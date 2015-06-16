@@ -1,0 +1,23 @@
+
+@@
+
+local context = contextManager:createContext()
+contextManager:setContextActive(context, true)
+
+yield()
+
+function foo()
+    yield(5)
+    fooCalled = 1
+end
+
+local thread = context:getScriptContext():newThread(foo)
+
+waitFrames = 0
+while not thread:isFinished() do
+    print("Waiting for thread")
+    waitFrames = waitFrames + 1
+    yield()
+end
+
+@@

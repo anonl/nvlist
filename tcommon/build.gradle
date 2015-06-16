@@ -1,0 +1,16 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.6
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    testCompile 'junit:junit:4.9'
+}
+
+task aptJar(type: Jar) {
+    classifier = 'apt'
+    from sourceSets.main.output
+    include 'nl/weeaboo/io/CustomSerializable.*'
+    include 'nl/weeaboo/io/CustomSerializableAnnotationProcessor.*'
+    include 'META-INF/services/javax.annotation.processing.Processor'
+}

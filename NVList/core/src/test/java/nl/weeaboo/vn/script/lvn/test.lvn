@@ -1,0 +1,26 @@
+
+Simple text
+
+Text with\tescape\ncodes\[ \] \\
+
+Text with "quotes"
+Text with $stringifier and ${longStringifier} embedded.
+Text with [embedded()] code
+Text with [embedded("[")] code
+Text with {tag a,b,c,d} embedded {/tag} text tags
+
+#single-line comment
+
+##
+Multi-line
+comment
+##
+
+@text("Code line")
+
+@@
+text("Multi")
+text("Code")
+text("Lines")
+@@
+

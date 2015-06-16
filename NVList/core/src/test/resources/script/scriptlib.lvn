@@ -1,0 +1,16 @@
+
+@@
+
+-- createContext
+context = createContext()
+
+-- newThread
+newThreadResult = 0
+function foo(a, b, c)
+    newThreadResult = a + b + c
+end
+
+thread = newThread(foo, 1, 2, 3)
+thread:update()
+
+@@

@@ -1,0 +1,17 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.6
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+dependencies {
+    compile project(':tcommon')
+    compile 'com.google.guava:guava:18.0'
+
+    testCompile 'junit:junit:4.12'
+}

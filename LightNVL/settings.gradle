@@ -1,0 +1,2 @@
+include ':tcommon'
+project(':tcommon').projectDir=new File('../tcommon')
