@@ -13,7 +13,9 @@ import nl.weeaboo.vn.script.IScriptLoader;
 
 public class LuaScriptEnv implements IScriptEnv {
 
-	private final LuaRunState runState;
+    private static final long serialVersionUID = LuaImpl.serialVersionUID;
+
+    private final LuaRunState runState;
 	private final LuaScriptLoader loader;
 	private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<ILuaScriptEnvInitializer>();
 
@@ -35,7 +37,7 @@ public class LuaScriptEnv implements IScriptEnv {
 	    }
 	}
 
-	public void registerOnThread() {
+    public final void registerOnThread() {
 	    runState.registerOnThread();
 	}
 

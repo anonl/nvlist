@@ -24,8 +24,10 @@ public final class StaticEnvironment {
         return INSTANCE;
     }
 
-    private synchronized Object get(String id) {
-        return objects.get(id);
+    private Object get(String id) {
+        synchronized (objects) {
+            return objects.get(id);
+        }
     }
 
     public <T> T get(StaticRef<T> ref) {
@@ -36,8 +38,10 @@ public final class StaticEnvironment {
         return type.cast(value);
     }
 
-    public synchronized <T> void set(StaticRef<T> ref, T value) {
-        objects.put(ref.getId(), value);
+    public <T> void set(StaticRef<T> ref, T value) {
+        synchronized (objects) {
+            objects.put(ref.getId(), value);
+        }
     }
 
 }

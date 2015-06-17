@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
 import nl.weeaboo.vn.save.ISaveModule;
+import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 
 public class Novel extends AbstractNovel {
 
@@ -42,6 +43,17 @@ public class Novel extends AbstractNovel {
 
         ISaveModule saveModule = getSaveModule();
         saveModule.savePersistent();
+    }
+
+    @Override
+    public void update() {
+        getScriptEnv().registerOnThread(); // Required after deserialization
+
+        super.update();
+    }
+
+    protected LuaScriptEnv getScriptEnv() {
+        return (LuaScriptEnv)getEnv().getScriptEnv();
     }
 
 }
