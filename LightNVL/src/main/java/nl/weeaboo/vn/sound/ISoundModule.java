@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public interface ISoundModule extends Serializable {
 
@@ -14,12 +15,11 @@ public interface ISoundModule extends Serializable {
      * Creates a new sound entity that can be used for playing the audio file specified by {@code filename}.
      *
      * @param stype The kind of sound to start playing (voice, sfx, music, ...)
-     * @param filename Relative resource path of the audio file.
-     * @param callStack The Lua callstack from which this method was called.
+     * @param loadInfo Filename of the requested resource and related metadata.
      *
      * @throws FileNotFoundException If no sound data could be found for the specified filename.
      */
-    public Entity createSound(IScreen screen, SoundType stype, String filename, String[] callStack)
+    public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo)
             throws IOException;
 
     /**

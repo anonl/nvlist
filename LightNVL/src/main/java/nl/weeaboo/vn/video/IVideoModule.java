@@ -5,16 +5,17 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public interface IVideoModule extends Serializable {
 
     /**
      * Starts a full-screen video.
      *
-     * @param filename Path to the video file that should be played.
+     * @param loadInfo Filename of the requested resource and related metadata.
      * @return An {@link IVideo} object that can be used to control playback.
      */
-    IVideo movie(String filename) throws IOException;
+    IVideo movie(ResourceLoadInfo loadInfo) throws IOException;
 
     /**
      * @return The currently playing full-screen video, or {@code null} if there's no full-screen video

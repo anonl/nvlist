@@ -6,6 +6,7 @@ import java.util.Collection;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.ILayer;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public interface IImageModule extends Serializable {
 
@@ -18,11 +19,10 @@ public interface IImageModule extends Serializable {
     /**
      * Creates a texture object from the specified filename.
      *
-     * @param filename The file to load
-     * @param callStack The Lua callstack from which the this function was called.
+     * @param loadInfo Filename of the requested resource and related metadata.
      * @param suppressErrors If <code>true</code> doesn't log any errors that may occur.
      */
-    public ITexture getTexture(String filename, String[] callStack, boolean suppressErrors);
+    public ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors);
 
     /**
      * Creates a texture from the given image data. The {@code scaleX} and {@code scaleY} factors scale from

@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.script.lua;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.luaj.vm2.LuaThread;
@@ -10,6 +11,7 @@ import org.luaj.vm2.lib.DebugLib;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.script.ScriptException;
 
 public final class LuaScriptUtil {
@@ -40,12 +42,13 @@ public final class LuaScriptUtil {
         return new LuaScriptThread(luaLink);
     }
 
-    public static String[] getLuaStack() {
+    public static List<String> getLuaStack() {
         return getLuaStack(LuaThread.getRunning());
     }
-    public static String[] getLuaStack(LuaThread thread) {
+
+    public static List<String> getLuaStack(LuaThread thread) {
         if (thread == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<String> result = new ArrayList<String>();
@@ -55,7 +58,7 @@ public final class LuaScriptUtil {
 
             result.add(line);
         }
-        return result.toArray(new String[result.size()]);
+        return result;
     }
 
     public static String getNearestLVNSrcloc(LuaScriptThread thread) {
@@ -88,6 +91,10 @@ public final class LuaScriptUtil {
             }
         }
         return null;
+    }
+
+    public static ResourceLoadInfo createLoadInfo(String filename) {
+        return new ResourceLoadInfo(filename, getLuaStack());
     }
 
 }

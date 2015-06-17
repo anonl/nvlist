@@ -7,6 +7,7 @@ import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
@@ -45,8 +46,8 @@ public class ImageLib extends LuaLib {
 
         if (args.isstring(index)) {
             // Texture filename
-            String[] callStack = LuaScriptUtil.getLuaStack();
-            return imageModule.getTexture(args.tojstring(2), callStack, false);
+            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(args.tojstring(2));
+            return imageModule.getTexture(loadInfo, false);
         } else if (args.isuserdata(2)) {
             // Texture or screenshot object
             Object obj = args.touserdata(2);

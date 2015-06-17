@@ -14,6 +14,7 @@ import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.EntityHelper;
 import nl.weeaboo.vn.core.impl.ResourceLoader;
@@ -68,7 +69,8 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ITexture getTexture(String filename, String[] callStack, boolean suppressErrors) {
+    public ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
+        String filename = loadInfo.getFilename();
         resourceLoader.checkRedundantFileExt(filename);
 
         String normalized = resourceLoader.normalizeFilename(filename);
@@ -80,22 +82,22 @@ public class ImageModule implements IImageModule {
         }
 
         // seenLog.addImage(filename); // TODO Enable seen log
-        return getTextureNormalized(filename, normalized, callStack);
+        return getTextureNormalized(normalized, loadInfo);
     }
 
     /**
-     * Is called from {@link #getTexture(String, String[], boolean)}
+     * Is called from {@link #getTexture(ResourceLoadInfo, boolean)}
      */
-    protected ITexture getTextureNormalized(String filename, String normalized, String[] luaStack) {
-        IResource<TextureRegion> tr = getTexRectNormalized(filename, normalized, luaStack);
+    protected ITexture getTextureNormalized(String filename, ResourceLoadInfo loadInfo) {
+        IResource<TextureRegion> tr = getTexRectNormalized(filename, loadInfo);
 
         double scale = getImageScale();
         return texManager.newTexture(tr, scale, scale);
     }
 
-    private IResource<TextureRegion> getTexRectNormalized(String filename, String normalized, String[] luaStack) {
+    private IResource<TextureRegion> getTexRectNormalized(String filename, ResourceLoadInfo loadInfo) {
         // TODO LVN-011 Track stack traces, log texture load times
-        return texManager.getTexture(normalized);
+        return texManager.getTexture(filename);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class ImageModule implements IImageModule {
 
     protected void onImageScaleChanged() {
     }
-    
+
     @Override
     public Collection<String> getImageFiles(String folder) {
         return resourceLoader.getMediaFiles(folder);
