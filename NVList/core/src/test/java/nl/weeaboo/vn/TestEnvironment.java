@@ -1,7 +1,7 @@
 package nl.weeaboo.vn;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.ContextManager;
@@ -33,10 +33,11 @@ public class TestEnvironment extends DefaultEnvironment {
 
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
-        IFileSystem fileSystem = TestFileSystem.newInstance();
+        MultiFileSystem fileSystem = TestFileSystem.newInstance();
 
         StaticEnvironment.NOTIFIER.set(notifier);
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
+        StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
 
         EnvironmentBuilder b = new EnvironmentBuilder();
 

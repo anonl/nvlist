@@ -17,6 +17,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.filesystem.InMemoryFileSystem;
+import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.res.GdxFileSystem;
+import nl.weeaboo.settings.PreferenceStore;
+import nl.weeaboo.vn.core.impl.LoggerNotifier;
+import nl.weeaboo.vn.core.impl.Novel;
+import nl.weeaboo.vn.core.impl.NovelBuilder;
+import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
 
 public class Launcher extends ApplicationAdapter {
 
@@ -31,6 +41,8 @@ public class Launcher extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private Texture img;
 	private Vector2 spritePos = new Vector2();
+
+    private Novel novel;
 
 	@Override
 	public void create() {
@@ -57,26 +69,52 @@ public class Launcher extends ApplicationAdapter {
 		manager.finishLoading();
 
 		img = manager.get("badlogic.jpg", Texture.class);
+
+        initNovel();
+    }
+
+    private void initNovel() {
+        IFileSystem readFileSystem = new GdxFileSystem("", true);
+        IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
+        MultiFileSystem fileSystem = new MultiFileSystem(readFileSystem, inMemoryFileSystem);
+
+        StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
+        StaticEnvironment.FILE_SYSTEM.set(fileSystem);
+        StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
+        StaticEnvironment.PREFS.set(new PreferenceStore());
+
+        NovelBuilder novelBuilder = new NovelBuilder();
+        try {
+            novel = novelBuilder.build();
+            novel.start("main");
+        } catch (InitException e) {
+            e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void dispose() {
+	    if (novel != null) {
+	        novel.stop();
+	        novel = null;
+	    }
+
 		disposeFrameBuffer();
-		osd.dispose();		
+		osd.dispose();
 		batch.dispose();
 		manager.dispose();
 	}
-	
+
 	private void disposeFrameBuffer() {
 		if (frameBuffer != null) {
 			frameBuffer.dispose();
 			frameBuffer = null;
-		}		
+		}
 	}
 
 	private void updateFrameBuffer() {
 		disposeFrameBuffer();
-		
+
 		frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
 		frameBufferViewport.update(frameBuffer.getWidth(), frameBuffer.getHeight(), true);
 	}
@@ -91,7 +129,7 @@ public class Launcher extends ApplicationAdapter {
 		frameBufferViewport.apply();
 		Camera camera = frameBufferViewport.getCamera();
 		batch.setProjectionMatrix(camera.combined);
-		
+
 		renderScreen(batch);
 		frameBuffer.end();
 
@@ -102,23 +140,23 @@ public class Launcher extends ApplicationAdapter {
 
 		batch.begin();
 		batch.draw(frameBuffer.getColorBufferTexture(), 0, vsize.h, vsize.w, -vsize.h);
-		batch.end();
+        batch.end();
 	}
 
 	protected void update(float dt) {
-		
-		
 		spritePos.x = (spritePos.x + 256 * dt) % vsize.w;
 		spritePos.y = (vsize.h / 2) + 128 * MathUtils.cosDeg(spritePos.x);
+
+        novel.update();
 	}
 
 	protected void renderScreen(SpriteBatch batch) {
 		batch.begin();
 
 		batch.draw(img, spritePos.x, spritePos.y);
-		
+
 		osd.render(batch, vsize);
-		
+
 		batch.end();
 	}
 

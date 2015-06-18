@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -13,6 +14,11 @@ abstract class AbstractEnvironment implements IEnvironment {
     @Override
     public IFileSystem getFileSystem() {
         return StaticEnvironment.FILE_SYSTEM.get();
+    }
+
+    @Override
+    public IWritableFileSystem getOutputFileSystem() {
+        return StaticEnvironment.OUTPUT_FILE_SYSTEM.get();
     }
 
     @Override

@@ -4,6 +4,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.entity.PartRegistry;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -16,6 +17,7 @@ import nl.weeaboo.vn.video.IVideoModule;
 public interface IEnvironment extends IDestructible {
 
     IFileSystem getFileSystem();
+    IWritableFileSystem getOutputFileSystem();
     INotifier getNotifier();
     boolean isDebug();
     <T> T getPref(Preference<T> pref);

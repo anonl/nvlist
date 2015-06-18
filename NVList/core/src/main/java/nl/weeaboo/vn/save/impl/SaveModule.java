@@ -60,7 +60,7 @@ public class SaveModule implements ISaveModule {
     }
 
     protected IWritableFileSystem getFileSystem() {
-        return (IWritableFileSystem)env.getFileSystem();
+        return env.getOutputFileSystem();
     }
 
     @Override

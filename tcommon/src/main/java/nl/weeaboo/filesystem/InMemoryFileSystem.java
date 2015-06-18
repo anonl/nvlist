@@ -11,13 +11,13 @@ import java.util.Map;
 public class InMemoryFileSystem extends AbstractWritableFileSystem {
 
 	private final Map<String, InMemoryFile> files = new HashMap<String, InMemoryFile>();
-	
+
 	private boolean readOnly;
-	
+
 	public InMemoryFileSystem(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
-	
+
 	@Override
 	public boolean isReadOnly() {
 		return readOnly;
@@ -30,7 +30,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected void deleteImpl(String path) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(path);
+            InMemoryFile file = getFile(path, false);
 			file.delete();
 			files.remove(path);
 		}
@@ -39,7 +39,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected void copyImpl(String src, String dst) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(src);
+            InMemoryFile file = getFile(src, false);
 			files.put(dst, file.copy(dst));
 		}
 	}
@@ -47,7 +47,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected InputStream newInputStreamImpl(String path) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(path);
+            InMemoryFile file = getFile(path, false);
 			return file.openInputStream();
 		}
 	}
@@ -55,8 +55,8 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected OutputStream newOutputStreamImpl(String path, boolean append) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(path);
-			return file.openOutputStream();
+            InMemoryFile file = getFile(path, true);
+            return file.openOutputStream(append);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected long getFileSizeImpl(String path) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(path);
+            InMemoryFile file = getFile(path, false);
 			return file.getFileSize();
 		}
 	}
@@ -78,21 +78,25 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	@Override
 	protected long getFileModifiedTimeImpl(String path) throws IOException {
 		synchronized (files) {
-			InMemoryFile file = getFile(path);
+            InMemoryFile file = getFile(path, false);
 			return file.getModifiedTime();
 		}
 	}
 
-	protected InMemoryFile getFile(String path) throws FileNotFoundException {
+    protected InMemoryFile getFile(String path, boolean createIfNeeded) throws FileNotFoundException {
 		synchronized (files) {
 			InMemoryFile file = files.get(path);
 			if (file == null) {
-				throw new FileNotFoundException(path);
+                if (!createIfNeeded) {
+                    throw new FileNotFoundException(path);
+                }
+                file = new InMemoryFile(path);
+                files.put(path, file);
 			}
 			return file;
 		}
 	}
-	
+
 	@Override
 	protected void getFiles(Collection<String> out, String prefix, FileCollectOptions opts) throws IOException {
 
@@ -100,7 +104,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 			// Folders aren't supported
 			return;
 		}
-		
+
 		synchronized (files) {
 			for (InMemoryFile file : files.values()) {
 				out.add(file.getName());

@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.vn.core.INotifier;
 
 public final class StaticEnvironment {
 
     public static final StaticRef<IFileSystem> FILE_SYSTEM = StaticRef.from("fileSystem", IFileSystem.class);
+    public static final StaticRef<IWritableFileSystem> OUTPUT_FILE_SYSTEM = StaticRef.from("outputFileSystem",
+            IWritableFileSystem.class);
     public static final StaticRef<INotifier> NOTIFIER = StaticRef.from("notifier", INotifier.class);
     public static final StaticRef<IPreferenceStore> PREFS = StaticRef.from("prefs", IPreferenceStore.class);
 

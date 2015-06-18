@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.EntityHelper;
 import nl.weeaboo.vn.core.impl.ResourceLoader;
@@ -39,7 +40,7 @@ public abstract class SoundModule implements ISoundModule {
     }
 
     @Override
-    public Entity createSound(IScreen screen, SoundType stype, String filename, String[] callStack) throws IOException {
+    public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
         // TODO LVN-01 Re-enable analytics, seen log
 
         Entity e = entityHelper.createScriptableEntity(screen);

@@ -11,8 +11,8 @@ public final class TestFileSystem {
     static {
         HeadlessGdx.init();
     }
-    
-    public static IFileSystem newInstance() {
+
+    public static MultiFileSystem newInstance() {
         IFileSystem readFileSystem = new GdxFileSystem("", true);
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         return new MultiFileSystem(readFileSystem, inMemoryFileSystem);

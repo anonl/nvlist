@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.EntityHelper;
 import nl.weeaboo.vn.video.IVideo;
@@ -44,10 +45,10 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public IVideo movie(String filename) throws IOException {
+    public IVideo movie(ResourceLoadInfo loadInfo) throws IOException {
     	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 
-        LOG.info("Attempt to play movie: videoFolder=" + videoFolder + ", path=" + filename);
+        LOG.info("Attempt to play movie: videoFolder=" + videoFolder + ", path=" + loadInfo.getFilename());
 
         // TODO LVN-021 Implement
         // fullscreenMovie = ...
