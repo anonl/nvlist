@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.image;
+package nl.weeaboo.vn.image.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.HeadlessGdx;
+import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 
 public final class TestImageUtil {

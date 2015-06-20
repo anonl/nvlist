@@ -1,7 +1,8 @@
 package nl.weeaboo.vn.math;
 
+
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.TestUtil;
+import nl.weeaboo.vn.LvnTestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,11 +13,11 @@ public class PolygonTest {
     public void boundsTest() {
         Rect2D r = Rect2D.of(1, 2, 3, 4);
         Polygon aligned = Polygon.rotatedRect(Matrix.identityMatrix(), r.x, r.y, r.w, r.h);
-        TestUtil.assertEquals(r, aligned.getBoundingRect());
+        LvnTestUtil.assertEquals(r, aligned.getBoundingRect());
 
         // Bounds when one or more coords are NaN
         Polygon nanPoly = Polygon.rotatedRect(Matrix.identityMatrix(), r.x, Double.NaN, r.w, r.h);
-        TestUtil.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect());
+        LvnTestUtil.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect());
         Assert.assertFalse(nanPoly.contains(0, 0)); // Bound w/h are exclusive
     }
 

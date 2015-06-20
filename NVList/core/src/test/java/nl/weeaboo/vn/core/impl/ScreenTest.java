@@ -1,8 +1,9 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core.impl;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.impl.Screen;
 
@@ -10,7 +11,7 @@ public class ScreenTest extends AbstractEntityTest {
 
 	@Test
 	public void layers() {
-		Screen screen = TestUtil.newScreen(pr, scene);
+        Screen screen = NvlTestUtil.newScreen(pr, scene);
 		ILayer active = screen.getActiveLayer();
 		Assert.assertNotNull(active); // Active layer should never be null
 		ILayer root = screen.getRootLayer();

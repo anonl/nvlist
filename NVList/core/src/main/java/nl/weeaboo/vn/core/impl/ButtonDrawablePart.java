@@ -18,7 +18,7 @@ import nl.weeaboo.vn.math.Vec2;
 @CustomSerializable
 class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private final ButtonPart model;
     private final ITextRenderer textRenderer;

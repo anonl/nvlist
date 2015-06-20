@@ -65,10 +65,14 @@ public final class AlignUtil {
 		Vec2 offset = new Vec2(alignAnchorX(w, 0, anchor), alignAnchorY(h, 0, anchor));
 
 		offset.x -= p.x + base.x;
-		if (w != 0) offset.x /= w;
+        if (w != 0) {
+            offset.x /= w;
+        }
 
 		offset.y -= p.y + base.y;
-		if (h != 0) offset.y /= h;
+        if (h != 0) {
+            offset.y /= h;
+        }
 
 		return offset;
 	}

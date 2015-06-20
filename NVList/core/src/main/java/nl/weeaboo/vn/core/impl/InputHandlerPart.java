@@ -11,7 +11,7 @@ import nl.weeaboo.vn.core.IInputListener;
 
 public class InputHandlerPart extends Part implements IInputHandlerPart {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private List<IInputListener> inputHandlers = new CopyOnWriteArrayList<IInputListener>();
 

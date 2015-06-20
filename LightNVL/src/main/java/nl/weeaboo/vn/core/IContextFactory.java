@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public interface IContextFactory<C extends IContext> extends Serializable {
 
-    public C newContext();
+    C newContext();
+
+    void setRenderEnv(IRenderEnv env);
 
 }

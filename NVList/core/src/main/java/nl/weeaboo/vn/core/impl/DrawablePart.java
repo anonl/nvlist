@@ -18,7 +18,7 @@ import nl.weeaboo.vn.math.Matrix;
 @CustomSerializable
 public class DrawablePart extends Part implements IDrawablePart {
 
-	private static final long serialVersionUID = BaseImpl.serialVersionUID;
+	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 	private static final Logger LOG = LoggerFactory.getLogger(DrawablePart.class);
 
 	private Layer parentLayer;
@@ -42,7 +42,7 @@ public class DrawablePart extends Part implements IDrawablePart {
 	//Functions
 	private void initTransients() {
 		changed = true;
-		colorARGBInt = BaseImpl.packRGBAtoARGB(rgba[0], rgba[1], rgba[2], rgba[3]);
+		colorARGBInt = CoreImpl.packRGBAtoARGB(rgba[0], rgba[1], rgba[2], rgba[3]);
 		boundsHelper.setChangeListener(new IChangeListener() {
 			@Override
 			public void onChanged() {
@@ -237,7 +237,7 @@ public class DrawablePart extends Part implements IDrawablePart {
 			rgba[1] = g;
 			rgba[2] = b;
 			rgba[3] = a;
-			colorARGBInt = BaseImpl.packRGBAtoARGB(rgba[0], rgba[1], rgba[2], rgba[3]);
+			colorARGBInt = CoreImpl.packRGBAtoARGB(rgba[0], rgba[1], rgba[2], rgba[3]);
 
 			markChanged();
 		}

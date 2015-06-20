@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class ResourceLoader implements Serializable {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
@@ -27,7 +27,7 @@ public abstract class ResourceLoader implements Serializable {
 
     //Functions
     protected String replaceExt(String filename, String ext) {
-        return BaseImpl.replaceExt(filename, ext);
+        return CoreImpl.replaceExt(filename, ext);
     }
 
     public String normalizeFilename(String filename) {

@@ -96,7 +96,7 @@ final class ClassMetaTable extends LuaTable implements IWriteReplaceSerializable
 			return method;
 		} else {
 			MethodInfo[] ms = classInfo.getMethods(name);
-			if (ms != null && ms.length >= 0) {
+            if (ms != null && ms.length > 0) {
 				method = new LuaMethod(classInfo, name, ms);
 				methods.put(name, method);
 				return method;

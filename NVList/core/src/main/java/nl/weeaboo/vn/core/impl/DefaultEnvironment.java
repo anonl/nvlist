@@ -17,7 +17,7 @@ import nl.weeaboo.vn.video.IVideoModule;
 
 public class DefaultEnvironment extends AbstractEnvironment implements Serializable {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private final BasicPartRegistry partRegistry;
     private final IContextManager contextManager;

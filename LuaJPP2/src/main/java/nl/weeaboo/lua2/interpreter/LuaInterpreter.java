@@ -7,6 +7,7 @@ import static org.luaj.vm2.LuaValue.varargsOf;
 import org.luaj.vm2.Buffer;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaClosure;
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaThread;
 import org.luaj.vm2.LuaValue;
@@ -70,7 +71,9 @@ public class LuaInterpreter {
 		sf.status = Status.RUNNING;
 		try {
 			while (thread.isRunning()) {
-				assert pc < 0 || pc >= code.length: "Program Counter outside code range: " + pc + " for " + closure;
+                if (pc < 0 || pc >= code.length) {
+                    throw new LuaError("Program Counter outside code range: " + pc + " for " + closure);
+                }
 
 				if (DebugLib.DEBUG_ENABLED) {
 					lrs.onInstruction(pc);

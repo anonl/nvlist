@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.image.impl;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.image.ITexture;

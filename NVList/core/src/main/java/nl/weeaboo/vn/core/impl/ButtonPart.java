@@ -15,7 +15,7 @@ import nl.weeaboo.vn.script.IScriptFunction;
 
 public class ButtonPart extends Part implements IButtonPart, IInputListener {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private final ChangeHelper changeHelper = new ChangeHelper();
     private final IScriptEventDispatcher eventDispatcher;

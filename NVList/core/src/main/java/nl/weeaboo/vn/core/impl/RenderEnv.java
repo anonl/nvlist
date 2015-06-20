@@ -7,7 +7,7 @@ import nl.weeaboo.vn.core.IRenderEnv;
 
 public class RenderEnv implements IRenderEnv {
 
-	private static final long serialVersionUID = BaseImpl.serialVersionUID;
+	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
 	private final Dim virtualSize;
 	private final Rect realClip;

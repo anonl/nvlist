@@ -95,30 +95,23 @@ public class LuaLink implements Serializable {
 	}
 
 	public void pushCall(String funcName, Object... args) throws LuaException {
-		pushCall(false, ignoreMissing, funcName, args);
+        pushCall(false, ignoreMissing, getFunction(funcName), concatArgs(getImplicitArgs(), args));
 	}
 	public void pushCall(String funcName, Varargs args) throws LuaException {
-		pushCall(false, ignoreMissing, funcName, args);
+        pushCall(getFunction(funcName), concatArgs(getImplicitArgs(), args));
 	}
 	public void pushCall(LuaClosure func, Varargs args) throws LuaException {
-		pushCall(false, ignoreMissing, func, args);
+        pushCall(false, ignoreMissing, func, concatArgs(getImplicitArgs(), args));
 	}
 
-	protected void pushCall(boolean ignoreConcurrentError, boolean ignoreMissing,
-			Object func, Object args) throws LuaException
+    private void pushCall(boolean ignoreConcurrentError, boolean ignoreMissing, LuaClosure func,
+            Varargs args) throws LuaException
 	{
 		if (!ignoreConcurrentError && thread.isRunning()) {
 			throw new ConcurrentModificationException("Attempted to use pushCall() on a running thread.");
 		}
 
-		LuaClosure lfunc;
-		if (func instanceof LuaClosure) {
-			lfunc = (LuaClosure)func;
-		} else {
-			lfunc = getFunction(String.valueOf(func));
-		}
-
-		if (lfunc == null) {
+        if (func == null) {
 			if (!ignoreMissing) {
 				throw new LuaException(String.format("function \"%s\" not found", String.valueOf(func)));
 			} else {
@@ -126,62 +119,62 @@ public class LuaLink implements Serializable {
 			}
 		}
 
-		Varargs vargs = getImplicitArgs();
-		if (args != null) {
-			int narg = vargs.narg();
-			if (args instanceof Object[]) {
-				//Convert and append to implicit args
-				Object[] b = (Object[])args;
-				if (b.length >= 0) {
-			 		LuaValue[] largs = new LuaValue[narg + b.length];
-			 		for (int n = 0; n < b.length; n++) {
-						largs[narg+n] = CoerceJavaToLua.coerce(b[n]);
-					}
-			 		vargs = LuaValue.varargsOf(largs);
-				}
-			} else {
-				Varargs b = (Varargs)args;
-				int blen = b.narg();
-				if (blen > 0) { //We only need to append if there's something to append
-					if (narg <= 0) {
-						//We can return the append part if the implicit part is empty
-						vargs = b;
-					} else {
-						//Append args to implicit args
-						LuaValue[] largs = new LuaValue[narg + blen];
-				 		for (int n = 0; n < blen; n++) {
-				 			largs[narg+n] = b.arg(1+n);
-				 		}
-				 		vargs = LuaValue.varargsOf(largs);
-					}
-				}
-			}
-		}
-
-		thread.pushPending(lfunc, vargs);
+        thread.pushPending(func, args);
 	}
 
-	/**
-	 * Calls a Lua function and returns its result.
-	 */
+    private static Varargs concatArgs(Varargs implicitArgs, Varargs extraArgs) {
+        if (extraArgs == null) {
+            return implicitArgs;
+        }
+
+        int implicitArgsCount = implicitArgs.narg();
+        LuaValue[] merged = new LuaValue[implicitArgsCount + extraArgs.narg()];
+        for (int n = 0; n < implicitArgsCount; n++) {
+            merged[n] = implicitArgs.arg(1 + n);
+        }
+        for (int n = 0; n < extraArgs.narg(); n++) {
+            merged[implicitArgsCount + n] = extraArgs.arg(1 + n);
+        }
+        return LuaValue.varargsOf(merged);
+    }
+
+    private static Varargs concatArgs(Varargs implicitArgs, Object[] javaArgs) {
+        if (javaArgs == null) {
+            return implicitArgs;
+        }
+
+        int implicitArgsCount = implicitArgs.narg();
+        LuaValue[] merged = new LuaValue[implicitArgsCount + javaArgs.length];
+        for (int n = 0; n < implicitArgsCount; n++) {
+            merged[n] = implicitArgs.arg(1 + n);
+        }
+        for (int n = 0; n < javaArgs.length; n++) {
+            merged[implicitArgsCount + n] = CoerceJavaToLua.coerce(javaArgs[n]);
+        }
+        return LuaValue.varargsOf(merged);
+    }
+
+    /**
+     * Calls a Lua function and returns its result.
+     */
+    public Varargs call(String funcName, Object... args) throws LuaException {
+        return call(getFunction(funcName), args);
+    }
+
+    /**
+     * Calls a Lua function and returns its result.
+     */
 	public Varargs call(LuaClosure func, Object... args) throws LuaException {
-		return call(ignoreMissing, func, args);
+        return call(ignoreMissing, func, concatArgs(getImplicitArgs(), args));
 	}
 
-	/**
-	 * Calls a Lua function and returns its result.
-	 */
-	public Varargs call(String funcName, Object... args) throws LuaException {
-		return call(ignoreMissing, funcName, args);
-	}
-
-	protected Varargs call(boolean ignoreMissing, Object func, Object... args) throws LuaException {
+    private Varargs call(boolean ignoreMissing, LuaClosure func, Varargs args) throws LuaException {
 		Varargs result = LuaValue.NONE;
 
 		LuaLink oldLink = luaRunState.getCurrentLink();
 		luaRunState.setCurrentLink(this);
 		try {
-			pushCall(true, ignoreMissing, func, args);
+            pushCall(true, ignoreMissing, func, args);
 			result = thread.resume(1);
 		} catch (LuaError e) {
 			if (ignoreMissing && e.getCause() instanceof NoSuchMethodException) {

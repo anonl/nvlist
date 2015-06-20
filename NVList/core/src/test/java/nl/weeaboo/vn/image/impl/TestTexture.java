@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.image;
+package nl.weeaboo.vn.image.impl;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.vn.image.ITexture;
 
 @CustomSerializable
 public class TestTexture implements ITexture {

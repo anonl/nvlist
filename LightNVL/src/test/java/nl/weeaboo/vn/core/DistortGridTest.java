@@ -1,9 +1,7 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import nl.weeaboo.vn.core.DistortGrid;
 
 public class DistortGridTest {
 

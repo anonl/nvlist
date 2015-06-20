@@ -3,10 +3,10 @@ package nl.weeaboo.vn.script.lua.lib;
 import java.io.IOException;
 
 import nl.weeaboo.lua2.LuaException;
-import nl.weeaboo.vn.TestEnvironment;
 import nl.weeaboo.vn.core.impl.Context;
 import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.ContextUtil;
+import nl.weeaboo.vn.core.impl.TestEnvironment;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;

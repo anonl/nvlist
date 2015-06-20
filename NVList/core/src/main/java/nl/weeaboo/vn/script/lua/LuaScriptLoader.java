@@ -167,14 +167,14 @@ public class LuaScriptLoader implements IScriptLoader {
         if (!loadResult.arg1().isclosure()) {
             throw new ScriptException("Error loading script, " + filename + ": " + loadResult.arg(2));
         }
-        
+
         luaThread.call(loadResult.checkclosure(1));
     }
 
     private static class LuaScriptResourceLoader extends ResourceLoader {
 
         private static final long serialVersionUID = 1L;
-        
+
         private final FileSystemView fs;
 
         public LuaScriptResourceLoader(IFileSystem fs) {

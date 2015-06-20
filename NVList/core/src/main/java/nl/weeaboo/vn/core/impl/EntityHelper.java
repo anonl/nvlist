@@ -10,7 +10,7 @@ import nl.weeaboo.vn.script.impl.ScriptPart;
 
 public class EntityHelper implements Serializable {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private final BasicPartRegistry pr;
 

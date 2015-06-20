@@ -30,10 +30,10 @@ public final class Scene implements IWriteReplaceSerializable {
 	private int id; // Unique scene identifier
 	private boolean enabled = true;
 
-	private final EntityManager entityManager = new EntityManager(this);
-	private final PartManager partManager = new PartManager(this);
-	private final CopyOnWriteArrayList<IEntityListener> entityListeners = new CopyOnWriteArrayList<IEntityListener>();
-	private final CopyOnWriteArrayList<IPartListener> partListeners = new CopyOnWriteArrayList<IPartListener>();
+    private transient final EntityManager entityManager = new EntityManager(this);
+    private transient final PartManager partManager = new PartManager(this);
+    private transient final CopyOnWriteArrayList<IEntityListener> entityListeners = new CopyOnWriteArrayList<IEntityListener>();
+    private transient final CopyOnWriteArrayList<IPartListener> partListeners = new CopyOnWriteArrayList<IPartListener>();
 
 	// -------------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 @CustomSerializable
 public class Screen implements IScreen, ILayerHolder {
 
-	private static final long serialVersionUID = BaseImpl.serialVersionUID;
+	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
 	protected final Scene scene;
 	private final Rect2D bounds;

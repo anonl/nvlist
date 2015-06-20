@@ -60,4 +60,9 @@ public class LuaScriptThread implements IScriptThread {
         return luaLink.isRunnable();
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(luaLink.getThread());
+    }
+
 }

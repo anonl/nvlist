@@ -18,7 +18,7 @@ import nl.weeaboo.vn.script.IScriptContext;
 
 public class Context implements IContext {
 
-	private static final long serialVersionUID = BaseImpl.serialVersionUID;
+	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 	private static final Logger LOG = LoggerFactory.getLogger(Context.class);
 
 	private final Scene scene;

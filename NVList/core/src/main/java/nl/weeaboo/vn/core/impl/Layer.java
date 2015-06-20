@@ -26,7 +26,7 @@ import nl.weeaboo.vn.render.impl.ScreenshotBuffer;
 @CustomSerializable
 public class Layer implements ILayer, ILayerHolder {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Layer.class);
 
     private final ILayerHolder parent;

@@ -1,24 +1,22 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.entity.Scene;
 import nl.weeaboo.entity.World;
+import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.IContextFactory;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
-import nl.weeaboo.vn.core.impl.Context;
-import nl.weeaboo.vn.core.impl.ContextArgs;
-import nl.weeaboo.vn.core.impl.Screen;
+import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 
 @SuppressWarnings("serial")
-public class TestContextBuilder implements IContextFactory<Context> {
+public class TestContextFactory implements IContextFactory<Context> {
 
     public final LuaScriptEnv scriptEnv;
     public final BasicPartRegistry pr;
     public final World world;
 
-    public TestContextBuilder(LuaScriptEnv scriptEnv) {
+    public TestContextFactory(LuaScriptEnv scriptEnv) {
         this.scriptEnv = scriptEnv;
 
         this.pr = new BasicPartRegistry();
@@ -26,7 +24,7 @@ public class TestContextBuilder implements IContextFactory<Context> {
     }
 
     protected Screen newScreen(Scene scene) {
-        return TestUtil.newScreen(pr, scene);
+        return NvlTestUtil.newScreen(pr, scene);
     }
 
     @Override
@@ -47,6 +45,10 @@ public class TestContextBuilder implements IContextFactory<Context> {
             return null;
         }
         return new LuaScriptContext(scriptEnv);
+    }
+
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
     }
 
 }

@@ -12,7 +12,7 @@ import nl.weeaboo.vn.core.IRenderEnv;
 
 public class ContextManager implements IContextManager {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private final IContextFactory<Context> contextFactory;
 
@@ -79,6 +79,8 @@ public class ContextManager implements IContextManager {
 
     @Override
     public void setRenderEnv(IRenderEnv env) {
+        contextFactory.setRenderEnv(env);
+
         for (IContext context : contexts) {
             context.setRenderEnv(env);
         }

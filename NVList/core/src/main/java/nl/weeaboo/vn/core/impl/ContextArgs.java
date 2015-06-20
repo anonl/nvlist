@@ -9,7 +9,7 @@ import nl.weeaboo.vn.script.IScriptContext;
 
 public final class ContextArgs implements Cloneable, Serializable {
 
-    private static final long serialVersionUID = BaseImpl.serialVersionUID;
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     public Scene scene;
     public PartType<? extends DrawablePart> drawablePart;

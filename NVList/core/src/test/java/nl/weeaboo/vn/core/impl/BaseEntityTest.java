@@ -1,22 +1,23 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core.impl;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.entity.Entity;
+import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.core.impl.DrawablePart;
-import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.ImagePart;
+import nl.weeaboo.vn.image.impl.TextureStub;
 
 public class BaseEntityTest extends AbstractEntityTest {
 
-    private static final double E = TestUtil.EPSILON;
+    private static final double E = LvnTestUtil.EPSILON;
 
 	@Test
 	public void transformablePartTest() {
-		Entity e = TestUtil.newImage(pr, scene);
+        Entity e = NvlTestUtil.newImage(pr, scene);
 		TransformablePart transformable = e.getPart(pr.transformable);
 
 		double x = -50;
@@ -26,42 +27,42 @@ public class BaseEntityTest extends AbstractEntityTest {
 
 		// Bounds
 		transformable.setBounds(x, y, w, h);
-		TestUtil.assertEquals(x, y, w, h, transformable.getBounds());
+        LvnTestUtil.assertEquals(x, y, w, h, transformable.getBounds());
 
         transformable.setPos(100, 100);
-        TestUtil.assertEquals(100, 100, w, h, transformable.getBounds());
+        LvnTestUtil.assertEquals(100, 100, w, h, transformable.getBounds());
         transformable.setSize(200, 200);
-        TestUtil.assertEquals(100, 100, 200, 200, transformable.getBounds());
+        LvnTestUtil.assertEquals(100, 100, 200, 200, transformable.getBounds());
 
         transformable.setBounds(1, 2, 3, 4);
-        TestUtil.assertEquals(1, 2, 3, 4, transformable.getBounds());
+        LvnTestUtil.assertEquals(1, 2, 3, 4, transformable.getBounds());
 
         transformable.setX(x);
         transformable.setY(y);
         transformable.setWidth(w);
         transformable.setHeight(h);
-        TestUtil.assertEquals(x, y, w, h, transformable.getBounds());
+        LvnTestUtil.assertEquals(x, y, w, h, transformable.getBounds());
 
 		// Rotated bounds
 		transformable.setRotation(64); // Rotate 1/8th circle clockwise around top-left
 		final double diagonal = Math.sqrt(w*w + h*h);
-		TestUtil.assertEquals(x-diagonal/2, y, diagonal, diagonal, transformable.getBounds());
+        LvnTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, transformable.getBounds());
 
 		// Scaled
 		transformable.setRotation(0);
 		transformable.setScale(0.5, 2);
-		TestUtil.assertEquals(x, y, w*.5, h*2, transformable.getBounds());
+        LvnTestUtil.assertEquals(x, y, w * .5, h * 2, transformable.getBounds());
 
 		// Align
 		transformable.setPos(0, 0);
 		transformable.setScale(1, 1);
 		transformable.setAlign(0.5, 0.5);
-		TestUtil.assertEquals(x, y, w, h, transformable.getBounds());
+        LvnTestUtil.assertEquals(x, y, w, h, transformable.getBounds());
 	}
 
 	@Test
 	public void drawablePartColor() {
-        Entity e = TestUtil.newImage(pr, scene);
+        Entity e = NvlTestUtil.newImage(pr, scene);
         DrawablePart drawable = e.getPart(pr.drawable);
 
         // Getters/setters using doubles
@@ -117,8 +118,8 @@ public class BaseEntityTest extends AbstractEntityTest {
 
         // Render env
         Assert.assertEquals(null, drawable.getRenderEnv());
-        drawable.setRenderEnv(TestUtil.BASIC_ENV);
-        Assert.assertEquals(TestUtil.BASIC_ENV, drawable.getRenderEnv());
+        drawable.setRenderEnv(NvlTestUtil.BASIC_ENV);
+        Assert.assertEquals(NvlTestUtil.BASIC_ENV, drawable.getRenderEnv());
     }
 
     @Test
@@ -134,7 +135,7 @@ public class BaseEntityTest extends AbstractEntityTest {
         Assert.assertEquals(0, transformable.getY(), E);
 
         imagePart.setTexture(alpha, 5);
-        TestUtil.assertEquals(25, 25, 50, 50, transformable.getBounds());
+        LvnTestUtil.assertEquals(25, 25, 50, 50, transformable.getBounds());
     }
 
 }

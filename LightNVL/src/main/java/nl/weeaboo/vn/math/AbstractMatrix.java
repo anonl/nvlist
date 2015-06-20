@@ -38,7 +38,11 @@ abstract class AbstractMatrix implements Serializable {
 		out.writeDouble(m10); out.writeDouble(m11); out.writeDouble(m12);
 	}
 
-	private void readObject(ObjectInputStream in) throws IOException {
+    /**
+     * @throws ClassNotFoundException Not actually thrown, but required to comply with magic method signature
+     *         required by Java deserialization.
+     */
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
 		m00 = in.readDouble(); m01 = in.readDouble(); m02 = in.readDouble();
 		m10 = in.readDouble(); m11 = in.readDouble(); m12 = in.readDouble();
 	}
@@ -68,17 +72,12 @@ abstract class AbstractMatrix implements Serializable {
 			return true;
 		}
 
-		if (epsilon != 0.0) {
-			return DoubleMath.fuzzyEquals(m00, m.m00, epsilon)
-				&& DoubleMath.fuzzyEquals(m01, m.m01, epsilon)
-				&& DoubleMath.fuzzyEquals(m02, m.m02, epsilon)
-				&& DoubleMath.fuzzyEquals(m10, m.m10, epsilon)
-				&& DoubleMath.fuzzyEquals(m11, m.m11, epsilon)
-				&& DoubleMath.fuzzyEquals(m12, m.m12, epsilon);
-		}
-
-		return m00 == m.m00 && m01 == m.m01 && m02 == m.m02
-				&& m10 == m.m10 && m11 == m.m11 && m12 == m.m12;
+		return DoubleMath.fuzzyEquals(m00, m.m00, epsilon)
+			&& DoubleMath.fuzzyEquals(m01, m.m01, epsilon)
+			&& DoubleMath.fuzzyEquals(m02, m.m02, epsilon)
+			&& DoubleMath.fuzzyEquals(m10, m.m10, epsilon)
+			&& DoubleMath.fuzzyEquals(m11, m.m11, epsilon)
+			&& DoubleMath.fuzzyEquals(m12, m.m12, epsilon);
 	}
 
 	public void transform(Vec2 v) {

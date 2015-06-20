@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.script.lvn;
 
+import static nl.weeaboo.vn.LvnTestUtil.deserializeObject;
+import static nl.weeaboo.vn.LvnTestUtil.serializeObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -20,11 +23,12 @@ import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.TestUtil;
 import nl.weeaboo.vn.script.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.script.lvn.TextParser.Token;
 
 public class LvnParserTest {
+
+    private static final String scriptDir = "/script/syntax/";
 
 	@Test
 	public void syntaxTest3() throws LvnParseException, IOException {
@@ -41,7 +45,8 @@ public class LvnParserTest {
 
         final ICompiledLvnFile lvnFile;
         final String contents;
-        InputStream in = LvnParserTest.class.getResourceAsStream(filename + ".lvn");
+        System.err.println(filename);
+        InputStream in = LvnParserTest.class.getResourceAsStream(scriptDir + filename + ".lvn");
         try {
             ILvnParser parser = LvnParserFactory.getParser(Integer.toString(version));
             lvnFile = parser.parseFile(filename, in);
@@ -50,7 +55,7 @@ public class LvnParserTest {
             in.close();
         }
 
-        URL luaFileUrl = Resources.getResource(LvnParserTest.class, filename + version + ".lua");
+        URL luaFileUrl = Resources.getResource(LvnParserTest.class, scriptDir + filename + version + ".lua");
         final byte[] checkBytes = Resources.toByteArray(luaFileUrl);
 
         System.out.println(contents);
@@ -79,7 +84,7 @@ public class LvnParserTest {
 		RuntimeTextParser runtimeParser = new RuntimeTextParser(debugTable);
 
 		// Serialize->Deserialize to make sure that doesn't break anything
-		runtimeParser = TestUtil.deserialize(TestUtil.serialize(runtimeParser), RuntimeTextParser.class);
+        runtimeParser = deserializeObject(serializeObject(runtimeParser), RuntimeTextParser.class);
 
 		ParseResult parseResult = runtimeParser.parse(input);
 		StyledText stext = parseResult.getText();

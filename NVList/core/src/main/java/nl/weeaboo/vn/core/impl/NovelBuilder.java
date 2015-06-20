@@ -9,8 +9,6 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
-import nl.weeaboo.vn.TestContextBuilder;
-import nl.weeaboo.vn.TestSystemEventHandler;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
@@ -49,9 +47,11 @@ public class NovelBuilder {
      */
     protected void initEnvironment(EnvironmentBuilder eb) throws InitException {
         final Dim vsize = new Dim(prefs.get(WIDTH), prefs.get(HEIGHT));
-        eb.renderEnv = RenderEnv.newDefaultInstance(vsize, false);
+        RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
+
+        eb.renderEnv = renderEnv;
         eb.partRegistry = new BasicPartRegistry();
-        eb.systemEventHandler = new TestSystemEventHandler();
+        eb.systemEventHandler = new SystemEventHandler();
 
         // Init Lua script env
         LuaRunState runState = new LuaRunState();
@@ -59,8 +59,8 @@ public class NovelBuilder {
         LuaScriptLoader scriptLoader = LuaScriptLoader.newInstance(lvnParser, fileSystem);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
 
-        TestContextBuilder contextBuilder = new TestContextBuilder(scriptEnv);
-        eb.contextManager = new ContextManager(contextBuilder);
+        ContextFactory contextFactory = new ContextFactory(scriptEnv, renderEnv);
+        eb.contextManager = new ContextManager(contextFactory);
         eb.scriptEnv = scriptEnv;
         eb.saveModule = new SaveModule(eb);
     }

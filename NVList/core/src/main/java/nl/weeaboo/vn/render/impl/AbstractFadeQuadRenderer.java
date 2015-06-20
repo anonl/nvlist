@@ -26,7 +26,7 @@ public abstract class AbstractFadeQuadRenderer {
     private int segments;
 
 	public AbstractFadeQuadRenderer() {
-		interpolator = LUTInterpolator.fromInterpolator(Interpolators.BUTTERWORTH, 256);
+        interpolator = LUTInterpolator.fromInterpolator(Interpolators.SMOOTH, 256);
 
     	ByteBuffer vertsB = ByteBuffer.allocateDirect((8+MAX_SEGMENTS*2) * 2 * 4);
     	vertsB.order(ByteOrder.nativeOrder());

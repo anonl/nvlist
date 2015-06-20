@@ -1,17 +1,20 @@
 package nl.weeaboo.vn.math;
 
+import static nl.weeaboo.vn.LvnTestUtil.EPSILON;
+import static nl.weeaboo.vn.LvnTestUtil.deserializeObject;
+import static nl.weeaboo.vn.LvnTestUtil.serializeObject;
+
 import java.io.IOException;
 import java.util.Random;
-
-import nl.weeaboo.vn.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import nl.weeaboo.vn.LvnTestUtil;
+
 public class MatrixTest {
 
     private static final float GL_EPSILON = 0.0001f;
-    private static final double EPSILON = TestUtil.EPSILON;
 
     @Test
     public void equalsTest() {
@@ -143,15 +146,15 @@ public class MatrixTest {
             float y = random.nextFloat();
 
             Vec2 expected = new Vec2(33*x+22*y+11, 44*x+55*y+66);
-            TestUtil.assertEquals(expected.x, expected.y, transform.transform(x, y), EPSILON);
+            LvnTestUtil.assertEquals(expected.x, expected.y, transform.transform(x, y), EPSILON);
 
             Vec2 v = new Vec2(x, y);
             transform.transform(v);
-            TestUtil.assertEquals(expected.x, expected.y, v, EPSILON);
+            LvnTestUtil.assertEquals(expected.x, expected.y, v, EPSILON);
 
             float[] pts = {x, y};
             transform.transform(pts, 0, 1);
-            TestUtil.assertEquals(expected.x, expected.y, new Vec2(pts[0], pts[1]), EPSILON);
+            LvnTestUtil.assertEquals(expected.x, expected.y, new Vec2(pts[0], pts[1]), EPSILON);
         }
     }
 
@@ -244,8 +247,8 @@ public class MatrixTest {
     public void serialize() throws IOException, ClassNotFoundException {
         Matrix alpha = new Matrix(11, 22, 33, 44, 55, 66);
 
-        Assert.assertEquals(alpha, TestUtil.deserialize(TestUtil.serialize(alpha), Matrix.class));
-        Assert.assertEquals(alpha, TestUtil.deserialize(TestUtil.serialize(alpha.mutableCopy()), MutableMatrix.class));
+        Assert.assertEquals(alpha, deserializeObject(serializeObject(alpha), Matrix.class));
+        Assert.assertEquals(alpha, deserializeObject(serializeObject(alpha.mutableCopy()), MutableMatrix.class));
     }
 
 }

@@ -11,7 +11,7 @@ import nl.weeaboo.vn.math.Polygon;
 
 public class TransformablePart extends DrawablePart implements ITransformablePart {
 
-	private static final long serialVersionUID = BaseImpl.serialVersionUID;
+	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
 	private double rotation;
 	private double imageAlignX, imageAlignY;

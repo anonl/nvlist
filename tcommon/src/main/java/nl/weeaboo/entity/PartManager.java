@@ -15,27 +15,27 @@ class PartManager {
 	private Scene scene;
 	private final Map<Part, Collection<Entity>> parts = new HashMap<Part, Collection<Entity>>();
 	// -------------------------------------------------------------------------
-	
+
 	public PartManager(Scene s) {
 		this.scene = s;
 	}
-	
+
 	void reset() {
 		parts.clear();
 	}
-	
+
 	void serialize() {
 		// Parts mapping will be restored by Entity deserialization
 	}
-	
+
 	void deserialize(Scene s) {
 		reset();
-		
+
 		scene = s;
-		
-		// Parts mapping will be restored by Entity deserialization		
+
+		// Parts mapping will be restored by Entity deserialization
 	}
-	
+
 	public Iterable<Entity> entitiesWithPart(Part p) {
 		Collection<Entity> entities = parts.get(p);
 		if (entities == null) {
@@ -43,12 +43,12 @@ class PartManager {
 		}
 		return entities;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "PartManager[" + scene + "]";
 	}
-	
+
 	public void add(Entity e, Part p) {
 		Collection<Entity> list = parts.get(p);
 		if (list == null) {
@@ -57,15 +57,15 @@ class PartManager {
 		}
 		list.add(e);
 	}
-	
+
 	public void remove(Entity e, Part p) {
 		Collection<Entity> list = parts.get(p);
 		if (list != null) {
 			list.remove(e);
 			if (list.isEmpty()) {
-				parts.remove(e);
+                parts.remove(p);
 			}
 		}
 	}
-	
+
 }

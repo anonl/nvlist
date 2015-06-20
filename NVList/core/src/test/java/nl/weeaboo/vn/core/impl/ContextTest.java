@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.impl.Context;
-import nl.weeaboo.vn.core.impl.ContextManager;
 
 public class ContextTest  {
 
@@ -20,9 +18,9 @@ public class ContextTest  {
 
     @Before
     public void init() {
-        TestContextBuilder contextBuilder = new TestContextBuilder(null);
+        TestContextFactory contextFactory = new TestContextFactory(null);
+        contextManager = new ContextManager(contextFactory);
 
-        contextManager = new ContextManager(contextBuilder);
         alpha = contextManager.createContext();
         beta = contextManager.createContext();
     }

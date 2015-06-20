@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.core.impl;
 
 import org.junit.Before;
 

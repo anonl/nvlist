@@ -2,11 +2,11 @@ package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.io.Filenames;
 
-final class BaseImpl {
+final class CoreImpl {
 
     static final long serialVersionUID = 54L;
 
-    private BaseImpl() {
+    private CoreImpl() {
     }
 
     public static String replaceExt(String filename, String ext) {

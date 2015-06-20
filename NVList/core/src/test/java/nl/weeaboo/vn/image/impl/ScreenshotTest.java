@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.image.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,12 +9,12 @@ import org.junit.Test;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.entity.Scene;
 import nl.weeaboo.entity.World;
+import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.Screen;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
-import nl.weeaboo.vn.image.TestImageUtil;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.image.impl.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
@@ -79,7 +79,7 @@ public class ScreenshotTest {
 		World world = new World(pr);
 		Scene scene = world.createScene();
 
-		Screen screen = TestUtil.newScreen(pr, scene);
+        Screen screen = NvlTestUtil.newScreen(pr, scene);
 		ILayer root = screen.getRootLayer();
 
 		WritableScreenshot s = new WritableScreenshot((short)0, false);
