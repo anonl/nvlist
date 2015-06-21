@@ -23,8 +23,8 @@ public class FileSystemView implements IFileSystem {
 	}
 
 	@Override
-	public InputStream newInputStream(String path) throws IOException {
-		return fileSystem.newInputStream(prefix + path);
+	public InputStream openInputStream(String path) throws IOException {
+		return fileSystem.openInputStream(prefix + path);
 	}
 
 	@Override

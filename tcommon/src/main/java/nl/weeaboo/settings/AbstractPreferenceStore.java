@@ -1,38 +1,41 @@
 package nl.weeaboo.settings;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PreferenceStore implements IPreferenceStore {
+import nl.weeaboo.common.Checks;
+
+public abstract class AbstractPreferenceStore implements IPreferenceStore {
 
     private final Map<String, Var> map = new HashMap<String, Var>();
     private final List<IPreferenceListener> listeners = new CopyOnWriteArrayList<IPreferenceListener>();
     private final Queue<FireEvent<?>> fireQueue = new ArrayDeque<FireEvent<?>>();
 
-    public PreferenceStore() {
+    public AbstractPreferenceStore() {
     }
 
-    @Override
-    public void init(Map<String, String> userOverrides) throws IOException {
-        // TODO Auto-generated method stub
-
+    protected void initConsts(Map<String, String> properties) {
+        setAll(properties, true);
     }
 
-    @Override
-    public void loadVariables() throws IOException {
-        // TODO Auto-generated method stub
-
+    protected void setAll(Map<String, String> properties) {
+        setAll(properties, false);
     }
 
-    @Override
-    public void saveVariables() throws IOException {
-        // TODO Auto-generated method stub
-
+    private void setAll(Map<String, String> properties, boolean asConsts) {
+        for (Entry<String, String> entry : properties.entrySet()) {
+            String name = entry.getKey();
+            Var current = map.get(name);
+            if (current != null && current.isConstant()) {
+                throw new IllegalArgumentException("Attempt to overwrite constant property: " + name);
+            }
+            map.put(name, new Var(asConsts, entry.getValue()));
+        }
     }
 
     @Override
@@ -64,6 +67,14 @@ public class PreferenceStore implements IPreferenceStore {
         return (var != null ? var.getValue(pref) : pref.getDefaultValue());
     }
 
+    protected Map<String, String> getVariables() {
+        Map<String, String> vars = new HashMap<String, String>();
+        for (Entry<String, Var> entry : map.entrySet()) {
+            vars.put(entry.getKey(), entry.getValue().getRawValue());
+        }
+        return vars;
+    }
+
     @Override
     public <T, V extends T> void set(Preference<T> pref, V value) {
         T oldValue;
@@ -85,7 +96,7 @@ public class PreferenceStore implements IPreferenceStore {
 
     private final static class Var {
 
-        private final boolean isConstant;
+        private boolean isConstant;
         private String raw;
 
         private transient Preference<?> lastGetterProp;
@@ -106,7 +117,7 @@ public class PreferenceStore implements IPreferenceStore {
             return isConstant;
         }
 
-        public String getRaw() {
+        public String getRawValue() {
             return raw;
         }
 
@@ -128,14 +139,11 @@ public class PreferenceStore implements IPreferenceStore {
         }
 
         public <T> T setValue(Preference<T> property, T value) {
-            if (!property.isValidValue(value)) {
-                throw new IllegalArgumentException(
-                        "Invalid value for property: " + property.getKey() + " -> " + value);
-            }
-            if (isConstant || property.isConstant()) {
-                throw new UnsupportedOperationException("Attempting to change the value of a constant: "
-                        + property.getKey() + " -> " + value);
-            }
+            Checks.checkState(!isConstant && !property.isConstant(),
+                    "Attempting to change the value of a constant: " + property.getKey() + " -> " + value);
+
+            Checks.checkArgument(property.isValidValue(value),
+                    "Invalid value for property: " + property.getKey() + " -> " + value);
 
             T oldValue = getValue(property);
 

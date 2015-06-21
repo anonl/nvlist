@@ -15,7 +15,7 @@ public final class FileSystemUtil {
 		
     public static byte[] readBytes(IFileSystem fs, String path) throws IOException {
         byte[] bytes;
-        InputStream in = fs.newInputStream(path);
+        InputStream in = fs.openInputStream(path);
         try {
             bytes = StreamUtil.readBytes(in);
         } finally {

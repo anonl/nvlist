@@ -3,7 +3,7 @@ package nl.weeaboo.vn.image.impl;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.entity.Part;
-import nl.weeaboo.vn.core.AlignUtil;
+import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.ITexture;

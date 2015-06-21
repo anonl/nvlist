@@ -3,7 +3,7 @@ package nl.weeaboo.settings;
 class EnumPreference<E extends Enum<E>> extends Preference<E> {
 
 	public EnumPreference(String key, Class<E> type, E defaultVal, boolean c, String name, String desc) {
-		super(key, type, defaultVal, c, name, desc);
+		super(key, name, type, defaultVal, c, desc);
 	}
 
 	@Override

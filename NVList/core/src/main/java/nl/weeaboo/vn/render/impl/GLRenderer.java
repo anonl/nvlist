@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.gl.GLBlendMode;
 import nl.weeaboo.gdx.gl.GLMatrixStack;
-import nl.weeaboo.vn.core.AlignUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.impl.TextureAdapter;
 
 public abstract class GLRenderer extends BaseRenderer {

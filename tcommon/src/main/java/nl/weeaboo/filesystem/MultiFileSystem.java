@@ -37,10 +37,10 @@ public class MultiFileSystem implements IFileSystem {
 	}
 
     @Override
-    public InputStream newInputStream(String path) throws IOException {
+    public InputStream openInputStream(String path) throws IOException {
         for (IFileSystem fs : fileSystems) {
             if (fs.getFileExists(path)) {
-                return fs.newInputStream(path);
+                return fs.openInputStream(path);
             }
         }
         throw new FileNotFoundException(path);

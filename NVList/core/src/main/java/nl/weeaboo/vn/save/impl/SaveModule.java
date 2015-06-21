@@ -187,7 +187,7 @@ public class SaveModule implements ISaveModule {
 
     private void readSaveData(IFileSystem fs, INovel novel, IProgressListener pl) throws IOException {
 
-        InputStream in = ProgressInputStream.wrap(fs.newInputStream(SaveFileConstants.SAVEDATA_PATH),
+        InputStream in = ProgressInputStream.wrap(fs.openInputStream(SaveFileConstants.SAVEDATA_PATH),
                 fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
 
         try {
@@ -208,7 +208,7 @@ public class SaveModule implements ISaveModule {
     public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException {
         IWritableFileSystem fs = getFileSystem();
 
-        ZipOutputStream zout = new ZipOutputStream(fs.newOutputStream(getSaveFilename(slot), false));
+        ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(getSaveFilename(slot), false));
         try {
             ThumbnailInfo thumbnailInfo = params.getThumbnailInfo();
 

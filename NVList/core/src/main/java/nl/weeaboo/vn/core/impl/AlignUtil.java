@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.ITexture;
@@ -16,8 +16,11 @@ public final class AlignUtil {
 		return new Vec2(getAlignOffset(tex.getWidth(), alignX), getAlignOffset(tex.getHeight(), alignY));
 	}
 
+    /**
+     * @return A relative offset (in pixels), based on the fractional alignment.
+     */
 	public static double getAlignOffset(double size, double align) {
-		return -align * (size == 0 ? 1 : size);
+        return -align * size;
 	}
 
 	public static Rect2D getAlignedBounds(ITexture tex, double alignX, double alignY) {

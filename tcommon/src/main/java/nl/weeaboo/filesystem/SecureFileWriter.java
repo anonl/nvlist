@@ -19,9 +19,9 @@ public class SecureFileWriter {
 	// Functions
 	public InputStream newInputStream(String path) throws IOException {
 		if (fs.getFileExists(path) && fs.getFileSize(path) > 0) {
-			return fs.newInputStream(path);
+			return fs.openInputStream(path);
 		}
-		return fs.newInputStream(backupPath(path));
+		return fs.openInputStream(backupPath(path));
 	}
 
 	public OutputStream newOutputStream(final String path, boolean append) throws IOException {
@@ -32,7 +32,7 @@ public class SecureFileWriter {
 				fs.copy(path, backupPath);
 			}
 		}
-		return new FilterOutputStream(fs.newOutputStream(backupPath, append)) {
+		return new FilterOutputStream(fs.openOutputStream(backupPath, append)) {
 			@Override
 			public void close() throws IOException {
 				super.close();

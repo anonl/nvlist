@@ -9,6 +9,6 @@ public interface IWritableFileSystem extends IFileSystem {
     public void rename(String src, String dst) throws IOException;
     public void copy(String src, String dst) throws IOException;        
     
-    public OutputStream newOutputStream(String path, boolean append) throws IOException;
+    public OutputStream openOutputStream(String path, boolean append) throws IOException;
     
 }

@@ -8,7 +8,7 @@ public interface IFileSystem {
 
     public void close();
     
-	public InputStream newInputStream(String path) throws IOException;
+	public InputStream openInputStream(String path) throws IOException;
 	
 	public boolean isOpen();
 	public boolean isReadOnly();

@@ -139,7 +139,7 @@ public class ZipFileArchive extends AbstractFileArchive {
     }
     
     @Override
-    protected InputStream newInputStreamImpl(String path) throws IOException {
+    protected InputStream openInputStreamImpl(String path) throws IOException {
         ArchiveFileRecord file = getFileImpl(path);
 
         long fileOffset = getFileOffset(file.getHeaderOffset());

@@ -1,18 +1,45 @@
 package nl.weeaboo.vn.core;
 
 import static nl.weeaboo.settings.Preference.newConstPreference;
-import static nl.weeaboo.settings.Preference.newPreference;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Map;
+
+import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.settings.AbstractPreferenceStore;
 import nl.weeaboo.settings.Preference;
+import nl.weeaboo.settings.PropertiesUtil;
 
-public final class NovelPrefs {
+public final class NovelPrefs extends AbstractPreferenceStore {
 
-    public static final Preference<Integer> WIDTH = newConstPreference("width", 1280, "Width", "Desired width for the main window. This is the width that will be passed to user code, the framework will take care of any scaling required.");
-    public static final Preference<Integer> HEIGHT = newConstPreference("height", 720, "Height", "Desired height for the main window. This is the height that will be passed to user code, the framework will take care of any scaling required.");
+    public static final Preference<Integer> WIDTH = newConstPreference("width",
+            "Width",
+            1280,
+            "Desired width for the main window. This is the width that will be passed to user code, the framework will take care of any scaling required.");
 
-	public static final Preference<Boolean> SCRIPT_DEBUG = newPreference("vn.scriptDebug", false, "Script Debug", "Certain functions detect and warn about additional errors when script debug is turned on.");
-    public static final Preference<String>  ENGINE_MIN_VERSION = newPreference("vn.engineMinVersion", "4.0", "Engine Minimum Version", "The minimum allowable version of NVList that can be used to read your novel. Raises an error if the current version is less than the required version.");
-    public static final Preference<String>  ENGINE_TARGET_VERSION = newPreference("vn.engineTargetVersion", "4.0", "Engine Target Version", "The version of NVList this VN was created for.");
+    public static final Preference<Integer> HEIGHT = newConstPreference("height",
+            "Height",
+            720,
+            "Desired height for the main window. This is the height that will be passed to user code, the framework will take care of any scaling required.");
+
+    public static final Preference<Boolean> SCRIPT_DEBUG = newConstPreference("vn.scriptDebug",
+            "Script Debug",
+            false,
+            "Certain functions detect and warn about additional errors when script debug is turned on.");
+
+    public static final Preference<String> ENGINE_MIN_VERSION = newConstPreference("vn.engineMinVersion",
+            "Engine Minimum Version",
+            "4.0",
+            "The minimum allowable version of NVList that can be used to read your novel. Raises an error if the current version is less than the required version.");
+
+    public static final Preference<String> ENGINE_TARGET_VERSION = newConstPreference("vn.engineTargetVersion",
+            "Engine Target Version",
+            "4.0",
+            "The version of NVList this VN was created for.");
 
 //	public static final Preference<Integer> SAVE_SCREENSHOT_WIDTH = newPreference("vn.saveScreenshotWidth", 224, "Save Screenshot Width", "Width (in pixels) to store the save slot screenshots at.");
 //	public static final Preference<Integer> SAVE_SCREENSHOT_HEIGHT = newPreference("vn.saveScreenshotHeight", 126, "Save Screenshot Height", "Height (in pixels) to store the save slot screenshots at.");
@@ -36,13 +63,44 @@ public final class NovelPrefs {
 //	public static final Preference<Boolean> ENABLE_PROOFREADER_TOOLS = newPreference("vn.enableProofreaderTools", false, "Enable Proofreader Tools", "Enables available bug reporting features for proofreaders/editors.");
 //	public static final Preference<Boolean> RTL = newPreference("vn.rtl", false, "Right-to-Left Text", "Sets the default text direction to RTL (right to left).");
 
-	private NovelPrefs() {
+    private static final String CONSTANTS_FILENAME = "config.ini";
+    private static final String DEFAULTS_FILENAME = "prefs.default.ini";
+    private static final String VARIABLES_FILENAME = "prefs.ini";
+
+    private final IWritableFileSystem fileSystem;
+
+    public NovelPrefs(IWritableFileSystem fs) {
+        this.fileSystem = Checks.checkNotNull(fs);
 	}
 
-//	private static TextStyle coloredTextStyle(int argb) {
-//		MutableTextStyle mts = new MutableTextStyle();
-//		mts.setColor(argb);
-//		return mts.immutableCopy();
-//	}
+    @Override
+    public void loadVariables() throws IOException {
+        initConsts(load(CONSTANTS_FILENAME));
+        setAll(load(DEFAULTS_FILENAME));
+        setAll(load(VARIABLES_FILENAME));
+    }
+
+    private Map<String, String> load(String filename) throws IOException {
+        if (!fileSystem.getFileExists(filename)) {
+            return Collections.emptyMap();
+        }
+
+        InputStream in = fileSystem.openInputStream(filename);
+        try {
+            return PropertiesUtil.load(in);
+        } finally {
+            in.close();
+        }
+    }
+
+    @Override
+    public void saveVariables() throws IOException {
+        OutputStream out = fileSystem.openOutputStream(VARIABLES_FILENAME, false);
+        try {
+            PropertiesUtil.save(out, getVariables());
+        } finally {
+            out.close();
+        }
+    }
 
 }

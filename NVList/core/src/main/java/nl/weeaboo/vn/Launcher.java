@@ -1,5 +1,10 @@
 package nl.weeaboo.vn;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -21,7 +26,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
-import nl.weeaboo.settings.PreferenceStore;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.NovelBuilder;
@@ -29,6 +34,8 @@ import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 
 public class Launcher extends ApplicationAdapter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
 	private AssetManager manager;
 	private FrameBuffer frameBuffer;
@@ -78,10 +85,18 @@ public class Launcher extends ApplicationAdapter {
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         MultiFileSystem fileSystem = new MultiFileSystem(readFileSystem, inMemoryFileSystem);
 
+        NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
+        try {
+            prefs.loadVariables();
+            prefs.saveVariables();
+        } catch (IOException ioe) {
+            LOG.warn("Unable to load variables", ioe);
+        }
+
         StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
-        StaticEnvironment.PREFS.set(new PreferenceStore());
+        StaticEnvironment.PREFS.set(prefs);
 
         NovelBuilder novelBuilder = new NovelBuilder();
         try {

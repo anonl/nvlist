@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITexture;
 
@@ -13,6 +14,10 @@ import nl.weeaboo.vn.image.ITexture;
 public class TestTexture implements ITexture {
 
 	private static final long serialVersionUID = 1L;
+
+    static {
+        HeadlessGdx.init();
+    }
 
 	private final int w, h;
 	private final int[] argb;

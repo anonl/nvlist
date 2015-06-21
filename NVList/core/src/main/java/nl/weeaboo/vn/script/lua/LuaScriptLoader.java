@@ -206,7 +206,7 @@ public class LuaScriptLoader implements IScriptLoader {
                 return url.openStream();
             }
 
-            return fs.newInputStream(filename);
+            return fs.openInputStream(filename);
         }
 
         public long getModifiedTime(String filename) throws IOException {

@@ -3,7 +3,7 @@ package nl.weeaboo.settings;
 class BasicPreference<T> extends Preference<T> {
 
 	public BasicPreference(String key, Class<T> type, T defaultVal, boolean c, String name, String desc) {
-		super(key, type, defaultVal, c, name, desc);
+		super(key, name, type, defaultVal, c, desc);
 		
 		if (!isBasicType(type)) {
 			throw new IllegalArgumentException("Can't create BasicProperty of non-basic type: " + type);

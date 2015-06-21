@@ -20,7 +20,7 @@ public abstract class AbstractWritableFileSystem extends AbstractFileSystem impl
     }
     
     @Override
-    public final OutputStream newOutputStream(String path, boolean append) throws IOException {
+    public final OutputStream openOutputStream(String path, boolean append) throws IOException {
         checkWritable();
         return newOutputStreamImpl(normalizePath(path, true), append);
     }

@@ -2,7 +2,6 @@ package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.AlignUtil;
 import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Matrix;

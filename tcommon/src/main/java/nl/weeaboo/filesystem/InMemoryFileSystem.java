@@ -45,7 +45,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 	}
 
 	@Override
-	protected InputStream newInputStreamImpl(String path) throws IOException {
+	protected InputStream openInputStreamImpl(String path) throws IOException {
 		synchronized (files) {
             InMemoryFile file = getFile(path, false);
 			return file.openInputStream();

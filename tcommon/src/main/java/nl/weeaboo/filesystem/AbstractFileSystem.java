@@ -38,11 +38,11 @@ public abstract class AbstractFileSystem implements IFileSystem {
     }
 
     @Override
-    public final InputStream newInputStream(String path) throws IOException {
-        return newInputStreamImpl(normalizePath(path, false));
+    public final InputStream openInputStream(String path) throws IOException {
+        return openInputStreamImpl(normalizePath(path, false));
     }
 
-    protected abstract InputStream newInputStreamImpl(String path) throws IOException;
+    protected abstract InputStream openInputStreamImpl(String path) throws IOException;
     
     @Override
     public final boolean getFileExists(String path) {

@@ -44,7 +44,7 @@ public class GdxFileSystem extends AbstractFileSystem {
     }
     
     @Override
-    protected InputStream newInputStreamImpl(String path) throws IOException {
+    protected InputStream openInputStreamImpl(String path) throws IOException {
         return resolveExisting(path).read();
     }
 

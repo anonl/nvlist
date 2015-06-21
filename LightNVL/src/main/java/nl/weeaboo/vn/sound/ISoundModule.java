@@ -25,7 +25,7 @@ public interface ISoundModule extends Serializable {
     /**
      * Returns the human-readable name of a sound file.
      *
-     * @return The name, or {@code null} if no human-readable name is defined in {@code snd.xml}.
+     * @return The name, or {@code null} if no human-readable name is defined.
      */
     public String getDisplayName(String filename);
 

@@ -5,7 +5,7 @@ import nl.weeaboo.settings.Preference;
 public class TextStylePreference extends Preference<TextStyle> {
 	
 	protected TextStylePreference(String key, TextStyle defaultVal, boolean c, String name, String desc) {
-		super(key, TextStyle.class, defaultVal, c, name, desc);
+		super(key, name, TextStyle.class, defaultVal, c, desc);
 	}
 
 	public static Preference<TextStyle> newPreference(String key, TextStyle defaultVal, String name, String desc) {
