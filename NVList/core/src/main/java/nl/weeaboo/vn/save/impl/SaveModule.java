@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -17,6 +18,7 @@ import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
+import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
@@ -33,6 +35,7 @@ import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
+@CustomSerializable
 public class SaveModule implements ISaveModule {
 
     private static final long serialVersionUID = SaveImpl.serialVersionUID;
@@ -42,29 +45,46 @@ public class SaveModule implements ISaveModule {
     private static final int AUTO_SAVE_OFFSET = 900;
 
     private final IEnvironment env;
-
-    private final LuaSerializer luaSerializer;
     private final IStorage globals;
-    private final IStorage sharedGlobals;
+
+    private transient IStorage sharedGlobals;
+    private transient LuaSerializer luaSerializer;
 
     public SaveModule(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
 
-        luaSerializer = new LuaSerializer();
         globals = new Storage();
-        sharedGlobals = new Storage();
+
+        initTransients();
     }
 
-    protected SecureFileWriter getSecureFileWriter() {
+    private void initTransients() {
+        sharedGlobals = new Storage();
+        tryLoadSharedGlobals();
+
+        luaSerializer = new LuaSerializer();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
+    }
+
+    protected final SecureFileWriter getSecureFileWriter() {
         return new SecureFileWriter(getFileSystem());
     }
 
-    protected IWritableFileSystem getFileSystem() {
+    protected final IWritableFileSystem getFileSystem() {
         return env.getOutputFileSystem();
     }
 
     @Override
     public void loadPersistent() {
+        tryLoadSharedGlobals();
+    }
+
+    private void tryLoadSharedGlobals() {
         try {
 // TODO LVN-017
 //            if (isVNDS()) {
@@ -78,7 +98,7 @@ public class SaveModule implements ISaveModule {
         }
     }
 
-    protected void loadSharedGlobals() throws IOException {
+    private void loadSharedGlobals() throws IOException {
         SecureFileWriter sfw = getSecureFileWriter();
         IStorage read = StorageIO.read(sfw, SHARED_GLOBALS_PATH);
 
@@ -96,7 +116,7 @@ public class SaveModule implements ISaveModule {
         generatePreloaderData();
     }
 
-    protected void saveSharedGlobals() throws IOException {
+    private void saveSharedGlobals() throws IOException {
         SecureFileWriter sfw = getSecureFileWriter();
         StorageIO.write(sharedGlobals, sfw, SHARED_GLOBALS_PATH);
     }
@@ -186,7 +206,6 @@ public class SaveModule implements ISaveModule {
     }
 
     private void readSaveData(IFileSystem fs, INovel novel, IProgressListener pl) throws IOException {
-
         InputStream in = ProgressInputStream.wrap(fs.openInputStream(SaveFileConstants.SAVEDATA_PATH),
                 fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
 
@@ -208,7 +227,8 @@ public class SaveModule implements ISaveModule {
     public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException {
         IWritableFileSystem fs = getFileSystem();
 
-        ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(getSaveFilename(slot), false));
+        String filename = getSaveFilename(slot);
+        ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(filename, false));
         try {
             ThumbnailInfo thumbnailInfo = params.getThumbnailInfo();
 
@@ -219,7 +239,9 @@ public class SaveModule implements ISaveModule {
             SaveFileIO.writeJson(zout, SaveFileConstants.HEADER_PATH, SaveFileHeaderJson.encode(header));
 
             // Thumbnail
-            SaveFileIO.writeBytes(zout, thumbnailInfo.getPath(), params.getThumbnailData());
+            if (thumbnailInfo != null) {
+                SaveFileIO.writeBytes(zout, thumbnailInfo.getPath(), params.getThumbnailData());
+            }
 
             // Save data
             writeSaveData(zout, novel, pl);
@@ -230,6 +252,8 @@ public class SaveModule implements ISaveModule {
                 LOG.warn("Error closing save file: slot=" + slot, ioe);
             }
         }
+
+        LOG.info("Save written: " + StringUtil.formatMemoryAmount(fs.getFileSize(filename)));
     }
 
     private void writeSaveData(ZipOutputStream zout, INovel novel, IProgressListener pl) throws IOException {
@@ -237,7 +261,7 @@ public class SaveModule implements ISaveModule {
         ObjectSerializer os = luaSerializer.openSerializer(ProgressOutputStream.wrap(bout, pl));
         try {
             os.setPackageLimit(PackageLimit.NONE);
-            os.writeObject(novel);
+            novel.writeAttributes(os);
             os.flush();
 
             List<String> warnings = ImmutableList.copyOf(os.checkErrors());

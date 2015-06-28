@@ -9,6 +9,8 @@ import nl.weeaboo.vn.script.ScriptException;
 
 public class TestSystemEventHandler implements ISystemEventHandler {
 
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOG = LoggerFactory.getLogger(TestSystemEventHandler.class);
 
     @Override

@@ -1,11 +1,9 @@
 package nl.weeaboo.vn.core.impl;
 
-import static nl.weeaboo.vn.core.NovelPrefs.ENGINE_TARGET_VERSION;
 import static nl.weeaboo.vn.core.NovelPrefs.HEIGHT;
 import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
@@ -13,17 +11,13 @@ import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
-import nl.weeaboo.vn.script.lvn.ILvnParser;
-import nl.weeaboo.vn.script.lvn.LvnParserFactory;
 
 public class NovelBuilder {
 
     private final IPreferenceStore prefs;
-    private final IFileSystem fileSystem;
 
     public NovelBuilder() {
         this.prefs = StaticEnvironment.PREFS.get();
-        this.fileSystem = StaticEnvironment.FILE_SYSTEM.get();
     }
 
     public Novel build() throws InitException {
@@ -37,32 +31,31 @@ public class NovelBuilder {
     }
 
     protected DefaultEnvironment initEnvironment() throws InitException {
-        EnvironmentBuilder eb = new EnvironmentBuilder();
-        initEnvironment(eb);
-        return new DefaultEnvironment(eb);
+        DefaultEnvironment env = new DefaultEnvironment();
+        initEnvironment(env);
+        return env;
     }
 
     /**
      * @throws InitException If an unrecoverable initialization error occurs.
      */
-    protected void initEnvironment(EnvironmentBuilder eb) throws InitException {
+    protected void initEnvironment(DefaultEnvironment env) throws InitException {
         final Dim vsize = new Dim(prefs.get(WIDTH), prefs.get(HEIGHT));
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
-        eb.renderEnv = renderEnv;
-        eb.partRegistry = new BasicPartRegistry();
-        eb.systemEventHandler = new SystemEventHandler();
+        env.renderEnv = renderEnv;
+        env.partRegistry = new BasicPartRegistry();
+        env.systemEventHandler = new SystemEventHandler();
 
         // Init Lua script env
         LuaRunState runState = new LuaRunState();
-        ILvnParser lvnParser = LvnParserFactory.getParser(prefs.get(ENGINE_TARGET_VERSION));
-        LuaScriptLoader scriptLoader = LuaScriptLoader.newInstance(lvnParser, fileSystem);
+        LuaScriptLoader scriptLoader = LuaScriptLoader.newInstance(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
 
         ContextFactory contextFactory = new ContextFactory(scriptEnv, renderEnv);
-        eb.contextManager = new ContextManager(contextFactory);
-        eb.scriptEnv = scriptEnv;
-        eb.saveModule = new SaveModule(eb);
+        env.contextManager = new ContextManager(contextFactory);
+        env.scriptEnv = scriptEnv;
+        env.saveModule = new SaveModule(env);
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {

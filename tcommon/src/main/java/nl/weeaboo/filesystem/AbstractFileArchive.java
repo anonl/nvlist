@@ -15,19 +15,19 @@ import nl.weeaboo.io.RandomAccessUtil;
 public abstract class AbstractFileArchive extends AbstractFileSystem implements IFileArchive {
 
     private static final RecordPathComparator pathComparator = new RecordPathComparator();
-    
+
 	protected File file;
 	protected IRandomAccessFile rfile;
 	protected ArchiveFileRecord records[];
 
 	public AbstractFileArchive() {
 	}
-	
+
 	//Functions
 	@Override
 	public void open(File f) throws IOException {
 		file = f;
-		
+
 		try {
 			open(RandomAccessUtil.wrap(new RandomAccessFile(f, "r")));
 		} catch (RuntimeException re) {
@@ -36,14 +36,14 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 			throw ioe;
 		}
 	}
-	
+
 	@Override
 	public void open(IRandomAccessFile f) throws IOException {
 		rfile = f;
-		
+
 		try {
 			records = initRecords(f);
-		    Arrays.sort(records);
+            Arrays.sort(records, pathComparator);
 		} catch (IOException ioe) {
 			close();
 			throw ioe;
@@ -58,17 +58,17 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 			}
 		} catch (IOException e) {
 		    // Ignore
-		}		
+		}
 		rfile = null;
 	}
-	
+
 	protected abstract ArchiveFileRecord[] initRecords(IRandomAccessFile f) throws IOException;
-	
+
     @Override
     public boolean isReadOnly() {
         return true;
     }
-	
+
     @Override
     protected boolean getFileExistsImpl(String path) {
         try {
@@ -77,7 +77,7 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
             return false;
         }
     }
-    
+
     @Override
     protected long getFileSizeImpl(String path) throws IOException {
         return getFileImpl(path).getUncompressedLength();
@@ -97,49 +97,49 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
         if (index < 0) {
             throw new FileNotFoundException(path);
         }
-        return records[index];        
+        return records[index];
     }
-    
+
 	public long getFileOffset(String path) throws IOException {
 		return getFileOffset(getFileImpl(path).getHeaderOffset());
 	}
-	
+
 	protected abstract long getFileOffset(long headerOffset) throws IOException;
-	
+
 	@Override
 	public Iterator<ArchiveFileRecord> iterator() {
 		return new Iterator<ArchiveFileRecord>() {
 			int t = 0;
-			
+
 			@Override
 			public boolean hasNext() {
 				return t < records.length;
 			}
-			
+
 			@Override
 			public ArchiveFileRecord next() {
-			    return records[t++];				
+			    return records[t++];
 			}
-			
+
 			@Override
 			public void remove() {
 				throw new UnsupportedOperationException("Archive is read-only");
 			}
 		};
-	}	
-	
+	}
+
     @Override
     protected void getFiles(Collection<String> out, String prefix, FileCollectOptions opts)
             throws IOException {
-        
+
 		int index = Arrays.binarySearch(records, prefix, pathComparator);
 		if (index < 0) {
 			index = -(index+1);
 		}
-		
+
 		while (index >= 0 && index < records.length) {
 			ArchiveFileRecord record = records[index];
-			if (record.getPath().startsWith(prefix)) {				
+			if (record.getPath().startsWith(prefix)) {
 				boolean isFolder = record.isFolder();
 				if ((isFolder && opts.collectFolders) || (!isFolder && opts.collectFiles)) {
 					String path = record.getPath();
@@ -152,40 +152,40 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 				break; //We're past the subrange that matches the prefix
 			}
 			index++;
-		}		
+		}
 	}
-	
+
 	/**
 	 * @return The backing File object if one exists.
 	 */
 	public File getFile() {
 		return file;
 	}
-	
+
 	/**
 	 * @return The backing IRandomAccessFile object used by this ZipArchive
 	 */
 	public IRandomAccessFile getRandomAccessFile() {
 		return rfile;
 	}
-    
+
     private static class RecordPathComparator implements Comparator<Object> {
 
         @Override
         public int compare(Object a, Object b) {
             if (a == b) {
                 return 0;
-            } 
+            }
             return getPath(a).compareTo(getPath(b));
         }
-        
+
         private static String getPath(Object obj) {
             if (obj instanceof ArchiveFileRecord) {
                 return ((ArchiveFileRecord)obj).getPath();
             }
             return String.valueOf(obj);
         }
-        
+
     }
-	
+
 }

@@ -45,6 +45,7 @@ public class Launcher extends ApplicationAdapter {
 	private FitViewport screenViewport;
 
 	private Osd osd;
+    private DebugControls debugControls;
 	private SpriteBatch batch;
 	private Texture img;
 	private Vector2 spritePos = new Vector2();
@@ -64,6 +65,7 @@ public class Launcher extends ApplicationAdapter {
 		Texture.setAssetManager(manager);
 
 		osd = Osd.newInstance();
+        debugControls = new DebugControls();
 
 		frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 
@@ -162,10 +164,12 @@ public class Launcher extends ApplicationAdapter {
 		spritePos.x = (spritePos.x + 256 * dt) % vsize.w;
 		spritePos.y = (vsize.h / 2) + 128 * MathUtils.cosDeg(spritePos.x);
 
+        debugControls.update(novel);
         novel.update();
 	}
 
 	protected void renderScreen(SpriteBatch batch) {
+
 		batch.begin();
 
 		batch.draw(img, spritePos.x, spritePos.y);

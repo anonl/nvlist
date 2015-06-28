@@ -1,11 +1,10 @@
 package nl.weeaboo.vn.core.impl;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.TestFileSystem;
-import nl.weeaboo.vn.script.IScriptLoader;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.lua.LuaTestUtil;
@@ -14,43 +13,30 @@ public class TestEnvironment extends DefaultEnvironment {
 
     private static final long serialVersionUID = 1L;
 
-    public final LuaScriptEnv scriptEnv;
-    public final IScriptLoader scriptLoader;
-
-    private TestEnvironment(EnvironmentBuilder b, LuaScriptEnv scriptEnv) {
-        super(b);
-
-        Checks.checkArgument(b.contextManager instanceof ContextManager,
-                "ContextManager must be an instance of " + ContextManager.class.getName());
-
-        this.scriptEnv = scriptEnv;
-        this.scriptLoader = scriptEnv.getScriptLoader();
-    }
-
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
+        NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
 
         StaticEnvironment.NOTIFIER.set(notifier);
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
+        StaticEnvironment.PREFS.set(prefs);
 
-        EnvironmentBuilder b = new EnvironmentBuilder();
-
-        b.partRegistry = new BasicPartRegistry();
-        b.renderEnv = NvlTestUtil.BASIC_ENV;
-        b.systemEventHandler = new TestSystemEventHandler();
-
+        TestEnvironment env = new TestEnvironment();
         LuaRunState runState = LuaTestUtil.newRunState();
-        LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(fileSystem);
-
+        LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
 
-        TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
-        b.contextManager = new ContextManager(contextFactory);
-        b.scriptEnv = scriptEnv;
+        env.partRegistry = new BasicPartRegistry();
+        env.renderEnv = NvlTestUtil.BASIC_ENV;
+        env.systemEventHandler = new TestSystemEventHandler();
+        env.scriptEnv = scriptEnv;
 
-        return new TestEnvironment(b, scriptEnv);
+        TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
+        env.contextManager = new ContextManager(contextFactory);
+
+        return env;
     }
 
     @Override

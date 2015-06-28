@@ -3,14 +3,12 @@ package nl.weeaboo.vn.script.lua;
 import org.junit.Assert;
 import org.luaj.vm2.LuaTable;
 
-import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
-import nl.weeaboo.vn.script.lvn.ILvnParser;
-import nl.weeaboo.vn.script.lvn.LvnParserFactory;
 
 public final class LuaTestUtil {
 
@@ -28,12 +26,8 @@ public final class LuaTestUtil {
         return runState;
     }
 
-    public static LuaScriptLoader newScriptLoader(IFileSystem fileSystem) {
-        return LuaScriptLoader.newInstance(LuaTestUtil.newLvnParser(), fileSystem);
-    }
-
-    public static ILvnParser newLvnParser() {
-        return LvnParserFactory.getParser(Integer.toString(4));
+    public static LuaScriptLoader newScriptLoader(IEnvironment env) {
+        return LuaScriptLoader.newInstance(env);
     }
 
     public static void assertGlobal(String name, int val) {

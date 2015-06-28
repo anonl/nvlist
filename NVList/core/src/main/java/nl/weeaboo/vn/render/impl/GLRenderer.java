@@ -1,17 +1,21 @@
 package nl.weeaboo.vn.render.impl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.gl.GLBlendMode;
 import nl.weeaboo.gdx.gl.GLMatrixStack;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.AlignUtil;
+import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.impl.TextureAdapter;
 
-public abstract class GLRenderer extends BaseRenderer {
+public class GLRenderer extends BaseRenderer {
 
     //--- Properties only valid between renderBegin() and renderEnd() beneath this line ---
     private int buffered;
@@ -24,21 +28,21 @@ public abstract class GLRenderer extends BaseRenderer {
     }
 
     @Override
-    public void renderBegin() {        
+    public void renderBegin() {
         matrixStack.pushMatrix();
         buffered = 0;
 
         super.renderBegin();
-        
-        spriteBatch.begin();        
+
+        spriteBatch.begin();
     }
 
     @Override
     public void renderEnd() {
-        spriteBatch.end();        
+        spriteBatch.end();
 
         super.renderEnd();
-        
+
         matrixStack.popMatrix();
     }
 
@@ -95,6 +99,16 @@ public abstract class GLRenderer extends BaseRenderer {
     }
 
     @Override
+    public void renderTriangleGrid(TriangleGrid grid) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void renderScreenshot(IWritableScreenshot out, Rect glScreenRect) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
     protected boolean renderUnknownCommand(RenderCommand cmd) {
         return false;
     }
@@ -105,18 +119,18 @@ public abstract class GLRenderer extends BaseRenderer {
             return;
         }
 
-        spriteBatch.flush();        
+        spriteBatch.flush();
         renderStats.onRenderQuadBatch(buffered);
         buffered = 0;
     }
 
     @Override
-    protected void setColor(int argb) {
+    protected void applyColor(int argb) {
         spriteBatch.setColor(argb);
     }
 
     @Override
-    protected void setBlendMode(BlendMode bm) {
+    protected void applyBlendMode(BlendMode bm) {
         switch (bm) {
         case DEFAULT:
             GLBlendMode.DEFAULT.apply(spriteBatch);
@@ -133,6 +147,20 @@ public abstract class GLRenderer extends BaseRenderer {
     @Override
     protected void translate(double dx, double dy) {
         matrixStack.translate(dx, dy);
+    }
+
+    @Override
+    protected void applyClip(boolean c) {
+        if (c) {
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        } else {
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+    }
+
+    @Override
+    protected void applyClipRect(Rect glRect) {
+        Gdx.gl.glScissor(glRect.x, glRect.y, glRect.w, glRect.h);
     }
 
 }

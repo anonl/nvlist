@@ -67,9 +67,9 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 	}
 
 	private void applyRenderState() {
-		setClip(clipping);
-		setBlendMode(blendMode);
-		setColor(foreground);
+		applyClip(clipping);
+		applyBlendMode(blendMode);
+		applyColor(foreground);
 	}
 
 	protected void renderLayer(DrawBuffer buffer, LayerRenderCommand lrc, Rect parentClip, Rect2D parentClip2D) {
@@ -99,7 +99,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 		);
 		final Rect layerClip = RenderUtil.roundClipRect(layerClip2D);
 
-		setClipRect(layerClip);
+		applyClipRect(layerClip);
 		translate(bounds.x, bounds.y);
 
 		//Render buffered commands
@@ -114,21 +114,21 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 			if (cmd.clipEnabled != clipping) {
 				flushQuadBatch();
 				clipping = cmd.clipEnabled;
-				setClip(clipping);
+				applyClip(clipping);
 			}
 
 			//Blend mode changed
 			if (cmd.blendMode != blendMode) {
 				flushQuadBatch();
 				blendMode = cmd.blendMode;
-				setBlendMode(blendMode);
+				applyBlendMode(blendMode);
 			}
 
 			//Foreground color changed
 			if (cmd.argb != foreground) {
 				flushQuadBatch();
 				foreground = cmd.argb;
-				setColor(foreground);
+				applyColor(foreground);
 			}
 
 			//Perform command-specific rendering
@@ -160,7 +160,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 		flushQuadBatch();
 
 		translate(-bounds.x, -bounds.y);
-		setClipRect(parentClip);
+		applyClipRect(parentClip);
 	}
 
 	/**
@@ -189,11 +189,11 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	protected abstract boolean renderUnknownCommand(RenderCommand cmd);
 
-	protected abstract void setClip(boolean c);
-	protected abstract void setColor(int argb);
-	protected abstract void setBlendMode(BlendMode bm);
+	protected abstract void applyClip(boolean c);
+	protected abstract void applyColor(int argb);
+	protected abstract void applyBlendMode(BlendMode bm);
 
-	protected abstract void setClipRect(Rect glRect);
+	protected abstract void applyClipRect(Rect glRect);
 	protected abstract void translate(double dx, double dy);
 
 	protected void flushQuadBatch() {

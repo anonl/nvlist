@@ -33,7 +33,7 @@ public final class ProgressInputStream extends FilterInputStream {
     }
 
     public static InputStream wrap(InputStream in, int updateBytes, long length, IProgressListener pl) {
-        if (in != null) {
+        if (pl != null) {
             return new ProgressInputStream(in, updateBytes, length, pl);
         } else {
             return in;

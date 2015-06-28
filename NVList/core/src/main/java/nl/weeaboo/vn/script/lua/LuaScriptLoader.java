@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +25,9 @@ import org.luaj.vm2.lib.ResourceFinder.Resource;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FileSystemView;
-import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.ResourceLoader;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
@@ -32,24 +35,43 @@ import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.script.lvn.ILvnParser;
 import nl.weeaboo.vn.script.lvn.LvnParseException;
+import nl.weeaboo.vn.script.lvn.LvnParserFactory;
 
+@CustomSerializable
 public class LuaScriptLoader implements IScriptLoader {
+
+    private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
     private static final int INPUT_BUFFER_SIZE = 4096;
     private static final LuaString PATH = valueOf("path");
 
-    private final ILvnParser lvnParser;
     private final LuaScriptResourceLoader resourceLoader;
+    private final String engineTargetVersion;
 
-    private LuaScriptLoader(ILvnParser lvnParser, LuaScriptResourceLoader resourceLoader) {
-        this.lvnParser = Checks.checkNotNull(lvnParser);
+    private transient ILvnParser lvnParser;
+
+    private LuaScriptLoader(LuaScriptResourceLoader resourceLoader, String engineTargetVersion) {
         this.resourceLoader = Checks.checkNotNull(resourceLoader);
+        this.engineTargetVersion = Checks.checkNotNull(engineTargetVersion);
+
+        initTransients();
     }
 
-    public static LuaScriptLoader newInstance(ILvnParser lvnParser, IFileSystem fileSystem) {
-        LuaScriptLoader scriptLoader = new LuaScriptLoader(lvnParser, new LuaScriptResourceLoader(fileSystem));
+    public static LuaScriptLoader newInstance(IEnvironment env) {
+        LuaScriptLoader scriptLoader = new LuaScriptLoader(new LuaScriptResourceLoader(env),
+                env.getPref(NovelPrefs.ENGINE_TARGET_VERSION));
         scriptLoader.initEnv();
         return scriptLoader;
+    }
+
+    private void initTransients() {
+        lvnParser = LvnParserFactory.getParser(engineTargetVersion);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
     }
 
     void initEnv() {
@@ -175,10 +197,19 @@ public class LuaScriptLoader implements IScriptLoader {
 
         private static final long serialVersionUID = 1L;
 
-        private final FileSystemView fs;
+        private final IEnvironment env;
 
-        public LuaScriptResourceLoader(IFileSystem fs) {
-            this.fs = new FileSystemView(fs, "script/");
+        private transient FileSystemView cachedFileSystemView;
+
+        public LuaScriptResourceLoader(IEnvironment env) {
+            this.env = env;
+        }
+
+        protected final FileSystemView getFileSystem() {
+            if (cachedFileSystemView == null) {
+                cachedFileSystemView = new FileSystemView(env.getFileSystem(), "script/");
+            }
+            return cachedFileSystemView;
         }
 
         public static boolean isBuiltInScript(String filename) {
@@ -194,7 +225,7 @@ public class LuaScriptLoader implements IScriptLoader {
             if (isBuiltInScript(filename)) {
                 return getClassResource(filename) != null;
             }
-            return fs.getFileExists(filename);
+            return getFileSystem().getFileExists(filename);
         }
 
         public InputStream newInputStream(String filename) throws IOException {
@@ -206,20 +237,20 @@ public class LuaScriptLoader implements IScriptLoader {
                 return url.openStream();
             }
 
-            return fs.openInputStream(filename);
+            return getFileSystem().openInputStream(filename);
         }
 
         public long getModifiedTime(String filename) throws IOException {
             if (isBuiltInScript(filename)) {
                 return 0L;
             }
-            return fs.getFileModifiedTime(filename);
+            return getFileSystem().getFileModifiedTime(filename);
         }
 
         @Override
         protected List<String> getFiles(String folder) throws IOException {
             List<String> out = new ArrayList<String>();
-            fs.getFiles(out, folder, true);
+            getFileSystem().getFiles(out, folder, true);
             return out;
         }
 

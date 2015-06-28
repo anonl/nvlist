@@ -3,9 +3,10 @@ package nl.weeaboo.vn.script;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface IScriptLoader {
+public interface IScriptLoader extends Serializable {
 
 	/**
 	 * @param pattern The filename, or filename pattern.

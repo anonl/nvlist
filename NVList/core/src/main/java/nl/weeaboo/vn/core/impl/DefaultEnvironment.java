@@ -2,7 +2,6 @@ package nl.weeaboo.vn.core.impl;
 
 import java.io.Serializable;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IContextManager;
@@ -11,7 +10,6 @@ import nl.weeaboo.vn.core.ISystemEventHandler;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
-import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
@@ -19,32 +17,19 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
-    private final BasicPartRegistry partRegistry;
-    private final IContextManager contextManager;
-    private final LuaScriptEnv scriptEnv;
-    private final ISystemEventHandler systemEventHandler;
+    BasicPartRegistry partRegistry;
+    IContextManager contextManager;
+    LuaScriptEnv scriptEnv;
+    ISystemEventHandler systemEventHandler;
 
-    private final IImageModule imageModule;
-    private final ISoundModule soundModule;
-    private final IVideoModule videoModule;
-    private final ISaveModule saveModule;
+    IImageModule imageModule;
+    ISoundModule soundModule;
+    IVideoModule videoModule;
+    ISaveModule saveModule;
 
-    private IRenderEnv renderEnv;
+    IRenderEnv renderEnv;
+
     private boolean destroyed;
-
-    public DefaultEnvironment(EnvironmentBuilder b) {
-        this.partRegistry = Checks.checkNotNull(b.partRegistry);
-        this.contextManager = Checks.checkNotNull(b.contextManager);
-        this.scriptEnv = Checks.checkNotNull(b.scriptEnv);
-        this.systemEventHandler = Checks.checkNotNull(b.systemEventHandler);
-
-        this.imageModule = b.imageModule;
-        this.soundModule = b.soundModule;
-        this.videoModule = b.videoModule;
-        this.saveModule = b.saveModule;
-
-        this.renderEnv = Checks.checkNotNull(b.renderEnv);
-    }
 
     @Override
     public void destroy() {
@@ -58,54 +43,56 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         return destroyed;
     }
 
+    private static <T> T checkSet(T object) {
+        if (object == null) {
+            throw new IllegalStateException("Incorrect initialization order, field is null");
+        }
+        return object;
+    }
+
     @Override
     public IContextManager getContextManager() {
-        return contextManager;
+        return checkSet(contextManager);
     }
 
     @Override
     public BasicPartRegistry getPartRegistry() {
-        return partRegistry;
+        return checkSet(partRegistry);
     }
 
     @Override
     public LuaScriptEnv getScriptEnv() {
-        return scriptEnv;
-    }
-
-    @Override
-    public LuaScriptLoader getScriptLoader() {
-        return (LuaScriptLoader)super.getScriptLoader();
+        return checkSet(scriptEnv);
     }
 
     @Override
     public IRenderEnv getRenderEnv() {
-        return renderEnv;
+        return checkSet(renderEnv);
     }
 
     @Override
     public ISystemEventHandler getSystemEventHandler() {
-        return systemEventHandler;
+        return checkSet(systemEventHandler);
     }
 
     @Override
     public IImageModule getImageModule() {
-        return imageModule;
+        return checkSet(imageModule);
     }
 
     @Override
     public ISoundModule getSoundModule() {
-        return soundModule;
+        return checkSet(soundModule);
     }
 
     @Override
     public IVideoModule getVideoModule() {
-        return videoModule;
+        return checkSet(videoModule);
     }
 
     @Override
     public ISaveModule getSaveModule() {
-        return saveModule;
+        return checkSet(saveModule);
     }
 
     @Override
