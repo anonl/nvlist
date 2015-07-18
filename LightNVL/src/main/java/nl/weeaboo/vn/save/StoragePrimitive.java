@@ -28,7 +28,7 @@ public final class StoragePrimitive {
      *         value couldn't be parsed.
      */
     public static StoragePrimitive fromJson(String json) {
-        if (json == null) {
+        if (json == null || json.equals("undefined")) {
             return null;
         }
 
@@ -57,7 +57,8 @@ public final class StoragePrimitive {
             return new StoragePrimitive(str);
         }
 
-        return null;
+        // Support libgdx 'minimal' JSON which allows omission of quotes for strings
+        return new StoragePrimitive(unescapeString(json));
     }
 
     public String toJson() {

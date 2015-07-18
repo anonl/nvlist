@@ -72,12 +72,23 @@ public class StoragePrimitiveTest {
         jsonConversionRoundtrip("987.654");
         jsonConversionRoundtrip("\"test string\"");
         jsonConversionRoundtrip("\"escape \\n \\r \\t \\f \\\\ \\' \\\" chars\"");
+
+        // Strings do not necessarily need to be quoted
+        String unquoted = "for convenience, unquoted strings are also allowed";
+        Assert.assertEquals("\"" + unquoted + "\"", StoragePrimitive.fromJson(unquoted).toJson());
+
+        // Unquoted strings may contain escape sequences
+        String unquotedEscapes = "\\n \\r \\t \\f \\\\ \\' \\\"";
+        Assert.assertEquals("\"" + unquotedEscapes + "\"",
+                StoragePrimitive.fromJson(unquotedEscapes).toJson());
+
+        // undefined becomes null
+        Assert.assertEquals(null, StoragePrimitive.fromJson("undefined"));
     }
 
     @Test
     public void invalidJson() {
         Assert.assertEquals(null, StoragePrimitive.fromJson(null));
-        Assert.assertEquals(null, StoragePrimitive.fromJson("\"not valid JSON"));
     }
 
     @Test
