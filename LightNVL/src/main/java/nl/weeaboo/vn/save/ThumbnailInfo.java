@@ -11,6 +11,8 @@ public final class ThumbnailInfo {
     public ThumbnailInfo(String path, Dim imageSize) {
         this.path = Checks.checkNotNull(path);
         this.imageSize = Checks.checkNotNull(imageSize);
+        Checks.checkRange(imageSize.w, "imageSize.w", 1);
+        Checks.checkRange(imageSize.h, "imageSize.h", 1);
     }
 
     public String getPath() {

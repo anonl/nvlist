@@ -1,5 +1,10 @@
 package nl.weeaboo.vn.render.impl;
 
+import static nl.weeaboo.vn.render.RenderUtil.combineUV;
+import static nl.weeaboo.vn.render.RenderUtil.interpolateColors;
+import static nl.weeaboo.vn.render.RenderUtil.premultiplyAlpha;
+import static nl.weeaboo.vn.render.RenderUtil.toABGR;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,7 +16,6 @@ import nl.weeaboo.vn.core.Interpolators;
 import nl.weeaboo.vn.core.LUTInterpolator;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Matrix;
-import nl.weeaboo.vn.render.RenderUtil;
 
 public abstract class AbstractFadeQuadRenderer {
 
@@ -26,6 +30,7 @@ public abstract class AbstractFadeQuadRenderer {
     private int segments;
 
 	public AbstractFadeQuadRenderer() {
+        // Use a LUT interpolator for guaranteed performance characteristics
         interpolator = LUTInterpolator.fromInterpolator(Interpolators.SMOOTH, 256);
 
     	ByteBuffer vertsB = ByteBuffer.allocateDirect((8+MAX_SEGMENTS*2) * 2 * 4);
@@ -65,13 +70,14 @@ public abstract class AbstractFadeQuadRenderer {
 			tex = null;
 			uv = ITexture.DEFAULT_UV;
 		} else {
-            uv = RenderUtil.combineUV(tex.getUV(), uv);
+            uv = combineUV(tex.getUV(), uv);
 		}
 
 		boolean horizontal = (dir == 4 || dir == 6);
 		setupTriangleStrip(bounds, uv, horizontal,
 				(float)a, (float)b,
-				RenderUtil.premultiplyAlpha(color0), RenderUtil.premultiplyAlpha(color1),
+ premultiplyAlpha(color0),
+                premultiplyAlpha(color1),
 				interpolator);
 
 		renderTriangleStrip(tex, transform, vs, ts, cs, 8+2*segments);
@@ -88,12 +94,12 @@ public abstract class AbstractFadeQuadRenderer {
     		premultColor1 = 0xFF00FF00;
     	}
 
-    	if (start < 0) {
-    		premultColor0 = RenderUtil.interpolateColors(premultColor0, premultColor1, (end-0)/(end-start));
-    	}
-    	if (end > 1) {
-    		premultColor1 = RenderUtil.interpolateColors(premultColor0, premultColor1, (end-1)/(end-start));
-    	}
+//    	if (start < 0) {
+//    		premultColor0 = RenderUtil.interpolateColors(premultColor0, premultColor1, ??? (end-0)/(end-start));
+//    	}
+//    	if (end > 1) {
+//    		premultColor1 = RenderUtil.interpolateColors(premultColor0, premultColor1, ??? (end-1)/(end-start));
+//    	}
 
     	start = Math.max(0f, Math.min(1f, start));
     	end = Math.max(0f, Math.min(1f, end));
@@ -122,8 +128,8 @@ public abstract class AbstractFadeQuadRenderer {
     	}
 
     	//Colors must be in ABGR for OpenGL
-    	int rgba0 = RenderUtil.toABGR(premultColor0);
-    	int rgba1 = RenderUtil.toABGR(premultColor1);
+        int rgba0 = toABGR(premultColor0);
+        int rgba1 = toABGR(premultColor1);
 
     	if (RENDER_TEST) {
     		rgba0 = 0xFFFF0000;
@@ -152,8 +158,7 @@ public abstract class AbstractFadeQuadRenderer {
     			float f = (n+.5f) / segments;
     			float pos = posa + (posb-posa) * f;
     			float uvpos = uva + (uvb-uva) * f;
-    			float w = interpolator.remap(1-f);
-    			int c = RenderUtil.toABGR(RenderUtil.interpolateColors(premultColor0, premultColor1, w));
+                int c = interpolateColors(rgba0, rgba1, interpolator.remap(f));
 
 	    		if (horizontal) {
 		    		vs.put(pos); vs.put(y0); ts.put(uvpos); ts.put(v0); cs.put(c);
@@ -181,9 +186,5 @@ public abstract class AbstractFadeQuadRenderer {
     	ts.rewind();
     	cs.rewind();
     }
-
-	//Getters
-
-	//Setters
 
 }

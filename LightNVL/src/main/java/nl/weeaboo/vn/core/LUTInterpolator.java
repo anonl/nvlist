@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.core;
 
+import nl.weeaboo.common.Checks;
+
 public final class LUTInterpolator implements IInterpolator {
 
 	private static final long serialVersionUID = 1L;
@@ -16,6 +18,8 @@ public final class LUTInterpolator implements IInterpolator {
 
 	//Functions
 	public static LUTInterpolator fromInterpolator(IInterpolator i, int len) {
+        Checks.checkRange(len, "len", 1);
+
 		float[] lut = new float[len];
 		for (int n = 0; n < len; n++) {
 			lut[n] = i.remap(n / (float)(len-1));
@@ -26,17 +30,18 @@ public final class LUTInterpolator implements IInterpolator {
 	@Override
 	public float remap(float x) {
 		//Clamp x to acceptable range
-		x = Math.max(0, Math.min(values.length - 1, x * (values.length-1)));
+        final int maxIndex = values.length - 1;
+        x = Math.max(0, Math.min(maxIndex, x * maxIndex));
 
 		//Find two nearest values
-		int prevIndex = Math.max(0, Math.min(values.length-1, (int)x));
-		int nextIndex = Math.min(values.length-1, prevIndex+1);
+        int prevIndex = (int)x;
+        int nextIndex = Math.min(maxIndex, prevIndex + 1);
 
 		//Get nearest two values and interpolate
 		float prev = values[prevIndex];
 		float next = values[nextIndex];
 
-		return prev + (next - prev) * Math.abs(x - prevIndex);
+        return prev + (next - prev) * (x - prevIndex);
 	}
 
 	//Getters

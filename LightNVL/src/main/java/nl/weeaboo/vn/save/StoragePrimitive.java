@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.save;
 
+import com.google.common.base.Objects;
+
 import nl.weeaboo.common.StringUtil;
 
 public final class StoragePrimitive {
@@ -26,6 +28,10 @@ public final class StoragePrimitive {
      *         value couldn't be parsed.
      */
     public static StoragePrimitive fromJson(String json) {
+        if (json == null) {
+            return null;
+        }
+
         // null
         if (json.equals("null")) {
             return new StoragePrimitive(null);
@@ -51,7 +57,7 @@ public final class StoragePrimitive {
             return new StoragePrimitive(str);
         }
 
-        return new StoragePrimitive(json);
+        return null;
     }
 
     public String toJson() {
@@ -60,19 +66,8 @@ public final class StoragePrimitive {
             return "\"" + escapeString(value.toString()) + "\"";
         }
 
-        if (value instanceof Number) {
-            // number
-            double doubleValue = ((Number)value).doubleValue();
-            int intValue = (int)doubleValue;
-            if (doubleValue == intValue) {
-                return Integer.toString(intValue);
-            } else {
-                return Double.toString(doubleValue);
-            }
-        }
-
-        // boolean, null
-        return String.valueOf(value);
+        // number, boolean, null
+        return toString("null");
     }
 
     @Override
@@ -86,12 +81,7 @@ public final class StoragePrimitive {
             return false;
         }
         StoragePrimitive p = (StoragePrimitive) obj;
-        return value == p.value || (value != null && value.equals(p.value));
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(value);
+        return Objects.equal(value, p.value);
     }
 
     public static StoragePrimitive fromBoolean(boolean value) {
@@ -102,7 +92,11 @@ public final class StoragePrimitive {
         if (value instanceof Boolean) {
             return ((Boolean) value).booleanValue();
         } else if (value instanceof String) {
-            return ((String) value).equalsIgnoreCase("true");
+            if (value.equals("true")) {
+                return true;
+            } else if (value.equals("false")) {
+                return false;
+            }
         }
         return defaultValue;
     }
@@ -129,8 +123,21 @@ public final class StoragePrimitive {
         return new StoragePrimitive(value);
     }
 
+    @Override
+    public String toString() {
+        return toString("null");
+    }
+
     public String toString(String defaultValue) {
-        if (value != null) {
+        if (value instanceof Number) {
+            // number
+            double doubleValue = ((Number)value).doubleValue();
+            int intValue = (int)doubleValue;
+            if (doubleValue == intValue) {
+                return Integer.toString(intValue);
+            }
+            return Double.toString(doubleValue);
+        } else if (value != null) {
             return value.toString();
         }
         return defaultValue;
