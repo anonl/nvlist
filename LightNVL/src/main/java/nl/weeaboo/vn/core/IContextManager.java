@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /** Manages the active {@link IContext} and context lifetimes. */
-public interface IContextManager extends Serializable {
+public interface IContextManager extends Serializable, IUpdateable {
 
     public IContext createContext();
 

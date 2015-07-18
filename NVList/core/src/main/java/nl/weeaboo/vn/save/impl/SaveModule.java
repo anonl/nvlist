@@ -71,6 +71,10 @@ public class SaveModule implements ISaveModule {
         initTransients();
     }
 
+    @Override
+    public void update() {
+    }
+
     protected final SecureFileWriter getSecureFileWriter() {
         return new SecureFileWriter(getFileSystem());
     }

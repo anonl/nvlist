@@ -40,6 +40,11 @@ public abstract class SoundModule implements ISoundModule {
     }
 
     @Override
+    public void update() {
+        soundController.update();
+    }
+
+    @Override
     public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
         // TODO LVN-01 Re-enable analytics, seen log
 

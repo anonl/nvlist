@@ -47,6 +47,13 @@ public class ContextManager implements IContextManager {
         throw new IllegalArgumentException("Context (" + ctxt + ") is not contained by this contextmanager.");
     }
 
+    @Override
+    public void update() {
+        for (IContext context : getActiveContexts()) {
+            context.updateScreen();
+        }
+    }
+
     //Getters
     @Override
     public Collection<Context> getContexts() {

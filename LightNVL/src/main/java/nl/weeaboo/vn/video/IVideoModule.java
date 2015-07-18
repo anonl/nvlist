@@ -1,13 +1,13 @@
 package nl.weeaboo.vn.video;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface IVideoModule extends Serializable {
+public interface IVideoModule extends IModule {
 
     /**
      * Starts a full-screen video.

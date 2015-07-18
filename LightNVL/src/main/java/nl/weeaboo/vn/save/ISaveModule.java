@@ -1,13 +1,13 @@
 package nl.weeaboo.vn.save;
 
 import java.io.IOException;
-import java.io.Serializable;
 
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
 import nl.weeaboo.vn.image.IScreenshot;
 
-public interface ISaveModule extends Serializable {
+public interface ISaveModule extends IModule {
 
     public void loadPersistent();
     public void savePersistent();

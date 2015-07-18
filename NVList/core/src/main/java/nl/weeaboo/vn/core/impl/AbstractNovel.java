@@ -7,6 +7,7 @@ import java.io.ObjectOutput;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.save.ISaveModule;
 
@@ -47,9 +48,10 @@ public class AbstractNovel implements INovel {
     @Override
     public void update() {
         IContextManager contextManager = getContextManager();
-        for (IContext context : contextManager.getActiveContexts()) {
-            context.updateScreen();
+        for (IModule module : env.getModules()) {
+            module.update();
         }
+        contextManager.update();
     }
 
     @Override

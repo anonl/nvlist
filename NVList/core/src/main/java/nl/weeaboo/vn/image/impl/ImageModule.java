@@ -48,6 +48,10 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
+    public void update() {
+    }
+
+    @Override
     public Entity createImage(ILayer layer) {
         Entity e = entityHelper.createScriptableEntity(layer);
         entityHelper.addImageParts(e);

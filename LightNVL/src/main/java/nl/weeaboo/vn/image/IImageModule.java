@@ -1,14 +1,14 @@
 package nl.weeaboo.vn.image;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.ILayer;
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface IImageModule extends Serializable {
+public interface IImageModule extends IModule {
 
     public Entity createImage(ILayer layer);
 

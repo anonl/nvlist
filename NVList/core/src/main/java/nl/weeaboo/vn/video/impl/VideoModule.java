@@ -45,6 +45,10 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
+    public void update() {
+    }
+
+    @Override
     public IVideo movie(ResourceLoadInfo loadInfo) throws IOException {
     	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 

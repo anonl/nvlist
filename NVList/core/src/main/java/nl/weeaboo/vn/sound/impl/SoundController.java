@@ -20,8 +20,8 @@ public class SoundController implements ISoundController {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
     private final Map<SoundType, Double> masterVolume;
-    private Map<Integer, ISoundPart> sounds;
-    private List<ISoundPart> pausedList;
+    private final Map<Integer, ISoundPart> sounds;
+    private final List<ISoundPart> pausedList;
     private boolean paused;
 
     protected SoundController() {

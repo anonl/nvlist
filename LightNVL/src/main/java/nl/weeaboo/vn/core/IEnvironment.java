@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.core;
 
+import java.util.Collection;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.entity.PartRegistry;
@@ -33,6 +35,7 @@ public interface IEnvironment extends IDestructible {
     ISoundModule getSoundModule();
     IVideoModule getVideoModule();
     ISaveModule getSaveModule();
+    Collection<IModule> getModules();
 
     /**
      * @see IRenderEnv

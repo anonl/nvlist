@@ -2,14 +2,14 @@ package nl.weeaboo.vn.sound;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Collection;
 
 import nl.weeaboo.entity.Entity;
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface ISoundModule extends Serializable {
+public interface ISoundModule extends IModule {
 
     /**
      * Creates a new sound entity that can be used for playing the audio file specified by {@code filename}.
