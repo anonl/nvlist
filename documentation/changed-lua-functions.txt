@@ -1,0 +1,118 @@
+
+[[General Notes]]
+Would it be possible to integrate some of the Java functionality from the Lua documentation? Especially the methods of IDrawable and Java objects that are available as global vars such as imageState and input. I should try to make all important methods of those Java objects available through regular Lua functions (looking at the list, basically that means the input:XXX functions). Possible to document synthetic functions with @function/@tparam
+It's actually possible to write Lua documentation inside .java source files that create Lua functions/variables. Just need to change the config for LDoc to process .java files and point it to the java source folder.
+Lua users don't want class hierarchies in their documentation, possible to generate Luadocs from Javadoc, but would need to squash the class hierarchy.
+At least I should used typed params and return values everywhere.
+Document Java-set global variables/enums/classes through LDoc as well.
+Configure LDoc to mark optional parameters in the parameter listing itself, should be possible but the LDoc code is horrifically unclear.
+
+[[EDT Functions]]
+* EDT Functions should not be in a separate namespace. All other library functions are smushed into the default namespace, so it doesn't quite make sense. runOnMainThread() instead of addEvent(), user-overridable onUpdate function (framework calls an ondocumented function for all the NVList internal crap which then calls the user-overridable onFrame function). Removing tasks will then no longer be necessary.
+edt.addEvent(event)
+edt.addTask(task)
+edt.removeEvents(event) --Should be removeEvent() and only remove one event, return true if removed. Removes oldest copy.
+edt.removeTasks(task) --Same change as removeEvents.
+edt.update() --Should not be a public function.
+--See notes on notepad for an idea of how to arrange/name the new update function that is to be called every frame on the main thread.
+
+[[stdlib Functions]]
+* Most of these are general functions, although join/getScriptPos/destroyValues are very useful in certain conditions for user code.
+* Module descriptions 
+addAll(tbl, values)
+destroyValues(tbl)
+extend(...)
+getDeepField(t, name)
+getLocalVars(level, max)
+getScriptPos(callOffset)
+getTableOrVarArg(...)
+join(...)
+removeAll(tbl, val)
+shallowCopy(x)
+signum(x)
+split(str, pattern)
+trim(str)
+update1join(...)
+values (...)
+yieldClosure (...)
+
+[[vn.image]]
+* Reorder image functions.
+colorTex(argb, w, w) --Rename to createColorTex(). Make sure to specify whether or not argb is premultiplied.
+button(filename) --createButton?
+textimg(text) --createTextDrawable? Should this be in the text module or not?
+pushLayerState(layer, z) --Rename to pushLayerContents
+popLayerState(layer) --See pushLayerState
+viewCG() --Should be moved to some GUI/Screen module, needs a more standardized name.
+
+[[vn.save]]
+getFreeSaveSlot() --Should have optional range arguments?
+saveScreen() --Is GUI related, not save related.
+loadScreen() --Is GUI related, not save related.
+
+[[vn.screens]]
+setViewportScrollBar(viewport, horizontal, pad, images)
+
+[[vn.sound]]
+sound(filename, loops, vol, ch, type) --Should there be a way to create a sound object without starting it?
+
+[[vn.system]]
+canExit() --There should be an "embedded" in the environment info, but canExit makes no sense. You can always exit and running in an embedded context only happens when running as an applet (which is pretty much never)...
+
+[[vn.text]]
+getTextLayerDrawable(name) --This should be a function of the TextScreen?
+appendTextLine(string) --Needs to be deprecated, only VNDS uses it.
+say(name, textStyle, nameStyle) --Instead of a single say function, add speaking character state to TextScreen.
+textSpeed(s) --Remove? Move to TextScreen?
+textoff(...) --Document parameters, replaces speed by duration in frames. Actual fade implementation should be handled by the textscreen.
+texton(...) --See textoff
+getTextLayer(mode) --Should be in the TextScreen
+setTextModeNVL() --Changes the currently active TextScreen
+setTextModeADV() --Changes the currently active TextScreen
+waitForTextVisible(textDrawable) --When passed with no argument, calls a TextScreen function instead.
+getTextLayerConstructor(mode) --Remove
+setTextLayerConstructor(mode, func) --Remove
+customTextBox(mode, t, baseFunc) --Remove
+
+[[vn.tween]]
+bitmapTween(img, dstTex, fadeFilename, duration, range, interpolator) --It's a bitmapTween, why is the param named fadeFilename? Explain that bitmaptweens aren't always available, explain how to check.
+bitmapTweenIn(img, fadeFilename, duration, range, interpolator)
+bitmapTweenOut(img, fadeFilename, duration, range, interpolator)
+crossFadeTween(img, dstTex, duration, interpolator) --Explain that crossFadeTween isn't always available, explain how to check.
+
+[[vn.video]]
+movie(filename) --No need to mention the main thread, just say it plays the movie.
+
+
+
+
+
+
+
+
+[[Environment]]
+* Need to better standardize. Based for a large part on RenderEnv, enhance RenderEnv with new information. Environment table is returned upon calls to a new global function getEnvironment() in vn.system, onEnvironmentChanged() is called when the environment changes.
+  
+env = {
+  monitor={
+    w=1366,
+    h=768,
+    dpi=100,
+  },
+  screen={
+    clip={x=0, y=0, w=1366, h=768}
+    glClip={x=0, y=0, w=1366, h=768}
+    w=1280,
+    h=720,
+    scale=.93704,
+  },
+  input={
+    hasTouch=true,
+  },
+  nvlist={
+    versionCode=40001,
+    versionString="4.0.1",
+  },
+  embedded=true,
+  platform="pc"|"android"|"ouya"
+}

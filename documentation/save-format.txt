@@ -1,0 +1,18 @@
+
+*** Changes from NVList 3 ***
+
+NVList 3 used a custom binary format for its save files, with a chunk system similar to that used by PNG. NVList 4 uses ZIP-archive based format, replacing the chunks with file entries in a ZIP archive.
+
+*** Format ***
+
+- header.xml
+  - File format version
+  - Timestamp
+  - Userdata
+    Custom key/value properties that scripts can use to store additional data
+  - Thumbnail
+    An image (screenshot) representing the saved data. The header contains information about the size of the image, while the image data is stored as a separate file.
+- thumbnail.jpg
+  Thumbnail image data.
+- savedata.bin
+  Serialized form of the engine state. This type of save data is very sensitive against changes in the engine and/or game script.
