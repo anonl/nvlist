@@ -65,7 +65,7 @@ public abstract class AbstractFadeQuadRenderer {
 			tex = null;
 			uv = ITexture.DEFAULT_UV;
 		} else {
-			uv = RenderUtil.combineUV(uv, tex.getUV());
+            uv = RenderUtil.combineUV(tex.getUV(), uv);
 		}
 
 		boolean horizontal = (dir == 4 || dir == 6);
