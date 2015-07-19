@@ -26,10 +26,10 @@ public final class LvnTestUtil {
     public static void assertEquals(double expectedX, double expectedY, double expectedW, double expectedH,
             Rect2D r) {
 
-        Assert.assertEquals(expectedX, r.x, EPSILON);
-        Assert.assertEquals(expectedY, r.y, EPSILON);
-        Assert.assertEquals(expectedW, r.w, EPSILON);
-        Assert.assertEquals(expectedH, r.h, EPSILON);
+        Assert.assertEquals("Invalid: " + r, expectedX, r.x, EPSILON);
+        Assert.assertEquals("Invalid: " + r, expectedY, r.y, EPSILON);
+        Assert.assertEquals("Invalid: " + r, expectedW, r.w, EPSILON);
+        Assert.assertEquals("Invalid: " + r, expectedH, r.h, EPSILON);
     }
 
     public static void assertEquals(double x, double y, Vec2 vec, double epsilon) {

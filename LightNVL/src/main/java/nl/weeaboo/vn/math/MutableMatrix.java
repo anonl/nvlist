@@ -55,8 +55,8 @@ public final class MutableMatrix extends AbstractMatrix {
 	}
 
     public void rotate(double angle) {
-        double cos = FastMath.fastCos((float)-angle);
-        double sin = FastMath.fastSin((float)-angle);
+        double cos = FastMath.fastCos((float)angle);
+        double sin = FastMath.fastSin((float)angle);
 
 		double a, b;
 

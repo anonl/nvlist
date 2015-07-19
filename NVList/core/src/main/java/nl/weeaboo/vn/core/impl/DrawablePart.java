@@ -91,7 +91,9 @@ public class DrawablePart extends Part implements IDrawablePart {
 			newLayer.invalidateStreams();
 		}
 
-		LOG.debug("Moved drawable part: {} -> {}", oldLayer, newLayer);
+        if (oldLayer != null) {
+            LOG.debug("Moved drawable part: {} -> {}", oldLayer, newLayer);
+        }
 	}
 
 	//Getters

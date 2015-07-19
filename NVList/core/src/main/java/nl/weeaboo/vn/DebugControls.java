@@ -48,8 +48,8 @@ final class DebugControls {
 
     public void update(TransformablePart part) {
         if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.rotate(-4);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.rotate(4);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.rotate(4);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.rotate(-4);
         } else if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
             if (Gdx.input.isKeyPressed(Keys.UP)) part.scale(1, 8 / 9.);
             if (Gdx.input.isKeyPressed(Keys.DOWN)) part.scale(1, 1.125);
