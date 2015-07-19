@@ -10,6 +10,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.entity.Entity;
@@ -59,7 +61,7 @@ public class Layer implements ILayer, ILayerHolder {
     private void initTransients() {
         changed = true;
 
-        renderStream = scene.joinStream(new DrawableZStreamDef(this, partRegistry.drawable, -1));
+        renderStream = scene.joinStream(new DrawableZStreamDef(this, partRegistry.drawable, 1));
 
         boundsHelper.setChangeListener(new IChangeListener() {
             @Override
@@ -89,18 +91,26 @@ public class Layer implements ILayer, ILayerHolder {
     @Override
     public final void destroy() {
         if (!destroyed) {
-            LOG.debug("Layer destroyed: {}", this);
-
             destroyed = true;
+
+            destroySubLayers();
+
+            LOG.debug("Layer destroyed: {}", this);
             parent.onSubLayerDestroyed(this);
         }
     }
 
+    private void destroySubLayers() {
+        List<Layer> layersCopy = ImmutableList.copyOf(subLayers);
+        for (ILayer subLayer : layersCopy) {
+            subLayer.destroy();
+        }
+    }
+
+    /** Creates a new entity, but does not add it to this layer. */
     @Override
     public Entity createEntity() {
-        Entity e = scene.createEntity();
-        add(e);
-        return e;
+        return scene.createEntity();
     }
 
     public Layer createSubLayer() {
@@ -151,7 +161,11 @@ public class Layer implements ILayer, ILayerHolder {
         return dp.getBounds().intersects(0, 0, r.w, r.h);
     }
 
-    public void draw(IDrawBuffer buffer, int layerId) {
+    public void draw(IDrawBuffer buffer) {
+        draw(buffer, buffer.reserveLayerIds(1));
+    }
+
+    private void draw(IDrawBuffer buffer, int layerId) {
         if (!isVisible()) {
             return;
         }
@@ -313,6 +327,8 @@ public class Layer implements ILayer, ILayerHolder {
 
     @Override
     public void setRenderEnv(IRenderEnv env) {
+        renderEnv = env;
+
         for (ILayer layer : subLayers) {
             layer.setRenderEnv(env);
         }

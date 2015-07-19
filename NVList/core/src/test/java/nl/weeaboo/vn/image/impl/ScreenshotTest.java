@@ -15,8 +15,6 @@ import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.Screen;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
-import nl.weeaboo.vn.image.impl.PixelTextureData;
-import nl.weeaboo.vn.image.impl.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.LayerRenderCommand;
 import nl.weeaboo.vn.render.impl.RenderCommand;
@@ -92,12 +90,9 @@ public class ScreenshotTest {
 		Assert.assertTrue(ssb.isEmpty()); // Screenshot buffer empties into the draw buffer
 
 		LayerRenderCommand lrc = buf.getRootLayerCommand();
-		int cstart = buf.getLayerStart(lrc.layerId);
-		int cend = buf.getLayerEnd(lrc.layerId);
-		Assert.assertEquals(cend-cstart, 1);
-
-		RenderCommand[] cmds = buf.sortCommands(cstart, cend);
-		ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmds[cstart];
+        RenderCommand[] cmds = buf.getLayerCommands(lrc.layerId);
+        Assert.assertEquals(1, cmds.length);
+        ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmds[0];
 
 		// Assert that the correct ScreenshotRenderCommand has been added to the render commands
 		Assert.assertEquals(s.getZ(), src.z);

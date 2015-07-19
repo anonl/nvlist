@@ -20,6 +20,8 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 
 public final class DrawBuffer implements IDrawBuffer {
 
+    private static final BaseRenderCommand[] EMPTY_COMMANDS = new BaseRenderCommand[0];
+
 	private final PartType<? extends ITransformablePart> transformablePart;
 	private final PartType<? extends IImagePart> imagePart;
 
@@ -40,7 +42,7 @@ public final class DrawBuffer implements IDrawBuffer {
 
 	// === Functions ===========================================================
 	private void reserveLayers(int minLength) {
-		if (layers != null && layers.length < minLength) {
+        if (layers != null && layers.length >= minLength) {
 			return;
 		}
 
@@ -83,7 +85,7 @@ public final class DrawBuffer implements IDrawBuffer {
 
 		int firstId = layersL;
 		for (int n = 0; n < count; n++) {
-			layerStarts[firstId+n] = 0;
+            layerStarts[firstId + n] = -1;
 		}
 		layersL += count;
 		return firstId;
@@ -113,6 +115,10 @@ public final class DrawBuffer implements IDrawBuffer {
 
 	@Override
 	public void drawWithTexture(Entity e, ITexture tex) {
+        if (tex == null) {
+            return;
+        }
+
 		final ITransformablePart tp = e.getPart(transformablePart);
 		final IDrawablePart dp = tp;
 		final IImagePart ip = e.getPart(imagePart);
@@ -148,11 +154,6 @@ public final class DrawBuffer implements IDrawBuffer {
 		commands[commandsL++] = cmd;
 	}
 
-	public BaseRenderCommand[] sortCommands(int start, int end) {
-		Arrays.sort(commands, start, end);
-		return commands;
-	}
-
 	// === Getters =============================================================
 
 	public LayerRenderCommand getRootLayerCommand() {
@@ -162,13 +163,24 @@ public final class DrawBuffer implements IDrawBuffer {
 		return (LayerRenderCommand)commands[0];
 	}
 
-	public int getLayerStart(int layerId) {
+    private int getLayerStart(int layerId) {
 		return layerStarts[layerId];
 	}
 
-	public int getLayerEnd(int layerId) {
-		return (layerId+1 < layersL ? layerStarts[layerId+1] : commandsL);
+    private int getLayerEnd(int layerId) {
+        int nextId = layerId + 1;
+        return (nextId >= layersL || layerStarts[nextId] < 0 ? commandsL : layerStarts[nextId]);
 	}
+
+    public BaseRenderCommand[] getLayerCommands(int layerId) {
+        int start = getLayerStart(layerId);
+        int end = getLayerEnd(layerId);
+        if (end <= start) {
+            return EMPTY_COMMANDS;
+        }
+        Arrays.sort(commands, start, end);
+        return Arrays.copyOfRange(commands, start, end);
+    }
 
 	// === Setters =============================================================
 

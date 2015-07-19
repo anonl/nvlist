@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITexture;
@@ -25,6 +26,9 @@ public class TestTexture implements ITexture {
 	private transient Pixmap image;
 
 	public TestTexture(int w, int h) {
+        Checks.checkRange(w, "w", 2);
+        Checks.checkRange(h, "h", 2);
+
 	    this.w = w;
 	    this.h = h;
 		this.argb = new int[w * h];

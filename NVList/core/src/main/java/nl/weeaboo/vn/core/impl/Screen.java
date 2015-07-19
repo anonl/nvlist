@@ -67,9 +67,8 @@ public class Screen implements IScreen, ILayerHolder {
     }
 
 	public void draw(IDrawBuffer buffer) {
-		Layer layer = (Layer)getRootLayer();
-		int layerId = buffer.reserveLayerIds(1);
-		layer.draw(buffer, layerId);
+        Layer layer = (Layer)getRootLayer();
+		layer.draw(buffer);
 	}
 
 	@Override

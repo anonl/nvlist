@@ -19,6 +19,7 @@ import nl.weeaboo.vn.core.impl.RenderEnv;
 import nl.weeaboo.vn.core.impl.Screen;
 import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.impl.ImagePart;
+import nl.weeaboo.vn.image.impl.TestTexture;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.impl.ScriptPart;
 
@@ -44,6 +45,7 @@ public final class NvlTestUtil {
 	public static Entity newImage(BasicPartRegistry pr, Scene scene) {
 		TransformablePart transformable = new TransformablePart();
 		ImagePart image = new ImagePart(transformable);
+        image.setTexture(new TestTexture(2, 2));
 		ScriptPart script = new ScriptPart();
 
 		Entity e = scene.createEntity();

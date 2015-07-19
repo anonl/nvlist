@@ -74,14 +74,11 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 	}
 
 	protected void renderLayer(DrawBuffer buffer, LayerRenderCommand lrc, Rect parentClip, Rect2D parentClip2D) {
-		int cstart = buffer.getLayerStart(lrc.layerId);
-		int cend = buffer.getLayerEnd(lrc.layerId);
-		if (cend <= cstart) {
-			return;
+        // Get sorted render commands
+        BaseRenderCommand[] cmds = buffer.getLayerCommands(lrc.layerId);
+        if (cmds.length == 0) {
+            return;
 		}
-
-		//Get sorted render commands
-		BaseRenderCommand[] cmds = buffer.sortCommands(cstart, cend);
 
 		//Setup clipping/translate
 		final Rect2D bounds = lrc.layerBounds;
@@ -105,8 +102,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 		//Render buffered commands
 		long renderStatsTimestamp = 0;
-		for (int n = cstart; n < cend; n++) {
-			BaseRenderCommand cmd = cmds[n];
+        for (BaseRenderCommand cmd : cmds) {
 			if (cmd.id != QuadRenderCommand.ID) {
 				flushQuadBatch();
 			}

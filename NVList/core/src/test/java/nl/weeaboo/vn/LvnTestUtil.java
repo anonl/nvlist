@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 
 import org.junit.Assert;
 
+import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.math.Vec2;
 
@@ -20,11 +21,21 @@ public final class LvnTestUtil {
     }
 
     public static void assertEquals(Rect2D expected, Rect2D r) {
+        assertEquals(expected.toArea2D(), r.toArea2D());
+    }
+
+    public static void assertEquals(Area2D expected, Area2D r) {
         assertEquals(expected.x, expected.y, expected.w, expected.h, r);
     }
 
     public static void assertEquals(double expectedX, double expectedY, double expectedW, double expectedH,
             Rect2D r) {
+
+        assertEquals(expectedX, expectedY, expectedW, expectedH, r.toArea2D());
+    }
+
+    public static void assertEquals(double expectedX, double expectedY, double expectedW, double expectedH,
+            Area2D r) {
 
         Assert.assertEquals("Invalid: " + r, expectedX, r.x, EPSILON);
         Assert.assertEquals("Invalid: " + r, expectedY, r.y, EPSILON);
