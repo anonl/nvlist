@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Matrix4;
 
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
@@ -179,6 +180,10 @@ public class GLRenderer extends BaseRenderer {
     @Override
     protected void applyClipRect(Rect glRect) {
         Gdx.gl.glScissor(glRect.x, glRect.y, glRect.w, glRect.h);
+    }
+
+    public void setProjectionMatrix(Matrix4 projectionMatrix) {
+        matrixStack.setProjectionMatrix(projectionMatrix);
     }
 
 }

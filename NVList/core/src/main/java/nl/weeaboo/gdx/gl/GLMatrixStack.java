@@ -61,4 +61,8 @@ public final class GLMatrixStack {
         batch.setTransformMatrix(matrix);
     }
 
+    public void setProjectionMatrix(Matrix4 m) {
+        batch.setProjectionMatrix(m);
+    }
+
 }

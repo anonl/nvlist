@@ -122,6 +122,7 @@ public class Launcher extends ApplicationAdapter {
         Entity entity = env.getImageModule().createImage(rootLayer);
         BasicPartRegistry pr = (BasicPartRegistry)env.getPartRegistry();
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
+        entity.getPart(pr.transformable).setPos(150, 50);
         entity.getPart(pr.image).setTexture(env.getImageModule().getTexture(texLoadInfo, false));
 	}
 
@@ -161,7 +162,7 @@ public class Launcher extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		frameBufferViewport.apply();
 		Camera camera = frameBufferViewport.getCamera();
-		batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
 		renderScreen(batch);
 		frameBuffer.end();
@@ -190,6 +191,7 @@ public class Launcher extends ApplicationAdapter {
         novel.draw(drawBuffer);
 
         GLRenderer renderer = new GLRenderer(novel.getEnv().getRenderEnv(), new RenderStats());
+        renderer.setProjectionMatrix(batch.getProjectionMatrix());
         renderer.render(drawBuffer);
         renderer.destroy();
 
