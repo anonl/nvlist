@@ -40,6 +40,8 @@ import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.NovelBuilder;
 import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.core.impl.TransformablePart;
+import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
@@ -63,6 +65,8 @@ public class Launcher extends ApplicationAdapter {
 	private Vector2 spritePos = new Vector2();
 
     private Novel novel;
+    private BasicPartRegistry pr;
+    private Entity entity;
 
 	@Override
 	public void create() {
@@ -119,11 +123,13 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
         IContext context = Iterables.get(env.getContextManager().getActiveContexts(), 0);
         ILayer rootLayer = context.getScreen().getRootLayer();
-        Entity entity = env.getImageModule().createImage(rootLayer);
-        BasicPartRegistry pr = (BasicPartRegistry)env.getPartRegistry();
+        entity = env.getImageModule().createImage(rootLayer);
+        pr = (BasicPartRegistry)env.getPartRegistry();
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
-        entity.getPart(pr.transformable).setPos(150, 50);
-        entity.getPart(pr.image).setTexture(env.getImageModule().getTexture(texLoadInfo, false));
+        TransformablePart transformable = entity.getPart(pr.transformable);
+        transformable.setPos(640, 360);
+        ImagePart image = entity.getPart(pr.image);
+        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
 	}
 
 	@Override
@@ -182,6 +188,8 @@ public class Launcher extends ApplicationAdapter {
 		spritePos.y = (vsize.h / 2) + 128 * MathUtils.cosDeg(spritePos.x);
 
         debugControls.update(novel);
+        debugControls.update(entity.getPart(pr.transformable));
+
         novel.update();
 	}
 

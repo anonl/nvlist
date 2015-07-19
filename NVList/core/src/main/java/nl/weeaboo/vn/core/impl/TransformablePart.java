@@ -28,8 +28,8 @@ public class TransformablePart extends DrawablePart implements ITransformablePar
 	protected Matrix createTransform() {
 		MutableMatrix m = baseTransform.mutableCopy();
 		m.translate(getX(), getY());
+        m.rotate(getRotation());
 		m.scale(getScaleX(), getScaleY());
-		m.rotate(getRotation());
 		return m.immutableCopy();
 	}
 
@@ -178,6 +178,11 @@ public class TransformablePart extends DrawablePart implements ITransformablePar
 		}
 	}
 
+    @Override
+    public final void rotate(double r) {
+        setRotation(getRotation() + r);
+    }
+
 	@Override
 	public void setRotation(double rot) {
 		if (rotation != rot) {
@@ -187,6 +192,16 @@ public class TransformablePart extends DrawablePart implements ITransformablePar
 			invalidateTransform();
 		}
 	}
+
+    @Override
+    public final void scale(double s) {
+        scale(s, s);
+    }
+
+    @Override
+    public final void scale(double sx, double sy) {
+        setScale(getScaleX() * sx, getScaleY() * sy);
+    }
 
 	@Override
 	public final void setScale(double s) {

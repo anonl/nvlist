@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
@@ -42,6 +43,23 @@ final class DebugControls {
             } catch (IOException e) {
                 LOG.warn("Load error", e);
             }
+        }
+    }
+
+    public void update(TransformablePart part) {
+        if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.rotate(-4);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.rotate(4);
+        } else if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
+            if (Gdx.input.isKeyPressed(Keys.UP)) part.scale(1, 8 / 9.);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) part.scale(1, 1.125);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.scale(8 / 9., 1);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.scale(1.125, 1);
+        } else {
+            if (Gdx.input.isKeyPressed(Keys.UP)) part.translate(0, 5);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) part.translate(0, -5);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.translate(-5, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.translate(5, 0);
         }
     }
 

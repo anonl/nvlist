@@ -8,18 +8,18 @@ public interface ITransformablePart extends IDrawablePart {
 	 * Returns the base width of the transformable, before any transforms are
 	 * applied.
 	 */
-	public double getUnscaledWidth();
+    double getUnscaledWidth();
 
 	/**
 	 * Returns the base height of the transformable, before any transforms are
 	 * applied.
 	 */
-	public double getUnscaledHeight();
+    double getUnscaledHeight();
 
 	/**
 	 * @see #getTransform()
 	 */
-	public Matrix getBaseTransform();
+    Matrix getBaseTransform();
 
 	/**
 	 * The transform is obtained by modifying the base transform with this
@@ -30,66 +30,88 @@ public interface ITransformablePart extends IDrawablePart {
 	 *         drawable.
 	 * @see #getBaseTransform()
 	 */
-	public Matrix getTransform();
+    Matrix getTransform();
 
 	/**
 	 * @return The current rotation between <code>0</code> and <code>512</code>.
 	 */
-	public double getRotation();
+    double getRotation();
 
 	/**
 	 * @return The horizontal scaling factor.
 	 * @see #setScale(double, double)
 	 */
-	public double getScaleX();
+    double getScaleX();
 
 	/**
 	 * @return The vertical scaling factor.
 	 * @see #setScale(double, double)
 	 */
-	public double getScaleY();
+    double getScaleY();
 
 	/**
 	 * @see #setAlign(double, double)
 	 */
-	public double getAlignX();
+    double getAlignX();
 
 	/**
 	 * @see #setAlign(double, double)
 	 */
-	public double getAlignY();
+    double getAlignY();
 
 	/**
 	 * @return {@link #getAlignX()} multiplied by the current width.
 	 */
-	public double getAlignOffsetX();
+    double getAlignOffsetX();
 
 	/**
 	 * @return {@link #getAlignY()} multiplied by the current height.
 	 */
-	public double getAlignOffsetY();
+    double getAlignOffsetY();
 
 	/**
 	 * @see #getTransform()
 	 */
-	public void setBaseTransform(Matrix transform);
+    void setBaseTransform(Matrix transform);
+
+    /**
+     * Adjusts the current rotation.
+     *
+     * @see #setRotation(double)
+     */
+    void rotate(double r);
 
 	/**
 	 * @param rot The new rotation between <code>0</code> and <code>512</code>.
 	 */
-	public void setRotation(double rot);
+    void setRotation(double rot);
+
+    /**
+     * Adjusts the current scale.
+     *
+     * @see #scale(double, double)
+     * @see #setScale(double)
+     */
+    void scale(double s);
+
+    /**
+     * Adjusts the current scale.
+     *
+     * @see #setScale(double, double)
+     */
+    void scale(double sx, double sy);
 
 	/**
 	 * Sets the horizontal and vertical scale factors to the same value.
 	 *
 	 * @see #setScale(double, double)
 	 */
-	public void setScale(double s);
+    void setScale(double s);
 
 	/**
 	 * Sets the horizontal and vertical scaling factors for this transformable.
 	 */
-	public void setScale(double sx, double sy);
+    void setScale(double sx, double sy);
 
 	/**
 	 * Changes the display position of this transformable relative to its X/Y
@@ -99,6 +121,6 @@ public interface ITransformablePart extends IDrawablePart {
 	 * @param xFrac Relative display position from the X-coordinate.
 	 * @param yFrac Relative display position from the Y-coordinate.
 	 */
-	public void setAlign(double xFrac, double yFrac);
+    void setAlign(double xFrac, double yFrac);
 
 }

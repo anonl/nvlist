@@ -204,6 +204,11 @@ public class DrawablePart extends Part implements IDrawablePart {
 	@Override
 	public final void setHeight(double h) { setSize(getWidth(), h); }
 
+    @Override
+    public final void translate(double dx, double dy) {
+        setPos(getX() + dx, getY() + dy);
+    }
+
 	@Override
 	public void setPos(double x, double y) { boundsHelper.setPos(x, y); }
 

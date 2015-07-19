@@ -57,6 +57,7 @@ public interface IDrawablePart extends IRenderable {
 	public void setZ(short z);
 	public void setWidth(double w); //Calls setSize
 	public void setHeight(double h); //Calls setSize
+    public void translate(double dx, double dy); //Calls setPos
 	public void setPos(double x, double y);
 	public void setSize(double w, double h);
 
