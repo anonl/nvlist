@@ -6,17 +6,18 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.AbstractFileSystem;
 import nl.weeaboo.filesystem.FileCollectOptions;
 
-public class GdxFileSystem extends AbstractFileSystem {
+public class GdxFileSystem extends AbstractFileSystem implements FileHandleResolver {
 
     private final String prefix;
     private final boolean isReadOnly;
-    
+
     public GdxFileSystem(String prefix, boolean isReadOnly) {
         this.prefix = Checks.checkNotNull(prefix);
         this.isReadOnly = isReadOnly;
@@ -31,10 +32,11 @@ public class GdxFileSystem extends AbstractFileSystem {
     protected void closeImpl() {
     }
 
-    protected FileHandle resolve(String path) {
+    @Override
+    public FileHandle resolve(String path) {
         return Gdx.files.internal(prefix + path);
     }
-    
+
     protected FileHandle resolveExisting(String path) throws FileNotFoundException {
         FileHandle file = resolve(path);
         if (!file.exists()) {
@@ -42,7 +44,7 @@ public class GdxFileSystem extends AbstractFileSystem {
         }
         return file;
     }
-    
+
     @Override
     protected InputStream openInputStreamImpl(String path) throws IOException {
         return resolveExisting(path).read();
@@ -67,14 +69,14 @@ public class GdxFileSystem extends AbstractFileSystem {
     protected void getFiles(Collection<String> out, String prefix, FileCollectOptions opts) throws IOException {
         getFilesImpl(out, prefix, opts, resolveExisting(prefix));
     }
-    
+
     private void getFilesImpl(Collection<String> out, String prefix, FileCollectOptions opts,
             FileHandle file) {
-        
+
         if (!file.exists()) {
             return;
         }
-        
+
         if (file.isDirectory()) {
             // Append folder name to prefix
             if (prefix.length() > 0 && !prefix.endsWith("/")) {
@@ -87,15 +89,15 @@ public class GdxFileSystem extends AbstractFileSystem {
                 boolean isDirectory = child.isDirectory();
                 if ((isDirectory && opts.collectFolders) || (!isDirectory && opts.collectFiles)) {
                     out.add(prefix + "/" + child.name());
-                    
+
                     if (opts.recursive) {
                         getFilesImpl(out, prefix, opts, file);
                     }
-                }                
+                }
             }
         } else if (opts.collectFiles) {
             out.add(prefix);
-        }               
+        }
     }
 
 }

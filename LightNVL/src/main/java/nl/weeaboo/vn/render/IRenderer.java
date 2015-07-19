@@ -1,7 +1,8 @@
 package nl.weeaboo.vn.render;
 
+import nl.weeaboo.vn.core.IDestructible;
 
-public interface IRenderer<D extends IDrawBuffer> {
+public interface IRenderer<D extends IDrawBuffer> extends IDestructible {
 
 	/**
 	 * Renders all buffered draw commands.

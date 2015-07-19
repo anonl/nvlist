@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import nl.weeaboo.entity.PartType;
 import nl.weeaboo.entity.Scene;
-import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 
 public final class ContextArgs implements Cloneable, Serializable {
@@ -13,7 +12,7 @@ public final class ContextArgs implements Cloneable, Serializable {
 
     public Scene scene;
     public PartType<? extends DrawablePart> drawablePart;
-    public IScreen screen;
+    public Screen screen;
     public IScriptContext scriptContext;
 
     @Override

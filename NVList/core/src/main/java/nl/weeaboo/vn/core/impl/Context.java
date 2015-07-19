@@ -14,6 +14,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.script.IScriptContext;
 
 public class Context implements IContext {
@@ -23,7 +24,7 @@ public class Context implements IContext {
 
 	private final Scene scene;
 	private final PartType<? extends DrawablePart> drawablePart;
-	private final IScreen screen;
+    private final Screen screen;
 	private final IScriptContext scriptContext;
 
 	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<IContextListener>();
@@ -90,6 +91,10 @@ public class Context implements IContext {
 	public void updateScreen() {
 	    screen.update();
 	}
+
+    public void drawScreen(IDrawBuffer drawBuffer) {
+        screen.draw(drawBuffer);
+    }
 
 	@Override
 	public void updateScripts() {

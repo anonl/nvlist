@@ -38,13 +38,15 @@ public class EntityHelper implements Serializable {
         return e;
     }
 
-    public Entity addImageParts(Entity e) {
+    public Entity addImageParts(Entity e, ILayer layer) {
         TransformablePart transformable = new TransformablePart();
         ImagePart image = new ImagePart(transformable);
 
         e.setPart(pr.drawable, transformable);
         e.setPart(pr.transformable, transformable);
         e.setPart(pr.image, image);
+
+        layer.add(e); // Updates drawable.parent field
 
         return e;
     }

@@ -11,7 +11,7 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.save.ISaveModule;
 
-public class AbstractNovel implements INovel {
+public abstract class AbstractNovel implements INovel {
 
     // --- Note: This class uses manual serialization ---
     private IEnvironment env;
@@ -47,11 +47,11 @@ public class AbstractNovel implements INovel {
 
     @Override
     public void update() {
-        IContextManager contextManager = getContextManager();
         for (IModule module : env.getModules()) {
             module.update();
         }
-        contextManager.update();
+
+        getContextManager().update();
     }
 
     @Override

@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
+import nl.weeaboo.vn.render.IDrawBuffer;
+
 public interface INovel extends IUpdateable {
 
-    public void start(String mainFunctionName);
-    public void stop();
+    void start(String mainFunctionName);
+    void stop();
 
     void readAttributes(ObjectInputStream in) throws IOException, ClassNotFoundException;
     void writeAttributes(ObjectOutput out) throws IOException;
 
-    public IEnvironment getEnv();
+    IEnvironment getEnv();
+    void draw(IDrawBuffer drawbuffer);
 
 }

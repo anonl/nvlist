@@ -1,6 +1,9 @@
 package nl.weeaboo.vn;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,24 +20,36 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.common.Rect;
+import nl.weeaboo.entity.Entity;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
+import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.NovelBuilder;
 import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.render.impl.DrawBuffer;
+import nl.weeaboo.vn.render.impl.GLRenderer;
+import nl.weeaboo.vn.render.impl.RenderStats;
 
 public class Launcher extends ApplicationAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
-	private AssetManager manager;
+    private GdxFileSystem resourceFileSystem;
+    private AssetManager assetManager;
 	private FrameBuffer frameBuffer;
 	private Dim vsize = new Dim(1280, 720);
 
@@ -54,15 +66,11 @@ public class Launcher extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		manager = new AssetManager();
-		manager.setLoader(Texture.class, new TextureLoader(new FileHandleResolver() {
-			@Override
-			public FileHandle resolve(String fileName) {
-				System.out.println(Gdx.files.local("res/" + fileName).file().getAbsolutePath());
-				return Gdx.files.local("res/" + fileName);
-			}
-		}));
-		Texture.setAssetManager(manager);
+        configureLogger();
+
+        resourceFileSystem = new GdxFileSystem("res/", true);
+        assetManager = new AssetManager(resourceFileSystem);
+        Texture.setAssetManager(assetManager);
 
 		osd = Osd.newInstance();
         debugControls = new DebugControls();
@@ -74,18 +82,17 @@ public class Launcher extends ApplicationAdapter {
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 
 		batch = new SpriteBatch();
-		manager.load("badlogic.jpg", Texture.class);
-		manager.finishLoading();
+        assetManager.load("badlogic.jpg", Texture.class);
+        assetManager.finishLoading();
 
-		img = manager.get("badlogic.jpg", Texture.class);
+        img = assetManager.get("badlogic.jpg", Texture.class);
 
         initNovel();
     }
 
     private void initNovel() {
-        IFileSystem readFileSystem = new GdxFileSystem("", true);
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
-        MultiFileSystem fileSystem = new MultiFileSystem(readFileSystem, inMemoryFileSystem);
+        MultiFileSystem fileSystem = new MultiFileSystem(resourceFileSystem, inMemoryFileSystem);
 
         NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
         try {
@@ -100,13 +107,22 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
 
-        NovelBuilder novelBuilder = new NovelBuilder();
+        NovelBuilder novelBuilder = new NovelBuilder(assetManager);
         try {
             novel = novelBuilder.build();
             novel.start("main");
         } catch (InitException e) {
             e.printStackTrace();
         }
+
+        // Create a test image
+        IEnvironment env = novel.getEnv();
+        IContext context = Iterables.get(env.getContextManager().getActiveContexts(), 0);
+        ILayer rootLayer = context.getScreen().getRootLayer();
+        Entity entity = env.getImageModule().createImage(rootLayer);
+        BasicPartRegistry pr = (BasicPartRegistry)env.getPartRegistry();
+        ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
+        entity.getPart(pr.image).setTexture(env.getImageModule().getTexture(texLoadInfo, false));
 	}
 
 	@Override
@@ -119,7 +135,7 @@ public class Launcher extends ApplicationAdapter {
 		disposeFrameBuffer();
 		osd.dispose();
 		batch.dispose();
-		manager.dispose();
+        assetManager.dispose();
 	}
 
 	private void disposeFrameBuffer() {
@@ -142,7 +158,7 @@ public class Launcher extends ApplicationAdapter {
 
 		frameBuffer.begin();
 		Gdx.gl.glClearColor(0, 0, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		frameBufferViewport.apply();
 		Camera camera = frameBufferViewport.getCamera();
 		batch.setProjectionMatrix(camera.combined);
@@ -169,6 +185,13 @@ public class Launcher extends ApplicationAdapter {
 	}
 
 	protected void renderScreen(SpriteBatch batch) {
+        // Render novel
+        DrawBuffer drawBuffer = new DrawBuffer((BasicPartRegistry)novel.getEnv().getPartRegistry());
+        novel.draw(drawBuffer);
+
+        GLRenderer renderer = new GLRenderer(novel.getEnv().getRenderEnv(), new RenderStats());
+        renderer.render(drawBuffer);
+        renderer.destroy();
 
 		batch.begin();
 
@@ -184,6 +207,23 @@ public class Launcher extends ApplicationAdapter {
 		super.resize(width, height);
 
 		screenViewport.update(width, height, true);
+        novel.getEnv().updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
 	}
+
+    private static void configureLogger() {
+        try {
+            InputStream in = NvlTestUtil.class.getResourceAsStream("logging.properties");
+            if (in == null) {
+                throw new FileNotFoundException();
+            }
+            try {
+                LogManager.getLogManager().readConfiguration(in);
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            LOG.warn("Unable to read logging config", e);
+        }
+    }
 
 }

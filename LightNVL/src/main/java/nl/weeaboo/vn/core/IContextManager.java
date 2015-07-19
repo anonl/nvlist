@@ -6,19 +6,19 @@ import java.util.Collection;
 /** Manages the active {@link IContext} and context lifetimes. */
 public interface IContextManager extends Serializable, IUpdateable {
 
-    public IContext createContext();
+    IContext createContext();
 
-    public Collection<? extends IContext> getContexts();
+    Collection<? extends IContext> getContexts();
 
     /**
      * @return A copy of the collection of currently active contexts.
      */
-    public Collection<? extends IContext> getActiveContexts();
+    Collection<? extends IContext> getActiveContexts();
 
-    public boolean isContextActive(IContext context);
+    boolean isContextActive(IContext context);
 
-    public void setContextActive(IContext context, boolean active);
+    void setContextActive(IContext context, boolean active);
 
-    public void setRenderEnv(IRenderEnv env);
+    void setRenderEnv(IRenderEnv env);
 
 }

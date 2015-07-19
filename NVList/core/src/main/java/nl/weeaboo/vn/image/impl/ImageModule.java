@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
@@ -17,7 +18,7 @@ import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.EntityHelper;
-import nl.weeaboo.vn.core.impl.ResourceLoader;
+import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
@@ -29,14 +30,18 @@ public class ImageModule implements IImageModule {
     private static final Logger LOG = LoggerFactory.getLogger(ImageModule.class);
 
     protected final IEnvironment env;
-    protected final ResourceLoader resourceLoader;
+    protected final FileResourceLoader resourceLoader;
     protected final EntityHelper entityHelper;
 
     private final TextureManager texManager;
 
     private Dim imageResolution;
 
-    public ImageModule(DefaultEnvironment env, ResourceLoader resourceLoader, TextureManager texManager) {
+    public ImageModule(DefaultEnvironment env, AssetManager assetManager) {
+        this(env, new ImageResourceLoader(env), new TextureManager(assetManager));
+    }
+
+    public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader, TextureManager texManager) {
         this.env = env;
         this.resourceLoader = resourceLoader;
         this.entityHelper = new EntityHelper(env.getPartRegistry());
@@ -54,7 +59,7 @@ public class ImageModule implements IImageModule {
     @Override
     public Entity createImage(ILayer layer) {
         Entity e = entityHelper.createScriptableEntity(layer);
-        entityHelper.addImageParts(e);
+        entityHelper.addImageParts(e, layer);
         return e;
     }
 
@@ -101,7 +106,8 @@ public class ImageModule implements IImageModule {
 
     private IResource<TextureRegion> getTexRectNormalized(String filename, ResourceLoadInfo loadInfo) {
         // TODO LVN-011 Track stack traces, log texture load times
-        return texManager.getTexture(filename);
+        String resourcePath = resourceLoader.getAbsolutePath(filename);
+        return texManager.getTexture(resourcePath);
     }
 
     @Override
@@ -119,6 +125,7 @@ public class ImageModule implements IImageModule {
     }
 
     protected void onImageScaleChanged() {
+
     }
 
     @Override

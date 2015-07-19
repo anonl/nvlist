@@ -88,7 +88,7 @@ public class VideoModule implements IVideoModule {
             videoFolder = folder;
             videoResolution = size;
 
-            resourceLoader.setVideoFolder(folder);
+            resourceLoader.setResourceFolder(folder);
             onVideoScaleChanged();
         }
     }

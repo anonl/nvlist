@@ -13,7 +13,7 @@ import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 
-public abstract class SoundModule implements ISoundModule {
+public class SoundModule implements ISoundModule {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
@@ -24,8 +24,8 @@ public abstract class SoundModule implements ISoundModule {
     private final SoundStore soundStore;
     private final ISoundController soundController;
 
-    public SoundModule(DefaultEnvironment env, ResourceLoader resourceLoader, SoundStore soundStore) {
-        this(env, resourceLoader, soundStore, new SoundController());
+    public SoundModule(DefaultEnvironment env) {
+        this(env, new SoundResourceLoader(env), new SoundStore(), new SoundController());
     }
 
     public SoundModule(DefaultEnvironment env, ResourceLoader resourceLoader, SoundStore soundStore,

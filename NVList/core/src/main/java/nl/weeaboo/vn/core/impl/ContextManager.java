@@ -9,6 +9,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.render.IDrawBuffer;
 
 public class ContextManager implements IContextManager {
 
@@ -51,6 +52,12 @@ public class ContextManager implements IContextManager {
     public void update() {
         for (IContext context : getActiveContexts()) {
             context.updateScreen();
+        }
+    }
+
+    public void draw(IDrawBuffer drawBuffer) {
+        for (Context context : getActiveContexts()) {
+            context.drawScreen(drawBuffer);
         }
     }
 

@@ -43,14 +43,14 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
         renderStats.startRender();
 		try {
 			renderReset();
-			renderBegin();
+            renderBegin();
 
 			final LayerRenderCommand lrc = d.getRootLayerCommand();
 			if (lrc != null) {
-				renderLayer(d, lrc, renderEnv.getGLClip(), renderEnv.getGLClip().toRect2D());
+                renderLayer(d, lrc, renderEnv.getGLClip(), renderEnv.getGLClip().toRect2D());
 			}
 
-			renderEnd();
+            renderEnd();
 		} finally {
 			rendering = false;
 			renderStats.stopRender();
@@ -63,6 +63,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	protected void renderEnd() {
 		renderReset();
+        applyClipRect(renderEnv.getGLClip());
 		applyRenderState();
 	}
 

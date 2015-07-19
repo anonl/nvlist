@@ -3,20 +3,28 @@ package nl.weeaboo.vn.core.impl;
 import static nl.weeaboo.vn.core.NovelPrefs.HEIGHT;
 import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
+import com.badlogic.gdx.assets.AssetManager;
+
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
+import nl.weeaboo.vn.sound.impl.SoundModule;
+import nl.weeaboo.vn.video.impl.VideoModule;
 
 public class NovelBuilder {
 
+    private final AssetManager assetManager;
     private final IPreferenceStore prefs;
 
-    public NovelBuilder() {
+    public NovelBuilder(AssetManager assetManager) {
+        this.assetManager = Checks.checkNotNull(assetManager);
         this.prefs = StaticEnvironment.PREFS.get();
     }
 
@@ -56,6 +64,11 @@ public class NovelBuilder {
         env.contextManager = new ContextManager(contextFactory);
         env.scriptEnv = scriptEnv;
         env.saveModule = new SaveModule(env);
+
+        // Init modules
+        env.imageModule = new ImageModule(env, assetManager);
+        env.soundModule = new SoundModule(env);
+        env.videoModule = new VideoModule(env);
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {

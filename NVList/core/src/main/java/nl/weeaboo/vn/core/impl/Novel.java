@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
+import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 
@@ -15,6 +17,9 @@ public class Novel extends AbstractNovel {
 
     public Novel(DefaultEnvironment env) {
         super(env);
+
+        Checks.checkArgument(env.getContextManager() instanceof ContextManager,
+                "Unexpected ContextManager type");
     }
 
     @Override
@@ -52,8 +57,18 @@ public class Novel extends AbstractNovel {
         super.update();
     }
 
+    @Override
+    public void draw(IDrawBuffer drawBuffer) {
+        getContextManager().draw(drawBuffer);
+    }
+
     protected LuaScriptEnv getScriptEnv() {
         return (LuaScriptEnv)getEnv().getScriptEnv();
+    }
+
+    @Override
+    protected ContextManager getContextManager() {
+        return (ContextManager)super.getContextManager();
     }
 
 }

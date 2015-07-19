@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.render.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,8 @@ import nl.weeaboo.vn.image.impl.TextureAdapter;
 
 public class GLRenderer extends BaseRenderer {
 
+    private boolean destroyed;
+
     //--- Properties only valid between renderBegin() and renderEnd() beneath this line ---
     private int buffered;
     private final SpriteBatch spriteBatch = new SpriteBatch();
@@ -25,6 +28,17 @@ public class GLRenderer extends BaseRenderer {
 
     public GLRenderer(IRenderEnv env, RenderStats stats) {
         super(env, stats);
+    }
+
+    @Override
+    public void destroy() {
+        destroyed = true;
+        spriteBatch.dispose();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
     @Override
@@ -126,7 +140,11 @@ public class GLRenderer extends BaseRenderer {
 
     @Override
     protected void applyColor(int argb) {
-        spriteBatch.setColor(argb);
+        int a = (argb >> 24) & 0xFF;
+        int r = (argb >> 16) & 0xFF;
+        int g = (argb >> 8 ) & 0xFF;
+        int b = (argb      ) & 0xFF;
+        spriteBatch.setColor(Color.toFloatBits(r, g, b, a));
     }
 
     @Override
