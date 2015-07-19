@@ -202,6 +202,8 @@ public class LuaScriptLoader implements IScriptLoader {
         private transient FileSystemView cachedFileSystemView;
 
         public LuaScriptResourceLoader(IEnvironment env) {
+            super(env.getResourceLoadLog());
+
             this.env = env;
         }
 

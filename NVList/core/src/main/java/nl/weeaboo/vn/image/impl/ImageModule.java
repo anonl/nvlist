@@ -105,7 +105,8 @@ public class ImageModule implements IImageModule {
     }
 
     private IResource<TextureRegion> getTexRectNormalized(String filename, ResourceLoadInfo loadInfo) {
-        // TODO LVN-011 Track stack traces, log texture load times
+        resourceLoader.logLoad(loadInfo);
+
         String resourcePath = resourceLoader.getAbsolutePath(filename);
         return texManager.getTexture(resourcePath);
     }

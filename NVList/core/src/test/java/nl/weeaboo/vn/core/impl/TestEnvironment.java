@@ -32,6 +32,7 @@ public class TestEnvironment extends DefaultEnvironment {
         env.renderEnv = NvlTestUtil.BASIC_ENV;
         env.systemEventHandler = new TestSystemEventHandler();
         env.scriptEnv = scriptEnv;
+        env.resourceLoadLog = new ResourceLoadLogStub();
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         env.contextManager = new ContextManager(contextFactory);

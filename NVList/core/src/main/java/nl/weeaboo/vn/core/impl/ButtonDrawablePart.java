@@ -35,8 +35,6 @@ class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
     private double verticalAlign = 0.5;
     private double touchMargin;
 
-    private transient ITexture currentTexture;
-
     public ButtonDrawablePart(ButtonPart model, ITextRenderer tr) {
         this.model = model;
         this.textRenderer = tr;
@@ -71,7 +69,8 @@ class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
     }
 
     protected void invalidateTexture() {
-        currentTexture = null;
+        // TODO LVN-001
+        // currentTexture = null;
     }
 
     @Override

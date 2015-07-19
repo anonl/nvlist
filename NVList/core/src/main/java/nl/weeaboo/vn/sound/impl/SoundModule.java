@@ -46,7 +46,7 @@ public class SoundModule implements ISoundModule {
 
     @Override
     public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
-        // TODO LVN-01 Re-enable analytics, seen log
+        resourceLoader.logLoad(loadInfo);
 
         Entity e = entityHelper.createScriptableEntity(screen);
         // TODO: Add sound parts

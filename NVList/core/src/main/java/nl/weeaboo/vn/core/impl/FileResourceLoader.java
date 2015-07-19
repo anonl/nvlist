@@ -19,7 +19,9 @@ public class FileResourceLoader extends ResourceLoader {
     private transient FileSystemView cachedFileSystemView;
 
     public FileResourceLoader(IEnvironment env, String resourceFolder) {
-        this.env = Checks.checkNotNull(env);
+        super(env.getResourceLoadLog());
+
+        this.env = env;
         this.resourceFolder = Checks.checkNotNull(resourceFolder);
     }
 

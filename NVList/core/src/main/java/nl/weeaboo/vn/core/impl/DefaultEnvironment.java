@@ -6,6 +6,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ISystemEventHandler;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -21,6 +22,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     IContextManager contextManager;
     LuaScriptEnv scriptEnv;
     ISystemEventHandler systemEventHandler;
+    IResourceLoadLog resourceLoadLog;
 
     IImageModule imageModule;
     ISoundModule soundModule;
@@ -73,6 +75,11 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public ISystemEventHandler getSystemEventHandler() {
         return checkSet(systemEventHandler);
+    }
+
+    @Override
+    public IResourceLoadLog getResourceLoadLog() {
+        return checkSet(resourceLoadLog);
     }
 
     @Override

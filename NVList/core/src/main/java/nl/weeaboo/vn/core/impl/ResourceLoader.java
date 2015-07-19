@@ -10,18 +10,24 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.IResourceLoadLog;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
+
 public abstract class ResourceLoader implements Serializable {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
+    private final IResourceLoadLog resourceLoadLog;
     private final LruSet<String> checkedFilenames;
 
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt;
 
-    public ResourceLoader() {
+    public ResourceLoader(IResourceLoadLog resourceLoadLog) {
+        this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
         this.checkedFilenames = new LruSet<String>(128);
     }
 
@@ -89,6 +95,10 @@ public abstract class ResourceLoader implements Serializable {
      */
     protected void preloadNormalized(String normalizedFilename) {
         // Default implementation does nothing
+    }
+
+    public void logLoad(ResourceLoadInfo info) {
+        resourceLoadLog.logLoad(info);
     }
 
     //Getters

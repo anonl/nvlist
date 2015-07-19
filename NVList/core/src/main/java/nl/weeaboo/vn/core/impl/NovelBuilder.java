@@ -54,6 +54,7 @@ public class NovelBuilder {
         env.renderEnv = renderEnv;
         env.partRegistry = new BasicPartRegistry();
         env.systemEventHandler = new SystemEventHandler();
+        env.resourceLoadLog = new ResourceLoadLog();
 
         // Init Lua script env
         LuaRunState runState = new LuaRunState();
