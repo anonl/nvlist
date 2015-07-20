@@ -25,7 +25,7 @@ public final class World implements Externalizable {
 	private PartRegistry partRegistry;
 	private final IntMap<Scene> scenes = new IntMap<Scene>();
 	private int idGenerator;
-	
+
 	// -------------------------------------------------------------------------
 
 	public World() {
@@ -33,25 +33,28 @@ public final class World implements Externalizable {
 	}
 	public World(PartRegistry partRegistry) {
 		if (partRegistry == null) throw new IllegalArgumentException("partRegistry may not be null");
-		
+
 		this.partRegistry = partRegistry;
 	}
 
 	private void reset() {
-		partRegistry.clear();
+        if (partRegistry != null) {
+            partRegistry.clear();
+        }
 		scenes.clear();
 		idGenerator = 0;
 	}
-	
+
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeInt(SERIALIZE_VERSION);
 		out.writeObject(partRegistry);
-		
+
 		final int scenesL = scenes.size();
 		out.writeInt(scenesL);
 		for (int n = 0; n < scenesL; n++) {
 			Scene scene = scenes.valueAt(n);
+            out.writeInt(scene.getId());
 			scene.serialize(out);
 		}
 	}
@@ -64,24 +67,23 @@ public final class World implements Externalizable {
 		}
 
 		reset();
-		
+
 		partRegistry = (PartRegistry)in.readObject();
-		
+
 		scenes.clear();
 		int scenesL = in.readInt();
 		for (int n = 0; n < scenesL; n++) {
-			Scene scene = new Scene(this, 0);
-			scene.deserialize(this, in);
-			
 			// Validate scene id
-			int sceneId = scene.getId();
+            int sceneId = in.readInt();
 			if (sceneId <= 0) {
 				throw new IOException("Serialized scene has an invalid id: " + sceneId);
 			} else if (scenes.get(sceneId) != null) {
 				throw new IOException("Serialized data contains the same ID multiple times: " + sceneId);
 			}
-			
+
+            Scene scene = new Scene(this, sceneId);
 			scenes.put(sceneId, scene);
+            scene.deserialize(this, in);
 		}
 	}
 
@@ -89,14 +91,14 @@ public final class World implements Externalizable {
 		while (scenes.containsKey(++idGenerator)) {}
 		return idGenerator;
 	}
-	
+
 	/**
 	 * Creates a new scene and attaches it to this world.
 	 */
 	public Scene createScene() {
 		final int id = generateSceneId();
 		assert !scenes.containsKey(id);
-		
+
 		Scene s = new Scene(this, id);
 		scenes.put(id, s);
 		return s;
@@ -110,21 +112,21 @@ public final class World implements Externalizable {
 		s.world = null;
 		assert removed == s;
 	}
-	
+
 	/**
 	 * Returns the scene with the specified identifier.
 	 */
 	public Scene getScene(int id) {
 		return scenes.get(id);
 	}
-	
+
 	/**
-	 * Returns the number of scenes inside this world. 
+	 * Returns the number of scenes inside this world.
 	 */
 	public int getScenesCount() {
 		return scenes.size();
 	}
-	
+
 	/**
 	 * Returns a list of all scenes inside this world.
 	 */
@@ -139,9 +141,9 @@ public final class World implements Externalizable {
 			out.add(scenes.valueAt(n));
 		}
 	}
-	
+
 	/**
-	 * Returns the global part registry used by this world. 
+	 * Returns the global part registry used by this world.
 	 */
 	public PartRegistry getPartRegistry() {
 		return partRegistry;
@@ -157,7 +159,7 @@ public final class World implements Externalizable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets called by parts whenever one of their properties changes.
 	 */

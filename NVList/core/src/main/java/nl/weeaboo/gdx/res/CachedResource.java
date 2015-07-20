@@ -1,36 +1,39 @@
 package nl.weeaboo.gdx.res;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.impl.StaticRef;
 
 final class CachedResource<T> implements IResource<T> {
 
-    private final LoadingResourceStore<T> cache;
+    private static final long serialVersionUID = 1L;
+
+    private final StaticRef<? extends LoadingResourceStore<T>> store;
     private final String filename;
-    
-    private Ref<T> valueRef;
-    
-    public CachedResource(LoadingResourceStore<T> cache, String filename) {
-        this.cache = Checks.checkNotNull(cache);
+
+    private transient Ref<T> valueRef;
+
+    public CachedResource(StaticRef<? extends LoadingResourceStore<T>> store, String filename) {
+        this.store = Checks.checkNotNull(store);
         this.filename = Checks.checkNotNull(filename);
     }
-    
+
     @Override
     public T get() {
-        T value = getValue();        
+        T value = getValue();
         if (value != null) {
             return value;
         }
-        
-        // Attempt to (re)load value        
-        set(cache.getEntry(filename));
+
+        // Attempt to (re)load value
+        set(store.get().getEntry(filename));
         return getValue();
     }
-    
+
     private T getValue() {
         Ref<T> ref = valueRef;
         return (ref != null ? ref.get() : null);
     }
-    
+
     protected void set(Ref<T> ref) {
         this.valueRef = ref;
     }

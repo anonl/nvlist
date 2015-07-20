@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.impl.StaticRef;
 
 /**
  * Handles dispose behavior for generated resources. Resources are registered through
@@ -22,31 +23,30 @@ public class GeneratedResourceStore extends AbstractResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeneratedResourceStore.class);
 
+    private final StaticRef<? extends GeneratedResourceStore> selfId;
     private final ReferenceQueue<GeneratedResource<?>> garbage;
     private final Array<ResourceRef<?>> resources = new Array<ResourceRef<?>>(false, 8);
 
-    public GeneratedResourceStore() {
+    public GeneratedResourceStore(StaticRef<? extends GeneratedResourceStore> selfId) {
         super(LoggerFactory.getLogger("GeneratedResourceStore"));
+
+        this.selfId = Checks.checkNotNull(selfId);
 
         garbage = new ReferenceQueue<GeneratedResource<?>>();
     }
 
     public <T extends Disposable> IResource<T> register(T value) {
-        return register(value, value);
-    }
-    
-    public <T> IResource<T> register(T value, Disposable disposeFunction) {
         cleanUp();
 
-        GeneratedResource<T> resource = new GeneratedResource<T>(value);
-        resources.add(new ResourceRef<T>(resource, disposeFunction, garbage));
+        GeneratedResource<T> resource = new GeneratedResource<T>(selfId, value);
+        resources.add(new ResourceRef<T>(resource, value, garbage));
         return resource;
     }
 
     public int size() {
         return resources.size;
     }
-    
+
     @Override
     public void clear() {
         resources.clear();
@@ -73,12 +73,12 @@ public class GeneratedResourceStore extends AbstractResourceStore {
         }
     }
 
-    private static class ResourceRef<T> extends WeakReference<GeneratedResource<T>> {
+    private static class ResourceRef<T> extends WeakReference<GeneratedResource<? extends T>> {
 
         private final Disposable disposeFunction;
 
-        public ResourceRef(GeneratedResource<T> referent, Disposable disposeFunction,
-                ReferenceQueue<? super GeneratedResource<T>> q) {
+        public ResourceRef(GeneratedResource<? extends T> referent, Disposable disposeFunction,
+                ReferenceQueue<? super GeneratedResource<? extends T>> q) {
 
             super(referent, q);
 

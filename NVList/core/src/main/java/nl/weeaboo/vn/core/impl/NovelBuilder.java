@@ -3,9 +3,6 @@ package nl.weeaboo.vn.core.impl;
 import static nl.weeaboo.vn.core.NovelPrefs.HEIGHT;
 import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
-import com.badlogic.gdx.assets.AssetManager;
-
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
@@ -20,11 +17,9 @@ import nl.weeaboo.vn.video.impl.VideoModule;
 
 public class NovelBuilder {
 
-    private final AssetManager assetManager;
     private final IPreferenceStore prefs;
 
-    public NovelBuilder(AssetManager assetManager) {
-        this.assetManager = Checks.checkNotNull(assetManager);
+    public NovelBuilder() {
         this.prefs = StaticEnvironment.PREFS.get();
     }
 
@@ -67,7 +62,7 @@ public class NovelBuilder {
         env.saveModule = new SaveModule(env);
 
         // Init modules
-        env.imageModule = new ImageModule(env, assetManager);
+        env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
         env.videoModule = new VideoModule(env);
     }

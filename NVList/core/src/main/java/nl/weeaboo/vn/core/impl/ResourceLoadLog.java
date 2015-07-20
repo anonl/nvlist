@@ -8,6 +8,8 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public class ResourceLoadLog implements IResourceLoadLog {
 
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
+
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoadLog.class);
 
     @Override

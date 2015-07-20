@@ -1,27 +1,26 @@
 package nl.weeaboo.vn.image.impl;
 
-import com.badlogic.gdx.assets.AssetManager;
+import java.io.Serializable;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
-import nl.weeaboo.gdx.res.LoadingResourceStore;
 import nl.weeaboo.gdx.res.TransformedResource;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.ITexture;
 
-public class TextureManager {
+public class TextureManager implements Serializable {
 
-    private final LoadingResourceStore<Texture> textureStore;
-    private final GeneratedResourceStore generatedResourceStore;
+    private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-    public TextureManager(AssetManager assetManager) {
-        textureStore = new LoadingResourceStore<Texture>(Texture.class, assetManager);
-        generatedResourceStore = new GeneratedResourceStore();
-    }
+    private final StaticRef<TextureStore> textureStore = StaticEnvironment.TEXTURE_STORE;
+    private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_TEXTURE_STORE;
 
     public IResource<TextureRegion> getTexture(String filename) {
-        IResource<Texture> texture = textureStore.get(filename);
+        IResource<Texture> texture = textureStore.get().get(filename);
         if (texture == null) {
             return null;
         }
@@ -34,8 +33,7 @@ public class TextureManager {
 
     public IResource<TextureRegion> generateTextureRegion(PixelTextureData texData) {
         Texture texture = new Texture(texData.getPixels());
-        TextureRegion texRect = new TextureRegion(texture);
-        return generatedResourceStore.register(texRect, texture);
+        return new RegionResource(generatedTextureStore.get().register(texture));
     }
 
     public ITexture generateTexture(PixelTextureData texData, double sx, double sy) {
@@ -44,6 +42,8 @@ public class TextureManager {
     }
 
     private static class RegionResource extends TransformedResource<Texture, TextureRegion> {
+
+        private static final long serialVersionUID = 1L;
 
         public RegionResource(IResource<Texture> inner) {
             super(inner);

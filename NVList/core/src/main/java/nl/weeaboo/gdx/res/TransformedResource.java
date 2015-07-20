@@ -10,6 +10,8 @@ import nl.weeaboo.common.Checks;
  */
 public abstract class TransformedResource<S, D> implements IResource<D> {
 
+    private static final long serialVersionUID = 1L;
+
     private final IResource<S> inner;
     private transient D cachedTransformed;
 

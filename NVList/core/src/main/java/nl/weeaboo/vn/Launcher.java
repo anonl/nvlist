@@ -29,6 +29,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
+import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
@@ -42,6 +43,7 @@ import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.impl.ImagePart;
+import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
@@ -66,7 +68,7 @@ public class Launcher extends ApplicationAdapter {
 
     private Novel novel;
     private BasicPartRegistry pr;
-    private Entity entity;
+    private int testEntity;
 
 	@Override
 	public void create() {
@@ -111,7 +113,11 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
 
-        NovelBuilder novelBuilder = new NovelBuilder(assetManager);
+        StaticEnvironment.ASSET_MANAGER.set(assetManager);
+        StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
+        StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
+
+        NovelBuilder novelBuilder = new NovelBuilder();
         try {
             novel = novelBuilder.build();
             novel.start("main");
@@ -123,7 +129,8 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
         IContext context = Iterables.get(env.getContextManager().getActiveContexts(), 0);
         ILayer rootLayer = context.getScreen().getRootLayer();
-        entity = env.getImageModule().createImage(rootLayer);
+        Entity entity = env.getImageModule().createImage(rootLayer);
+        testEntity = entity.getId();
         pr = (BasicPartRegistry)env.getPartRegistry();
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
         TransformablePart transformable = entity.getPart(pr.transformable);
@@ -188,7 +195,11 @@ public class Launcher extends ApplicationAdapter {
 		spritePos.y = (vsize.h / 2) + 128 * MathUtils.cosDeg(spritePos.x);
 
         debugControls.update(novel);
-        debugControls.update(entity.getPart(pr.transformable));
+
+        Entity entity = novel.getEnv().getContextManager().findEntity(testEntity);
+        if (entity != null) {
+            debugControls.update(entity.getPart(pr.transformable));
+        }
 
         novel.update();
 	}

@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
@@ -37,8 +36,8 @@ public class ImageModule implements IImageModule {
 
     private Dim imageResolution;
 
-    public ImageModule(DefaultEnvironment env, AssetManager assetManager) {
-        this(env, new ImageResourceLoader(env), new TextureManager(assetManager));
+    public ImageModule(DefaultEnvironment env) {
+        this(env, new ImageResourceLoader(env), new TextureManager());
     }
 
     public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader, TextureManager texManager) {

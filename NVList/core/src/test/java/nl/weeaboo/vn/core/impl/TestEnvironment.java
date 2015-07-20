@@ -24,15 +24,15 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.PREFS.set(prefs);
 
         TestEnvironment env = new TestEnvironment();
-        LuaRunState runState = LuaTestUtil.newRunState();
-        LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
-        LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
-
         env.partRegistry = new BasicPartRegistry();
         env.renderEnv = NvlTestUtil.BASIC_ENV;
         env.systemEventHandler = new TestSystemEventHandler();
-        env.scriptEnv = scriptEnv;
         env.resourceLoadLog = new ResourceLoadLogStub();
+
+        LuaRunState runState = LuaTestUtil.newRunState();
+        LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
+        LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
+        env.scriptEnv = scriptEnv;
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         env.contextManager = new ContextManager(contextFactory);

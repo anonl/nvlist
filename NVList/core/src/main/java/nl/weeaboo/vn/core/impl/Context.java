@@ -101,6 +101,11 @@ public class Context implements IContext {
 	    scriptContext.updateThreads(this);
 	}
 
+    @Override
+    public Entity findEntity(int entityId) {
+        return scene.getEntity(entityId);
+    }
+
 	//Getters
 	@Override
 	public boolean isDestroyed() {

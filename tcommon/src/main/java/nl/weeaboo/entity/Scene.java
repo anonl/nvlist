@@ -1,6 +1,7 @@
 package nl.weeaboo.entity;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
@@ -27,7 +28,7 @@ public final class Scene implements IWriteReplaceSerializable {
 	// -------------------------------------------------------------------------
 	transient World world;
 
-	private int id; // Unique scene identifier
+    private final int id; // Unique scene identifier
 	private boolean enabled = true;
 
     private transient final EntityManager entityManager = new EntityManager(this);
@@ -48,7 +49,6 @@ public final class Scene implements IWriteReplaceSerializable {
 	}
 
 	private void reset() {
-		id = 0;
 		enabled = true;
 
 		entityManager.reset();
@@ -58,7 +58,6 @@ public final class Scene implements IWriteReplaceSerializable {
 	}
 
 	void serialize(ObjectOutput out) throws IOException {
-		out.writeInt(id);
 		out.writeBoolean(enabled);
 
 		entityManager.serialize(out);
@@ -75,11 +74,10 @@ public final class Scene implements IWriteReplaceSerializable {
 		}
 	}
 
-	void deserialize(World w, ObjectInput in) throws IOException, ClassNotFoundException {
+    void deserialize(World w, ObjectInput in) throws IOException, ClassNotFoundException {
 		reset();
 
-		world = w;
-		id = in.readInt();
+        this.world = w;
 		enabled = in.readBoolean();
 
 		entityManager.deserialize(this, in);
@@ -323,8 +321,12 @@ public final class Scene implements IWriteReplaceSerializable {
 		}
 
 		@Override
-		public Object readResolve() throws ObjectStreamException {
-			return world.getScene(id);
+        public Object readResolve() throws ObjectStreamException {
+            Scene scene = world.getScene(id);
+            if (scene == null) {
+                throw new InvalidObjectException("Scene lost during serialization: " + id);
+            }
+            return scene;
 		}
 
 	}

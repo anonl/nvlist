@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public final class DefaultEntityStreamDef extends EntityStreamDef {
 
-    public static DefaultEntityStreamDef ALL_ENTITIES_STREAM = new DefaultEntityStreamDef();
+    public static final DefaultEntityStreamDef ALL_ENTITIES_STREAM = new DefaultEntityStreamDef();
 
 	private final PartType<?>[] requiredParts;
 

@@ -2,6 +2,7 @@ package nl.weeaboo.vn.core;
 
 import java.io.Serializable;
 
+import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.script.IScriptContext;
 
 public interface IContext extends Serializable, IDestructible, IEntityContainer {
@@ -21,5 +22,7 @@ public interface IContext extends Serializable, IDestructible, IEntityContainer 
 	public IScriptContext getScriptContext();
 
     public void setRenderEnv(IRenderEnv env);
+
+    public Entity findEntity(int entityId);
 
 }

@@ -3,18 +3,25 @@ package nl.weeaboo.vn.core.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.vn.core.INotifier;
+import nl.weeaboo.vn.image.impl.TextureStore;
 
 public final class StaticEnvironment {
 
     public static final StaticRef<IFileSystem> FILE_SYSTEM = StaticRef.from("fileSystem", IFileSystem.class);
-    public static final StaticRef<IWritableFileSystem> OUTPUT_FILE_SYSTEM = StaticRef.from("outputFileSystem",
-            IWritableFileSystem.class);
+    public static final StaticRef<IWritableFileSystem> OUTPUT_FILE_SYSTEM = StaticRef.from("outputFileSystem", IWritableFileSystem.class);
     public static final StaticRef<INotifier> NOTIFIER = StaticRef.from("notifier", INotifier.class);
     public static final StaticRef<IPreferenceStore> PREFS = StaticRef.from("prefs", IPreferenceStore.class);
+
+    public static final StaticRef<AssetManager> ASSET_MANAGER = StaticRef.from("assetManager", AssetManager.class);
+    public static final StaticRef<TextureStore> TEXTURE_STORE = StaticRef.from("store.texture", TextureStore.class);
+    public static final StaticRef<GeneratedResourceStore> GENERATED_TEXTURE_STORE = StaticRef.from("store.generatedTexture", GeneratedResourceStore.class);
 
     private static final StaticEnvironment INSTANCE = new StaticEnvironment();
 

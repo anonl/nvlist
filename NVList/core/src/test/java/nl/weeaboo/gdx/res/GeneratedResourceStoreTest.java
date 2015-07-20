@@ -7,14 +7,16 @@ import org.junit.Test;
 import com.badlogic.gdx.utils.Disposable;
 
 import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.core.impl.StaticRef;
 
 public class GeneratedResourceStoreTest {
 
+    private StaticRef<GeneratedResourceStore> TEST_ID = StaticRef.from("test", GeneratedResourceStore.class);
     private GeneratedResourceStore store;
 
     @Before
     public void init() {
-        store = new GeneratedResourceStore();
+        TEST_ID.set(store = new GeneratedResourceStore(TEST_ID));
     }
 
     @Test

@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.core;
 
-public interface IResourceLoadLog {
+import java.io.Serializable;
+
+public interface IResourceLoadLog extends Serializable {
 
     void logLoad(ResourceLoadInfo info);
 
