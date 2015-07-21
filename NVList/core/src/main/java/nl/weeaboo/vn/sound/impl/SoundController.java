@@ -103,7 +103,15 @@ public class SoundController implements ISoundController {
         return paused;
     }
 
-    //Setters
+    @Override
+    public int getFreeChannel() {
+        for (int n = 1; n < 10000; n++) {
+            if (!sounds.containsKey(n)) {
+                return n;
+            }
+        }
+        throw new RuntimeException("No free channels left");
+    }
 
     @Override
     public void set(int channel, ISoundPart sound) {

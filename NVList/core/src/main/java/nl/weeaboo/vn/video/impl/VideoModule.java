@@ -45,6 +45,10 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
+    public void destroy() {
+    }
+
+    @Override
     public void update() {
     }
 

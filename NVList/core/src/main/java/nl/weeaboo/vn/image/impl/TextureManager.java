@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.gdx.res.TransformedResource;
+import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.ITexture;
@@ -19,7 +20,8 @@ public class TextureManager implements Serializable {
     private final StaticRef<TextureStore> textureStore = StaticEnvironment.TEXTURE_STORE;
     private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_TEXTURE_STORE;
 
-    public IResource<TextureRegion> getTexture(String filename) {
+    public IResource<TextureRegion> getTexture(FileResourceLoader loader, String filename) {
+        filename = loader.getAbsolutePath(filename);
         IResource<Texture> texture = textureStore.get().get(filename);
         if (texture == null) {
             return null;

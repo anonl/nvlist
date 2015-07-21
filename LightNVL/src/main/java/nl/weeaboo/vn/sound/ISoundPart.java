@@ -5,54 +5,66 @@ import java.io.IOException;
 public interface ISoundPart {
 
 	// === Functions ===========================================================
+
+    /**
+     * @see start(int)
+     */
+    void start() throws IOException;
+
 	/**
-	 * Starts playing the sound.
-	 *
-	 * @param loops The number of times the sound should loop. Use
-	 *        <code>-1</code> for infinite looping.
-	 */
-	public void start(int loops) throws IOException;
+     * Starts playing the sound.
+     *
+     * @param loops The number of times the sound should play. Use <code>-1</code> for infinite looping.
+     */
+    void start(int loops) throws IOException;
 
 	/**
 	 * @see #stop(int)
 	 */
-	public void stop();
+    void stop();
 
 	/**
 	 * Stops playing the sound.
 	 * @param fadeOutMillis Instead of stopping the sound immediately, fade it
 	 *        out slowly over the course of <code>fadeOutMillis</code>.
 	 */
-	public void stop(int fadeOutMillis);
+    void stop(int fadeOutMillis);
 
 	/**
 	 * Temporarily pauses playback. Use {@link #resume()} to resume playback.
 	 */
-	public void pause();
+    void pause();
 
 	/**
 	 * Resumes a previously paused sound. Behavior is unspecified when the sound
 	 * is not paused.
 	 */
-	public void resume();
+    void resume();
 
 	// === Getters =============================================================
 
-	public String getFilename();
-	public SoundType getSoundType();
-	public boolean isPlaying();
-	public boolean isPaused();
-	public boolean isStopped();
-	public boolean isDestroyed();
-	public int getLoopsLeft();
+    String getFilename();
 
-	public double getVolume();
-	public double getPrivateVolume();
-	public double getMasterVolume();
+    SoundType getSoundType();
+
+    boolean isPlaying();
+
+    boolean isPaused();
+
+    boolean isStopped();
+
+    int getLoopsLeft();
+
+    double getVolume();
+
+    double getPrivateVolume();
+
+    double getMasterVolume();
 
 	// === Setters =============================================================
 
-	public void setPrivateVolume(double v);
-	public void setMasterVolume(double v);
+    void setPrivateVolume(double v);
+
+    void setMasterVolume(double v);
 
 }

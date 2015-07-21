@@ -5,6 +5,7 @@ import java.io.Serializable;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IContextManager;
+import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ISystemEventHandler;
@@ -36,6 +37,10 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public void destroy() {
         destroyed = true;
+
+        for (IModule module : getModules()) {
+            module.destroy();
+        }
 
         ContextUtil.setCurrentContext(null);
     }

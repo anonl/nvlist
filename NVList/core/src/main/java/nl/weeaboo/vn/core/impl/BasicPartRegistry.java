@@ -6,6 +6,7 @@ import nl.weeaboo.vn.core.IButtonPart;
 import nl.weeaboo.vn.core.IInputListener;
 import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.script.impl.ScriptPart;
+import nl.weeaboo.vn.sound.impl.SoundPart;
 
 public class BasicPartRegistry extends PartRegistry {
 
@@ -22,6 +23,8 @@ public class BasicPartRegistry extends PartRegistry {
     public final PartType<? extends IButtonPart> button;
     // public final PartType<? extends IButtonDrawablePart> buttonDrawable;
 
+    public final PartType<SoundPart> sound;
+
 	public BasicPartRegistry() {
         script = register("script", ScriptPart.class);
 
@@ -33,6 +36,8 @@ public class BasicPartRegistry extends PartRegistry {
 
         button = register("button", ButtonPart.class);
         //buttonDrawable = register("buttonDrawable", ButtonDrawable.class);
+
+        sound = register("sound", SoundPart.class);
 	}
 
 }

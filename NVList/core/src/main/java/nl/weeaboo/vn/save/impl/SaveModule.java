@@ -72,6 +72,11 @@ public class SaveModule implements ISaveModule {
     }
 
     @Override
+    public void destroy() {
+        savePersistent();
+    }
+
+    @Override
     public void update() {
     }
 

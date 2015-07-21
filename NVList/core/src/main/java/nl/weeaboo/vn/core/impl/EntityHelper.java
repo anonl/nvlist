@@ -7,6 +7,10 @@ import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.script.impl.ScriptPart;
+import nl.weeaboo.vn.sound.ISoundController;
+import nl.weeaboo.vn.sound.SoundType;
+import nl.weeaboo.vn.sound.impl.IAudioAdapter;
+import nl.weeaboo.vn.sound.impl.SoundPart;
 
 public class EntityHelper implements Serializable {
 
@@ -49,6 +53,16 @@ public class EntityHelper implements Serializable {
         layer.add(e); // Updates drawable.parent field
 
         return e;
+    }
+
+    public SoundPart addSoundPart(Entity e, ISoundController sctrl, SoundType stype, String normalized,
+            IAudioAdapter audio) {
+
+        SoundPart soundPart = new SoundPart(sctrl, stype, normalized, audio);
+
+        e.addPart(pr.sound, soundPart);
+
+        return soundPart;
     }
 
 }

@@ -23,6 +23,10 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void readAttributes(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        if (env != null) {
+            env.destroy();
+        }
+
         env = (IEnvironment)in.readObject();
     }
 
@@ -41,8 +45,6 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void stop() {
-        ISaveModule saveModule = getSaveModule();
-        saveModule.savePersistent();
     }
 
     @Override

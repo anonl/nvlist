@@ -52,6 +52,10 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
+    public void destroy() {
+    }
+
+    @Override
     public void update() {
     }
 
@@ -89,7 +93,6 @@ public class ImageModule implements IImageModule {
             return null;
         }
 
-        // seenLog.addImage(filename); // TODO Enable seen log
         return getTextureNormalized(normalized, loadInfo);
     }
 
@@ -106,8 +109,7 @@ public class ImageModule implements IImageModule {
     private IResource<TextureRegion> getTexRectNormalized(String filename, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(loadInfo);
 
-        String resourcePath = resourceLoader.getAbsolutePath(filename);
-        return texManager.getTexture(resourcePath);
+        return texManager.getTexture(resourceLoader, filename);
     }
 
     @Override

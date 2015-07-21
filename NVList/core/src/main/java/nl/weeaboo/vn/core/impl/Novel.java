@@ -6,7 +6,6 @@ import java.io.ObjectOutput;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 
 public class Novel extends AbstractNovel {
@@ -46,8 +45,7 @@ public class Novel extends AbstractNovel {
         }
         isStarted = false;
 
-        ISaveModule saveModule = getSaveModule();
-        saveModule.savePersistent();
+        super.stop();
     }
 
     @Override

@@ -48,6 +48,7 @@ import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
+import nl.weeaboo.vn.sound.impl.MusicStore;
 
 public class Launcher extends ApplicationAdapter {
 
@@ -126,6 +127,7 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
+        StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
 
         NovelBuilder novelBuilder = new NovelBuilder();
         try {
