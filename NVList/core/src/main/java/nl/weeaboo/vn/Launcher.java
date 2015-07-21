@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.google.common.collect.Iterables;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.entity.Entity;
@@ -52,6 +53,8 @@ public class Launcher extends ApplicationAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
+    private final String resourceFolder;
+
     private GdxFileSystem resourceFileSystem;
     private AssetManager assetManager;
 	private FrameBuffer frameBuffer;
@@ -70,11 +73,18 @@ public class Launcher extends ApplicationAdapter {
     private BasicPartRegistry pr;
     private int testEntity;
 
+    public Launcher() {
+        this("res/");
+    }
+    public Launcher(String resF) {
+        this.resourceFolder = Checks.checkNotNull(resF);
+    }
+
 	@Override
 	public void create() {
         configureLogger();
 
-        resourceFileSystem = new GdxFileSystem("res/", true);
+        resourceFileSystem = new GdxFileSystem(resourceFolder, true);
         assetManager = new AssetManager(resourceFileSystem);
         Texture.setAssetManager(assetManager);
 
@@ -230,6 +240,10 @@ public class Launcher extends ApplicationAdapter {
 		screenViewport.update(width, height, true);
         novel.getEnv().updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
 	}
+
+    public Novel getNovel() {
+        return novel;
+    }
 
     private static void configureLogger() {
         try {

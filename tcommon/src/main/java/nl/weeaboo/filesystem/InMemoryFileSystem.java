@@ -12,7 +12,7 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 
 	private final Map<String, InMemoryFile> files = new HashMap<String, InMemoryFile>();
 
-	private boolean readOnly;
+    private final boolean readOnly;
 
 	public InMemoryFileSystem(boolean readOnly) {
 		this.readOnly = readOnly;
