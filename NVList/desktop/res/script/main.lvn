@@ -1,0 +1,13 @@
+
+@@
+
+function main()
+	print("main")
+	return titlescreen()
+end
+
+function titlescreen()
+	print("titlescreen")
+end
+
+@@

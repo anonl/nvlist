@@ -34,8 +34,16 @@ public class LuaScriptThread implements IScriptThread {
         return luaLink.isFinished();
     }
 
+    public void call(String funcName, Object... args) throws ScriptException {
+        try {
+            luaLink.call(funcName, args);
+        } catch (LuaException e) {
+            throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
+        }
+    }
+
     public void call(LuaScriptFunction func) throws ScriptException {
-        func.call();
+        func.call(luaLink);
     }
 
     public void call(LuaClosure func) throws ScriptException {

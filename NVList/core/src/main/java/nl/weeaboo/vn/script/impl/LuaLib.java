@@ -11,7 +11,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
 
-import nl.weeaboo.lua2.LuaException;
+import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.script.lua.ILuaScriptEnvInitializer;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
@@ -32,7 +32,7 @@ public abstract class LuaLib implements Serializable, ILuaScriptEnvInitializer {
     }
 
     @Override
-    public void initEnv(LuaScriptEnv env) throws LuaException {
+    public void initEnv(LuaScriptEnv env) throws ScriptException {
         LuaTable globals = env.getGlobals();
 
         if (tableName != null) {
@@ -47,7 +47,7 @@ public abstract class LuaLib implements Serializable, ILuaScriptEnvInitializer {
     /**
      * @param env The script environment.
      */
-    protected void initTable(LuaTable table, LuaScriptEnv env) throws LuaException {
+    protected void initTable(LuaTable table, LuaScriptEnv env) throws ScriptException {
         for (Method method : getClass().getMethods()) {
             ScriptFunction functionAnnot = method.getAnnotation(ScriptFunction.class);
             if (functionAnnot == null) {
@@ -55,16 +55,16 @@ public abstract class LuaLib implements Serializable, ILuaScriptEnvInitializer {
             }
 
             if (!method.getReturnType().equals(Varargs.class)) {
-                throw new LuaException("Return type must be Varargs");
+                throw new ScriptException("Return type must be Varargs");
             }
 
             if (!Arrays.equals(method.getParameterTypes(), new Class<?>[] { Varargs.class })) {
-                throw new LuaException("Method must have a single parameter of type Varargs");
+                throw new ScriptException("Method must have a single parameter of type Varargs");
             }
 
             String name = method.getName();
             if (table.rawget(name) != LuaValue.NIL) {
-                throw new LuaException("There's already a table entry named: " + name + " :: " + table.rawget(name));
+                throw new ScriptException("There's already a table entry named: " + name + " :: " + table.rawget(name));
             }
             table.rawset(name, wrapFunction(method.getName(), method.getParameterTypes()));
         }

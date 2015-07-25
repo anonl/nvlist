@@ -4,12 +4,12 @@ import static nl.weeaboo.vn.core.NovelPrefs.HEIGHT;
 import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
+import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.sound.impl.SoundModule;
@@ -79,7 +79,9 @@ public class NovelBuilder {
         LuaScriptEnv scriptEnv = env.getScriptEnv();
         try {
             scriptEnv.initEnv();
-        } catch (LuaException e) {
+        } catch (ScriptException e) {
+            throw new InitException(e);
+        } catch (RuntimeException e) {
             throw new InitException(e);
         }
     }

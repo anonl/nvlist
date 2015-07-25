@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.luaj.vm2.LuaTable;
 
-import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.vn.core.IContextManager;
@@ -29,7 +28,7 @@ public class BaseScriptTest {
     private LuaScriptEnv scriptEnv;
 
     @Before
-    public void init() throws LuaException {
+    public void init() throws ScriptException {
         LuaRunState runState = LuaTestUtil.newRunState();
         TestEnvironment env = TestEnvironment.newInstance();
         scriptLoader = LuaTestUtil.newScriptLoader(env);

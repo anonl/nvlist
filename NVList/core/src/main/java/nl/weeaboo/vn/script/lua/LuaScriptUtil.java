@@ -33,6 +33,7 @@ public final class LuaScriptUtil {
     public static ScriptException toScriptException(String message, LuaException e) {
         ScriptException se = new ScriptException(message + ": " + e.getMessage());
         se.setStackTrace(e.getStackTrace());
+        se.initCause(e.getCause());
         return se;
     }
 

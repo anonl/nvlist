@@ -4,11 +4,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.script.IScriptLoader;
+import nl.weeaboo.vn.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.lua.LuaScriptThread;
 
 public class Novel extends AbstractNovel {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Novel.class);
 
     // --- Note: This class uses manual serialization ---
     private transient boolean isStarted;
@@ -35,7 +44,25 @@ public class Novel extends AbstractNovel {
     public void start(String mainFunctionName) {
         isStarted = true;
 
-        super.start(mainFunctionName);
+        // Create an initial context and activate it
+        ContextManager contextManager = getContextManager();
+        Context mainContext = contextManager.createContext();
+        contextManager.setContextActive(mainContext, true);
+
+        // Load main script and call main function
+        IScriptLoader scriptLoader = getScriptEnv().getScriptLoader();
+        LuaScriptContext scriptContext = getScriptContext(mainContext);
+        LuaScriptThread mainThread = scriptContext.getMainThread();
+        try {
+            scriptLoader.loadScript(mainThread, "main");
+            mainThread.call(mainFunctionName);
+        } catch (Exception e) {
+            LOG.warn("Error executing main function: \"" + mainFunctionName + "\"", e);
+        }
+    }
+
+    protected static LuaScriptContext getScriptContext(IContext context) {
+        return (LuaScriptContext)context.getScriptContext();
     }
 
     @Override

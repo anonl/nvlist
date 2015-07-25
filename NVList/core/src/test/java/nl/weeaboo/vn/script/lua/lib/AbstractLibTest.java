@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 
-import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.vn.core.impl.Context;
 import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.ContextUtil;
@@ -22,7 +21,7 @@ public abstract class AbstractLibTest {
     protected IScriptThread mainThread;
 
     @Before
-    public void init() throws LuaException {
+    public void init() throws ScriptException {
         env = TestEnvironment.newInstance();
 
         addInitializers(env.getScriptEnv());

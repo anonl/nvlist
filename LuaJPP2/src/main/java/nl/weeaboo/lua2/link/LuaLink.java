@@ -158,7 +158,11 @@ public class LuaLink implements Serializable {
      * Calls a Lua function and returns its result.
      */
     public Varargs call(String funcName, Object... args) throws LuaException {
-        return call(getFunction(funcName), args);
+        LuaClosure function = getFunction(funcName);
+        if (function == null && !ignoreMissing) {
+            throw new LuaException(String.format("function \"%s\" not found", funcName));
+        }
+        return call(function, args);
     }
 
     /**

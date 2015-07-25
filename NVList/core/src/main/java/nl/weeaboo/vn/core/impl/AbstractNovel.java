@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
-import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
@@ -33,14 +32,6 @@ public abstract class AbstractNovel implements INovel {
     @Override
     public void writeAttributes(ObjectOutput out) throws IOException {
         out.writeObject(env);
-    }
-
-    @Override
-    public void start(String mainFunctionName) {
-        // Create an initial context and activate it
-        IContextManager contextManager = env.getContextManager();
-        IContext mainContext = contextManager.createContext();
-        contextManager.setContextActive(mainContext, true);
     }
 
     @Override

@@ -6,10 +6,10 @@ import java.util.List;
 import org.luaj.vm2.LuaTable;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.script.IScriptLoader;
+import nl.weeaboo.vn.script.ScriptException;
 
 public class LuaScriptEnv implements IScriptEnv {
 
@@ -26,7 +26,7 @@ public class LuaScriptEnv implements IScriptEnv {
 		this.loader = loader;
 	}
 
-	public void initEnv() throws LuaException {
+    public void initEnv() throws ScriptException {
 	    initialized = true;
 
 	    registerOnThread();
