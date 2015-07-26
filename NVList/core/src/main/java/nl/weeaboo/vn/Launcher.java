@@ -183,19 +183,19 @@ public class Launcher extends ApplicationAdapter {
 		update(Gdx.graphics.getDeltaTime());
 
 		frameBuffer.begin();
+        frameBufferViewport.apply();
 		Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		frameBufferViewport.apply();
 		Camera camera = frameBufferViewport.getCamera();
         batch.setProjectionMatrix(camera.combined);
 
-		renderScreen(batch);
+        renderScreen(batch);
 		frameBuffer.end();
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+        screenViewport.apply();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		screenViewport.apply();
-		batch.setProjectionMatrix(screenViewport.getCamera().combined);
+        batch.setProjectionMatrix(screenViewport.getCamera().combined);
 
 		batch.begin();
 		batch.draw(frameBuffer.getColorBufferTexture(), 0, vsize.h, vsize.w, -vsize.h);

@@ -32,7 +32,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	//Functions
 	private void renderReset() {
-		clipping = true;
+        clipping = false;
 		blendMode = BlendMode.DEFAULT;
 		foreground = 0xFFFFFFFF;
 	}
