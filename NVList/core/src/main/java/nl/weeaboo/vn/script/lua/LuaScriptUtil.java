@@ -59,24 +59,27 @@ public final class LuaScriptUtil {
         List<String> result = new ArrayList<String>();
         for (int level = 0; level < DEFAULT_STACK_LIMIT; level++) {
             String line = DebugLib.fileline(thread, level);
-            if (line == null) break;
-
+            if (line == null) {
+                break;
+            }
             result.add(line);
         }
         return result;
     }
 
-    public static String getNearestLVNSrcloc(LuaScriptThread thread) {
-        return getNearestLVNSrcloc(thread.luaLink.getThread());
+    public static String getNearestLvnSrcloc(LuaScriptThread thread) {
+        return getNearestLvnSrcloc(thread.luaLink.getThread());
     }
 
-    private static String getNearestLVNSrcloc(LuaThread thread) {
+    private static String getNearestLvnSrcloc(LuaThread thread) {
         if (thread == null) {
             return null;
         }
         for (int level = 0; level < DEFAULT_STACK_LIMIT; level++) {
             String line = DebugLib.fileline(thread, level);
-            if (line == null) break;
+            if (line == null) {
+                break;
+            }
 
             if (line.contains(LVN_PATTERN)) {
                 return line;
@@ -85,11 +88,7 @@ public final class LuaScriptUtil {
         return null;
     }
 
-    public static String getNearestLVNSrcloc(String[] stack) {
-        if (stack == null) {
-            return null;
-        }
-
+    public static String getNearestLvnSrcloc(List<String> stack) {
         for (String frame : stack) {
             if (frame.contains(LVN_PATTERN)) {
                 return frame;

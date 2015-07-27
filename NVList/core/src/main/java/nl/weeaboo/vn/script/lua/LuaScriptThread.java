@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.script.lua;
 
+import java.util.List;
+
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaValue;
 
@@ -71,6 +73,11 @@ public class LuaScriptThread implements IScriptThread {
     @Override
     public String toString() {
         return String.valueOf(luaLink.getThread());
+    }
+
+    @Override
+    public List<String> getStackTrace() {
+        return LuaScriptUtil.getLuaStack(luaLink.getThread());
     }
 
 }

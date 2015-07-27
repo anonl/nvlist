@@ -6,6 +6,8 @@ import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.settings.Preference;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
@@ -17,19 +19,13 @@ import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.sound.impl.SoundModule;
 import nl.weeaboo.vn.video.impl.VideoModule;
 
-public class NovelBuilder {
+public class EnvironmentFactory {
 
-    private final IPreferenceStore prefs;
-
-    public NovelBuilder() {
-        this.prefs = StaticEnvironment.PREFS.get();
-    }
-
-    public Novel build() throws InitException {
+    public DefaultEnvironment build() throws InitException {
         try {
             DefaultEnvironment env = initEnvironment();
             initScriptState(env);
-            return buildNovel(env);
+            return env;
         } catch (RuntimeException re) {
             throw new InitException(re);
         }
@@ -45,7 +41,7 @@ public class NovelBuilder {
      * @throws InitException If an unrecoverable initialization error occurs.
      */
     protected void initEnvironment(DefaultEnvironment env) throws InitException {
-        final Dim vsize = new Dim(prefs.get(WIDTH), prefs.get(HEIGHT));
+        final Dim vsize = new Dim(getPref(WIDTH), getPref(HEIGHT));
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
@@ -95,22 +91,12 @@ public class NovelBuilder {
         }
     }
 
-    protected Novel buildNovel(DefaultEnvironment env) {
-        return new Novel(env);
+    private static IPreferenceStore getPrefs() {
+        return StaticEnvironment.PREFS.get();
     }
 
-    public static class InitException extends Exception {
-
-        private static final long serialVersionUID = 1L;
-
-        public InitException(Throwable cause) {
-            this("Fatal error during initialization", cause);
-        }
-
-        public InitException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
+    protected <T> T getPref(Preference<T> pref) {
+        return getPrefs().get(pref);
     }
 
 }

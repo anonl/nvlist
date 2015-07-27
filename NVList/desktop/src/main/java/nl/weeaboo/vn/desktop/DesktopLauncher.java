@@ -3,6 +3,7 @@ package nl.weeaboo.vn.desktop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -15,6 +16,9 @@ public class DesktopLauncher {
 
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "NVList";
+        config.addIcon("icon32.png", FileType.Internal);
+        config.addIcon("icon16.png", FileType.Internal);
 
         LwjglApplication app = new LwjglApplication(new Launcher(), config);
         app.addLifecycleListener(new LifecycleListener() {

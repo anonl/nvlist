@@ -10,15 +10,23 @@ function titlescreen()
 	print("titlescreen")
 	
 	newThread(function()
-		yield(120)
+		yield(60)
 		print("other thread")
+		
+		local rootLayer = Image.getActiveLayer()
+		local subLayer = Image.createLayer(rootLayer)
 		
 		local ss = Image.screenshot()
 		while not ss:isAvailable() do
 			yield()
 		end
-		Image.createImage(nil, ss)
+		Image.createImage(subLayer, ss)
 	end)
+	
+	-- Wait forever (keeps the main thread alive)
+	while true do
+		yield(60)
+	end
 end
 
 @@

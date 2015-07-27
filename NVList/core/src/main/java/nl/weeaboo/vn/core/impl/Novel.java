@@ -7,7 +7,7 @@ import java.io.ObjectOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptUtil;
@@ -20,11 +20,8 @@ public class Novel extends AbstractNovel {
     private transient boolean isStarted;
     // --- Note: This class uses manual serialization ---
 
-    public Novel(DefaultEnvironment env) {
-        super(env);
-
-        Checks.checkArgument(env.getContextManager() instanceof ContextManager,
-                "Unexpected ContextManager type");
+    public Novel(EnvironmentFactory envFactory) {
+        super(envFactory);
     }
 
     @Override
@@ -38,7 +35,9 @@ public class Novel extends AbstractNovel {
     }
 
     @Override
-    public void start(String mainFunctionName) {
+    public void start(String mainFunctionName) throws InitException {
+        super.start(mainFunctionName);
+
         isStarted = true;
 
         // Create an initial context and activate it
@@ -53,6 +52,13 @@ public class Novel extends AbstractNovel {
         } catch (Exception e) {
             LOG.warn("Error executing main function: \"" + mainFunctionName + "\"", e);
         }
+    }
+
+    @Override
+    public void restart() throws InitException {
+        stop();
+
+        start("titlescreen");
     }
 
     @Override

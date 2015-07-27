@@ -8,7 +8,8 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 
 public interface INovel extends IUpdateable {
 
-    void start(String mainFunctionName);
+    void start(String mainFunctionName) throws InitException;
+    void restart() throws InitException;
     void stop();
 
     void readAttributes(ObjectInputStream in) throws IOException, ClassNotFoundException;

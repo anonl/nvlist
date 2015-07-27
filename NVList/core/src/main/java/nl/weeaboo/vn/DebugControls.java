@@ -14,6 +14,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.TransformablePart;
@@ -33,6 +34,15 @@ final class DebugControls {
         IContext activeContext = Iterables.get(env.getContextManager().getActiveContexts(), 0);
         IScreen screen = (activeContext != null ? activeContext.getScreen() : null);
         boolean alt = Gdx.input.isKeyPressed(Keys.ALT_LEFT);
+
+        // Reset
+        if (Gdx.input.isKeyJustPressed(Keys.F5)) {
+            try {
+                novel.restart();
+            } catch (InitException e) {
+                LOG.error("Fatal error during restart", e);
+            }
+        }
 
         // Save/load
         ISaveModule saveModule = env.getSaveModule();

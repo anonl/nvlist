@@ -4,20 +4,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.save.ISaveModule;
 
 public abstract class AbstractNovel implements INovel {
 
     // --- Note: This class uses manual serialization ---
+    private EnvironmentFactory envFactory;
     private IEnvironment env;
     // --- Note: This class uses manual serialization ---
 
-    public AbstractNovel(IEnvironment env) {
-        this.env = env;
+    public AbstractNovel(EnvironmentFactory envFactory) {
+        this.envFactory = Checks.checkNotNull(envFactory);
     }
 
     @Override
@@ -32,6 +35,11 @@ public abstract class AbstractNovel implements INovel {
     @Override
     public void writeAttributes(ObjectOutput out) throws IOException {
         out.writeObject(env);
+    }
+
+    @Override
+    public void start(String mainFuncName) throws InitException {
+        env = envFactory.build();
     }
 
     @Override

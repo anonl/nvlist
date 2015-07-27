@@ -34,13 +34,13 @@ import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
+import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
-import nl.weeaboo.vn.core.impl.NovelBuilder;
-import nl.weeaboo.vn.core.impl.NovelBuilder.InitException;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.impl.ImagePart;
@@ -129,12 +129,12 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
         StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
 
-        NovelBuilder novelBuilder = new NovelBuilder();
+        EnvironmentFactory envFactory = new EnvironmentFactory();
+        novel = new Novel(envFactory);
         try {
-            novel = novelBuilder.build();
             novel.start("main");
         } catch (InitException e) {
-            e.printStackTrace();
+            LOG.error("Fatal error during init", e);
         }
 
         // Create a test image
@@ -185,7 +185,7 @@ public class Launcher extends ApplicationAdapter {
 
 		frameBuffer.begin();
         frameBufferViewport.apply();
-		Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(.514f, .380f, .584f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Camera camera = frameBufferViewport.getCamera();
         batch.setProjectionMatrix(camera.combined);
@@ -233,7 +233,7 @@ public class Launcher extends ApplicationAdapter {
 
 		batch.draw(img, spritePos.x, spritePos.y);
 
-		osd.render(batch, vsize);
+        osd.render(batch, env);
 
 		batch.end();
 	}
