@@ -147,6 +147,7 @@ public class Launcher extends ApplicationAdapter {
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
         TransformablePart transformable = entity.getPart(pr.transformable);
         transformable.setPos(640, 360);
+        transformable.setZ((short)-100);
         ImagePart image = entity.getPart(pr.image);
         image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
 	}
@@ -217,11 +218,13 @@ public class Launcher extends ApplicationAdapter {
 	}
 
 	protected void renderScreen(SpriteBatch batch) {
+        IEnvironment env = novel.getEnv();
+
         // Render novel
-        DrawBuffer drawBuffer = new DrawBuffer((BasicPartRegistry)novel.getEnv().getPartRegistry());
+        DrawBuffer drawBuffer = new DrawBuffer((BasicPartRegistry)env.getPartRegistry());
         novel.draw(drawBuffer);
 
-        GLRenderer renderer = new GLRenderer(novel.getEnv().getRenderEnv(), new RenderStats());
+        GLRenderer renderer = new GLRenderer(env.getRenderEnv(), new RenderStats());
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         renderer.render(drawBuffer);
         renderer.destroy();

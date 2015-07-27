@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IScreen;
 
 public final class ContextUtil {
 
@@ -17,6 +18,14 @@ public final class ContextUtil {
         IContext oldContext = getCurrentContext();
         currentContext.set(context);
         return oldContext;
+    }
+
+    public static IScreen getCurrentScreen() {
+        IContext context = getCurrentContext();
+        if (context == null) {
+            return null;
+        }
+        return context.getScreen();
     }
 
 }

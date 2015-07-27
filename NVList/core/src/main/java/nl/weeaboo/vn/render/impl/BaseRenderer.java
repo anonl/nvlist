@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.render.impl;
 
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
@@ -180,7 +182,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	public abstract void renderDistortQuad(DistortQuadCommand dqc);
 
-	public abstract void renderTriangleGrid(TriangleGrid grid);
+	public abstract void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader);
 
 	public abstract void renderScreenshot(IWritableScreenshot out, Rect glScreenRect);
 

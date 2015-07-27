@@ -12,6 +12,12 @@ function titlescreen()
 	newThread(function()
 		yield(120)
 		print("other thread")
+		
+		local ss = Image.screenshot()
+		while not ss:isAvailable() do
+			yield()
+		end
+		Image.createImage(nil, ss)
 	end)
 end
 

@@ -2,7 +2,14 @@ package nl.weeaboo.vn.render.impl;
 
 import java.io.Serializable;
 import java.nio.FloatBuffer;
-import java.util.TreeSet;
+import java.util.Arrays;
+import java.util.List;
+
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Area2D;
 
@@ -62,48 +69,41 @@ public final class TriangleGrid implements Serializable {
 			throw new IllegalArgumentException("texBounds.length != wrap.length");
 		}
 
-		TreeSet<Double> sorter = new TreeSet<Double>();
-		for (Area2D r : bounds) {
-			sorter.add(r.x);
-			sorter.add(r.x + r.w);
-		}
-		int t = 0;
-		double[] xsplits = new double[sorter.size()];
-		for (Double d : sorter) {
-			xsplits[t++] = d;
-		}
+        double[] xsplits = new double[bounds.length * 2];
+        double[] ysplits = new double[bounds.length * 2];
 
-		sorter.clear();
+        int t = 0;
 		for (Area2D r : bounds) {
-			sorter.add(r.y);
-			sorter.add(r.y + r.h);
+            xsplits[t] = r.x;
+            ysplits[t] = r.y;
+            t++;
+            xsplits[t] = r.x + r.w;
+            ysplits[t] = r.y + r.h;
+            t++;
 		}
-		t = 0;
-		double[] ysplits = new double[sorter.size()];
-		for (Double d : sorter) {
-			ysplits[t++] = d;
-		}
+        Arrays.sort(xsplits);
+        Arrays.sort(ysplits);
 
 		int cols = xsplits.length;
 		int rows = ysplits.length - 1;
-		int vertices = (2*cols) * rows + 1;
-		int bytes = 2 * 4 * vertices;
-		FloatBuffer pos  = FloatBuffer.allocate(bytes);
+        int vertices = (2 * cols) * rows;
+        FloatBuffer pos = FloatBuffer.allocate(2 * vertices);
 		FloatBuffer[] texs = new FloatBuffer[texBounds.length];
 		for (int n = 0; n < texs.length; n++) {
-			texs[n] = FloatBuffer.allocate(bytes);
+            texs[n] = FloatBuffer.allocate(2 * vertices);
 		}
 
 		for (int yi = 0; yi < rows; yi++) {
 			double y0 = ysplits[yi];
 			double y1 = ysplits[yi+1];
+
 			for (int xi = 0; xi < cols; xi++) {
 				double x = xsplits[xi];
 
-				glDrawArrayVertex(pos, x, y1);
-				for (int n = 0; n < texs.length; n++) {
-					glDrawArrayTexcoord(texs[n], x, y1, bounds[n], texBounds[n], wrap[n]);
-				}
+                glDrawArrayVertex(pos, x, y1);
+                for (int n = 0; n < texs.length; n++) {
+                    glDrawArrayTexcoord(texs[n], x, y1, bounds[n], texBounds[n], wrap[n]);
+                }
 
 				glDrawArrayVertex(pos, x, y0);
 				for (int n = 0; n < texs.length; n++) {
@@ -129,7 +129,7 @@ public final class TriangleGrid implements Serializable {
 		double normalizedX = (x-bounds.x) / bounds.w;
 		double normalizedY = (y-bounds.y) / bounds.h;
 
-		//System.out.println(bounds + " " + x + "<->" + normalizedX + " " + y + "<->" + normalizedY);
+        // System.out.println(bounds + " " + x + "<->" + normalizedX + " " + y + "<->" + normalizedY);
 
 		double u;
 		if (wrap != TextureWrap.REPEAT_X && wrap != TextureWrap.REPEAT_BOTH) {
@@ -145,24 +145,31 @@ public final class TriangleGrid implements Serializable {
 			v = texBounds.y + normalizedY * texBounds.h;
 		}
 
-		//System.out.printf("x=%.1f, y=%.1f :: u=%.1f, v=%.1f\n", x, y, u, v);
-		coords.put((float)u); coords.put((float)v);
+        // System.out.printf("x=%.1f, y=%.1f :: u=%.1f, v=%.1f\n", x, y, u, v);
+
+        coords.put((float)u);
+        coords.put(1 - (float)v);
 	}
 
 	//Getters
-	public void getVertices(FloatBuffer out, int row) {
-		int offset = row * verticesPerRow * 2;
+    public void getVertices(int row, FloatBuffer out, int outStride) {
+        int src = row * verticesPerRow * 2;
+        int dst = out.position();
 		for (int n = 0; n < verticesPerRow; n++) {
-			out.put(pos[offset++]);
-			out.put(pos[offset++]);
+            out.put(dst++, pos[src++]);
+            out.put(dst++, pos[src++]);
+            dst += outStride;
 		}
 	}
-	public void getTexCoords(FloatBuffer out, int texIndex, int row) {
-		int offset = row * verticesPerRow * 2;
-		for (int n = 0; n < verticesPerRow; n++) {
-			out.put(tex[texIndex][offset++]);
-			out.put(tex[texIndex][offset++]);
-		}
+
+    public void getTexCoords(int texIndex, int row, FloatBuffer out, int outStride) {
+        int src = row * verticesPerRow * 2;
+        int dst = out.position();
+        for (int n = 0; n < verticesPerRow; n++) {
+            out.put(dst++, tex[texIndex][src++]);
+            out.put(dst++, tex[texIndex][src++]);
+            dst += outStride;
+        }
 	}
 	public int getRows() {
 		return rows;
@@ -174,6 +181,14 @@ public final class TriangleGrid implements Serializable {
 		return tex.length;
 	}
 
-	//Setters
+    public VertexAttributes getVertexAttributes() {
+        List<VertexAttribute> list = Lists.newArrayList();
+        list.add(new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE));
+        list.add(new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE));
+        for (int t = 0; t < getTextures(); t++) {
+            list.add(new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + t));
+        }
+        return new VertexAttributes(list.toArray(new VertexAttribute[list.size()]));
+    }
 
 }

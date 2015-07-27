@@ -12,7 +12,10 @@ import nl.weeaboo.vn.math.Matrix;
 public final class GLMatrixStack {
 
     private final Deque<Matrix4> matrixStack = new ArrayDeque<Matrix4>();
-    private final Matrix4 matrix = new Matrix4();
+    private final Matrix4 transform = new Matrix4();
+    private final Matrix4 projection = new Matrix4();
+    private final Matrix4 combined = new Matrix4();
+    private boolean combinedDirty = false;
     private final Batch batch;
 
     /**
@@ -23,21 +26,21 @@ public final class GLMatrixStack {
     }
 
     public void pushMatrix() {
-        matrixStack.push(matrix.cpy());
+        matrixStack.push(transform.cpy());
     }
 
     public void popMatrix() {
-        matrix.set(matrixStack.pop());
+        transform.set(matrixStack.pop());
         onTransformChanged();
     }
 
     public void multiply(Matrix m) {
-        Matrix4.mul(matrix.val, m.toGLMatrix());
+        Matrix4.mul(transform.val, m.toGLMatrix());
         onTransformChanged();
     }
 
     public void multiply(Matrix4 m) {
-        matrix.mul(m);
+        transform.mul(m);
         onTransformChanged();
     }
 
@@ -45,7 +48,7 @@ public final class GLMatrixStack {
         translate((float)dx, (float)dy);
     }
     public void translate(float dx, float dy) {
-        matrix.translate(dx, dy, 0);
+        transform.translate(dx, dy, 0);
         onTransformChanged();
     }
 
@@ -53,16 +56,31 @@ public final class GLMatrixStack {
         scale((float)dx, (float)dy);
     }
     public void scale(float sx, float sy) {
-        matrix.scale(sx, sy, 1);
+        transform.scale(sx, sy, 1);
         onTransformChanged();
     }
 
+    public Matrix4 getCombined() {
+        if (combinedDirty) {
+            combinedDirty = false;
+            combined.set(projection).mul(transform);
+        }
+        return combined;
+    }
+
     protected void onTransformChanged() {
-        batch.setTransformMatrix(matrix);
+        batch.setTransformMatrix(transform);
+        combinedDirty = true;
     }
 
     public void setProjectionMatrix(Matrix4 m) {
-        batch.setProjectionMatrix(m);
+        projection.set(m);
+        onProjectionChanged();
+    }
+
+    protected void onProjectionChanged() {
+        batch.setProjectionMatrix(projection);
+        combinedDirty = true;
     }
 
 }

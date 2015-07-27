@@ -45,15 +45,11 @@ public class ImageLib extends LuaLib {
     }
 
     private static ILayer getActiveLayer() {
-        IContext context = ContextUtil.getCurrentContext();
-        IScreen screen = context.getScreen();
-        return screen.getActiveLayer();
+        return ContextUtil.getCurrentScreen().getActiveLayer();
     }
 
     private static ILayer getRootLayer() {
-        IContext context = ContextUtil.getCurrentContext();
-        IScreen screen = context.getScreen();
-        return screen.getRootLayer();
+        return ContextUtil.getCurrentScreen().getRootLayer();
     }
 
     protected ITexture getTextureArg(Varargs args, int index) throws ScriptException {
@@ -141,6 +137,22 @@ public class ImageLib extends LuaLib {
         screen.setActiveLayer(layer);
 
         return LuaValue.NONE;
+    }
+
+    @ScriptFunction
+    public Varargs screenshot(Varargs args) throws ScriptException {
+        ILayer layer = getLayerArg(args, 1);
+        if (layer == null) {
+            layer = getRootLayer();
+        }
+        int z = args.optint(2, Short.MIN_VALUE);
+        boolean clip = args.optboolean(3, true);
+        boolean isVolatile = args.optboolean(4, false);
+
+        IImageModule imageModule = env.getImageModule();
+        IScreenshot ss = imageModule.screenshot(layer, (short)z, isVolatile, clip);
+        return LuajavaLib.toUserdata(ss, IScreenshot.class);
+
     }
 
 }

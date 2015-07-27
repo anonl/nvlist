@@ -22,6 +22,8 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
+import nl.weeaboo.vn.image.IWritableScreenshot;
+import nl.weeaboo.vn.render.impl.WritableScreenshot;
 
 public class ImageModule implements IImageModule {
 
@@ -124,6 +126,13 @@ public class ImageModule implements IImageModule {
         double sy = renderEnv.getHeight() / (double)ss.getScreenSize().h;
         ITextureData pixels = ss.getPixels();
         return createTexture(pixels, sx, sy);
+    }
+
+    @Override
+    public IScreenshot screenshot(ILayer layer, short z, boolean isVolatile, boolean clipEnabled) {
+        IWritableScreenshot ss = new WritableScreenshot(z, isVolatile);
+        layer.getScreenshotBuffer().add(ss, clipEnabled);
+        return ss;
     }
 
     protected void onImageScaleChanged() {
