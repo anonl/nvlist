@@ -8,6 +8,11 @@ end
 
 function titlescreen()
 	print("titlescreen")
+	
+	newThread(function()
+		yield(120)
+		print("other thread")
+	end)
 end
 
 @@

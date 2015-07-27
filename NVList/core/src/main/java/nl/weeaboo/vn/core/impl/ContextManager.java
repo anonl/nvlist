@@ -51,8 +51,12 @@ public class ContextManager implements IContextManager {
 
     @Override
     public void update() {
-        for (IContext context : getActiveContexts()) {
+        Collection<Context> active = getActiveContexts();
+        for (IContext context : active) {
             context.updateScreen();
+        }
+        for (IContext context : active) {
+            context.updateScripts();
         }
     }
 

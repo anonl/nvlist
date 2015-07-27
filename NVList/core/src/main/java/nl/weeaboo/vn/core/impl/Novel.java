@@ -8,12 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.script.IScriptLoader;
-import nl.weeaboo.vn.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
-import nl.weeaboo.vn.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.script.lua.LuaScriptUtil;
 
 public class Novel extends AbstractNovel {
 
@@ -50,19 +47,12 @@ public class Novel extends AbstractNovel {
         contextManager.setContextActive(mainContext, true);
 
         // Load main script and call main function
-        IScriptLoader scriptLoader = getScriptEnv().getScriptLoader();
-        LuaScriptContext scriptContext = getScriptContext(mainContext);
-        LuaScriptThread mainThread = scriptContext.getMainThread();
         try {
-            scriptLoader.loadScript(mainThread, "main");
-            mainThread.call(mainFunctionName);
+            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), "main");
+            LuaScriptUtil.callFunction(mainContext, mainFunctionName);
         } catch (Exception e) {
             LOG.warn("Error executing main function: \"" + mainFunctionName + "\"", e);
         }
-    }
-
-    protected static LuaScriptContext getScriptContext(IContext context) {
-        return (LuaScriptContext)context.getScriptContext();
     }
 
     @Override

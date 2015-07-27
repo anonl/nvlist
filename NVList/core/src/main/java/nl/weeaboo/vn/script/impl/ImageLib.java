@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.script.impl;
 
+import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
 import nl.weeaboo.entity.Entity;
@@ -37,8 +38,22 @@ public class ImageLib extends LuaLib {
             if (layer != null) {
                 return layer;
             }
+        } else if (args.isnil(index)) {
+            return null;
         }
         throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
+    }
+
+    private static ILayer getActiveLayer() {
+        IContext context = ContextUtil.getCurrentContext();
+        IScreen screen = context.getScreen();
+        return screen.getActiveLayer();
+    }
+
+    private static ILayer getRootLayer() {
+        IContext context = ContextUtil.getCurrentContext();
+        IScreen screen = context.getScreen();
+        return screen.getRootLayer();
     }
 
     protected ITexture getTextureArg(Varargs args, int index) throws ScriptException {
@@ -71,6 +86,9 @@ public class ImageLib extends LuaLib {
     @ScriptFunction
     public Varargs createImage(Varargs args) throws ScriptException {
         ILayer layer = getLayerArg(args, 1);
+        if (layer == null) {
+            layer = getActiveLayer();
+        }
 
         IImageModule imageModule = env.getImageModule();
         BasicPartRegistry pr = env.getPartRegistry();
@@ -89,12 +107,40 @@ public class ImageLib extends LuaLib {
     @ScriptFunction
     public Varargs createLayer(Varargs args) throws ScriptException {
         ILayer parentLayer = getLayerArg(args, 1);
+        if (parentLayer == null) {
+            parentLayer = getRootLayer();
+        }
 
         IContext context = ContextUtil.getCurrentContext();
         IScreen screen = context.getScreen();
 
         ILayer layer = screen.createLayer(parentLayer);
-        return LuajavaLib.toUserdata(layer, layer.getClass());
+        return LuajavaLib.toUserdata(layer, ILayer.class);
+    }
+
+    /**
+     * @param args ignored
+     */
+    @ScriptFunction
+    public Varargs getActiveLayer(Varargs args) {
+        return LuajavaLib.toUserdata(getActiveLayer(), ILayer.class);
+    }
+
+    /**
+     * @param args The layer to make active
+     */
+    @ScriptFunction
+    public Varargs setActiveLayer(Varargs args) throws ScriptException {
+        ILayer layer = getLayerArg(args, 1);
+        if (layer == null) {
+            throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
+        }
+
+        IContext context = ContextUtil.getCurrentContext();
+        IScreen screen = context.getScreen();
+        screen.setActiveLayer(layer);
+
+        return LuaValue.NONE;
     }
 
 }

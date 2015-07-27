@@ -9,34 +9,39 @@ public interface IScreen extends Serializable, IUpdateable {
     /**
      * Creates a new entity and adds it to this screen.
      */
-    public Entity createEntity();
+    Entity createEntity();
 
 	/**
 	 * Creates a new layer and adds it to {@code parentLayer}.
 	 *
 	 * @throws IllegalArgumentException If {@code parentLayer} isn't attached to this screen.
 	 */
-	public ILayer createLayer(ILayer parentLayer);
+    ILayer createLayer(ILayer parentLayer);
 
 	/**
 	 * @return The root layer of this screen.
 	 */
-	public ILayer getRootLayer();
+    ILayer getRootLayer();
 
-	/**
-	 * @return The current default layer for new drawables that are added to this screen.
-	 */
-	public ILayer getActiveLayer();
+    /**
+     * @return The current default layer for new drawables that are added to this screen.
+     */
+    ILayer getActiveLayer();
+
+    /**
+     * @see #getActiveLayer()
+     */
+    void setActiveLayer(ILayer layer);
 
 	/**
 	 * Returns information about the rendering environment.
 	 */
-	public IRenderEnv getRenderEnv();
+    IRenderEnv getRenderEnv();
 
     /**
      * Sets the rendering environment which contains information about the
      * clipping/scaling performed by OpenGL.
      */
-    public void setRenderEnv(IRenderEnv env);
+    void setRenderEnv(IRenderEnv env);
 
 }

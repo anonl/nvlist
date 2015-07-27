@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.script.impl;
 
-import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
 import nl.weeaboo.lua2.lib.LuajavaLib;
@@ -28,7 +27,15 @@ public class CoreLib extends LuaLib {
     }
 
     /**
-     * @param args Must be {@link LuaValue#NONE}. 
+     * @param args ignored
+     */
+    @ScriptFunction
+    public Varargs getCurrentContext(Varargs args) {
+        return LuajavaLib.toUserdata(ContextUtil.getCurrentContext(), IContext.class);
+    }
+
+    /**
+     * @param args ignored
      */
     @ScriptFunction
     public Varargs createContext(Varargs args) {
@@ -37,6 +44,13 @@ public class CoreLib extends LuaLib {
         return LuajavaLib.toUserdata(context, IContext.class);
     }
 
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Function
+     *        <li>Function args
+     *        </ol>
+     */
     @ScriptFunction
     public Varargs newThread(Varargs args) throws ScriptException {
         IContext context = ContextUtil.getCurrentContext();

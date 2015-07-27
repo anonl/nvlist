@@ -41,7 +41,6 @@ public class Screen implements IScreen, ILayerHolder {
 		initTransients();
 	}
 
-	//Functions
     private void initTransients() {
         signalStream = scene.joinStream(DefaultEntityStreamDef.ALL_ENTITIES_STREAM);
     }
@@ -115,7 +114,6 @@ public class Screen implements IScreen, ILayerHolder {
 		}
 	}
 
-	//Getters
 	@Override
 	public ILayer getRootLayer() {
 		if (rootLayer == null) {
@@ -132,6 +130,15 @@ public class Screen implements IScreen, ILayerHolder {
 		return activeLayer;
 	}
 
+    @Override
+    public void setActiveLayer(ILayer layer) {
+        Checks.checkNotNull(layer, "layer");
+        Checks.checkArgument(!layer.isDestroyed(), "The active layer may not be destroyed");
+        Checks.checkArgument(containsLayer(layer), "The supplied layer is not contained in this screen");
+
+        activeLayer = layer;
+    }
+
 	protected boolean containsLayer(ILayer layer) {
 		return rootLayer != null && (rootLayer == layer || rootLayer.containsLayer(layer));
 	}
@@ -141,7 +148,6 @@ public class Screen implements IScreen, ILayerHolder {
         return renderEnv;
     }
 
-	//Setters
 	@Override
     public void setRenderEnv(IRenderEnv env) {
 		renderEnv = env;

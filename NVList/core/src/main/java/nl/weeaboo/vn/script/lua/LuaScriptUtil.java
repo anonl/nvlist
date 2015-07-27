@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.script.lua;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,10 @@ import org.luaj.vm2.lib.DebugLib;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.core.impl.ContextUtil;
+import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.ScriptException;
 
 public final class LuaScriptUtil {
@@ -96,6 +100,38 @@ public final class LuaScriptUtil {
 
     public static ResourceLoadInfo createLoadInfo(String filename) {
         return new ResourceLoadInfo(filename, getLuaStack());
+    }
+
+    public static void loadScript(IContext mainContext, IScriptLoader scriptLoader, String scriptFilename)
+            throws IOException, ScriptException {
+
+        LuaScriptContext scriptContext = getScriptContext(mainContext);
+        LuaScriptThread mainThread = scriptContext.getMainThread();
+
+        IContext oldContext = ContextUtil.setCurrentContext(mainContext);
+        try {
+            scriptLoader.loadScript(mainThread, scriptFilename);
+        } finally {
+            ContextUtil.setCurrentContext(oldContext);
+        }
+    }
+
+    private static LuaScriptContext getScriptContext(IContext context) {
+        return (LuaScriptContext)context.getScriptContext();
+    }
+
+    public static void callFunction(IContext mainContext, String functionName, Object... args)
+            throws ScriptException {
+
+        LuaScriptContext scriptContext = getScriptContext(mainContext);
+        LuaScriptThread mainThread = scriptContext.getMainThread();
+
+        IContext oldContext = ContextUtil.setCurrentContext(mainContext);
+        try {
+            mainThread.call(functionName, args);
+        } finally {
+            ContextUtil.setCurrentContext(oldContext);
+        }
     }
 
 }

@@ -10,6 +10,8 @@ import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.script.impl.CoreLib;
+import nl.weeaboo.vn.script.impl.ImageLib;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.sound.impl.SoundModule;
@@ -68,6 +70,14 @@ public class NovelBuilder {
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {
+        LuaScriptEnv scriptEnv = env.getScriptEnv();
+
+        // Register script libs
+        scriptEnv.addInitializer(new CoreLib(env));
+        scriptEnv.addInitializer(new ImageLib(env));
+
+        // Register objects
+
      // TODO LVN-017
 //      if (isVNDS()) {
 //          novel.setBootstrapScripts("builtin/vnds/main.lua");
@@ -76,7 +86,6 @@ public class NovelBuilder {
         ISaveModule saveModule = env.getSaveModule();
         saveModule.loadPersistent();
 
-        LuaScriptEnv scriptEnv = env.getScriptEnv();
         try {
             scriptEnv.initEnv();
         } catch (ScriptException e) {
