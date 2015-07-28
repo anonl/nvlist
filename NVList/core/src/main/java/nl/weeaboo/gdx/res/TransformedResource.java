@@ -13,6 +13,7 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
     private static final long serialVersionUID = 1L;
 
     private final IResource<S> inner;
+    private transient D cachedOriginal;
     private transient D cachedTransformed;
 
     public TransformedResource(IResource<S> inner) {
@@ -21,13 +22,16 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
 
     @Override
     public final D get() {
+        S original = inner.get();
         D result = cachedTransformed;
-        if (result == null) {
-            S original = inner.get();
-            if (original != null) {
-                result = transform(original);
-                cachedTransformed = result;
-            }
+
+        if (result != null && cachedOriginal == cachedTransformed) {
+            return cachedTransformed;
+        }
+
+        if (original != null) {
+            result = transform(original);
+            cachedTransformed = result;
         }
         return result;
     }
