@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.Iterables;
 
@@ -13,6 +14,7 @@ import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -30,6 +32,7 @@ final class DebugControls {
 
     public void update(INovel novel) {
         IEnvironment env = novel.getEnv();
+        IRenderEnv renderEnv = env.getRenderEnv();
         BasicPartRegistry pr = (BasicPartRegistry)env.getPartRegistry();
         IContext activeContext = Iterables.get(env.getContextManager().getActiveContexts(), 0);
         IScreen screen = (activeContext != null ? activeContext.getScreen() : null);
@@ -68,6 +71,16 @@ final class DebugControls {
             }
         }
 
+        // Fullscreen toggle
+        if (alt && Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+            DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+            if (!Gdx.graphics.isFullscreen()) {
+                Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+            } else {
+                Gdx.graphics.setDisplayMode(renderEnv.getWidth(), renderEnv.getHeight(), false);
+            }
+        }
+
         // Music
         ISoundModule soundModule = env.getSoundModule();
         if (alt && Gdx.input.isKeyJustPressed(Keys.PERIOD)) {
@@ -77,7 +90,7 @@ final class DebugControls {
             try {
                 Entity e = soundModule.createSound(screen, SoundType.MUSIC,
                         new ResourceLoadInfo("music.ogg"));
-                e.getPart(pr.sound).start();
+                e.getPart(pr.sound).start(-1);
             } catch (IOException e) {
                 LOG.warn("Audio error", e);
             }
