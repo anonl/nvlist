@@ -2,6 +2,7 @@ package nl.weeaboo.vn.core.impl;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -88,11 +89,11 @@ public class LayerTest extends AbstractEntityTest {
         LvnTestUtil.assertEquals(1, 2, 3, 4, lrc.layerBounds);
 
         // Find draw commands for sub layers (in correct Z order)
-        RenderCommand[] layerCommands = buffer.getLayerCommands(lrc.layerId);
-        Assert.assertEquals(2, layerCommands.length);
+        List<? extends RenderCommand> layerCommands = buffer.getLayerCommands(lrc.layerId);
+        Assert.assertEquals(2, layerCommands.size());
         // Higher Z-coordinates are in the back and thus drawn first
-        Assert.assertEquals(10, ((LayerRenderCommand)layerCommands[0]).z);
-        Assert.assertEquals(-10, ((LayerRenderCommand)layerCommands[1]).z);
+        Assert.assertEquals(10, ((LayerRenderCommand)layerCommands.get(0)).z);
+        Assert.assertEquals(-10, ((LayerRenderCommand)layerCommands.get(1)).z);
 
         // Make one sublayer invisible
         subLayer1.setVisible(false);
@@ -101,8 +102,8 @@ public class LayerTest extends AbstractEntityTest {
 
         // The invisible layer is no longer drawn
         layerCommands = buffer.getLayerCommands(buffer.getRootLayerCommand().layerId);
-        Assert.assertEquals(1, layerCommands.length);
-        Assert.assertEquals(-10, ((LayerRenderCommand)layerCommands[0]).z);
+        Assert.assertEquals(1, layerCommands.size());
+        Assert.assertEquals(-10, ((LayerRenderCommand)layerCommands.get(0)).z);
     }
 
     @Test
@@ -157,12 +158,12 @@ public class LayerTest extends AbstractEntityTest {
         layer.draw(buffer);
 
         LayerRenderCommand lrc = buffer.getRootLayerCommand();
-        RenderCommand[] cmd = buffer.getLayerCommands(lrc.layerId);
+        List<? extends RenderCommand> cmd = buffer.getLayerCommands(lrc.layerId);
 
-        Assert.assertEquals(entities.length, cmd.length);
+        Assert.assertEquals(entities.length, cmd.size());
         for (int n = 0; n < entities.length; n++) {
             TransformablePart transformable = entities[n].getPart(pr.transformable);
-            Assert.assertEquals(transformable.getZ(), ((QuadRenderCommand)cmd[n]).z);
+            Assert.assertEquals(transformable.getZ(), ((QuadRenderCommand)cmd.get(n)).z);
         }
     }
 

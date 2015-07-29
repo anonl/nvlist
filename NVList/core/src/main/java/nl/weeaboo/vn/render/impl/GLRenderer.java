@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.render.impl;
 
 import java.nio.FloatBuffer;
+import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
@@ -91,7 +93,7 @@ public class GLRenderer extends BaseRenderer {
             spriteBatch.draw(tex, (float)x, (float)y, (float)w, (float)h);
             matrixStack.popMatrix();
         } else {
-            // Optimized path for scale+translate transforms
+            // Optimized path for simple transforms (doesn't trigger a SpriteBatch flush)
             double sx = qrc.transform.getScaleX();
             double sy = qrc.transform.getScaleY();
             x = x * sx + qrc.transform.getTranslationX();
@@ -222,9 +224,14 @@ public class GLRenderer extends BaseRenderer {
             return;
         }
 
+        Stopwatch sw = Stopwatch.createStarted();
+
         spriteBatch.flush();
         renderStats.onRenderQuadBatch(buffered);
         buffered = 0;
+
+        sw.stop();
+        renderStats.logExtra(QuadRenderCommand.class, QuadRenderCommand.ID, sw.elapsed(TimeUnit.NANOSECONDS));
     }
 
     @Override

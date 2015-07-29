@@ -7,7 +7,6 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.render.RenderUtil;
 
 public class TextureAdapter implements ITexture {
 
@@ -30,7 +29,7 @@ public class TextureAdapter implements ITexture {
 	protected int getHandle() {
 	    return getTexture().getTextureObjectHandle();
 	}
-	
+
 	public Texture getTexture() {
 	    TextureRegion tr = getTextureRegion();
 	    if (tr == null) {
@@ -44,21 +43,30 @@ public class TextureAdapter implements ITexture {
 	}
 
     public TextureRegion getTextureRegion(Area2D uv) {
-        uv = RenderUtil.combineUV(getUV(), uv);
-        float u = (float)uv.x;
-        float u2 = u + (float)uv.w;
-        float v = (float)uv.y;
-        float v2 = v + (float)uv.h;
-        return new TextureRegion(getTexture(), u, v, u2, v2);
+        if (uv.equals(ITexture.DEFAULT_UV)) {
+            return getTextureRegion();
+        }
+
+        TextureRegion tr = getTextureRegion();
+
+        float uspan = tr.getU2() - tr.getU();
+        float u = tr.getU() + uspan * (float)uv.x;
+        float u2 = u + uspan * (float)uv.w;
+
+        float vspan = tr.getV2() - tr.getV();
+        float v = tr.getU() + vspan * (float)uv.y;
+        float v2 = v + vspan * (float)uv.h;
+
+        return new TextureRegion(tr.getTexture(), u, v, u2, v2);
     }
-	
+
 	@Override
 	public Area2D getUV() {
         TextureRegion tr = getTextureRegion();
         if (tr == null) {
             return ITexture.DEFAULT_UV;
         }
-        
+
         float u1 = tr.getU();
         float u2 = tr.getU2();
         float v1 = tr.getV();

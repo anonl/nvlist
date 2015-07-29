@@ -110,4 +110,10 @@ public class ImagePart extends Part implements IImagePart {
 		}
 	}
 
+    @Override
+    public void scrollUV(double du, double dv) {
+        Area2D uv = getUV();
+        setUV(uv.x + du, uv.y + dv, uv.w, uv.h);
+    }
+
 }

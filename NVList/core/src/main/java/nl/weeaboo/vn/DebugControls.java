@@ -13,13 +13,18 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.TransformablePart;
+import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.IImagePart;
+import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
@@ -81,6 +86,17 @@ final class DebugControls {
             }
         }
 
+        // Image
+        IImageModule imageModule = env.getImageModule();
+        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.I)) {
+            createImage(screen.getRootLayer(), imageModule, pr);
+        }
+        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.J)) {
+            for (int n = 0; n < 100; n++) {
+                createImage(screen.getRootLayer(), imageModule, pr);
+            }
+        }
+
         // Music
         ISoundModule soundModule = env.getSoundModule();
         if (alt && Gdx.input.isKeyJustPressed(Keys.PERIOD)) {
@@ -97,21 +113,35 @@ final class DebugControls {
         }
     }
 
-    public void update(TransformablePart part) {
+    public void update(ITransformablePart transformable, IImagePart image) {
         if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.rotate(4);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.rotate(-4);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.rotate(4);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.rotate(-4);
         } else if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.UP)) part.scale(1, 8 / 9.);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) part.scale(1, 1.125);
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.scale(8 / 9., 1);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.scale(1.125, 1);
+            if (Gdx.input.isKeyPressed(Keys.UP)) transformable.scale(1, 8 / 9.);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) transformable.scale(1, 1.125);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.scale(8 / 9., 1);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.scale(1.125, 1);
+        } else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
+            if (Gdx.input.isKeyPressed(Keys.UP)) image.scrollUV(0, .05);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) image.scrollUV(0, -.05);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) image.scrollUV(.05, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) image.scrollUV(-.05, 0);
         } else {
-            if (Gdx.input.isKeyPressed(Keys.UP)) part.translate(0, 5);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) part.translate(0, -5);
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) part.translate(-5, 0);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) part.translate(5, 0);
+            if (Gdx.input.isKeyPressed(Keys.UP)) transformable.translate(0, 5);
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) transformable.translate(0, -5);
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.translate(-5, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.translate(5, 0);
         }
+    }
+
+    private static void createImage(ILayer layer, IImageModule imageModule, BasicPartRegistry pr) {
+        Entity entity = imageModule.createImage(layer);
+        TransformablePart transformable = entity.getPart(pr.transformable);
+        transformable.setPos(640, 360);
+        transformable.setZ((short)entity.getId());
+        ImagePart image = entity.getPart(pr.image);
+        image.setTexture(imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false), 5);
     }
 
 }

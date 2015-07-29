@@ -55,4 +55,11 @@ public interface IImagePart {
 	 */
 	public void setUV(Area2D uv);
 
+    /**
+     * Moves the UV rectangle by the specified amount.
+     *
+     * @see #setUV(double, double, double, double)
+     */
+    public void scrollUV(double du, double dv);
+
 }
