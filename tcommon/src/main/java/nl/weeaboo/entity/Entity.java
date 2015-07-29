@@ -149,15 +149,16 @@ public final class Entity implements IWriteReplaceSerializable {
 	}
 
     public void handleSignal(ISignal signal) {
-        for (Part part : parts()) {
+        for (Part part : parts) {
             if (signal.isHandled()) {
                 break;
             }
-            
-            part.handleSignal(signal);
+            if (part != null) {
+                part.handleSignal(signal);
+            }
         }
     }
-	
+
 	/**
 	 *  Returns an snapshot of all parts currently attached to this entity.
 	 */
