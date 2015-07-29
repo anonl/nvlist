@@ -1,17 +1,21 @@
 package nl.weeaboo.gdx.gl;
 
-import java.util.ArrayDeque;
 import java.util.Deque;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Matrix4;
+import com.google.common.collect.Queues;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.math.Matrix;
 
 public final class GLMatrixStack {
 
-    private final Deque<Matrix4> matrixStack = new ArrayDeque<Matrix4>();
+    private static final int MAX_POOL_SIZE = 8;
+
+    private final Deque<Matrix4> matrixPool = Queues.newArrayDeque();
+
+    private final Deque<Matrix4> matrixStack = Queues.newArrayDeque();
     private final Matrix4 transform = new Matrix4();
     private final Matrix4 projection = new Matrix4();
     private final Matrix4 combined = new Matrix4();
@@ -26,12 +30,35 @@ public final class GLMatrixStack {
     }
 
     public void pushMatrix() {
-        matrixStack.push(transform.cpy());
+        Matrix4 copy = alloc(transform);
+        matrixStack.push(copy);
+    }
+
+    // Take from pool, create a copy only if pool empty
+    private Matrix4 alloc(Matrix4 val) {
+        Matrix4 pooled = matrixPool.pollFirst();
+        if (pooled != null) {
+            pooled.set(val);
+            return pooled;
+        }
+        return val.cpy();
     }
 
     public void popMatrix() {
-        transform.set(matrixStack.pop());
+        Matrix4 popped = matrixStack.pop();
+        transform.set(popped);
+        free(popped);
+
         onTransformChanged();
+    }
+
+    // Return to pool
+    private void free(Matrix4 val) {
+        if (matrixPool.size() >= MAX_POOL_SIZE) {
+            return;
+        }
+
+        matrixPool.addFirst(val);
     }
 
     public void multiply(Matrix m) {

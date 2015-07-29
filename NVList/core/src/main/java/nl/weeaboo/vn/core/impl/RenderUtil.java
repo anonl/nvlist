@@ -1,16 +1,13 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.core.ITextRenderer;
 import nl.weeaboo.vn.math.Vec2;
+import nl.weeaboo.vn.text.ITextRenderer;
 
 final class RenderUtil {
 
 	private RenderUtil() {
 	}
-
-	public static TextStyle CENTERED_STYLE = TextStyle.fromString("anchor=5");
 
 	/**
 	 * @param scale The scale factor from virtual coordinates to real coordinates.

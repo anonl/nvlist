@@ -9,11 +9,12 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.ITextRenderer;
 import nl.weeaboo.vn.core.TickSignal;
 import nl.weeaboo.vn.image.IButtonDrawablePart;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Vec2;
+import nl.weeaboo.vn.text.ITextPart;
+import nl.weeaboo.vn.text.ITextRenderer;
 
 @CustomSerializable
 class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
@@ -31,7 +32,7 @@ class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
     private ITexture disabledPressedTexture;
 
     private StyledText stext = StyledText.EMPTY_STRING;
-    private TextStyle defaultStyle = RenderUtil.CENTERED_STYLE;
+    private TextStyle defaultStyle = ITextPart.CENTERED_STYLE;
     private double verticalAlign = 0.5;
     private double touchMargin;
 

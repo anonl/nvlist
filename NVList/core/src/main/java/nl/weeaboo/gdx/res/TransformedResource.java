@@ -1,5 +1,7 @@
 package nl.weeaboo.gdx.res;
 
+import java.lang.ref.WeakReference;
+
 import nl.weeaboo.common.Checks;
 
 /**
@@ -13,7 +15,7 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
     private static final long serialVersionUID = 1L;
 
     private final IResource<S> inner;
-    private transient D cachedOriginal;
+    private transient WeakReference<S> cachedOriginal;
     private transient D cachedTransformed;
 
     public TransformedResource(IResource<S> inner) {
@@ -25,12 +27,16 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
         S original = inner.get();
         D result = cachedTransformed;
 
-        if (result != null && cachedOriginal == cachedTransformed) {
-            return cachedTransformed;
+        if (result != null) {
+            S cachedOriginalValue = (cachedOriginal != null ? cachedOriginal.get() : null);
+            if (original == cachedOriginalValue) {
+                return cachedTransformed;
+            }
         }
 
         if (original != null) {
             result = transform(original);
+            cachedOriginal = new WeakReference<S>(original);
             cachedTransformed = result;
         }
         return result;

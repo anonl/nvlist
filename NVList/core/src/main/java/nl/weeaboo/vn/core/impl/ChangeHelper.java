@@ -2,14 +2,14 @@ package nl.weeaboo.vn.core.impl;
 
 import java.io.Serializable;
 
-class ChangeHelper implements Serializable {
+public class ChangeHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private transient IChangeListener changeListener;
 
     // Functions
-    protected final void fireChanged() {
+    public final void fireChanged() {
         if (changeListener != null) {
             changeListener.onChanged();
         }

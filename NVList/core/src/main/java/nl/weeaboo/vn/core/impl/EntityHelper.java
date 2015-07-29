@@ -11,6 +11,7 @@ import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 import nl.weeaboo.vn.sound.impl.IAudioAdapter;
 import nl.weeaboo.vn.sound.impl.SoundPart;
+import nl.weeaboo.vn.text.impl.TextPart;
 
 public class EntityHelper implements Serializable {
 
@@ -63,6 +64,17 @@ public class EntityHelper implements Serializable {
         e.addPart(pr.sound, soundPart);
 
         return soundPart;
+    }
+
+    public TextPart addTextPart(Entity e, ILayer layer) {
+        TextPart textPart = new TextPart();
+
+        e.addPart(pr.drawable, textPart);
+        e.addPart(pr.text, textPart);
+
+        layer.add(e); // Updates drawable.parent field
+
+        return textPart;
     }
 
 }

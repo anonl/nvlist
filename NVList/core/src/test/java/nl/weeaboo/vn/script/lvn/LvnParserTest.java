@@ -21,7 +21,6 @@ import com.google.common.io.Resources;
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.lib.LuajavaLib;
-import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.script.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.script.lvn.TextParser.Token;
@@ -87,17 +86,6 @@ public class LvnParserTest {
         runtimeParser = deserializeObject(serializeObject(runtimeParser), RuntimeTextParser.class);
 
 		ParseResult parseResult = runtimeParser.parse(input);
-		StyledText stext = parseResult.getText();
-		System.out.println(stext);
-		for (int n = 0; n < stext.length(); n++) {
-			TextStyle style = stext.getStyle(n);
-			if (style != null && style.getTags().length > 0) {
-				System.out.print('*');
-			} else {
-				System.out.print(' ');
-			}
-		}
-		System.out.println();
 		IntMap<String> commandMap = parseResult.getCommands();
 		for (int n = 0; n < commandMap.size(); n++) {
 			System.out.println(commandMap.keyAt(n) + ": " + commandMap.valueAt(n));
@@ -120,7 +108,7 @@ public class LvnParserTest {
             @Override
             public Varargs invoke(Varargs args) {
                 System.out.println("tagOpen: " + args.arg1() + " " + args.arg(2));
-                return varargsOf(valueOf(""), LuajavaLib.toUserdata(TextStyle.withTags(1337), TextStyle.class));
+                return varargsOf(valueOf(""), LuajavaLib.toUserdata(TextStyle.defaultInstance(), TextStyle.class));
             }
         });
         table.set(RuntimeTextParser.F_TAG_CLOSE, new TwoArgFunction() {

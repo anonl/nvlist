@@ -19,7 +19,6 @@ public class DesktopLauncher {
         config.title = "NVList";
         config.width = 1280;
         config.height = 720;
-        // config.vSyncEnabled = true;
         config.addIcon("icon128.png", FileType.Internal);
         config.addIcon("icon32.png", FileType.Internal);
         config.addIcon("icon16.png", FileType.Internal);

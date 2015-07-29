@@ -2,6 +2,7 @@ package nl.weeaboo.vn.image.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -90,9 +91,9 @@ public class ScreenshotTest {
 		Assert.assertTrue(ssb.isEmpty()); // Screenshot buffer empties into the draw buffer
 
 		LayerRenderCommand lrc = buf.getRootLayerCommand();
-        RenderCommand[] cmds = buf.getLayerCommands(lrc.layerId);
-        Assert.assertEquals(1, cmds.length);
-        ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmds[0];
+        List<? extends RenderCommand> cmds = buf.getLayerCommands(lrc.layerId);
+        Assert.assertEquals(1, cmds.size());
+        ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmds.get(0);
 
 		// Assert that the correct ScreenshotRenderCommand has been added to the render commands
 		Assert.assertEquals(s.getZ(), src.z);

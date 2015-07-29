@@ -22,6 +22,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.gdx.styledtext.GdxFontStore;
+import nl.weeaboo.gdx.styledtext.GdxFontUtil;
+import nl.weeaboo.styledtext.EFontStyle;
+import nl.weeaboo.styledtext.MutableStyledText;
+import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.styledtext.layout.ITextLayout;
+import nl.weeaboo.styledtext.layout.LayoutParameters;
+import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
@@ -39,6 +47,8 @@ final class Osd implements Disposable {
 
     private BitmapFont font;
     private BitmapFont smallFont;
+
+    private GdxFontStore fontStore;
 
 	private Osd() {
 	}
@@ -59,18 +69,21 @@ final class Osd implements Disposable {
 	    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 	    try {
 		    FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		    parameter.flip = false;
 		    parameter.size = 32;
 		    parameter.color = Color.WHITE;
             parameter.borderColor = Color.WHITE;
-            parameter.borderWidth = .5f;
 		    font = generator.generateFont(parameter);
 
             parameter.size = 16;
+            parameter.borderWidth = .5f;
             smallFont = generator.generateFont(parameter);
 	    } finally {
 	    	generator.dispose();
 	    }
+
+        fontStore = new GdxFontStore();
+        fontStore.registerFont("normal", EFontStyle.PLAIN, font);
+        fontStore.registerFont("small", EFontStyle.PLAIN, smallFont);
 	}
 
 	@Override
@@ -119,6 +132,16 @@ final class Osd implements Disposable {
                 }
             }
         }
+
+        MutableStyledText stext = new MutableStyledText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        stext.setStyle(TextStyle.fromString("fontName=DejaVuSerif|fontSize=32|color=FFFFFF"));
+        stext.setStyle(TextStyle.fromString("fontName=other|fontSize=18|color=FF0000"), 10, 20);
+
+        LayoutParameters layoutParams = new LayoutParameters();
+        layoutParams.wrapWidth = wrapWidth;
+        ITextLayout textLayout = LayoutUtil.layout(fontStore, stext.immutableCopy(), layoutParams);
+        GdxFontUtil.draw(batch, textLayout, pad, pad + textLayout.getTextHeight(),
+                .3f * Gdx.graphics.getFrameId() % (1.5f * textLayout.getGlyphCount()));
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {

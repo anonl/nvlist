@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class Part implements Cloneable, Serializable {
+public class Part implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,11 +54,11 @@ public class Part implements Cloneable, Serializable {
 	 */
 	public void onDetached(World w) {
 	}
-	
+
 	/**
 	 * @param signal The signal which is optionally handled by this part.
 	 */
-	public void handleSignal(ISignal signal) {	    
+	public void handleSignal(ISignal signal) {
 	}
 
 	protected void firePropertyChanged(String propertyName, Object newValue) {

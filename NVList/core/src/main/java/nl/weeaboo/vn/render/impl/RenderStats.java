@@ -5,9 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.StringUtil;
 
 public class RenderStats {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RenderStats.class);
 
 	private final CommandStats[] cmdStats;
 	private final List<Integer> quadBatchSizes;
@@ -23,8 +28,8 @@ public class RenderStats {
 	}
 	public void stopRender() {
 		framesRendered++;
-		if ((framesRendered & 0xFF) == 0) {
-			System.out.println(this);
+        if ((framesRendered & 0x3FF) == 0) {
+            LOG.trace(toString());
 		}
 
 		Arrays.fill(cmdStats, null);
@@ -35,13 +40,22 @@ public class RenderStats {
 		quadBatchSizes.add(count);
 	}
 
-	public void log(RenderCommand cmd, long durationNanos) {
+	public void logCommand(RenderCommand cmd, long durationNanos) {
 		CommandStats stats = cmdStats[cmd.id & 0xFF];
 		if (stats == null) {
-			cmdStats[cmd.id & 0xFF] = stats = new CommandStats();
+            cmdStats[cmd.id & 0xFF] = stats = new CommandStats(cmd.getClass());
 		}
-		stats.addRun(cmd, durationNanos);
+        stats.addRun();
+        stats.addTime(durationNanos);
 	}
+
+    public void logExtra(Class<? extends RenderCommand> cmdClass, int cmdId, long durationNanos) {
+        CommandStats stats = cmdStats[cmdId];
+        if (stats == null) {
+            cmdStats[cmdId] = stats = new CommandStats(cmdClass);
+        }
+        stats.addTime(durationNanos);
+    }
 
 	@Override
 	public String toString() {
@@ -69,25 +83,20 @@ public class RenderStats {
 	//Inner Classes
 	private static class CommandStats {
 
-		private Class<?> clazz;
 		private String label;
 
 		private int count;
 		private long durationNanos;
 
-		public CommandStats() {
+        public CommandStats(Class<?> cmdClass) {
+            label = cmdClass.getSimpleName();
 		}
 
-		public void addRun(RenderCommand cmd, long durationNanos) {
-			if (clazz == null) {
-				clazz = cmd.getClass();
-				label = clazz.getSimpleName();
-			} else if (clazz != cmd.getClass()) {
-				clazz = null;
-				label = null;
-			}
-
+        public void addRun() {
 			this.count++;
+        }
+
+        public void addTime(long durationNanos) {
 			this.durationNanos += durationNanos;
 		}
 

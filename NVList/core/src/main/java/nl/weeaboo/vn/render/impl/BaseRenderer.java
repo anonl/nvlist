@@ -1,6 +1,10 @@
 package nl.weeaboo.vn.render.impl;
 
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect;
@@ -77,8 +81,8 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	protected void renderLayer(DrawBuffer buffer, LayerRenderCommand lrc, Rect parentClip, Rect2D parentClip2D) {
         // Get sorted render commands
-        BaseRenderCommand[] cmds = buffer.getLayerCommands(lrc.layerId);
-        if (cmds.length == 0) {
+        Collection<? extends BaseRenderCommand> cmds = buffer.getLayerCommands(lrc.layerId);
+        if (cmds.isEmpty()) {
             return;
 		}
 
@@ -103,7 +107,7 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 		translate(bounds.x, bounds.y);
 
 		//Render buffered commands
-		long renderStatsTimestamp = 0;
+        Stopwatch sw = Stopwatch.createUnstarted();
         for (BaseRenderCommand cmd : cmds) {
 			if (cmd.id != QuadRenderCommand.ID) {
 				flushQuadBatch();
@@ -131,7 +135,8 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 			}
 
 			//Perform command-specific rendering
-			renderStatsTimestamp = System.nanoTime();
+            sw.reset();
+            sw.start();
 
 			preRenderCommand(cmd);
 
@@ -141,6 +146,9 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 			case BlendQuadCommand.ID:   renderBlendQuad((BlendQuadCommand)cmd); break;
 			case FadeQuadCommand.ID:    renderFadeQuad((FadeQuadCommand)cmd); break;
 			case DistortQuadCommand.ID: renderDistortQuad((DistortQuadCommand)cmd); break;
+            case TextRenderCommand.ID:
+                renderText((TextRenderCommand)cmd);
+                break;
 			case ScreenshotRenderCommand.ID: {
 				ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmd;
 				renderScreenshot(src.ss, src.clipEnabled ? layerClip : renderEnv.getGLClip());
@@ -153,7 +161,8 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 			postRenderCommand(cmd);
 
-			renderStats.log(cmd, System.nanoTime()-renderStatsTimestamp);
+            sw.stop();
+            renderStats.logCommand(cmd, sw.elapsed(TimeUnit.NANOSECONDS));
 		}
 
 		flushQuadBatch();
@@ -180,7 +189,9 @@ public abstract class BaseRenderer implements IRenderer<DrawBuffer> {
 
 	public abstract void renderFadeQuad(FadeQuadCommand fqc);
 
-	public abstract void renderDistortQuad(DistortQuadCommand dqc);
+    public abstract void renderDistortQuad(DistortQuadCommand dqc);
+
+    public abstract void renderText(TextRenderCommand trc);
 
 	public abstract void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader);
 

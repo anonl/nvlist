@@ -8,6 +8,7 @@ class BoundsHelper extends ChangeHelper {
 	private static final long serialVersionUID = 1L;
 
 	private double x, y, w, h;
+    private transient Rect2D cachedBounds;
 
 	// Functions
 
@@ -18,9 +19,12 @@ class BoundsHelper extends ChangeHelper {
 	public double getHeight() { return h; }
 
 	public Rect2D getBounds() {
-		double w = getWidth();
-		double h = getHeight();
-		return Rect2D.of(x, y, Double.isNaN(w) ? 0 : w, Double.isNaN(h) ? 0 : h);
+        if (cachedBounds == null) {
+            double w = getWidth();
+            double h = getHeight();
+            cachedBounds = Rect2D.of(x, y, Double.isNaN(w) ? 0 : w, Double.isNaN(h) ? 0 : h);
+        }
+        return cachedBounds;
 	}
 
 	public boolean contains(double px, double py) {
@@ -36,6 +40,7 @@ class BoundsHelper extends ChangeHelper {
 			this.x = x;
 			this.y = y;
 
+            cachedBounds = null;
 			fireChanged();
 		}
 	}
@@ -48,6 +53,7 @@ class BoundsHelper extends ChangeHelper {
 			this.w = w;
 			this.h = h;
 
+            cachedBounds = null;
 			fireChanged();
 		}
 	}

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
@@ -31,6 +32,10 @@ import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
+import nl.weeaboo.gdx.styledtext.GdxFontStore;
+import nl.weeaboo.gdx.styledtext.GdxFontUtil;
+import nl.weeaboo.styledtext.EFontStyle;
+import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
@@ -71,6 +76,8 @@ public class Launcher extends ApplicationAdapter {
 	private Vector2 spritePos = new Vector2();
 
     private Novel novel;
+    private GLRenderer renderer;
+    private DrawBuffer drawBuffer;
     private BasicPartRegistry pr;
     private int testEntity;
 
@@ -128,6 +135,7 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
         StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
+        StaticEnvironment.FONT_STORE.set(createFontStore());
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
@@ -152,18 +160,38 @@ public class Launcher extends ApplicationAdapter {
         image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
 	}
 
-	@Override
+    private IFontStore createFontStore() {
+        GdxFontStore fontStore = new GdxFontStore();
+        try {
+            for (BitmapFont font : GdxFontUtil.load("font/DejaVuSerif.ttf", 16, 32)) {
+                fontStore.registerFont("DejaVuSerif", EFontStyle.PLAIN, font);
+            }
+        } catch (IOException ioe) {
+            LOG.warn("Unable to load font(s)", ioe);
+        }
+        return fontStore;
+    }
+
+    @Override
 	public void dispose() {
 	    if (novel != null) {
 	        novel.stop();
 	        novel = null;
 	    }
 
+        disposeRenderer();
 		disposeFrameBuffer();
 		osd.dispose();
 		batch.dispose();
         assetManager.dispose();
 	}
+
+    private void disposeRenderer() {
+        if (renderer != null) {
+            renderer.destroy();
+            renderer = null;
+        }
+    }
 
 	private void disposeFrameBuffer() {
 		if (frameBuffer != null) {
@@ -211,7 +239,7 @@ public class Launcher extends ApplicationAdapter {
 
         Entity entity = novel.getEnv().getContextManager().findEntity(testEntity);
         if (entity != null) {
-            debugControls.update(entity.getPart(pr.transformable));
+            debugControls.update(entity.getPart(pr.transformable), entity.getPart(pr.image));
         }
 
         novel.update();
@@ -221,13 +249,18 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
 
         // Render novel
-        DrawBuffer drawBuffer = new DrawBuffer((BasicPartRegistry)env.getPartRegistry());
+        if (renderer == null) {
+            renderer = new GLRenderer(env.getRenderEnv(), new RenderStats());
+        }
+        renderer.setProjectionMatrix(batch.getProjectionMatrix());
+        if (drawBuffer == null) {
+            drawBuffer = new DrawBuffer(pr);
+        } else {
+            drawBuffer.reset();
+        }
         novel.draw(drawBuffer);
 
-        GLRenderer renderer = new GLRenderer(env.getRenderEnv(), new RenderStats());
-        renderer.setProjectionMatrix(batch.getProjectionMatrix());
         renderer.render(drawBuffer);
-        renderer.destroy();
 
 		batch.begin();
 
@@ -243,7 +276,10 @@ public class Launcher extends ApplicationAdapter {
 		super.resize(width, height);
 
 		screenViewport.update(width, height, true);
-        novel.getEnv().updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
+        IEnvironment env = novel.getEnv();
+        env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
+
+        disposeRenderer();
 	}
 
     public Novel getNovel() {

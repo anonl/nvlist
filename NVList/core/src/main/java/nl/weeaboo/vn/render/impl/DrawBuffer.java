@@ -1,10 +1,17 @@
 package nl.weeaboo.vn.render.impl;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.Sort;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.entity.PartType;
+import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IDrawablePart;
 import nl.weeaboo.vn.core.ILayer;
@@ -15,102 +22,70 @@ import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.math.Matrix;
-import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.text.impl.TextPart;
 
 public final class DrawBuffer implements IDrawBuffer {
 
-    private static final BaseRenderCommand[] EMPTY_COMMANDS = new BaseRenderCommand[0];
-
 	private final PartType<? extends ITransformablePart> transformablePart;
-	private final PartType<? extends IImagePart> imagePart;
+    private final PartType<? extends IImagePart> imagePart;
+    private final PartType<TextPart> textPart;
 
-	private ILayer[] layers;
-	private int[] layerStarts;
-	private int layersL;
-
-	private BaseRenderCommand[] commands;
-	private int commandsL;
+    private final Array<ILayer> layers = Array.of(ILayer.class);
+    private final IntArray layerStarts = new IntArray();
+    private final Array<BaseRenderCommand> commands = Array.of(BaseRenderCommand.class);
 
 	public DrawBuffer(BasicPartRegistry partRegistry) {
 		this.transformablePart = partRegistry.transformable;
 		this.imagePart = partRegistry.image;
-
-		reserveLayers(8);
-		reserveCommands(64);
-	}
-
-	// === Functions ===========================================================
-	private void reserveLayers(int minLength) {
-        if (layers != null && layers.length >= minLength) {
-			return;
-		}
-
-		ILayer[] newLayers = new ILayer[Math.max(minLength, layersL*2)];
-		int[] newLayerStarts = new int[newLayers.length];
-		if (layers != null) {
-			System.arraycopy(layers, 0, newLayers, 0, layersL);
-		}
-		if (layerStarts != null) {
-			System.arraycopy(layerStarts, 0, newLayerStarts, 0, layersL);
-		}
-		layers = newLayers;
-		layerStarts = newLayerStarts;
-	}
-
-	private void reserveCommands(int minLength) {
-		if (commandsL >= minLength) {
-			return;
-		}
-
-		BaseRenderCommand[] newCommands = new BaseRenderCommand[Math.max(minLength, commandsL*2)];
-		if (commands != null) {
-			System.arraycopy(commands, 0, newCommands, 0, commandsL);
-		}
-		commands = newCommands;
+        this.textPart = partRegistry.text;
 	}
 
 	@Override
 	public void reset() {
-		Arrays.fill(layers, null);
-		layersL = 0;
-
-		Arrays.fill(commands, 0, commandsL, null);
-		commandsL = 0;
+        layers.clear();
+        layerStarts.clear();
+        commands.clear();
 	}
 
 	@Override
-	public int reserveLayerIds(int count) {
-		reserveLayers(layersL + count);
+    public int reserveLayerIds(int count) {
+        int firstId = layers.size;
+        for (int n = 0; n < count; n++) {
+            layers.add(null);
+            layerStarts.add(-1);
+        }
+        return firstId;
+    }
 
-		int firstId = layersL;
-		for (int n = 0; n < count; n++) {
-            layerStarts[firstId + n] = -1;
-		}
-		layersL += count;
-		return firstId;
-	}
-
-	@Override
+    @Override
 	public void startLayer(int layerId, ILayer layer) {
-		if (layerId >= layersL) {
+        if (layerId < 0 || layerId >= layers.size) {
 			throw new IllegalArgumentException("The given layerId hasn't been reserved yet: " + layerId);
-		} else if (layers[layerId] == layer) {
+        } else if (layers.get(layerId) == layer) {
 			throw new IllegalStateException("Layer has already been added");
 		}
 
-		if (layerId == 0 && commandsL == 0) {
+        if (layerId == 0 && commands.size == 0) {
 			draw(new LayerRenderCommand(layerId, layer));
 		}
 
-		layers[layerId] = layer;
-		layerStarts[layerId] = commandsL;
+		layers.set(layerId, layer);
+        layerStarts.set(layerId, commands.size);
 	}
 
 	@Override
 	public void draw(Entity e) {
 		IImagePart ip = e.getPart(imagePart);
-		drawWithTexture(e, ip.getTexture());
+        if (ip != null) {
+            drawWithTexture(e, ip.getTexture());
+            return;
+        }
+
+        TextPart tp = e.getPart(textPart);
+        if (tp != null) {
+            tp.draw(this);
+        }
 	}
 
 	@Override
@@ -123,8 +98,9 @@ public final class DrawBuffer implements IDrawBuffer {
 		final IDrawablePart dp = tp;
 		final IImagePart ip = e.getPart(imagePart);
 
-		Vec2 offset = AlignUtil.getAlignOffset(tex, tp.getAlignX(), tp.getAlignY());
-		Area2D bounds = Area2D.of(offset.x, offset.y, tp.getUnscaledWidth(), tp.getUnscaledHeight());
+        double offsetX = AlignUtil.getAlignOffset(tex.getWidth(), tp.getAlignX());
+        double offsetY = AlignUtil.getAlignOffset(tex.getHeight(), tp.getAlignY());
+        Area2D bounds = Area2D.of(offsetX, offsetY, tp.getUnscaledWidth(), tp.getUnscaledHeight());
 
         drawQuad(dp.getZ(), dp.isClipEnabled(), dp.getBlendMode(), dp.getColorARGB(),
                 tex, tp.getTransform(), bounds, ip.getUV());
@@ -148,40 +124,45 @@ public final class DrawBuffer implements IDrawBuffer {
 	public void drawLayer(int layerId, ILayer layer) {
 		draw(new LayerRenderCommand(layerId, layer));
 	}
-
-	public void draw(BaseRenderCommand cmd) {
-		reserveCommands(commandsL+1);
-		commands[commandsL++] = cmd;
+	
+	public void drawText(short z, boolean clipEnabled, BlendMode blendMode,
+	        ITextLayout textLayout, float visibleGlyphs, double x, double y)
+	{
+	    draw(new TextRenderCommand(z, clipEnabled, blendMode, textLayout, visibleGlyphs, x, y));
 	}
 
-	// === Getters =============================================================
+	public void draw(BaseRenderCommand cmd) {
+        commands.add(cmd);
+	}
 
 	public LayerRenderCommand getRootLayerCommand() {
-		if (layersL == 0) {
+        if (layers.size == 0) {
 			return null;
 		}
-		return (LayerRenderCommand)commands[0];
+        return (LayerRenderCommand)commands.get(0);
 	}
 
     private int getLayerStart(int layerId) {
-		return layerStarts[layerId];
+        return layerStarts.get(layerId);
 	}
 
     private int getLayerEnd(int layerId) {
         int nextId = layerId + 1;
-        return (nextId >= layersL || layerStarts[nextId] < 0 ? commandsL : layerStarts[nextId]);
+        if (nextId < layerStarts.size && layerStarts.get(nextId) >= 0) {
+            return layerStarts.get(nextId);
+        } else {
+            return commands.size;
+        }
 	}
 
-    public BaseRenderCommand[] getLayerCommands(int layerId) {
+    public List<? extends BaseRenderCommand> getLayerCommands(int layerId) {
         int start = getLayerStart(layerId);
         int end = getLayerEnd(layerId);
         if (end <= start) {
-            return EMPTY_COMMANDS;
+            return Collections.emptyList();
         }
-        Arrays.sort(commands, start, end);
-        return Arrays.copyOfRange(commands, start, end);
+        Sort.instance().sort(commands.items, start, end);
+        return Arrays.asList(commands.items).subList(start, end);
     }
-
-	// === Setters =============================================================
 
 }

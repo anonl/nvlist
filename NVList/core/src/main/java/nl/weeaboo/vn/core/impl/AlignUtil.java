@@ -9,13 +9,6 @@ public final class AlignUtil {
 	private AlignUtil() {
 	}
 
-	public static Vec2 getAlignOffset(ITexture tex, double alignX, double alignY) {
-		if (tex == null) {
-			return new Vec2(0, 0);
-		}
-		return new Vec2(getAlignOffset(tex.getWidth(), alignX), getAlignOffset(tex.getHeight(), alignY));
-	}
-
     /**
      * @return A relative offset (in pixels), based on the fractional alignment.
      */

@@ -16,7 +16,7 @@ Logically, an Entity is merely a collection of Parts with a shared lifetime. Ent
 - image
   Stores texturing information (image + UV) which may be used during rendering.
   
-- textDrawable
+- text
   An extension of drawable that renders styled text instead of a (textured) quad.
 
 - button
