@@ -79,7 +79,7 @@ public class MutableStyledText extends AbstractStyledText<MutableStyledText> {
     }
 
     public void setStyle(TextStyle style) {
-        setStyle(style, 0, text.length);
+        setStyle(style, 0, len);
     }
 
     public void setStyle(TextStyle style, int index) {
@@ -87,10 +87,12 @@ public class MutableStyledText extends AbstractStyledText<MutableStyledText> {
     }
 
     public void setStyle(TextStyle style, int from, int to) {
+        checkBounds(from, to);
+
         if (from + 1 == to) {
-            styles[from] = style;
+            styles[soff + from] = style;
         } else {
-            Arrays.fill(styles, from, to, style);
+            Arrays.fill(styles, soff + from, soff + to, style);
         }
     }
 
@@ -107,7 +109,9 @@ public class MutableStyledText extends AbstractStyledText<MutableStyledText> {
         extendStyle(from, to, ext, 0);
     }
     public void extendStyle(int from, int to, TextStyle[] ext, int eoff) {
-        TextStyle.extend(styles, from, styles, from, ext, eoff, to - from);
+        checkBounds(from, to);
+
+        TextStyle.extend(styles, soff + from, styles, soff + from, ext, eoff, to - from);
     }
 
     public void setBaseStyle(TextStyle base) {
@@ -123,7 +127,9 @@ public class MutableStyledText extends AbstractStyledText<MutableStyledText> {
         setBaseStyle(from, to, base, 0);
     }
     public void setBaseStyle(int from, int to, TextStyle[] base, int boff) {
-        TextStyle.extend(styles, from, base, boff, styles, from, to - from);
+        checkBounds(from, to);
+
+        TextStyle.extend(styles, soff + from, base, boff, styles, from, to - from);
     }
 
 }

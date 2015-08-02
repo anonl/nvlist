@@ -43,7 +43,7 @@ final class Osd implements Disposable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Osd.class);
 
-    private final String fontPath = "font/DejaVuSerif.ttf";
+    private final String fontPath = "font/DejaVuSans.ttf";
 
     private BitmapFont font;
     private BitmapFont smallFont;
@@ -69,16 +69,19 @@ final class Osd implements Disposable {
 	    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 	    try {
 		    FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+            parameter.incremental = true;
 		    parameter.size = 32;
-		    parameter.color = Color.WHITE;
-            parameter.borderColor = Color.WHITE;
 		    font = generator.generateFont(parameter);
 
+            // Must create a new parameter object if incremental is true
+            parameter = new FreeTypeFontParameter();
+            parameter.incremental = true;
             parameter.size = 16;
+            parameter.borderColor = Color.WHITE;
             parameter.borderWidth = .5f;
             smallFont = generator.generateFont(parameter);
 	    } finally {
-	    	generator.dispose();
+            // generator.dispose();
 	    }
 
         fontStore = new GdxFontStore();
@@ -133,15 +136,16 @@ final class Osd implements Disposable {
             }
         }
 
-        MutableStyledText stext = new MutableStyledText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        MutableStyledText stext = //new MutableStyledText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        new MutableStyledText("של 1234 ום WORD של!@#$%^&*()ום");
         stext.setStyle(TextStyle.fromString("fontName=DejaVuSerif|fontSize=32|color=FFFFFF"));
-        stext.setStyle(TextStyle.fromString("fontName=other|fontSize=18|color=FF0000"), 10, 20);
+        // stext.setStyle(TextStyle.fromString("fontName=other|fontSize=18|color=FF0000"), 10, 20);
 
         LayoutParameters layoutParams = new LayoutParameters();
         layoutParams.wrapWidth = wrapWidth;
         ITextLayout textLayout = LayoutUtil.layout(fontStore, stext.immutableCopy(), layoutParams);
         GdxFontUtil.draw(batch, textLayout, pad, pad + textLayout.getTextHeight(),
-                .3f * Gdx.graphics.getFrameId() % (1.5f * textLayout.getGlyphCount()));
+                .1f * Gdx.graphics.getFrameId() % (1.5f * textLayout.getGlyphCount()));
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {

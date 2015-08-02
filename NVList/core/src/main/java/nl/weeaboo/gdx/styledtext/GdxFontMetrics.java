@@ -29,8 +29,10 @@ public class GdxFontMetrics implements IFontMetrics {
     }
 
     @Override
-    public ILayoutElement layoutText(CharSequence str, TextStyle style, LayoutParameters params) {
-        return new GdxTextElement(str, style, font);
+    public ILayoutElement layoutText(CharSequence str, TextStyle style, int bidiLevel,
+            LayoutParameters params) {
+
+        return new GdxTextElement(str, style, bidiLevel, font);
     }
 
     @Override

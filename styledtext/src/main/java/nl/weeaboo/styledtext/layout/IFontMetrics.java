@@ -8,7 +8,7 @@ public interface IFontMetrics {
 
     float getLineHeight();
 
-    ILayoutElement layoutText(CharSequence str, TextStyle style, LayoutParameters params);
+    ILayoutElement layoutText(CharSequence str, TextStyle style, int bidiLevel, LayoutParameters params);
 
     ILayoutElement layoutSpacing(CharSequence text, TextStyle style, LayoutParameters params);
 

@@ -87,18 +87,30 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
     }
 
     protected final void checkBounds(int index) {
-        if (index < 0 || index >= length()) {
-            throw new ArrayIndexOutOfBoundsException("index=" + index + ", length=" + length());
+        if (index < 0 || index >= len) {
+            throw new ArrayIndexOutOfBoundsException("index=" + index + ", length=" + len);
+        }
+    }
+
+    protected final void checkBounds(int from, int to) {
+        if (from < 0) {
+            throw new ArrayIndexOutOfBoundsException(from);
+        }
+        if (to > len) {
+            throw new ArrayIndexOutOfBoundsException(to);
+        }
+        if (from > to) {
+            throw new ArrayIndexOutOfBoundsException(to - from);
         }
     }
 
     @Override
-    public int length() {
+    public final int length() {
         return len;
     }
 
     @Override
-    public char charAt(int index) {
+    public final char charAt(int index) {
         checkBounds(index);
         return text[toff + index];
     }
@@ -106,7 +118,7 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
     /**
      * @see #charAt(int)
      */
-    public char getChar(int index) {
+    public final char getChar(int index) {
         checkBounds(index);
         return text[toff + index];
     }
@@ -115,7 +127,7 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
      * @return The {@link TextStyle} at the specified index, or {@code null} if no style exists at the
      *         specified index.
      */
-    public TextStyle getStyle(int index) {
+    public final TextStyle getStyle(int index) {
         checkBounds(index);
         return styles[soff + index];
     }
@@ -123,7 +135,7 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
     /**
      * @see #getChars(char[], int, int)
      */
-    protected char[] getChars() {
+    protected final char[] getChars() {
         char[] out = new char[len];
         getChars(out, 0, len);
         return out;
@@ -140,14 +152,14 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
      *
      * @see #getStyles(TextStyle[], int, int)
      */
-    protected void getChars(char[] out, int off, int len) {
+    protected final void getChars(char[] out, int off, int len) {
         System.arraycopy(text, toff, out, off, len);
     }
 
     /**
      * @see #getStyled(TextStyle[], int, int)
      */
-    protected TextStyle[] getStyles() {
+    protected final TextStyle[] getStyles() {
         TextStyle[] out = new TextStyle[len];
         getStyles(out, 0, len);
         return out;
@@ -164,7 +176,7 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
      *
      * @see #getChars(char[], int, int)
      */
-    protected void getStyles(TextStyle[] out, int off, int len) {
+    protected final void getStyles(TextStyle[] out, int off, int len) {
         System.arraycopy(styles, soff, out, off, len);
     }
 
@@ -207,10 +219,7 @@ abstract class AbstractStyledText<S extends AbstractStyledText<S>> implements Ch
         }
 
         // Check if to and from lie within the acceptable range
-        checkBounds(from);
-        if (to > from) {
-            checkBounds(to - 1);
-        }
+        checkBounds(from, to);
 
         return newInstance(to - from, text, toff + from, styles, soff + from);
     }

@@ -1,5 +1,9 @@
 package nl.weeaboo.styledtext.layout;
 
+import java.text.Bidi;
+import java.util.Arrays;
+import java.util.List;
+
 import nl.weeaboo.styledtext.ETextAttribute;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
@@ -90,6 +94,30 @@ public final class LayoutUtil {
             return seq.getGlyphCount();
         }
         return 0;
+    }
+
+    static List<ILayoutElement> visualSortedCopy(List<ILayoutElement> elems) {
+        ILayoutElement[] elemsArray = new ILayoutElement[elems.size()];
+        byte[] bidiLevels = new byte[elemsArray.length];
+
+        int t = 0;
+        for (ILayoutElement elem : elems) {
+            elemsArray[t] = elem;
+            bidiLevels[t] = 0;
+            if (elem instanceof TextElement) {
+                TextElement textElem = (TextElement)elem;
+                bidiLevels[t] = (byte)textElem.getBidiLevel();
+            }
+            t++;
+        }
+
+        Bidi.reorderVisually(bidiLevels, 0, elemsArray, 0, elemsArray.length);
+
+        return Arrays.asList(elemsArray);
+    }
+
+    public static boolean isRightToLeftLevel(int bidiLevel) {
+        return (bidiLevel & 1) != 0;
     }
 
 }

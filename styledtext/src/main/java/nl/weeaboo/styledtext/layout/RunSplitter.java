@@ -82,13 +82,12 @@ public class RunSplitter {
     }
 
     private boolean isBoundary(RunState cur, RunState next) {
-        return cur.containsLineBreak
-            || next.containsLineBreak
+        return (cur.isWhitespace != next.isWhitespace)
             || (nextBreakBoundary >= next.startIndex && nextBreakBoundary < next.endIndex)
             || (cur.style != next.style)
             || (cur.bidiLevel != next.bidiLevel)
-            || (cur.isWhitespace != next.isWhitespace)
-            || (cur.containsLineBreak != next.containsLineBreak);
+            || cur.containsLineBreak
+            || next.containsLineBreak;
     }
 
     public void processCodepoint() {
@@ -104,7 +103,7 @@ public class RunSplitter {
 		}
 
         // Go look for the next line break boundary if needed
-        while (nextBreakBoundary != BreakIterator.DONE && index > nextBreakBoundary) {
+        while (index > nextBreakBoundary && nextBreakBoundary != BreakIterator.DONE) {
             nextBreakBoundary = lineBreaker.next();
         }
 

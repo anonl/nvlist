@@ -38,7 +38,7 @@ final class TextLayoutAlgorithm implements RunHandler {
         CompositeTextLayout compositeLayout = new CompositeTextLayout();
         for (LineLayout line : finishedLines) {
             compositeLayout.add(line.layout(0f, y));
-            y -= line.getLayoutHeight();
+            y += params.ydir * line.getLayoutHeight();
         }
         return compositeLayout;
     }
@@ -59,7 +59,7 @@ final class TextLayoutAlgorithm implements RunHandler {
         if (rs.isWhitespace) {
             elem = metrics.layoutSpacing(text, style, params);
         } else {
-            elem = metrics.layoutText(text, style, params);
+            elem = metrics.layoutText(text, style, rs.bidiLevel, params);
         }
 
         if (currentLine.fits(elem)) {
@@ -94,6 +94,8 @@ final class TextLayoutAlgorithm implements RunHandler {
 
         private float layoutWidth;
         private float layoutHeight;
+        private float maxAscent;
+        private boolean isSimpleLTR = true;
 
         public LineLayout(LayoutParameters params) {
             this.params = params;
@@ -102,6 +104,13 @@ final class TextLayoutAlgorithm implements RunHandler {
         public void add(ILayoutElement elem) {
             elements.add(elem);
             layoutWidth += elem.getLayoutWidth();
+            if (elem instanceof TextElement) {
+                TextElement textElem = (TextElement)elem;
+                maxAscent = Math.max(maxAscent, textElem.getAscent());
+                if (textElem.getBidiLevel() != 0) {
+                    isSimpleLTR = false;
+                }
+            }
         }
 
         public boolean fits(ILayoutElement elem) {
@@ -113,8 +122,8 @@ final class TextLayoutAlgorithm implements RunHandler {
         public List<ILayoutElement> layout(float x, float y) {
             removeTrailingWhitespace();
 
-            final List<SpacingElement> paddingElements = new ArrayList<SpacingElement>();
-            final List<ILayoutElement> newElements = new ArrayList<ILayoutElement>(elements.size());
+            List<SpacingElement> paddingElements = new ArrayList<SpacingElement>();
+            List<ILayoutElement> newElements = new ArrayList<ILayoutElement>(elements.size());
 
             addPadding(newElements, paddingElements);
 
@@ -129,7 +138,10 @@ final class TextLayoutAlgorithm implements RunHandler {
                 }
             }
 
-            // TODO Sort newElements in visual order
+            // Sort elements in visual order for layout
+            if (!isSimpleLTR) {
+                newElements = LayoutUtil.visualSortedCopy(newElements);
+            }
 
             // Position text elements and calculate line width/height
             layoutWidth = 0f;
@@ -137,8 +149,12 @@ final class TextLayoutAlgorithm implements RunHandler {
             for (ILayoutElement elem : newElements) {
                 if (elem instanceof TextElement) {
                     TextElement text = (TextElement)elem;
+
+                    // TODO Only round y position if font.integer==true?
+                    float dy = Math.round(maxAscent - text.getAscent());
+
                     text.setX(x);
-                    text.setY(y);
+                    text.setY(y + params.ydir * dy);
                 }
 
                 x += elem.getLayoutWidth();
@@ -146,7 +162,8 @@ final class TextLayoutAlgorithm implements RunHandler {
                 layoutHeight = Math.max(layoutHeight, elem.getLayoutHeight());
             }
 
-            return newElements;
+            // Return elements in logical order, without the additional padding elements
+            return elements;
         }
 
         /** Add padding wherever the horizontal layout switches */
