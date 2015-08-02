@@ -124,12 +124,12 @@ public final class DrawBuffer implements IDrawBuffer {
 	public void drawLayer(int layerId, ILayer layer) {
 		draw(new LayerRenderCommand(layerId, layer));
 	}
-	
+
 	public void drawText(short z, boolean clipEnabled, BlendMode blendMode,
 	        ITextLayout textLayout, float visibleGlyphs, double x, double y)
 	{
 	    draw(new TextRenderCommand(z, clipEnabled, blendMode, textLayout, visibleGlyphs, x, y));
-	}
+    }
 
 	public void draw(BaseRenderCommand cmd) {
         commands.add(cmd);
