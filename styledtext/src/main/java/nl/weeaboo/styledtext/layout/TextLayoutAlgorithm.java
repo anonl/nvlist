@@ -114,9 +114,16 @@ final class TextLayoutAlgorithm implements RunHandler {
         }
 
         public boolean fits(ILayoutElement elem) {
-            return elem.isWhitespace()
-                || params.wrapWidth < 0
-                || layoutWidth + elem.getLayoutWidth() <= params.wrapWidth;
+            if (elem.isWhitespace() || params.wrapWidth < 0) {
+                return true;
+            }
+
+            float dx = 0;
+            if (!elements.isEmpty()) {
+                dx = LayoutUtil.getKerningOffset(elements.get(elements.size() - 1), elem);
+            }
+
+            return layoutWidth + dx + elem.getLayoutWidth() <= params.wrapWidth;
         }
 
         public List<ILayoutElement> layout(float x, float y) {
@@ -146,7 +153,10 @@ final class TextLayoutAlgorithm implements RunHandler {
             // Position text elements and calculate line width/height
             layoutWidth = 0f;
             layoutHeight = 0f;
+            ILayoutElement prev = null;
             for (ILayoutElement elem : newElements) {
+                x += LayoutUtil.getKerningOffset(prev, elem);
+
                 if (elem instanceof TextElement) {
                     TextElement text = (TextElement)elem;
 

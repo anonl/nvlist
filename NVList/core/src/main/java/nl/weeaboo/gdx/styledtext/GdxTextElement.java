@@ -138,6 +138,11 @@ final class GdxTextElement extends TextElement {
     }
 
     @Override
+    public int getGlyphId(int index) {
+        return getGlyph(glyphLayout, index).id;
+    }
+
+    @Override
     public int getGlyphCount() {
         return glyphCount;
     }
@@ -145,6 +150,33 @@ final class GdxTextElement extends TextElement {
     @Override
     public TextStyle getGlyphStyle(int glyphIndex) {
         return style;
+    }
+
+    @Override
+    public float getKerning(int glyphId) {
+        if (glyphCount == 0) {
+            return 0f;
+        } else if (glyphId != (char)glyphId) {
+            return 0f; // libGDX Glyph.getKerning uses char instead of int
+        }
+
+        Glyph finalGlyph = getGlyph(glyphLayout, glyphCount - 1);
+        int kerning = finalGlyph.getKerning((char)glyphId);
+        return scaleXY * kerning;
+    }
+
+    private static Glyph getGlyph(GlyphLayout layout, int index) {
+        int offset = 0;
+        for (GlyphRun run : layout.runs) {
+            if (index < offset) {
+                break;
+            }
+            if (index - offset < run.glyphs.size) {
+                return run.glyphs.get(index - offset);
+            }
+            offset += run.glyphs.size;
+        }
+        throw new ArrayIndexOutOfBoundsException(index);
     }
 
     private static int getGlyphCount(GlyphLayout layout) {

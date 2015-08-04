@@ -88,6 +88,20 @@ public final class LayoutUtil {
         return 1f / style.getSpeed();
     }
 
+    static float getKerningOffset(ILayoutElement a, ILayoutElement b) {
+        if (!(a instanceof TextElement) || !(b instanceof IGlyphSequence)) {
+            return 0f;
+        }
+
+        TextElement textA = (TextElement)a;
+        IGlyphSequence textB = (IGlyphSequence)b;
+        if (textB.getGlyphCount() == 0) {
+            return 0f;
+        }
+
+        return textA.getKerning(textB.getGlyphId(0));
+    }
+
     static int getGlyphCount(ILayoutElement elem) {
         if (elem instanceof IGlyphSequence) {
             IGlyphSequence seq = (IGlyphSequence)elem;

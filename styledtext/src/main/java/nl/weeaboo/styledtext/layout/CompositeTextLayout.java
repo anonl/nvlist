@@ -62,6 +62,15 @@ public class CompositeTextLayout implements ITextLayout {
     }
 
     @Override
+    public int getGlyphId(int glyphIndex) {
+        Elem elem = findByGlyphIndex(glyphIndex);
+        if (elem == null) {
+            throw new ArrayIndexOutOfBoundsException(glyphIndex);
+        }
+        return elem.getGlyphId(glyphIndex);
+    }
+
+    @Override
     public TextStyle getGlyphStyle(int glyphIndex) {
         Elem elem = findByGlyphIndex(glyphIndex);
         if (elem == null) {
@@ -79,7 +88,7 @@ public class CompositeTextLayout implements ITextLayout {
         return null;
     }
 
-    private static class Elem implements IGlyphSequence {
+    private static class Elem {
 
         public final ILayoutElement elem;
         public final int glyphStart;
@@ -98,15 +107,20 @@ public class CompositeTextLayout implements ITextLayout {
             return glyphIndex >= glyphStart && glyphIndex < glyphEnd;
         }
 
-        @Override
-        public int getGlyphCount() {
-            return glyphEnd - glyphStart;
+        /**
+         * @param glyphIndex Absolute glyph index
+         */
+        public int getGlyphId(int glyphIndex) {
+            if (elem instanceof IGlyphSequence) {
+                IGlyphSequence seq = (IGlyphSequence)elem;
+                return seq.getGlyphId(glyphIndex - glyphStart);
+            }
+            return 0;
         }
 
         /**
          * @param glyphIndex Absolute glyph index
          */
-        @Override
         public TextStyle getGlyphStyle(int glyphIndex) {
             if (elem instanceof IGlyphSequence) {
                 IGlyphSequence seq = (IGlyphSequence)elem;
