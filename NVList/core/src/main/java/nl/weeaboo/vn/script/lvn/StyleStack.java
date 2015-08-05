@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.script.lvn;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -8,9 +7,7 @@ import java.util.ListIterator;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
 
-class StyleStack implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+final class StyleStack {
 
 	private final List<TaggedEntry> stack;
 	private transient TextStyle calculated;
@@ -19,7 +16,6 @@ class StyleStack implements Serializable {
 		stack = new ArrayList<TaggedEntry>();
 	}
 
-	//Functions
 	public void clear() {
 		if (!stack.isEmpty()) {
 			stack.clear();
@@ -51,7 +47,6 @@ class StyleStack implements Serializable {
 		calculated = null;
 	}
 
-	//Getters
 	public TextStyle getCalculatedStyle() {
 		if (calculated == null) {
 			MutableTextStyle mts = new MutableTextStyle();
@@ -63,12 +58,7 @@ class StyleStack implements Serializable {
 		return calculated;
 	}
 
-	//Setters
-
-	//Inner Classes
-	private static class TaggedEntry implements Serializable {
-
-		private static final long serialVersionUID = 1L;
+    private static class TaggedEntry {
 
 		final String tag;
 		final TextStyle style;

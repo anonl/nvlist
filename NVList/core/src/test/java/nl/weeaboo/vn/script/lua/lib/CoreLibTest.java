@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.CoreLib;
+import nl.weeaboo.vn.script.lua.CoreLib;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaTestUtil;
 

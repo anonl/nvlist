@@ -12,10 +12,11 @@ import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.CoreLib;
-import nl.weeaboo.vn.script.impl.ImageLib;
+import nl.weeaboo.vn.script.lua.CoreLib;
+import nl.weeaboo.vn.script.lua.ImageLib;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
+import nl.weeaboo.vn.script.lua.TextLib;
 import nl.weeaboo.vn.sound.impl.SoundModule;
 import nl.weeaboo.vn.video.impl.VideoModule;
 
@@ -71,6 +72,7 @@ public class EnvironmentFactory {
         // Register script libs
         scriptEnv.addInitializer(new CoreLib(env));
         scriptEnv.addInitializer(new ImageLib(env));
+        scriptEnv.addInitializer(new TextLib(env));
 
         // Register objects
 

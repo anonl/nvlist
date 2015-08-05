@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.script.impl;
+package nl.weeaboo.vn.script.lua;
 
 import org.luaj.vm2.Varargs;
 
@@ -12,7 +12,6 @@ import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
-import nl.weeaboo.vn.script.lua.LuaScriptUtil;
 
 public class CoreLib extends LuaLib {
 

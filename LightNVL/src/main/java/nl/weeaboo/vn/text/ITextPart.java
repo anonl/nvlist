@@ -6,7 +6,7 @@ import nl.weeaboo.vn.core.IRenderable;
 
 public interface ITextPart extends IRenderable {
 
-    TextStyle CENTERED_STYLE = TextStyle.fromString("align=center");
+    TextStyle DEFAULT_STYLE = TextStyle.fromString("fontSize=32|align=center");
 
     /**
      * @see #setText(StyledText)

@@ -71,7 +71,7 @@ public class ImageModule implements IImageModule {
     @Override
     public Entity createTextDrawable(ILayer layer) {
         Entity e = entityHelper.createScriptableEntity(layer);
-        //TODO Add text parts
+        entityHelper.addTextPart(e, layer);
         return e;
     }
 

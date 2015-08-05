@@ -23,8 +23,9 @@ public final class MirrorChars {
             return ')';
         case ')':
             return '(';
+        default:
+            return c;
         }
-        return c;
     }
 
 }

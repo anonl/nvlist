@@ -24,7 +24,7 @@ public class TextPart extends DrawablePart implements ITextPart {
     private final StaticRef<IFontStore> fontStore = StaticEnvironment.FONT_STORE;
 
     private StyledText stext = StyledText.EMPTY_STRING;
-    private TextStyle defaultStyle = CENTERED_STYLE;
+    private TextStyle defaultStyle = DEFAULT_STYLE;
 
     private float visibleGlyphs = ALL_GLYPHS_VISIBLE;
     private boolean rightToLeft;
@@ -78,6 +78,8 @@ public class TextPart extends DrawablePart implements ITextPart {
 
             invalidateLayout();
         }
+
+        setVisibleText(ALL_GLYPHS_VISIBLE);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class TextPart extends DrawablePart implements ITextPart {
     public void draw(DrawBuffer drawBuffer) {
         ITextLayout textLayout = getLayout();
         drawBuffer.drawText(getZ(), isClipEnabled(), getBlendMode(),
-                textLayout, visibleGlyphs, getX(), getY());
+                textLayout, visibleGlyphs, getX(), getY() + getHeight());
     }
 
 }
