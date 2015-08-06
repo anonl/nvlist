@@ -1,7 +1,9 @@
 package nl.weeaboo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nl.weeaboo.collections.IntMap;
@@ -72,5 +74,9 @@ public class PartRegistry implements Serializable {
 	public PartType<?> get(int id) {
 		return entriesById.get(id);
 	}
+
+    public List<PartType<?>> getAll() {
+        return new ArrayList<PartType<?>>(entriesByName.values());
+    }
 
 }

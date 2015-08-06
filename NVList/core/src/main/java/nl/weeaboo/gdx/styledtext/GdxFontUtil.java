@@ -52,7 +52,10 @@ public final class GdxFontUtil {
             for (int n = 0; n < sizes.length; n++) {
                 FreeTypeFontParameter parameter = new FreeTypeFontParameter();
                 parameter.size = sizes[n];
-                result[n] = generator.generateFont(parameter);
+
+                BitmapFont bmFont = generator.generateFont(parameter);
+                bmFont.setUseIntegerPositions(true);
+                result[n] = bmFont;
             }
         } finally {
             generator.dispose();

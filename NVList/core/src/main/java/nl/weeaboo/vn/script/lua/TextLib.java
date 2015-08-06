@@ -3,7 +3,6 @@ package nl.weeaboo.vn.script.lua;
 import org.luaj.vm2.Varargs;
 
 import nl.weeaboo.entity.Entity;
-import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
@@ -57,7 +56,7 @@ public class TextLib extends LuaLib {
             }
         }
 
-        return LuajavaLib.toUserdata(e, Entity.class);
+        return LuaEntity.toUserdata(e, pr);
     }
 
 }

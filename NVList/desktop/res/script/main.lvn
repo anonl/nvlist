@@ -8,11 +8,13 @@ end
 
 function titlescreen()
 	print("titlescreen")
-	
-	local textEntity = Text.createTextDrawable(nil, "My text is very nice")
+	local textbox = Text.createTextDrawable()
 	
 	newThread(function()
-		yield(60)
+		for n=1,60 do
+			textbox.text:setText("wait " .. tostring(n))
+			yield()
+		end
 		print("other thread")
 		
 		local rootLayer = Image.getActiveLayer()

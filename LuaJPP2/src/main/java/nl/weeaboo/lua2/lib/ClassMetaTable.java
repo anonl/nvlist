@@ -90,7 +90,7 @@ final class ClassMetaTable extends LuaTable implements IWriteReplaceSerializable
 		return "ClassMetaTable(" + classInfo.getWrappedClass().getSimpleName() + ")@" + hashCode();
 	}
 
-	LuaMethod getMethod(LuaValue name) {
+    LuaMethod getMethod(LuaValue name) {
 		LuaMethod method = methods.get(name);
 		if (method != null) {
 			return method;

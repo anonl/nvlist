@@ -165,8 +165,11 @@ public class TextPart extends DrawablePart implements ITextPart {
 
     public void draw(DrawBuffer drawBuffer) {
         ITextLayout textLayout = getLayout();
+        float x = Math.round(getX());
+        float y = Math.round(getY() + getHeight());
+        
         drawBuffer.drawText(getZ(), isClipEnabled(), getBlendMode(),
-                textLayout, visibleGlyphs, getX(), getY() + getHeight());
+                textLayout, visibleGlyphs, x, y);
     }
 
 }

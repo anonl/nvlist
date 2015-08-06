@@ -32,7 +32,7 @@ class ButtonDrawablePart extends DrawablePart implements IButtonDrawablePart {
     private ITexture disabledPressedTexture;
 
     private StyledText stext = StyledText.EMPTY_STRING;
-    private TextStyle defaultStyle = ITextPart.CENTERED_STYLE;
+    private TextStyle defaultStyle = ITextPart.DEFAULT_STYLE;
     private double verticalAlign = 0.5;
     private double touchMargin;
 
