@@ -2,6 +2,8 @@ package nl.weeaboo.styledtext;
 
 public final class MirrorChars {
 
+    private static final String mirrorGlyphs = "()[]{}";
+
     private MirrorChars() {
     }
 
@@ -16,16 +18,18 @@ public final class MirrorChars {
      *         is known.
      */
     public static char getMirrorChar(char c) {
-        // TODO Use a far more complete lookup table. Maybe use ftp://ftp.unicode.org/Public/UNIDATA/BidiMirroring.txt
-
-        switch (c) {
-        case '(':
-            return ')';
-        case ')':
-            return '(';
-        default:
+        int index = mirrorGlyphs.indexOf(c);
+        if (index < 0) {
             return c;
         }
+
+        // Find index of mirror glyph
+        if ((index & 1) == 0) {
+            index++;
+        } else {
+            index--;
+        }
+        return mirrorGlyphs.charAt(index);
     }
 
 }
