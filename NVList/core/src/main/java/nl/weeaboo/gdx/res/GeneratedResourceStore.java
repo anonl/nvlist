@@ -1,5 +1,6 @@
 package nl.weeaboo.gdx.res;
 
+import java.io.Serializable;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -35,7 +36,7 @@ public class GeneratedResourceStore extends AbstractResourceStore {
         garbage = new ReferenceQueue<GeneratedResource<?>>();
     }
 
-    public <T extends Disposable> IResource<T> register(T value) {
+    public <T extends Serializable & Disposable> IResource<T> register(T value) {
         cleanUp();
 
         GeneratedResource<T> resource = new GeneratedResource<T>(selfId, value);

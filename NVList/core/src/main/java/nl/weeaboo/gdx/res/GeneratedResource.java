@@ -2,6 +2,7 @@ package nl.weeaboo.gdx.res;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 
 import com.badlogic.gdx.utils.Disposable;
 
@@ -10,7 +11,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 @CustomSerializable
-final class GeneratedResource<T extends Disposable> implements IResource<T> {
+final class GeneratedResource<T extends Serializable & Disposable> implements IResource<T> {
 
     private static final long serialVersionUID = 1L;
 

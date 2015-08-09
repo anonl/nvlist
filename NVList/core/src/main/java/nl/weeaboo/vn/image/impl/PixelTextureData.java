@@ -5,17 +5,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.Disposable;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITextureData;
 
 @CustomSerializable
-public class PixelTextureData implements ITextureData {
+public class PixelTextureData implements ITextureData, Disposable {
 
     private static final long serialVersionUID = 1L;
 
     private transient Pixmap pixels;
+    private boolean destroyed;
 
     private PixelTextureData(Pixmap pixels) {
         this.pixels = Checks.checkNotNull(pixels);
@@ -53,6 +55,25 @@ public class PixelTextureData implements ITextureData {
     @Override
     public int getHeight() {
         return pixels.getHeight();
+    }
+
+    @Override
+    public void destroy() {
+        if (!destroyed) {
+            destroyed = true;
+
+            pixels.dispose();
+        }
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    @Override
+    public final void dispose() {
+        destroy();
     }
 
 }

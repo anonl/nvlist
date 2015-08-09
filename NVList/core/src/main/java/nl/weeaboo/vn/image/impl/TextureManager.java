@@ -34,8 +34,8 @@ public class TextureManager implements Serializable {
     }
 
     public IResource<TextureRegion> generateTextureRegion(PixelTextureData texData) {
-        Texture texture = new Texture(texData.getPixels());
-        return new RegionResource(generatedTextureStore.get().register(texture));
+        GeneratedResourceStore generatedStore = generatedTextureStore.get();
+        return new GeneratedRegionResource(generatedStore.register(texData));
     }
 
     public ITexture generateTexture(PixelTextureData texData, double sx, double sy) {
@@ -54,6 +54,22 @@ public class TextureManager implements Serializable {
         @Override
         protected TextureRegion transform(Texture original) {
             return new TextureRegion(original);
+        }
+
+    }
+
+    private static class GeneratedRegionResource
+            extends TransformedResource<PixelTextureData, TextureRegion> {
+
+        private static final long serialVersionUID = 1L;
+
+        public GeneratedRegionResource(IResource<PixelTextureData> inner) {
+            super(inner);
+        }
+
+        @Override
+        protected TextureRegion transform(PixelTextureData original) {
+            return new TextureRegion(new Texture(original.getPixels()));
         }
 
     }

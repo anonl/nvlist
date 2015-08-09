@@ -1,5 +1,7 @@
 package nl.weeaboo.gdx.res;
 
+import java.io.Serializable;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +57,9 @@ public class GeneratedResourceStoreTest {
         Assert.assertFalse(dummy.disposed);
     }
 
-    private static class Dummy implements Disposable {
+    private static class Dummy implements Serializable, Disposable {
+
+        private static final long serialVersionUID = 1L;
 
         public final int id;
         public boolean disposed;

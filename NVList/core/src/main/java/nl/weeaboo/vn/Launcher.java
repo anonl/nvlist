@@ -284,6 +284,8 @@ public class Launcher extends ApplicationAdapter {
     }
 
     private static void configureLogger() {
+        System.setProperty("sun.io.serialization.extendedDebugInfo", "true");
+
         try {
             InputStream in = NvlTestUtil.class.getResourceAsStream("logging.properties");
             if (in == null) {

@@ -23,13 +23,7 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.gdx.styledtext.GdxFontStore;
-import nl.weeaboo.gdx.styledtext.GdxFontUtil;
 import nl.weeaboo.styledtext.EFontStyle;
-import nl.weeaboo.styledtext.MutableStyledText;
-import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.styledtext.layout.ITextLayout;
-import nl.weeaboo.styledtext.layout.LayoutParameters;
-import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
@@ -135,17 +129,6 @@ final class Osd implements Disposable {
                 }
             }
         }
-
-        MutableStyledText stext = //new MutableStyledText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-        new MutableStyledText("של 1234 ום WORD של!@#$%^&*()ום");
-        stext.setStyle(TextStyle.fromString("fontName=DejaVuSerif|fontSize=32|color=FFFFFF"));
-        // stext.setStyle(TextStyle.fromString("fontName=other|fontSize=18|color=FF0000"), 10, 20);
-
-        LayoutParameters layoutParams = new LayoutParameters();
-        layoutParams.wrapWidth = wrapWidth;
-        ITextLayout textLayout = LayoutUtil.layout(fontStore, stext.immutableCopy(), layoutParams);
-        GdxFontUtil.draw(batch, textLayout, pad, pad + textLayout.getTextHeight(),
-                .1f * Gdx.graphics.getFrameId() % (1.5f * textLayout.getGlyphCount()));
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {

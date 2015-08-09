@@ -2,7 +2,9 @@ package nl.weeaboo.vn.image;
 
 import java.io.Serializable;
 
-public interface ITextureData extends Serializable {
+import nl.weeaboo.vn.core.IDestructible;
+
+public interface ITextureData extends Serializable, IDestructible {
 
     int getWidth();
 

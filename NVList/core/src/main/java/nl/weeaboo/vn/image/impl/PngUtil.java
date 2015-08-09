@@ -17,6 +17,7 @@ public final class PngUtil {
 
     public static void writePng(Pixmap pixmap, OutputStream out) throws IOException {
         PixmapIO.PNG encoder = new PixmapIO.PNG();
+        encoder.setFlipY(false);
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         try {
@@ -36,7 +37,7 @@ public final class PngUtil {
         byte[] bytes = new byte[len];
         din.readFully(bytes);
 
-        return new Pixmap(bytes, 9, len);
+        return new Pixmap(bytes, 0, len);
     }
 
 }
