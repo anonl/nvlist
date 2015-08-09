@@ -37,11 +37,11 @@ final class LuaConvertUtil {
 
         if (args.isstring(index)) {
             // Texture filename
-            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(args.tojstring(2));
+            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(args.tojstring(index));
             return imageModule.getTexture(loadInfo, false);
-        } else if (args.isuserdata(2)) {
+        } else if (args.isuserdata(index)) {
             // Texture or screenshot object
-            Object obj = args.touserdata(2);
+            Object obj = args.touserdata(index);
             if (obj instanceof ITexture) {
                 return (ITexture)obj;
             } else if (obj instanceof IScreenshot) {
@@ -53,7 +53,7 @@ final class LuaConvertUtil {
             } else {
                 throw new ScriptException("Invalid arguments");
             }
-        } else if (!args.isnil(2)) {
+        } else if (!args.isnil(index)) {
             throw new ScriptException("Invalid arguments");
         }
         return null;

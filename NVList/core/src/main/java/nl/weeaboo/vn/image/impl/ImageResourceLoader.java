@@ -9,6 +9,8 @@ final class ImageResourceLoader extends FileResourceLoader {
 
     public ImageResourceLoader(IEnvironment env) {
         super(env, "img/");
+
+        setAutoFileExts("ktx", "png", "jpg");
     }
 
 }

@@ -133,4 +133,19 @@ public final class LuaScriptUtil {
         }
     }
 
+    public static String eval(IContext mainContext, String luaCode) throws ScriptException {
+        LuaScriptContext scriptContext = getScriptContext(mainContext);
+        LuaScriptThread mainThread = scriptContext.getMainThread();
+
+        Varargs result;
+        IContext oldContext = ContextUtil.setCurrentContext(mainContext);
+        try {
+            result = mainThread.eval(luaCode);
+        } finally {
+            ContextUtil.setCurrentContext(oldContext);
+        }
+
+        return result.tojstring();
+    }
+
 }

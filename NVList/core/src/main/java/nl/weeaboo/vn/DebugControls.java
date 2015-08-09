@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.entity.Entity;
+import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -30,6 +31,7 @@ import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
+import nl.weeaboo.vn.script.lua.LuaConsole;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 import nl.weeaboo.vn.text.impl.TextPart;
@@ -37,6 +39,12 @@ import nl.weeaboo.vn.text.impl.TextPart;
 final class DebugControls {
 
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);
+
+    private LuaConsole luaConsole;
+
+    public DebugControls(Scene2dEnv sceneEnv) {
+        luaConsole = new LuaConsole(sceneEnv);
+    }
 
     public void update(INovel novel) {
         IEnvironment env = novel.getEnv();
@@ -118,6 +126,12 @@ final class DebugControls {
             } catch (IOException e) {
                 LOG.warn("Audio error", e);
             }
+        }
+
+        // Lua console
+        luaConsole.setActiveContext(activeContext);
+        if (Gdx.input.isKeyJustPressed(Keys.F1)) {
+            luaConsole.setVisible(!luaConsole.isVisible());
         }
     }
 

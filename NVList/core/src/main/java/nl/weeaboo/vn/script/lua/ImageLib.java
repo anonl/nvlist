@@ -48,7 +48,7 @@ public class ImageLib extends LuaLib {
             imagePart.setTexture(tex);
         }
 
-        return LuajavaLib.toUserdata(e, Entity.class);
+        return LuaEntity.toUserdata(e, pr);
     }
 
     @ScriptFunction

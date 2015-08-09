@@ -32,6 +32,7 @@ import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
+import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.gdx.styledtext.GdxFontStore;
 import nl.weeaboo.gdx.styledtext.GdxFontUtil;
 import nl.weeaboo.styledtext.EFontStyle;
@@ -69,10 +70,10 @@ public class Launcher extends ApplicationAdapter {
 	private FitViewport frameBufferViewport;
 	private FitViewport screenViewport;
 
+    private Scene2dEnv sceneEnv;
 	private Osd osd;
     private DebugControls debugControls;
 	private SpriteBatch batch;
-	private Texture img;
 	private Vector2 spritePos = new Vector2();
 
     private Novel novel;
@@ -95,11 +96,7 @@ public class Launcher extends ApplicationAdapter {
         resourceFileSystem = new GdxFileSystem(resourceFolder, true);
         assetManager = new AssetManager(resourceFileSystem);
         Texture.setAssetManager(assetManager);
-
-		osd = Osd.newInstance();
-        debugControls = new DebugControls();
-
-		frameBufferViewport = new FitViewport(vsize.w, vsize.h);
+        frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 
 		updateFrameBuffer();
 
@@ -109,9 +106,11 @@ public class Launcher extends ApplicationAdapter {
         assetManager.load("badlogic.jpg", Texture.class);
         assetManager.finishLoading();
 
-        img = assetManager.get("badlogic.jpg", Texture.class);
-
         initNovel();
+
+        sceneEnv = new Scene2dEnv(frameBufferViewport);
+        osd = Osd.newInstance();
+        debugControls = new DebugControls(sceneEnv);
     }
 
     private void initNovel() {
@@ -262,12 +261,10 @@ public class Launcher extends ApplicationAdapter {
 
         renderer.render(drawBuffer);
 
+        sceneEnv.getStage().draw();
+
 		batch.begin();
-
-		batch.draw(img, spritePos.x, spritePos.y);
-
         osd.render(batch, env);
-
 		batch.end();
 	}
 
