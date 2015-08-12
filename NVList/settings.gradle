@@ -1,9 +1,6 @@
 include ':tcommon'
 project(':tcommon').projectDir=new File('../tcommon')
 
-include ':styledtext'
-project(':styledtext').projectDir=new File('../styledtext')
-
 include ':LuaJPP2'
 project(':LuaJPP2').projectDir=new File('../LuaJPP2')
 

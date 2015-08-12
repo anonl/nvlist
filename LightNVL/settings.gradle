@@ -1,5 +1,0 @@
-include ':tcommon'
-project(':tcommon').projectDir=new File('../tcommon')
-
-include ':styledtext'
-project(':styledtext').projectDir=new File('../styledtext')

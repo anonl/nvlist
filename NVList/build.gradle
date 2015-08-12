@@ -1,3 +1,4 @@
+
 buildscript {
     repositories {
         mavenCentral()
@@ -111,9 +112,9 @@ project(":core") {
     apply plugin: "java"
 
     dependencies {
-        compile project(":styledtext")        
         compile project(":LightNVL")
         compile project(":LuaJPP2")        
+        compile files('libs/styledtext-impl-1.0.jar')
         compile 'org.slf4j:slf4j-api:1.7.12'
         
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"        

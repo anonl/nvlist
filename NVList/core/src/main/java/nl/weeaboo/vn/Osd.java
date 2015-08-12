@@ -22,8 +22,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.gdx.styledtext.GdxFontStore;
 import nl.weeaboo.styledtext.EFontStyle;
+import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;

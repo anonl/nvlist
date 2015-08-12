@@ -20,7 +20,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.gl.GLBlendMode;
 import nl.weeaboo.gdx.gl.GLMatrixStack;
-import nl.weeaboo.gdx.styledtext.GdxFontUtil;
+import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.AlignUtil;
