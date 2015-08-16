@@ -6,12 +6,13 @@ sourceCompatibility = 1.6
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 
 dependencies {
     compile project(':tcommon')
-    compile files('libs/styledtext-api-1.0.jar')
+    compile 'nl.weeaboo.gdx-styledtext:styledtext-api:1.0'
     compile 'com.google.guava:guava:18.0'
     
     testCompile 'junit:junit:4.12'

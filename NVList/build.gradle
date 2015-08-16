@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         classpath 'com.android.tools.build:gradle:1.0.0'
-        classpath 'org.robovm:robovm-gradle-plugin:1.0.0'
+        classpath 'org.robovm:robovm-gradle-plugin:1.5.1-SNAPSHOT'
     }
 }
 
@@ -28,8 +28,10 @@ allprojects {
 
     repositories {
         mavenCentral()
+        jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
     }
 }
 
@@ -114,7 +116,7 @@ project(":core") {
     dependencies {
         compile project(":LightNVL")
         compile project(":LuaJPP2")        
-        compile files('libs/styledtext-impl-1.0.jar')
+        compile 'nl.weeaboo.gdx-styledtext:styledtext-impl:1.0'
         compile 'org.slf4j:slf4j-api:1.7.12'
         
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
