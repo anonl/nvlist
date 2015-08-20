@@ -24,6 +24,7 @@ allprojects {
         box2DLightsVersion = '1.3'
         ashleyVersion = '1.3.1'
         aiVersion = '1.5.0'
+        junitVersion = '4.12'
     }
 
     repositories {
@@ -35,9 +36,40 @@ allprojects {
     }
 }
 
-project(":desktop") {
+project(':api') {
     apply plugin: "java"
 
+    dependencies {
+        compile project(':tcommon')
+        compile 'nl.weeaboo.gdx-styledtext:styledtext-api:1.0'
+        compile 'com.google.guava:guava:18.0'
+        
+        testCompile "junit:junit:$junitVersion"
+    }
+}
+
+project(':core') {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":api")
+        compile project(":LuaJPP2")        
+        compile 'nl.weeaboo.gdx-styledtext:styledtext-impl:1.0'
+        compile 'org.slf4j:slf4j-api:1.7.12'
+        
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
+        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
+
+    	testCompile "junit:junit:$junitVersion"
+        testCompile 'org.slf4j:slf4j-simple:1.7.12'        
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+		testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java"
 
     dependencies {
         compile project(":core")
@@ -49,6 +81,11 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+    	testCompile "junit:junit:$junitVersion"
+        testCompile 'org.slf4j:slf4j-simple:1.7.12'        
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+		testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }
 
@@ -89,44 +126,6 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-    }
-}
-
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-
-
-    dependencies {
-        compile project(":core")
-        compile 'org.slf4j:slf4j-simple:1.7.12'        
-        
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion:sources"
-    }
-}
-
-project(":core") {
-    apply plugin: "java"
-
-    dependencies {
-        compile project(":LightNVL")
-        compile project(":LuaJPP2")        
-        compile 'nl.weeaboo.gdx-styledtext:styledtext-impl:1.0'
-        compile 'org.slf4j:slf4j-api:1.7.12'
-        
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
-
-    	testCompile 'junit:junit:4.12'
-        testCompile 'org.slf4j:slf4j-simple:1.7.12'        
-        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-		testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }
 

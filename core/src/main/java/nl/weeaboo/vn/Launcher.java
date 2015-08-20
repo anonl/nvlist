@@ -287,7 +287,7 @@ public class Launcher extends ApplicationAdapter {
         System.setProperty("sun.io.serialization.extendedDebugInfo", "true");
 
         try {
-            InputStream in = NvlTestUtil.class.getResourceAsStream("logging.properties");
+            InputStream in = Launcher.class.getResourceAsStream("logging.properties");
             if (in == null) {
                 throw new FileNotFoundException();
             }
