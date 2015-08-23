@@ -7,6 +7,8 @@ import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.LvnTestUtil;
 import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.BlendMode;
+import nl.weeaboo.vn.core.IDrawablePart;
+import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.image.impl.TextureStub;
@@ -18,7 +20,7 @@ public class BaseEntityTest extends AbstractEntityTest {
 	@Test
 	public void transformablePartTest() {
         Entity e = NvlTestUtil.newImage(pr, scene);
-		TransformablePart transformable = e.getPart(pr.transformable);
+        ITransformablePart transformable = e.getPart(pr.transformable);
 
 		double x = -50;
 		double y = -50;
@@ -63,7 +65,7 @@ public class BaseEntityTest extends AbstractEntityTest {
 	@Test
 	public void drawablePartColor() {
         Entity e = NvlTestUtil.newImage(pr, scene);
-        DrawablePart drawable = e.getPart(pr.drawable);
+        IDrawablePart drawable = e.getPart(pr.drawable);
 
         // Getters/setters using doubles
         double alpha = 0.35;

@@ -12,7 +12,7 @@ function titlescreen()
 	
 	newThread(function()
 		for n=1,60 do
-			textbox.text:setText("wait " .. tostring(n))
+			textbox:setText("wait " .. tostring(n))
 			yield()
 		end
 		print("other thread")

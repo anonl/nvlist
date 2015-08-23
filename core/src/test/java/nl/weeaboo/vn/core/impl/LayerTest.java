@@ -11,6 +11,7 @@ import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.LvnTestUtil;
 import nl.weeaboo.vn.NvlTestUtil;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.LayerRenderCommand;
 import nl.weeaboo.vn.render.impl.QuadRenderCommand;
@@ -112,13 +113,13 @@ public class LayerTest extends AbstractEntityTest {
         layer.setBounds(0, 0, 1280, 720);
 
         Entity entity1 = NvlTestUtil.newImage(pr, scene);
-        TransformablePart trans1 = entity1.getPart(pr.transformable);
+        ITransformablePart trans1 = entity1.getPart(pr.transformable);
         trans1.setZ((short)1);
         trans1.setAlpha(0);
         layer.add(entity1);
 
         Entity entity2 = NvlTestUtil.newImage(pr, scene);
-        TransformablePart trans2 = entity2.getPart(pr.transformable);
+        ITransformablePart trans2 = entity2.getPart(pr.transformable);
         trans2.setZ((short)2);
         layer.add(entity2);
 
@@ -162,7 +163,7 @@ public class LayerTest extends AbstractEntityTest {
 
         Assert.assertEquals(entities.length, cmd.size());
         for (int n = 0; n < entities.length; n++) {
-            TransformablePart transformable = entities[n].getPart(pr.transformable);
+            ITransformablePart transformable = entities[n].getPart(pr.transformable);
             Assert.assertEquals(transformable.getZ(), ((QuadRenderCommand)cmd.get(n)).z);
         }
     }

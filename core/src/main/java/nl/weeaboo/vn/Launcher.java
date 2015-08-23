@@ -40,6 +40,7 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ILayer;
+import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -48,8 +49,7 @@ import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
-import nl.weeaboo.vn.core.impl.TransformablePart;
-import nl.weeaboo.vn.image.impl.ImagePart;
+import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLRenderer;
@@ -152,10 +152,10 @@ public class Launcher extends ApplicationAdapter {
         testEntity = entity.getId();
         pr = (BasicPartRegistry)env.getPartRegistry();
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
-        TransformablePart transformable = entity.getPart(pr.transformable);
+        ITransformablePart transformable = entity.getPart(pr.transformable);
         transformable.setPos(640, 360);
         transformable.setZ((short)-100);
-        ImagePart image = entity.getPart(pr.image);
+        IImagePart image = entity.getPart(pr.image);
         image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
 	}
 

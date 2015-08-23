@@ -123,7 +123,7 @@ public class Layer implements ILayer, ILayerHolder {
     @Override
     public void add(Entity e) {
         e.moveToScene(scene);
-        DrawablePart.moveToLayer(e.getPart(partRegistry.drawable), this);
+        DrawablePart.moveToLayer((DrawablePart)e.getPart(partRegistry.drawable), this);
     }
 
     @Override

@@ -12,9 +12,9 @@ import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -41,7 +41,7 @@ public class ImageLib extends LuaLib {
         BasicPartRegistry pr = env.getPartRegistry();
 
         Entity e = imageModule.createImage(layer);
-        ImagePart imagePart = e.getPart(pr.image);
+        IImagePart imagePart = e.getPart(pr.image);
 
         ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args, 2);
         if (tex != null) {

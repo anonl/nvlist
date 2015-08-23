@@ -23,13 +23,14 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.text.ITextPart;
 import nl.weeaboo.vn.text.impl.TextPart;
 
 public final class DrawBuffer implements IDrawBuffer {
 
-	private final PartType<? extends ITransformablePart> transformablePart;
-    private final PartType<? extends IImagePart> imagePart;
-    private final PartType<TextPart> textPart;
+    private final PartType<ITransformablePart> transformablePart;
+    private final PartType<IImagePart> imagePart;
+    private final PartType<ITextPart> textPart;
 
     private final Array<ILayer> layers = Array.of(ILayer.class);
     private final IntArray layerStarts = new IntArray();
@@ -82,7 +83,7 @@ public final class DrawBuffer implements IDrawBuffer {
             return;
         }
 
-        TextPart tp = e.getPart(textPart);
+        TextPart tp = (TextPart)e.getPart(textPart);
         if (tp != null) {
             tp.draw(this);
         }

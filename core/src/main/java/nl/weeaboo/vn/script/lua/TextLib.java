@@ -4,13 +4,14 @@ import org.luaj.vm2.Varargs;
 
 import nl.weeaboo.entity.Entity;
 import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.vn.core.IDrawablePart;
 import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
-import nl.weeaboo.vn.text.impl.TextPart;
+import nl.weeaboo.vn.text.ITextPart;
 
 public class TextLib extends LuaLib {
 
@@ -44,9 +45,10 @@ public class TextLib extends LuaLib {
         Entity e = imageModule.createTextDrawable(layer);
 
         // Set initial text
-        TextPart textPart = e.getPart(pr.text);
-        textPart.setBounds(0, 0, layer.getWidth(), layer.getHeight());
+        IDrawablePart drawablePart = e.getPart(pr.drawable);
+        drawablePart.setBounds(0, 0, layer.getWidth(), layer.getHeight());
 
+        ITextPart textPart = e.getPart(pr.text);
         if (!args.isnil(2)) {
             StyledText stext = args.touserdata(2, StyledText.class);
             if (stext != null) {

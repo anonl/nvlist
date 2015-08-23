@@ -41,13 +41,13 @@ public class PartRegistry implements Serializable {
 	}
 
 	/**
-	 * Registers a new part type in the registry.
-	 *
-	 * @param name The unique name for the part type.
-	 * @param partClass The class which each part of this type must extend.
-	 * @return An object containing information about the registered part.
-	 */
-	public <T extends Part> PartType<T> register(String name, Class<T> partClass) {
+     * Registers a new part type in the registry.
+     *
+     * @param name The unique name for the part type.
+     * @param partInterface The interface which each part of this type must implement.
+     * @return An object containing information about the registered part.
+     */
+    public <T> PartType<T> register(String name, Class<T> partInterface) {
 		if (entriesByName.containsKey(name)) {
 			throw new IllegalArgumentException("Name is already in use: " + name);
 		}
@@ -55,7 +55,7 @@ public class PartRegistry implements Serializable {
 		int id = generateId();
 		assert !entriesById.containsKey(id);
 
-		PartType<T> entry = new PartType<T>(id, name, partClass);
+        PartType<T> entry = new PartType<T>(id, name, partInterface);
 		entriesByName.put(name, entry);
 		entriesById.put(id, entry);
 		return entry;

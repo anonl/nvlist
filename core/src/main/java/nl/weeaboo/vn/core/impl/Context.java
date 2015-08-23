@@ -12,6 +12,7 @@ import nl.weeaboo.entity.PartType;
 import nl.weeaboo.entity.Scene;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
+import nl.weeaboo.vn.core.IDrawablePart;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -23,7 +24,7 @@ public class Context implements IContext {
 	private static final Logger LOG = LoggerFactory.getLogger(Context.class);
 
 	private final Scene scene;
-	private final PartType<? extends DrawablePart> drawablePart;
+    private final PartType<IDrawablePart> drawablePart;
     private final Screen screen;
 	private final IScriptContext scriptContext;
 
@@ -63,7 +64,7 @@ public class Context implements IContext {
 	@Override
 	public void add(Entity e) {
 		e.moveToScene(scene);
-		DrawablePart.moveToLayer(e.getPart(drawablePart), null);
+        DrawablePart.moveToLayer((DrawablePart)e.getPart(drawablePart), null);
 	}
 
 	@Override

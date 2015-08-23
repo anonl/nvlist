@@ -9,13 +9,13 @@ final class TestPartRegistry extends PartRegistry {
 	public final PartType<ModelPart> typeC;
 	public final PartType<ModelPart> typeModel;
 	public final PartType<RenderPart> typeRender;
-	
+
 	public TestPartRegistry() {
-		typeA = register("a", ModelPart.class);
-		typeB = register("b", ModelPart.class);
-		typeC = register("c", ModelPart.class);
-		typeModel = register("model", ModelPart.class);
-		typeRender = register("render", RenderPart.class);
+        typeA = register("a", ModelPart.class);
+        typeB = register("b", ModelPart.class);
+        typeC = register("c", ModelPart.class);
+        typeModel = register("model", ModelPart.class);
+        typeRender = register("render", RenderPart.class);
 	}
 
 }

@@ -24,10 +24,8 @@ import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.EntityHelper;
-import nl.weeaboo.vn.core.impl.TransformablePart;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IImagePart;
-import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
@@ -159,10 +157,10 @@ final class DebugControls {
 
     private static void createImage(ILayer layer, IImageModule imageModule, BasicPartRegistry pr) {
         Entity entity = imageModule.createImage(layer);
-        TransformablePart transformable = entity.getPart(pr.transformable);
+        ITransformablePart transformable = entity.getPart(pr.transformable);
         transformable.setPos(640, 360);
         transformable.setZ((short)entity.getId());
-        ImagePart image = entity.getPart(pr.image);
+        IImagePart image = entity.getPart(pr.image);
         image.setTexture(imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false), 5);
     }
 

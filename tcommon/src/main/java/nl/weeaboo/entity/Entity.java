@@ -174,8 +174,8 @@ public final class Entity implements IWriteReplaceSerializable {
 		return result;
 	}
 
-	public <T extends Part> void addPart(PartType<T> type, T part) {
-		addPart(type.getId(), type.cast(part)); // Perform explicit cast for non-generic aware calling code
+    public <T> void addPart(PartType<T> type, T part) {
+        addPart(type.getId(), (Part)part); // Perform explicit cast for non-generic aware calling code
 	}
 	protected void addPart(int partId, Part part) {
 		if (partId < parts.length && parts[partId] != null) {
@@ -206,7 +206,7 @@ public final class Entity implements IWriteReplaceSerializable {
 		return partId >= 0 && partId < parts.length && parts[partId] != null;
 	}
 
-	public <T extends Part> T getPart(PartType<T> type) {
+    public <T> T getPart(PartType<T> type) {
 		return type.cast(getPart(type.getId()));
 	}
 	protected Part getPart(int partId) {
@@ -216,8 +216,8 @@ public final class Entity implements IWriteReplaceSerializable {
 		return parts[partId];
 	}
 
-	public <T extends Part> void setPart(PartType<T> type, T part) {
-		setPart(type.getId(), type.cast(part)); // Perform explicit cast for non-generic aware calling code
+    public <T> void setPart(PartType<T> type, T part) {
+        setPart(type.getId(), (Part)part); // Perform explicit cast for non-generic aware calling code
 	}
 	protected void setPart(int partId, Part part) {
 		if (part != null) {
