@@ -24,7 +24,8 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 	}
 
 	//Functions
-	@Override
+    @SuppressWarnings("resource")
+    @Override
 	public void open(File f) throws IOException {
 		file = f;
 

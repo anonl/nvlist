@@ -405,7 +405,7 @@ public class BaseLib extends OneArgFunction {
 			return loadStream(r.in, "@" + r.canonicalName);
 		} finally {
 			try {
-				r.in.close();
+                r.close();
 			} catch (IOException e) {
 				//Ignore
 			}

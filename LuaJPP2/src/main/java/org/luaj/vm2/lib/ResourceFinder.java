@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,6 +21,8 @@
  ******************************************************************************/
 package org.luaj.vm2.lib;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 
 import nl.weeaboo.lua2.lib.J2sePlatform;
@@ -37,7 +39,7 @@ import nl.weeaboo.lua2.lib.J2sePlatform;
  * <p>
  * The io library does not use this API for file manipulation.
  * <p>
- * 
+ *
  * @see BaseLib
  * @see BaseLib#FINDER
  * @see J2sePlatform
@@ -48,19 +50,24 @@ public interface ResourceFinder {
 	 * Try to open a file, or return null if not found.
 	 */
 	public Resource findResource(String filename);
-	
-	public static class Resource {
-		
+
+    public static class Resource implements Closeable {
+
 		public final String canonicalName;
 		public final InputStream in;
-		
+
 		public Resource(String canonicalName, InputStream in) {
 			this.canonicalName = canonicalName;
 			this.in = in;
-			
+
 			if (canonicalName == null || in == null) throw new NullPointerException();
 		}
-		
+
+        @Override
+        public void close() throws IOException {
+            in.close();
+        }
+
 	}
-	
+
 }

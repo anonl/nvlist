@@ -36,6 +36,7 @@ class Test {
 
 			private static final long serialVersionUID = 1986140110559674826L;
 
+            @SuppressWarnings("resource")
 			@Override
 			public Resource findResource(String filename) {
 				File file = new File(filename);
