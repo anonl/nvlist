@@ -2,27 +2,25 @@ package nl.weeaboo.vn.core;
 
 import java.io.Serializable;
 
-import nl.weeaboo.entity.Entity;
+import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 
-public interface IContext extends Serializable, IDestructible, IEntityContainer {
+public interface IContext extends Serializable, IDestructible {
 
-    public void addContextListener(IContextListener contextListener);
+    void addContextListener(IContextListener contextListener);
 
-    public void removeContextListener(IContextListener contextListener);
+    void removeContextListener(IContextListener contextListener);
 
-    public boolean isActive();
+    boolean isActive();
 
-    public void updateScreen();
+    void updateScreen();
 
-    public void updateScripts();
+    void updateScripts();
 
-	public IScreen getScreen();
+    IScreen getScreen();
 
-	public IScriptContext getScriptContext();
+    IScriptContext getScriptContext();
 
-    public void setRenderEnv(IRenderEnv env);
-
-    public Entity findEntity(int entityId);
+    void setRenderEnv(IRenderEnv env);
 
 }

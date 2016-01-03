@@ -29,7 +29,7 @@ public interface ISoundController extends Serializable, IUpdateable {
      * @param channel The channel to request the contents of.
      * @return The sound in the specified channel, or {@code null} if none exists.
      */
-    ISoundPart get(int channel);
+    ISound get(int channel);
 
     /**
      * @return The master volume for the specified type.
@@ -50,7 +50,7 @@ public interface ISoundController extends Serializable, IUpdateable {
      *        stopped first.
      * @param sound The sound object to store.
      */
-    void set(int channel, ISoundPart sound);
+    void set(int channel, ISound sound);
 
     /**
      * Changes the master volume for the specified type. The master volume is multiplied together with the

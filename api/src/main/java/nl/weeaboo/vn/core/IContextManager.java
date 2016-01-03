@@ -3,8 +3,6 @@ package nl.weeaboo.vn.core;
 import java.io.Serializable;
 import java.util.Collection;
 
-import nl.weeaboo.entity.Entity;
-
 /** Manages the active {@link IContext} and context lifetimes. */
 public interface IContextManager extends Serializable, IUpdateable {
 
@@ -22,7 +20,5 @@ public interface IContextManager extends Serializable, IUpdateable {
     void setContextActive(IContext context, boolean active);
 
     void setRenderEnv(IRenderEnv env);
-
-    Entity findEntity(int entityId);
 
 }

@@ -1,0 +1,31 @@
+package nl.weeaboo.vn.text;
+
+import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.styledtext.TextStyle;
+
+public interface IText {
+
+    TextStyle DEFAULT_STYLE = TextStyle.fromString("fontSize=32|align=center");
+
+    /** @see #setText(StyledText) */
+    StyledText getText();
+
+    /** @see #setText(StyledText) */
+    void setText(String text); // Calls setText(StyledText)
+
+    /** Sets the text that should be rendered. */
+    void setText(StyledText stext);
+
+    /** @see #setDefaultStyle(TextStyle) */
+    TextStyle getDefaultStyle();
+
+    /** Sets the default text style for the rendered text. */
+    void setDefaultStyle(TextStyle style);
+
+    /** @return {@code true} if the default direction of this text is right-to-left */
+    boolean isRightToLeft();
+
+    /** Sets the default direction of this text */
+    void setRightToLeft(boolean rtl);
+
+}

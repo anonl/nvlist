@@ -4,9 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 
-import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IModule;
-import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public interface ISoundModule extends IModule {
@@ -19,8 +17,7 @@ public interface ISoundModule extends IModule {
      *
      * @throws FileNotFoundException If no sound data could be found for the specified filename.
      */
-    public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo)
-            throws IOException;
+    public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException;
 
     /**
      * Returns the human-readable name of a sound file.

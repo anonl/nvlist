@@ -3,18 +3,21 @@ package nl.weeaboo.vn.image;
 import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.entity.Entity;
-import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.scene.IButton;
+import nl.weeaboo.vn.scene.IImageDrawable;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.ITextDrawable;
+import nl.weeaboo.vn.script.IScriptContext;
 
 public interface IImageModule extends IModule {
 
-    Entity createImage(ILayer layer);
+    IImageDrawable createImage(ILayer layer);
 
-    Entity createTextDrawable(ILayer layer);
+    ITextDrawable createTextDrawable(ILayer layer);
 
-    Entity createButton(ILayer layer);
+    IButton createButton(ILayer layer, IScriptContext scriptContext);
 
     /**
      * Creates a texture object from the specified filename.

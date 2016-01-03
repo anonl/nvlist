@@ -9,11 +9,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Queues;
 
@@ -82,19 +84,17 @@ public class LuaConsole {
         inputField.setTextFieldListener(new TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char c) {
-                String text = inputField.getText();
-                if (!text.trim().isEmpty() && Scene2dUtil.isEnterChar(c)) {
-                    append(text);
-
-                    inputBuffer.addLast(text);
-                    while (inputBuffer.size() > INPUT_BUFFER_LIMIT) {
-                        inputBuffer.removeFirst();
-                    }
-                    inputBufferIndex = inputBuffer.size();
-                    inputField.setText("");
-
-                    eval(text);
+                if (Scene2dUtil.isEnterChar(c)) {
+                    evalInput();
                 }
+            }
+        });
+
+        ImageTextButton inputButton = new ImageTextButton("Eval", skin);
+        inputButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                evalInput();
             }
         });
 
@@ -102,12 +102,31 @@ public class LuaConsole {
 
         layout = new Table(skin);
         layout.setBounds(pad, pad, stage.getWidth() - pad * 2, stage.getHeight() - pad * 2);
-        layout.add(console).expand().fill();
+        layout.add(console).colspan(2).expand().fill();
         layout.row();
-        layout.add(inputField).bottom().fillX();
+        layout.add(inputField).bottom().expandX().fill();
+        layout.add(inputButton).bottom().fill();
 
         stage.addActor(layout);
         stage.setKeyboardFocus(inputField);
+    }
+
+    private void evalInput() {
+        String text = inputField.getText();
+        if (text.trim().isEmpty()) {
+            return;
+        }
+
+        append(text);
+
+        inputBuffer.addLast(text);
+        while (inputBuffer.size() > INPUT_BUFFER_LIMIT) {
+            inputBuffer.removeFirst();
+        }
+        inputBufferIndex = inputBuffer.size();
+        inputField.setText("");
+
+        eval(text);
     }
 
     private void hide() {

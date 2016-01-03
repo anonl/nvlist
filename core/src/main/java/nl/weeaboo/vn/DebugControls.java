@@ -10,29 +10,31 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.Iterables;
 
-import nl.weeaboo.entity.Entity;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.IScreen;
-import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
-import nl.weeaboo.vn.core.impl.EntityHelper;
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.image.IImagePart;
+import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
+import nl.weeaboo.vn.scene.IButton;
+import nl.weeaboo.vn.scene.IImageDrawable;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.scene.ITextDrawable;
+import nl.weeaboo.vn.scene.ITransformable;
+import nl.weeaboo.vn.scene.impl.EntityHelper;
+import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.lua.LuaConsole;
+import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
-import nl.weeaboo.vn.text.impl.TextPart;
 
 final class DebugControls {
 
@@ -47,9 +49,15 @@ final class DebugControls {
     public void update(INovel novel) {
         IEnvironment env = novel.getEnv();
         IRenderEnv renderEnv = env.getRenderEnv();
-        BasicPartRegistry pr = (BasicPartRegistry)env.getPartRegistry();
+
         IContext activeContext = Iterables.get(env.getContextManager().getActiveContexts(), 0);
-        IScreen screen = (activeContext != null ? activeContext.getScreen() : null);
+        IScriptContext scriptContext = null;
+        IScreen screen = null;
+        if (activeContext != null) {
+            scriptContext = activeContext.getScriptContext();
+            screen = activeContext.getScreen();
+        }
+
         boolean alt = Gdx.input.isKeyPressed(Keys.ALT_LEFT);
 
         // Reset
@@ -98,17 +106,22 @@ final class DebugControls {
         // Image
         IImageModule imageModule = env.getImageModule();
         if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.I)) {
-            createImage(screen.getRootLayer(), imageModule, pr);
+            createImage(screen.getRootLayer(), imageModule);
         }
         if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.J)) {
             for (int n = 0; n < 100; n++) {
-                createImage(screen.getRootLayer(), imageModule, pr);
+                createImage(screen.getRootLayer(), imageModule);
             }
         }
 
         // Text
         if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.T)) {
-            createText(screen.getRootLayer(), pr);
+            createText(screen.getRootLayer());
+        }
+
+        // Button
+        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.B)) {
+            createButton(screen.getRootLayer(), scriptContext);
         }
 
         // Music
@@ -118,9 +131,9 @@ final class DebugControls {
         }
         if (alt && Gdx.input.isKeyJustPressed(Keys.M)) {
             try {
-                Entity e = soundModule.createSound(screen, SoundType.MUSIC,
+                ISound sound = soundModule.createSound(SoundType.MUSIC,
                         new ResourceLoadInfo("music.ogg"));
-                e.getPart(pr.sound).start(-1);
+                sound.start(-1);
             } catch (IOException e) {
                 LOG.warn("Audio error", e);
             }
@@ -133,7 +146,7 @@ final class DebugControls {
         }
     }
 
-    public void update(ITransformablePart transformable, IImagePart image) {
+    public void update(ITransformable transformable, ITextureRenderer image) {
         if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
             if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.rotate(4);
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.rotate(-4);
@@ -155,25 +168,28 @@ final class DebugControls {
         }
     }
 
-    private static void createImage(ILayer layer, IImageModule imageModule, BasicPartRegistry pr) {
-        Entity entity = imageModule.createImage(layer);
-        ITransformablePart transformable = entity.getPart(pr.transformable);
-        transformable.setPos(640, 360);
-        transformable.setZ((short)entity.getId());
-        IImagePart image = entity.getPart(pr.image);
-        image.setTexture(imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false), 5);
+    private static void createImage(ILayer layer, IImageModule imageModule) {
+        IImageDrawable image = imageModule.createImage(layer);
+        image.setPos(640, 360);
+        image.setAlign(.5, .5);
+        image.setTexture(imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false));
     }
 
-    private static void createText(ILayer layer, BasicPartRegistry pr) {
-        EntityHelper entityHelper = new EntityHelper(pr);
-        Entity e = entityHelper.createScriptableEntity(layer);
-        TextPart textPart = entityHelper.addTextPart(e, layer);
+    private static void createButton(ILayer layer, IScriptContext scriptContext) {
+        EntityHelper entityHelper = new EntityHelper();
+        IButton button = entityHelper.createButton(layer, scriptContext);
+        button.setText("Test");
+    }
 
-        textPart.setBounds(200, 200, 400, 400);
-        textPart.setZ((short)-1000);
-        textPart.setDefaultStyle(new TextStyle(null, 32));
-        textPart.setText("1234567890");
-        textPart.setVisibleText(6.5f);
+    private static void createText(ILayer layer) {
+        EntityHelper entityHelper = new EntityHelper();
+        ITextDrawable text = entityHelper.createText(layer);
+
+        text.setBounds(200, 200, 400, 400);
+        text.setZ((short)-1000);
+        text.setDefaultStyle(new TextStyle(null, 32));
+        text.setText("1234567890");
+        text.setVisibleText(6.5f);
     }
 
 }

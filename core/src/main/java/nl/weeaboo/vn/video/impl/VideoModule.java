@@ -13,7 +13,6 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
-import nl.weeaboo.vn.core.impl.EntityHelper;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
 
@@ -26,7 +25,6 @@ public class VideoModule implements IVideoModule {
 
     protected final IEnvironment env;
     protected final VideoResourceLoader resourceLoader;
-    protected final EntityHelper entityHelper;
 
     private IVideo fullscreenMovie;
     private String videoFolder = DEFAULT_VIDEO_FOLDER;
@@ -38,7 +36,6 @@ public class VideoModule implements IVideoModule {
     public VideoModule(DefaultEnvironment env, VideoResourceLoader resourceLoader) {
         this.env = env;
         this.resourceLoader = resourceLoader;
-        this.entityHelper = new EntityHelper(env.getPartRegistry());
 
         IRenderEnv renderEnv = env.getRenderEnv();
         videoResolution = renderEnv.getVirtualSize();

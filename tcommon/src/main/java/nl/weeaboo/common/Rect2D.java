@@ -8,11 +8,11 @@ public final class Rect2D implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static Rect2D EMPTY = new Rect2D(0, 0, 0, 0);
-	
+
 	public final double x, y, w, h;
 
 	private Rect2D(double x, double y, double w, double h) {
-		if (w < 0 || Double.isInfinite(w) || Double.isNaN(w) || h < 0 || Double.isInfinite(w) || Double.isNaN(w)) {
+		if (w < 0 || Double.isInfinite(w) || Double.isNaN(w) || h < 0 || Double.isInfinite(h) || Double.isNaN(h)) {
 			throw new IllegalArgumentException("Dimensions must be >= 0 and finite, w=" + w + ", h=" + h);
 		}
 
@@ -21,12 +21,16 @@ public final class Rect2D implements Serializable {
 		this.w = w;
 		this.h = h;
 	}
-	
+
 	public static Rect2D of(double x, double y, double w, double h) {
 		return new Rect2D(x, y, w, h);
 	}
-	
+
 	//Functions
+    public Rect2D translatedCopy(double dx, double dy) {
+        return Rect2D.of(x + dx, y + dy, w, h);
+    }
+
 	public static Rect2D combine(Rect2D... r) {
 		if (r.length == 0) {
 			return EMPTY;

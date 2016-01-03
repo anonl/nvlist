@@ -1,11 +1,12 @@
 package nl.weeaboo.vn.script;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Interface for scheduling pieces of code to run on the main thread of a script context.
  */
-public interface IScriptEventDispatcher {
+public interface IScriptEventDispatcher extends Serializable {
 
 	/**
 	 * Enqueues an event

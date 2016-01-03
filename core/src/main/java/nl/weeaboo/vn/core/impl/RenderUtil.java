@@ -28,17 +28,10 @@ final class RenderUtil {
 	}
 
     /**
-     * @param outerW Width of the bounding rectangle within which the text should be positioned. 
-     * @param outerH Height of the bounding rectangle within which the text should be positioned. 
+     * @param outerH Height of the bounding rectangle within which the text should be positioned.
      */
-    public static Vec2 getTextRendererXY(double outerW, double outerH, ITextRenderer tr, double valign) {
+    public static Vec2 getTextRendererXY(double outerH, ITextRenderer tr, double valign) {
         double x = 0;
-        /*out.x = LayoutUtil.alignAnchorX(outerW, tr.getTextWidth(), anchor);
-        if (tr.isRightToLeft()) {
-            x -= tr.getTextTrailing();
-        } else {
-            x -= tr.getTextLeading();
-        }*/
         double y = (outerH - tr.getTextHeight()) * valign;
         return new Vec2(x, y);
     }

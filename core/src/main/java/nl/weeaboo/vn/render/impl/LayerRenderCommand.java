@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.render.impl;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.ILayer;
+import nl.weeaboo.vn.scene.ILayer;
 
 public final class LayerRenderCommand extends BaseRenderCommand {
 

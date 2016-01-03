@@ -46,7 +46,6 @@ public class EnvironmentFactory {
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
-        env.partRegistry = new BasicPartRegistry();
         env.systemEventHandler = new SystemEventHandler();
         env.resourceLoadLog = new ResourceLoadLog();
 

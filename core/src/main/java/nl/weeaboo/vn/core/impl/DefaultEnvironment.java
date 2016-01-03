@@ -19,7 +19,6 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
-    BasicPartRegistry partRegistry;
     IContextManager contextManager;
     LuaScriptEnv scriptEnv;
     ISystemEventHandler systemEventHandler;
@@ -60,11 +59,6 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public IContextManager getContextManager() {
         return checkSet(contextManager);
-    }
-
-    @Override
-    public BasicPartRegistry getPartRegistry() {
-        return checkSet(partRegistry);
     }
 
     @Override

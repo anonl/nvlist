@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.entity.PartRegistry;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.Preference;
@@ -25,7 +24,6 @@ public interface IEnvironment extends IDestructible {
     <T> T getPref(Preference<T> pref);
 
     IContextManager getContextManager();
-    PartRegistry getPartRegistry();
     IScriptEnv getScriptEnv();
     IScriptLoader getScriptLoader();
     IRenderEnv getRenderEnv();

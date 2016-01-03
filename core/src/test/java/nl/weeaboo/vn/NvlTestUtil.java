@@ -11,17 +11,12 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.entity.Entity;
-import nl.weeaboo.entity.Scene;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.RenderEnv;
-import nl.weeaboo.vn.core.impl.Screen;
-import nl.weeaboo.vn.core.impl.TransformablePart;
-import nl.weeaboo.vn.image.impl.ImagePart;
 import nl.weeaboo.vn.image.impl.TestTexture;
+import nl.weeaboo.vn.scene.impl.ImageDrawable;
+import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.impl.ScriptPart;
 
 public final class NvlTestUtil {
 
@@ -33,27 +28,19 @@ public final class NvlTestUtil {
 	private NvlTestUtil() {
 	}
 
-	public static Screen newScreen(BasicPartRegistry pr, Scene scene) {
+    public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
-	    return new Screen(scene, Rect2D.of(0, 0, vsize.w, vsize.h), pr, BASIC_ENV);
+        return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV);
 	}
 
 	public static IScriptContext newScriptContext() {
 	    return null;
 	}
 
-	public static Entity newImage(BasicPartRegistry pr, Scene scene) {
-		TransformablePart transformable = new TransformablePart();
-		ImagePart image = new ImagePart(transformable);
+    public static ImageDrawable newImage() {
+        ImageDrawable image = new ImageDrawable();
         image.setTexture(new TestTexture(2, 2));
-		ScriptPart script = new ScriptPart();
-
-		Entity e = scene.createEntity();
-		e.setPart(pr.drawable, transformable);
-		e.setPart(pr.transformable, transformable);
-        e.setPart(pr.image, image);
-        e.setPart(pr.script, script);
-		return e;
+        return image;
 	}
 
 	public static void configureLogger() {

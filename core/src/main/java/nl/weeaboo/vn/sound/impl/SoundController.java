@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.sound.ISoundController;
-import nl.weeaboo.vn.sound.ISoundPart;
+import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.SoundType;
 
 public class SoundController implements ISoundController {
@@ -20,8 +20,8 @@ public class SoundController implements ISoundController {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
     private final Map<SoundType, Double> masterVolume;
-    private final Map<Integer, ISoundPart> sounds;
-    private final List<ISoundPart> pausedList;
+    private final Map<Integer, ISound> sounds;
+    private final List<ISound> pausedList;
     private boolean paused;
 
     protected SoundController() {
@@ -30,17 +30,17 @@ public class SoundController implements ISoundController {
             masterVolume.put(type, 1.0);
         }
 
-        sounds = new HashMap<Integer, ISoundPart>();
-        pausedList = new ArrayList<ISoundPart>();
+        sounds = new HashMap<Integer, ISound>();
+        pausedList = new ArrayList<ISound>();
     }
 
     //Functions
     @Override
     public void update() {
-        Iterator<Entry<Integer, ISoundPart>> itr = sounds.entrySet().iterator();
+        Iterator<Entry<Integer, ISound>> itr = sounds.entrySet().iterator();
         while (itr.hasNext()) {
-            Entry<Integer, ISoundPart> entry = itr.next();
-            ISoundPart s = entry.getValue();
+            Entry<Integer, ISound> entry = itr.next();
+            ISound s = entry.getValue();
             if (s.isStopped()) {
                 pausedList.remove(s);
                 itr.remove();
@@ -55,9 +55,9 @@ public class SoundController implements ISoundController {
             stop(channel);
         }
 
-        ISoundPart ps[] = pausedList.toArray(new ISoundPart[pausedList.size()]);
+        ISound ps[] = pausedList.toArray(new ISound[pausedList.size()]);
         pausedList.clear();
-        for (ISoundPart sound : ps) {
+        for (ISound sound : ps) {
             sound.stop(0);
         }
     }
@@ -69,7 +69,7 @@ public class SoundController implements ISoundController {
 
     @Override
     public void stop(int channel, int fadeOutMillis) {
-        ISoundPart sound = sounds.remove(channel);
+        ISound sound = sounds.remove(channel);
         if (sound != null) {
             pausedList.remove(sound);
             sound.stop(fadeOutMillis);
@@ -78,7 +78,7 @@ public class SoundController implements ISoundController {
 
     //Getters
     @Override
-    public ISoundPart get(int channel) {
+    public ISound get(int channel) {
         return sounds.get(channel);
     }
 
@@ -88,9 +88,9 @@ public class SoundController implements ISoundController {
         return masterVolume.get(type);
     }
 
-    protected Iterable<ISoundPart> getSounds(SoundType type) {
-        Collection<ISoundPart> result = new ArrayList<ISoundPart>();
-        for (ISoundPart sound : sounds.values()) {
+    protected Iterable<ISound> getSounds(SoundType type) {
+        Collection<ISound> result = new ArrayList<ISound>();
+        for (ISound sound : sounds.values()) {
             if (sound.getSoundType() == type) {
                 result.add(sound);
             }
@@ -114,7 +114,7 @@ public class SoundController implements ISoundController {
     }
 
     @Override
-    public void set(int channel, ISoundPart sound) {
+    public void set(int channel, ISound sound) {
         stop(channel);
 
         if (sounds.containsKey(channel)) {
@@ -130,7 +130,7 @@ public class SoundController implements ISoundController {
     public void setMasterVolume(SoundType type, double vol) {
         masterVolume.put(type, vol);
 
-        for (ISoundPart sound : getSounds(type)) {
+        for (ISound sound : getSounds(type)) {
             sound.setMasterVolume(vol);
         }
     }
@@ -140,14 +140,14 @@ public class SoundController implements ISoundController {
         paused = p;
 
         if (paused) {
-            for (ISoundPart sound : sounds.values()) {
+            for (ISound sound : sounds.values()) {
                 if (!sound.isPaused()) {
                     sound.pause();
                     pausedList.add(sound);
                 }
             }
         } else {
-            for (ISoundPart sound : pausedList) {
+            for (ISound sound : pausedList) {
                 sound.resume();
             }
             pausedList.clear();

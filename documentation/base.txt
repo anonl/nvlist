@@ -28,12 +28,6 @@ Logically, an Entity is merely a collection of Parts with a shared lifetime. Ent
 - sound
   Contains methods for controlling playback of an audio clip or streaming music. Currently has no interaction with any other parts.
 
-*** Rendering ***
-
-The draw() method is
-TODO: Expand
-Layer -> Drawable
-
 *** Input handling ***
 
 Because visibility information from IDrawablePart is necessary to determine if a click lies inside the visual bounds of the entity, input handling flows through DrawablePart (which then forwards it to other parts).

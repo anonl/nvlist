@@ -12,7 +12,7 @@ import nl.weeaboo.common.StringUtil;
 
 public final class Vec2 implements Cloneable, Externalizable {
 
-	public double x, y;
+    public double x, y;
 
 	public Vec2() {
 		this(0, 0);
@@ -69,7 +69,7 @@ public final class Vec2 implements Cloneable, Externalizable {
 			return DoubleMath.fuzzyEquals(x, v.x, epsilon)
 					&& DoubleMath.fuzzyEquals(y, v.y, epsilon);
 		}
-		
+
 		return x == v.x && y == v.y;
 	}
 

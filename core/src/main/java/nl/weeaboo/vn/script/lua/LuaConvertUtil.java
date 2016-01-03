@@ -2,12 +2,12 @@ package nl.weeaboo.vn.script.lua;
 
 import org.luaj.vm2.Varargs;
 
-import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.script.ScriptException;
 
 final class LuaConvertUtil {

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import nl.weeaboo.entity.Entity;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
@@ -103,17 +102,6 @@ public class ContextManager implements IContextManager {
         for (IContext context : contexts) {
             context.setRenderEnv(env);
         }
-    }
-
-    @Override
-    public Entity findEntity(int entityId) {
-        for (IContext context : contexts) {
-            Entity e = context.findEntity(entityId);
-            if (e != null) {
-                return e;
-            }
-        }
-        return null;
     }
 
 }

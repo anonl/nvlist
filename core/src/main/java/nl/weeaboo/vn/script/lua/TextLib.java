@@ -2,16 +2,14 @@ package nl.weeaboo.vn.script.lua;
 
 import org.luaj.vm2.Varargs;
 
-import nl.weeaboo.entity.Entity;
+import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.styledtext.StyledText;
-import nl.weeaboo.vn.core.IDrawablePart;
-import nl.weeaboo.vn.core.ILayer;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
-import nl.weeaboo.vn.text.ITextPart;
 
 public class TextLib extends LuaLib {
 
@@ -40,25 +38,20 @@ public class TextLib extends LuaLib {
         }
 
         IImageModule imageModule = env.getImageModule();
-        BasicPartRegistry pr = env.getPartRegistry();
-
-        Entity e = imageModule.createTextDrawable(layer);
+        ITextDrawable textDrawable = imageModule.createTextDrawable(layer);
 
         // Set initial text
-        IDrawablePart drawablePart = e.getPart(pr.drawable);
-        drawablePart.setBounds(0, 0, layer.getWidth(), layer.getHeight());
-
-        ITextPart textPart = e.getPart(pr.text);
+        textDrawable.setBounds(0, 0, layer.getWidth(), layer.getHeight());
         if (!args.isnil(2)) {
             StyledText stext = args.touserdata(2, StyledText.class);
             if (stext != null) {
-                textPart.setText(stext);
+                textDrawable.setText(stext);
             } else {
-                textPart.setText(args.tojstring(2));
+                textDrawable.setText(args.tojstring(2));
             }
         }
 
-        return LuaEntity.toUserdata(e, pr);
+        return LuajavaLib.toUserdata(textDrawable, ITextDrawable.class);
     }
 
 }

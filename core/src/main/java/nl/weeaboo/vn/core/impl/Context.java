@@ -7,15 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.entity.Entity;
-import nl.weeaboo.entity.PartType;
-import nl.weeaboo.entity.Scene;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
-import nl.weeaboo.vn.core.IDrawablePart;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.script.IScriptContext;
 
 public class Context implements IContext {
@@ -23,8 +20,6 @@ public class Context implements IContext {
 	private static final long serialVersionUID = CoreImpl.serialVersionUID;
 	private static final Logger LOG = LoggerFactory.getLogger(Context.class);
 
-	private final Scene scene;
-    private final PartType<IDrawablePart> drawablePart;
     private final Screen screen;
 	private final IScriptContext scriptContext;
 
@@ -34,8 +29,6 @@ public class Context implements IContext {
 	private boolean destroyed;
 
     public Context(ContextArgs contextArgs) {
-		this.scene = Checks.checkNotNull(contextArgs.scene);
-		this.drawablePart = Checks.checkNotNull(contextArgs.drawablePart);
 		this.screen = Checks.checkNotNull(contextArgs.screen);
 		this.scriptContext = contextArgs.scriptContext;
 	}
@@ -60,17 +53,6 @@ public class Context implements IContext {
     public void removeContextListener(IContextListener contextListener) {
         contextListeners.remove(contextListener);
     }
-
-	@Override
-	public void add(Entity e) {
-		e.moveToScene(scene);
-        DrawablePart.moveToLayer((DrawablePart)e.getPart(drawablePart), null);
-	}
-
-	@Override
-	public boolean contains(Entity e) {
-		return scene.contains(e);
-	}
 
 	private void fireDestroyed() {
         for (IContextListener cl : contextListeners) {
@@ -101,11 +83,6 @@ public class Context implements IContext {
 	public void updateScripts() {
 	    scriptContext.updateThreads(this);
 	}
-
-    @Override
-    public Entity findEntity(int entityId) {
-        return scene.getEntity(entityId);
-    }
 
 	//Getters
 	@Override

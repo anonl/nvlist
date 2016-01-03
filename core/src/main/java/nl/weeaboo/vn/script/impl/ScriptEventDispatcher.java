@@ -10,7 +10,7 @@ import java.util.List;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
 
-public class ScriptEventDispatcher implements IScriptEventDispatcher, Serializable {
+public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
 	private static final long serialVersionUID = ScriptImpl.serialVersionUID;
 

@@ -7,7 +7,7 @@ public final class Rect implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static Rect EMPTY = new Rect(0, 0, 0, 0);
-	
+
 	public final int x, y, w, h;
 
 	private Rect(int x, int y, int w, int h) {
@@ -27,8 +27,12 @@ public final class Rect implements Serializable {
 		}
 		return new Rect(x, y, w, h);
 	}
-	
+
 	// Functions
+    public Rect translatedCopy(int dx, int dy) {
+        return Rect.of(x + dx, y + dy, w, h);
+    }
+
 	public static Rect combine(Rect... r) {
 		if (r.length == 0) {
 			return EMPTY;

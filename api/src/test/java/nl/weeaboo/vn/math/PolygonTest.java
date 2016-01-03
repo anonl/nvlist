@@ -1,22 +1,23 @@
 package nl.weeaboo.vn.math;
 
 
-import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.LvnTestUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.LvnTestUtil;
 
 public class PolygonTest {
 
     @Test
     public void boundsTest() {
         Rect2D r = Rect2D.of(1, 2, 3, 4);
-        Polygon aligned = Polygon.rotatedRect(Matrix.identityMatrix(), r.x, r.y, r.w, r.h);
+        Polygon aligned = Polygon.transformedRect(Matrix.identityMatrix(), r);
         LvnTestUtil.assertEquals(r, aligned.getBoundingRect());
 
         // Bounds when one or more coords are NaN
-        Polygon nanPoly = Polygon.rotatedRect(Matrix.identityMatrix(), r.x, Double.NaN, r.w, r.h);
+        r = r.translatedCopy(Double.NaN, 0);
+        Polygon nanPoly = Polygon.transformedRect(Matrix.identityMatrix(), r);
         LvnTestUtil.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect());
         Assert.assertFalse(nanPoly.contains(0, 0)); // Bound w/h are exclusive
     }
@@ -24,7 +25,7 @@ public class PolygonTest {
     @Test
     public void containsTest() {
         Rect2D r = Rect2D.of(1, 2, 3, 4);
-        Polygon aligned = Polygon.rotatedRect(Matrix.identityMatrix(), r.x, r.y, r.w, r.h);
+        Polygon aligned = Polygon.transformedRect(Matrix.identityMatrix(), r);
 
         Assert.assertTrue(aligned.contains(1, 2)); //Top-left corner
         Assert.assertTrue(aligned.contains(1, 5.99)); //Bottom-left corner

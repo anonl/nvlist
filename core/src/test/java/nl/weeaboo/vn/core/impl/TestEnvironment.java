@@ -28,7 +28,6 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.PREFS.set(prefs);
 
         TestEnvironment env = new TestEnvironment();
-        env.partRegistry = new BasicPartRegistry();
         env.renderEnv = NvlTestUtil.BASIC_ENV;
         env.systemEventHandler = new TestSystemEventHandler();
         env.resourceLoadLog = new ResourceLoadLogStub();

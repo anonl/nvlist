@@ -6,11 +6,9 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.entity.Entity;
-import nl.weeaboo.vn.core.IScreen;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
-import nl.weeaboo.vn.core.impl.EntityHelper;
+import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
@@ -22,7 +20,6 @@ public class SoundModule implements ISoundModule {
 
     protected final DefaultEnvironment env;
     protected final SoundResourceLoader resourceLoader;
-    protected final EntityHelper entityHelper;
 
     private final AudioManager soundStore;
     private final ISoundController soundController;
@@ -36,7 +33,6 @@ public class SoundModule implements ISoundModule {
 
         this.env = env;
         this.resourceLoader = resourceLoader;
-        this.entityHelper = new EntityHelper(env.getPartRegistry());
 
         this.soundStore = soundStore;
         this.soundController = soundController;
@@ -53,7 +49,7 @@ public class SoundModule implements ISoundModule {
     }
 
     @Override
-    public Entity createSound(IScreen screen, SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
+    public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
         String filename = loadInfo.getFilename();
         resourceLoader.checkRedundantFileExt(filename);
 
@@ -66,9 +62,7 @@ public class SoundModule implements ISoundModule {
 
         IAudioAdapter audio = soundStore.getMusic(resourceLoader, normalized);
 
-        Entity e = entityHelper.createScriptableEntity(screen);
-        entityHelper.addSoundPart(e, soundController, stype, normalized, audio);
-        return e;
+        return new Sound(soundController, stype, normalized, audio);
     }
 
     @Override

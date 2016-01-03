@@ -24,7 +24,6 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 	}
 
 	//Functions
-    @SuppressWarnings("resource")
     @Override
 	public void open(File f) throws IOException {
 		file = f;
@@ -52,15 +51,15 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 	}
 
 	@Override
-	public void closeImpl() {
-		try {
-			if (rfile != null) {
-			    rfile.close();
-			}
-		} catch (IOException e) {
-		    // Ignore
-		}
-		rfile = null;
+    protected void closeImpl() {
+        if (rfile != null) {
+            try {
+                rfile.close();
+            } catch (IOException e) {
+                // Ignore
+            }
+            rfile = null;
+        }
 	}
 
 	protected abstract ArchiveFileRecord[] initRecords(IRandomAccessFile f) throws IOException;

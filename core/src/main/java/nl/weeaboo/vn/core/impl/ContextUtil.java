@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.scene.IScreen;
 
 public final class ContextUtil {
 

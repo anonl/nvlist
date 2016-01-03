@@ -26,7 +26,6 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.entity.Entity;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
@@ -39,21 +38,19 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ILayer;
-import nl.weeaboo.vn.core.ITransformablePart;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
-import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
-import nl.weeaboo.vn.render.impl.GLRenderer;
+import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
+import nl.weeaboo.vn.scene.IImageDrawable;
+import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.sound.impl.MusicStore;
 
 public class Launcher extends ApplicationAdapter {
@@ -77,10 +74,8 @@ public class Launcher extends ApplicationAdapter {
 	private Vector2 spritePos = new Vector2();
 
     private Novel novel;
-    private GLRenderer renderer;
+    private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
-    private BasicPartRegistry pr;
-    private int testEntity;
 
     public Launcher() {
         this("res/");
@@ -148,15 +143,13 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
         IContext context = Iterables.get(env.getContextManager().getActiveContexts(), 0);
         ILayer rootLayer = context.getScreen().getRootLayer();
-        Entity entity = env.getImageModule().createImage(rootLayer);
-        testEntity = entity.getId();
-        pr = (BasicPartRegistry)env.getPartRegistry();
+
+        IImageDrawable image = env.getImageModule().createImage(rootLayer);
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
-        ITransformablePart transformable = entity.getPart(pr.transformable);
-        transformable.setPos(640, 360);
-        transformable.setZ((short)-100);
-        IImagePart image = entity.getPart(pr.image);
-        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
+        image.setPos(640, 360);
+        image.setZ((short)-100);
+        image.setAlign(.5, .5);
+        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false));
 	}
 
     private IFontStore createFontStore() {
@@ -236,10 +229,10 @@ public class Launcher extends ApplicationAdapter {
 
         debugControls.update(novel);
 
-        Entity entity = novel.getEnv().getContextManager().findEntity(testEntity);
-        if (entity != null) {
-            debugControls.update(entity.getPart(pr.transformable), entity.getPart(pr.image));
-        }
+//        Entity entity = novel.getEnv().getContextManager().findEntity(testEntity);
+//        if (entity != null) {
+//            debugControls.update(entity.getPart(pr.transformable), entity.getPart(pr.image));
+//        }
 
         novel.update();
 	}
@@ -249,11 +242,11 @@ public class Launcher extends ApplicationAdapter {
 
         // Render novel
         if (renderer == null) {
-            renderer = new GLRenderer(env.getRenderEnv(), new RenderStats());
+            renderer = new GLScreenRenderer(env.getRenderEnv(), new RenderStats());
         }
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         if (drawBuffer == null) {
-            drawBuffer = new DrawBuffer(pr);
+            drawBuffer = new DrawBuffer();
         } else {
             drawBuffer.reset();
         }

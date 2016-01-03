@@ -9,38 +9,19 @@ import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Sort;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.entity.Entity;
-import nl.weeaboo.entity.PartType;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.core.IDrawablePart;
-import nl.weeaboo.vn.core.ILayer;
-import nl.weeaboo.vn.core.ITransformablePart;
-import nl.weeaboo.vn.core.impl.AlignUtil;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
-import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.text.ITextPart;
-import nl.weeaboo.vn.text.impl.TextPart;
+import nl.weeaboo.vn.scene.ILayer;
 
 public final class DrawBuffer implements IDrawBuffer {
-
-    private final PartType<ITransformablePart> transformablePart;
-    private final PartType<IImagePart> imagePart;
-    private final PartType<ITextPart> textPart;
 
     private final Array<ILayer> layers = Array.of(ILayer.class);
     private final IntArray layerStarts = new IntArray();
     private final Array<BaseRenderCommand> commands = Array.of(BaseRenderCommand.class);
-
-	public DrawBuffer(BasicPartRegistry partRegistry) {
-		this.transformablePart = partRegistry.transformable;
-		this.imagePart = partRegistry.image;
-        this.textPart = partRegistry.text;
-	}
 
 	@Override
 	public void reset() {
@@ -76,42 +57,8 @@ public final class DrawBuffer implements IDrawBuffer {
 	}
 
 	@Override
-	public void draw(Entity e) {
-		IImagePart ip = e.getPart(imagePart);
-        if (ip != null) {
-            drawWithTexture(e, ip.getTexture());
-            return;
-        }
-
-        TextPart tp = (TextPart)e.getPart(textPart);
-        if (tp != null) {
-            tp.draw(this);
-        }
-	}
-
-	@Override
-	public void drawWithTexture(Entity e, ITexture tex) {
-        if (tex == null) {
-            return;
-        }
-
-		final ITransformablePart tp = e.getPart(transformablePart);
-		final IDrawablePart dp = tp;
-		final IImagePart ip = e.getPart(imagePart);
-
-        double offsetX = AlignUtil.getAlignOffset(tex.getWidth(), tp.getAlignX());
-        double offsetY = AlignUtil.getAlignOffset(tex.getHeight(), tp.getAlignY());
-        Area2D bounds = Area2D.of(offsetX, offsetY, tp.getUnscaledWidth(), tp.getUnscaledHeight());
-
-        drawQuad(dp.getZ(), dp.isClipEnabled(), dp.getBlendMode(), dp.getColorARGB(),
-                tex, tp.getTransform(), bounds, ip.getUV());
-//            draw(new FadeQuadCommand(dp.getZ(), dp.isClipEnabled(), dp.getBlendMode(), dp.getColorARGB(),
-//                    tex, tp.getTransform(), bounds, ip.getUV(), 6, true, 0.5, 0.5));
-	}
-
-	@Override
 	public void drawQuad(short z, boolean clipEnabled, BlendMode blendMode, int argb,
-			ITexture tex, Matrix trans, Area2D bounds, Area2D uv)
+			Matrix trans, ITexture tex, Area2D bounds, Area2D uv)
 	{
 		draw(new QuadRenderCommand(z, clipEnabled, blendMode, argb, tex, trans, bounds, uv));
 	}
@@ -126,10 +73,11 @@ public final class DrawBuffer implements IDrawBuffer {
 		draw(new LayerRenderCommand(layerId, layer));
 	}
 
-	public void drawText(short z, boolean clipEnabled, BlendMode blendMode,
-	        ITextLayout textLayout, float visibleGlyphs, double x, double y)
+    @Override
+    public void drawText(short z, boolean clipEnabled, BlendMode blendMode, Matrix transform,
+            ITextLayout textLayout, float visibleGlyphs)
 	{
-	    draw(new TextRenderCommand(z, clipEnabled, blendMode, textLayout, visibleGlyphs, x, y));
+        draw(new TextRenderCommand(z, clipEnabled, blendMode, transform, textLayout, visibleGlyphs));
     }
 
 	public void draw(BaseRenderCommand cmd) {

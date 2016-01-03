@@ -80,11 +80,15 @@ abstract class AbstractMatrix implements Serializable {
 			&& DoubleMath.fuzzyEquals(m12, m.m12, epsilon);
 	}
 
-	public void transform(Vec2 v) {
+    /**
+     * @return The modified input vector
+     */
+    public Vec2 transform(Vec2 v) {
 		double newX = m00 * v.x + m01 * v.y + m02;
 		double newY = m10 * v.x + m11 * v.y + m12;
 		v.x = newX;
 		v.y = newY;
+        return v;
 	}
 	public Vec2 transform(double x, double y) {
 		return new Vec2(

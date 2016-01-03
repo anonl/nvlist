@@ -1,6 +1,5 @@
 package nl.weeaboo.vn;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,9 +25,9 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ILayer;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.IScreen;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.lua.LuaScriptUtil;
@@ -132,15 +131,12 @@ final class Osd implements Disposable {
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {
-        Collection<? extends ILayer> subLayers = layer.getSubLayers();
-
         String str = "Layer(" + layer.getWidth() + ", " + layer.getHeight() + "): "
-                + Iterables.size(layer.getContents());
+                + Iterables.size(layer.getChildren());
+
         out.add(Strings.repeat(" ", indent) + "+ " + str);
-        if (!subLayers.isEmpty()) {
-            for (ILayer subLayer : subLayers) {
-                printLayers(out, indent + 1, subLayer);
-            }
+        for (ILayer subLayer : layer.getSubLayers()) {
+            printLayers(out, indent + 1, subLayer);
         }
     }
 

@@ -3,18 +3,16 @@ package nl.weeaboo.vn.script.lua;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
-import nl.weeaboo.entity.Entity;
 import nl.weeaboo.lua2.lib.LuajavaLib;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.ILayer;
-import nl.weeaboo.vn.core.IScreen;
-import nl.weeaboo.vn.core.impl.BasicPartRegistry;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.image.IImagePart;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.scene.IImageDrawable;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -38,17 +36,15 @@ public class ImageLib extends LuaLib {
         }
 
         IImageModule imageModule = env.getImageModule();
-        BasicPartRegistry pr = env.getPartRegistry();
 
-        Entity e = imageModule.createImage(layer);
-        IImagePart imagePart = e.getPart(pr.image);
+        IImageDrawable image = imageModule.createImage(layer);
 
         ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args, 2);
         if (tex != null) {
-            imagePart.setTexture(tex);
+            image.setTexture(tex);
         }
 
-        return LuaEntity.toUserdata(e, pr);
+        return LuajavaLib.toUserdata(image, IImageDrawable.class);
     }
 
     @ScriptFunction
