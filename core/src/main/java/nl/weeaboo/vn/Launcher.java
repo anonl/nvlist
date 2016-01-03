@@ -18,8 +18,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.google.common.collect.Iterables;
 
@@ -71,7 +69,6 @@ public class Launcher extends ApplicationAdapter {
 	private Osd osd;
     private DebugControls debugControls;
 	private SpriteBatch batch;
-	private Vector2 spritePos = new Vector2();
 
     private Novel novel;
     private GLScreenRenderer renderer;
@@ -148,8 +145,7 @@ public class Launcher extends ApplicationAdapter {
         ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
         image.setPos(640, 360);
         image.setZ((short)-100);
-        image.setAlign(.5, .5);
-        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false));
+        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
 	}
 
     private IFontStore createFontStore() {
@@ -201,7 +197,7 @@ public class Launcher extends ApplicationAdapter {
 
 	@Override
 	public final void render() {
-		update(Gdx.graphics.getDeltaTime());
+		update();
 
 		frameBuffer.begin();
         frameBufferViewport.apply();
@@ -223,16 +219,19 @@ public class Launcher extends ApplicationAdapter {
         batch.end();
 	}
 
-	protected void update(float dt) {
-		spritePos.x = (spritePos.x + 256 * dt) % vsize.w;
-		spritePos.y = (vsize.h / 2) + 128 * MathUtils.cosDeg(spritePos.x);
-
+	protected void update() {
         debugControls.update(novel);
 
-//        Entity entity = novel.getEnv().getContextManager().findEntity(testEntity);
-//        if (entity != null) {
-//            debugControls.update(entity.getPart(pr.transformable), entity.getPart(pr.image));
-//        }
+        IEnvironment env = novel.getEnv();
+        IContext context = Iterables.getFirst(env.getContextManager().getActiveContexts(), null);
+        if (context != null) {
+            ILayer rootLayer = context.getScreen().getRootLayer();
+            IImageDrawable first = Iterables
+                    .getFirst(Iterables.filter(rootLayer.getChildren(), IImageDrawable.class), null);
+            if (first != null) {
+                debugControls.update(first);
+            }
+        }
 
         novel.update();
 	}

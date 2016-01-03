@@ -26,6 +26,7 @@ import nl.weeaboo.vn.save.impl.SaveParams;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IRenderable;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.scene.ITransformable;
@@ -146,7 +147,13 @@ final class DebugControls {
         }
     }
 
-    public void update(ITransformable transformable, ITextureRenderer image) {
+    public void update(ITransformable transformable) {
+        IRenderable renderer = null;
+        if (transformable instanceof IImageDrawable) {
+            IImageDrawable image = (IImageDrawable)transformable;
+            renderer = image.getRenderer();
+        }
+
         if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
             if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.rotate(4);
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.rotate(-4);
@@ -156,10 +163,13 @@ final class DebugControls {
             if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.scale(8 / 9., 1);
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.scale(1.125, 1);
         } else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.UP)) image.scrollUV(0, .05);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) image.scrollUV(0, -.05);
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) image.scrollUV(.05, 0);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) image.scrollUV(-.05, 0);
+            if (renderer instanceof ITextureRenderer) {
+                ITextureRenderer texRenderer = (ITextureRenderer)renderer;
+                if (Gdx.input.isKeyPressed(Keys.UP)) texRenderer.scrollUV(0, .05);
+                if (Gdx.input.isKeyPressed(Keys.DOWN)) texRenderer.scrollUV(0, -.05);
+                if (Gdx.input.isKeyPressed(Keys.LEFT)) texRenderer.scrollUV(.05, 0);
+                if (Gdx.input.isKeyPressed(Keys.RIGHT)) texRenderer.scrollUV(-.05, 0);
+            }
         } else {
             if (Gdx.input.isKeyPressed(Keys.UP)) transformable.translate(0, 5);
             if (Gdx.input.isKeyPressed(Keys.DOWN)) transformable.translate(0, -5);
