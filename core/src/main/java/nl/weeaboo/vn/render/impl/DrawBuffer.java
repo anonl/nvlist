@@ -10,11 +10,10 @@ import com.badlogic.gdx.utils.Sort;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
-import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IDrawTransform;
 import nl.weeaboo.vn.scene.ILayer;
 
 public final class DrawBuffer implements IDrawBuffer {
@@ -57,10 +56,9 @@ public final class DrawBuffer implements IDrawBuffer {
 	}
 
 	@Override
-	public void drawQuad(short z, boolean clipEnabled, BlendMode blendMode, int argb,
-			Matrix trans, ITexture tex, Area2D bounds, Area2D uv)
-	{
-		draw(new QuadRenderCommand(z, clipEnabled, blendMode, argb, tex, trans, bounds, uv));
+    public void drawQuad(IDrawTransform dt, int argb, ITexture tex, Area2D bounds, Area2D uv) {
+        draw(new QuadRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb, tex,
+                dt.getTransform(), bounds, uv));
 	}
 
 	@Override
@@ -74,10 +72,9 @@ public final class DrawBuffer implements IDrawBuffer {
 	}
 
     @Override
-    public void drawText(short z, boolean clipEnabled, BlendMode blendMode, Matrix transform,
-            ITextLayout textLayout, float visibleGlyphs)
-	{
-        draw(new TextRenderCommand(z, clipEnabled, blendMode, transform, textLayout, visibleGlyphs));
+    public void drawText(IDrawTransform dt, ITextLayout textLayout, float visibleGlyphs) {
+        draw(new TextRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), dt.getTransform(),
+                textLayout, visibleGlyphs));
     }
 
 	public void draw(BaseRenderCommand cmd) {

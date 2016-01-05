@@ -2,10 +2,8 @@ package nl.weeaboo.vn.render;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
-import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.ILayer;
 
 public interface IDrawBuffer {
@@ -24,11 +22,9 @@ public interface IDrawBuffer {
      */
     void startLayer(int layerId, ILayer layer);
 
-    void drawQuad(short z, boolean clipEnabled, BlendMode blendMode, int argb, Matrix transform, ITexture tex,
-            Area2D bounds, Area2D uv);
+    void drawQuad(IDrawTransform transform, int argb, ITexture tex, Area2D bounds, Area2D uv);
 
-    void drawText(short z, boolean clipEnabled, BlendMode blendMode, Matrix transform,
-            ITextLayout textLayout, float visibleGlyphs);
+    void drawText(IDrawTransform transform, ITextLayout textLayout, float visibleGlyphs);
 
     void drawLayer(int layerId, ILayer layer);
 

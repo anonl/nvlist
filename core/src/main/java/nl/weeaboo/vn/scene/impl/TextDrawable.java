@@ -20,6 +20,19 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
+    public void onTick() {
+        increaseVisibleText(.5f);
+    }
+
+    @Override
+    public void setSize(double w, double h) {
+        super.setSize(w, h);
+
+        // Copy textdrawable size to embedded textrenderer
+        setMaxSize((float)w, (float)h);
+    }
+
+    @Override
     public void draw(IDrawBuffer drawBuffer) {
         Area2D bounds = Area2D.of(getAlignOffsetX(), getAlignOffsetY(), getUnscaledWidth(),
                 getUnscaledHeight());

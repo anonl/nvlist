@@ -2,11 +2,15 @@ package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.render.IDrawTransform;
 
-public interface IDrawable extends IVisualElement, IColorizable {
+public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform {
 
-	BlendMode getBlendMode();
-	boolean isClipEnabled();
+	@Override
+    BlendMode getBlendMode();
+
+	@Override
+    boolean isClipEnabled();
 
     /**
      * A utility method to check if {@code visible && getAlpha() >= minAlpha}.
@@ -33,6 +37,7 @@ public interface IDrawable extends IVisualElement, IColorizable {
     double getWidth(); // getVisualBounds().width
     double getHeight(); // getVisualBounds().height
 
+    @Override
     Matrix getTransform();
 
 	void setX(double x); //Calls setPos

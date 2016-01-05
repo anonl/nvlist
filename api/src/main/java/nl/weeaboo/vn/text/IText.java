@@ -5,7 +5,7 @@ import nl.weeaboo.styledtext.TextStyle;
 
 public interface IText {
 
-    TextStyle DEFAULT_STYLE = TextStyle.fromString("fontSize=32|align=center");
+    TextStyle DEFAULT_STYLE = new TextStyle(null, 32);
 
     /** @see #setText(StyledText) */
     StyledText getText();

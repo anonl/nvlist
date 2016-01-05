@@ -30,8 +30,7 @@ public class TextureRenderer extends AbstractRenderable implements ITextureRende
             return;
         }
 
-        buffer.drawQuad(d.getZ(), d.isClipEnabled(), d.getBlendMode(), d.getColorARGB(), d.getTransform(),
-                tex, bounds, uv);
+        buffer.drawQuad(d, d.getColorARGB(), tex, bounds, uv);
     }
 
     @Override

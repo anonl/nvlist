@@ -8,6 +8,7 @@ import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.DestroySignal;
 import nl.weeaboo.vn.scene.signal.ISignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
+import nl.weeaboo.vn.scene.signal.TickSignal;
 
 public class VisualElement implements IVisualElement {
 
@@ -45,9 +46,15 @@ public class VisualElement implements IVisualElement {
 
     @Override
     public void handleSignal(ISignal signal) {
+        if (signal instanceof TickSignal) {
+            onTick();
+        }
         if (signal instanceof RenderEnvChangeSignal) {
             onRenderEnvChanged(((RenderEnvChangeSignal)signal).getRenderEnv());
         }
+    }
+
+    protected void onTick() {
     }
 
     /**

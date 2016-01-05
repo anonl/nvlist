@@ -23,7 +23,8 @@ allprojects {
         roboVMVersion = '1.12.0'
         junitVersion = '4.12'
         slf4jVersion = '1.7.12'
-        styledTextVersion = '1.1'
+        guavaVersion = '19.0'
+        styledTextVersion = '1.2'
     }
 
     repositories {
@@ -41,7 +42,7 @@ project(':api') {
     dependencies {
         compile project(':tcommon')
         compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-        compile "com.google.guava:guava:19.0"
+        compile "com.google.guava:guava:$guavaVersion"
         
         testCompile "junit:junit:$junitVersion"
     }

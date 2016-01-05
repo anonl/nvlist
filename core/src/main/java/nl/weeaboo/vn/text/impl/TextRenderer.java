@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.text.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 
 import nl.weeaboo.common.Area2D;
@@ -13,8 +16,8 @@ import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.impl.DrawTransform;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.impl.AbstractRenderable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -22,7 +25,7 @@ import nl.weeaboo.vn.text.ITextRenderer;
 public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;
-
+    private static final Logger LOG = LoggerFactory.getLogger(TextRenderer.class);
     private static final float ALL_GLYPHS_VISIBLE = 999999;
 
     private final StaticRef<IFontStore> fontStore = StaticEnvironment.FONT_STORE;
@@ -57,10 +60,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
             return;
         }
 
-        ITextLayout textLayout = getVisibleLayout();
-        Matrix transform = d.getTransform().translatedCopy(bounds.x, bounds.y + getTextHeight());
+        DrawTransform dt = new DrawTransform(d);
+        dt.setTransform(dt.getTransform().translatedCopy(bounds.x, bounds.y + getTextHeight()));
 
-        buffer.drawText(d.getZ(), d.isClipEnabled(), d.getBlendMode(), transform, textLayout, visibleText);
+        ITextLayout textLayout = getVisibleLayout();
+        buffer.drawText(dt, textLayout, visibleText);
     }
 
     protected final ITextLayout getLayout() {
@@ -79,8 +83,12 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     public final ITextLayout getVisibleLayout() {
         if (_visibleLayout == null) {
             ITextLayout layout = getLayout();
-            int endLine = LayoutUtil.getVisibleLines(layout, startLine, getLayoutMaxHeight());
+            int count = LayoutUtil.getVisibleLines(layout, startLine, getLayoutMaxHeight());
+            int endLine = Math.min(layout.getLineCount(), startLine + count);
             _visibleLayout = layout.getLineRange(startLine, endLine);
+
+            LOG.debug("Text layout created: startLine={}, endLine={}, height={}/{}",
+                    startLine, endLine, _visibleLayout.getTextHeight(), getLayoutMaxHeight());
         }
         return _visibleLayout;
     }
