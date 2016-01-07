@@ -10,6 +10,7 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.Iterables;
 
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
@@ -19,7 +20,10 @@ import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.INinePatchRenderer.EArea;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
+import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
@@ -182,7 +186,16 @@ final class DebugControls {
         IImageDrawable image = imageModule.createImage(layer);
         image.setPos(640, 360);
         image.setAlign(.5, .5);
-        image.setTexture(imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false));
+
+        ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
+        NinePatchRenderer renderer = new NinePatchRenderer();
+        renderer.setInsets(Insets2D.of(10));
+        for (EArea area : EArea.values()) {
+            renderer.setTexture(area, texture);
+        }
+        image.setRenderer(renderer);
+        image.setSize(400, 400);
+        // image.setTexture(texture);
     }
 
     private static void createButton(ILayer layer, IScriptContext scriptContext) {
