@@ -6,15 +6,15 @@ import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import nl.weeaboo.vn.Launcher;
 import nl.weeaboo.vn.core.impl.Novel;
 
 public abstract class IntegrationTest {
 
-    protected LwjglApplication app;
+    protected Lwjgl3Application app;
     protected Novel novel;
 
     @Before
@@ -29,8 +29,8 @@ public abstract class IntegrationTest {
             }
         };
 
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        app = new LwjglApplication(launcher, config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        app = new Lwjgl3Application(launcher, config);
 
         initLock.tryAcquire(1, 5, TimeUnit.SECONDS); // Wait for init
 

@@ -72,9 +72,9 @@ public final class DrawBuffer implements IDrawBuffer {
 	}
 
     @Override
-    public void drawText(IDrawTransform dt, ITextLayout textLayout, float visibleGlyphs) {
-        draw(new TextRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), dt.getTransform(),
-                textLayout, visibleGlyphs));
+    public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
+            float visibleGlyphs) {
+        draw(new TextRenderCommand(dt, dx, dy, textLayout, visibleGlyphs));
     }
 
 	public void draw(BaseRenderCommand cmd) {

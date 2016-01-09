@@ -133,9 +133,12 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     public void renderText(TextRenderCommand trc) {
         flushQuadBatch();
 
+        int dx = (int)Math.round(trc.dx);
+        int dy = (int)Math.round(trc.dy);
+
         matrixStack.pushMatrix();
         matrixStack.multiply(trc.transform);
-        GdxFontUtil.draw(spriteBatch, trc.textLayout, 0, 0, trc.visibleGlyphs);
+        GdxFontUtil.draw(spriteBatch, trc.textLayout, dx, dy, trc.visibleGlyphs);
         matrixStack.popMatrix();
     }
 

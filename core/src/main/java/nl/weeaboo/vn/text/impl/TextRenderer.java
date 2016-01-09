@@ -17,7 +17,6 @@ import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.render.impl.DrawTransform;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.impl.AbstractRenderable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -60,11 +59,8 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
             return;
         }
 
-        DrawTransform dt = new DrawTransform(d);
-        dt.setTransform(dt.getTransform().translatedCopy(bounds.x, bounds.y + getTextHeight()));
-
         ITextLayout textLayout = getVisibleLayout();
-        buffer.drawText(dt, textLayout, visibleText);
+        buffer.drawText(d, bounds.x, bounds.y + getTextHeight(), textLayout, visibleText);
     }
 
     protected final ITextLayout getLayout() {

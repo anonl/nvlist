@@ -19,7 +19,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'NVList'
-        gdxVersion = '1.7.2'
+        gdxVersion = '1.8.0'
         roboVMVersion = '1.12.0'
         junitVersion = '4.12'
         slf4jVersion = '1.7.12'
@@ -73,11 +73,11 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
 

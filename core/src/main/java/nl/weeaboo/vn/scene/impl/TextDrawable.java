@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.scene.impl;
 
-import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
@@ -25,19 +24,24 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void setSize(double w, double h) {
-        super.setSize(w, h);
+    protected double getUnscaledWidth() {
+        return textRenderer.getMaxWidth();
+    }
 
+    @Override
+    protected double getUnscaledHeight() {
+        return textRenderer.getMaxHeight();
+    }
+
+    @Override
+    public void setUnscaledSize(double w, double h) {
         // Copy textdrawable size to embedded textrenderer
         setMaxSize((float)w, (float)h);
     }
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        Area2D bounds = Area2D.of(getAlignOffsetX(), getAlignOffsetY(), getUnscaledWidth(),
-                getUnscaledHeight());
-
-        textRenderer.render(this, bounds, drawBuffer);
+        textRenderer.render(this, getAlignOffsetX(), getAlignOffsetY(), drawBuffer);
     }
 
     @Override

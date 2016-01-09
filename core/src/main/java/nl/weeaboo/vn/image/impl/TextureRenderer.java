@@ -8,7 +8,7 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.impl.AbstractRenderable;
 
-public class TextureRenderer extends AbstractRenderable implements ITextureRenderer {
+public final class TextureRenderer extends AbstractRenderable implements ITextureRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
@@ -21,6 +21,8 @@ public class TextureRenderer extends AbstractRenderable implements ITextureRende
 
     public TextureRenderer(ITexture tex) {
         this.texture = tex;
+
+        pack();
     }
 
     @Override
@@ -60,6 +62,7 @@ public class TextureRenderer extends AbstractRenderable implements ITextureRende
         if (texture != newTexture) {
             texture = newTexture;
 
+            pack();
             fireChanged();
         }
     }

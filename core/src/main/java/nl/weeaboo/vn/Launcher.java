@@ -1,9 +1,6 @@
 package nl.weeaboo.vn;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.LogManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +50,10 @@ import nl.weeaboo.vn.sound.impl.MusicStore;
 
 public class Launcher extends ApplicationAdapter {
 
+    static {
+        InitConfig.init();
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
     private final String resourceFolder;
@@ -83,8 +84,6 @@ public class Launcher extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-        configureLogger();
-
         resourceFileSystem = new GdxFileSystem(resourceFolder, true);
         assetManager = new AssetManager(resourceFileSystem);
         Texture.setAssetManager(assetManager);
@@ -273,24 +272,6 @@ public class Launcher extends ApplicationAdapter {
 
     public Novel getNovel() {
         return novel;
-    }
-
-    private static void configureLogger() {
-        System.setProperty("sun.io.serialization.extendedDebugInfo", "true");
-
-        try {
-            InputStream in = Launcher.class.getResourceAsStream("logging.properties");
-            if (in == null) {
-                throw new FileNotFoundException();
-            }
-            try {
-                LogManager.getLogManager().readConfiguration(in);
-            } finally {
-                in.close();
-            }
-        } catch (IOException e) {
-            LOG.warn("Unable to read logging config", e);
-        }
     }
 
 }

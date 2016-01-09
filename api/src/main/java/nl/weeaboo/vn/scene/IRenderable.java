@@ -2,7 +2,6 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
-import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IChangeListener;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -34,6 +33,24 @@ public interface IRenderable extends Serializable {
      */
     double getNativeHeight();
 
+    /**
+     * @return The current width of this renderable.
+     */
+    double getWidth();
+
+    /**
+     * @return The current height of this renderable.
+     */
+    double getHeight();
+
+    /**
+     * Changes the renderable's current width/height.
+     * 
+     * @see #getWidth()
+     * @see #getHeight()
+     */
+    void setSize(double w, double h);
+
 	/**
      * @return The axis-aligned bounding box for this renderable element.
      */
@@ -42,6 +59,6 @@ public interface IRenderable extends Serializable {
     /**
      * Renders to the given draw buffer
      */
-    void render(IDrawable parentComponent, Area2D bounds, IDrawBuffer drawBuffer);
+    void render(IDrawable parentComponent, double dx, double dy, IDrawBuffer drawBuffer);
 
 }

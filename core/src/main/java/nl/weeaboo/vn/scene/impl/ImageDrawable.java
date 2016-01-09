@@ -3,12 +3,10 @@ package nl.weeaboo.vn.scene.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.IChangeListener;
-import nl.weeaboo.vn.core.NullRenderer;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.TextureRenderer;
@@ -22,7 +20,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private IRenderable renderer = NullRenderer.getInstance();
+    private IRenderable renderer = new NullRenderer();
 
     private transient IChangeListener rendererListener;
 
@@ -55,25 +53,28 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     @Override
     public void draw(IDrawBuffer buffer) {
-        Area2D bounds = Area2D.of(getAlignOffsetX(), getAlignOffsetY(), getUnscaledWidth(),
-                getUnscaledHeight());
-
-        renderer.render(this, bounds, buffer);
+        renderer.render(this, getAlignOffsetX(), getAlignOffsetY(), buffer);
     }
 
     @Override
     public double getUnscaledWidth() {
-        return renderer.getNativeWidth();
+        return renderer.getWidth();
     }
 
     @Override
     public double getUnscaledHeight() {
-        return renderer.getNativeHeight();
+        return renderer.getHeight();
     }
 
     @Override
     public Rect2D getUntransformedVisualBounds() {
         return renderer.getVisualBounds();
+    }
+
+    @Override
+    public void setUnscaledSize(double w, double h) {
+        System.out.println(w + " " + h);
+        renderer.setSize(w, h);
     }
 
     @Override
@@ -97,6 +98,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
             double h0 = getUnscaledHeight();
             double w1 = r.getNativeWidth();
             double h1 = r.getNativeHeight();
+            // TODO: How should this method be implemented?
             Rect2D rect = AlignUtil.getAlignedBounds(w0, h0, getAlignX(), getAlignY());
             Vec2 align = AlignUtil.alignSubRect(rect, w1, h1, anchor);
             alignX = align.x;
@@ -111,14 +113,10 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
         Checks.checkNotNull(r);
 
         if (renderer != r || getAlignX() != alignX || getAlignY() != alignY) {
-            double sx = getScaleX();
-            double sy = getScaleY();
-
             renderer.onDetached(rendererListener);
             renderer = r;
             initRenderer();
 
-            setScale(sx, sy); // Maintain relative scale, but not the exact size
             setAlign(alignX, alignY);
         }
     }
