@@ -96,9 +96,8 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
         if (renderer != r) {
             double w0 = getUnscaledWidth();
             double h0 = getUnscaledHeight();
-            double w1 = r.getNativeWidth();
-            double h1 = r.getNativeHeight();
-            // TODO: How should this method be implemented?
+            double w1 = r.getWidth();
+            double h1 = r.getHeight();
             Rect2D rect = AlignUtil.getAlignedBounds(w0, h0, getAlignX(), getAlignY());
             Vec2 align = AlignUtil.alignSubRect(rect, w1, h1, anchor);
             alignX = align.x;
