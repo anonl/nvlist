@@ -1,21 +1,20 @@
 package nl.weeaboo.vn.scene.impl;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
+import nl.weeaboo.vn.text.impl.TextRenderer;
 
 public class TextDrawable extends Transformable implements ITextDrawable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final ITextRenderer textRenderer;
+    private final ITextRenderer textRenderer = new TextRenderer();
 
-    public TextDrawable(ITextRenderer textRenderer) {
-        this.textRenderer = Checks.checkNotNull(textRenderer);
+    public TextDrawable() {
     }
 
     @Override

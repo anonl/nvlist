@@ -1,12 +1,14 @@
 package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.DestroySignal;
 import nl.weeaboo.vn.scene.signal.ISignal;
+import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
 
@@ -49,12 +51,21 @@ public class VisualElement implements IVisualElement {
         if (signal instanceof TickSignal) {
             onTick();
         }
+        if (signal instanceof InputSignal) {
+            handleInput(((InputSignal)signal).input);
+        }
         if (signal instanceof RenderEnvChangeSignal) {
-            onRenderEnvChanged(((RenderEnvChangeSignal)signal).getRenderEnv());
+            onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
         }
     }
 
     protected void onTick() {
+    }
+
+    /**
+     * @param input Keyboard/mouse/gamepad input
+     */
+    protected void handleInput(IInput input) {
     }
 
     /**

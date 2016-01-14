@@ -4,14 +4,10 @@ import nl.weeaboo.vn.core.IRenderEnv;
 
 public final class RenderEnvChangeSignal extends AbstractSignal {
 
-    private final IRenderEnv renderEnv;
+    public final IRenderEnv renderEnv;
 
     public RenderEnvChangeSignal(IRenderEnv renderEnv) {
         this.renderEnv = renderEnv;
-    }
-
-    public IRenderEnv getRenderEnv() {
-        return renderEnv;
     }
 
 }

@@ -73,7 +73,6 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     @Override
     public void setUnscaledSize(double w, double h) {
-        System.out.println(w + " " + h);
         renderer.setSize(w, h);
     }
 

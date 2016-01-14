@@ -195,22 +195,22 @@ final class DebugControls {
     private void createNinePatchImage(ILayer layer, IImageModule imageModule) {
         IImageDrawable image = imageModule.createImage(layer);
         image.setPos(640, 360);
-        image.setAlign(.5, .5);
 
         ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
         NinePatchRenderer renderer = new NinePatchRenderer();
-        renderer.setInsets(Insets2D.of(10));
+        renderer.setInsets(Insets2D.of(50));
         for (EArea area : EArea.values()) {
             renderer.setTexture(area, texture);
         }
-        image.setRenderer(renderer);
-        image.setSize(400, 400);
+        renderer.setSize(400, 400);
+        image.setRenderer(renderer, 5);
     }
 
     private static void createButton(ILayer layer, IScriptContext scriptContext) {
         EntityHelper entityHelper = new EntityHelper();
         IButton button = entityHelper.createButton(layer, scriptContext);
         button.setText("Test");
+        button.setPos(800, 200);
     }
 
     private static void createText(ILayer layer) {
