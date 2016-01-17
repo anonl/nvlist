@@ -35,7 +35,12 @@ public interface IButton extends ITransformable {
     /** @see IButtonModel#getClickHandler() */
     public IScriptFunction getClickHandler();
 
-    /** @see IButtonModel#setClickHandler(IScriptFunction) */
+    /**
+     * Sets the script function to automatically call when the button is pressed.
+     * 
+     * @param func The click handler function, or {@code null} to disable automatic click handling.
+     * @see #consumePress()
+     */
     public void setClickHandler(IScriptFunction func);
 
     /**

@@ -2,8 +2,8 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IChangeListener;
-import nl.weeaboo.vn.core.impl.ChangeHelper;
+import nl.weeaboo.vn.core.IEventListener;
+import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.IRenderable;
@@ -12,22 +12,22 @@ public abstract class AbstractRenderable implements IRenderable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final ChangeHelper changeHelper = new ChangeHelper();
+    private final TransientListenerSupport changeHelper = new TransientListenerSupport();
 
     private double width, height;
 
     @Override
-    public void onAttached(IChangeListener cl) {
-        changeHelper.addChangeListener(cl);
+    public void onAttached(IEventListener cl) {
+        changeHelper.addTransientListener(cl);
     }
 
     @Override
-    public void onDetached(IChangeListener cl) {
-        changeHelper.removeChangeListener(cl);
+    public void onDetached(IEventListener cl) {
+        changeHelper.removeTransientListener(cl);
     }
 
     protected final void fireChanged() {
-        changeHelper.fireChanged();
+        changeHelper.fireListeners();
     }
 
     /** Sets the current width/height to the native width/height */

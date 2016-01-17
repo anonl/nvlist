@@ -2,7 +2,7 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
-import nl.weeaboo.vn.core.IChangeListener;
+import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -28,8 +28,9 @@ public class Button extends Transformable implements IButton, IButtonView {
     private final IScriptEventDispatcher eventDispatcher;
 
     private double touchMargin;
+    private IScriptFunction clickHandler;
 
-    private transient IChangeListener rendererListener;
+    private transient IEventListener rendererListener;
 
     public Button(IScriptEventDispatcher eventDispatcher) {
         this.eventDispatcher = Checks.checkNotNull(eventDispatcher);
@@ -38,9 +39,9 @@ public class Button extends Transformable implements IButton, IButtonView {
     }
 
     private void initTransients() {
-        rendererListener = new IChangeListener() {
+        rendererListener = new IEventListener() {
             @Override
-            public void onChanged() {
+            public void onEvent() {
                 invalidateTransform();
             }
         };
@@ -62,6 +63,10 @@ public class Button extends Transformable implements IButton, IButtonView {
         super.handleInput(input);
 
         model.handleInput(this, input);
+
+        if (clickHandler != null && model.consumePress()) {
+            eventDispatcher.addEvent(clickHandler);
+        }
     }
 
     @Override
@@ -117,12 +122,12 @@ public class Button extends Transformable implements IButton, IButtonView {
 
     @Override
     public IScriptFunction getClickHandler() {
-        return model.getClickHandler();
+        return clickHandler;
     }
 
     @Override
     public void setClickHandler(IScriptFunction func) {
-        model.setClickHandler(func);
+        clickHandler = func;
     }
 
     @Override

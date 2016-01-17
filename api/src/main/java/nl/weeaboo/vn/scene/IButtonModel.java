@@ -3,7 +3,6 @@ package nl.weeaboo.vn.scene;
 import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.script.IScriptFunction;
 
 public interface IButtonModel extends Serializable {
 
@@ -57,15 +56,5 @@ public interface IButtonModel extends Serializable {
      * Changes if this button functions as a regular button or a toggle button (stays selected when pressed).
      */
     void setToggle(boolean t);
-
-    /**
-     * @see #setClickHandler(IScriptFunction)
-     */
-    public IScriptFunction getClickHandler();
-
-    /**
-     * Sets a script function that should be called when this button is clicked.
-     */
-    public void setClickHandler(IScriptFunction func);
 
 }

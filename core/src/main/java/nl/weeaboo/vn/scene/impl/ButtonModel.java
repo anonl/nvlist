@@ -1,21 +1,15 @@
 package nl.weeaboo.vn.scene.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.impl.ChangeHelper;
+import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.scene.IButtonModel;
 import nl.weeaboo.vn.scene.IButtonView;
-import nl.weeaboo.vn.script.IScriptFunction;
-import nl.weeaboo.vn.script.ScriptException;
 
 public class ButtonModel implements IButtonModel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
-    private static final Logger LOG = LoggerFactory.getLogger(ButtonModel.class);
 
-    private final ChangeHelper changeHelper = new ChangeHelper();
+    private final TransientListenerSupport changeListeners = new TransientListenerSupport();
 
     private boolean enabled = true;
     private boolean selected;
@@ -26,25 +20,15 @@ public class ButtonModel implements IButtonModel {
     private boolean mouseArmed;
     private int pressEvents;
 
-    private IScriptFunction clickHandler;
-
     protected final void fireChanged() {
-        changeHelper.fireChanged();
+        changeListeners.fireListeners();
     }
 
-    protected void onPressed() {
+    protected void onClicked() {
         if (isToggle()) {
             setSelected(!isSelected());
         }
         pressEvents++;
-
-        if (clickHandler != null) {
-            try {
-                clickHandler.call();
-            } catch (ScriptException e) {
-                LOG.warn("Error calling click handler", e);
-            }
-        }
     }
 
     @Override
@@ -87,7 +71,7 @@ public class ButtonModel implements IButtonModel {
 
             if (mouseArmed && !inputHeld) {
                 if (mouseArmed && mouseContains) {
-                    onPressed();
+                    onClicked();
                 }
                 mouseArmed = false;
                 changed = true;
@@ -177,16 +161,6 @@ public class ButtonModel implements IButtonModel {
             toggle = t;
             fireChanged();
         }
-    }
-
-    @Override
-    public IScriptFunction getClickHandler() {
-        return clickHandler;
-    }
-
-    @Override
-    public void setClickHandler(IScriptFunction func) {
-        this.clickHandler = func;
     }
 
 }

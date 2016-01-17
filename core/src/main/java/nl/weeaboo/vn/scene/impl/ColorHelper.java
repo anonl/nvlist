@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.core.impl.ChangeHelper;
+import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.render.RenderUtil;
 
 @CustomSerializable
-class ColorHelper extends ChangeHelper {
+class ColorHelper extends TransientListenerSupport {
 
     private static final long serialVersionUID = 1L;
 

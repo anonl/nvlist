@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.core.IChangeListener;
+import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.TextureRenderer;
@@ -22,16 +22,16 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     private IRenderable renderer = new NullRenderer();
 
-    private transient IChangeListener rendererListener;
+    private transient IEventListener rendererListener;
 
     public ImageDrawable() {
         initTransients();
     }
 
     private void initTransients() {
-        rendererListener = new IChangeListener() {
+        rendererListener = new IEventListener() {
             @Override
-            public void onChanged() {
+            public void onEvent() {
                 invalidateTransform();
             }
         };

@@ -2,9 +2,9 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.impl.ChangeHelper;
+import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 
-class BoundsHelper extends ChangeHelper {
+class BoundsHelper extends TransientListenerSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ class BoundsHelper extends ChangeHelper {
 			this.y = y;
 
             cachedBounds = null;
-			fireChanged();
+			fireListeners();
 		}
 	}
 
@@ -55,7 +55,7 @@ class BoundsHelper extends ChangeHelper {
 			this.h = h;
 
             cachedBounds = null;
-			fireChanged();
+			fireListeners();
 		}
 	}
 

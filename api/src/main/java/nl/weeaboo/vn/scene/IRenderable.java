@@ -3,7 +3,7 @@ package nl.weeaboo.vn.scene;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IChangeListener;
+import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.render.IDrawBuffer;
 
 public interface IRenderable extends Serializable {
@@ -13,7 +13,7 @@ public interface IRenderable extends Serializable {
      *
      * @param cl The change listener to add.
      */
-    void onAttached(IChangeListener cl);
+    void onAttached(IEventListener cl);
 
     /**
      * Called when this renderable is detached from the scene. This method can be used to clean up any native
@@ -21,7 +21,7 @@ public interface IRenderable extends Serializable {
      *
      * @param cl The change listener to remove.
      */
-    void onDetached(IChangeListener cl);
+    void onDetached(IEventListener cl);
 
     /**
      * @return The intrinsic width for this renderable.
