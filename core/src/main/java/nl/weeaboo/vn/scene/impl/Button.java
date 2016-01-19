@@ -19,6 +19,7 @@ public class Button extends Transformable implements IButton, IButtonView {
     // TODO: Store all view state in a ButtonView class
     // - The button class acts as a controller
     // TODO: Add change listener to model
+    // TODO: Implement touchMargin
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -161,18 +162,20 @@ public class Button extends Transformable implements IButton, IButtonView {
 
     @Override
     protected double getUnscaledWidth() {
-        return ninePatch.getWidth();
+        return Math.max(ninePatch.getWidth(), textRenderer.getWidth());
     }
 
     @Override
     protected double getUnscaledHeight() {
-        return ninePatch.getHeight();
+        return Math.max(ninePatch.getHeight(), textRenderer.getHeight());
     }
 
     @Override
     protected void setUnscaledSize(double w, double h) {
         ninePatch.setSize(w, h);
         textRenderer.setSize(w, h);
+
+        invalidateTransform();
     }
 
 }

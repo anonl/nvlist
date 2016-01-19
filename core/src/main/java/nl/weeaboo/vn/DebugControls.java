@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Insets2D;
@@ -14,9 +13,11 @@ import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatchRenderer.EArea;
@@ -44,13 +45,13 @@ final class DebugControls {
 
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);
 
-    private LuaConsole luaConsole;
+    private final LuaConsole luaConsole;
 
     public DebugControls(Scene2dEnv sceneEnv) {
-        luaConsole = new LuaConsole(sceneEnv);
+        this.luaConsole = new LuaConsole(sceneEnv);
     }
 
-    public void update(INovel novel) {
+    public void update(INovel novel, IInput input) {
         IEnvironment env = novel.getEnv();
         IRenderEnv renderEnv = env.getRenderEnv();
 
@@ -62,10 +63,10 @@ final class DebugControls {
             screen = activeContext.getScreen();
         }
 
-        boolean alt = Gdx.input.isKeyPressed(Keys.ALT_LEFT);
+        boolean alt = input.isPressed(KeyCode.ALT_LEFT, true);
 
         // Reset
-        if (Gdx.input.isKeyJustPressed(Keys.F5)) {
+        if (input.consumePress(KeyCode.F5)) {
             try {
                 novel.restart();
             } catch (InitException e) {
@@ -76,7 +77,7 @@ final class DebugControls {
         // Save/load
         ISaveModule saveModule = env.getSaveModule();
         int slot = saveModule.getQuickSaveSlot(99);
-        if (Gdx.input.isKeyJustPressed(Keys.PLUS)) {
+        if (input.consumePress(KeyCode.PLUS)) {
             LOG.debug("Save");
             SaveParams saveParams = new SaveParams();
             try {
@@ -86,7 +87,7 @@ final class DebugControls {
             } catch (IOException e) {
                 LOG.warn("Save error", e);
             }
-        } else if (Gdx.input.isKeyJustPressed(Keys.MINUS)) {
+        } else if (input.consumePress(KeyCode.MINUS)) {
             LOG.debug("Load");
             try {
                 saveModule.load(novel, slot, null);
@@ -98,7 +99,7 @@ final class DebugControls {
         }
 
         // Fullscreen toggle
-        if (alt && Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+        if (alt && input.consumePress(KeyCode.ENTER)) {
             if (!Gdx.graphics.isFullscreen()) {
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             } else {
@@ -108,34 +109,34 @@ final class DebugControls {
 
         // Image
         IImageModule imageModule = env.getImageModule();
-        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.I)) {
+        if (screen != null && alt && input.consumePress(KeyCode.I)) {
             createImage(screen.getRootLayer(), imageModule);
         }
-        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.J)) {
+        if (screen != null && alt && input.consumePress(KeyCode.J)) {
             for (int n = 0; n < 100; n++) {
                 createImage(screen.getRootLayer(), imageModule);
             }
         }
-        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.N)) {
+        if (screen != null && alt && input.consumePress(KeyCode.N)) {
             createNinePatchImage(screen.getRootLayer(), imageModule);
         }
 
         // Text
-        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.T)) {
+        if (screen != null && alt && input.consumePress(KeyCode.T)) {
             createText(screen.getRootLayer());
         }
 
         // Button
-        if (screen != null && alt && Gdx.input.isKeyJustPressed(Keys.B)) {
+        if (screen != null && alt && input.consumePress(KeyCode.B)) {
             createButton(screen.getRootLayer(), scriptContext);
         }
 
         // Music
         ISoundModule soundModule = env.getSoundModule();
-        if (alt && Gdx.input.isKeyJustPressed(Keys.PERIOD)) {
+        if (alt && input.consumePress(KeyCode.PERIOD)) {
             soundModule.getSoundController().stopAll();
         }
-        if (alt && Gdx.input.isKeyJustPressed(Keys.M)) {
+        if (alt && input.consumePress(KeyCode.M)) {
             try {
                 ISound sound = soundModule.createSound(SoundType.MUSIC,
                         new ResourceLoadInfo("music.ogg"));
@@ -147,39 +148,39 @@ final class DebugControls {
 
         // Lua console
         luaConsole.setActiveContext(activeContext);
-        if (Gdx.input.isKeyJustPressed(Keys.F1)) {
+        if (input.consumePress(KeyCode.F1)) {
             luaConsole.setVisible(!luaConsole.isVisible());
         }
     }
 
-    public void update(ITransformable transformable) {
+    public void update(ITransformable transformable, IInput input) {
         IRenderable renderer = null;
         if (transformable instanceof IImageDrawable) {
             IImageDrawable image = (IImageDrawable)transformable;
             renderer = image.getRenderer();
         }
 
-        if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.rotate(4);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.rotate(-4);
-        } else if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.UP)) transformable.scale(1, 8 / 9.);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) transformable.scale(1, 1.125);
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.scale(8 / 9., 1);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.scale(1.125, 1);
-        } else if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
+        if (input.isPressed(KeyCode.CONTROL_LEFT, true)) {
+            if (input.isPressed(KeyCode.LEFT, false)) transformable.rotate(4);
+            if (input.isPressed(KeyCode.RIGHT, false)) transformable.rotate(-4);
+        } else if (input.isPressed(KeyCode.SHIFT_LEFT, true)) {
+            if (input.isPressed(KeyCode.UP, false)) transformable.scale(1, 8 / 9.);
+            if (input.isPressed(KeyCode.DOWN, false)) transformable.scale(1, 1.125);
+            if (input.isPressed(KeyCode.LEFT, false)) transformable.scale(8 / 9., 1);
+            if (input.isPressed(KeyCode.RIGHT, false)) transformable.scale(1.125, 1);
+        } else if (input.isPressed(KeyCode.ALT_LEFT, true)) {
             if (renderer instanceof ITextureRenderer) {
                 ITextureRenderer texRenderer = (ITextureRenderer)renderer;
-                if (Gdx.input.isKeyPressed(Keys.UP)) texRenderer.scrollUV(0, .05);
-                if (Gdx.input.isKeyPressed(Keys.DOWN)) texRenderer.scrollUV(0, -.05);
-                if (Gdx.input.isKeyPressed(Keys.LEFT)) texRenderer.scrollUV(.05, 0);
-                if (Gdx.input.isKeyPressed(Keys.RIGHT)) texRenderer.scrollUV(-.05, 0);
+                if (input.isPressed(KeyCode.UP, false)) texRenderer.scrollUV(0, .05);
+                if (input.isPressed(KeyCode.DOWN, false)) texRenderer.scrollUV(0, -.05);
+                if (input.isPressed(KeyCode.LEFT, false)) texRenderer.scrollUV(.05, 0);
+                if (input.isPressed(KeyCode.RIGHT, false)) texRenderer.scrollUV(-.05, 0);
             }
         } else {
-            if (Gdx.input.isKeyPressed(Keys.UP)) transformable.translate(0, 5);
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) transformable.translate(0, -5);
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) transformable.translate(-5, 0);
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) transformable.translate(5, 0);
+            if (input.isPressed(KeyCode.UP, false)) transformable.translate(0, 5);
+            if (input.isPressed(KeyCode.DOWN, false)) transformable.translate(0, -5);
+            if (input.isPressed(KeyCode.LEFT, false)) transformable.translate(-5, 0);
+            if (input.isPressed(KeyCode.RIGHT, false)) transformable.translate(5, 0);
         }
     }
 
@@ -209,6 +210,7 @@ final class DebugControls {
     private static void createButton(ILayer layer, IScriptContext scriptContext) {
         EntityHelper entityHelper = new EntityHelper();
         IButton button = entityHelper.createButton(layer, scriptContext);
+        button.setSize(100, 20);
         button.setText("Test");
         button.setPos(800, 200);
     }

@@ -3,11 +3,14 @@ package nl.weeaboo.vn.scene.impl;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.signal.ISignal;
+import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
 
@@ -30,6 +33,11 @@ public class Screen implements IScreen {
     @Override
     public void update() {
         sendSignal(new TickSignal());
+
+        IInput input = StaticEnvironment.INPUT.get();
+        if (!input.isIdle()) {
+            sendSignal(new InputSignal(input));
+        }
     }
 
     protected void sendSignal(ISignal signal) {

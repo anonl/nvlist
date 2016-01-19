@@ -14,8 +14,6 @@ public class Scene2dEnv implements Disposable {
     public Scene2dEnv(Viewport viewport) {
         stage = new Stage(viewport);
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

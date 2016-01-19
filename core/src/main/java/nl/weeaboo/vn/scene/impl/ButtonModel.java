@@ -1,6 +1,10 @@
 package nl.weeaboo.vn.scene.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.scene.IButtonModel;
 import nl.weeaboo.vn.scene.IButtonView;
@@ -8,6 +12,7 @@ import nl.weeaboo.vn.scene.IButtonView;
 public class ButtonModel implements IButtonModel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(ButtonModel.class);
 
     private final TransientListenerSupport changeListeners = new TransientListenerSupport();
 
@@ -25,6 +30,8 @@ public class ButtonModel implements IButtonModel {
     }
 
     protected void onClicked() {
+        LOG.debug("Button clicked");
+
         if (isToggle()) {
             setSelected(!isSelected());
         }
@@ -51,7 +58,7 @@ public class ButtonModel implements IButtonModel {
     public void handleInput(IButtonView view, IInput input) {
         boolean changed = false;
 
-        boolean mouseContains = view.contains(input.getMouseX(), input.getMouseY());
+        boolean mouseContains = view.contains(input.getPointerX(), input.getPointerY());
 
         boolean visibleEnough = view.isVisible(alphaEnableThreshold);
         if (!visibleEnough) {
@@ -67,7 +74,10 @@ public class ButtonModel implements IButtonModel {
         }
 
         if (isEnabled() && visibleEnough) {
-            consumeInput(input, mouseContains);
+            if (mouseContains && input.consumePress(KeyCode.MOUSE_LEFT)) {
+                mouseArmed = true;
+                fireChanged();
+            }
 
             if (mouseArmed && !inputHeld) {
                 if (mouseArmed && mouseContains) {
@@ -96,16 +106,9 @@ public class ButtonModel implements IButtonModel {
         }
     }
 
-    private void consumeInput(IInput input, boolean mouseContains) {
-        if (mouseContains && input.consumeMouse()) {
-            mouseArmed = true;
-            fireChanged();
-        }
-    }
-
     //Getters
     protected boolean isInputHeld(IInput input) {
-        if (input.isMouseHeld(true)) {
+        if (input.isPressed(KeyCode.MOUSE_LEFT, true)) {
             return true;
         }
         return false;

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,6 +25,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.input.GdxInputAdapter;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
@@ -33,6 +35,7 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -70,6 +73,7 @@ public class Launcher extends ApplicationAdapter {
 	private Osd osd;
     private DebugControls debugControls;
 	private SpriteBatch batch;
+    private GdxInputAdapter inputAdapter;
 
     private Novel novel;
     private GLScreenRenderer renderer;
@@ -92,6 +96,7 @@ public class Launcher extends ApplicationAdapter {
 		updateFrameBuffer();
 
 		screenViewport = new FitViewport(vsize.w, vsize.h);
+        inputAdapter = new GdxInputAdapter(screenViewport);
 
 		batch = new SpriteBatch();
         assetManager.load("badlogic.jpg", Texture.class);
@@ -102,6 +107,10 @@ public class Launcher extends ApplicationAdapter {
         sceneEnv = new Scene2dEnv(frameBufferViewport);
         osd = Osd.newInstance();
         debugControls = new DebugControls(sceneEnv);
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
+
+        initWindow();
     }
 
     private void initNovel() {
@@ -120,6 +129,7 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
+        StaticEnvironment.INPUT.set(inputAdapter.getInput());
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
@@ -219,7 +229,10 @@ public class Launcher extends ApplicationAdapter {
 	}
 
 	protected void update() {
-        debugControls.update(novel);
+        inputAdapter.update();
+        IInput input = inputAdapter.getInput();
+
+        debugControls.update(novel, input);
 
         IEnvironment env = novel.getEnv();
         IContext context = Iterables.getFirst(env.getContextManager().getActiveContexts(), null);
@@ -228,7 +241,7 @@ public class Launcher extends ApplicationAdapter {
             IImageDrawable first = Iterables
                     .getFirst(Iterables.filter(rootLayer.getChildren(), IImageDrawable.class), null);
             if (first != null) {
-                debugControls.update(first);
+                debugControls.update(first, input);
             }
         }
 
@@ -263,7 +276,11 @@ public class Launcher extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 
-		screenViewport.update(width, height, true);
+        screenViewport.update(width, height, true);
+        initWindow();
+    }
+
+    private void initWindow() {
         IEnvironment env = novel.getEnv();
         env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
 

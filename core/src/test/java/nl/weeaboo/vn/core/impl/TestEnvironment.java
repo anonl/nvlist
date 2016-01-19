@@ -26,6 +26,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
+        StaticEnvironment.INPUT.set(new Input());
 
         TestEnvironment env = new TestEnvironment();
         env.renderEnv = NvlTestUtil.BASIC_ENV;
