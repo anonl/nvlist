@@ -17,6 +17,7 @@ import nl.weeaboo.vn.core.impl.Input;
 import nl.weeaboo.vn.core.impl.InputAccumulator;
 import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.MousePositionEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.MouseScrollEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.PressState;
 
 public final class GdxInputAdapter implements IUpdateable, InputProcessor {
@@ -86,6 +87,7 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        addMouseScrollEvent(amount);
         return true;
     }
 
@@ -110,6 +112,11 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
         LOG.trace("Mouse position event: {}", worldCoords);
         accum.addEvent(new MousePositionEvent(timestamp(), worldCoords.x, worldCoords.y));
+    }
+
+    private void addMouseScrollEvent(int scrollAmount) {
+        LOG.trace("Mouse scroll event: {}", scrollAmount);
+        accum.addEvent(new MouseScrollEvent(timestamp(), scrollAmount));
     }
 
     private static KeyCode convertKeyboard(int keycode) {

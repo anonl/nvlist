@@ -13,6 +13,7 @@ import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.Event;
 import nl.weeaboo.vn.core.impl.InputAccumulator.MousePositionEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.MouseScrollEvent;
 import nl.weeaboo.vn.math.Vec2;
 
 public final class Input implements IInput {
@@ -28,9 +29,17 @@ public final class Input implements IInput {
 
     public void update(long timestampMs, InputAccumulator accum) {
         List<Event> events = accum.drainEvents();
+
         this.timestampMs = timestampMs;
         this.idle = events.isEmpty();
 
+        // Clear outdated state from last update
+        pointerScroll = 0;
+        for (ButtonState state : buttonStates.values()) {
+            state.consumePress();
+        }
+
+        // Process new input events
         for (Event raw : events) {
             if (raw instanceof ButtonEvent) {
                 ButtonEvent event = (ButtonEvent)raw;
@@ -53,6 +62,10 @@ public final class Input implements IInput {
 
                 pointerPos.x = event.x;
                 pointerPos.y = event.y;
+            } else if (raw instanceof MouseScrollEvent) {
+                MouseScrollEvent event = (MouseScrollEvent)raw;
+
+                pointerScroll += event.scrollAmount;
             } else {
                 LOG.warn("Unknown event type: {}", raw.getClass());
             }

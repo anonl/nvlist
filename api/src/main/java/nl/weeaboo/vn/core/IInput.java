@@ -35,7 +35,8 @@ public interface IInput {
 	double getPointerY();
 
     /**
-     * The amount that the mouse scroll wheel was scrolled.
+     * The amount that the mouse scroll wheel was scrolled. Positive values indicate a downward scroll,
+     * negative values an upward scroll.
      */
     int getPointerScroll();
 

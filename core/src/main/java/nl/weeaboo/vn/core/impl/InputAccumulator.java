@@ -72,4 +72,20 @@ public final class InputAccumulator {
 
     }
 
+    public static class MouseScrollEvent extends Event {
+
+        public final int scrollAmount;
+
+        /**
+         * @param scrollAmount The number of clicks scrolled by the scroll wheel. Positive values indicate a
+         *        downward scroll, negative values an upward scroll.
+         */
+        public MouseScrollEvent(long timestampMs, int scrollAmount) {
+            super(timestampMs);
+
+            this.scrollAmount = scrollAmount;
+        }
+
+    }
+
 }
