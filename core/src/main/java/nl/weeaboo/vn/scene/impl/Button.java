@@ -1,10 +1,13 @@
 package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
+import nl.weeaboo.vn.math.IShape;
+import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IButtonModel;
@@ -19,7 +22,6 @@ public class Button extends Transformable implements IButton, IButtonView {
     // TODO: Store all view state in a ButtonView class
     // - The button class acts as a controller
     // TODO: Add change listener to model
-    // TODO: Implement touchMargin
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -74,6 +76,19 @@ public class Button extends Transformable implements IButton, IButtonView {
     public void draw(IDrawBuffer drawBuffer) {
         ninePatch.render(this, 0, 0, drawBuffer);
         textRenderer.render(this, 0, 0, drawBuffer);
+    }
+
+    @Override
+    protected IShape createCollisionShape() {
+        Rect2D r = getUntransformedVisualBounds();
+
+        r = Rect2D.of(
+                r.x + getAlignOffsetX() - touchMargin,
+                r.y + getAlignOffsetY() - touchMargin,
+                r.w + 2 * touchMargin,
+                r.h + 2 * touchMargin);
+
+        return Polygon.transformedRect(getTransform(), r);
     }
 
     @Override
