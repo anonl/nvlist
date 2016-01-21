@@ -1,13 +1,8 @@
 package nl.weeaboo.vn.image.impl;
 
-import java.util.Map;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatchRenderer;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -18,25 +13,13 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-    private final Map<EArea, ITexture> textures = Maps.newEnumMap(EArea.class);
-
-    private Insets2D insets = Insets2D.EMPTY;
-
-    @Override
-    public double getNativeWidth() {
-        return insets.left + insets.right;
-    }
-
-    @Override
-    public double getNativeHeight() {
-        return insets.top + insets.bottom;
-    }
+    private final INinePatch ninePatch = new NinePatch();
 
     @Override
     public void render(IDrawable d, Area2D r, IDrawBuffer drawBuffer) {
         final int color = d.getColorARGB();
         final Area2D uv = ITexture.DEFAULT_UV;
-        final Insets2D i = insets;
+        final Insets2D i = ninePatch.getInsets();
 
         // Center
         ITexture center = getTexture(EArea.CENTER);
@@ -89,28 +72,41 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
             Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y + i.bottom, i.right, r.h - i.top - i.bottom);
             drawBuffer.drawQuad(d, color, right, bounds, uv);
         }
+    }
 
+    @Override
+    public double getNativeWidth() {
+        return ninePatch.getNativeWidth();
+    }
+
+    @Override
+    public double getNativeHeight() {
+        return ninePatch.getNativeHeight();
     }
 
     @Override
     public ITexture getTexture(EArea area) {
-        return textures.get(area);
+        return ninePatch.getTexture(area);
     }
 
     @Override
     public void setTexture(EArea area, ITexture texture) {
-        Preconditions.checkNotNull(area);
-        textures.put(area, texture);
+        ninePatch.setTexture(area, texture);
     }
 
     @Override
     public Insets2D getInsets() {
-        return insets;
+        return ninePatch.getInsets();
     }
 
     @Override
     public void setInsets(Insets2D i) {
-        this.insets = Checks.checkNotNull(i);
+        ninePatch.setInsets(i);
+    }
+
+    @Override
+    public void set(INinePatch other) {
+        ninePatch.set(other);
     }
 
 }

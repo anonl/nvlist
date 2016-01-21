@@ -20,7 +20,7 @@ import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.image.INinePatchRenderer.EArea;
+import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
