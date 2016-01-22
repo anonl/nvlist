@@ -4,6 +4,7 @@ public final class ButtonState {
 
     private boolean consumed;
     private boolean pressed;
+    private boolean isJustPressed;
     private long pressedStateSinceMs;
 
     public boolean consumePress() {
@@ -13,7 +14,11 @@ public final class ButtonState {
     }
 
     public boolean isJustPressed() {
-        return pressed && !consumed;
+        return pressed && isJustPressed && !consumed;
+    }
+
+    public void clearJustPressed() {
+        isJustPressed = false;
     }
 
     public boolean isPressed(boolean allowConsumedPress) {
@@ -36,6 +41,7 @@ public final class ButtonState {
     public void onPressed(long timestampMs) {
         if (!pressed) {
             consumed = false;
+            isJustPressed = true;
             pressed = true;
             pressedStateSinceMs = timestampMs;
         }
@@ -44,6 +50,7 @@ public final class ButtonState {
     public void onReleased(long timestampMs) {
         if (pressed) {
             consumed = false;
+            isJustPressed = false;
             pressed = false;
             pressedStateSinceMs = timestampMs;
         }

@@ -36,7 +36,7 @@ public final class Input implements IInput {
         // Clear outdated state from last update
         pointerScroll = 0;
         for (ButtonState state : buttonStates.values()) {
-            state.consumePress();
+            state.clearJustPressed();
         }
 
         // Process new input events
