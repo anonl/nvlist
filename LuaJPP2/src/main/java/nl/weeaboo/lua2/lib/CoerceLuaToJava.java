@@ -196,7 +196,6 @@ public class CoerceLuaToJava {
 	static void coerceArgs(Object[] out, Varargs luaArgs, Class<?>[] javaParams) {
 		final int jlen = javaParams.length;
 		if (jlen == 0) {
-			//if (luaArgs.narg() > 0) System.err.println(DebugLib.traceback(0));
 			return;
 		}
 		final int llen = luaArgs.narg();

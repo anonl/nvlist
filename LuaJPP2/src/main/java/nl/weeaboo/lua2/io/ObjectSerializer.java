@@ -118,7 +118,6 @@ public class ObjectSerializer extends ObjectOutputStream {
 		if (env != null) {
 			Long id = env.getId(obj);
 			if (id != null) {
-				//System.err.println(id + "=" + obj);
 				return new RefEnvironment(id);
 			}
 		}

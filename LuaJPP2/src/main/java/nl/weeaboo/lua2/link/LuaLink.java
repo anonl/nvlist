@@ -79,7 +79,6 @@ public class LuaLink implements Serializable {
 		while (table != null && !table.isnil() && (index = funcName.indexOf('.')) >= 0) {
 			String part = funcName.substring(0, index);
 			table = table.get(LuaString.valueOf(part));
-			//System.err.println(part + " " + table);
 			funcName = funcName.substring(index+1);
 		}
 

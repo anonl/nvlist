@@ -222,8 +222,6 @@ public final class LuaRunState implements Serializable {
 			return;
 		}
 
-		//System.err.println("Running: " + t);
-
 		currentThread = t;
 		instructionCount = 0;
 	}
