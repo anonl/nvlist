@@ -24,21 +24,12 @@ public interface IScriptEventDispatcher extends Serializable {
 	public void addTask(IScriptFunction task, double priority);
 
 	/**
-	 * Cancels an active task.
-	 * @return {@code true} if the task was found and removed, {@code false} otherwise.
-	 * @see #addTask(IScriptFunction, double)
-	 */
-	public boolean removeTask(IScriptFunction task);
-
-	/**
-	 * Removes all enqueued events
-	 */
-	public void clear();
-
-	/**
-	 * @return {@code true} if no events are currently enqueued
-	 */
-	public boolean isEmpty();
+     * Cancels all active tasks for the given script function.
+     *
+     * @return {@code true} if the task was found and removed, {@code false} otherwise.
+     * @see #addTask(IScriptFunction, double)
+     */
+    public boolean removeTask(IScriptFunction function);
 
 	/**
 	 * This method should be called once every frame.

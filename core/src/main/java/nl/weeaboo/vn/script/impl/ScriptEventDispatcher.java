@@ -37,24 +37,15 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
 	@Override
 	public boolean removeTask(IScriptFunction func) {
+        boolean removed = false;
 		for (Iterator<Task> itr = tasks.iterator(); itr.hasNext(); ) {
 			Task task = itr.next();
 			if (task.matches(func)) {
 				itr.remove();
-				return true;
+                removed = true;
 			}
 		}
-		return false;
-	}
-
-	@Override
-	public void clear() {
-		events.clear();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return events.isEmpty();
+        return removed;
 	}
 
 	private void sortTasks() {
