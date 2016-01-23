@@ -29,13 +29,14 @@ public class SingleLineLogFormatter extends Formatter {
             return "";
         }
 
-        PrintWriter printWriter = new PrintWriter(new StringWriter());
+        StringWriter sw = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(sw);
         try {
             thrown.printStackTrace(printWriter);
         } finally {
             printWriter.close();
         }
-        return printWriter.toString();
+        return sw.toString();
     }
 
 }
