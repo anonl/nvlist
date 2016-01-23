@@ -80,14 +80,6 @@ public class Storage implements IStorage, Json.Serializable {
         return JsonUtil.toJson(serializable);
     }
 
-    public static Storage fromMap(Map<String, StoragePrimitive> map) {
-        Storage result = new Storage();
-        for (Entry<String, StoragePrimitive> entry : map.entrySet()) {
-            result.set(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
-
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
 
@@ -119,7 +111,7 @@ public class Storage implements IStorage, Json.Serializable {
 
     @Override
     public void clear() {
-        LOG.trace(this + ": Clearing storage");
+        LOG.trace("{}: Clearing storage", this);
 
         properties.clear();
         onChanged();
@@ -129,7 +121,7 @@ public class Storage implements IStorage, Json.Serializable {
     public StoragePrimitive remove(String key) {
         StoragePrimitive removed = properties.remove(key);
         if (removed != null) {
-            LOG.trace(this + ": Remove " + key);
+            LOG.trace("{}: Remove {}", this, key);
             onChanged();
         }
         return removed;
@@ -178,7 +170,7 @@ public class Storage implements IStorage, Json.Serializable {
 
         StoragePrimitive result = properties.get(key);
 
-        LOG.trace(this + ": get(key=" + key + ") = " + result);
+        LOG.trace("{}: get(key={}) = {}", this, key, result);
 
         return result;
     }
@@ -196,11 +188,6 @@ public class Storage implements IStorage, Json.Serializable {
     @Override
     public int getInt(String key, int defaultValue) {
         return (int)getDouble(key, defaultValue);
-    }
-
-    @Override
-    public float getFloat(String key, float defaultValue) {
-        return (float)getDouble(key, defaultValue);
     }
 
     @Override
@@ -235,7 +222,7 @@ public class Storage implements IStorage, Json.Serializable {
             oldval = properties.put(key, val);
         }
 
-        LOG.trace(this + ": set(key=" + key + ") = " + val);
+        LOG.trace("{}: set(key={}) = {}", this, key, val);
 
         if (oldval != val && (oldval == null || !oldval.equals(val))) {
             onChanged();
@@ -249,11 +236,6 @@ public class Storage implements IStorage, Json.Serializable {
 
     @Override
     public void setInt(String key, int val) {
-        setDouble(key, val);
-    }
-
-    @Override
-    public void setFloat(String key, float val) {
         setDouble(key, val);
     }
 

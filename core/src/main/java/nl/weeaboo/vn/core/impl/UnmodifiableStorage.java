@@ -79,11 +79,6 @@ public final class UnmodifiableStorage implements IStorage {
     }
 
     @Override
-    public float getFloat(String key, float defaultValue) {
-        return inner.getFloat(key, defaultValue);
-    }
-
-    @Override
     public double getDouble(String key, double defaultValue) {
         return inner.getDouble(key, defaultValue);
     }
@@ -105,11 +100,6 @@ public final class UnmodifiableStorage implements IStorage {
 
     @Override
     public void setInt(String key, int val) {
-        throw modificationException();
-    }
-
-    @Override
-    public void setFloat(String key, float val) {
         throw modificationException();
     }
 

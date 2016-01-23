@@ -18,7 +18,6 @@ import java.util.Collection;
  */
 public interface IStorage extends Serializable {
 
-    // === Functions ===========================================================
     /**
      * Removes all stored values.
      */
@@ -43,8 +42,6 @@ public interface IStorage extends Serializable {
      * {@code prefix}. Any existing values are overwritten.
      */
     void addAll(String prefix, IStorage val);
-
-    // === Getters =============================================================
 
     /**
      * @see #getKeys(String)
@@ -85,14 +82,6 @@ public interface IStorage extends Serializable {
     int getInt(String key, int defaultValue);
 
     /**
-     * Convenience method for retrieving a floating-point value in single precision. This is equivalent to
-     * calling {@link IStorage#getDouble(String, double)} and casting the result to float.
-     *
-     * @see #getDouble(String, double)
-     */
-    float getFloat(String key, float defaultValue);
-
-    /**
      * Returns value stored under the given key converted to a double.
      *
      * @param defaultValue This value is returned instead if no value was stored under the given key, or if
@@ -108,8 +97,6 @@ public interface IStorage extends Serializable {
      */
     String getString(String key, String defaultValue);
 
-    // === Setters =============================================================
-
     /**
      * Stores a value under the given key. If {@code null}, removes any existing mapping for the given key
      * instead.
@@ -118,6 +105,7 @@ public interface IStorage extends Serializable {
 
     /**
      * Stores a boolean value under the given key.
+     *
      * @see #setString(String, String)
      */
     void setBoolean(String key, boolean val);
@@ -129,14 +117,6 @@ public interface IStorage extends Serializable {
      * @see #setDouble(String, double)
      */
     void setInt(String key, int val);
-
-    /**
-     * Convenience method for storing a single-precision floating point number. All values are stored as
-     * double-precision floating point internally.
-     *
-     * @see #setDouble(String, double)
-     */
-    void setFloat(String key, float val);
 
     /**
      * Stores a double-precision floating point value under the given key.
