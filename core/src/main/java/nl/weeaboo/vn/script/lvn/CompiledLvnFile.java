@@ -25,7 +25,6 @@ class CompiledLvnFile implements ICompiledLvnFile {
 		this.compiledModes = compiledModes.clone();
 	}
 
-	//Functions
 	@Override
 	public int countTextLines(boolean countEmptyLines) {
 		int count = 0;
@@ -69,7 +68,6 @@ class CompiledLvnFile implements ICompiledLvnFile {
         return totalWords;
     }
 
-	//Getters
 	@Override
 	public String getFilename() {
 		return filename;
@@ -79,17 +77,5 @@ class CompiledLvnFile implements ICompiledLvnFile {
     public String getCompiledContents() {
         return ParserUtil.concatLines(compiledLines);
     }
-
-	String[] getSourceLines() {
-		return srcLines;
-	}
-	String[] getCompiledLines() {
-		return compiledLines;
-	}
-	LvnMode[] getCompiledModes() {
-		return compiledModes;
-	}
-
-	//Setters
 
 }

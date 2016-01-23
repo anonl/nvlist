@@ -12,8 +12,8 @@ import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.Event;
-import nl.weeaboo.vn.core.impl.InputAccumulator.MousePositionEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.MouseScrollEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.math.Vec2;
 
 public final class Input implements IInput {
@@ -22,7 +22,7 @@ public final class Input implements IInput {
 
     private final EnumMap<KeyCode, ButtonState> buttonStates = Maps.newEnumMap(KeyCode.class);
     private final Vec2 pointerPos = new Vec2();
-    private int pointerScroll; // TODO: Support mouse scroll events
+    private int pointerScroll;
     private boolean idle;
 
     private long timestampMs;
@@ -43,7 +43,7 @@ public final class Input implements IInput {
         for (Event raw : events) {
             if (raw instanceof ButtonEvent) {
                 ButtonEvent event = (ButtonEvent)raw;
-                ButtonState state = getButtonState(event.key);
+                ButtonState state = getButtonState(event.key, true);
 
                 switch (event.pressState) {
                 case PRESS:
@@ -57,13 +57,13 @@ public final class Input implements IInput {
                 }
 
                 buttonStates.put(event.key, state); // Store updated state
-            } else if (raw instanceof MousePositionEvent) {
-                MousePositionEvent event = (MousePositionEvent)raw;
+            } else if (raw instanceof PointerPositionEvent) {
+                PointerPositionEvent event = (PointerPositionEvent)raw;
 
                 pointerPos.x = event.x;
                 pointerPos.y = event.y;
-            } else if (raw instanceof MouseScrollEvent) {
-                MouseScrollEvent event = (MouseScrollEvent)raw;
+            } else if (raw instanceof PointerScrollEvent) {
+                PointerScrollEvent event = (PointerScrollEvent)raw;
 
                 pointerScroll += event.scrollAmount;
             } else {
@@ -74,7 +74,7 @@ public final class Input implements IInput {
 
     @Override
     public boolean consumePress(KeyCode button) {
-        ButtonState state = getButtonState(button);
+        ButtonState state = getButtonState(button, false);
         if (state == null) {
             return false;
         }
@@ -83,7 +83,7 @@ public final class Input implements IInput {
 
     @Override
     public boolean isJustPressed(KeyCode button) {
-        ButtonState state = getButtonState(button);
+        ButtonState state = getButtonState(button, false);
         if (state == null) {
             return false;
         }
@@ -92,7 +92,7 @@ public final class Input implements IInput {
 
     @Override
     public boolean isPressed(KeyCode button, boolean allowConsumedPress) {
-        ButtonState state = getButtonState(button);
+        ButtonState state = getButtonState(button, false);
         if (state == null) {
             return false;
         }
@@ -101,16 +101,16 @@ public final class Input implements IInput {
 
     @Override
     public long getPressedTime(KeyCode button, boolean allowConsumedPress) {
-        ButtonState state = getButtonState(button);
+        ButtonState state = getButtonState(button, false);
         if (state == null) {
             return 0;
         }
         return state.getPressedTime(timestampMs, allowConsumedPress);
     }
 
-    private ButtonState getButtonState(KeyCode button) {
+    private ButtonState getButtonState(KeyCode button, boolean createIfNeeded) {
         ButtonState state = buttonStates.get(button);
-        if (state == null) {
+        if (state == null && createIfNeeded) {
             state = new ButtonState();
             buttonStates.put(button, state);
         }

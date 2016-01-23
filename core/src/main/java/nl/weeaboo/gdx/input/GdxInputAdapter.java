@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.common.annotations.VisibleForTesting;
 
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IUpdateable;
@@ -16,8 +17,8 @@ import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.Input;
 import nl.weeaboo.vn.core.impl.InputAccumulator;
 import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.MousePositionEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.MouseScrollEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
+import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.PressState;
 
 public final class GdxInputAdapter implements IUpdateable, InputProcessor {
@@ -111,15 +112,16 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         Vector2 worldCoords = viewport.unproject(new Vector2(screenX, screenY));
 
         LOG.trace("Mouse position event: {}", worldCoords);
-        accum.addEvent(new MousePositionEvent(timestamp(), worldCoords.x, worldCoords.y));
+        accum.addEvent(new PointerPositionEvent(timestamp(), worldCoords.x, worldCoords.y));
     }
 
     private void addMouseScrollEvent(int scrollAmount) {
         LOG.trace("Mouse scroll event: {}", scrollAmount);
-        accum.addEvent(new MouseScrollEvent(timestamp(), scrollAmount));
+        accum.addEvent(new PointerScrollEvent(timestamp(), scrollAmount));
     }
 
-    private static KeyCode convertKeyboard(int keycode) {
+    @VisibleForTesting
+    static KeyCode convertKeyboard(int keycode) {
         switch (keycode) {
         case Keys.NUM_0: return KeyCode.NUM_0;
         case Keys.NUM_1: return KeyCode.NUM_1;
@@ -267,7 +269,8 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         }
     }
 
-    private static KeyCode convertMouse(int button) {
+    @VisibleForTesting
+    static KeyCode convertMouse(int button) {
         switch (button) {
         case Buttons.LEFT: return KeyCode.MOUSE_LEFT;
         case Buttons.MIDDLE: return KeyCode.MOUSE_MIDDLE;

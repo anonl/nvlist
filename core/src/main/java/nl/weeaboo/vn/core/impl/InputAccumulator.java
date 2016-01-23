@@ -51,7 +51,7 @@ public final class InputAccumulator {
 
     }
 
-    public static class MousePositionEvent extends Event {
+    public static class PointerPositionEvent extends Event {
 
         public final double x;
         public final double y;
@@ -63,7 +63,7 @@ public final class InputAccumulator {
          * @param x Pointer X-coordinate in virtual coordinates.
          * @param x Pointer Y-coordinate in virtual coordinates.
          */
-        public MousePositionEvent(long timestampMs, double x, double y) {
+        public PointerPositionEvent(long timestampMs, double x, double y) {
             super(timestampMs);
 
             this.x = x;
@@ -72,7 +72,7 @@ public final class InputAccumulator {
 
     }
 
-    public static class MouseScrollEvent extends Event {
+    public static class PointerScrollEvent extends Event {
 
         public final int scrollAmount;
 
@@ -80,7 +80,7 @@ public final class InputAccumulator {
          * @param scrollAmount The number of clicks scrolled by the scroll wheel. Positive values indicate a
          *        downward scroll, negative values an upward scroll.
          */
-        public MouseScrollEvent(long timestampMs, int scrollAmount) {
+        public PointerScrollEvent(long timestampMs, int scrollAmount) {
             super(timestampMs);
 
             this.scrollAmount = scrollAmount;

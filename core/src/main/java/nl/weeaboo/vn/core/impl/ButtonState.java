@@ -39,21 +39,17 @@ public final class ButtonState {
     }
 
     public void onPressed(long timestampMs) {
-        if (!pressed) {
-            consumed = false;
-            isJustPressed = true;
-            pressed = true;
-            pressedStateSinceMs = timestampMs;
-        }
+        consumed = false;
+        isJustPressed = true;
+        pressed = true;
+        pressedStateSinceMs = timestampMs;
     }
 
     public void onReleased(long timestampMs) {
-        if (pressed) {
-            consumed = false;
-            isJustPressed = false;
-            pressed = false;
-            pressedStateSinceMs = timestampMs;
-        }
+        consumed = false;
+        isJustPressed = false;
+        pressed = false;
+        pressedStateSinceMs = timestampMs;
     }
 
 }
