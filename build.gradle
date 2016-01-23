@@ -62,7 +62,9 @@ project(':core') {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
     	testCompile "junit:junit:$junitVersion"
-        testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"        
+        testRuntime "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+		testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"
     }
 }
 
@@ -80,8 +82,7 @@ project(":desktop") {
         runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
 
     	testCompile "junit:junit:$junitVersion"
-        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-		testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+		testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"        
     }
 }
