@@ -62,7 +62,6 @@ project(':core') {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
     	testCompile "junit:junit:$junitVersion"
-        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testRuntime "org.slf4j:slf4j-simple:$slf4jVersion"        
     }
 }
