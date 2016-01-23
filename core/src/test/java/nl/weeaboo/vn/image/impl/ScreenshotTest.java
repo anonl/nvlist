@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
@@ -71,7 +71,7 @@ public class ScreenshotTest {
 
 	@Test
 	public void screenshotBuffer() {
-        Screen screen = NvlTestUtil.newScreen();
+        Screen screen = CoreTestUtil.newScreen();
 		ILayer root = screen.getRootLayer();
 
 		WritableScreenshot s = new WritableScreenshot((short)0, false);

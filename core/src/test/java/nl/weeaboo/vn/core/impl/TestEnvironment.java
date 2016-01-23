@@ -2,7 +2,7 @@ package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.TestFileSystem;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.image.impl.ImageModule;
@@ -29,7 +29,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.INPUT.set(new Input());
 
         TestEnvironment env = new TestEnvironment();
-        env.renderEnv = NvlTestUtil.BASIC_ENV;
+        env.renderEnv = CoreTestUtil.BASIC_ENV;
         env.systemEventHandler = new TestSystemEventHandler();
         env.resourceLoadLog = new ResourceLoadLogStub();
 

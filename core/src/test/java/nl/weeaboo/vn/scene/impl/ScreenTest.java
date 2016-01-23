@@ -3,14 +3,14 @@ package nl.weeaboo.vn.scene.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.scene.ILayer;
 
 public class ScreenTest {
 
 	@Test
 	public void layers() {
-        Screen screen = NvlTestUtil.newScreen();
+        Screen screen = CoreTestUtil.newScreen();
 		ILayer active = screen.getActiveLayer();
 		Assert.assertNotNull(active); // Active layer should never be null
 		ILayer root = screen.getRootLayer();

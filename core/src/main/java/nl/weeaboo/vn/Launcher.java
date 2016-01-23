@@ -93,8 +93,6 @@ public class Launcher extends ApplicationAdapter {
         Texture.setAssetManager(assetManager);
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 
-		updateFrameBuffer();
-
 		screenViewport = new FitViewport(vsize.w, vsize.h);
         inputAdapter = new GdxInputAdapter(screenViewport);
 
@@ -201,7 +199,7 @@ public class Launcher extends ApplicationAdapter {
 		disposeFrameBuffer();
 
 		frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
-		frameBufferViewport.update(frameBuffer.getWidth(), frameBuffer.getHeight(), true);
+        frameBufferViewport.update(vsize.w, vsize.h, true);
 	}
 
 	@Override
@@ -276,15 +274,19 @@ public class Launcher extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 
-        screenViewport.update(width, height, true);
+        LOG.info("Viewport resized: ({}x{})", width, height);
+
         initWindow();
     }
 
     private void initWindow() {
+        screenViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+
         IEnvironment env = novel.getEnv();
         env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
 
         disposeRenderer();
+        updateFrameBuffer();
 	}
 
     public Novel getNovel() {

@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.badlogic.gdx.utils.Disposable;
 
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 public class GeneratedResourceStoreTest {
@@ -49,7 +49,7 @@ public class GeneratedResourceStoreTest {
             if (store.size() == expectedSize) {
                 break;
             }
-            NvlTestUtil.trySleep(100);
+            CoreTestUtil.trySleep(100);
         }
     }
 

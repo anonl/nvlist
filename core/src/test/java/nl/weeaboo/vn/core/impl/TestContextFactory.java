@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.core.impl;
 
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.scene.impl.Screen;
@@ -27,7 +27,7 @@ public class TestContextFactory implements IContextFactory<Context> {
     }
 
     protected Screen newScreen() {
-        return NvlTestUtil.newScreen();
+        return CoreTestUtil.newScreen();
     }
 
     protected IScriptContext newScriptContext() {

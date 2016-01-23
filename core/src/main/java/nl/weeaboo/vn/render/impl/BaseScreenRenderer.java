@@ -103,7 +103,7 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 		);
 		final Rect layerClip = RenderUtil.roundClipRect(layerClip2D);
 
-		applyClipRect(layerClip);
+        applyClipRect(layerClip);
 		translate(bounds.x, bounds.y);
 
 		//Render buffered commands

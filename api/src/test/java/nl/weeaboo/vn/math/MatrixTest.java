@@ -1,8 +1,8 @@
 package nl.weeaboo.vn.math;
 
-import static nl.weeaboo.vn.LvnTestUtil.EPSILON;
-import static nl.weeaboo.vn.LvnTestUtil.deserializeObject;
-import static nl.weeaboo.vn.LvnTestUtil.serializeObject;
+import static nl.weeaboo.vn.ApiTestUtil.EPSILON;
+import static nl.weeaboo.vn.ApiTestUtil.deserializeObject;
+import static nl.weeaboo.vn.ApiTestUtil.serializeObject;
 
 import java.io.IOException;
 import java.util.Random;
@@ -10,7 +10,7 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class MatrixTest {
 
@@ -146,15 +146,15 @@ public class MatrixTest {
             float y = random.nextFloat();
 
             Vec2 expected = new Vec2(33*x+22*y+11, 44*x+55*y+66);
-            LvnTestUtil.assertEquals(expected.x, expected.y, transform.transform(x, y), EPSILON);
+            ApiTestUtil.assertEquals(expected.x, expected.y, transform.transform(x, y), EPSILON);
 
             Vec2 v = new Vec2(x, y);
             transform.transform(v);
-            LvnTestUtil.assertEquals(expected.x, expected.y, v, EPSILON);
+            ApiTestUtil.assertEquals(expected.x, expected.y, v, EPSILON);
 
             float[] pts = {x, y};
             transform.transform(pts, 0, 1);
-            LvnTestUtil.assertEquals(expected.x, expected.y, new Vec2(pts[0], pts[1]), EPSILON);
+            ApiTestUtil.assertEquals(expected.x, expected.y, new Vec2(pts[0], pts[1]), EPSILON);
         }
     }
 

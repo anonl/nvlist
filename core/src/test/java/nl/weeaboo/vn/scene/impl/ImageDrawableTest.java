@@ -3,8 +3,7 @@ package nl.weeaboo.vn.scene.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.TestTexture;
@@ -12,7 +11,7 @@ import nl.weeaboo.vn.image.impl.TextureStub;
 
 public class ImageDrawableTest {
 
-    private static final double E = LvnTestUtil.EPSILON;
+    private static final double E = CoreTestUtil.EPSILON;
 
 	@Test
     public void transform() {
@@ -26,42 +25,42 @@ public class ImageDrawableTest {
 
 		// Bounds
         image.setBounds(x, y, w, h);
-        LvnTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
 
         image.setPos(100, 100);
-        LvnTestUtil.assertEquals(100, 100, w, h, image.getVisualBounds());
+        CoreTestUtil.assertEquals(100, 100, w, h, image.getVisualBounds());
         image.setSize(200, 200);
-        LvnTestUtil.assertEquals(100, 100, 200, 200, image.getVisualBounds());
+        CoreTestUtil.assertEquals(100, 100, 200, 200, image.getVisualBounds());
 
         image.setBounds(1, 2, 3, 4);
-        LvnTestUtil.assertEquals(1, 2, 3, 4, image.getVisualBounds());
+        CoreTestUtil.assertEquals(1, 2, 3, 4, image.getVisualBounds());
 
         image.setX(x);
         image.setY(y);
         image.setWidth(w);
         image.setHeight(h);
-        LvnTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
 
 		// Rotated bounds
         image.setRotation(64); // Rotate 1/8th circle clockwise around top-left
 		final double diagonal = Math.sqrt(w*w + h*h);
-        LvnTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, image.getVisualBounds());
+        CoreTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, image.getVisualBounds());
 
 		// Scaled
         image.setRotation(0);
         image.setScale(0.5, 2);
-        LvnTestUtil.assertEquals(x, y, w * .5, h * 2, image.getVisualBounds());
+        CoreTestUtil.assertEquals(x, y, w * .5, h * 2, image.getVisualBounds());
 
 		// Align
         image.setPos(0, 0);
         image.setScale(1, 1);
         image.setAlign(0.5, 0.5);
-        LvnTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
 	}
 
 	@Test
     public void drawableColor() {
-        ImageDrawable image = NvlTestUtil.newImage();
+        ImageDrawable image = CoreTestUtil.newImage();
 
         // Getters/setters using doubles
         double alpha = 0.35;
@@ -87,7 +86,7 @@ public class ImageDrawableTest {
 
     @Test
     public void drawableAttributes() {
-        ImageDrawable image = NvlTestUtil.newImage();
+        ImageDrawable image = CoreTestUtil.newImage();
 
         // Z
         Assert.assertEquals(0, image.getZ());
@@ -117,7 +116,7 @@ public class ImageDrawableTest {
 
     @Test
     public void imageAttributes() {
-        ImageDrawable image = NvlTestUtil.newImage();
+        ImageDrawable image = CoreTestUtil.newImage();
 
         ITexture alpha = new TextureStub(50, 50);
         ITexture beta = new TextureStub(100, 100);
@@ -127,7 +126,7 @@ public class ImageDrawableTest {
         Assert.assertEquals(0, image.getY(), E);
 
         image.setTexture(alpha, 5);
-        LvnTestUtil.assertEquals(25, 25, 50, 50, image.getVisualBounds());
+        CoreTestUtil.assertEquals(25, 25, 50, 50, image.getVisualBounds());
     }
 
 }

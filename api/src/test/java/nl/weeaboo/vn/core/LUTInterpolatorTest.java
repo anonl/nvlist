@@ -3,11 +3,11 @@ package nl.weeaboo.vn.core;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class LUTInterpolatorTest {
 
-    private static final double EPSILON = LvnTestUtil.EPSILON;
+    private static final double EPSILON = ApiTestUtil.EPSILON;
 
     @Test
     public void basicTest() {

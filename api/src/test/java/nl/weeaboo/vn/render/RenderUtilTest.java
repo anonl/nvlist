@@ -8,7 +8,7 @@ import org.junit.Test;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class RenderUtilTest {
 
@@ -69,7 +69,7 @@ public class RenderUtilTest {
                 0.3 * base.w,
                 0.4 * base.h);
 
-        LvnTestUtil.assertEquals(expected, combined);
+        ApiTestUtil.assertEquals(expected, combined);
     }
 
 }

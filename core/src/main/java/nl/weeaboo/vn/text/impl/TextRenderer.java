@@ -233,13 +233,13 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void setVisibleText(int sl, float vc) {
-        if (startLine != sl || visibleGlyphs != vc) {
+        if (startLine != sl) {
             startLine = sl;
-
-            setVisibleText(vc);
 
             invalidateLayout();
         }
+
+        setVisibleText(vc);
     }
 
     @Override

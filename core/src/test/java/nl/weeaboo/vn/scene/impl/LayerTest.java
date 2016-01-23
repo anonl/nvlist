@@ -12,8 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.vn.LvnTestUtil;
-import nl.weeaboo.vn.NvlTestUtil;
+import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.RenderEnv;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
@@ -26,7 +25,7 @@ import nl.weeaboo.vn.scene.IVisualElement;
 
 public class LayerTest {
 
-    private static final double EPSILON = LvnTestUtil.EPSILON;
+    private static final double EPSILON = CoreTestUtil.EPSILON;
 
     @Test
     public void subLayers() {
@@ -58,15 +57,15 @@ public class LayerTest {
     public void testBounds() {
         Layer layer = new RootLayerStub();
         layer.setBounds(1, 2, 3, 4);
-        LvnTestUtil.assertEquals(1, 2, 3, 4, layer.getBounds());
+        CoreTestUtil.assertEquals(1, 2, 3, 4, layer.getBounds());
         layer.setPos(5, 6);
         layer.setSize(7, 8);
-        LvnTestUtil.assertEquals(5, 6, 7, 8, layer.getBounds());
+        CoreTestUtil.assertEquals(5, 6, 7, 8, layer.getBounds());
         layer.setX(-1);
         layer.setY(-2);
         layer.setWidth(5);
         layer.setHeight(6);
-        LvnTestUtil.assertEquals(-1, -2, 5, 6, layer.getBounds());
+        CoreTestUtil.assertEquals(-1, -2, 5, 6, layer.getBounds());
         Assert.assertEquals(layer.getBounds().x, layer.getX(), EPSILON);
         Assert.assertEquals(layer.getBounds().y, layer.getY(), EPSILON);
         Assert.assertEquals(layer.getBounds().w, layer.getWidth(), EPSILON);
@@ -92,7 +91,7 @@ public class LayerTest {
         // Check generated draw commands
         LayerRenderCommand lrc = buffer.getRootLayerCommand();
         Assert.assertEquals(5, lrc.z);
-        LvnTestUtil.assertEquals(1, 2, 3, 4, lrc.layerBounds);
+        CoreTestUtil.assertEquals(1, 2, 3, 4, lrc.layerBounds);
 
         // Find draw commands for sub layers (in correct Z order)
         List<? extends RenderCommand> layerCommands = buffer.getLayerCommands(lrc.layerId);
@@ -117,12 +116,12 @@ public class LayerTest {
         Layer layer = new RootLayerStub();
         layer.setBounds(0, 0, 1280, 720);
 
-        IImageDrawable entity1 = NvlTestUtil.newImage();
+        IImageDrawable entity1 = CoreTestUtil.newImage();
         entity1.setZ((short)1);
         entity1.setAlpha(0);
         layer.add(entity1);
 
-        IImageDrawable entity2 = NvlTestUtil.newImage();
+        IImageDrawable entity2 = CoreTestUtil.newImage();
         entity2.setZ((short)2);
         layer.add(entity2);
 
@@ -140,7 +139,7 @@ public class LayerTest {
 
     @Test
     public void updateRenderEnv() {
-        IRenderEnv renderEnv = NvlTestUtil.BASIC_ENV;
+        IRenderEnv renderEnv = CoreTestUtil.BASIC_ENV;
 
         RootLayerStub layer = new RootLayerStub();
 
@@ -149,7 +148,7 @@ public class LayerTest {
         Assert.assertEquals(renderEnv, subLayer.getRenderEnv());
 
         // Drawable render env is taken from parent layer, so is null until attached
-        IImageDrawable image = NvlTestUtil.newImage();
+        IImageDrawable image = CoreTestUtil.newImage();
         Assert.assertEquals(null, image.getRenderEnv());
         subLayer.add(image);
         Assert.assertEquals(renderEnv, image.getRenderEnv());

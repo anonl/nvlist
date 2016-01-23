@@ -16,7 +16,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("NVList");
-        config.setWindowedMode(1280, 720);
+        config.setWindowedMode(800, 720);
 
         // TODO Icon support is not yet supported by LWJGL3 backend (2016-01-08)
         // config.addIcon("icon128.png", FileType.Internal);

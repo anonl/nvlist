@@ -3,7 +3,7 @@ package nl.weeaboo.vn.save;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class StoragePrimitiveTest {
 
@@ -134,10 +134,10 @@ public class StoragePrimitiveTest {
     private static void assertNumber(Number expected, StoragePrimitive p) {
         if (expected != null) {
             Assert.assertEquals(expected.doubleValue(), p.toDouble(-expected.doubleValue()),
-                    LvnTestUtil.EPSILON);
+                    ApiTestUtil.EPSILON);
         } else {
-            Assert.assertEquals(123.0, p.toDouble(123.0), LvnTestUtil.EPSILON);
-            Assert.assertEquals(456.0, p.toDouble(456.0), LvnTestUtil.EPSILON);
+            Assert.assertEquals(123.0, p.toDouble(123.0), ApiTestUtil.EPSILON);
+            Assert.assertEquals(456.0, p.toDouble(456.0), ApiTestUtil.EPSILON);
         }
     }
 

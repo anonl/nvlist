@@ -1,18 +1,18 @@
 package nl.weeaboo.vn.math;
 
-import static nl.weeaboo.vn.LvnTestUtil.deserializeObject;
-import static nl.weeaboo.vn.LvnTestUtil.serializeObject;
+import static nl.weeaboo.vn.ApiTestUtil.deserializeObject;
+import static nl.weeaboo.vn.ApiTestUtil.serializeObject;
 
 import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class VectorTest {
 
-	private static final double E = LvnTestUtil.EPSILON;
+	private static final double E = ApiTestUtil.EPSILON;
 
 	@Test
 	public void vectorTest() {
@@ -24,9 +24,9 @@ public class VectorTest {
         System.out.println(a.toString());
 
 		// Copy constructor
-        LvnTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);
+        ApiTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);
         Assert.assertEquals(a.hashCode(), new Vec2(a).hashCode());
-        LvnTestUtil.assertEquals(a.x, a.y, a.clone(), 0);
+        ApiTestUtil.assertEquals(a.x, a.y, a.clone(), 0);
         Assert.assertEquals(a.hashCode(), a.clone().hashCode());
 
 		// Dot product
@@ -34,11 +34,11 @@ public class VectorTest {
 
 		// Add, sub, scale
 		a.add(b);
-		LvnTestUtil.assertEquals(5, 5, a, E);
+		ApiTestUtil.assertEquals(5, 5, a, E);
 		a.sub(b);
-		LvnTestUtil.assertEquals(1, 2, a, E);
+		ApiTestUtil.assertEquals(1, 2, a, E);
 		a.scale(-.5);
-		LvnTestUtil.assertEquals(-.5, -1, a, E);
+		ApiTestUtil.assertEquals(-.5, -1, a, E);
 	}
 
 	@Test
@@ -46,13 +46,13 @@ public class VectorTest {
         Vec2 a = new Vec2(1, 2);
         Vec2 b = new Vec2(4, 3);
 
-        LvnTestUtil.assertEquals(a.y-b.y, b.x-a.x, a.cross(b), 0);
+        ApiTestUtil.assertEquals(a.y-b.y, b.x-a.x, a.cross(b), 0);
 
         Assert.assertEquals(25, b.lengthSquared(), E);
         Assert.assertEquals(5, b.length(), E);
 
         b.normalize();
-        LvnTestUtil.assertEquals(4.0/5.0, 3.0/5.0, b, E);
+        ApiTestUtil.assertEquals(4.0/5.0, 3.0/5.0, b, E);
 	}
 
 	@Test

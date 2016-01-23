@@ -13,11 +13,11 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.math.Vec2;
 
-public final class LvnTestUtil {
+public final class ApiTestUtil {
 
     public static final double EPSILON = 0.001;
 
-    private LvnTestUtil() {
+    private ApiTestUtil() {
     }
 
     public static void assertEquals(Rect2D expected, Rect2D actual) {

@@ -3,7 +3,7 @@ package nl.weeaboo.vn.core;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.LvnTestUtil;
+import nl.weeaboo.vn.ApiTestUtil;
 
 public class InterpolatorsTest {
 
@@ -44,7 +44,7 @@ public class InterpolatorsTest {
     private static void testInterpolator(double[] expected, IInterpolator interpolator) {
         for (int n = 0; n < expected.length; n++) {
             float f = n / (float)(expected.length - 1);
-            Assert.assertEquals(expected[n], interpolator.remap(f), LvnTestUtil.EPSILON);
+            Assert.assertEquals(expected[n], interpolator.remap(f), ApiTestUtil.EPSILON);
         }
     }
 
