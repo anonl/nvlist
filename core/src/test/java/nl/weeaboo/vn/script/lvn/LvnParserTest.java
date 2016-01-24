@@ -15,6 +15,8 @@ import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
@@ -27,6 +29,7 @@ import nl.weeaboo.vn.script.lvn.TextParser.Token;
 
 public class LvnParserTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LvnParserTest.class);
     private static final String scriptDir = "/script/syntax/";
 
 	@Test
@@ -44,7 +47,7 @@ public class LvnParserTest {
 
         final ICompiledLvnFile lvnFile;
         final String contents;
-        System.err.println(filename);
+        LOG.info(filename);
         InputStream in = LvnParserTest.class.getResourceAsStream(scriptDir + filename + ".lvn");
         try {
             ILvnParser parser = LvnParserFactory.getParser(Integer.toString(version));
@@ -57,7 +60,7 @@ public class LvnParserTest {
         URL luaFileUrl = Resources.getResource(LvnParserTest.class, scriptDir + filename + version + ".lua");
         final byte[] checkBytes = Resources.toByteArray(luaFileUrl);
 
-        System.out.println(contents);
+        LOG.debug(contents);
 
         Assert.assertEquals(StringUtil.fromUTF8(checkBytes, 0, checkBytes.length), contents);
         Assert.assertArrayEquals(checkBytes, StringUtil.toUTF8(contents));
@@ -72,11 +75,11 @@ public class LvnParserTest {
 
 		TextParser parser = new TextParser();
 
-		System.out.println("----------------------------------------");
+        LOG.debug("----------------------------------------");
 		for (Token token : parser.tokenize(input)) {
-			System.out.println(token);
+            LOG.debug(token.toString());
 		}
-		System.out.println("----------------------------------------");
+        LOG.debug("----------------------------------------");
 
 		LuaTable debugTable = createDebugFunctions();
 
@@ -88,9 +91,9 @@ public class LvnParserTest {
 		ParseResult parseResult = runtimeParser.parse(input);
 		IntMap<String> commandMap = parseResult.getCommands();
 		for (int n = 0; n < commandMap.size(); n++) {
-			System.out.println(commandMap.keyAt(n) + ": " + commandMap.valueAt(n));
+            LOG.debug(commandMap.keyAt(n) + ": " + commandMap.valueAt(n));
 		}
-		System.out.println("----------------------------------------");
+        LOG.debug("----------------------------------------");
 
 	}
 
@@ -100,21 +103,21 @@ public class LvnParserTest {
 	    table.set(RuntimeTextParser.F_STRINGIFY, new OneArgFunction() {
             @Override
             public LuaValue call(LuaValue arg) {
-                System.out.println("stringify: " + arg);
+                LOG.debug("stringify: " + arg);
                 return arg;
             }
         });
         table.set(RuntimeTextParser.F_TAG_OPEN, new VarArgFunction() {
             @Override
             public Varargs invoke(Varargs args) {
-                System.out.println("tagOpen: " + args.arg1() + " " + args.arg(2));
+                LOG.debug("tagOpen: " + args.arg1() + " " + args.arg(2));
                 return varargsOf(valueOf(""), LuajavaLib.toUserdata(TextStyle.defaultInstance(), TextStyle.class));
             }
         });
         table.set(RuntimeTextParser.F_TAG_CLOSE, new TwoArgFunction() {
             @Override
             public LuaValue call(LuaValue name, LuaValue args) {
-                System.out.println("tagClose: " + name + " " + args);
+                LOG.debug("tagClose: " + name + " " + args);
                 return valueOf("");
             }
         });

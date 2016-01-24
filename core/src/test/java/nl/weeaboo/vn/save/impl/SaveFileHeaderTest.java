@@ -29,7 +29,6 @@ public class SaveFileHeaderTest {
         SaveFileHeaderJson json = SaveFileHeaderJson.encode(header);
 
         String str = JsonUtil.toJson(json);
-        System.out.println(str);
         SaveFileHeaderJson deserialized = JsonUtil.fromJson(SaveFileHeaderJson.class, str);
 
         SaveFileHeader decoded = SaveFileHeaderJson.decode(deserialized);

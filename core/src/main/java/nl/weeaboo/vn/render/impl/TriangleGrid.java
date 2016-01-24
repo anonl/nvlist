@@ -129,8 +129,6 @@ public final class TriangleGrid implements Serializable {
 		double normalizedX = (x-bounds.x) / bounds.w;
 		double normalizedY = (y-bounds.y) / bounds.h;
 
-        // System.out.println(bounds + " " + x + "<->" + normalizedX + " " + y + "<->" + normalizedY);
-
 		double u;
 		if (wrap != TextureWrap.REPEAT_X && wrap != TextureWrap.REPEAT_BOTH) {
 			u = texBounds.x + Math.max(0, Math.min(1, normalizedX)) * texBounds.w;
@@ -144,8 +142,6 @@ public final class TriangleGrid implements Serializable {
 		} else {
 			v = texBounds.y + normalizedY * texBounds.h;
 		}
-
-        // System.out.printf("x=%.1f, y=%.1f :: u=%.1f, v=%.1f\n", x, y, u, v);
 
         coords.put((float)u);
         coords.put(1 - (float)v);

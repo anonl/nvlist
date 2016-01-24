@@ -141,13 +141,11 @@ public abstract class AbstractFadeQuadRenderer {
     	{
     		//Generate vertices
     		if (horizontal) {
-        		//System.out.printf("(%.0f, %.0f, %.0f, %.0f) (%.1f, %.1f, %.1f, %.1f)\n", x0, posa, posb, x1, u0, uva, uvb, u1);
 	    		vs.put(x0);   vs.put(y0);   ts.put(u0);  ts.put(v0);  cs.put(rgba0);
 	    		vs.put(x0);   vs.put(y1);   ts.put(u0);  ts.put(v1);  cs.put(rgba0);
 	    		vs.put(posa); vs.put(y0);   ts.put(uva); ts.put(v0);  cs.put(rgba0);
 	    		vs.put(posa); vs.put(y1);   ts.put(uva); ts.put(v1);  cs.put(rgba0);
     		} else {
-        		//System.out.printf("(%.0f, %.0f, %.0f, %.0f) (%.1f, %.1f, %.1f, %.1f)\n", y0, posa, posb, y1, v0, uva, uvb, v1);
 	    		vs.put(x0);   vs.put(y0);   ts.put(u0);  ts.put(v0);  cs.put(rgba0);
 	    		vs.put(x1);   vs.put(y0);   ts.put(u1);  ts.put(v0);  cs.put(rgba0);
 	    		vs.put(x0);   vs.put(posa); ts.put(u0);  ts.put(uva); cs.put(rgba0);

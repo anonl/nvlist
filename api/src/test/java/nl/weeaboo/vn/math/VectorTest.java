@@ -21,7 +21,6 @@ public class VectorTest {
 
 		// Equality
         Assert.assertFalse(a.equals(null));
-        System.out.println(a.toString());
 
 		// Copy constructor
         ApiTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);

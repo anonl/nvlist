@@ -145,7 +145,6 @@ public class ZipFileArchive extends AbstractFileArchive {
         long fileOffset = getFileOffset(file.getHeaderOffset());
         InputStream in = rfile.getInputStream(fileOffset, file.getCompressedLength());
         if (file.getCompression() == ZipEntry.DEFLATED) {
-            //System.out.printf("%s: %08x %08x %08x\n", r.getFilename(), r.offset, r.compressedLength, r.uncompressedLength);
             in = new CompressedEntryInputStream(in);
         }
         return in;
