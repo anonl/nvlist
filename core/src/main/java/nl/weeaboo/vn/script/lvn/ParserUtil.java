@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 
 import nl.weeaboo.common.StringUtil;
@@ -18,37 +18,28 @@ final class ParserUtil {
 
     private ParserUtil() {
     }
-    
-    public static String[] readLinesUtf8(InputStream in) throws IOException {
+
+    public static List<String> readLinesUtf8(InputStream in) throws IOException {
         byte bytes[] = ByteStreams.toByteArray(in);
-        int off = StreamUtil.skipBOM(bytes, 0, bytes.length);        
-        
-        List<String> lines = new ArrayList<String>();
+        int off = StreamUtil.skipBOM(bytes, 0, bytes.length);
+
+        ImmutableList.Builder<String> lines = ImmutableList.builder();
         while (off < bytes.length) {
             int lineStart = off;
             while (off < bytes.length && bytes[off] != '\n') {
                 off++;
             }
-            
-            int lineEnd = off;          
+
+            int lineEnd = off;
             if (lineEnd > lineStart && bytes[lineEnd-1] == '\r') { // CRLF
                 lines.add(StringUtil.fromUTF8(bytes, lineStart, Math.max(0, lineEnd-lineStart-1)));
             } else { // LF
                 lines.add(StringUtil.fromUTF8(bytes, lineStart, lineEnd-lineStart));
             }
-            
+
             off = lineEnd + 1;
         }
-        return lines.toArray(new String[lines.size()]);
-    }   
-    
-    public static String concatLines(String[] lines) {
-        StringBuilder sb = new StringBuilder();
-        for (String line : lines) {
-            sb.append(line);
-            sb.append('\n');
-        }
-        return sb.toString();
+        return lines.build();
     }
 
     public static boolean isCollapsibleSpace(char c) {
@@ -120,6 +111,7 @@ final class ParserUtil {
         CharacterIterator itr = new StringCharacterIterator(str, off);
         return findBlockEnd(itr, endChar, null);
     }
+
     static int findBlockEnd(CharacterIterator itr, char endChar, StringBuilder out) {
         boolean inQuotes = false;
         int brackets = 0;
@@ -133,8 +125,7 @@ final class ParserUtil {
             } else if (!inQuotes) {
                 if (brackets <= 0 && c == endChar) {
                     break;
-                }
-                else if (c == '[') brackets++;
+                } else if (c == '[') brackets++;
                 else if (c == ']') brackets--;
             }
 

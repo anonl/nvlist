@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 class LvnParser3 implements ILvnParser {
 
-	private String[] compiledLines;
-	private LvnMode[] compiledModes;
+    private List<LvnLine> compiledLines;
 
 	public LvnParser3() {
 	}
@@ -20,70 +21,84 @@ class LvnParser3 implements ILvnParser {
 	//Functions
 	@Override
 	public CompiledLvnFile parseFile(String filename, InputStream in) throws LvnParseException, IOException {
-		String[] src = ParserUtil.readLinesUtf8(in);
-		
-		parseLines(filename, src, 1, 1);
-		return new CompiledLvnFile(filename, src, compiledLines, compiledModes);
+        List<String> src = ParserUtil.readLinesUtf8(in);
+
+        compiledLines = Lists.newArrayList();
+
+        parseLines(filename, src);
+        return new CompiledLvnFile(filename, compiledLines);
 	}
 
-	private void parseLines(String filename, String[] lines, int startLineNum,
-			int textLineNum) throws LvnParseException
-	{
-		compiledLines = new String[lines.length];
-		compiledModes = new LvnMode[lines.length];
-
+    private void parseLines(String filename, List<String> lines) throws LvnParseException {
 		LvnMode mode = LvnMode.TEXT;
-		for (int n = 0; n < lines.length; n++) {
-			String line = lines[n].trim();
+
+        int lineNum = 1;
+        int textLineNum = 1;
+        for (String srcLine : lines) {
+            srcLine = srcLine.trim();
 
 			//End single-line modes
-			if (mode.isSingleLine()) mode = LvnMode.TEXT;
+            if (mode.isSingleLine()) {
+                mode = LvnMode.TEXT;
+            }
 
 			//Look for comment starts
-			if (mode == LvnMode.TEXT && line.startsWith("#")) mode = LvnMode.COMMENT;
-			if (mode == LvnMode.TEXT && line.startsWith("@")) mode = LvnMode.CODE;
+            if (mode == LvnMode.TEXT && srcLine.startsWith("#")) {
+                mode = LvnMode.COMMENT;
+            }
+            if (mode == LvnMode.TEXT && srcLine.startsWith("@")) {
+                mode = LvnMode.CODE;
+            }
 
 			//Process line
+            String compiledLine;
+            final LvnMode compiledLineMode;
 			if (mode == LvnMode.TEXT) {
-				compiledModes[n] = mode;
-				if (line.length() > 0) {
-					line = parseTextLine(filename, line, textLineNum);
+                compiledLineMode = mode;
+
+                if (srcLine.length() > 0) {
+                    compiledLine = parseTextLine(filename, srcLine, textLineNum);
 					textLineNum++;
+                } else {
+                    compiledLine = "";
 				}
 			} else if (mode == LvnMode.CODE || mode == LvnMode.MULTILINE_CODE) {
-				if (line.startsWith("@@")) {
-					compiledModes[n] = LvnMode.MULTILINE_CODE;
+                if (srcLine.startsWith("@@")) {
+                    compiledLineMode = LvnMode.MULTILINE_CODE;
 
-					line = line.substring(2);
+                    compiledLine = srcLine.substring(2);
 					mode = (mode == LvnMode.MULTILINE_CODE ? LvnMode.TEXT : LvnMode.MULTILINE_CODE);
 				} else {
-					compiledModes[n] = mode;
-					if (mode == LvnMode.CODE && line.startsWith("@")) {
-						line = line.substring(1);
+                    compiledLineMode = mode;
+                    if (mode == LvnMode.CODE && srcLine.startsWith("@")) {
+                        compiledLine = srcLine.substring(1);
+                    } else {
+                        compiledLine = srcLine;
 					}
 				}
 
 				if (mode == LvnMode.CODE || mode == LvnMode.MULTILINE_CODE) {
-					line = parseCodeLine(line);
+                    compiledLine = parseCodeLine(compiledLine);
 				} else {
-					line = "";
+                    compiledLine = "";
 				}
 			} else if (mode == LvnMode.COMMENT || mode == LvnMode.MULTILINE_COMMENT) {
-				if (line.startsWith("##")) {
-					compiledModes[n] = LvnMode.MULTILINE_COMMENT;
+                if (srcLine.startsWith("##")) {
+                    compiledLineMode = LvnMode.MULTILINE_COMMENT;
 
 					mode = (mode == LvnMode.MULTILINE_COMMENT ? LvnMode.TEXT : LvnMode.MULTILINE_COMMENT);
 				} else {
-					compiledModes[n] = mode;
+                    compiledLineMode = mode;
 				}
 
 				//Ignore commented lines
-				line = "";
+                compiledLine = "";
 			} else {
-				throw new LvnParseException(filename, startLineNum+n, "Invalid mode: " + mode);
+                throw new LvnParseException(filename, lineNum, "Invalid mode: " + mode);
 			}
 
-			compiledLines[n] = line;
+            compiledLines.add(new LvnLine(srcLine, compiledLine, compiledLineMode));
+            lineNum++;
 		}
 	}
 

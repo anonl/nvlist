@@ -1,36 +1,30 @@
 package nl.weeaboo.vn.script.lvn;
 
 import java.text.BreakIterator;
+import java.util.List;
 import java.util.Locale;
+
+import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 
-class CompiledLvnFile implements ICompiledLvnFile {
+final class CompiledLvnFile implements ICompiledLvnFile {
 
 	private final String filename;
-	private final String[] srcLines;
-	private final String[] compiledLines;
-	private final LvnMode[] compiledModes;
+    private final ImmutableList<LvnLine> lines;
 
-	public CompiledLvnFile(String filename, String[] srcLines, String[] compiledLines,
-			LvnMode[] compiledModes)
-	{
-	    Checks.checkArgument(srcLines.length == compiledLines.length, "source line count != compiled line count");
-	    Checks.checkArgument(compiledLines.length == compiledModes.length, "compiled lines length != compiles modes length");
-
-		this.filename = filename;
-		this.srcLines = srcLines.clone();
-		this.compiledLines = compiledLines.clone();
-		this.compiledModes = compiledModes.clone();
+    public CompiledLvnFile(String filename, List<LvnLine> lines) {
+        this.filename = Checks.checkNotNull(filename);
+        this.lines = ImmutableList.copyOf(lines);
 	}
 
 	@Override
 	public int countTextLines(boolean countEmptyLines) {
 		int count = 0;
-		for (int n = 0; n < compiledLines.length; n++) {
-			if (compiledModes[n] == LvnMode.TEXT) {
-				if (countEmptyLines || !StringUtil.isWhitespace(srcLines[n])) {
+        for (LvnLine line : lines) {
+            if (line.getType() == LvnMode.TEXT) {
+                if (countEmptyLines || !StringUtil.isWhitespace(line.getSourceLine())) {
 					count++;
 				}
 			}
@@ -45,19 +39,19 @@ class CompiledLvnFile implements ICompiledLvnFile {
 
     protected int countTextWords(BreakIterator wordBreakIterator) {
         int totalWords = 0;
-        for (int n = 0; n < compiledLines.length; n++) {
+        for (LvnLine line : lines) {
             int lineWords = 0;
 
-            String line = srcLines[n];
-            if (compiledModes[n] == LvnMode.TEXT) {
-                if (!ParserUtil.isWhitespace(line)) {
-                    wordBreakIterator.setText(line);
+            if (line.getType() == LvnMode.TEXT) {
+                String src = line.getSourceLine();
+                if (!ParserUtil.isWhitespace(src)) {
+                    wordBreakIterator.setText(src);
 
                     int index = wordBreakIterator.first();
                     while (index != BreakIterator.DONE) {
                         int lastIndex = index;
                         index = wordBreakIterator.next();
-                        if (index != BreakIterator.DONE && ParserUtil.isWord(line, lastIndex, index)) {
+                        if (index != BreakIterator.DONE && ParserUtil.isWord(src, lastIndex, index)) {
                             lineWords++;
                         }
                     }
@@ -75,7 +69,12 @@ class CompiledLvnFile implements ICompiledLvnFile {
 
     @Override
     public String getCompiledContents() {
-        return ParserUtil.concatLines(compiledLines);
+        StringBuilder sb = new StringBuilder();
+        for (int n = 0; n < lines.size(); n++) {
+            sb.append(lines.get(n).getCompiledLine());
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 
 }
