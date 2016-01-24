@@ -44,7 +44,7 @@ public final class ProgressInputStream extends FilterInputStream {
     public synchronized long skip(long n) throws IOException {
     	n = in.skip(n);
 
-    	if (n >= 0) {
+        if (n > 0) {
     		pos += n;
 
     		if (pos - lastReportedPos >= updateBytes || pos == length) {
@@ -60,7 +60,7 @@ public final class ProgressInputStream extends FilterInputStream {
 	public synchronized int read(byte b[], int off, int len) throws IOException {
     	int r = super.read(b, off, len);
 
-    	if (r >= 0) {
+        if (r > 0) {
     		pos += r;
     		if (pos - lastReportedPos >= updateBytes || pos == length) {
     			lastReportedPos = pos;
