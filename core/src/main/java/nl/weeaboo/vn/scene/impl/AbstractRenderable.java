@@ -57,7 +57,7 @@ public abstract class AbstractRenderable implements IRenderable {
 
     @Override
     public Rect2D getVisualBounds() {
-        return Rect2D.of(0, 0, getNativeWidth(), getNativeHeight());
+        return Rect2D.of(0, 0, getWidth(), getHeight());
     }
 
     @Override
