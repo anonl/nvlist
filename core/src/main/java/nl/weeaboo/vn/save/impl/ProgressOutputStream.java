@@ -23,7 +23,7 @@ public final class ProgressOutputStream extends FilterOutputStream {
 	}
 
     public static OutputStream wrap(OutputStream out, IProgressListener pl) {
-        return wrap(out, 4096, pl);
+        return wrap(out, 2048, pl);
     }
 
     /**
@@ -43,11 +43,7 @@ public final class ProgressOutputStream extends FilterOutputStream {
 
 		pos += len;
    		if (pos - lastReportedPos >= updateBytes) {
-   			if (updateBytes > 0) {
-   				lastReportedPos = (pos / updateBytes) * updateBytes;
-   			} else {
-   				lastReportedPos = pos;
-   			}
+            lastReportedPos = (pos / updateBytes) * updateBytes;
    			pl.onProgressChanged(lastReportedPos);
    		}
 	}
@@ -58,11 +54,7 @@ public final class ProgressOutputStream extends FilterOutputStream {
 
    		pos++;
    		if (pos - lastReportedPos >= updateBytes) {
-   			if (updateBytes > 0) {
-   				lastReportedPos = (pos / updateBytes) * updateBytes;
-   			} else {
-   				lastReportedPos = pos;
-   			}
+            lastReportedPos = (pos / updateBytes) * updateBytes;
    			pl.onProgressChanged(lastReportedPos);
    		}
 	}

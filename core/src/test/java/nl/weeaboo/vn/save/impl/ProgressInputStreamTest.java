@@ -13,6 +13,8 @@ import nl.weeaboo.vn.core.impl.TestProgressListener;
 
 public class ProgressInputStreamTest {
 
+    private static final float EPSILON = .001f;
+
     private TestProgressListener listener;
 
     private byte[] data;
@@ -59,6 +61,7 @@ public class ProgressInputStreamTest {
         // Trying to read from the empty stream doesn't result in any additional events
         Assert.assertEquals(-1, inputStream.read(new byte[1]));
         Assert.assertEquals(0, listener.consumeEventCount());
+        Assert.assertEquals(1.0f, listener.getLastProgress(), EPSILON);
     }
 
     @Test
@@ -68,6 +71,7 @@ public class ProgressInputStreamTest {
 
         // 1 call to skip results in 1 event at most
         Assert.assertEquals(1, listener.consumeEventCount());
+        Assert.assertEquals(1.0f, listener.getLastProgress(), EPSILON);
 
         // Nothing further to skip
         Assert.assertEquals(0, inputStream.skip(1));
@@ -90,6 +94,7 @@ public class ProgressInputStreamTest {
 
         // Expect ceil(10_000 / 2048.0) = 5 events
         Assert.assertEquals(5, listener.consumeEventCount());
+        Assert.assertEquals(1.0f, listener.getLastProgress(), EPSILON);
     }
 
     /** Throws an exception if length < 0 */

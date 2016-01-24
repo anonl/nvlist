@@ -58,24 +58,24 @@ public final class ProgressInputStream extends FilterInputStream {
 
 	@Override
 	public synchronized int read(byte b[], int off, int len) throws IOException {
-    	int r = super.read(b, off, len);
+        int bytesRead = super.read(b, off, len);
 
-        if (r > 0) {
-    		pos += r;
+        if (bytesRead > 0) {
+            pos += bytesRead;
     		if (pos - lastReportedPos >= updateBytes || pos == length) {
     			lastReportedPos = pos;
     			pl.onProgressChanged((float)(pos / (double)length));
     		}
     	}
 
-    	return r;
+        return bytesRead;
 	}
 
 	@Override
     public synchronized int read() throws IOException {
-    	int r = super.read();
+        int value = super.read();
 
-    	if (r >= 0) {
+        if (value >= 0) {
     		pos++;
     		if (pos - lastReportedPos >= updateBytes || pos == length) {
     			lastReportedPos = pos;
@@ -83,7 +83,7 @@ public final class ProgressInputStream extends FilterInputStream {
     		}
     	}
 
-    	return r;
+        return value;
     }
 
 	@Override
