@@ -66,9 +66,9 @@ public abstract class ResourceLoader implements Serializable {
         for (String ext : autoFileExts) {
             if (filename.endsWith("." + ext)) {
                 if (isValidFilename(filename)) {
-                    LOG.debug("You don't need to specify the file extension: " + filename);
+                    LOG.debug("You don't need to specify the file extension: {}", filename);
                 } else if (isValidFilename(normalizeFilename(filename))) {
-                    LOG.warn("Incorrect file extension: " + filename);
+                    LOG.warn("Incorrect file extension: {}", filename);
                 }
                 break;
             }
@@ -118,7 +118,7 @@ public abstract class ResourceLoader implements Serializable {
             }
             return filtered;
         } catch (IOException ioe) {
-            LOG.warn("Folder doesn't exist or can't be read: " + folder, ioe);
+            LOG.warn("Folder doesn't exist or can't be read: {}", folder, ioe);
             return Collections.emptyList();
         }
     }

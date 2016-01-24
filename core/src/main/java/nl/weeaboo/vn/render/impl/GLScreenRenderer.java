@@ -217,7 +217,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     public void renderScreenshot(IWritableScreenshot ss, Rect glRect) {
         /*
          * TODO Support volatile screenshots (libGDX doesn't seem to have built-in support for GPU-only
-         * texturedata objects) EDIT: Support addded in 1.7.2 (GLOnlyTextureData)
+         * texturedata objects) EDIT: Support added in 1.7.2 (GLOnlyTextureData)
          */
 
         Pixmap pixels = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
