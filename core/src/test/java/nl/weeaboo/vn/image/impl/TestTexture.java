@@ -10,6 +10,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.image.ITextureData;
 
 @CustomSerializable
 public class TestTexture implements ITexture {
@@ -24,6 +25,14 @@ public class TestTexture implements ITexture {
 	private final int[] argb;
 
 	private transient Pixmap image;
+
+    public TestTexture() {
+        this(2, 2);
+    }
+
+    public TestTexture(ITextureData pixels) {
+        this(pixels.getWidth(), pixels.getHeight());
+    }
 
 	public TestTexture(int w, int h) {
         Checks.checkRange(w, "w", 2);
@@ -44,7 +53,7 @@ public class TestTexture implements ITexture {
 		initTransients();
 	}
 
-	private void initTransients() {
+    private void initTransients() {
         image = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         TestImageUtil.setPixmapPixels(image, argb);
 	}

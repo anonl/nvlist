@@ -20,7 +20,6 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
-import nl.weeaboo.vn.render.impl.WritableScreenshot;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;

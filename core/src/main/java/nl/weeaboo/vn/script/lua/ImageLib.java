@@ -65,7 +65,7 @@ public class ImageLib extends LuaLib {
      * @param args ignored
      */
     @ScriptFunction
-    public Varargs getActiveLayer(Varargs args) {
+    public Varargs getActiveLayer(Varargs args) throws ScriptException {
         return LuajavaLib.toUserdata(LuaConvertUtil.getActiveLayer(), ILayer.class);
     }
 

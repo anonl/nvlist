@@ -46,7 +46,7 @@ public final class CoreTestUtil {
 
     public static ImageDrawable newImage() {
         ImageDrawable image = new ImageDrawable();
-        image.setTexture(new TestTexture(2, 2));
+        image.setTexture(new TestTexture());
         return image;
 	}
 

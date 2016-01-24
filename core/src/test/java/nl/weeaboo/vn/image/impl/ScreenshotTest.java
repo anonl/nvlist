@@ -15,7 +15,6 @@ import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.LayerRenderCommand;
 import nl.weeaboo.vn.render.impl.RenderCommand;
 import nl.weeaboo.vn.render.impl.ScreenshotRenderCommand;
-import nl.weeaboo.vn.render.impl.WritableScreenshot;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.impl.Screen;
 

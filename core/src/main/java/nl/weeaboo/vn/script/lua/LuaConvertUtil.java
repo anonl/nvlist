@@ -8,6 +8,7 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.ScriptException;
 
 final class LuaConvertUtil {
@@ -24,12 +25,20 @@ final class LuaConvertUtil {
         throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
     }
 
-    public static ILayer getActiveLayer() {
-        return ContextUtil.getCurrentScreen().getActiveLayer();
+    private static IScreen getCurrentScreen() throws ScriptException {
+        IScreen currentScreen = ContextUtil.getCurrentScreen();
+        if (currentScreen == null) {
+            throw new ScriptException("No screen active");
+        }
+        return currentScreen;
     }
 
-    public static ILayer getRootLayer() {
-        return ContextUtil.getCurrentScreen().getRootLayer();
+    public static ILayer getActiveLayer() throws ScriptException {
+        return getCurrentScreen().getActiveLayer();
+    }
+
+    public static ILayer getRootLayer() throws ScriptException {
+        return getCurrentScreen().getRootLayer();
     }
 
     public static ITexture getTextureArg(IImageModule imageModule, Varargs args, int index)

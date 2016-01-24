@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,10 +34,14 @@ public class LuaUserdata extends LuaValue implements Serializable {
 	public LuaValue m_metatable;
 
 	public LuaUserdata(Object obj) {
-		m_instance = obj;
+        this(obj, null);
 	}
 
 	public LuaUserdata(Object obj, LuaValue metatable) {
+        if (obj == null) {
+            throw new LuaError("Attempt to create userdata from null object");
+        }
+
 		m_instance = obj;
 		m_metatable = metatable;
 	}
@@ -114,7 +118,7 @@ public class LuaUserdata extends LuaValue implements Serializable {
 	}
 
 	@Override
-	public <T> T checkuserdata(Class<T> c) {		
+	public <T> T checkuserdata(Class<T> c) {
 		if (!c.isAssignableFrom(m_instance.getClass())) typerror(c.getName());
 		return c.cast(m_instance);
 	}
@@ -163,8 +167,8 @@ public class LuaUserdata extends LuaValue implements Serializable {
 //				this, val,
 //				(this==val)?1:0,
 //				m_metatable==val.m_metatable?1:0, m_metatable, val.m_metatable,
-//				m_instance==val.m_instance?1:0);		
-		
+//				m_instance==val.m_instance?1:0);
+
 		return this == val || (m_metatable == val.m_metatable && m_instance.equals(val.m_instance));
 	}
 
