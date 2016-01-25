@@ -56,15 +56,23 @@ final class ParserUtil {
             char c = chars[r++];
 
             if (isCollapsibleSpace(c)) {
+                int collapseLength = 1;
+
                 //Skip any future characters if they're whitespace
                 while (r < chars.length && isCollapsibleSpace(chars[r])) {
                     r++;
+                    collapseLength++;
                 }
 
                 if (w == 0 && trim) {
                     continue; //Starts with space
                 } else if (r >= chars.length && trim) {
                     continue; //Ends with space
+                }
+
+                // Replace with ' ', unless the whitespace sequence consists of a single zero width space
+                if (collapseLength > 1 || c != ZERO_WIDTH_SPACE) {
+                    c = ' ';
                 }
             }
 
