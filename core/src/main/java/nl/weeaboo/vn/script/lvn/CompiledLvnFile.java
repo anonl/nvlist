@@ -7,7 +7,6 @@ import java.util.Locale;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.common.StringUtil;
 
 final class CompiledLvnFile implements ICompiledLvnFile {
 
@@ -24,7 +23,7 @@ final class CompiledLvnFile implements ICompiledLvnFile {
 		int count = 0;
         for (LvnLine line : lines) {
             if (line.getType() == LvnMode.TEXT) {
-                if (countEmptyLines || !StringUtil.isWhitespace(line.getSourceLine())) {
+                if (countEmptyLines || !ParserUtil.isWhitespace(line.getSourceLine())) {
 					count++;
 				}
 			}
