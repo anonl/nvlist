@@ -3,11 +3,8 @@ package nl.weeaboo.vn.scene.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.scene.IButtonModel;
-import nl.weeaboo.vn.scene.IButtonView;
 
 public class ButtonModel implements IButtonModel {
 
@@ -19,7 +16,6 @@ public class ButtonModel implements IButtonModel {
     private boolean enabled = true;
     private boolean selected;
     private boolean toggle;
-    private double alphaEnableThreshold = 0.9;
 
     private boolean rollover;
     private boolean mouseArmed;
@@ -52,66 +48,6 @@ public class ButtonModel implements IButtonModel {
         }
 
         return consumed;
-    }
-
-    @Override
-    public void handleInput(IButtonView view, IInput input) {
-        boolean changed = false;
-
-        boolean mouseContains = view.contains(input.getPointerX(), input.getPointerY());
-
-        boolean visibleEnough = view.isVisible(alphaEnableThreshold);
-        if (!visibleEnough) {
-            mouseContains = false;
-        }
-
-        boolean inputHeld = isInputHeld(input);
-        boolean r = mouseContains && (mouseArmed || !inputHeld);
-
-        if (rollover != r) {
-            rollover = r;
-            changed = true;
-        }
-
-        if (isEnabled() && visibleEnough) {
-            if (mouseContains && input.consumePress(KeyCode.MOUSE_LEFT)) {
-                mouseArmed = true;
-                fireChanged();
-            }
-
-            if (mouseArmed && !inputHeld) {
-                if (mouseArmed && mouseContains) {
-                    onClicked();
-                }
-                mouseArmed = false;
-                changed = true;
-            }
-        } else {
-            pressEvents = 0;
-
-            if (mouseArmed) {
-                mouseArmed = false;
-                changed = true;
-            }
-        }
-
-        r = mouseContains && (mouseArmed || !inputHeld);
-        if (rollover != r) {
-            rollover = r;
-            changed = true;
-        }
-
-        if (changed) {
-            fireChanged();
-        }
-    }
-
-    //Getters
-    protected boolean isInputHeld(IInput input) {
-        if (input.isPressed(KeyCode.MOUSE_LEFT, true)) {
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -163,6 +99,27 @@ public class ButtonModel implements IButtonModel {
         if (toggle != t) {
             toggle = t;
             fireChanged();
+        }
+    }
+
+    @Override
+    public void setRollover(boolean r) {
+        if (rollover != r) {
+            rollover = r;
+            fireChanged();
+        }
+    }
+
+    @Override
+    public void setPressed(boolean p) {
+        if (mouseArmed != p) {
+            boolean wasPressed = isPressed();
+
+            mouseArmed = p;
+
+            if (enabled && wasPressed && !isPressed()) {
+                onClicked();
+            }
         }
     }
 

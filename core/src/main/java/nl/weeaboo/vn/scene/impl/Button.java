@@ -5,21 +5,20 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IButtonModel;
-import nl.weeaboo.vn.scene.IButtonView;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.text.impl.TextRenderer;
 
-public class Button extends Transformable implements IButton, IButtonView {
+public class Button extends Transformable implements IButton {
 
-    // TODO: Move handleInput logic from model to button
-    // TODO: Store all view state in a ButtonView class
+    // TODO: Store all view state in a ButtonSkin or ButtonRenderer class
     // - The button class acts as a controller
     // TODO: Add change listener to model
 
@@ -31,6 +30,7 @@ public class Button extends Transformable implements IButton, IButtonView {
     private final IScriptEventDispatcher eventDispatcher;
 
     private double touchMargin;
+    private double alphaEnableThreshold = 0.9;
     private IScriptFunction clickHandler;
 
     private transient IEventListener rendererListener;
@@ -65,7 +65,21 @@ public class Button extends Transformable implements IButton, IButtonView {
     protected void handleInput(IInput input) {
         super.handleInput(input);
 
-        model.handleInput(this, input);
+        boolean enabled = isEnabled() && isVisible(alphaEnableThreshold);
+        boolean mouseContains = enabled && contains(input.getPointerX(), input.getPointerY());
+
+        if (enabled) {
+            model.setRollover(mouseContains);
+            if (mouseContains && input.consumePress(KeyCode.MOUSE_LEFT)) {
+                model.setPressed(true);
+            }
+            if (!input.isPressed(KeyCode.MOUSE_LEFT, true)) {
+                model.setPressed(false);
+            }
+        } else {
+            model.setRollover(false);
+            model.setPressed(false);
+        }
 
         if (clickHandler != null && model.consumePress()) {
             eventDispatcher.addEvent(clickHandler);

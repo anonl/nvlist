@@ -2,12 +2,7 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
-import nl.weeaboo.vn.core.IInput;
-
 public interface IButtonModel extends Serializable {
-
-    /** Update the model state based on the view and input */
-    void handleInput(IButtonView view, IInput input);
 
     /**
      * Buttons store internally if they've been pressed. This method returns if that has been the case and
@@ -20,10 +15,14 @@ public interface IButtonModel extends Serializable {
      */
     boolean isRollover();
 
+    void setRollover(boolean rollover);
+
     /**
      * @return {@code true} if this button is currently being pressed.
      */
     boolean isPressed();
+
+    void setPressed(boolean pressed);
 
     /**
      * @return {@code true} if this button is enabled.
