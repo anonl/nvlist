@@ -20,7 +20,6 @@ public class Button extends Transformable implements IButton {
 
     // TODO: Store all view state in a ButtonSkin or ButtonRenderer class
     // - The button class acts as a controller
-    // TODO: Add change listener to model
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 

@@ -1,10 +1,12 @@
 package nl.weeaboo.vn.core.impl;
 
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.core.impl.InputAccumulator.PressState;
+import nl.weeaboo.vn.scene.IVisualElement;
 
 public class TestInputAdapter {
 
@@ -53,4 +55,22 @@ public class TestInputAdapter {
         accum.addEvent(new ButtonEvent(getTime(), button, PressState.RELEASE));
     }
 
+    public void click(IVisualElement elem) {
+        mouseFocus(elem);
+        mousePress();
+        mouseRelease();
+    }
+
+    public void mousePress() {
+        buttonPressed(KeyCode.MOUSE_LEFT);
+    }
+
+    public void mouseRelease() {
+        buttonReleased(KeyCode.MOUSE_LEFT);
+    }
+
+    public void mouseFocus(IVisualElement elem) {
+        Rect2D bounds = elem.getVisualBounds();
+        pointerMoved(bounds.x + bounds.w / 2, bounds.y + bounds.h / 2);
+    }
 }

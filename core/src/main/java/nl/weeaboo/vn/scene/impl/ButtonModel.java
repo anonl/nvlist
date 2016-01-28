@@ -3,15 +3,12 @@ package nl.weeaboo.vn.scene.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.scene.IButtonModel;
 
 public class ButtonModel implements IButtonModel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(ButtonModel.class);
-
-    private final TransientListenerSupport changeListeners = new TransientListenerSupport();
 
     private boolean enabled = true;
     private boolean selected;
@@ -20,10 +17,6 @@ public class ButtonModel implements IButtonModel {
     private boolean rollover;
     private boolean mouseArmed;
     private int pressEvents;
-
-    protected final void fireChanged() {
-        changeListeners.fireListeners();
-    }
 
     protected void onClicked() {
         LOG.debug("Button clicked");
@@ -42,11 +35,6 @@ public class ButtonModel implements IButtonModel {
          */
         boolean consumed = (pressEvents > 0);
         pressEvents = 0;
-
-        if (consumed) {
-            fireChanged();
-        }
-
         return consumed;
     }
 
@@ -79,10 +67,10 @@ public class ButtonModel implements IButtonModel {
     public void setEnabled(boolean e) {
         if (enabled != e) {
             enabled = e;
+
             if (!enabled) {
                 rollover = false;
             }
-            fireChanged();
         }
     }
 
@@ -90,7 +78,6 @@ public class ButtonModel implements IButtonModel {
     public void setSelected(boolean s) {
         if (selected != s) {
             selected = s;
-            fireChanged();
         }
     }
 
@@ -98,7 +85,6 @@ public class ButtonModel implements IButtonModel {
     public void setToggle(boolean t) {
         if (toggle != t) {
             toggle = t;
-            fireChanged();
         }
     }
 
@@ -106,7 +92,6 @@ public class ButtonModel implements IButtonModel {
     public void setRollover(boolean r) {
         if (rollover != r) {
             rollover = r;
-            fireChanged();
         }
     }
 
