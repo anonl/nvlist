@@ -74,11 +74,8 @@ public abstract class AbstractFadeQuadRenderer {
 		}
 
 		boolean horizontal = (dir == 4 || dir == 6);
-		setupTriangleStrip(bounds, uv, horizontal,
-				(float)a, (float)b,
- premultiplyAlpha(color0),
-                premultiplyAlpha(color1),
-				interpolator);
+        setupTriangleStrip(bounds, uv, horizontal, (float)a, (float)b, premultiplyAlpha(color0),
+                premultiplyAlpha(color1), interpolator);
 
 		renderTriangleStrip(tex, transform, vs, ts, cs, 8+2*segments);
 	}

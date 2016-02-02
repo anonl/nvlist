@@ -76,21 +76,25 @@ public class TextureAdapter implements ITexture {
 
 	@Override
 	public double getWidth() {
-       TextureRegion tr = getTextureRegion();
-        if (tr == null) {
-            return 0.0;
-        }
-		return tr.getRegionWidth() * scaleX;
+        return getPixelWidth() * scaleX;
 	}
 
 	@Override
 	public double getHeight() {
-       TextureRegion tr = getTextureRegion();
-        if (tr == null) {
-            return 0.0;
-        }
-		return tr.getRegionHeight() * scaleY;
+        return getPixelHeight() * scaleY;
 	}
+
+    @Override
+    public int getPixelWidth() {
+        TextureRegion tr = getTextureRegion();
+        return (tr != null ? tr.getRegionWidth() : 0);
+    }
+
+    @Override
+    public int getPixelHeight() {
+        TextureRegion tr = getTextureRegion();
+        return (tr != null ? tr.getRegionHeight() : 0);
+    }
 
 	@Override
 	public double getScaleX() {

@@ -61,6 +61,14 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
+    public void onTick() {
+        super.onTick();
+
+        ninePatch.update();
+        textRenderer.update();
+    }
+
+    @Override
     protected void handleInput(IInput input) {
         super.handleInput(input);
 

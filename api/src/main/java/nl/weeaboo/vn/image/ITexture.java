@@ -18,6 +18,16 @@ public interface ITexture extends Serializable {
 	 */
 	public double getHeight();
 
+    /**
+     * @return The texture width in pixels.
+     */
+    public int getPixelWidth();
+
+    /**
+     * @return The texture height in pixels.
+     */
+    public int getPixelHeight();
+
 	/**
 	 * @return The scale factor from pixel size to virtual size.
 	 */

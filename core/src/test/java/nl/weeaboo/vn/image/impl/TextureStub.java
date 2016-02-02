@@ -22,11 +22,21 @@ public class TextureStub implements ITexture {
 
     @Override
     public double getWidth() {
-        return width;
+        return getPixelWidth() * getScaleX();
     }
 
     @Override
     public double getHeight() {
+        return getPixelHeight() * getScaleY();
+    }
+
+    @Override
+    public int getPixelWidth() {
+        return width;
+    }
+
+    @Override
+    public int getPixelHeight() {
         return height;
     }
 

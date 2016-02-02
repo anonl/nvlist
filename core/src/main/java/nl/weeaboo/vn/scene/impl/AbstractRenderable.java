@@ -26,6 +26,10 @@ public abstract class AbstractRenderable implements IRenderable {
         changeHelper.removeTransientListener(cl);
     }
 
+    @Override
+    public void update() {
+    }
+
     protected final void fireChanged() {
         changeHelper.fireListeners();
     }

@@ -14,6 +14,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IDrawTransform;
+import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.scene.ILayer;
 
 public final class DrawBuffer implements IDrawBuffer {
@@ -75,6 +76,12 @@ public final class DrawBuffer implements IDrawBuffer {
     public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
             float visibleGlyphs) {
         draw(new TextRenderCommand(dt, dx, dy, textLayout, visibleGlyphs));
+    }
+
+    @Override
+    public void drawCustom(IDrawTransform dt, IRenderLogic renderLogic) {
+        int argb = 0xFFFFFFFF;
+        draw(new CustomRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb, renderLogic));
     }
 
 	public void draw(BaseRenderCommand cmd) {

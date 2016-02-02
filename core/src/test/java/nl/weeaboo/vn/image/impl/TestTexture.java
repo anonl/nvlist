@@ -66,13 +66,23 @@ public class TestTexture implements ITexture {
 
 	@Override
 	public double getWidth() {
-		return getScaleY() * image.getHeight();
+        return getScaleY() * getPixelWidth();
 	}
 
 	@Override
 	public double getHeight() {
-		return getScaleX() * image.getWidth();
+        return getScaleX() * getPixelHeight();
 	}
+
+    @Override
+    public int getPixelWidth() {
+        return image.getWidth();
+    }
+
+    @Override
+    public int getPixelHeight() {
+        return image.getHeight();
+    }
 
 	@Override
 	public double getScaleX() {

@@ -20,6 +20,8 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public void onTick() {
         increaseVisibleText(.5f);
+
+        textRenderer.update();
     }
 
     @Override

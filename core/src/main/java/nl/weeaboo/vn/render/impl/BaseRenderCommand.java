@@ -4,15 +4,6 @@ import nl.weeaboo.vn.core.BlendMode;
 
 class BaseRenderCommand extends RenderCommand {
 
-	static final byte ID_LAYER_RENDER_COMMAND  = 8;
-	static final byte ID_QUAD_RENDER_COMMAND   = 9;
-	static final byte ID_BLEND_QUAD_COMMAND    = 10;
-	static final byte ID_FADE_QUAD_COMMAND     = 11;
-	static final byte ID_DISTORT_QUAD_COMMAND  = 12;
-    static final byte ID_TEXT_RENDER_COMMAND   = 13;
-	static final byte ID_CUSTOM_RENDER_COMMAND = 14;
-	static final byte ID_SCREENSHOT_RENDER_COMMAND = 15;
-
 	public final short z;
 	public final boolean clipEnabled;
 	public final BlendMode blendMode;

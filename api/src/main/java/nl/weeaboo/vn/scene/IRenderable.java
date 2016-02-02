@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IEventListener;
+import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 
-public interface IRenderable extends Serializable {
+public interface IRenderable extends Serializable, IUpdateable {
 
     /**
      * Called when this renderable is attached to a drawable in the scene.
@@ -45,7 +46,7 @@ public interface IRenderable extends Serializable {
 
     /**
      * Changes the renderable's current width/height.
-     * 
+     *
      * @see #getWidth()
      * @see #getHeight()
      */

@@ -64,6 +64,10 @@ public final class LuaScriptUtil {
     }
 
     static List<String> getLuaStack(LuaThread thread) {
+        if (thread == null) {
+            return ImmutableList.of();
+        }
+
         ImmutableList.Builder<String> result = ImmutableList.builder();
         for (int level = 0; level < DEFAULT_STACK_LIMIT; level++) {
             String line = DebugLib.fileline(thread, level);
