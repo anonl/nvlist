@@ -1,6 +1,10 @@
 package nl.weeaboo.vn.scene.impl;
 
+import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEventListener;
+import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.scene.IDrawable;
 
 public abstract class AnimatedRenderable extends AbstractRenderable {
 
@@ -9,6 +13,10 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
     private boolean prepared;
     private double time;
     private double duration;
+
+    protected AnimatedRenderable(double duration) {
+        this.duration = Checks.checkRange(duration, "duration", 0);
+    }
 
     @Override
     public void onAttached(IEventListener cl) {
@@ -31,11 +39,11 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
         if (!isFinished()) {
             time = Math.min(getDuration(), time + 1);
 
+            checkedPrepare();
+            updateResources();
+
             if (isFinished()) {
                 onFinished();
-            } else {
-                checkedPrepare();
-                updateResources();
             }
         }
     }
@@ -55,7 +63,6 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
     }
 
     protected void onFinished() {
-        checkedDispose();
     }
 
     protected void prepareResources() {
@@ -85,6 +92,33 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
 
     public double getDuration() {
         return duration;
+    }
+
+    @Override
+    protected final void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        if (isFinished()) {
+            renderEnd(drawBuffer, parent, bounds);
+        } else if (getNormalizedTime() <= 0) {
+            renderStart(drawBuffer, parent, bounds);
+        } else {
+            checkedRenderIntermediate(drawBuffer, parent, bounds);
+        }
+    }
+
+    private void checkedRenderIntermediate(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        checkedPrepare();
+
+        renderIntermediate(drawBuffer, parent, bounds);
+    }
+
+    protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        checkedRenderIntermediate(drawBuffer, parent, bounds);
+    }
+
+    protected abstract void renderIntermediate(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds);
+
+    protected void renderEnd(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        checkedRenderIntermediate(drawBuffer, parent, bounds);
     }
 
 }

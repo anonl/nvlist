@@ -43,6 +43,7 @@ import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
@@ -132,6 +133,7 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
+        StaticEnvironment.SHADER_STORE.set(new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(createFontStore());
 
@@ -204,7 +206,11 @@ public class Launcher extends ApplicationAdapter {
 
 	@Override
 	public final void render() {
-		update();
+        try {
+            update();
+        } catch (RuntimeException re) {
+            onUncaughtException(re);
+        }
 
 		frameBuffer.begin();
         frameBufferViewport.apply();
@@ -213,7 +219,11 @@ public class Launcher extends ApplicationAdapter {
 		Camera camera = frameBufferViewport.getCamera();
         batch.setProjectionMatrix(camera.combined);
 
-        renderScreen(batch);
+        try {
+            renderScreen(batch);
+        } catch (RuntimeException re) {
+            onUncaughtException(re);
+        }
 		frameBuffer.end();
 
         screenViewport.apply();
@@ -226,7 +236,7 @@ public class Launcher extends ApplicationAdapter {
         batch.end();
 	}
 
-	protected void update() {
+    protected void update() {
         inputAdapter.update();
         IInput input = inputAdapter.getInput();
 
@@ -291,6 +301,10 @@ public class Launcher extends ApplicationAdapter {
 
     public Novel getNovel() {
         return novel;
+    }
+
+    private void onUncaughtException(RuntimeException re) {
+        LOG.error("Uncaught exception", re);
     }
 
 }

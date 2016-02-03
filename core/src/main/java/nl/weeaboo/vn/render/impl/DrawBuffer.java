@@ -79,9 +79,9 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     @Override
-    public void drawCustom(IDrawTransform dt, IRenderLogic renderLogic) {
-        int argb = 0xFFFFFFFF;
-        draw(new CustomRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb, renderLogic));
+    public void drawCustom(IDrawTransform dt, int argb, IRenderLogic renderLogic) {
+        draw(new CustomRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb,
+                dt.getTransform(), renderLogic));
     }
 
 	public void draw(BaseRenderCommand cmd) {

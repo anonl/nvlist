@@ -27,15 +27,13 @@ public class TextureAdapter implements ITexture {
 	}
 
 	protected int getHandle() {
-	    return getTexture().getTextureObjectHandle();
+	    Texture tex = getTexture();
+        return (tex != null ? tex.getTextureObjectHandle() : 0);
 	}
 
 	public Texture getTexture() {
 	    TextureRegion tr = getTextureRegion();
-	    if (tr == null) {
-	        return null;
-	    }
-		return tr.getTexture();
+        return (tr != null ? tr.getTexture() : null);
 	}
 
 	public TextureRegion getTextureRegion() {

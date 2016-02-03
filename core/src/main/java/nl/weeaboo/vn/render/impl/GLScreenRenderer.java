@@ -20,6 +20,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.gl.GLBlendMode;
 import nl.weeaboo.gdx.gl.GLMatrixStack;
+import nl.weeaboo.gdx.gl.GdxTextureUtil;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -27,7 +28,6 @@ import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.image.impl.PixmapUtil;
-import nl.weeaboo.vn.image.impl.TextureAdapter;
 
 public class GLScreenRenderer extends BaseScreenRenderer {
 
@@ -79,8 +79,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
     @Override
     public void renderQuad(QuadRenderCommand qrc) {
-        TextureAdapter ta = (TextureAdapter)qrc.tex;
-        TextureRegion tex = ta.getTextureRegion(qrc.uv);
+        TextureRegion tex = GdxTextureUtil.getTextureRegion(qrc.tex, qrc.uv);
 
         double x = qrc.bounds.x;
         double y = qrc.bounds.y;
@@ -143,6 +142,23 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     }
 
     @Override
+    public void renderCustom(CustomRenderCommand cmd) {
+        flushQuadBatch();
+
+        spriteBatch.end();
+
+        matrixStack.pushMatrix();
+        matrixStack.multiply(cmd.transform);
+
+        cmd.renderLogic.render(this);
+
+        matrixStack.popMatrix();
+
+        spriteBatch.setShader(null);
+        spriteBatch.begin();
+    }
+
+    @Override
     public void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader) {
         flushQuadBatch();
 
@@ -183,7 +199,6 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
         shader.begin();
         shader.setUniformMatrix("u_projTrans", matrixStack.getCombined());
-        shader.setUniformi("u_texture", 0);
         for (int n = 0; n < texCount; n++) {
             int loc = shader.fetchUniformLocation("u_texture" + n, false);
             if (loc >= 0) {

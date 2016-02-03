@@ -42,7 +42,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        textRenderer.render(this, getAlignOffsetX(), getAlignOffsetY(), drawBuffer);
+        textRenderer.render(drawBuffer, this, getAlignOffsetX(), getAlignOffsetY());
     }
 
     @Override

@@ -53,7 +53,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
-    public void render(IDrawable d, Area2D bounds, IDrawBuffer buffer) {
+    public void render(IDrawBuffer buffer, IDrawable d, Area2D bounds) {
         float visibleText = getVisibleText();
         if (visibleText == 0f) {
             return;

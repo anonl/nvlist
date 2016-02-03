@@ -26,7 +26,7 @@ final class SaveFileIO {
     }
 
     public static String read(IFileSystem fs, String path) throws IOException {
-        return StringUtil.fromUTF8(readBytes(fs, path));
+        return FileSystemUtil.readString(fs, path);
     }
 
     public static byte[] readBytes(IFileSystem fs, String path) throws IOException {

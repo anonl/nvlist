@@ -19,7 +19,7 @@ public final class NullRenderer extends AbstractRenderable {
     }
 
     @Override
-    protected void render(IDrawable parent, Area2D bounds, IDrawBuffer drawBuffer) {
+    protected void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
     }
 
 }

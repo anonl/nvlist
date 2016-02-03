@@ -60,6 +60,6 @@ public interface IRenderable extends Serializable, IUpdateable {
     /**
      * Renders to the given draw buffer
      */
-    void render(IDrawable parentComponent, double dx, double dy, IDrawBuffer drawBuffer);
+    void render(IDrawBuffer drawBuffer, IDrawable parentComponent, double dx, double dy);
 
 }

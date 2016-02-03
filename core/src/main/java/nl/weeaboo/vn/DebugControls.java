@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.gdx.gl.GdxBitmapTweenRenderer;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
@@ -23,6 +24,8 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
+import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
+import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
@@ -116,6 +119,9 @@ final class DebugControls {
             for (int n = 0; n < 100; n++) {
                 createImage(screen.getRootLayer(), imageModule);
             }
+        }
+        if (screen != null && alt && input.consumePress(KeyCode.K)) {
+            createBitmapTweenImage(screen.getRootLayer(), imageModule);
         }
         if (screen != null && alt && input.consumePress(KeyCode.N)) {
             createNinePatchImage(screen.getRootLayer(), imageModule);
@@ -224,6 +230,21 @@ final class DebugControls {
         text.setDefaultStyle(new TextStyle(null, 32));
         text.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         text.setVisibleText(0f);
+    }
+
+    private static void createBitmapTweenImage(ILayer layer, IImageModule imageModule) {
+        IImageDrawable image = imageModule.createImage(layer);
+        image.setPos(640, 360);
+        image.setAlign(.5, .5);
+
+        ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
+
+        BitmapTweenConfig config = new BitmapTweenConfig(600, new ControlImage(texture, false));
+        config.setStartTexture(texture);
+        config.setEndTexture(null);
+
+        image.setRenderer(new GdxBitmapTweenRenderer(imageModule, config));
+        image.setSize(150, 75);
     }
 
 }

@@ -61,7 +61,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     }
 
     public IResource<T> get(String filename) {
-        CachedResource<T> resource = new CachedResource<T>(selfId, filename);
+        FileResource<T> resource = new FileResource<T>(selfId, filename);
         resource.set(getEntry(filename));
         return resource;
     }

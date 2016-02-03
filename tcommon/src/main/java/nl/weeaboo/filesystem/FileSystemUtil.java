@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.io.StreamUtil;
 
 public final class FileSystemUtil {
 
-	private FileSystemUtil() {		
+	private FileSystemUtil() {
 	}
-		
+
     public static byte[] readBytes(IFileSystem fs, String path) throws IOException {
         byte[] bytes;
         InputStream in = fs.openInputStream(path);
@@ -23,10 +24,16 @@ public final class FileSystemUtil {
         }
         return bytes;
     }
-	
+
+    public static String readString(IFileSystem fs, String path) throws IOException {
+        byte[] bytes = readBytes(fs, path);
+        int skip = StreamUtil.skipBOM(bytes, 0, bytes.length);
+        return StringUtil.fromUTF8(bytes, skip, bytes.length - skip);
+    }
+
 	public static Collection<String> withoutPathPrefix(Collection<String> paths, String prefix) {
 		final int pL = prefix.length();
-		
+
 		Collection<String> result = new ArrayList<String>(paths.size());
 		for (String path : paths) {
 			if (path.length() > prefix.length() && path.charAt(pL) == '/') {
@@ -38,7 +45,7 @@ public final class FileSystemUtil {
 		}
 		return result;
 	}
-	
+
 	public static Comparator<String> getFilenameComparator() {
 		return new Comparator<String>() {
 			@Override
@@ -47,10 +54,10 @@ public final class FileSystemUtil {
 				boolean bDir = b.endsWith("/");
 				if (aDir && !bDir) return -1;
 				if (!aDir && bDir) return 1;
-				
+
 				return a.compareToIgnoreCase(b);
 			}
 		};
 	}
-	
+
 }

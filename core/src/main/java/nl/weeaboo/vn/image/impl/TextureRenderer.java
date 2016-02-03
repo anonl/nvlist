@@ -26,7 +26,7 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
     }
 
     @Override
-    public void render(IDrawable d, Area2D bounds, IDrawBuffer buffer) {
+    public void render(IDrawBuffer buffer, IDrawable d, Area2D bounds) {
         ITexture tex = getTexture();
         if (tex == null) {
             return;

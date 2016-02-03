@@ -29,7 +29,7 @@ public interface IDrawBuffer {
 
     void drawLayer(int layerId, ILayer layer);
 
-    void drawCustom(IDrawTransform transform, IRenderLogic renderLogic);
+    void drawCustom(IDrawTransform transform, int argb, IRenderLogic renderLogic);
 
     /**
      * Schedules a screenshot to be taken during rendering.

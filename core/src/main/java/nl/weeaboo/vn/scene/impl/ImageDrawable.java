@@ -60,7 +60,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     @Override
     public void draw(IDrawBuffer buffer) {
-        renderer.render(this, getAlignOffsetX(), getAlignOffsetY(), buffer);
+        renderer.render(buffer, this, getAlignOffsetX(), getAlignOffsetY());
     }
 
     @Override

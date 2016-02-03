@@ -95,8 +95,8 @@ public class Button extends Transformable implements IButton {
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        ninePatch.render(this, 0, 0, drawBuffer);
-        textRenderer.render(this, 0, 0, drawBuffer);
+        ninePatch.render(drawBuffer, this, 0, 0);
+        textRenderer.render(drawBuffer, this, 0, 0);
     }
 
     @Override

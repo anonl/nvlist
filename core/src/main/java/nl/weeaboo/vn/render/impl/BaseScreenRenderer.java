@@ -141,13 +141,26 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 			preRenderCommand(cmd);
 
 			switch (cmd.id) {
-			case LayerRenderCommand.ID: renderLayer(buffer, (LayerRenderCommand)cmd, layerClip, layerClip2D); break;
-			case QuadRenderCommand.ID:  renderQuad((QuadRenderCommand)cmd); break;
-			case BlendQuadCommand.ID:   renderBlendQuad((BlendQuadCommand)cmd); break;
-			case FadeQuadCommand.ID:    renderFadeQuad((FadeQuadCommand)cmd); break;
-			case DistortQuadCommand.ID: renderDistortQuad((DistortQuadCommand)cmd); break;
+            case LayerRenderCommand.ID:
+                renderLayer(buffer, (LayerRenderCommand)cmd, layerClip, layerClip2D);
+                break;
+            case QuadRenderCommand.ID:
+                renderQuad((QuadRenderCommand)cmd);
+                break;
+            case BlendQuadCommand.ID:
+                renderBlendQuad((BlendQuadCommand)cmd);
+                break;
+            case FadeQuadCommand.ID:
+                renderFadeQuad((FadeQuadCommand)cmd);
+                break;
+            case DistortQuadCommand.ID:
+                renderDistortQuad((DistortQuadCommand)cmd);
+                break;
             case TextRenderCommand.ID:
                 renderText((TextRenderCommand)cmd);
+                break;
+            case CustomRenderCommand.ID:
+                renderCustom((CustomRenderCommand)cmd);
                 break;
 			case ScreenshotRenderCommand.ID: {
 				ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmd;
@@ -171,9 +184,9 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 		applyClipRect(parentClip);
 	}
 
-	/**
-	 * @param cmd The command that's about to be handled.
-	 */
+    /**
+     * @param cmd The command that's about to be handled.
+     */
 	protected void preRenderCommand(BaseRenderCommand cmd) {
 	}
 
@@ -196,6 +209,8 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 	public abstract void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader);
 
 	public abstract void renderScreenshot(IWritableScreenshot out, Rect glScreenRect);
+
+    public abstract void renderCustom(CustomRenderCommand cmd);
 
 	protected abstract boolean renderUnknownCommand(RenderCommand cmd);
 

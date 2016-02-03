@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
@@ -14,7 +15,8 @@ public abstract class AbstractRenderable implements IRenderable {
 
     private final TransientListenerSupport changeHelper = new TransientListenerSupport();
 
-    private double width, height;
+    private double width = 1;
+    private double height = 1;
 
     @Override
     public void onAttached(IEventListener cl) {
@@ -51,6 +53,9 @@ public abstract class AbstractRenderable implements IRenderable {
 
     @Override
     public void setSize(double w, double h) {
+        Checks.checkRange(w, "w", .00001);
+        Checks.checkRange(h, "h", .00001);
+
         if (width != w || height != h) {
             width = w;
             height = h;
@@ -65,11 +70,11 @@ public abstract class AbstractRenderable implements IRenderable {
     }
 
     @Override
-    public final void render(IDrawable parent, double dx, double dy, IDrawBuffer drawBuffer) {
+    public final void render(IDrawBuffer drawBuffer, IDrawable parent, double dx, double dy) {
         Area2D bounds = Area2D.of(dx, dy, width, height);
-        render(parent, bounds, drawBuffer);
+        render(drawBuffer, parent, bounds);
     }
 
-    protected abstract void render(IDrawable parent, Area2D bounds, IDrawBuffer drawBuffer);
+    protected abstract void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds);
 
 }

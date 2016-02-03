@@ -14,7 +14,7 @@ public class BitmapTweenConfig {
     private final double duration;
     private final ControlImage controlImage;
 
-    private double range = 1;
+    private double range = 0.05;
     private IInterpolator interpolator = Interpolators.SMOOTH;
 
     private InputTexture startTexture = new InputTexture();
@@ -53,16 +53,22 @@ public class BitmapTweenConfig {
         return startTexture;
     }
 
-    public void setStartTexture(InputTexture startTexture) {
-        this.startTexture = Checks.checkNotNull(startTexture);
+    public void setStartTexture(ITexture texture) {
+        setStartTexture(texture, 0, 0);
+    }
+    public void setStartTexture(ITexture texture, double alignX, double alignY) {
+        this.startTexture = new InputTexture(texture, alignX, alignY);
     }
 
     public InputTexture getEndTexture() {
         return endTexture;
     }
 
-    public void setEndTexture(InputTexture endTexture) {
-        this.endTexture = Checks.checkNotNull(endTexture);
+    public void setEndTexture(ITexture texture) {
+        setEndTexture(texture, 0, 0);
+    }
+    public void setEndTexture(ITexture texture, double alignX, double alignY) {
+        this.endTexture = new InputTexture(texture, alignX, alignY);
     }
 
     /** Texture that controls the shape of the dissolve and related settings */

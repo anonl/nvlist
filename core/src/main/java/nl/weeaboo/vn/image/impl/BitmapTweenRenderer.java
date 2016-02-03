@@ -2,6 +2,9 @@ package nl.weeaboo.vn.image.impl;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Area2D;
@@ -13,15 +16,14 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.InputTexture;
-import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.impl.TriangleGrid;
 import nl.weeaboo.vn.render.impl.TriangleGrid.TextureWrap;
-import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 
 public abstract class BitmapTweenRenderer extends AnimatedRenderable {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(BitmapTweenRenderer.class);
 
     private static final int INTERPOLATOR_MAX = 255;
 
@@ -36,6 +38,8 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
     private TriangleGrid grid;
 
     public BitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
+        super(config.getDuration());
+
         this.imageModule = imageModule;
         this.config = config;
     }
@@ -98,11 +102,18 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         }
 
         grid = TriangleGrid.layout3(
-                bounds0.toArea2D(), tex0.getUV(baseUV), wrap0,
-                bounds1.toArea2D(), tex1.getUV(baseUV), wrap1,
+                bounds0.toArea2D(), getStartTextureUV(), wrap0,
+                bounds1.toArea2D(), getEndTextureUV(), wrap1,
                 controlBounds.toArea2D(), controlTexUV, controlWrap);
 
-        updateRemapTex(); // Needs to be called here, we don't know if update() will be called before draw()
+        updateRemapTex(); // Init remapTex
+    }
+
+    @Override
+    protected void updateResources() {
+        super.updateResources();
+
+        updateRemapTex();
     }
 
     private boolean updateRemapTex() {
@@ -133,20 +144,32 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
                 buf.put(n, value);
             }
 
+            LOG.debug("Remap tex: {}->{}", i0, i1);
+
             disposeRemapTexture();
             remapTexture = imageModule.createTexture(PixelTextureData.fromPixmap(pixmap), 1, 1);
-        } finally {
+        } catch (RuntimeException re) {
             pixmap.dispose();
+            throw re;
         }
 
         return true;
     }
 
+    protected TriangleGrid getGeometry() {
+        return grid;
+    }
     protected ITexture getStartTexture() {
         return config.getStartTexture().getTexture();
     }
+    protected Area2D getStartTextureUV() {
+        return config.getStartTexture().getUV(baseUV);
+    }
     protected ITexture getEndTexture() {
         return config.getEndTexture().getTexture();
+    }
+    protected Area2D getEndTextureUV() {
+        return config.getEndTexture().getUV(baseUV);
     }
     protected ITexture getControlTexture() {
         return config.getControlImage().getTexture();
@@ -164,12 +187,5 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
     public double getNativeHeight() {
         return getControlTexture().getHeight();
     }
-
-    @Override
-    protected final void render(IDrawable parent, Area2D bounds, IDrawBuffer drawBuffer) {
-        render(drawBuffer, grid, bounds.x, bounds.y);
-    }
-
-    protected abstract void render(IDrawBuffer drawBuffer, TriangleGrid grid, double x, double y);
 
 }

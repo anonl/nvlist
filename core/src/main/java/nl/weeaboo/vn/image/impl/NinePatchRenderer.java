@@ -16,7 +16,7 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
     private final INinePatch ninePatch = new NinePatch();
 
     @Override
-    public void render(IDrawable d, Area2D r, IDrawBuffer drawBuffer) {
+    public void render(IDrawBuffer drawBuffer, IDrawable d, Area2D r) {
         final int color = d.getColorARGB();
         final Area2D uv = ITexture.DEFAULT_UV;
         final Insets2D i = ninePatch.getInsets();
