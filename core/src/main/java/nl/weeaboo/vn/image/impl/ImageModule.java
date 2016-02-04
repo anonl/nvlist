@@ -79,6 +79,11 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
+    public ITexture getTexture(String filename) {
+        return getTexture(new ResourceLoadInfo(filename), false);
+    }
+
+    @Override
     public ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         String filename = loadInfo.getFilename();
         resourceLoader.checkRedundantFileExt(filename);

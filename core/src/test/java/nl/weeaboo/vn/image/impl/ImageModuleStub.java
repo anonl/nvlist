@@ -46,6 +46,11 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
+    public ITexture getTexture(String filename) {
+        return getTexture(new ResourceLoadInfo(filename), false);
+    }
+
+    @Override
     public ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors) {
         return new TestTexture();
     }

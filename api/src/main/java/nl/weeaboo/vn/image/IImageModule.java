@@ -20,6 +20,11 @@ public interface IImageModule extends IModule {
     IButton createButton(ILayer layer, IScriptContext scriptContext);
 
     /**
+     * Convenience method for {@link #getTexture(ResourceLoadInfo, boolean)}
+     */
+    ITexture getTexture(String filename);
+
+    /**
      * Creates a texture object from the specified filename.
      *
      * @param loadInfo Filename of the requested resource and related metadata.

@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.gdx.gl.GdxTextureUtil;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IImageModule;
@@ -140,15 +142,25 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
                     // Value between i0 and i1; partially visible
                     // f is 1.0 at i0, 0.0 at i1
                     double f = (i1 - n) / (i1 - i0);
-                    value = (byte)(INTERPOLATOR_MAX * interpolator.remap((float)f));
+                    float val = INTERPOLATOR_MAX * interpolator.remap((float)f);
+                    value = (byte)Math.max(0, Math.min(INTERPOLATOR_MAX, val));
                 }
                 buf.put(n, value);
             }
 
-            LOG.debug("Remap tex: {}->{}", i0, i1);
+            Texture backingTexture = GdxTextureUtil.getTexture(remapTexture);
 
-            disposeRemapTexture();
-            remapTexture = imageModule.createTexture(PixelTextureData.fromPixmap(pixmap), 1, 1);
+            LOG.debug("Remap tex: {}->{} ({})", i0, i1, (backingTexture == null ? "alloc" : "update"));
+
+            if (backingTexture != null) {
+                // Update existing texture
+                backingTexture.draw(pixmap, 0, 0);
+                pixmap.dispose();
+            } else {
+                // (Re)allocate texture
+                disposeRemapTexture();
+                remapTexture = imageModule.createTexture(PixelTextureData.fromPixmap(pixmap), 1, 1);
+            }
         } catch (RuntimeException re) {
             pixmap.dispose();
             throw re;

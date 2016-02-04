@@ -195,7 +195,7 @@ final class DebugControls {
         image.setPos(640, 360);
         image.setAlign(.5, .5);
 
-        ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
+        ITexture texture = imageModule.getTexture("test");
         image.setTexture(texture);
     }
 
@@ -203,7 +203,7 @@ final class DebugControls {
         IImageDrawable image = imageModule.createImage(layer);
         image.setPos(640, 360);
 
-        ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
+        ITexture texture = imageModule.getTexture("test");
         NinePatchRenderer renderer = new NinePatchRenderer();
         renderer.setInsets(Insets2D.of(50));
         for (EArea area : EArea.values()) {
@@ -237,9 +237,10 @@ final class DebugControls {
         image.setPos(640, 360);
         image.setAlign(.5, .5);
 
-        ITexture texture = imageModule.getTexture(new ResourceLoadInfo("test.jpg"), false);
+        ITexture texture = imageModule.getTexture("test");
+        ITexture control = imageModule.getTexture("fade/shutter-right");
 
-        BitmapTweenConfig config = new BitmapTweenConfig(600, new ControlImage(texture, false));
+        BitmapTweenConfig config = new BitmapTweenConfig(600, new ControlImage(control, false));
         config.setStartTexture(texture);
         config.setEndTexture(null);
 

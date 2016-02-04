@@ -38,7 +38,6 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
@@ -151,10 +150,9 @@ public class Launcher extends ApplicationAdapter {
         ILayer rootLayer = context.getScreen().getRootLayer();
 
         IImageDrawable image = env.getImageModule().createImage(rootLayer);
-        ResourceLoadInfo texLoadInfo = new ResourceLoadInfo("test.jpg");
         image.setPos(640, 360);
         image.setZ((short)-100);
-        image.setTexture(env.getImageModule().getTexture(texLoadInfo, false), 5);
+        image.setTexture(env.getImageModule().getTexture("test"), 5);
 	}
 
     private IFontStore createFontStore() {

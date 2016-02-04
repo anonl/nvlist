@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.IImageModule;
@@ -68,7 +67,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     }
 
     private ITexture getBlankTexture() {
-        return imageModule.getTexture(new ResourceLoadInfo("blank"), false);
+        return imageModule.getTexture("blank");
     }
 
     @Override

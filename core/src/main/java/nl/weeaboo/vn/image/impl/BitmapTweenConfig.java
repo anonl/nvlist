@@ -14,7 +14,7 @@ public class BitmapTweenConfig {
     private final double duration;
     private final ControlImage controlImage;
 
-    private double range = 0.05;
+    private double range = 0.2;
     private IInterpolator interpolator = Interpolators.SMOOTH;
 
     private InputTexture startTexture = new InputTexture();
