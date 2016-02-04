@@ -27,7 +27,8 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
 
     private static final int INTERPOLATOR_MAX = 255;
 
-    private final IImageModule imageModule;
+    protected final IImageModule imageModule;
+
     private final BitmapTweenConfig config;
 
     private Area2D baseUV = ITexture.DEFAULT_UV;

@@ -5,9 +5,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.IImageModule;
@@ -64,6 +67,10 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         return shader;
     }
 
+    private ITexture getBlankTexture() {
+        return imageModule.getTexture(new ResourceLoadInfo("blank"), false);
+    }
+
     @Override
     protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getStartTexture();
@@ -99,13 +106,30 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
                 return;
             }
 
+            ITexture startTexture = getStartTexture();
+            if (startTexture == null) {
+                startTexture = getBlankTexture();
+            }
+
+            ITexture endTexture = getEndTexture();
+            if (endTexture == null) {
+                endTexture = getBlankTexture();
+            }
+
+            ITexture controlTexture = getControlTexture();
+
+            LOG.trace("BitmapTween[start={}, end={}, control={}]", startTexture, endTexture, controlTexture);
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GLBlendMode.DEFAULT_PREMULT.srcFunc, GLBlendMode.DEFAULT_PREMULT.dstFunc);
+
             shader.begin();
             try {
                 // Must init textures in reverse order for some reason (maybe active unit must be 0?)
                 GdxShaderUtil.setTexture(shader, 3, getRemapTexture(), "u_interpolationLUT");
-                GdxShaderUtil.setTexture(shader, 2, getControlTexture(), "u_controlTex");
-                GdxShaderUtil.setTexture(shader, 1, getEndTexture(), "u_tex1");
-                GdxShaderUtil.setTexture(shader, 0, getStartTexture(), "u_tex0");
+                GdxShaderUtil.setTexture(shader, 2, controlTexture, "u_controlTex");
+                GdxShaderUtil.setTexture(shader, 1, endTexture, "u_tex1");
+                GdxShaderUtil.setTexture(shader, 0, startTexture, "u_tex0");
 
                 rr.renderTriangleGrid(geometry, shader);
             } finally {

@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.image.impl;
 
+import java.util.Locale;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -23,7 +25,9 @@ public class TextureAdapter implements ITexture {
 
 	@Override
 	public String toString() {
-		return "TextureAdapter(" + getHandle() + ")";
+		return String.format(Locale.ROOT,
+		        "TextureAdapter(%d, %.1fx%.1f)",
+		        getHandle(), getWidth(), getHeight());
 	}
 
 	protected int getHandle() {
