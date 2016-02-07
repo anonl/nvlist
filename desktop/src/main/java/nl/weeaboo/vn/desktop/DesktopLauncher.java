@@ -13,7 +13,7 @@ public class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
-	public static void main (String[] arg) {
+    public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("NVList");
         config.setWindowedMode(1280, 720);

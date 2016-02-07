@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.lwjgl.glfw.GLFW;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -17,7 +18,7 @@ import nl.weeaboo.vn.core.impl.Novel;
 
 public abstract class IntegrationTest {
 
-    private static final int MAX_STARTUP_TIME_SEC = 30;
+    private static final int MAX_STARTUP_TIME_SEC = 60;
 
     protected Novel novel;
 
@@ -25,6 +26,12 @@ public abstract class IntegrationTest {
 
     @Before
     public void beforeIntegration() throws InterruptedException {
+        /*
+         * Workaround for libGDX issue; GLFW context is terminated upon shutdown, but not reinitialized when
+         * creating a new application
+         */
+        GLFW.glfwInit();
+
         final Semaphore initLock = new Semaphore(0);
         final Launcher launcher = new Launcher() {
             @Override

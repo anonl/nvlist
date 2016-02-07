@@ -1,6 +1,7 @@
 package nl.weeaboo.vn;
 
 import java.io.IOException;
+import java.util.EnumSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,8 +159,17 @@ public class Launcher extends ApplicationAdapter {
     private IFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();
         try {
-            for (BitmapFont font : GdxFontUtil.load("font/DejaVuSerif.ttf", 16, 32)) {
-                fontStore.registerFont("DejaVuSerif", EFontStyle.PLAIN, font);
+            String fontFamily = "RobotoSlab";
+            int[] sizes = { 16, 32 };
+            for (EFontStyle style : EnumSet.of(EFontStyle.PLAIN, EFontStyle.BOLD, EFontStyle.ITALIC)) {
+                String name = fontFamily;
+                if (style.isBold()) name += "Bold";
+                if (style.isItalic()) name += "Oblique";
+
+                BitmapFont[] fonts = GdxFontUtil.load("font/" + name + ".ttf", sizes);
+                for (int n = 0; n < fonts.length; n++) {
+                    fontStore.registerFont(fontFamily, style, fonts[n], sizes[n]);
+                }
             }
         } catch (IOException ioe) {
             LOG.warn("Unable to load font(s)", ioe);

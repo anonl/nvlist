@@ -8,29 +8,12 @@ end
 
 function titlescreen()
 	print("titlescreen")
+
 	local textbox = Text.createTextDrawable()
-	
-	newThread(function()
-		for n=1,60 do
-			textbox:setText("wait " .. tostring(n))
-			yield()
-		end
-		print("other thread")
-		
-		local rootLayer = Image.getActiveLayer()
-		local subLayer = Image.createLayer(rootLayer)
-		
-		local ss = Image.screenshot()
-		while not ss:isAvailable() do
-			yield()
-		end
-		Image.createImage(subLayer, ss)
-	end)
-	
-	-- Wait forever (keeps the main thread alive)
-	while true do
-		yield(60)
-	end
+	local pad = 16
+	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() - pad * 2)
+	textbox:setText("Test sentence for the text drawable.\nSecond line of text.")
+	textbox:setVisibleText(0)
 end
 
 @@

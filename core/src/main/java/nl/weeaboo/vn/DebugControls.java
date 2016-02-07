@@ -1,16 +1,23 @@
 package nl.weeaboo.vn;
 
+import java.awt.Color;
 import java.io.IOException;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.google.common.collect.Iterables;
+import com.google.common.io.BaseEncoding;
 
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.gdx.gl.GdxBitmapTweenRenderer;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.styledtext.EFontStyle;
+import nl.weeaboo.styledtext.MutableStyledText;
+import nl.weeaboo.styledtext.MutableTextStyle;
+import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -131,6 +138,9 @@ final class DebugControls {
         if (screen != null && alt && input.consumePress(KeyCode.T)) {
             createText(screen.getRootLayer());
         }
+        if (screen != null && alt && input.consumePress(KeyCode.Y)) {
+            createLongText(screen.getRootLayer());
+        }
 
         // Button
         if (screen != null && alt && input.consumePress(KeyCode.B)) {
@@ -229,6 +239,45 @@ final class DebugControls {
         text.setZ((short)-1000);
         text.setDefaultStyle(new TextStyle(null, 32));
         text.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        text.setVisibleText(0f);
+    }
+
+    private static void createLongText(ILayer layer) {
+        EntityHelper entityHelper = new EntityHelper();
+        ITextDrawable text = entityHelper.createText(layer);
+        text.setBounds(0, 0, 1280, 720);
+
+        MutableTextStyle mts = new MutableTextStyle();
+        mts.setColor(0xFF404040);
+        mts.setSpeed(10f);
+        text.setDefaultStyle(mts.immutableCopy());
+
+        Random random = new Random();
+        BaseEncoding encoder = BaseEncoding.base64().omitPadding();
+        MutableStyledText mst = new MutableStyledText();
+        for (int w = 0; w < 1000; w++) {
+            byte[] bytes = new byte[3 + random.nextInt(5)];
+            random.nextBytes(bytes);
+
+            mts.setFontSize(16 + 16 * random.nextInt(2));
+
+            switch (random.nextInt(10)) {
+            case 0:
+                mts.setFontStyle(EFontStyle.BOLD);
+                break;
+            case 1:
+                mts.setFontStyle(EFontStyle.ITALIC);
+                break;
+            default:
+                mts.setFontStyle(EFontStyle.PLAIN);
+            }
+
+            mts.setColor(0xFF000000 | Color.HSBtoRGB(random.nextFloat(), .8f, .9f));
+
+            mst.append(new StyledText(encoder.encode(bytes), mts.immutableCopy()));
+            mst.append(' ', null);
+        }
+        text.setText(mst.immutableCopy());
         text.setVisibleText(0f);
     }
 

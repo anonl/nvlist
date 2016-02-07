@@ -3,6 +3,8 @@ package nl.weeaboo.vn.scene.impl;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
+import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -22,6 +24,20 @@ public class TextDrawable extends Transformable implements ITextDrawable {
         increaseVisibleText(.5f);
 
         textRenderer.update();
+    }
+
+    @Override
+    public void handleInput(IInput input) {
+        super.handleInput(input);
+
+        if (contains(input.getPointerX(), input.getPointerY())) {
+            int lineCount = textRenderer.getLineCount();
+            int endLine = textRenderer.getEndLine();
+            if (endLine < lineCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
+                // Scroll to new visible lines
+                textRenderer.setVisibleText(endLine, 0f);
+            }
+        }
     }
 
     @Override

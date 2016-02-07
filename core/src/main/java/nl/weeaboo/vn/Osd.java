@@ -36,7 +36,7 @@ final class Osd implements Disposable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Osd.class);
 
-    private final String fontPath = "font/DejaVuSans.ttf";
+    private final String fontPath = "font/RobotoSlab.ttf";
 
     private BitmapFont font;
     private BitmapFont smallFont;
@@ -59,12 +59,15 @@ final class Osd implements Disposable {
             return;
         }
 
-	    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+        fontStore = new GdxFontStore();
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 	    try {
 		    FreeTypeFontParameter parameter = new FreeTypeFontParameter();
             parameter.incremental = true;
 		    parameter.size = 32;
 		    font = generator.generateFont(parameter);
+            fontStore.registerFont("normal", EFontStyle.PLAIN, font, parameter.size);
 
             // Must create a new parameter object if incremental is true
             parameter = new FreeTypeFontParameter();
@@ -73,13 +76,10 @@ final class Osd implements Disposable {
             parameter.borderColor = Color.WHITE;
             parameter.borderWidth = .5f;
             smallFont = generator.generateFont(parameter);
+            fontStore.registerFont("small", EFontStyle.PLAIN, smallFont, parameter.size);
 	    } finally {
             // generator.dispose();
 	    }
-
-        fontStore = new GdxFontStore();
-        fontStore.registerFont("normal", EFontStyle.PLAIN, font);
-        fontStore.registerFont("small", EFontStyle.PLAIN, smallFont);
 	}
 
 	@Override

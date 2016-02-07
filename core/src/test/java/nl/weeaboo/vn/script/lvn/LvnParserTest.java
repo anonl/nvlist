@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.script.lvn;
 
-import static nl.weeaboo.vn.ApiTestUtil.deserializeObject;
-import static nl.weeaboo.vn.ApiTestUtil.serializeObject;
+import static nl.weeaboo.vn.CoreTestUtil.deserializeObject;
+import static nl.weeaboo.vn.CoreTestUtil.serializeObject;
 
 import java.io.IOException;
 import java.io.InputStream;

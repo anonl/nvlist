@@ -11,9 +11,9 @@ abstract class AbstractResourceStore implements IResourceStore {
     public AbstractResourceStore(Logger log) {
         this.log = Checks.checkNotNull(log);
     }
-    
+
     protected void loadError(String filename, Throwable cause) {
-        log.info("Load error: " + filename, cause);        
+        log.info("Load error: {}", filename, cause);
     }
-    
+
 }

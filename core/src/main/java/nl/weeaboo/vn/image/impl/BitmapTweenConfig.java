@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.image.impl;
 
+import java.io.Serializable;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
@@ -9,8 +11,10 @@ import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.RenderUtil;
 
-public class BitmapTweenConfig {
+public class BitmapTweenConfig implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     private final double duration;
     private final ControlImage controlImage;
 
@@ -72,8 +76,10 @@ public class BitmapTweenConfig {
     }
 
     /** Texture that controls the shape of the dissolve and related settings */
-    public static class ControlImage {
+    public static class ControlImage implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+        
         private final ITexture texture;
         private final boolean tile;
 
@@ -100,8 +106,10 @@ public class BitmapTweenConfig {
 
     }
 
-    public static class InputTexture {
+    public static class InputTexture implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+        
         /** May be null */
         private final ITexture texture;
         private final double alignX, alignY;

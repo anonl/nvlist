@@ -5,6 +5,10 @@ sourceCompatibility = 1.6
 project.ext.mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../android/assets");
 
+test {
+    workingDir = project.assetsDir
+}
+
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
