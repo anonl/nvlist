@@ -115,6 +115,9 @@ final class DebugControls {
             } else {
                 Gdx.graphics.setWindowedMode(renderEnv.getWidth(), renderEnv.getHeight());
             }
+
+            // GDX clears internal press state, so we should do the same
+            input.clearButtonStates();
         }
 
         // Image

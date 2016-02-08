@@ -3,6 +3,11 @@ package nl.weeaboo.vn.core;
 public interface IInput {
 
     /**
+     * Reset button press states.
+     */
+    void clearButtonStates();
+
+    /**
      * @return Same as {@link #isPressed(KeyCode)}, then marks the press as consumed so further calls return
      *         {@code false}.
      */

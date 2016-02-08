@@ -27,6 +27,11 @@ public final class Input implements IInput {
 
     private long timestampMs;
 
+    @Override
+    public void clearButtonStates() {
+        buttonStates.clear();
+    }
+
     public void update(long timestampMs, InputAccumulator accum) {
         List<Event> events = accum.drainEvents();
 
