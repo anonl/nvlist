@@ -256,4 +256,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         }
     }
 
+    @Override
+    public void setSize(double w, double h) {
+        setMaxSize((int)Math.floor(w), (int)Math.floor(h));
+
+        super.setSize(w, h);
+    }
+
 }

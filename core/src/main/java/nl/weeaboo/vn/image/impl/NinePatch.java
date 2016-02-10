@@ -19,6 +19,15 @@ public final class NinePatch implements INinePatch {
     private Insets2D insets = Insets2D.EMPTY;
     // ------
 
+    public NinePatch() {
+    }
+
+    public NinePatch(ITexture tex) {
+        this();
+
+        textures.put(EArea.CENTER, tex);
+    }
+
     @Override
     public void set(INinePatch other) {
         textures.clear();

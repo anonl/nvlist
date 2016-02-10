@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.vn.image.INinePatch;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.script.IScriptFunction;
 
 public interface IButton extends ITransformable {
@@ -37,7 +39,7 @@ public interface IButton extends ITransformable {
 
     /**
      * Sets the script function to automatically call when the button is pressed.
-     * 
+     *
      * @param func The click handler function, or {@code null} to disable automatic click handling.
      * @see #consumePress()
      */
@@ -70,5 +72,11 @@ public interface IButton extends ITransformable {
      * Sets the text displayed on top of this button.
      */
     public void setText(StyledText stext);
+
+    /** @see IButtonRenderer#setTexture(ButtonViewState, ITexture) */
+    public void setTexture(ButtonViewState viewState, ITexture tex);
+
+    /** @see IButtonRenderer#setTexture(ButtonViewState, ITexture) */
+    public void setTexture(ButtonViewState viewState, INinePatch patch);
 
 }

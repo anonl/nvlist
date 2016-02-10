@@ -37,6 +37,7 @@ import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
+import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -147,7 +148,7 @@ final class DebugControls {
 
         // Button
         if (screen != null && alt && input.consumePress(KeyCode.B)) {
-            createButton(screen.getRootLayer(), scriptContext);
+            createButton(screen.getRootLayer(), imageModule, scriptContext);
         }
 
         // Music
@@ -226,10 +227,11 @@ final class DebugControls {
         image.setRenderer(renderer, 5);
     }
 
-    private static void createButton(ILayer layer, IScriptContext scriptContext) {
+    private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext) {
         EntityHelper entityHelper = new EntityHelper();
         IButton button = entityHelper.createButton(layer, scriptContext);
-        button.setSize(100, 20);
+        button.setSize(150, 32);
+        button.setTexture(ButtonViewState.DEFAULT, imageModule.getTexture("test"));
         button.setText("Test");
         button.setPos(800, 200);
     }

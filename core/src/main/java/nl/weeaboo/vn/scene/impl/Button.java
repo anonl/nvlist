@@ -6,26 +6,24 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.KeyCode;
-import nl.weeaboo.vn.image.impl.NinePatchRenderer;
+import nl.weeaboo.vn.image.INinePatch;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IButtonModel;
+import nl.weeaboo.vn.scene.IButtonRenderer;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
-import nl.weeaboo.vn.text.impl.TextRenderer;
 
 public class Button extends Transformable implements IButton {
-
-    // TODO: Store all view state in a ButtonSkin or ButtonRenderer class
-    // - The button class acts as a controller
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     private final IButtonModel model = new ButtonModel();
-    private final NinePatchRenderer ninePatch = new NinePatchRenderer();
-    private final TextRenderer textRenderer = new TextRenderer();
+    private final IButtonRenderer renderer = new ButtonRenderer();
     private final IScriptEventDispatcher eventDispatcher;
 
     private double touchMargin;
@@ -48,24 +46,21 @@ public class Button extends Transformable implements IButton {
             }
         };
 
-        ninePatch.onAttached(rendererListener);
-        textRenderer.onAttached(rendererListener);
+        renderer.onAttached(rendererListener);
     }
 
     @Override
     protected void onDestroyed() {
         super.onDestroyed();
 
-        ninePatch.onDetached(rendererListener);
-        textRenderer.onDetached(rendererListener);
+        renderer.onDetached(rendererListener);
     }
 
     @Override
     public void onTick() {
         super.onTick();
 
-        ninePatch.update();
-        textRenderer.update();
+        renderer.update();
     }
 
     @Override
@@ -95,8 +90,7 @@ public class Button extends Transformable implements IButton {
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        ninePatch.render(drawBuffer, this, 0, 0);
-        textRenderer.render(drawBuffer, this, 0, 0);
+        renderer.render(drawBuffer, this, 0, 0);
     }
 
     @Override
@@ -183,35 +177,44 @@ public class Button extends Transformable implements IButton {
 
     @Override
     public StyledText getText() {
-        return textRenderer.getText();
+        return renderer.getText();
     }
 
     @Override
-    public void setText(String text) {
-        textRenderer.setText(text);
+    public void setText(String s) {
+        setText(new StyledText(s != null ? s : ""));
     }
 
     @Override
     public void setText(StyledText stext) {
-        textRenderer.setText(stext);
+        renderer.setText(stext);
     }
 
     @Override
     protected double getUnscaledWidth() {
-        return Math.max(ninePatch.getWidth(), textRenderer.getWidth());
+        return renderer.getNativeWidth();
     }
 
     @Override
     protected double getUnscaledHeight() {
-        return Math.max(ninePatch.getHeight(), textRenderer.getHeight());
+        return renderer.getNativeHeight();
     }
 
     @Override
     protected void setUnscaledSize(double w, double h) {
-        ninePatch.setSize(w, h);
-        textRenderer.setSize(w, h);
+        renderer.setSize(w, h);
 
         invalidateTransform();
+    }
+
+    @Override
+    public void setTexture(ButtonViewState viewState, ITexture tex) {
+        renderer.setTexture(viewState, tex);
+    }
+
+    @Override
+    public void setTexture(ButtonViewState viewState, INinePatch patch) {
+        renderer.setTexture(viewState, patch);
     }
 
 }
