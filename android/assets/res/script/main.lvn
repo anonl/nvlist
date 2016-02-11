@@ -11,7 +11,7 @@ function titlescreen()
 
 	local textbox = Text.createTextDrawable()
 	local pad = 16
-	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() - pad * 2)
+	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() / 4)
 	textbox:setText("Test sentence for the text drawable.\nSecond line of text.")
 	textbox:setVisibleText(0)
 end

@@ -25,7 +25,6 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(TextRenderer.class);
-    private static final float ALL_GLYPHS_VISIBLE = 999999;
 
     private final StaticRef<IFontStore> fontStore = StaticEnvironment.FONT_STORE;
 
@@ -60,7 +59,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         }
 
         ITextLayout textLayout = getVisibleLayout();
-        buffer.drawText(d, bounds.x, bounds.y + getTextHeight(), textLayout, visibleText);
+        double dx = bounds.x;
+        double dy = bounds.y + getHeight();
+        buffer.drawText(d, dx, dy, textLayout, visibleText);
     }
 
     protected final ITextLayout getLayout() {

@@ -6,6 +6,8 @@ import nl.weeaboo.styledtext.layout.ITextLayout;
 
 public interface ITextRenderState extends IMultiLineText, Serializable {
 
+    final float ALL_GLYPHS_VISIBLE = 999999;
+
 	/**
 	 * Returns the tags of the TextStyle of the characters at the specified location or <code>null</code> if no hit.
 	 */

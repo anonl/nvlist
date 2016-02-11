@@ -20,6 +20,7 @@ public class EntityHelper implements Serializable {
 
     public ITextDrawable createText(ILayer layer) {
         TextDrawable textDrawable = new TextDrawable();
+        textDrawable.setSize(layer.getWidth(), layer.getHeight());
         layer.add(textDrawable);
         return textDrawable;
     }

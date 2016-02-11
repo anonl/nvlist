@@ -18,7 +18,6 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
-import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IInput;
@@ -233,7 +232,7 @@ final class DebugControls {
         button.setSize(150, 32);
         button.setTexture(ButtonViewState.DEFAULT, imageModule.getTexture("test"));
         button.setText("Test");
-        button.setPos(800, 200);
+        button.setPos(800, 0);
     }
 
     private static void createText(ILayer layer) {
@@ -242,7 +241,6 @@ final class DebugControls {
 
         text.setBounds(200, 200, 800, 200);
         text.setZ((short)-1000);
-        text.setDefaultStyle(new TextStyle(null, 32));
         text.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         text.setVisibleText(0f);
     }

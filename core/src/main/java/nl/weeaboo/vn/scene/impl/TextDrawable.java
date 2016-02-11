@@ -33,7 +33,11 @@ public class TextDrawable extends Transformable implements ITextDrawable {
         if (contains(input.getPointerX(), input.getPointerY())) {
             int lineCount = textRenderer.getLineCount();
             int endLine = textRenderer.getEndLine();
-            if (endLine < lineCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
+            int maxGlyphCount = getVisibleLayout().getGlyphCount();
+            if (getVisibleText() < maxGlyphCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
+                // Make all glyphs in the current lines fully visible
+                textRenderer.setVisibleText(ALL_GLYPHS_VISIBLE);
+            } else if (endLine < lineCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
                 // Scroll to new visible lines
                 textRenderer.setVisibleText(endLine, 0f);
             }
@@ -53,7 +57,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public void setUnscaledSize(double w, double h) {
         // Copy textdrawable size to embedded textrenderer
-        setMaxSize((float)w, (float)h);
+        textRenderer.setSize(w, h);
     }
 
     @Override
