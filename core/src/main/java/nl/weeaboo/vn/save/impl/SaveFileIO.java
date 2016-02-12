@@ -47,7 +47,7 @@ final class SaveFileIO {
     }
 
     public static void writeBytes(ZipOutputStream zout, String path, byte[] fileData) throws IOException {
-        ZipUtil.writeFileEntry(zout, path, fileData, 0, fileData.length, Compression.NONE);
+        ZipUtil.writeFileEntry(zout, path, fileData, 0, fileData.length, Compression.DEFLATE);
     }
 
 }

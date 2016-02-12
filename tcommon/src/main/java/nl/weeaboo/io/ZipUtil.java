@@ -21,14 +21,14 @@ public final class ZipUtil {
 		NONE_BAD_CRC
 	}
 
-	private ZipUtil() {	    
+	private ZipUtil() {
 	}
 
 	public static void writeFolderEntry(ZipOutputStream zout, String relpath) throws IOException {
 		if (relpath.length() > 0 && !relpath.endsWith("/")) {
 			relpath += "/";
 		}
-		
+
 		ZipEntry entry = new ZipEntry(relpath);
 		zout.putNextEntry(entry);
 		zout.closeEntry();
@@ -36,7 +36,7 @@ public final class ZipUtil {
 
     public static void add(ZipOutputStream zout, String relpath, File file, Compression c)
             throws IOException {
-        
+
 		if (file.isDirectory()) {
 		    writeFolderEntry(zout, relpath);
 		} else {
@@ -48,11 +48,11 @@ public final class ZipUtil {
 			}
 		}
 	}
-	
+
 	public static void writeFileEntry(ZipOutputStream zout, String relpath, byte[] b, int off, int len,
 			Compression c) throws IOException
 	{
-	    
+
 		ByteArrayInputStream bin = new ByteArrayInputStream(b, off, len);
 		try {
 		    writeFileEntry(zout, relpath, bin, len, c);
@@ -60,7 +60,7 @@ public final class ZipUtil {
 			bin.close();
 		}
 	}
-	
+
    	public static void writeFileEntry(ZipOutputStream zout, String relpath,
    	 		InputStream in, long size, Compression c) throws IOException
    	{
@@ -102,7 +102,7 @@ public final class ZipUtil {
 
         try {
             CRC32 crc = new CRC32();
-            
+
 	        if (size > 0) {
 				long read = 0;
 				byte buf[] = new byte[readBufSize];
@@ -123,14 +123,14 @@ public final class ZipUtil {
             if (tempOut != null) {
                 tempOut.close();
             }
-            
+
         	if (tempF != null && !tempF.delete()) {
         		throw new IOException("Unable to delete temp file: " + tempF);
         	}
         }
 
         //If we've written to a temporary file/buffer, copy the data to the zip stream
-        if (tempOut != zout) {
+        if (tempOut != null) {
             zout.putNextEntry(entry);
 
             if (tempOut instanceof ByteArrayOutputStream) {
@@ -151,7 +151,7 @@ public final class ZipUtil {
                 }
             }
         }
-        
+
 		zout.closeEntry();
 	}
 
