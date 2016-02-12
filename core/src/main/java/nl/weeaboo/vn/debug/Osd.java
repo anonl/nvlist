@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.debug;
 
 import java.util.List;
 
@@ -32,11 +32,12 @@ import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.lua.LuaScriptUtil;
 
-final class Osd implements Disposable {
+public final class Osd implements Disposable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Osd.class);
 
     private final String fontPath = "font/RobotoSlab.ttf";
+    private final PerformanceMetrics performanceMetrics = new PerformanceMetrics();
 
     private BitmapFont font;
     private BitmapFont smallFont;
@@ -95,17 +96,14 @@ final class Osd implements Disposable {
             return;
         }
 
-		List<String> lines = Lists.newArrayList();
-		lines.add("FPS: " + Gdx.graphics.getFramesPerSecond());
-
         IRenderEnv renderEnv = env.getRenderEnv();
         Dim vsize = renderEnv.getVirtualSize();
         int pad = Math.min(vsize.w, vsize.h) / 64;
         int wrapWidth = vsize.w - pad * 2;
 
         int y = vsize.h - pad;
-        GlyphLayout layout = font.draw(batch, Joiner.on('\n').join(lines), pad, y, wrapWidth,
-                Align.left, true);
+        GlyphLayout layout = smallFont.draw(batch, performanceMetrics.getPerformanceSummary(),
+                pad, y, wrapWidth, Align.left, true);
 
         // Small text per context
         for (IContext active : env.getContextManager().getActiveContexts()) {

@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.debug;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -51,7 +51,7 @@ import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 
-final class DebugControls {
+public final class DebugControls {
 
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);
 
