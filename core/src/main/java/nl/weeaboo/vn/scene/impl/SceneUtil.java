@@ -1,6 +1,13 @@
 package nl.weeaboo.vn.scene.impl;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Queues;
 
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
@@ -19,22 +26,35 @@ public final class SceneUtil {
     }
 
     public static void sendSignal(IVisualElement source, ISignal signal) {
-        doSendSignal(getRoot(source), signal);
+        sendSignal(source, signal, VisualOrdering.BACK_TO_FRONT);
     }
 
-    private static void doSendSignal(IVisualElement current, ISignal signal) {
-        if (signal.isHandled()) {
-            return;
+    public static void sendSignal(IVisualElement source, ISignal signal, Ordering<IVisualElement> order) {
+        IVisualElement root = getRoot(source);
+        for (IVisualElement elem : collect(root, order)) {
+            if (signal.isHandled()) {
+                return;
+            }
+            elem.handleSignal(signal);
         }
+    }
 
-        current.handleSignal(signal);
+    private static Iterable<IVisualElement> collect(IVisualElement root, Ordering<IVisualElement> ordering) {
+        List<IVisualElement> result = Lists.newArrayList();
 
-        if (current instanceof IVisualGroup) {
-            IVisualGroup group = (IVisualGroup)current;
-            for (IVisualElement child : ImmutableList.copyOf(group.getChildren())) {
-                doSendSignal(child, signal);
+        Queue<IVisualElement> workQ = Queues.newArrayDeque();
+        workQ.add(root);
+        while (!workQ.isEmpty()) {
+            IVisualElement elem = workQ.remove();
+            result.add(elem);
+
+            if (elem instanceof IVisualGroup) {
+                IVisualGroup group = (IVisualGroup)elem;
+                Iterables.addAll(workQ, group.getChildren());
             }
         }
+        Collections.sort(result, ordering);
+        return result;
     }
 
 }
