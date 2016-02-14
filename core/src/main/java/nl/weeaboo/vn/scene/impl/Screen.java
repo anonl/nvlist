@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.scene.impl;
 
-import com.google.common.collect.Ordering;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
@@ -11,7 +9,6 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
-import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.signal.ISignal;
 import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
@@ -47,7 +44,7 @@ public class Screen implements IScreen {
         SceneUtil.sendSignal(getRootLayer(), signal);
     }
 
-    protected void sendSignal(ISignal signal, Ordering<IVisualElement> order) {
+    protected void sendSignal(ISignal signal, VisualOrdering order) {
         SceneUtil.sendSignal(getRootLayer(), signal, order);
     }
 

@@ -248,6 +248,7 @@ public final class DebugControls {
     private static void createLongText(ILayer layer) {
         EntityHelper entityHelper = new EntityHelper();
         ITextDrawable text = entityHelper.createText(layer);
+        text.setZ((short)1000);
         text.setBounds(0, 0, 1280, 720);
 
         MutableTextStyle mts = new MutableTextStyle();

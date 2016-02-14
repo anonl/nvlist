@@ -111,7 +111,7 @@ public class Launcher extends ApplicationAdapter {
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
 
-        initWindow();
+        initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     private void initNovel() {
@@ -296,11 +296,11 @@ public class Launcher extends ApplicationAdapter {
 
         LOG.info("Viewport resized: ({}x{})", width, height);
 
-        initWindow();
+        initWindow(width, height);
     }
 
-    private void initWindow() {
-        screenViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+    private void initWindow(int width, int height) {
+        screenViewport.update(width, height, true);
 
         IEnvironment env = novel.getEnv();
         env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
