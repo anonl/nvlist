@@ -18,6 +18,7 @@ public class TextBoxState implements ITextBoxState {
     private ITextDrawable textDrawable;
 
     public TextBoxState() {
+        // TODO: Share a single textlog between all screens
         textLog = new TextLog();
 
         baseTextSpeed = NovelPrefs.TEXT_SPEED.getDefaultValue();

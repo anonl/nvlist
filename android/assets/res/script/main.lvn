@@ -1,6 +1,9 @@
 
 @@
 
+--Import built-in NVList functions
+require("builtin/vn")
+
 function main()
 	print("main")
 	return titlescreen()
@@ -10,6 +13,8 @@ function titlescreen()
 	print("titlescreen")
 
 	local textbox = Text.createTextDrawable()
+	setMainTextBox(textbox)
+	
 	local pad = 16
 	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() / 4)
 	textbox:setText("Test sentence for the text drawable.\nSecond line of text.")
