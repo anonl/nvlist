@@ -59,8 +59,12 @@ public final class FastMath {
 		return sz > 0 && (sz & (sz-1)) == 0;
 	}
 	public static int toPowerOfTwo(int target) {
-		if (target <= 0) throw new IllegalArgumentException("target must be positive");
-		if (target > 0x7FFFFFFF) throw new IllegalArgumentException("No greater power-of-two possible in 32 bits: " + target);
+        if (target <= 0) {
+            throw new IllegalArgumentException("target must be positive");
+        }
+        if (target > 0x40000000) {
+            throw new IllegalArgumentException("No greater power-of-two possible in 32 bits: " + target);
+        }
 
 		int cur = (target < 16 ? 1 : 16); //Start with a valid power of two lower than target
 		while (cur < target) {

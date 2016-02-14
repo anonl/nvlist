@@ -23,8 +23,11 @@ public class VisualOrdering extends Ordering<IVisualElement> implements Serializ
 
     @Override
     public int compare(IVisualElement left, IVisualElement right) {
-        int c = Shorts.compare(left.getZ(), right.getZ());
-        return (backToFront ? -c : c);
+        if (backToFront) {
+            return Shorts.compare(right.getZ(), left.getZ());
+        } else {
+            return Shorts.compare(left.getZ(), right.getZ());
+        }
     }
 
     public final boolean isBackToFront() {

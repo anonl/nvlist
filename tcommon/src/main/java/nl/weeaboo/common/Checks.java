@@ -1,20 +1,20 @@
 package nl.weeaboo.common;
 
 public final class Checks {
-	
+
     private Checks() {
     }
 
     private static String nameString(String name) {
         return (name != null ? name : "<undefined>");
     }
-	
+
     public static <T> T checkNotNull(T val) {
         return checkNotNull(val, null);
     }
     public static <T> T checkNotNull(T val, String name) {
         if (val == null) {
-            throw new IllegalArgumentException("Invalid value for " + nameString(name) + ": " + val);
+            throw new IllegalArgumentException("Invalid value for " + nameString(name) + ": null");
         }
         return val;
     }
@@ -24,13 +24,13 @@ public final class Checks {
             throw new IllegalArgumentException(errorMessage);
         }
     }
-    
+
     public static void checkState(boolean condition, String errorMessage) {
         if (!condition) {
             throw new IllegalStateException(errorMessage);
         }
     }
-    
+
     public static int checkRange(int val, String name, int min) {
         return checkRange(val, name, min, Integer.MAX_VALUE);
     }
@@ -40,7 +40,7 @@ public final class Checks {
         }
         return val;
     }
-    
+
 	public static double checkRange(double val, String name) {
 	    return checkRange(val, name, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 	}

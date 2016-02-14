@@ -2,8 +2,6 @@ package nl.weeaboo.entity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -34,9 +32,8 @@ public class SaveLoadTest {
 		Scene scene = world.createScene();
 
 		//Create some entities to save
-		List<Entity> entities = new ArrayList<Entity>();
 		for (int n = 0; n < 3; n++) {
-			entities.add(scene.createEntity());
+            scene.createEntity();
 		}
 
 		//Save the scene
@@ -113,12 +110,12 @@ public class SaveLoadTest {
 
 		long t2 = System.nanoTime();
 
-        System.out.printf("Large serialization total W=%s, R=%s, size=%s\n",
+        System.out.printf("Large serialization total W=%s, R=%s, size=%s%n",
 				StringUtil.formatTime(t1-t0, TimeUnit.NANOSECONDS),
 				StringUtil.formatTime(t2-t1, TimeUnit.NANOSECONDS),
 				StringUtil.formatMemoryAmount(TEMP_FILE.length()));
 		double perEntityMult = 1.0 / (sceneCount * entityCount);
-        System.out.printf("Large serialization per entity W=%s, R=%s, size=%s\n",
+        System.out.printf("Large serialization per entity W=%s, R=%s, size=%s%n",
 				StringUtil.formatTime(Math.round((t1-t0) * perEntityMult), TimeUnit.NANOSECONDS),
 				StringUtil.formatTime(Math.round((t2-t1) * perEntityMult), TimeUnit.NANOSECONDS),
 				StringUtil.formatMemoryAmount(Math.round(TEMP_FILE.length() * perEntityMult)));

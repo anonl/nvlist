@@ -33,21 +33,23 @@ class InMemoryFile {
 	}
 	public InMemoryFile copy(String path) throws IOException {
 		InMemoryFile copy = new InMemoryFile(path);
-		synchronized (this) {
-			checkNotWriting();
-			copy.modifiedTime = modifiedTime;
-			copy.contents = contents;
+        synchronized (copy) {
+            synchronized (this) {
+                checkNotWriting();
+                copy.modifiedTime = modifiedTime;
+                copy.contents = contents;
+            }
 		}
 		return copy;
 	}
 
-	private void checkNotReading() throws IOException {
+    private synchronized void checkNotReading() throws IOException {
 		if (openInputStreams > 0) {
 			throw new IOException("File is currently opened for reading: " + path);
 		}
 	}
 
-	private void checkNotWriting() throws IOException {
+    private synchronized void checkNotWriting() throws IOException {
 		if (openOutputStreams > 0) {
 			throw new IOException("File is currently opened for writing: " + path);
 		}

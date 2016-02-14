@@ -93,9 +93,11 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
 	}
 
-	private static class TaskSorter implements Comparator<Task> {
+    private static class TaskSorter implements Comparator<Task>, Serializable {
 
-		@Override
+        private static final long serialVersionUID = 1L;
+
+        @Override
 		public int compare(Task a, Task b) {
 			return Double.compare(b.priority, a.priority); // Descending (reverse) order
 		}

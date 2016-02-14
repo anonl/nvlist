@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import nl.weeaboo.io.IRandomAccessFile;
 import nl.weeaboo.io.RandomAccessUtil;
@@ -120,6 +122,9 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 
 			@Override
 			public ArchiveFileRecord next() {
+                if (t >= records.length) {
+                    throw new NoSuchElementException(Integer.toString(t));
+                }
 			    return records[t++];
 			}
 
@@ -171,7 +176,9 @@ public abstract class AbstractFileArchive extends AbstractFileSystem implements 
 		return rfile;
 	}
 
-    private static class RecordPathComparator implements Comparator<Object> {
+    private static class RecordPathComparator implements Comparator<Object>, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public int compare(Object a, Object b) {

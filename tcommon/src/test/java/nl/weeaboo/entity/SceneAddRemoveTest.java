@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SceneAddRemoveTest {
-	
+
 	/**
 	 * Adds and then removes scenes.
 	 */
@@ -17,13 +17,12 @@ public class SceneAddRemoveTest {
 		World world = new World(pr);
 
 		// Create some scenes with some entities
-		List<Entity> entities = new ArrayList<Entity>();
 		List<Scene> scenes = new ArrayList<Scene>();
 		for (int s = 0; s < 3; s++) {
 			Scene scene = world.createScene();
 			scenes.add(scene);
 			for (int e = 0; e < 3; e++) {
-				entities.add(scene.createEntity());
+                scene.createEntity();
 			}
 		}
 
@@ -32,7 +31,7 @@ public class SceneAddRemoveTest {
 		destroyScene(scenes.get(0));
 		destroyScene(scenes.get(2));
 	}
-	
+
 	private static void destroyScene(Scene s) {
 		List<Entity> entities = s.getEntities();
 		int entitiesCount = entities.size();
@@ -41,9 +40,9 @@ public class SceneAddRemoveTest {
 		for (Entity e : entities) {
 			Assert.assertEquals(false, e.isDestroyed());
 		}
-		
+
 		s.destroy();
-		
+
 		Assert.assertEquals(true, s.isDestroyed());
 		Assert.assertEquals(0, s.getEntitiesCount());
 		// Make sure entities list is a copy, and not a reference.
@@ -52,5 +51,5 @@ public class SceneAddRemoveTest {
 			Assert.assertEquals(true, e.isDestroyed());
 		}
 	}
-	
+
 }
