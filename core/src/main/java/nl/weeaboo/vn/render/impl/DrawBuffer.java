@@ -74,7 +74,7 @@ public final class DrawBuffer implements IDrawBuffer {
 
     @Override
     public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
-            float visibleGlyphs) {
+            double visibleGlyphs) {
         draw(new TextRenderCommand(dt, dx, dy, textLayout, visibleGlyphs));
     }
 

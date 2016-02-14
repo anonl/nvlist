@@ -13,6 +13,8 @@ import nl.weeaboo.vn.scene.signal.ISignal;
 import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
+import nl.weeaboo.vn.text.ITextBoxState;
+import nl.weeaboo.vn.text.impl.TextBoxState;
 
 @CustomSerializable
 public class Screen implements IScreen {
@@ -20,6 +22,7 @@ public class Screen implements IScreen {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
 	private final Rect2D bounds;
+    private final ITextBoxState textState;
 
 	private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
 	private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
@@ -28,10 +31,13 @@ public class Screen implements IScreen {
     public Screen(Rect2D bounds, IRenderEnv env) {
 		this.bounds = Checks.checkNotNull(bounds);
 		this.renderEnv = Checks.checkNotNull(env);
+        this.textState = new TextBoxState();
 	}
 
     @Override
     public void update() {
+        textState.update();
+
         sendSignal(new TickSignal());
 
         IInput input = StaticEnvironment.INPUT.get();
@@ -93,6 +99,11 @@ public class Screen implements IScreen {
 		}
 		return rootLayer;
 	}
+
+    @Override
+    public ITextBoxState getTextBoxState() {
+        return textState;
+    }
 
 	@Override
 	public ILayer getActiveLayer() {

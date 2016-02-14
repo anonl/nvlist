@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene.impl;
 
+import static nl.weeaboo.vn.text.impl.TextUtil.toStyledText;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
@@ -182,7 +184,7 @@ public class Button extends Transformable implements IButton {
 
     @Override
     public void setText(String s) {
-        setText(new StyledText(s != null ? s : ""));
+        setText(toStyledText(s));
     }
 
     @Override

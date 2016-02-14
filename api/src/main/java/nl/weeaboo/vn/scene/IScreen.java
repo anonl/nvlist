@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IUpdateable;
+import nl.weeaboo.vn.text.ITextBoxState;
 
 public interface IScreen extends Serializable, IUpdateable {
 
@@ -28,6 +29,11 @@ public interface IScreen extends Serializable, IUpdateable {
      * @see #getActiveLayer()
      */
     void setActiveLayer(ILayer layer);
+
+    /**
+     * @return Information about the current text box.
+     */
+    ITextBoxState getTextBoxState();
 
     /**
      * Returns information about the rendering environment.

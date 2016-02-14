@@ -18,13 +18,13 @@ public interface IMultiLineText extends IText {
     int getGlyphOffset(int line);
 
     /** Word-wrap width for this multi-line text */
-    float getMaxWidth();
+    double getMaxWidth();
 
     /**
      * Maximum visible height for this multi-line text. Lines that lie (partially) outside the maximum visible
      * area will not be rendered.
      */
-    float getMaxHeight();
+    double getMaxHeight();
 
     /**
      * Sets the maximum size; the visible rectangle in which the multi-line text is rendered.
@@ -32,7 +32,7 @@ public interface IMultiLineText extends IText {
      * @see #getMaxWidth()
      * @see #getMaxHeight()
      */
-    void setMaxSize(float w, float h);
+    void setMaxSize(double w, double h);
 
     /**
      * @return The minimum bounding text width for the currently visible lines.

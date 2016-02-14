@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.text.impl;
 
+import static nl.weeaboo.vn.text.impl.TextUtil.toStyledText;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,12 +32,12 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     private StyledText stext = StyledText.EMPTY_STRING;
     private TextStyle defaultStyle = DEFAULT_STYLE;
-    private float visibleGlyphs = ALL_GLYPHS_VISIBLE;
+    private double visibleGlyphs = ALL_GLYPHS_VISIBLE;
     private boolean rightToLeft;
 
     private int startLine;
-    private float maxWidth = -1f;
-    private float maxHeight = -1f;
+    private double maxWidth = -1;
+    private double maxHeight = -1;
 
     private transient ITextLayout _layout;
     private transient ITextLayout _visibleLayout;
@@ -53,8 +55,8 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void render(IDrawBuffer buffer, IDrawable d, Area2D bounds) {
-        float visibleText = getVisibleText();
-        if (visibleText == 0f) {
+        double visibleText = getVisibleText();
+        if (visibleText == 0) {
             return;
         }
 
@@ -124,17 +126,17 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
-    public final float getMaxWidth() {
+    public final double getMaxWidth() {
         return maxWidth;
     }
 
     @Override
-    public final float getMaxHeight() {
+    public final double getMaxHeight() {
         return maxHeight;
     }
 
     @Override
-    public void setMaxSize(float w, float h) {
+    public void setMaxSize(double w, double h) {
         if (maxWidth != w || maxHeight != h) {
             maxWidth = w;
             maxHeight = h;
@@ -172,7 +174,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
-    public int[] getHitTags(float cx, float cy) {
+    public int[] getHitTags(double cx, double cy) {
         return new int[0];
     }
 
@@ -188,7 +190,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void setText(String s) {
-        setText(new StyledText(s != null ? s : ""));
+        setText(toStyledText(s));
     }
 
     @Override
@@ -214,17 +216,22 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
-    public void increaseVisibleText(float textSpeed) {
-        setVisibleText(LayoutUtil.increaseVisibleCharacters(getVisibleLayout(), visibleGlyphs, textSpeed));
+    public void increaseVisibleText(double textSpeed) {
+        if (textSpeed == 0) {
+            return; // Nothing to do
+        }
+
+        setVisibleText(LayoutUtil.increaseVisibleCharacters(getVisibleLayout(),
+                (float)visibleGlyphs, (float)textSpeed));
     }
 
     @Override
-    public float getVisibleText() {
+    public double getVisibleText() {
         return visibleGlyphs;
     }
 
     @Override
-    public void setVisibleText(float vc) {
+    public void setVisibleText(double vc) {
         if (visibleGlyphs != vc) {
             visibleGlyphs = vc;
 
@@ -233,7 +240,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
-    public void setVisibleText(int sl, float vc) {
+    public void setVisibleText(int sl, double vc) {
         if (startLine != sl) {
             startLine = sl;
 

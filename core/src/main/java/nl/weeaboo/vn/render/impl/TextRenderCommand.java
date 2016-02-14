@@ -11,10 +11,10 @@ public final class TextRenderCommand extends BaseRenderCommand {
     public final Matrix transform;
     public final double dx, dy;
     public final ITextLayout textLayout;
-    public final float visibleGlyphs;
+    public final double visibleGlyphs;
 
     protected TextRenderCommand(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
-            float visibleGlyphs)
+            double visibleGlyphs)
 	{
         super(ID, dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), 0xFFFFFFFF,
                 (byte)Double.doubleToRawLongBits(dt.getTransform().getTranslationY()));

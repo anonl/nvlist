@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.scene.impl;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
@@ -16,12 +17,14 @@ public class TextDrawable extends Transformable implements ITextDrawable {
 
     private final ITextRenderer textRenderer = new TextRenderer();
 
+    private double textSpeed = 0;
+
     public TextDrawable() {
     }
 
     @Override
     public void onTick() {
-        increaseVisibleText(.5f);
+        increaseVisibleText(textSpeed);
 
         textRenderer.update();
     }
@@ -76,7 +79,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public int[] getHitTags(float cx, float cy) {
+    public int[] getHitTags(double cx, double cy) {
         return textRenderer.getHitTags(cx, cy);
     }
 
@@ -96,7 +99,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void increaseVisibleText(float textSpeed) {
+    public void increaseVisibleText(double textSpeed) {
         textRenderer.increaseVisibleText(textSpeed);
     }
 
@@ -106,7 +109,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public float getVisibleText() {
+    public double getVisibleText() {
         return textRenderer.getVisibleText();
     }
 
@@ -121,12 +124,12 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void setVisibleText(float visibleGlyphs) {
+    public void setVisibleText(double visibleGlyphs) {
         textRenderer.setVisibleText(visibleGlyphs);
     }
 
     @Override
-    public float getMaxWidth() {
+    public double getMaxWidth() {
         return textRenderer.getMaxWidth();
     }
 
@@ -136,7 +139,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public float getMaxHeight() {
+    public double getMaxHeight() {
         return textRenderer.getMaxHeight();
     }
 
@@ -146,7 +149,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void setVisibleText(int startLine, float visibleGlyphs) {
+    public void setVisibleText(int startLine, double visibleGlyphs) {
         textRenderer.setVisibleText(startLine, visibleGlyphs);
     }
 
@@ -161,7 +164,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void setMaxSize(float w, float h) {
+    public void setMaxSize(double w, double h) {
         textRenderer.setMaxSize(w, h);
     }
 
@@ -178,6 +181,16 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public float getTextHeight(int startLine, int endLine) {
         return textRenderer.getTextHeight(startLine, endLine);
+    }
+
+    @Override
+    public double getTextSpeed() {
+        return textSpeed;
+    }
+
+    @Override
+    public void setTextSpeed(double speed) {
+        textSpeed = Checks.checkRange(speed, "speed", 0);
     }
 
 }
