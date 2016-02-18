@@ -12,6 +12,7 @@ import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.sound.ISoundModule;
+import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
 /** Wrapper object that contains global engine state. */
@@ -33,6 +34,7 @@ public interface IEnvironment extends IDestructible {
     IImageModule getImageModule();
     ISoundModule getSoundModule();
     IVideoModule getVideoModule();
+    ITextModule getTextModule();
     ISaveModule getSaveModule();
     Collection<IModule> getModules();
 

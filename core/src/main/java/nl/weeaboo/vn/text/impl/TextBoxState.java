@@ -2,6 +2,7 @@ package nl.weeaboo.vn.text.impl;
 
 import static nl.weeaboo.vn.text.impl.TextUtil.toStyledText;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.scene.ITextDrawable;
@@ -17,9 +18,8 @@ public class TextBoxState implements ITextBoxState {
     private ITextLog textLog;
     private ITextDrawable textDrawable;
 
-    public TextBoxState() {
-        // TODO: Share a single textlog between all screens
-        textLog = new TextLog();
+    public TextBoxState(ITextLog textLog) {
+        this.textLog = Checks.checkNotNull(textLog);
 
         baseTextSpeed = NovelPrefs.TEXT_SPEED.getDefaultValue();
     }

@@ -18,6 +18,7 @@ import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.lua.TextLib;
 import nl.weeaboo.vn.sound.impl.SoundModule;
+import nl.weeaboo.vn.text.impl.TextModule;
 import nl.weeaboo.vn.video.impl.VideoModule;
 
 public class EnvironmentFactory {
@@ -53,16 +54,18 @@ public class EnvironmentFactory {
         LuaRunState runState = new LuaRunState();
         LuaScriptLoader scriptLoader = LuaScriptLoader.newInstance(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
-
-        ContextFactory contextFactory = new ContextFactory(scriptEnv, renderEnv);
-        env.contextManager = new ContextManager(contextFactory);
         env.scriptEnv = scriptEnv;
-        env.saveModule = new SaveModule(env);
 
         // Init modules
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
         env.videoModule = new VideoModule(env);
+        env.textModule = new TextModule();
+        env.saveModule = new SaveModule(env);
+
+        // Init context
+        ContextFactory contextFactory = new ContextFactory(scriptEnv, env.getTextModule(), renderEnv);
+        env.contextManager = new ContextManager(contextFactory);
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {

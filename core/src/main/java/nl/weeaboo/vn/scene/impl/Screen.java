@@ -14,7 +14,6 @@ import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
 import nl.weeaboo.vn.text.ITextBoxState;
-import nl.weeaboo.vn.text.impl.TextBoxState;
 
 @CustomSerializable
 public class Screen implements IScreen {
@@ -28,10 +27,10 @@ public class Screen implements IScreen {
 	private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
 	private IRenderEnv renderEnv;
 
-    public Screen(Rect2D bounds, IRenderEnv env) {
+    public Screen(Rect2D bounds, IRenderEnv env, ITextBoxState textState) {
 		this.bounds = Checks.checkNotNull(bounds);
 		this.renderEnv = Checks.checkNotNull(env);
-        this.textState = new TextBoxState();
+        this.textState = Checks.checkNotNull(textState);
 	}
 
     @Override

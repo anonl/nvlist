@@ -13,6 +13,7 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.sound.ISoundModule;
+import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
 public class DefaultEnvironment extends AbstractEnvironment implements Serializable {
@@ -27,6 +28,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     IImageModule imageModule;
     ISoundModule soundModule;
     IVideoModule videoModule;
+    ITextModule textModule;
     ISaveModule saveModule;
 
     IRenderEnv renderEnv;
@@ -94,6 +96,11 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public IVideoModule getVideoModule() {
         return checkSet(videoModule);
+    }
+
+    @Override
+    public ITextModule getTextModule() {
+        return checkSet(textModule);
     }
 
     @Override

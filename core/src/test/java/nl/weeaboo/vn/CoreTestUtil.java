@@ -24,6 +24,8 @@ import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.impl.ImageDrawable;
 import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.text.ITextBoxState;
+import nl.weeaboo.vn.text.impl.TestTextBoxState;
 
 public final class CoreTestUtil {
 
@@ -37,7 +39,8 @@ public final class CoreTestUtil {
 
     public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
-        return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV);
+        ITextBoxState textBoxState = new TestTextBoxState();
+        return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState);
 	}
 
 	public static IScriptContext newScriptContext() {

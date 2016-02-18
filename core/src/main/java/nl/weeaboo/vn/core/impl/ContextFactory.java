@@ -8,23 +8,28 @@ import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.text.ITextModule;
+import nl.weeaboo.vn.text.impl.TextBoxState;
 
 public class ContextFactory implements IContextFactory<Context> {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
-    public final LuaScriptEnv scriptEnv;
+    private final LuaScriptEnv scriptEnv;
+    private final ITextModule textModule;
 
     private IRenderEnv renderEnv;
 
-    public ContextFactory(LuaScriptEnv scriptEnv, IRenderEnv renderEnv) {
+    public ContextFactory(LuaScriptEnv scriptEnv, ITextModule textModule, IRenderEnv renderEnv) {
         this.scriptEnv = scriptEnv;
+        this.textModule = textModule;
         this.renderEnv = renderEnv;
     }
 
     protected Screen newScreen() {
         Rect2D rect = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
-        return new Screen(rect, renderEnv);
+        TextBoxState textBoxState = new TextBoxState(textModule.getTextLog());
+        return new Screen(rect, renderEnv, textBoxState);
     }
 
     @Override
