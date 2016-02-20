@@ -23,7 +23,6 @@ public class RenderStats {
 		quadBatchSizes = new ArrayList<Integer>();
 	}
 
-	//Functions
 	public void startRender() {
 	}
 	public void stopRender() {
@@ -75,10 +74,6 @@ public class RenderStats {
 
 		return sb.toString();
 	}
-
-	//Getters
-
-	//Setters
 
 	//Inner Classes
 	private static class CommandStats {

@@ -11,7 +11,7 @@ import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ISystemEventHandler;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
-import nl.weeaboo.vn.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;

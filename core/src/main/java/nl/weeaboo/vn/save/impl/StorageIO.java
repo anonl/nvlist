@@ -11,7 +11,6 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.settings.PropertiesUtil;
-import nl.weeaboo.vn.core.impl.Storage;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.StoragePrimitive;
 

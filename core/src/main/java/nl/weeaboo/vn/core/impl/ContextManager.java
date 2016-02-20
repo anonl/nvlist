@@ -1,9 +1,8 @@
 package nl.weeaboo.vn.core.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import com.google.common.base.Predicate;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
@@ -17,13 +16,12 @@ public class ContextManager implements IContextManager {
 
     private final IContextFactory<Context> contextFactory;
 
-    private final List<Context> contexts = new ArrayList<Context>();
+    private final DestructibleElemList<Context> contexts = new DestructibleElemList<Context>();
 
     public ContextManager(IContextFactory<Context> contextFactory) {
         this.contextFactory = contextFactory;
     }
 
-    //Functions
     @Override
     public final Context createContext() {
         Context context = contextFactory.newContext();
@@ -65,21 +63,19 @@ public class ContextManager implements IContextManager {
         }
     }
 
-    //Getters
     @Override
     public Collection<Context> getContexts() {
-        return Collections.unmodifiableCollection(contexts);
+        return contexts.getSnapshot();
     }
 
     @Override
     public Collection<Context> getActiveContexts() {
-        List<Context> active = new ArrayList<Context>(2);
-        for (Context context : contexts) {
-            if (context.isActive()) {
-                active.add(context);
+        return contexts.getSnapshot(new Predicate<Context>() {
+            @Override
+            public boolean apply(Context context) {
+                return context.isActive();
             }
-        }
-        return Collections.unmodifiableCollection(active);
+        });
     }
 
     @Override
@@ -88,7 +84,6 @@ public class ContextManager implements IContextManager {
         return context.isActive();
     }
 
-    //Setters
     @Override
     public void setContextActive(IContext ctxt, boolean active) {
         Context context = checkContains(ctxt);

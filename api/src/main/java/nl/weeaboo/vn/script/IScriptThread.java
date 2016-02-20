@@ -13,10 +13,6 @@ public interface IScriptThread extends Serializable, IDestructible {
 	 */
 	public void update() throws ScriptException;
 
-    /** @deprecated Exists for backwards compatibility with NVList 3.x */
-    @Deprecated
-    public boolean isFinished();
-
 	/**
 	 * @return {@code true} if the thread has been started and not yet finished.
 	 */

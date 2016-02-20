@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.save.impl;
 
-public final class SaveFileConstants {
+final class SaveFileConstants {
 
     public static final String HEADER_PATH = "header.json";
     public static final String SAVEDATA_PATH = "data.bin";

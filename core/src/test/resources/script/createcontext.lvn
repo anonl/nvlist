@@ -14,7 +14,7 @@ end
 local thread = context:getScriptContext():newThread(foo)
 
 waitFrames = 0
-while not thread:isFinished() do
+while not thread:isDestroyed() do
     print("Waiting for thread")
     waitFrames = waitFrames + 1
     yield()

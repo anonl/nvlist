@@ -32,16 +32,12 @@ public final class TriangleGrid implements Serializable {
 	private TriangleGrid(int rows, int cols, float[] pos, float[][] tex) {
 		this.rows = rows;
 		this.cols = cols;
-		this.pos = pos;
-		this.tex = new float[tex.length][];
-		for (int n = 0; n < tex.length; n++) {
-			this.tex[n] = tex[n];
-		}
+        this.pos = pos;
+        this.tex = tex;
 
 		verticesPerRow = cols * 2;
 	}
 
-	//Functions
 	public static TriangleGrid layout1(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0) {
 		return layout(new Area2D[] {bounds0},
 				new Area2D[] {texBounds0},
@@ -126,8 +122,8 @@ public final class TriangleGrid implements Serializable {
 	private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y,
 			Area2D bounds, Area2D texBounds, TextureWrap wrap)
 	{
-		double normalizedX = (x-bounds.x) / bounds.w;
-		double normalizedY = (y-bounds.y) / bounds.h;
+        double normalizedX = (x - bounds.x) / bounds.w;
+        double normalizedY = (y - bounds.y) / bounds.h;
 
 		double u;
 		if (wrap != TextureWrap.REPEAT_X && wrap != TextureWrap.REPEAT_BOTH) {
@@ -147,7 +143,6 @@ public final class TriangleGrid implements Serializable {
         coords.put(1 - (float)v);
 	}
 
-	//Getters
     public void getVertices(int row, FloatBuffer out, int outStride) {
         int src = row * verticesPerRow * 2;
         int dst = out.position();

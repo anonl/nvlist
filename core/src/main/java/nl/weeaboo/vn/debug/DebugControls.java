@@ -12,7 +12,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.BaseEncoding;
 
 import nl.weeaboo.common.Insets2D;
-import nl.weeaboo.gdx.gl.GdxBitmapTweenRenderer;
+import nl.weeaboo.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
@@ -44,9 +44,9 @@ import nl.weeaboo.vn.scene.IRenderable;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.scene.ITransformable;
-import nl.weeaboo.vn.scene.impl.EntityHelper;
+import nl.weeaboo.vn.scene.impl.ComponentFactory;
 import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.lua.LuaConsole;
+import nl.weeaboo.vn.script.impl.lua.LuaConsole;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
@@ -227,7 +227,7 @@ public final class DebugControls {
     }
 
     private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext) {
-        EntityHelper entityHelper = new EntityHelper();
+        ComponentFactory entityHelper = new ComponentFactory();
         IButton button = entityHelper.createButton(layer, scriptContext);
         button.setSize(150, 32);
         button.setTexture(ButtonViewState.DEFAULT, imageModule.getTexture("test"));
@@ -236,7 +236,7 @@ public final class DebugControls {
     }
 
     private static void createText(ILayer layer) {
-        EntityHelper entityHelper = new EntityHelper();
+        ComponentFactory entityHelper = new ComponentFactory();
         ITextDrawable text = entityHelper.createText(layer);
 
         text.setBounds(200, 200, 800, 200);
@@ -246,7 +246,7 @@ public final class DebugControls {
     }
 
     private static void createLongText(ILayer layer) {
-        EntityHelper entityHelper = new EntityHelper();
+        ComponentFactory entityHelper = new ComponentFactory();
         ITextDrawable text = entityHelper.createText(layer);
         text.setZ((short)1000);
         text.setBounds(0, 0, 1280, 720);

@@ -17,17 +17,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.gdx.gl.GLBlendMode;
-import nl.weeaboo.gdx.gl.GLMatrixStack;
-import nl.weeaboo.gdx.gl.GdxTextureUtil;
+import nl.weeaboo.gdx.graphics.GLBlendMode;
+import nl.weeaboo.gdx.graphics.GLMatrixStack;
+import nl.weeaboo.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
-import nl.weeaboo.vn.image.impl.PixmapUtil;
 
 public class GLScreenRenderer extends BaseScreenRenderer {
 
@@ -104,21 +102,6 @@ public class GLScreenRenderer extends BaseScreenRenderer {
             spriteBatch.draw(tex, (float)x, (float)y, (float)w, (float)h);
         }
         buffered++;
-    }
-
-    @Override
-    public void renderBlendQuad(BlendQuadCommand bqc) {
-        // TODO LVN-019 Support this properly
-        Rect2D bounds0 = AlignUtil.getAlignedBounds(bqc.tex0, bqc.alignX0, bqc.alignY0);
-        renderQuad(new QuadRenderCommand(bqc.z, bqc.clipEnabled, bqc.blendMode, bqc.argb, bqc.tex0,
-                bqc.transform, bounds0.toArea2D(), bqc.uv));
-    }
-
-    @Override
-    public void renderFadeQuad(FadeQuadCommand fqc) {
-        // TODO LVN-019 Support this properly
-        renderQuad(new QuadRenderCommand(fqc.z, fqc.clipEnabled, fqc.blendMode, fqc.argb, fqc.tex,
-                fqc.transform, fqc.bounds, fqc.uv));
     }
 
     @Override

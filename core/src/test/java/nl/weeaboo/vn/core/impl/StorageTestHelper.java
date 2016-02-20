@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.save.IStorage;
+import nl.weeaboo.vn.save.impl.Storage;
 
 final class StorageTestHelper {
 

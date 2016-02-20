@@ -20,7 +20,7 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 	protected final IRenderEnv renderEnv;
 	protected final RenderStats renderStats;
 
-	/** This boolean is <code>true</code> when inside a call to render() */
+    /** This boolean is {@code true} when inside a call to render() */
 	protected boolean rendering;
 
 	//--- Properties only valid while render==true beneath this line ----------------------
@@ -36,7 +36,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 		renderReset();
 	}
 
-	//Functions
 	private void renderReset() {
         clipping = false;
 		blendMode = BlendMode.DEFAULT;
@@ -92,8 +91,8 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 		final double scale = renderEnv.getScale();
 		double bx0 = bounds.x * scale;
 		double by0 = bounds.y * scale;
-		double bx1 = (bounds.x+bounds.w) * scale;
-		double by1 = (bounds.y+bounds.h) * scale;
+        double bx1 = (bounds.x + bounds.w) * scale;
+        double by1 = (bounds.y + bounds.h) * scale;
 
 		layerClip2D = Rect2D.of(
 			parentClip2D.x + Math.max(0, Math.min(parentClip2D.w, bx0)),
@@ -147,12 +146,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
             case QuadRenderCommand.ID:
                 renderQuad((QuadRenderCommand)cmd);
                 break;
-            case BlendQuadCommand.ID:
-                renderBlendQuad((BlendQuadCommand)cmd);
-                break;
-            case FadeQuadCommand.ID:
-                renderFadeQuad((FadeQuadCommand)cmd);
-                break;
             case DistortQuadCommand.ID:
                 renderDistortQuad((DistortQuadCommand)cmd);
                 break;
@@ -197,10 +190,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 	}
 
 	public abstract void renderQuad(QuadRenderCommand qrc);
-
-	public abstract void renderBlendQuad(BlendQuadCommand bqc);
-
-	public abstract void renderFadeQuad(FadeQuadCommand fqc);
 
     public abstract void renderDistortQuad(DistortQuadCommand dqc);
 

@@ -13,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.vn.save.impl.Storage;
+
 public class StorageTest {
 
     private StorageTestHelper testHelper;

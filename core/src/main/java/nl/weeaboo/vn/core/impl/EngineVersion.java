@@ -9,7 +9,7 @@ public final class EngineVersion {
     private static final VersionNumber VERSION = new VersionNumber(VERSION_MAJOR, VERSION_MINOR);
 
     /** The oldest target engine version we're still reasonably backwards-compatible with */
-    private static final VersionNumber MIN_COMPAT_VERSION = new VersionNumber(3, 0);
+    private static final VersionNumber MIN_COMPAT_VERSION = new VersionNumber(4, 0);
 
     private EngineVersion() {
     }

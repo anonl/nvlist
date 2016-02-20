@@ -24,7 +24,7 @@ import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
-import nl.weeaboo.vn.scene.impl.EntityHelper;
+import nl.weeaboo.vn.scene.impl.ComponentFactory;
 import nl.weeaboo.vn.script.IScriptContext;
 
 public class ImageModule implements IImageModule {
@@ -34,7 +34,7 @@ public class ImageModule implements IImageModule {
 
     protected final IEnvironment env;
     protected final FileResourceLoader resourceLoader;
-    protected final EntityHelper entityHelper;
+    protected final ComponentFactory entityHelper;
 
     private final TextureManager texManager;
 
@@ -47,7 +47,7 @@ public class ImageModule implements IImageModule {
     public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader, TextureManager texManager) {
         this.env = env;
         this.resourceLoader = resourceLoader;
-        this.entityHelper = new EntityHelper();
+        this.entityHelper = new ComponentFactory();
 
         this.texManager = texManager;
 

@@ -33,7 +33,6 @@ public class Context implements IContext {
 		this.scriptContext = contextArgs.scriptContext;
 	}
 
-	//Functions
 	@Override
 	public final void destroy() {
 		if (!destroyed) {
@@ -84,7 +83,6 @@ public class Context implements IContext {
 	    scriptContext.updateThreads(this);
 	}
 
-	//Getters
 	@Override
 	public boolean isDestroyed() {
 		return destroyed;
@@ -105,7 +103,6 @@ public class Context implements IContext {
 		return scriptContext;
 	}
 
-	//Setters
 	void setActive(boolean a) {
 	    if (active != a) {
 	        active = a;

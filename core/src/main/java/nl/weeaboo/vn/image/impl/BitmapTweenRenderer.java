@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.gdx.gl.GdxTextureUtil;
+import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IImageModule;

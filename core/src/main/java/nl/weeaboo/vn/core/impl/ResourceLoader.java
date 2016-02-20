@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
@@ -31,25 +32,29 @@ public abstract class ResourceLoader implements Serializable {
         this.checkedFilenames = new LruSet<String>(128);
     }
 
-    //Functions
     protected String replaceExt(String filename, String ext) {
-        return CoreImpl.replaceExt(filename, ext);
+        int index = filename.indexOf('#');
+        if (index < 0) {
+            return Filenames.replaceExt(filename, ext);
+        }
+        return Filenames.replaceExt(filename.substring(0, index), ext) + filename.substring(index);
     }
 
     public String normalizeFilename(String filename) {
-        if (filename == null) return null;
+        if (filename == null) {
+            return null;
+        }
 
         if (isValidFilename(filename)) {
-            return filename; //The given extension works
+            return filename; // The given extension works
         }
 
         for (String ext : autoFileExts) {
             String fn = replaceExt(filename, ext);
             if (isValidFilename(fn)) {
-                return fn; //This extension works
+                return fn; // This extension works
             }
         }
-
         return null;
     }
 
@@ -101,7 +106,6 @@ public abstract class ResourceLoader implements Serializable {
         resourceLoadLog.logLoad(info);
     }
 
-    //Getters
     /**
      * @param normalizedFilename A normalized filename
      */
@@ -125,7 +129,6 @@ public abstract class ResourceLoader implements Serializable {
 
     protected abstract List<String> getFiles(String folder) throws IOException;
 
-    //Setters
     public void setAutoFileExts(String... exts) {
         autoFileExts = exts.clone();
     }

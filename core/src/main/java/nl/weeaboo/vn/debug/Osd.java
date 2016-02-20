@@ -30,7 +30,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
-import nl.weeaboo.vn.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
 public final class Osd implements Disposable {
 

@@ -10,7 +10,6 @@ import nl.weeaboo.filesystem.ZipFileArchive;
 import nl.weeaboo.io.RandomAccessUtil;
 import nl.weeaboo.io.ZipUtil;
 import nl.weeaboo.io.ZipUtil.Compression;
-import nl.weeaboo.vn.core.impl.JsonUtil;
 
 final class SaveFileIO {
 

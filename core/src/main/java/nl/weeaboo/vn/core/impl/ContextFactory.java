@@ -5,11 +5,11 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.scene.impl.Screen;
+import nl.weeaboo.vn.scene.impl.ScreenTextState;
 import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.lua.LuaScriptContext;
-import nl.weeaboo.vn.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.text.ITextModule;
-import nl.weeaboo.vn.text.impl.TextBoxState;
 
 public class ContextFactory implements IContextFactory<Context> {
 
@@ -28,7 +28,7 @@ public class ContextFactory implements IContextFactory<Context> {
 
     protected Screen newScreen() {
         Rect2D rect = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
-        TextBoxState textBoxState = new TextBoxState(textModule.getTextLog());
+        ScreenTextState textBoxState = new ScreenTextState(textModule.getTextLog());
         return new Screen(rect, renderEnv, textBoxState);
     }
 

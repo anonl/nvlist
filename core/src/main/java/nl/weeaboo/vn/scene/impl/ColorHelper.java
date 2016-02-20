@@ -8,7 +8,7 @@ import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 import nl.weeaboo.vn.render.RenderUtil;
 
 @CustomSerializable
-class ColorHelper extends TransientListenerSupport {
+final class ColorHelper extends TransientListenerSupport {
 
     private static final long serialVersionUID = 1L;
 

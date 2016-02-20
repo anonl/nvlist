@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 
-public final class PngUtil {
+final class PngUtil {
 
     private PngUtil() {
     }

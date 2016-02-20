@@ -26,7 +26,6 @@ import nl.weeaboo.lua2.io.ObjectSerializer.PackageLimit;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
-import nl.weeaboo.vn.core.impl.Storage;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.impl.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -262,7 +261,7 @@ public class SaveModule implements ISaveModule {
             }
         }
 
-        LOG.info("Save written: " + StringUtil.formatMemoryAmount(fs.getFileSize(filename)));
+        LOG.info("Save written: {}", StringUtil.formatMemoryAmount(fs.getFileSize(filename)));
     }
 
     private void writeSaveData(ZipOutputStream zout, INovel novel, IProgressListener pl) throws IOException {

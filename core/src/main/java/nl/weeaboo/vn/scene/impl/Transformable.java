@@ -32,7 +32,6 @@ public abstract class Transformable extends VisualElement implements ITransforma
 	public Transformable() {
 	}
 
-	//Functions
     protected Matrix createTransform() {
         MutableMatrix m = baseTransform.mutableCopy();
         m.translate(getX(), getY());
@@ -73,7 +72,6 @@ public abstract class Transformable extends VisualElement implements ITransforma
         _collisionShape = null;
     }
 
-	//Getters
 	@Override
 	public final boolean isVisible() {
 		return isVisible(0);
@@ -223,7 +221,6 @@ public abstract class Transformable extends VisualElement implements ITransforma
         return baseTransform;
     }
 
-	//Setters
 	@Override
 	public final void setX(double x) { setPos(x, getY()); }
 

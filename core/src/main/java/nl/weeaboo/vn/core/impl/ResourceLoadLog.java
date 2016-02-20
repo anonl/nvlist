@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public class ResourceLoadLog implements IResourceLoadLog {
+final class ResourceLoadLog implements IResourceLoadLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
@@ -14,7 +14,7 @@ public class ResourceLoadLog implements IResourceLoadLog {
 
     @Override
     public void logLoad(ResourceLoadInfo info) {
-        LOG.trace("Load resource: " + info.getFilename());
+        LOG.trace("Load resource: {}", info.getFilename());
     }
 
 }

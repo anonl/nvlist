@@ -104,6 +104,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
             double h0 = getUnscaledHeight();
             double w1 = r.getWidth();
             double h1 = r.getHeight();
+
             Rect2D rect = AlignUtil.getAlignedBounds(w0, h0, getAlignX(), getAlignY());
             Vec2 align = AlignUtil.alignSubRect(rect, w1, h1, anchor);
             alignX = align.x;

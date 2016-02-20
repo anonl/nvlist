@@ -4,16 +4,13 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 
-class BoundsHelper extends TransientListenerSupport {
+final class BoundsHelper extends TransientListenerSupport {
 
 	private static final long serialVersionUID = 1L;
 
 	private double x, y, w, h;
     private transient Rect2D cachedBounds;
 
-	// Functions
-
-	// Getters
 	public double getX() { return x; }
 	public double getY() { return y; }
 	public double getWidth() { return w; }
@@ -32,7 +29,6 @@ class BoundsHelper extends TransientListenerSupport {
 		return getBounds().contains(px, py);
 	}
 
-	// Setters
 	public void setPos(double x, double y) {
 		Checks.checkRange(x, "x");
 		Checks.checkRange(y, "y");

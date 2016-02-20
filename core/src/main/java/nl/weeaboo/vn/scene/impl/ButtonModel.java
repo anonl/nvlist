@@ -19,7 +19,7 @@ public class ButtonModel implements IButtonModel {
     private int pressEvents;
 
     protected void onClicked() {
-        LOG.debug("Button clicked");
+        LOG.trace("Button clicked: {}", this);
 
         if (isToggle()) {
             setSelected(!isSelected());

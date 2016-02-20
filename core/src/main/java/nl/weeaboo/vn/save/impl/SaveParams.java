@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.save.impl;
 
-import nl.weeaboo.vn.core.impl.Storage;
-import nl.weeaboo.vn.core.impl.UnmodifiableStorage;
 import nl.weeaboo.vn.save.ISaveParams;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.ThumbnailInfo;

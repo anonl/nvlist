@@ -33,11 +33,6 @@ public class FileResourceLoader extends ResourceLoader {
     }
 
     @Override
-    protected void preloadNormalized(String filename) {
-        // Do nothing
-    }
-
-    @Override
     protected boolean isValidFilename(String filename) {
         if (filename == null) {
             return false;

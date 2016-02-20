@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.script.IScriptFunction;
-import nl.weeaboo.vn.script.lua.LuaScriptFunctionStub;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptFunctionStub;
 
 public class ScriptEventDispatcherTest {
 

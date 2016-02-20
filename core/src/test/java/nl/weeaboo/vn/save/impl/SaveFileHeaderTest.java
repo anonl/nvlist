@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.vn.core.impl.JsonUtil;
-import nl.weeaboo.vn.core.impl.Storage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 

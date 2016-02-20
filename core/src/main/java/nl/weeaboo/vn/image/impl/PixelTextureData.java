@@ -12,7 +12,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITextureData;
 
 @CustomSerializable
-public class PixelTextureData implements ITextureData, Disposable {
+public final class PixelTextureData implements ITextureData, Disposable {
 
     private static final long serialVersionUID = 1L;
 

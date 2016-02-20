@@ -18,7 +18,6 @@ public class ScreenshotBuffer implements IScreenshotBuffer {
 		screenshots = new ArrayList<ScreenshotEntry>();
 	}
 
-	//Functions
 	@Override
 	public void add(IWritableScreenshot ss, boolean clip) {
 		screenshots.add(new ScreenshotEntry(ss, clip));
@@ -39,15 +38,11 @@ public class ScreenshotBuffer implements IScreenshotBuffer {
 		screenshots.clear();
 	}
 
-	//Getters
 	@Override
 	public boolean isEmpty() {
 		return screenshots.isEmpty();
 	}
 
-	//Setters
-
-	//Inner Classes
 	private static class ScreenshotEntry implements Serializable {
 
 		private static final long serialVersionUID = 1L;

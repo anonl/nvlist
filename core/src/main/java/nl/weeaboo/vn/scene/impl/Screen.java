@@ -9,11 +9,11 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.scene.signal.ISignal;
 import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
-import nl.weeaboo.vn.text.ITextBoxState;
 
 @CustomSerializable
 public class Screen implements IScreen {
@@ -21,13 +21,13 @@ public class Screen implements IScreen {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
 	private final Rect2D bounds;
-    private final ITextBoxState textState;
+    private final IScreenTextState textState;
 
 	private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
 	private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
 	private IRenderEnv renderEnv;
 
-    public Screen(Rect2D bounds, IRenderEnv env, ITextBoxState textState) {
+    public Screen(Rect2D bounds, IRenderEnv env, IScreenTextState textState) {
 		this.bounds = Checks.checkNotNull(bounds);
 		this.renderEnv = Checks.checkNotNull(env);
         this.textState = Checks.checkNotNull(textState);
@@ -100,7 +100,7 @@ public class Screen implements IScreen {
 	}
 
     @Override
-    public ITextBoxState getTextBoxState() {
+    public IScreenTextState getTextState() {
         return textState;
     }
 

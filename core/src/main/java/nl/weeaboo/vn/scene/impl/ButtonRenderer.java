@@ -70,7 +70,7 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     protected void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         background.render(drawBuffer, parent, bounds);
 
-        // TODO Vertical-align text
+        // TODO #14: Vertical-align text
         textRenderer.render(drawBuffer, parent, bounds);
     }
 

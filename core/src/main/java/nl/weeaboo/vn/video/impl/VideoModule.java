@@ -53,7 +53,7 @@ public class VideoModule implements IVideoModule {
     public IVideo movie(ResourceLoadInfo loadInfo) throws IOException {
     	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 
-        LOG.info("Attempt to play movie: videoFolder=" + videoFolder + ", path=" + loadInfo.getFilename());
+        LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getFilename());
 
         // TODO LVN-021 Implement
         // fullscreenMovie = ...

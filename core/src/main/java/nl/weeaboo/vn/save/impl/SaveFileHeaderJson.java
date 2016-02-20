@@ -2,7 +2,6 @@ package nl.weeaboo.vn.save.impl;
 
 import java.io.IOException;
 
-import nl.weeaboo.vn.core.impl.Storage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
