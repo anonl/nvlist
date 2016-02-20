@@ -201,6 +201,11 @@ public final class DebugControls {
             if (input.isPressed(KeyCode.LEFT, false)) transformable.translate(-5, 0);
             if (input.isPressed(KeyCode.RIGHT, false)) transformable.translate(5, 0);
         }
+
+        // Place image at mouse press location (useful for Android testing)
+        if (input.isPressed(KeyCode.MOUSE_LEFT, false)) {
+            transformable.setPos(input.getPointerX(), input.getPointerY());
+        }
     }
 
     private static void createImage(ILayer layer, IImageModule imageModule) {

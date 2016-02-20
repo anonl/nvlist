@@ -1,0 +1,30 @@
+
+@@
+
+local contexts = {}
+
+function setMode(modeId)
+    local context = contexts[modeId]
+    if context == nil then
+        context = createContext(function()
+            print("context main function")
+            newContextTrigger = true
+        end)
+    end
+
+    -- Change active context
+    local oldContext = getCurrentContext()
+    setContextActive(oldContext, false)
+    setContextActive(context, true)
+    return yield() -- Stop executing code in the current context
+end
+
+oldContextTrigger = false
+newContextTrigger = false
+
+setMode("test")
+
+oldContextTrigger = true
+print("old context still active")
+
+@@

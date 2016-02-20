@@ -2,6 +2,9 @@ package nl.weeaboo.vn.core.impl;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Predicate;
 
 import nl.weeaboo.vn.core.IContext;
@@ -9,10 +12,14 @@ import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.script.IScriptFunction;
+import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
 public class ContextManager implements IContextManager {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 
     private final IContextFactory<Context> contextFactory;
 
@@ -24,7 +31,20 @@ public class ContextManager implements IContextManager {
 
     @Override
     public final Context createContext() {
+        return createContext(null);
+    }
+
+    @Override
+    public final Context createContext(IScriptFunction func) {
         Context context = contextFactory.newContext();
+        if (func != null) {
+            try {
+                LuaScriptUtil.callFunction(context, func);
+            } catch (ScriptException e) {
+                LOG.warn("Exception while initializing new context", e);
+            }
+        }
+
         register(context);
         return context;
     }

@@ -15,6 +15,7 @@ import nl.weeaboo.lua2.link.LuaLink;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.ContextUtil;
+import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -36,6 +37,9 @@ public final class LuaScriptUtil {
      * All remaining arguments in the vararg are passed as parameters to the returned function.
      */
     public static LuaScriptFunction toScriptFunction(Varargs args, int offset) {
+        if (args.isnil(offset)) {
+            return null;
+        }
         return new LuaScriptFunction(args.checkclosure(offset), args.subargs(offset+1));
     }
 
@@ -115,20 +119,28 @@ public final class LuaScriptUtil {
         }
     }
 
+    public static void callFunction(IContext mainContext, String functionName, Object... args)
+            throws ScriptException {
+
+        LuaScriptContext scriptContext = getScriptContext(mainContext);
+        IContext oldContext = ContextUtil.setCurrentContext(mainContext);
+        try {
+            scriptContext.getMainThread().call(functionName, args);
+        } finally {
+            ContextUtil.setCurrentContext(oldContext);
+        }
+    }
+
     /**
      * Calls a function in the main thread of the given context.
      *
      * @see IScriptLoader#loadScript(IScriptThread, String)
      */
-    public static void callFunction(IContext mainContext, String functionName, Object... args)
-            throws ScriptException {
-
+    public static void callFunction(IContext mainContext, IScriptFunction func) throws ScriptException {
         LuaScriptContext scriptContext = getScriptContext(mainContext);
-        LuaScriptThread mainThread = scriptContext.getMainThread();
-
         IContext oldContext = ContextUtil.setCurrentContext(mainContext);
         try {
-            mainThread.call(functionName, args);
+            scriptContext.getMainThread().call((LuaScriptFunction)func);
         } finally {
             ContextUtil.setCurrentContext(oldContext);
         }

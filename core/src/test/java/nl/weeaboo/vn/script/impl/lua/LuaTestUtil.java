@@ -2,6 +2,7 @@ package nl.weeaboo.vn.script.impl.lua;
 
 import org.junit.Assert;
 import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
 
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContext;
@@ -9,7 +10,6 @@ import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
 
 public final class LuaTestUtil {
 
@@ -17,6 +17,7 @@ public final class LuaTestUtil {
     public static final String SCRIPT_YIELD = "yield";
     public static final String SCRIPT_CREATECONTEXT = "createcontext";
     public static final String SCRIPT_SCRIPTLIB = "scriptlib";
+    public static final String SCRIPT_SETMODE = "setmode";
 
     private LuaTestUtil() {
     }
@@ -37,7 +38,13 @@ public final class LuaTestUtil {
     }
     public static void assertGlobal(String name, Object val) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
-        Assert.assertEquals(val, globals.get(name).optuserdata(null));
+        LuaValue global = globals.get(name);
+
+        if (val instanceof Boolean) {
+            Assert.assertEquals(val, global.toboolean());
+        } else {
+            Assert.assertEquals(val, global.optuserdata(null));
+        }
     }
 
     public static <T> T getGlobal(String name, Class<T> type) {

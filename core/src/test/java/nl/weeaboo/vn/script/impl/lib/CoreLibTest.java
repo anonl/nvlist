@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.lib.CoreLib;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 
@@ -32,6 +31,15 @@ public class CoreLibTest extends AbstractLibTest {
         loadScript(LuaTestUtil.SCRIPT_SCRIPTLIB);
 
         LuaTestUtil.assertGlobal("newThreadResult", 1 + 2 + 3);
+    }
+
+    @Test
+    public void setMode() throws IOException, ScriptException {
+        loadScript(LuaTestUtil.SCRIPT_SETMODE);
+
+        Assert.assertEquals(2, env.getContextManager().getContexts().size());
+        LuaTestUtil.assertGlobal("oldContextTrigger", false);
+        LuaTestUtil.assertGlobal("newContextTrigger", true);
     }
 
 }
