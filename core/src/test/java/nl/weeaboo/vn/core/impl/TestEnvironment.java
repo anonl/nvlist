@@ -11,6 +11,7 @@ import nl.weeaboo.vn.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.sound.impl.SoundModule;
+import nl.weeaboo.vn.text.impl.TextModule;
 import nl.weeaboo.vn.video.impl.VideoModule;
 
 public class TestEnvironment extends DefaultEnvironment {
@@ -41,6 +42,7 @@ public class TestEnvironment extends DefaultEnvironment {
         env.saveModule = new SaveModule(env);
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
+        env.textModule = new TextModule();
         env.videoModule = new VideoModule(env);
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
