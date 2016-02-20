@@ -20,7 +20,7 @@ function getScreen()
 end
 
 function getTextState()
-	return getScreen():getTextBoxState()
+	return getScreen():getTextState()
 end
 
 function getMainTextBox()
