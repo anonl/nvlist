@@ -1,11 +1,6 @@
 package nl.weeaboo.vn.scene.impl;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
+import nl.weeaboo.vn.core.impl.DestructibleElemList;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.DestroySignal;
@@ -15,7 +10,7 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final List<IVisualElement> children = Lists.newArrayList();
+    private final DestructibleElemList<IVisualElement> children = new DestructibleElemList<IVisualElement>();
 
     public VisualGroup() {
     }
@@ -54,10 +49,7 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
     protected void onDestroyed() {
         super.onDestroyed();
 
-        // Destroy all children recursively
-        for (IVisualElement child : ImmutableList.copyOf(getChildren())) {
-            child.destroy();
-        }
+        children.destroyAll();
     }
 
     protected void onChildDestroyed(IVisualElement elem) {
@@ -66,7 +58,7 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
 
     @Override
     public Iterable<? extends IVisualElement> getChildren() {
-        return Collections.unmodifiableList(children);
+        return children;
     }
 
 }

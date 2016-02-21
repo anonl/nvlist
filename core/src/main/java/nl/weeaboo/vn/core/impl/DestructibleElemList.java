@@ -31,6 +31,15 @@ public class DestructibleElemList<T extends IDestructible> implements Iterable<T
         elements.clear();
     }
 
+    public void destroyAll() {
+        for (T elem : getSnapshot()) {
+            elem.destroy();
+        }
+
+        // We can't use clear, because destroying elements may result in new elements being added to this list
+        removeDestroyedElements();
+    }
+
     public boolean contains(Object elem) {
         removeDestroyedElements();
         return elements.contains(elem);
