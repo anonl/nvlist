@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
-import com.google.common.collect.Iterables;
 import com.google.common.io.BaseEncoding;
 
 import nl.weeaboo.common.Insets2D;
@@ -65,7 +64,7 @@ public final class DebugControls {
         IEnvironment env = novel.getEnv();
         IRenderEnv renderEnv = env.getRenderEnv();
 
-        IContext activeContext = Iterables.get(env.getContextManager().getActiveContexts(), 0);
+        IContext activeContext = env.getContextManager().getPrimaryContext();
         IScriptContext scriptContext = null;
         IScreen screen = null;
         if (activeContext != null) {

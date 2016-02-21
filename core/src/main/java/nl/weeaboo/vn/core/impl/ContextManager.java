@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
@@ -96,6 +97,11 @@ public class ContextManager implements IContextManager {
                 return context.isActive();
             }
         });
+    }
+
+    @Override
+    public IContext getPrimaryContext() {
+        return Iterables.get(getActiveContexts(), 0, null);
     }
 
     @Override

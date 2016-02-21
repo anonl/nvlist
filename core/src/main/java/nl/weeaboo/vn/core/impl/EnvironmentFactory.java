@@ -47,7 +47,6 @@ public class EnvironmentFactory {
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
-        env.systemEventHandler = new SystemEventHandler();
         env.resourceLoadLog = new ResourceLoadLog();
 
         // Init Lua script env
@@ -66,6 +65,8 @@ public class EnvironmentFactory {
         // Init context
         ContextFactory contextFactory = new ContextFactory(scriptEnv, env.getTextModule(), renderEnv);
         env.contextManager = new ContextManager(contextFactory);
+
+        env.systemEventHandler = new SystemEventHandler(env.getContextManager());
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {

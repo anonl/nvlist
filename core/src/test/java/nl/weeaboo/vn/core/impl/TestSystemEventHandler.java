@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.vn.core.ISystemEventHandler;
-import nl.weeaboo.vn.script.ScriptException;
 
 public class TestSystemEventHandler implements ISystemEventHandler {
 
@@ -14,7 +13,7 @@ public class TestSystemEventHandler implements ISystemEventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(TestSystemEventHandler.class);
 
     @Override
-    public void onExit() throws ScriptException {
+    public void onExit() {
         LOG.info("SystemEventHandler.onExit()");
     }
 

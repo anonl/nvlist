@@ -2,6 +2,7 @@
 --  @module vn
 
 require("builtin/stdlib")
+require("builtin/callbacks")
 
 -- ----------------------------------------------------------------------------
 --  Functions

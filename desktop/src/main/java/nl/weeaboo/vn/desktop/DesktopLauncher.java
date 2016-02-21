@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 
 import nl.weeaboo.vn.Launcher;
 
@@ -23,7 +24,15 @@ public class DesktopLauncher {
         // config.addIcon("icon32.png", FileType.Internal);
         // config.addIcon("icon16.png", FileType.Internal);
 
-        Lwjgl3Application app = new Lwjgl3Application(new Launcher(), config);
+        final Launcher launcher = new Launcher();
+        config.setWindowListener(new Lwjgl3WindowAdapter() {
+            @Override
+            public boolean windowIsClosing() {
+                return launcher.onWindowIsClosing();
+            }
+        });
+
+        Lwjgl3Application app = new Lwjgl3Application(launcher, config);
         app.addLifecycleListener(new LifecycleListener() {
 
             @Override

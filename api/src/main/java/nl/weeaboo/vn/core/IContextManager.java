@@ -20,6 +20,9 @@ public interface IContextManager extends Serializable, IUpdateable {
      */
     Collection<? extends IContext> getActiveContexts();
 
+    /** @return An 'most important' active context, or {@code null} if no context is active. */
+    IContext getPrimaryContext();
+
     boolean isContextActive(IContext context);
 
     void setContextActive(IContext context, boolean active);

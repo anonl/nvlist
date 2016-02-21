@@ -38,6 +38,7 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.core.ISystemEventHandler;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -148,7 +149,7 @@ public class Launcher extends ApplicationAdapter {
 
         // Create a test image
         IEnvironment env = novel.getEnv();
-        IContext context = Iterables.get(env.getContextManager().getActiveContexts(), 0);
+        IContext context = env.getContextManager().getPrimaryContext();
         ILayer rootLayer = context.getScreen().getRootLayer();
 
         IImageDrawable image = env.getImageModule().createImage(rootLayer);
@@ -249,7 +250,7 @@ public class Launcher extends ApplicationAdapter {
         debugControls.update(novel, input);
 
         IEnvironment env = novel.getEnv();
-        IContext context = Iterables.getFirst(env.getContextManager().getActiveContexts(), null);
+        IContext context = env.getContextManager().getPrimaryContext();
         if (context != null) {
             ILayer rootLayer = context.getScreen().getRootLayer();
             IImageDrawable first = Iterables
@@ -311,6 +312,22 @@ public class Launcher extends ApplicationAdapter {
 
     private void onUncaughtException(RuntimeException re) {
         LOG.error("Uncaught exception", re);
+    }
+
+    /**
+     * This method is called when the user attempts to close the window. This method is only called on the
+     * desktop, where close events can be canceled.
+     *
+     * @return {@code true} if the window should close, {@code false} to cancel.
+     */
+    public boolean onWindowIsClosing() {
+        if (novel != null) {
+            IEnvironment env = novel.getEnv();
+            ISystemEventHandler eventHandler = env.getSystemEventHandler();
+            eventHandler.onExit();
+            return false;
+        }
+        return true;
     }
 
 }
