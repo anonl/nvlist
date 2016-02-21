@@ -30,13 +30,14 @@ abstract class AbstractEnvironment implements IEnvironment {
         return StaticEnvironment.NOTIFIER.get();
     }
 
-    private static IPreferenceStore getPrefs() {
+    @Override
+    public IPreferenceStore getPrefStore() {
         return StaticEnvironment.PREFS.get();
     }
 
     @Override
     public <T> T getPref(Preference<T> pref) {
-        return getPrefs().get(pref);
+        return getPrefStore().get(pref);
     }
 
     @Override

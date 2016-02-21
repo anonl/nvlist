@@ -7,7 +7,7 @@ function titlescreen()
 end
 
 function onExit()
-	System.exit()
+	--System.exit()
 end
 
 function onPrefsChanged()

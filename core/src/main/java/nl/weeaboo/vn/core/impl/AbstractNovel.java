@@ -77,4 +77,8 @@ public abstract class AbstractNovel implements INovel {
         return env.getSaveModule();
     }
 
+    public void onPrefsChanged() {
+        env.getSystemEventHandler().onPrefsChanged(env.getPrefStore());
+    }
+
 }

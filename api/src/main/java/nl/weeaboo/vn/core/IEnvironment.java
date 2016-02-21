@@ -6,6 +6,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -22,6 +23,7 @@ public interface IEnvironment extends IDestructible {
     IWritableFileSystem getOutputFileSystem();
     INotifier getNotifier();
     boolean isDebug();
+    IPreferenceStore getPrefStore();
     <T> T getPref(Preference<T> pref);
 
     IContextManager getContextManager();

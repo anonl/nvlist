@@ -31,6 +31,8 @@ import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.settings.IPreferenceListener;
+import nl.weeaboo.settings.Preference;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
@@ -146,6 +148,14 @@ public class Launcher extends ApplicationAdapter {
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
         novel.start("main");
+
+        // Attach listener to static environment
+        prefs.addPreferenceListener(new IPreferenceListener() {
+            @Override
+            public <T> void onPreferenceChanged(Preference<T> pref, T oldValue, T newValue) {
+                onPrefsChanged();
+            }
+        });
 
         // Create a test image
         IEnvironment env = novel.getEnv();
@@ -328,6 +338,12 @@ public class Launcher extends ApplicationAdapter {
             return false;
         }
         return true;
+    }
+
+    private void onPrefsChanged() {
+        if (novel != null) {
+            novel.onPrefsChanged();
+        }
     }
 
 }
