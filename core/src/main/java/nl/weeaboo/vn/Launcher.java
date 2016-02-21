@@ -27,6 +27,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.input.GdxInputAdapter;
+import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
@@ -100,10 +101,12 @@ public class Launcher extends ApplicationAdapter {
         inputAdapter = new GdxInputAdapter(screenViewport);
 
 		batch = new SpriteBatch();
-        assetManager.load("badlogic.jpg", Texture.class);
-        assetManager.finishLoading();
 
-        initNovel();
+        try {
+            initNovel();
+        } catch (InitException e) {
+            throw new RuntimeException("Fatal error during init", e);
+        }
 
         sceneEnv = new Scene2dEnv(frameBufferViewport);
         osd = Osd.newInstance();
@@ -114,7 +117,7 @@ public class Launcher extends ApplicationAdapter {
         initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void initNovel() {
+    private void initNovel() throws InitException {
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         MultiFileSystem fileSystem = new MultiFileSystem(resourceFileSystem, inMemoryFileSystem);
 
@@ -141,11 +144,7 @@ public class Launcher extends ApplicationAdapter {
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
-        try {
-            novel.start("main");
-        } catch (InitException e) {
-            LOG.error("Fatal error during init", e);
-        }
+        novel.start("main");
 
         // Create a test image
         IEnvironment env = novel.getEnv();
@@ -188,9 +187,9 @@ public class Launcher extends ApplicationAdapter {
 
         disposeRenderer();
 		disposeFrameBuffer();
-		osd.dispose();
-		batch.dispose();
-        assetManager.dispose();
+        osd = DisposeUtil.dispose(osd);
+        batch = DisposeUtil.dispose(batch);
+        assetManager = DisposeUtil.dispose(assetManager);
 	}
 
     private void disposeRenderer() {
@@ -201,10 +200,7 @@ public class Launcher extends ApplicationAdapter {
     }
 
 	private void disposeFrameBuffer() {
-		if (frameBuffer != null) {
-			frameBuffer.dispose();
-			frameBuffer = null;
-		}
+        frameBuffer = DisposeUtil.dispose(frameBuffer);
 	}
 
 	private void updateFrameBuffer() {

@@ -10,6 +10,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.save.ISaveModule;
 
 public abstract class AbstractNovel implements INovel {
@@ -40,6 +41,14 @@ public abstract class AbstractNovel implements INovel {
     @Override
     public void start(String mainFuncName) throws InitException {
         env = envFactory.build();
+
+        String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
+        String engineTargetVersion = env.getPref(NovelPrefs.ENGINE_TARGET_VERSION);
+        try {
+            EngineVersion.checkVersion(engineMinVersion, engineTargetVersion);
+        } catch (UnsupportedVersionException e) {
+            throw new InitException("Incompatible script/engine versions", e);
+        }
     }
 
     @Override
