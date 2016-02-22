@@ -48,7 +48,7 @@ public class SystemModule implements ISystemModule{
 
     @Override
     public boolean canExit() {
-        return systemEnv.get().canExit();
+        return getEnvironment().canExit();
     }
 
     @Override
@@ -82,6 +82,11 @@ public class SystemModule implements ISystemModule{
             LOG.warn("Exception while calling event handler: " + functionName, e);
             return false;
         }
+    }
+
+    @Override
+    public ISystemEnv getEnvironment() {
+        return systemEnv.get();
     }
 
 }

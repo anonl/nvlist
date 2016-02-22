@@ -6,6 +6,8 @@ import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
+import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
@@ -74,6 +76,17 @@ public class SystemLib extends LuaLib {
         ISystemModule system = env.getSystemModule();
         system.openWebsite(url);
         return LuaValue.NONE;
+    }
+
+    /**
+     * @param args not used
+     * @return An {@link ISystemEnv} object containing information about the external system.
+     */
+    @ScriptFunction
+    public Varargs getEnv(Varargs args) {
+        ISystemModule system = env.getSystemModule();
+
+        return LuajavaLib.toUserdata(system.getEnvironment(), ISystemEnv.class);
     }
 
 }

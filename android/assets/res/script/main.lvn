@@ -12,6 +12,8 @@ end
 function titlescreen()
 	print("titlescreen")
 
+	print(System.getEnv())
+
 	local textbox = Text.createTextDrawable()
 	setMainTextBox(textbox)
 	

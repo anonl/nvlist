@@ -37,4 +37,9 @@ public interface ISystemModule extends IModule {
      */
     void onPrefsChanged(IPreferenceStore config);
 
+    /**
+     * @return The system environment data.
+     */
+    ISystemEnv getEnvironment();
+
 }

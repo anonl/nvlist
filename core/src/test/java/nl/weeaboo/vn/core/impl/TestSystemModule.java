@@ -1,11 +1,16 @@
 package nl.weeaboo.vn.core.impl;
 
+import com.badlogic.gdx.Application.ApplicationType;
+
 import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 
 public class TestSystemModule implements ISystemModule {
 
     private static final long serialVersionUID = 1L;
+
+    private final SystemEnv systemEnv = new SystemEnv(ApplicationType.HeadlessDesktop);
 
     @Override
     public void destroy() {
@@ -34,6 +39,11 @@ public class TestSystemModule implements ISystemModule {
 
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
+    }
+
+    @Override
+    public ISystemEnv getEnvironment() {
+        return systemEnv;
     }
 
 }
