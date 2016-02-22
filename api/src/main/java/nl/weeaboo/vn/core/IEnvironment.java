@@ -30,7 +30,6 @@ public interface IEnvironment extends IDestructible {
     IScriptEnv getScriptEnv();
     IScriptLoader getScriptLoader();
     IRenderEnv getRenderEnv();
-    ISystemEventHandler getSystemEventHandler();
     IResourceLoadLog getResourceLoadLog();
 
     IImageModule getImageModule();
@@ -38,6 +37,7 @@ public interface IEnvironment extends IDestructible {
     IVideoModule getVideoModule();
     ITextModule getTextModule();
     ISaveModule getSaveModule();
+    ISystemModule getSystemModule();
     Collection<IModule> getModules();
 
     /**

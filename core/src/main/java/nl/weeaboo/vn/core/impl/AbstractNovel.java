@@ -40,6 +40,8 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void start(String mainFuncName) throws InitException {
+        StaticEnvironment.NOVEL.set(this);
+
         env = envFactory.build();
 
         String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
@@ -78,7 +80,7 @@ public abstract class AbstractNovel implements INovel {
     }
 
     public void onPrefsChanged() {
-        env.getSystemEventHandler().onPrefsChanged(env.getPrefStore());
+        env.getSystemModule().onPrefsChanged(env.getPrefStore());
     }
 
 }

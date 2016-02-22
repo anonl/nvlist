@@ -40,13 +40,13 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.ISystemEventHandler;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
 import nl.weeaboo.vn.image.impl.ShaderStore;
@@ -137,6 +137,7 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
         StaticEnvironment.INPUT.set(inputAdapter.getInput());
+        StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
@@ -147,6 +148,7 @@ public class Launcher extends ApplicationAdapter {
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
+
         novel.start("main");
 
         // Attach listener to static environment
@@ -333,8 +335,7 @@ public class Launcher extends ApplicationAdapter {
     public boolean onWindowIsClosing() {
         if (novel != null) {
             IEnvironment env = novel.getEnv();
-            ISystemEventHandler eventHandler = env.getSystemEventHandler();
-            eventHandler.onExit();
+            env.getSystemModule().exit(false);
             return false;
         }
         return true;

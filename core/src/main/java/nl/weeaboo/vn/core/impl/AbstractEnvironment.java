@@ -53,7 +53,7 @@ abstract class AbstractEnvironment implements IEnvironment {
     @Override
     public Collection<IModule> getModules() {
         return Arrays.asList(getImageModule(), getSoundModule(), getVideoModule(), getTextModule(),
-                getSaveModule());
+                getSaveModule(), getSystemModule());
     }
 
 }

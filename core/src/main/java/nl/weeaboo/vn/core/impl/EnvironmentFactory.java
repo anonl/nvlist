@@ -14,6 +14,7 @@ import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lib.CoreLib;
 import nl.weeaboo.vn.script.impl.lib.ImageLib;
+import nl.weeaboo.vn.script.impl.lib.SystemLib;
 import nl.weeaboo.vn.script.impl.lib.TextLib;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
@@ -61,12 +62,11 @@ public class EnvironmentFactory {
         env.videoModule = new VideoModule(env);
         env.textModule = new TextModule();
         env.saveModule = new SaveModule(env);
+        env.systemModule = new SystemModule(env);
 
         // Init context
         ContextFactory contextFactory = new ContextFactory(scriptEnv, env.getTextModule(), renderEnv);
         env.contextManager = new ContextManager(contextFactory);
-
-        env.systemEventHandler = new SystemEventHandler(env.getContextManager());
     }
 
     protected void initScriptState(DefaultEnvironment env) throws InitException {
@@ -76,6 +76,7 @@ public class EnvironmentFactory {
         scriptEnv.addInitializer(new CoreLib(env));
         scriptEnv.addInitializer(new ImageLib(env));
         scriptEnv.addInitializer(new TextLib(env));
+        scriptEnv.addInitializer(new SystemLib(env));
 
         // Register objects
 

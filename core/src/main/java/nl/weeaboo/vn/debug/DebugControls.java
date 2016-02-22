@@ -22,6 +22,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -75,9 +76,10 @@ public final class DebugControls {
         boolean alt = input.isPressed(KeyCode.ALT_LEFT, true);
 
         // Reset
+        ISystemModule systemModule = env.getSystemModule();
         if (input.consumePress(KeyCode.F5)) {
             try {
-                novel.restart();
+                systemModule.restart();
             } catch (InitException e) {
                 LOG.error("Fatal error during restart", e);
             }

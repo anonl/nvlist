@@ -31,7 +31,6 @@ public class TestEnvironment extends DefaultEnvironment {
 
         TestEnvironment env = new TestEnvironment();
         env.renderEnv = CoreTestUtil.BASIC_ENV;
-        env.systemEventHandler = new TestSystemEventHandler();
         env.resourceLoadLog = new ResourceLoadLogStub();
 
         LuaRunState runState = LuaTestUtil.newRunState();
@@ -44,6 +43,7 @@ public class TestEnvironment extends DefaultEnvironment {
         env.soundModule = new SoundModule(env);
         env.textModule = new TextModule();
         env.videoModule = new VideoModule(env);
+        env.systemModule = new TestSystemModule();
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         env.contextManager = new ContextManager(contextFactory);

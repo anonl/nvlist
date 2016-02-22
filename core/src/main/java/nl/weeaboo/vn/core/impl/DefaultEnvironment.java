@@ -8,7 +8,8 @@ import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IResourceLoadLog;
-import nl.weeaboo.vn.core.ISystemEventHandler;
+import nl.weeaboo.vn.core.ISystemEnv;
+import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
@@ -22,7 +23,6 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
 
     IContextManager contextManager;
     LuaScriptEnv scriptEnv;
-    ISystemEventHandler systemEventHandler;
     IResourceLoadLog resourceLoadLog;
 
     IImageModule imageModule;
@@ -30,6 +30,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     IVideoModule videoModule;
     ITextModule textModule;
     ISaveModule saveModule;
+    ISystemModule systemModule;
 
     IRenderEnv renderEnv;
 
@@ -74,11 +75,6 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     }
 
     @Override
-    public ISystemEventHandler getSystemEventHandler() {
-        return checkSet(systemEventHandler);
-    }
-
-    @Override
     public IResourceLoadLog getResourceLoadLog() {
         return checkSet(resourceLoadLog);
     }
@@ -109,9 +105,15 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     }
 
     @Override
+    public ISystemModule getSystemModule() {
+        return checkSet(systemModule);
+    }
+
+    @Override
     public void updateRenderEnv(Rect realClip, Dim realScreenSize) {
         IRenderEnv old = getRenderEnv();
-        renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize, old.isTouchScreen());
+        ISystemEnv systemEnv = StaticEnvironment.SYSTEM_ENV.get();
+        renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize, systemEnv.isTouchScreen());
 
         contextManager.setRenderEnv(getRenderEnv());
     }

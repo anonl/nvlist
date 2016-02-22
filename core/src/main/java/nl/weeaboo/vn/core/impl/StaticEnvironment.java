@@ -12,6 +12,8 @@ import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.INotifier;
+import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.sound.impl.MusicStore;
@@ -23,7 +25,9 @@ public final class StaticEnvironment {
     public static final StaticRef<INotifier> NOTIFIER = StaticRef.from("notifier", INotifier.class);
     public static final StaticRef<IPreferenceStore> PREFS = StaticRef.from("prefs", IPreferenceStore.class);
     public static final StaticRef<IInput> INPUT = StaticRef.from("input", IInput.class);
+    public static final StaticRef<ISystemEnv> SYSTEM_ENV = StaticRef.from("systemEnv", ISystemEnv.class);
 
+    public static final StaticRef<INovel> NOVEL = StaticRef.from("novel", INovel.class);
     public static final StaticRef<AssetManager> ASSET_MANAGER = StaticRef.from("assetManager", AssetManager.class);
     public static final StaticRef<TextureStore> TEXTURE_STORE = StaticRef.from("store.texture", TextureStore.class);
     public static final StaticRef<GeneratedResourceStore> GENERATED_TEXTURE_STORE = StaticRef.from("store.generatedTexture", GeneratedResourceStore.class);
