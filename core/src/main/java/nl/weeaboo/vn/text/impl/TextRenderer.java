@@ -16,6 +16,7 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
+import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -269,6 +270,23 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         setMaxSize((int)Math.floor(w), (int)Math.floor(h));
 
         super.setSize(w, h);
+    }
+
+    /** @return The vertical offset for aligning content within its parent bounds */
+    public static double getOffsetY(ITextRenderer textRenderer, VerticalAlign verticalAlign) {
+        double boundingHeight = textRenderer.getHeight();
+        double contentHeight = textRenderer.getTextHeight();
+
+        switch (verticalAlign) {
+        case TOP:
+            return 0;
+        case MIDDLE:
+            return (contentHeight - boundingHeight) / 2;
+        case BOTTOM:
+            return (contentHeight - boundingHeight);
+        default:
+            throw new IllegalArgumentException("Unsupported alignment: " + verticalAlign);
+        }
     }
 
 }

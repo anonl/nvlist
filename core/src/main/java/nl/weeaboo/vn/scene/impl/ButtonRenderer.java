@@ -5,10 +5,12 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.ETextAlign;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
+import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.NinePatch;
@@ -30,6 +32,7 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     private final Map<ButtonViewState, INinePatch> textures = Maps.newEnumMap(ButtonViewState.class);
 
     private ButtonViewState currentViewState = ButtonViewState.DEFAULT;
+    private VerticalAlign verticalTextAlign = VerticalAlign.MIDDLE;
 
     public ButtonRenderer() {
         MutableTextStyle mts = new MutableTextStyle(IText.DEFAULT_STYLE);
@@ -70,8 +73,9 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     protected void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         background.render(drawBuffer, parent, bounds);
 
-        // TODO #14: Vertical-align text
-        textRenderer.render(drawBuffer, parent, bounds);
+        double ty = TextRenderer.getOffsetY(textRenderer, verticalTextAlign);
+        Area2D textBounds = Area2D.of(bounds.x, bounds.y + ty, bounds.w, textRenderer.getTextHeight());
+        textRenderer.render(drawBuffer, parent, textBounds);
     }
 
     @Override
@@ -123,6 +127,16 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
         currentViewState = state;
 
         invalidateBackground();
+    }
+
+    @Override
+    public VerticalAlign getVerticalAlign() {
+        return verticalTextAlign;
+    }
+
+    @Override
+    public void setVerticalAlign(VerticalAlign align) {
+        this.verticalTextAlign = Checks.checkNotNull(align);
     }
 
 }

@@ -8,6 +8,7 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.KeyCode;
+import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.IShape;
@@ -217,6 +218,16 @@ public class Button extends Transformable implements IButton {
     @Override
     public void setTexture(ButtonViewState viewState, INinePatch patch) {
         renderer.setTexture(viewState, patch);
+    }
+
+    @Override
+    public VerticalAlign getVerticalAlign() {
+        return renderer.getVerticalAlign();
+    }
+
+    @Override
+    public void setVerticalAlign(VerticalAlign align) {
+        renderer.setVerticalAlign(align);
     }
 
 }

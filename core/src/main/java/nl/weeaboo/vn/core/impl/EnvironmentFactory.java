@@ -12,6 +12,7 @@ import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.script.impl.lib.BasicScriptInitializer;
 import nl.weeaboo.vn.script.impl.lib.CoreLib;
 import nl.weeaboo.vn.script.impl.lib.ImageLib;
 import nl.weeaboo.vn.script.impl.lib.SystemLib;
@@ -72,13 +73,14 @@ public class EnvironmentFactory {
     protected void initScriptState(DefaultEnvironment env) throws InitException {
         LuaScriptEnv scriptEnv = env.getScriptEnv();
 
+        // Register basic types/objects
+        scriptEnv.addInitializer(new BasicScriptInitializer());
+
         // Register script libs
         scriptEnv.addInitializer(new CoreLib(env));
         scriptEnv.addInitializer(new ImageLib(env));
         scriptEnv.addInitializer(new TextLib(env));
         scriptEnv.addInitializer(new SystemLib(env));
-
-        // Register objects
 
      // TODO LVN-017
 //      if (isVNDS()) {

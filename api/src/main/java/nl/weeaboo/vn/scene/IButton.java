@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.script.IScriptFunction;
@@ -78,5 +79,11 @@ public interface IButton extends ITransformable {
 
     /** @see IButtonRenderer#setTexture(ButtonViewState, ITexture) */
     public void setTexture(ButtonViewState viewState, INinePatch patch);
+
+    /** @see IButtonRenderer#getVerticalAlign() */
+    VerticalAlign getVerticalAlign();
+
+    /** @see IButtonRenderer#setVerticalAlign(VerticalAlign) */
+    void setVerticalAlign(VerticalAlign align);
 
 }

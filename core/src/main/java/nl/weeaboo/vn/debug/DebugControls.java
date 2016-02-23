@@ -235,9 +235,9 @@ public final class DebugControls {
     private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext) {
         ComponentFactory entityHelper = new ComponentFactory();
         IButton button = entityHelper.createButton(layer, scriptContext);
-        button.setSize(150, 32);
+        button.setSize(150, 150);
         button.setTexture(ButtonViewState.DEFAULT, imageModule.getTexture("test"));
-        button.setText("Test");
+        button.setText("MgZx\nZxMg");
         button.setPos(800, 0);
     }
 
