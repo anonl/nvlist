@@ -1,7 +1,14 @@
 package nl.weeaboo.vn.script.impl.lua;
 
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
+import nl.weeaboo.lua2.lib.CoerceLuaToJava;
+import nl.weeaboo.styledtext.ETextAttribute;
+import nl.weeaboo.styledtext.MutableTextStyle;
+import nl.weeaboo.styledtext.StyleParseException;
+import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.image.IImageModule;
@@ -66,6 +73,48 @@ public final class LuaConvertUtil {
             throw new ScriptException("Invalid arguments");
         }
         return null;
+    }
+
+    public static TextStyle getTextStyleArg(LuaValue val) throws ScriptException {
+        TextStyle ts = val.touserdata(TextStyle.class);
+        if (ts != null) {
+            // The value is already a TextStyle
+            return ts;
+        }
+
+        if (val.isstring()) {
+            try {
+                return TextStyle.fromString(val.tojstring());
+            } catch (StyleParseException e) {
+                throw new ScriptException("Unable to parse text style: " + val.tojstring(), e);
+            }
+        } else if (val.istable()) {
+            LuaTable table = val.checktable();
+
+            MutableTextStyle mts = new MutableTextStyle();
+            for (LuaValue key : table.keys()) {
+                ETextAttribute attribute = ETextAttribute.fromId(key.toString());
+                if (attribute == null) {
+                    continue;
+                }
+
+                Object javaValue = parseTextAttribute(attribute, table.get(key));
+                if (javaValue != null) {
+                    mts.setProperty(attribute, javaValue);
+                }
+            }
+            return mts.immutableCopy();
+        } else {
+            return TextStyle.defaultInstance();
+        }
+    }
+
+    public static Object parseTextAttribute(ETextAttribute attribute, LuaValue luaValue) {
+        if (luaValue.isstring()) {
+            return attribute.valueFromString(luaValue.tojstring());
+        } else {
+            return CoerceLuaToJava.coerceArg(luaValue, attribute.getType());
+        }
     }
 
 }

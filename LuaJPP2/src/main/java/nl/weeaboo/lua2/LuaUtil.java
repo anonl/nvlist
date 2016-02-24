@@ -149,7 +149,7 @@ public final class LuaUtil {
 	 * constant of type boolean, number or string into the proper LuaValue
 	 * subclass.
 	 */
-	public static LuaValue resolveCodeConstant(String code) {
+	public static LuaValue parseLuaLiteral(String code) {
 		if ("true".equals(code)) {
 			return valueOf(true);
 		} else if ("false".equals(code)) {
