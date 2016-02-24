@@ -32,9 +32,26 @@ public final class RenderEnv implements IRenderEnv {
 
 		this.scale = Math.min(rclip.w / (double)vsize.w, rclip.h / (double)vsize.h);
 		this.glClip = Rect.of(rclip.x, rscreen.h - rclip.y - rclip.h, rclip.w, rclip.h);
-		this.glScreenVirtualBounds = RenderUtil.calculateGLScreenVirtualBounds(rclip.x, rclip.y,
+        this.glScreenVirtualBounds = calculateGLScreenVirtualBounds(rclip.x, rclip.y,
 				rscreen.w, rscreen.h, scale);
 	}
+
+    /**
+     * @param scale The scale factor from virtual coordinates to real coordinates.
+     */
+    private static Rect2D calculateGLScreenVirtualBounds(int clipX, int clipY, int screenWidth,
+            int screenHeight, double scale) {
+        double s = 1.0 / scale;
+        double x = s * -clipX;
+        double y = s * -clipY;
+        double w = s * screenWidth;
+        double h = s * screenHeight;
+
+        w = Double.isNaN(w) ? 0 : Math.max(0, w);
+        h = Double.isNaN(h) ? 0 : Math.max(0, h);
+
+        return Rect2D.of(x, y, w, h);
+    }
 
     public static RenderEnv newDefaultInstance(Dim vsize, boolean isTouchScreen) {
         Rect rclip = Rect.of(0, 0, vsize.w, vsize.h);
