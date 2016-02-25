@@ -5,7 +5,6 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -33,18 +32,6 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     public void handleInput(IInput input) {
         super.handleInput(input);
 
-        if (contains(input.getPointerX(), input.getPointerY())) {
-            int lineCount = textRenderer.getLineCount();
-            int endLine = textRenderer.getEndLine();
-            int maxGlyphCount = getVisibleLayout().getGlyphCount();
-            if (getVisibleText() < maxGlyphCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
-                // Make all glyphs in the current lines fully visible
-                textRenderer.setVisibleText(ALL_GLYPHS_VISIBLE);
-            } else if (endLine < lineCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
-                // Scroll to new visible lines
-                textRenderer.setVisibleText(endLine, 0f);
-            }
-        }
     }
 
     @Override
