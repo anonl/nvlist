@@ -20,12 +20,16 @@ public abstract class AbstractRenderable implements IRenderable {
 
     @Override
     public void onAttached(IEventListener cl) {
-        changeHelper.addTransientListener(cl);
+        if (cl != null) {
+            changeHelper.addTransientListener(cl);
+        }
     }
 
     @Override
     public void onDetached(IEventListener cl) {
-        changeHelper.removeTransientListener(cl);
+        if (cl != null) {
+            changeHelper.removeTransientListener(cl);
+        }
     }
 
     @Override

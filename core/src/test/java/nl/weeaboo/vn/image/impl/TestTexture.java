@@ -36,8 +36,8 @@ public class TestTexture implements ITexture {
     }
 
 	public TestTexture(int w, int h) {
-        Checks.checkRange(w, "w", 2);
-        Checks.checkRange(h, "h", 2);
+        Checks.checkRange(w, "w", 1);
+        Checks.checkRange(h, "h", 1);
 
 	    this.w = w;
 	    this.h = h;
@@ -45,8 +45,8 @@ public class TestTexture implements ITexture {
 
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				int r = 64 + 127 * x / (w - 1);
-				int g = 64 + 127 * y / (h - 1);
+                int r = 64 + 127 * x / Math.max(1, w - 1);
+                int g = 64 + 127 * y / Math.max(1, h - 1);
 				argb[y * w + x] = 0xFF000000|(r<<16)|(g<<8);
 			}
 		}
