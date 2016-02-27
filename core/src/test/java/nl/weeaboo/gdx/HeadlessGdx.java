@@ -20,10 +20,12 @@ public class HeadlessGdx {
         }
 
         HeadlessNativesLoader.load();
+        Gdx.app = new GdxAppStub();
         Gdx.files = new HeadlessFiles();
         Gdx.net = new HeadlessNet();
         Gdx.graphics = new MockGraphics();
-        Gdx.gl = MockGL.newInstance();
+        Gdx.gl20 = MockGL.newInstance();
+        Gdx.gl = Gdx.gl20;
         Gdx.audio = new MockAudio();
         Gdx.input = new MockInput();
         initialized = true;
