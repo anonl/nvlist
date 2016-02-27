@@ -291,7 +291,7 @@ public final class DebugControls {
 
     private static void createBitmapTweenImage(ILayer layer, IImageModule imageModule) {
         IImageDrawable image = imageModule.createImage(layer);
-        image.setPos(640, 360);
+        image.setPos(0, 0);
         image.setAlign(.5, .5);
 
         ITexture texture = imageModule.getTexture("test");

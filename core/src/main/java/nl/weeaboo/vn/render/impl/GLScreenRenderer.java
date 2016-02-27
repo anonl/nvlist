@@ -166,19 +166,19 @@ public class GLScreenRenderer extends BaseScreenRenderer {
                 triangleMesh.dispose();
             }
             triangleMesh = new Mesh(false, false, cols * 4, cols * 6, attrs);
-
-            // Create an index buffer for a triangle strip
-            short[] indices = new short[cols * 6];
-            for (int col = 0, i = 0, v = 0; col < cols - 1; col++, i += 2) {
-                indices[v++] = (short)(i + 0);
-                indices[v++] = (short)(i + 1);
-                indices[v++] = (short)(i + 2);
-                indices[v++] = (short)(i + 2);
-                indices[v++] = (short)(i + 1);
-                indices[v++] = (short)(i + 3);
-            }
-            triangleMesh.setIndices(indices);
         }
+
+        // Create an index buffer for a triangle strip
+        short[] indices = new short[cols * 6];
+        for (int col = 0, i = 0, v = 0; col < cols - 1; col++, i += 2) {
+            indices[v++] = (short)(i + 0);
+            indices[v++] = (short)(i + 1);
+            indices[v++] = (short)(i + 2);
+            indices[v++] = (short)(i + 2);
+            indices[v++] = (short)(i + 1);
+            indices[v++] = (short)(i + 3);
+        }
+        triangleMesh.setIndices(indices);
 
         shader.begin();
         shader.setUniformMatrix("u_projTrans", matrixStack.getCombined());

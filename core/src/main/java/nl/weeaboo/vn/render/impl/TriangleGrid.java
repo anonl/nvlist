@@ -39,37 +39,30 @@ public final class TriangleGrid implements Serializable {
 	}
 
 	public static TriangleGrid layout1(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0) {
-		return layout(new Area2D[] {bounds0},
-				new Area2D[] {texBounds0},
-				new TextureWrap[] {wrap0});
+        return layout(new InputQuad(bounds0, texBounds0, wrap0));
 	}
 	public static TriangleGrid layout2(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
 			Area2D bounds1, Area2D texBounds1, TextureWrap wrap1)
 	{
-		return layout(new Area2D[] {bounds0, bounds1},
-				new Area2D[] {texBounds0, texBounds1},
-				new TextureWrap[] {wrap0, wrap1});
+        return layout(new InputQuad(bounds0, texBounds0, wrap0), new InputQuad(bounds1, texBounds1, wrap1));
 	}
 	public static TriangleGrid layout3(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
 			Area2D bounds1, Area2D texBounds1, TextureWrap wrap1,
 			Area2D bounds2, Area2D texBounds2, TextureWrap wrap2)
 	{
-		return layout(new Area2D[] {bounds0, bounds1, bounds2},
-				new Area2D[] {texBounds0, texBounds1, texBounds2},
-				new TextureWrap[] {wrap0, wrap1, wrap2});
+		return layout(
+		        new InputQuad(bounds0, texBounds0, wrap0),
+		        new InputQuad(bounds1, texBounds1, wrap1),
+		        new InputQuad(bounds2, texBounds2, wrap2));
 	}
-	private static TriangleGrid layout(Area2D[] bounds, Area2D[] texBounds, TextureWrap[] wrap) {
-		if (bounds.length != texBounds.length) {
-			throw new IllegalArgumentException("bounds.length != texBounds.length");
-		} else if (texBounds.length != wrap.length) {
-			throw new IllegalArgumentException("texBounds.length != wrap.length");
-		}
 
-        double[] xsplits = new double[bounds.length * 2];
-        double[] ysplits = new double[bounds.length * 2];
+    private static TriangleGrid layout(InputQuad... inputs) {
+        double[] xsplits = new double[inputs.length * 2];
+        double[] ysplits = new double[inputs.length * 2];
 
         int t = 0;
-		for (Area2D r : bounds) {
+		for (InputQuad input : inputs) {
+            Area2D r = input.bounds;
             xsplits[t] = r.x;
             ysplits[t] = r.y;
             t++;
@@ -84,7 +77,7 @@ public final class TriangleGrid implements Serializable {
 		int rows = ysplits.length - 1;
         int vertices = (2 * cols) * rows;
         FloatBuffer pos = FloatBuffer.allocate(2 * vertices);
-		FloatBuffer[] texs = new FloatBuffer[texBounds.length];
+        FloatBuffer[] texs = new FloatBuffer[inputs.length];
 		for (int n = 0; n < texs.length; n++) {
             texs[n] = FloatBuffer.allocate(2 * vertices);
 		}
@@ -96,14 +89,14 @@ public final class TriangleGrid implements Serializable {
 			for (int xi = 0; xi < cols; xi++) {
 				double x = xsplits[xi];
 
-                glDrawArrayVertex(pos, x, y1);
+                glDrawArrayVertex(pos, x, y0);
                 for (int n = 0; n < texs.length; n++) {
-                    glDrawArrayTexcoord(texs[n], x, y1, bounds[n], texBounds[n], wrap[n]);
+                    glDrawArrayTexcoord(texs[n], x, y0, inputs[n]);
                 }
 
-				glDrawArrayVertex(pos, x, y0);
+                glDrawArrayVertex(pos, x, y1);
 				for (int n = 0; n < texs.length; n++) {
-					glDrawArrayTexcoord(texs[n], x, y0, bounds[n], texBounds[n], wrap[n]);
+                    glDrawArrayTexcoord(texs[n], x, y1, inputs[n]);
 				}
 			}
 		}
@@ -119,9 +112,12 @@ public final class TriangleGrid implements Serializable {
 	private static void glDrawArrayVertex(FloatBuffer coords, double x, double y) {
 		coords.put((float)x); coords.put((float)y);
 	}
-	private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y,
-			Area2D bounds, Area2D texBounds, TextureWrap wrap)
-	{
+
+    private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y, InputQuad input) {
+        final Area2D bounds = input.bounds;
+        final Area2D texBounds = input.texBounds;
+        final TextureWrap wrap = input.wrap;
+
         double normalizedX = (x - bounds.x) / bounds.w;
         double normalizedY = (y - bounds.y) / bounds.h;
 
@@ -142,6 +138,10 @@ public final class TriangleGrid implements Serializable {
         coords.put((float)u);
         coords.put(1 - (float)v);
 	}
+
+    public int getVerticesPerRow() {
+        return verticesPerRow;
+    }
 
     public void getVertices(int row, FloatBuffer out, int outStride) {
         int src = row * verticesPerRow * 2;
@@ -180,6 +180,20 @@ public final class TriangleGrid implements Serializable {
             list.add(new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + t));
         }
         return new VertexAttributes(list.toArray(new VertexAttribute[list.size()]));
+    }
+
+    private static class InputQuad {
+
+        public final Area2D bounds;
+        public final Area2D texBounds;
+        public final TextureWrap wrap;
+
+        public InputQuad(Area2D bounds, Area2D texBounds, TextureWrap wrap) {
+            this.bounds = bounds;
+            this.texBounds = texBounds;
+            this.wrap = wrap;
+        }
+
     }
 
 }
