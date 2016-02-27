@@ -25,6 +25,7 @@ public final class NinePatch implements INinePatch {
     public NinePatch(ITexture tex) {
         this();
 
+        Preconditions.checkNotNull(tex);
         textures.put(EArea.CENTER, tex);
     }
 
@@ -58,8 +59,11 @@ public final class NinePatch implements INinePatch {
 
     @Override
     public void setTexture(EArea area, ITexture texture) {
-        Preconditions.checkNotNull(area);
-        textures.put(area, texture);
+        if (texture != null) {
+            textures.put(area, texture);
+        } else {
+            textures.remove(area);
+        }
     }
 
     @Override

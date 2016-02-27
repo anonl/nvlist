@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -98,6 +99,13 @@ public final class CoreTestUtil {
         Assert.assertEquals("Invalid: " + r, expectedY, r.y, EPSILON);
         Assert.assertEquals("Invalid: " + r, expectedW, r.w, EPSILON);
         Assert.assertEquals("Invalid: " + r, expectedH, r.h, EPSILON);
+    }
+
+    public static void assertEquals(Insets2D expected, Insets2D actual) {
+        Assert.assertEquals("Invalid: " + actual, expected.top, actual.top, EPSILON);
+        Assert.assertEquals("Invalid: " + actual, expected.right, actual.right, EPSILON);
+        Assert.assertEquals("Invalid: " + actual, expected.bottom, actual.bottom, EPSILON);
+        Assert.assertEquals("Invalid: " + actual, expected.left, actual.left, EPSILON);
     }
 
     public static void assertEquals(double x, double y, Vec2 vec, double epsilon) {
