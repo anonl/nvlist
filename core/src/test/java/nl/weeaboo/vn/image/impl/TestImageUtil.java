@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.ITextureData;
 
@@ -21,19 +20,7 @@ public final class TestImageUtil {
     
     private TestImageUtil() {        
     }
-    
-    public static void setPixmapPixels(Pixmap target, int[] argb) {
-        int len = target.getWidth() * target.getHeight();
-        Checks.checkArgument(len == argb.length, "int[] has incorrect length: " + argb.length + ", expected: " + len);
         
-        int t = 0;
-        for (int y = 0; y < target.getHeight(); y++) {
-            for (int x = 0; x < target.getWidth(); x++) {
-                target.drawPixel(x, y, argb[t++]);
-            }
-        }
-    }
-    
     public static void writePng(Pixmap pixmap, OutputStream out) throws IOException {
         PNG encoder = new PixmapIO.PNG();
         encoder.write(out, pixmap);

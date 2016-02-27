@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.HeadlessGdx;
+import nl.weeaboo.gdx.graphics.GdxGraphicsTestUtil;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
@@ -55,7 +56,7 @@ public class TestTexture implements ITexture {
 
     private void initTransients() {
         image = new Pixmap(w, h, Pixmap.Format.RGBA8888);
-        TestImageUtil.setPixmapPixels(image, argb);
+        GdxGraphicsTestUtil.setPixmapPixels(image, argb);
 	}
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
