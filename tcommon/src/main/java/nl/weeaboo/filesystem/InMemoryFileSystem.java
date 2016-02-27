@@ -99,7 +99,6 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 
 	@Override
 	protected void getFiles(Collection<String> out, String prefix, FileCollectOptions opts) throws IOException {
-
 		if (!opts.collectFiles) {
 			// Folders aren't supported
 			return;
@@ -107,7 +106,9 @@ public class InMemoryFileSystem extends AbstractWritableFileSystem {
 
 		synchronized (files) {
 			for (InMemoryFile file : files.values()) {
-				out.add(file.getName());
+                if (file.getName().startsWith(prefix)) {
+                    out.add(file.getName());
+                }
 			}
 		}
 	}

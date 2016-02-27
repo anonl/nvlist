@@ -79,8 +79,12 @@ public class MultiFileSystem implements IFileSystem {
 	@Override
 	public void getFiles(Collection<String> out, String path, boolean recursive) throws IOException {
 		for (IFileSystem fs : fileSystems) {
-			if (fs.isOpen()) {
-			    fs.getFiles(out, path, recursive);
+            if (fs.isOpen()) {
+                try {
+                    fs.getFiles(out, path, recursive);
+                } catch (FileNotFoundException fnfe) {
+                    // Ignore and try the next file system
+                }
 			}
 		}
 	}
@@ -89,7 +93,11 @@ public class MultiFileSystem implements IFileSystem {
 	public void getSubFolders(Collection<String> out, String path, boolean recursive) throws IOException {
 		for (IFileSystem fs : fileSystems) {
 			if (fs.isOpen()) {
-			    fs.getSubFolders(out, path, recursive);
+                try {
+                    fs.getSubFolders(out, path, recursive);
+                } catch (FileNotFoundException fnfe) {
+                    // Ignore and try the next file system
+                }
 			}
 		}
 	}

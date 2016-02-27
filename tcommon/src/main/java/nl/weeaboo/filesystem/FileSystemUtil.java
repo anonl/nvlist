@@ -2,6 +2,7 @@ package nl.weeaboo.filesystem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,12 +32,25 @@ public final class FileSystemUtil {
         return StringUtil.fromUTF8(bytes, skip, bytes.length - skip);
     }
 
-	public static Collection<String> withoutPathPrefix(Collection<String> paths, String prefix) {
+    public static void writeString(IWritableFileSystem fs, String path, String content) throws IOException {
+        writeBytes(fs, path, StringUtil.toUTF8(content));
+    }
+
+    public static void writeBytes(IWritableFileSystem fs, String path, byte[] content) throws IOException {
+        OutputStream out = fs.openOutputStream(path, false);
+        try {
+            out.write(content);
+        } finally {
+            out.close();
+        }
+    }
+
+    public static Collection<String> withoutPathPrefix(Collection<String> paths, String prefix) {
 		final int pL = prefix.length();
 
 		Collection<String> result = new ArrayList<String>(paths.size());
 		for (String path : paths) {
-			if (path.length() > prefix.length() && path.charAt(pL) == '/') {
+            if (path.length() > pL && path.charAt(pL) == '/') {
 				//Path without pathPrefix would otherwise start with a '/'
 				result.add(path.substring(pL+1));
 			} else {

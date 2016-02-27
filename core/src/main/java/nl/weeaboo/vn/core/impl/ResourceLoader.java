@@ -25,7 +25,7 @@ public abstract class ResourceLoader implements Serializable {
     private final LruSet<String> checkedFilenames;
 
     private String[] autoFileExts = new String[0];
-    private boolean checkFileExt;
+    private boolean checkFileExt = true;
 
     public ResourceLoader(IResourceLoadLog resourceLoadLog) {
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
@@ -67,13 +67,18 @@ public abstract class ResourceLoader implements Serializable {
             return;
         }
 
+        // If the file has an extension, isn't valid, but would be valid with a different extension...
+        if (!Filenames.getExtension(filename).isEmpty() && !isValidFilename(filename)
+                && isValidFilename(normalizeFilename(filename))) {
+
+            LOG.warn("Incorrect file extension: {}", filename);
+        }
+
         //Check if a file extension in the default list has been specified.
         for (String ext : autoFileExts) {
             if (filename.endsWith("." + ext)) {
                 if (isValidFilename(filename)) {
                     LOG.debug("You don't need to specify the file extension: {}", filename);
-                } else if (isValidFilename(normalizeFilename(filename))) {
-                    LOG.warn("Incorrect file extension: {}", filename);
                 }
                 break;
             }
