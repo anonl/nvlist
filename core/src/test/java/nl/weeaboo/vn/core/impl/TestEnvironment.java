@@ -28,6 +28,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
         StaticEnvironment.INPUT.set(new Input());
+        StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
         TestEnvironment env = new TestEnvironment();
         env.renderEnv = CoreTestUtil.BASIC_ENV;
@@ -43,12 +44,17 @@ public class TestEnvironment extends DefaultEnvironment {
         env.soundModule = new SoundModule(env);
         env.textModule = new TextModule();
         env.videoModule = new VideoModule(env);
-        env.systemModule = new TestSystemModule();
+        env.systemModule = new SystemModuleStub();
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         env.contextManager = new ContextManager(contextFactory);
 
         return env;
+    }
+
+    /** Only valid after calling {@link #newInstance()} */
+    public TestSystemEnv getSystemEnv() {
+        return (TestSystemEnv)StaticEnvironment.SYSTEM_ENV.get();
     }
 
     @Override

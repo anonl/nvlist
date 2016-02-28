@@ -41,19 +41,23 @@ public class SystemModule implements ISystemModule{
     public void exit(boolean force) {
         LOG.info("SystemEventHandler.exit({})", force);
 
-        if (force || !call("onExit")) {
-            Gdx.app.exit();
+        if (force || !call(KnownScriptFunctions.ON_EXIT)) {
+            doExit();
         }
+    }
+
+    protected void doExit() {
+        Gdx.app.exit();
     }
 
     @Override
     public boolean canExit() {
-        return getEnvironment().canExit();
+        return getSystemEnv().canExit();
     }
 
     @Override
     public void restart() throws InitException {
-        INovel novel = novelRef.get();
+        INovel novel = novelRef.getIfPresent();
         if (novel == null) {
             throw new InitException("Unable to restart, novel is null");
         }
@@ -69,10 +73,10 @@ public class SystemModule implements ISystemModule{
     public void onPrefsChanged(IPreferenceStore config) {
         LOG.info("SystemEventHandler.onPrefsChanged()");
 
-        call("onPrefsChanged");
+        call(KnownScriptFunctions.ON_PREFS_CHANGE);
     }
 
-    private boolean call(String functionName) {
+    protected boolean call(String functionName) {
         IContextManager contextManager = env.getContextManager();
         IContext context = contextManager.getPrimaryContext();
         try {
@@ -85,7 +89,7 @@ public class SystemModule implements ISystemModule{
     }
 
     @Override
-    public ISystemEnv getEnvironment() {
+    public ISystemEnv getSystemEnv() {
         return systemEnv.get();
     }
 

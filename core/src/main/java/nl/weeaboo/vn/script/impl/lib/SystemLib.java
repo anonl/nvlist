@@ -86,7 +86,7 @@ public class SystemLib extends LuaLib {
     public Varargs getEnv(Varargs args) {
         ISystemModule system = env.getSystemModule();
 
-        return LuajavaLib.toUserdata(system.getEnvironment(), ISystemEnv.class);
+        return LuajavaLib.toUserdata(system.getSystemEnv(), ISystemEnv.class);
     }
 
 }

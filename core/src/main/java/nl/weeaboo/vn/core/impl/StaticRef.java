@@ -21,8 +21,12 @@ public final class StaticRef<T> implements Serializable {
     }
 
     public final T get() {
+        return Checks.checkNotNull(getIfPresent());
+    }
+
+    public final T getIfPresent() {
         StaticEnvironment instance = StaticEnvironment.getInstance();
-        return Checks.checkNotNull(instance.get(this));
+        return instance.get(this);
     }
 
     public final void set(T value) {

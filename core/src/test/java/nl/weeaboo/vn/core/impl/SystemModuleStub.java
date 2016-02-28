@@ -6,7 +6,7 @@ import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 
-public class TestSystemModule implements ISystemModule {
+public class SystemModuleStub implements ISystemModule {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ public class TestSystemModule implements ISystemModule {
     }
 
     @Override
-    public ISystemEnv getEnvironment() {
+    public ISystemEnv getSystemEnv() {
         return systemEnv;
     }
 

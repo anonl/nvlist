@@ -47,7 +47,7 @@ public class Novel extends AbstractNovel {
 
         // Load main script and call main function
         try {
-            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), "main");
+            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), KnownScriptFunctions.MAIN);
             LuaScriptUtil.callFunction(mainContext, mainFunctionName);
         } catch (Exception e) {
             LOG.warn("Error executing main function: \"{}\"", mainFunctionName, e);
@@ -58,7 +58,7 @@ public class Novel extends AbstractNovel {
     public void restart() throws InitException {
         stop();
 
-        start("titlescreen");
+        start(KnownScriptFunctions.TITLESCREEN);
     }
 
     @Override
