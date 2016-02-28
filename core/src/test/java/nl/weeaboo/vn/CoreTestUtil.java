@@ -95,17 +95,17 @@ public final class CoreTestUtil {
     public static void assertEquals(double expectedX, double expectedY, double expectedW, double expectedH,
             Area2D r) {
 
-        Assert.assertEquals("Invalid: " + r, expectedX, r.x, EPSILON);
-        Assert.assertEquals("Invalid: " + r, expectedY, r.y, EPSILON);
-        Assert.assertEquals("Invalid: " + r, expectedW, r.w, EPSILON);
-        Assert.assertEquals("Invalid: " + r, expectedH, r.h, EPSILON);
+        Assert.assertEquals("Invalid x: " + r, expectedX, r.x, EPSILON);
+        Assert.assertEquals("Invalid y: " + r, expectedY, r.y, EPSILON);
+        Assert.assertEquals("Invalid w: " + r, expectedW, r.w, EPSILON);
+        Assert.assertEquals("Invalid h: " + r, expectedH, r.h, EPSILON);
     }
 
     public static void assertEquals(Insets2D expected, Insets2D actual) {
-        Assert.assertEquals("Invalid: " + actual, expected.top, actual.top, EPSILON);
-        Assert.assertEquals("Invalid: " + actual, expected.right, actual.right, EPSILON);
-        Assert.assertEquals("Invalid: " + actual, expected.bottom, actual.bottom, EPSILON);
-        Assert.assertEquals("Invalid: " + actual, expected.left, actual.left, EPSILON);
+        Assert.assertEquals("Invalid top: " + actual, expected.top, actual.top, EPSILON);
+        Assert.assertEquals("Invalid right: " + actual, expected.right, actual.right, EPSILON);
+        Assert.assertEquals("Invalid bottom: " + actual, expected.bottom, actual.bottom, EPSILON);
+        Assert.assertEquals("Invalid left: " + actual, expected.left, actual.left, EPSILON);
     }
 
     public static void assertEquals(double x, double y, Vec2 vec, double epsilon) {

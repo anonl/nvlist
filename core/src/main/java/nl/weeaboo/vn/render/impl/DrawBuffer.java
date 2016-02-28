@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Sort;
+import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
@@ -116,6 +117,10 @@ public final class DrawBuffer implements IDrawBuffer {
         }
         Sort.instance().sort(commands.items, start, end);
         return Arrays.asList(commands.items).subList(start, end);
+    }
+
+    public ImmutableList<RenderCommand> getCommands() {
+        return ImmutableList.<RenderCommand> copyOf(commands);
     }
 
 }
