@@ -10,6 +10,9 @@ import nl.weeaboo.vn.scene.signal.ISignalHandler;
 
 public interface IVisualElement extends Serializable, IDestructible, ISignalHandler {
 
+    <T extends ISignalHandler & Serializable> void addSignalHandler(int order, T handler);
+    void removeSignalHandler(ISignalHandler handler);
+
     void draw(IDrawBuffer drawBuffer);
 
     IVisualGroup getParent();

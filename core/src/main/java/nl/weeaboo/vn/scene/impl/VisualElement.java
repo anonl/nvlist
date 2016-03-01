@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene.impl;
 
+import java.io.Serializable;
+
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -8,6 +10,7 @@ import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.DestroySignal;
 import nl.weeaboo.vn.scene.signal.ISignal;
+import nl.weeaboo.vn.scene.signal.ISignalHandler;
 import nl.weeaboo.vn.scene.signal.InputSignal;
 import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.scene.signal.TickSignal;
@@ -19,9 +22,16 @@ public class VisualElement implements IVisualElement {
     /** May be null */
     IVisualGroup parent;
 
+    private final SignalSupport signalSupport = new SignalSupport();
+
     private short z;
     private boolean visible = true;
     private boolean destroyed;
+
+    public VisualElement() {
+        // Add self at index 0
+        signalSupport.addSignalHandler(0, new SelfSignalHandler());
+    }
 
     @Override
     public final void destroy() {
@@ -42,21 +52,23 @@ public class VisualElement implements IVisualElement {
         return destroyed;
     }
 
+    @Override
+    public <T extends ISignalHandler & Serializable> void addSignalHandler(int order, T handler) {
+        signalSupport.addSignalHandler(order, handler);
+    }
+
+    @Override
+    public void removeSignalHandler(ISignalHandler handler) {
+        signalSupport.removeSignalHandler(handler);
+    }
+
     void sendSignal(ISignal signal) {
         SceneUtil.sendSignal(this, signal);
     }
 
     @Override
     public void handleSignal(ISignal signal) {
-        if (signal instanceof TickSignal) {
-            onTick();
-        }
-        if (signal instanceof InputSignal) {
-            handleInput(((InputSignal)signal).input);
-        }
-        if (signal instanceof RenderEnvChangeSignal) {
-            onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
-        }
+        signalSupport.handleSignal(signal);
     }
 
     protected void onTick() {
@@ -116,4 +128,22 @@ public class VisualElement implements IVisualElement {
         return (parent != null ? parent.getRenderEnv() : null);
     }
 
+    private class SelfSignalHandler implements ISignalHandler, Serializable {
+
+        private static final long serialVersionUID = VisualElement.serialVersionUID;
+
+        @Override
+        public void handleSignal(ISignal signal) {
+            if (!signal.isHandled() && signal instanceof TickSignal) {
+                onTick();
+            }
+            if (!signal.isHandled() && signal instanceof InputSignal) {
+                handleInput(((InputSignal)signal).input);
+            }
+            if (!signal.isHandled() && signal instanceof RenderEnvChangeSignal) {
+                onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
+            }
+        }
+
+    }
 }
