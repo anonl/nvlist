@@ -1,5 +1,0 @@
-[ ] The static s_metatable fields for various datatypes aren't serialized.
-	[ ] The StringLib actually modifies the string table during inialization.
-	    If you load a savefile before registering a StringLib first, you'll get
-	    unexpected behavior.
-	    	    

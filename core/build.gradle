@@ -1,8 +1,21 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.6
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 eclipse.project {
     name = appName + "-core"
+}
+
+dependencies {
+    compile project(":api")
+    compile project(":LuaJPP2")        
+    compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
+    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
 }

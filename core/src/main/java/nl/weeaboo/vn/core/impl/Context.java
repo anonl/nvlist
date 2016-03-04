@@ -10,6 +10,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.impl.Screen;
@@ -22,6 +23,7 @@ public class Context implements IContext {
 
     private final Screen screen;
 	private final IScriptContext scriptContext;
+    private final ISkipState skipState = new SkipState();
 
 	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<IContextListener>();
 
@@ -99,6 +101,11 @@ public class Context implements IContext {
 	}
 
 	@Override
+    public ISkipState getSkipState() {
+        return skipState;
+    }
+
+    @Override
 	public IScriptContext getScriptContext() {
 		return scriptContext;
 	}

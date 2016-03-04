@@ -1,8 +1,13 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.6
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 eclipse.project {
     name = appName + "-api"
+}
+
+dependencies {
+    compile project(":tcommon")
+    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+    compile "com.google.guava:guava:$guavaVersion"
+    
+    testCompile "junit:junit:$junitVersion"
 }

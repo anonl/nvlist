@@ -21,6 +21,8 @@ public interface IContext extends Serializable, IDestructible {
 
     IScriptContext getScriptContext();
 
+    ISkipState getSkipState();
+
     void setRenderEnv(IRenderEnv env);
 
 }

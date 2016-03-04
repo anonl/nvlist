@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.luaj.vm2.LuaClosure;
+import org.luaj.vm2.Varargs;
+
 import nl.weeaboo.lua2.io.LuaSerializable;
 import nl.weeaboo.lua2.link.LuaFunctionLink;
 import nl.weeaboo.lua2.link.LuaLink;
-
-import org.luaj.vm2.LuaClosure;
-import org.luaj.vm2.Varargs;
 
 @LuaSerializable
 public final class LuaThreadGroup implements Externalizable {

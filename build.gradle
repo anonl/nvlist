@@ -2,12 +2,11 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'org.robovm:robovm-gradle-plugin:1.5.1-SNAPSHOT'
     }
 }
@@ -34,104 +33,12 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
     }
-}
-
-project(':api') {
-    apply plugin: "java"
-
-    dependencies {
-        compile project(":tcommon")
-        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-        compile "com.google.guava:guava:$guavaVersion"
-        
-        testCompile "junit:junit:$junitVersion"
-    }
-}
-
-project(':core') {
-    apply plugin: "java"
-
-    dependencies {
-        compile project(":api")
-        compile project(":LuaJPP2")        
-        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
-        
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-
-    	testCompile "junit:junit:$junitVersion"
-        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-		testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    }
-}
-
-project(":desktop") {
-    apply plugin: "java"
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
-        
-        runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-        runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        
-    	testCompile "junit:junit:$junitVersion"
-    }
-}
-
-project(":android") {
-    apply plugin: "android"
-
-    configurations { natives }
-
-    dependencies {
-        compile project(":api")
-        compile project(":core")
-        compile project(":tcommon")
-        compile project(":LuaJPP2")
-        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
-        compile "org.slf4j:slf4j-android:$slf4jVersion"
-        compile "com.google.guava:guava:$guavaVersion"
-
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-    }
-}
-
-project(":ios") {
-    apply plugin: "java"
-    apply plugin: "robovm"
-
-    configurations { natives }
-
-    dependencies {
-        compile project(":core")
-        runtime "org.slf4j:slf4j-simple:$slf4jVersion"
-        
-        compile "org.robovm:robovm-rt:${roboVMVersion}"
-        compile "org.robovm:robovm-cocoatouch:${roboVMVersion}"
-        compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+    
+    plugins.withType(JavaPlugin) {
+        sourceCompatibility = 1.6
+        targetCompatibility = 1.6
+        compileJava.options.encoding = 'UTF-8'
+        compileTestJava.options.encoding = 'UTF-8'
     }
 }
 

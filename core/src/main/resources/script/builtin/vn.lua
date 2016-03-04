@@ -20,18 +20,6 @@ function deprecated(deprecatedSince)
     end
 end
 
--- Forward NVList 2.x style thread creation to the new interface
-Thread.new = function(...)
-    notifier:w("Don't use Thread.new(), use newThread() instead")
-    return newThread(...)
-end
-
-local _dofile = dofile
-dofile = function(...)
-    notifier:w("Don't use dofile(), use call instead")
-    return call(...)
-end
-
 ---Executes the script with the given filename. When the called script
 -- completes, resumes executing the current script. Use
 -- <code>jump("some-script.lvn")</code> when you don't want/need to
@@ -61,6 +49,7 @@ module("vn", package.seeall)
 
 --Require submodules
 local submodules = {
+	"context",
 	"text"
 }
 for _,module in ipairs(submodules) do

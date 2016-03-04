@@ -15,8 +15,11 @@ TextMode = {
 
 local textMode = 0
 local speaker = {}
-local lineRead = true
-local currentStyle = nil
+
+local lineState = {
+	read = true,
+	style = nil
+}
 
 -- ----------------------------------------------------------------------------
 --  Local Functions
@@ -34,14 +37,6 @@ end
 --  Functions
 -- ----------------------------------------------------------------------------
 
-function getScreen()
-	return getCurrentContext():getScreen()
-end
-
-function getTextState()
-	return getScreen():getTextState()
-end
-
 function getMainTextBox()
 	return getTextState():getTextDrawable()
 end
@@ -55,7 +50,7 @@ end
 ---Sets the current text of the main textbox.
 -- @param str The new text (may be either a string or a StyledText object). Any
 --        embedded stringifiers or text tags are evaluated unless
---        <code>meta.parse == false</code>.
+--        <code>meta.parse == false</code>.ua
 -- @tab[opt=nil] triggers An optional table containing functions that should be
 --               called at specific text positions.
 -- @tab[opt=nil] meta A table with metadata for this line of text (filename,

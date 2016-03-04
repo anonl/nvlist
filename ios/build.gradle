@@ -1,7 +1,22 @@
+apply plugin: "java"
+apply plugin: "robovm"
+
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 sourceCompatibility = '1.7'
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+configurations { natives }
+
+dependencies {
+    compile project(":core")
+    runtime "org.slf4j:slf4j-simple:$slf4jVersion"
+    
+    compile "org.robovm:robovm-rt:${roboVMVersion}"
+    compile "org.robovm:robovm-cocoatouch:${roboVMVersion}"
+    compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+}
 
 ext {
 	mainClassName = "nl.weeaboo.vn.IOSLauncher"
@@ -57,7 +72,6 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
-
 
 eclipse.project {
     name = appName + "-ios"
