@@ -6,7 +6,7 @@ eclipse.project {
 
 dependencies {
     compile project(":api")
-    compile project(":LuaJPP2")        
+    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
     compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     

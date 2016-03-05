@@ -1,4 +1,3 @@
 
 include 'api', 'core', 'desktop', 'android', 'ios'
 include 'tcommon'
-include 'LuaJPP2'

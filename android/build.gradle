@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.3.1'
     }
 }
 
@@ -20,7 +20,7 @@ dependencies {
     compile project(":api")
     compile project(":core")
     compile project(":tcommon")
-    compile project(":LuaJPP2")
+    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"

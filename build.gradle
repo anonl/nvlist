@@ -24,6 +24,7 @@ allprojects {
         slf4jVersion = '1.7.12'
         guavaVersion = '19.0'
         styledTextVersion = '1.3.1'
+        luajpp2Version = '2.1.0'
     }
 
     repositories {
@@ -32,6 +33,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
+        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
     }
     
     plugins.withType(JavaPlugin) {
