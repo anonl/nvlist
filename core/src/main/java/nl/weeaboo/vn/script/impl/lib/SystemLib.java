@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import javax.script.ScriptException;
-
 import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -11,6 +9,7 @@ import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
+import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
 public class SystemLib extends LuaLib {
@@ -58,7 +57,7 @@ public class SystemLib extends LuaLib {
         try {
             system.restart();
         } catch (InitException e) {
-            throw new ScriptException(e);
+            throw new ScriptException("Error restarting", e);
         }
         return LuaValue.NONE;
     }
