@@ -5,7 +5,7 @@ eclipse.project {
 }
 
 dependencies {
-    compile project(":tcommon")
+    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "com.google.guava:guava:$guavaVersion"
     
