@@ -62,6 +62,10 @@ android {
         minSdkVersion 8
         targetSdkVersion 23
     }
+    lintOptions {
+        textOutput "stdout"
+        textReport true
+    }
 }
 
 
