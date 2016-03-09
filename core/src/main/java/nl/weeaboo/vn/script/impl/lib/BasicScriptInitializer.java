@@ -12,6 +12,8 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 
 public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void initEnv(LuaScriptEnv env) throws ScriptException {
         LuaTable globals = env.getGlobals();

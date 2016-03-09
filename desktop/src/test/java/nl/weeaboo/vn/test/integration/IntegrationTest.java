@@ -1,10 +1,12 @@
 package nl.weeaboo.vn.test.integration;
 
+import java.awt.GraphicsEnvironment;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.lwjgl.glfw.GLFW;
 
@@ -26,6 +28,9 @@ public abstract class IntegrationTest {
 
     @Before
     public void beforeIntegration() throws InterruptedException {
+        // Skip test if headless
+        Assume.assumeFalse("Test doesn't work in headless mode", GraphicsEnvironment.isHeadless());
+
         /*
          * Workaround for libGDX issue; GLFW context is terminated upon shutdown, but not reinitialized when
          * creating a new application

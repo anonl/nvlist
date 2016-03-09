@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -17,7 +16,7 @@ import nl.weeaboo.vn.script.impl.lua.ILuaScriptEnvInitializer;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 
 /** Base class for modules of Lua functions */
-public abstract class LuaLib implements Serializable, ILuaScriptEnvInitializer {
+public abstract class LuaLib implements ILuaScriptEnvInitializer {
 
     private static final long serialVersionUID = 1L;
 
