@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import static org.luaj.vm2.LuaValue.NONE;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -54,7 +52,7 @@ public class LuaScriptThread implements IScriptThread {
         try {
             ByteArrayInputStream bin = new ByteArrayInputStream(StringUtil.toUTF8("return " + code));
 
-            Varargs result = NONE;
+            Varargs result;
             try {
                 // Try to evaluate as an expression
                 result = LoadState.load(bin, chunkName, env);

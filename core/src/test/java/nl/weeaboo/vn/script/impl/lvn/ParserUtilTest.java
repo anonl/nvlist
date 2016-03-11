@@ -7,8 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.script.impl.lvn.ParserUtil;
-
 public class ParserUtilTest {
 
     @Test
@@ -66,7 +64,7 @@ public class ParserUtilTest {
     }
 
     private List<String> readLines(String filename) throws IOException {
-        InputStream in = getClass().getResourceAsStream(filename);
+        InputStream in = ParserUtilTest.class.getResourceAsStream(filename);
         try {
             return ParserUtil.readLinesUtf8(in);
         } finally {

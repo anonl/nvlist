@@ -10,7 +10,7 @@ public class SystemModuleStub implements ISystemModule {
 
     private static final long serialVersionUID = 1L;
 
-    private final SystemEnv systemEnv = new SystemEnv(ApplicationType.HeadlessDesktop);
+    private transient SystemEnv systemEnv;
 
     @Override
     public void destroy() {
@@ -43,6 +43,9 @@ public class SystemModuleStub implements ISystemModule {
 
     @Override
     public ISystemEnv getSystemEnv() {
+        if (systemEnv == null) {
+            systemEnv = new SystemEnv(ApplicationType.HeadlessDesktop);
+        }
         return systemEnv;
     }
 

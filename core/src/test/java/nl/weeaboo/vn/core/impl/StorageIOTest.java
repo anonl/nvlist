@@ -15,11 +15,12 @@ import nl.weeaboo.vn.save.impl.StorageIO;
 
 public class StorageIOTest {
 
+    private static final String FILENAME = "test.json";
+
     private StorageTestHelper testHelper;
     private MultiFileSystem fileSystem;
 
     private Storage testData;
-    private final String filename = "test.json";
 
     @Before
     public void before() {
@@ -32,8 +33,8 @@ public class StorageIOTest {
     @Test
     public void basicReadWrite() throws IOException {
         IWritableFileSystem fs = fileSystem.getWritableFileSystem();
-        StorageIO.write(testData, fs, filename);
-        IStorage deserialized = StorageIO.read(fs, filename);
+        StorageIO.write(testData, fs, FILENAME);
+        IStorage deserialized = StorageIO.read(fs, FILENAME);
 
         testHelper.assertStorageEquals(testData, deserialized);
     }
@@ -42,8 +43,8 @@ public class StorageIOTest {
     public void secureWriterReadWrite() throws IOException {
         SecureFileWriter sfw = new SecureFileWriter(fileSystem.getWritableFileSystem());
 
-        StorageIO.write(testData, sfw, filename);
-        IStorage deserialized = StorageIO.read(sfw, filename);
+        StorageIO.write(testData, sfw, FILENAME);
+        IStorage deserialized = StorageIO.read(sfw, FILENAME);
 
         testHelper.assertStorageEquals(testData, deserialized);
 

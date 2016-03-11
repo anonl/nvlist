@@ -2,6 +2,7 @@ package nl.weeaboo.vn.scene.impl;
 
 import java.io.Serializable;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -30,7 +31,7 @@ public class VisualElement implements IVisualElement {
 
     public VisualElement() {
         // Add self at index 0
-        signalSupport.addSignalHandler(0, new SelfSignalHandler());
+        signalSupport.addSignalHandler(0, new SelfSignalHandler(this));
     }
 
     @Override
@@ -128,20 +129,26 @@ public class VisualElement implements IVisualElement {
         return (parent != null ? parent.getRenderEnv() : null);
     }
 
-    private class SelfSignalHandler implements ISignalHandler, Serializable {
+    private static class SelfSignalHandler implements ISignalHandler, Serializable {
 
         private static final long serialVersionUID = VisualElement.serialVersionUID;
+
+        private VisualElement self;
+
+        public SelfSignalHandler(VisualElement self) {
+            this.self = Checks.checkNotNull(self);
+        }
 
         @Override
         public void handleSignal(ISignal signal) {
             if (!signal.isHandled() && signal instanceof TickSignal) {
-                onTick();
+                self.onTick();
             }
             if (!signal.isHandled() && signal instanceof InputSignal) {
-                handleInput(((InputSignal)signal).input);
+                self.handleInput(((InputSignal)signal).input);
             }
             if (!signal.isHandled() && signal instanceof RenderEnvChangeSignal) {
-                onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
+                self.onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
             }
         }
 
