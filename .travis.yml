@@ -4,8 +4,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.1
-    - android-23
+    - build-tools-24.0.0-rc1
+    - android-N
 
 jdk:
-  - openjdk7
+  - openjdk8

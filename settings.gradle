@@ -1,2 +1,3 @@
 
-include 'api', 'core', 'desktop', 'android', 'ios'
+include 'api', 'core', 'desktop'
+include 'android'

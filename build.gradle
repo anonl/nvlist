@@ -1,25 +1,28 @@
 
 buildscript {
     repositories {
-        mavenCentral()
         jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/releases' }
     }
     dependencies {
-        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'org.robovm:robovm-gradle-plugin:1.5.1-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
     }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.6"
 }
 
 allprojects {
     apply plugin: "eclipse"
-    apply plugin: "idea"
 
-    version = '1.0'
+    group = 'nl.weeaboo.vn'
+    version = '4.0.0-alpha'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
-        roboVMVersion = '1.12.0'
         junitVersion = '4.12'
         slf4jVersion = '1.7.12'
         guavaVersion = '19.0'
@@ -29,10 +32,7 @@ allprojects {
     }
 
     repositories {
-        mavenCentral()
         jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
@@ -46,6 +46,50 @@ allprojects {
     }
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
+project(':api') {
+    apply plugin: 'java'
+}
+
+project(':core') {
+    apply plugin: 'java'
+}
+
+project(':desktop') {
+    apply plugin: 'java'
+}
+
+project(':android') {
+    apply plugin: 'com.android.library'
+    apply plugin: 'com.github.dcendents.android-maven'
+}
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        desktop(MavenPublication) {
+            from project(':desktop').components.java
+            artifactId 'desktop'
+        }
+        android(MavenPublication) {
+            def androidProj = project(':android')
+            artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"
+            artifactId 'android'
+        }
+    }
+}
+
+bintray {   
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['desktop', 'android']
+    pkg {
+        repo = 'nvlist'
+        name = 'nvlist'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/anonl/nvlist.git'
+        version {
+            name = project.version
+        }
+    }
 }
