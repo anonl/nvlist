@@ -19,7 +19,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha'
+    version = '4.0.0-alpha2'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
@@ -69,12 +69,12 @@ publishing {
     publications {
         desktop(MavenPublication) {
             from project(':desktop').components.java
-            artifactId 'desktop'
+            artifactId 'nvlist-desktop'
         }
         android(MavenPublication) {
             def androidProj = project(':android')
             artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"
-            artifactId 'android'
+            artifactId 'nvlist-android'
         }
     }
 }
