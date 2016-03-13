@@ -1,3 +1,5 @@
 
+rootProject.name = "NVList-project"
+
 include "desktop"
 include "android"
