@@ -19,7 +19,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha4'
+    version = '4.0.0-alpha5'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
@@ -46,7 +46,7 @@ allprojects {
     }
 }
 
-project(':api') {
+project(':nvlist-api') {
     apply plugin: 'java'
     
     dependencies {
@@ -58,11 +58,11 @@ project(':api') {
     }
 }
 
-project(':core') {
+project(':nvlist-core') {
     apply plugin: 'java'
 
     dependencies {
-        compile project(":api")
+        compile project(":nvlist-api")
         compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
         compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
         compile "org.slf4j:slf4j-api:$slf4jVersion"
@@ -78,11 +78,11 @@ project(':core') {
     }
 }
 
-project(':desktop') {
+project(':nvlist-desktop') {
     apply plugin: 'java'
 
     dependencies {
-        compile project(":core")
+        compile project(":nvlist-core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
@@ -96,15 +96,15 @@ project(':desktop') {
     }
 }
 
-project(':android') {
+project(':nvlist-android') {
     apply plugin: 'com.android.library'
     apply plugin: 'com.github.dcendents.android-maven'
 
     configurations { natives }
 
     dependencies {
-        compile project(":api")
-        compile project(":core")
+        compile project(":nvlist-api")
+        compile project(":nvlist-core")
         compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
         compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
         compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
@@ -133,19 +133,19 @@ apply plugin: 'maven-publish'
 publishing {
     publications {
         api(MavenPublication) {
-            from project(':api').components.java
+            from project(':nvlist-api').components.java
             artifactId 'nvlist-api'
         }
         core(MavenPublication) {
-            from project(':core').components.java
+            from project(':nvlist-core').components.java
             artifactId 'nvlist-core'
         }
         desktop(MavenPublication) {
-            from project(':desktop').components.java
+            from project(':nvlist-desktop').components.java
             artifactId 'nvlist-desktop'
         }
         android(MavenPublication) {
-            def androidProj = project(':android')
+            def androidProj = project(':nvlist-android')
             artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"
             artifactId 'nvlist-android'
         }

@@ -1,8 +1,4 @@
 
-eclipse.project {
-    name = appName + "-android"
-}
-
 android {
     buildToolsVersion '24.0.0 rc1'
     compileSdkVersion 'android-N'
