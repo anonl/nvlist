@@ -48,19 +48,84 @@ allprojects {
 
 project(':api') {
     apply plugin: 'java'
+    
+    dependencies {
+        compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+        
+        testCompile "junit:junit:$junitVersion"
+    }
 }
 
 project(':core') {
     apply plugin: 'java'
+
+    dependencies {
+        compile project(":api")
+        compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
+        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
+        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    
+        testCompile "junit:junit:$junitVersion"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    }
 }
 
 project(':desktop') {
     apply plugin: 'java'
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
+        
+        runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
+        runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+        runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        
+        testCompile "junit:junit:$junitVersion"
+    }
 }
 
 project(':android') {
     apply plugin: 'com.android.library'
     apply plugin: 'com.github.dcendents.android-maven'
+
+    configurations { natives }
+
+    dependencies {
+        compile project(":api")
+        compile project(":core")
+        compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+        compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
+        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        compile "org.slf4j:slf4j-android:$slf4jVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+    
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
+        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        
+        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+    }
 }
 
 apply plugin: 'maven-publish'

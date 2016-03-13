@@ -1,18 +1,4 @@
 
-dependencies {
-    compile project(":core")
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
-    
-    runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-    runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    
-    testCompile "junit:junit:$junitVersion"
-}
-
 project.ext.mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../android/assets");
 

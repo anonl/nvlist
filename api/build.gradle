@@ -2,11 +2,3 @@
 eclipse.project {
     name = appName + "-api"
 }
-
-dependencies {
-    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-    compile "com.google.guava:guava:$guavaVersion"
-    
-    testCompile "junit:junit:$junitVersion"
-}

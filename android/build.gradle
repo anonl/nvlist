@@ -3,33 +3,6 @@ eclipse.project {
     name = appName + "-android"
 }
 
-configurations { natives }
-
-dependencies {
-    compile project(":api")
-    compile project(":core")
-    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-    compile "org.slf4j:slf4j-api:$slf4jVersion"
-    compile "org.slf4j:slf4j-android:$slf4jVersion"
-    compile "com.google.guava:guava:$guavaVersion"
-
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    
-    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-    compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-}
-
 android {
     buildToolsVersion '24.0.0 rc1'
     compileSdkVersion 'android-N'
