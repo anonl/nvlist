@@ -1,0 +1,110 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha1'
+    }
+}
+
+// Loads a .properties file
+def loadProperties(String filename) {
+    def props = new Properties()
+    def propertiesFile = file(filename)
+    if (propertiesFile.canRead()) {
+        propertiesFile.withInputStream { instr ->
+            props.load(instr)
+        }
+    }
+    return props
+}
+
+// Standard folders
+def rootDir = new File(vnRoot).getCanonicalFile()
+def resDir = new File(rootDir, "/res")
+def buildResDir = new File(rootDir, "/build-res")
+
+logger.lifecycle("VN root folder: " + rootDir)
+logger.lifecycle("VN resource folder: " + resDir)
+logger.lifecycle("VN build-resource folder: " + buildResDir)
+
+// Load user-defined build.properties file
+def settings = loadProperties("${buildResDir}/build.properties")
+
+allprojects {
+    version = settings.appVersion
+
+    ext {
+        nvlistVersion = settings.nvlistVersion
+    }
+
+    repositories {
+        jcenter()
+        maven { url "https://dl.bintray.com/anonl/nvlist/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
+        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
+        maven { url "https://dl.bintray.com/anonl/tcommon/" }
+    }
+    
+    plugins.withType(JavaPlugin) {
+        sourceCompatibility = 1.6
+        targetCompatibility = 1.6
+        compileJava.options.encoding = 'UTF-8'
+        compileTestJava.options.encoding = 'UTF-8'
+    }
+}
+
+project(':desktop') {
+    apply plugin: 'java'
+
+    dependencies {
+        compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"        
+    }
+    
+    project.ext.mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
+
+    task run(dependsOn: classes, type: JavaExec) {
+        main = project.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        standardInput = System.in
+        workingDir = rootDir
+        ignoreExitValue = true
+    }
+ 
+}
+
+project(':android') {
+    apply plugin: 'com.android.application'
+
+    dependencies {
+        compile "nl.weeaboo.vn:nvlist-android:$nvlistVersion"        
+    }
+    
+    android {
+        buildToolsVersion '24.0.0 rc1'
+        compileSdkVersion 'android-N'
+        
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = [resDir]
+                jniLibs.srcDirs = ['libs']
+            }
+    
+            instrumentTest.setRoot('tests')
+        }
+        defaultConfig {
+            minSdkVersion 8
+            targetSdkVersion 'N'
+        }
+        lintOptions {
+            textOutput 'stdout'
+            textReport true
+        }
+    }
+}

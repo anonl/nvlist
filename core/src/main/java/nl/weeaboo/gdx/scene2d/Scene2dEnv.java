@@ -6,14 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import nl.weeaboo.gdx.res.GdxFileSystem;
+
 public class Scene2dEnv implements Disposable {
 
     private final Stage stage;
     private final Skin skin;
 
-    public Scene2dEnv(Viewport viewport) {
+    public Scene2dEnv(GdxFileSystem fileSystem, Viewport viewport) {
         stage = new Stage(viewport);
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin = new Skin(fileSystem.resolve("skin/uiskin.json"));
     }
 
     @Override

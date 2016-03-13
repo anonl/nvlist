@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
@@ -57,8 +56,9 @@ public abstract class AbstractRenderable implements IRenderable {
 
     @Override
     public void setSize(double w, double h) {
-        Checks.checkRange(w, "w", .00001);
-        Checks.checkRange(h, "h", .00001);
+        if (w <= 0 || h <= 0) {
+            return;
+        }
 
         if (width != w || height != h) {
             width = w;

@@ -1,35 +1,21 @@
 
 project.ext.mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
 
 test {
-    workingDir = project.assetsDir
+    workingDir = project.vnRootDir
 }
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
+    workingDir = project.vnRootDir
     ignoreExitValue = true
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
-    manifest {
-        attributes 'Main-Class': project.mainClassName
-    }
-}
-
-dist.dependsOn classes
-
 eclipse {
     project {
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/template'
     }
 }
 

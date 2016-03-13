@@ -10,6 +10,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -111,8 +112,8 @@ public class Launcher extends ApplicationAdapter {
             throw new RuntimeException("Fatal error during init", e);
         }
 
-        sceneEnv = new Scene2dEnv(frameBufferViewport);
-        osd = Osd.newInstance();
+        sceneEnv = new Scene2dEnv(resourceFileSystem, frameBufferViewport);
+        osd = Osd.newInstance(resourceFileSystem);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -180,7 +181,8 @@ public class Launcher extends ApplicationAdapter {
                 if (style.isBold()) name += "Bold";
                 if (style.isItalic()) name += "Oblique";
 
-                BitmapFont[] fonts = GdxFontUtil.load("font/" + name + ".ttf", sizes);
+                FileHandle fileHandle = resourceFileSystem.resolve("font/" + name + ".ttf");
+                BitmapFont[] fonts = GdxFontUtil.load(fileHandle, sizes);
                 for (int n = 0; n < fonts.length; n++) {
                     fontStore.registerFont(fontFamily, style, fonts[n], sizes[n]);
                 }

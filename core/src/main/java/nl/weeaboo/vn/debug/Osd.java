@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -21,6 +20,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.vn.core.IContext;
@@ -47,14 +47,14 @@ public final class Osd implements Disposable {
 	private Osd() {
 	}
 
-	public static Osd newInstance() {
+    public static Osd newInstance(GdxFileSystem fileSystem) {
 		Osd osd = new Osd();
-		osd.init();
+        osd.init(fileSystem);
 		return osd;
 	}
 
-	public void init() {
-        FileHandle fontFile = Gdx.files.internal(fontPath);
+    public void init(GdxFileSystem fileSystem) {
+        FileHandle fontFile = fileSystem.resolve(fontPath);
         if (!fontFile.exists()) {
             LOG.warn("OSD font doesn't exist: " + fontPath);
             return;

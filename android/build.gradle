@@ -10,12 +10,16 @@ android {
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+            assets.srcDirs = [project.vnResDir, 'assets']
             jniLibs.srcDirs = ['libs']
         }
 
         instrumentTest.setRoot('tests')
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }    
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 'N'
@@ -26,64 +30,19 @@ android {
     }
 }
 
-// called every time gradle gets executed, takes the native dependencies of
-// the natives configuration, and extracts them to the proper libs/ folders
-// so they get packed with the APK.
-task copyAndroidNatives() { 
-    file('libs/armeabi/').mkdirs();
-    file('libs/armeabi-v7a/').mkdirs();
-    file('libs/x86/').mkdirs();
-
-    configurations.natives.files.each { jar ->
-        def outputDir = null
-        if(jar.name.endsWith('natives-armeabi-v7a.jar')) outputDir = file('libs/armeabi-v7a')
-        if(jar.name.endsWith('natives-armeabi.jar')) outputDir = file('libs/armeabi')
-        if(jar.name.endsWith('natives-x86.jar')) outputDir = file('libs/x86')
-        if(outputDir != null) {
-            copy {
-                from zipTree(jar)
-                into outputDir
-                include '*.so'
-            }
-        }
-    }
-}
-
-task run(type: Exec) {
-    def path
-    def localProperties = project.file('../local.properties')
-    if (localProperties.exists()) {
-        Properties properties = new Properties()
-        localProperties.withInputStream { instr ->
-            properties.load(instr)
-        }
-        def sdkDir = properties.getProperty('sdk.dir')
-        if (sdkDir) {
-            path = sdkDir
-        } else {
-            path = "$System.env.ANDROID_HOME"
-        }
-    } else {
-        path = "$System.env.ANDROID_HOME"
-    }
-
-    def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'nl.weeaboo.vn.android/nl.weeaboo.vn.android.AndroidLauncher'
-}
-
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {
     // need to specify Java source sets explicitely, SpringSource Gradle Eclipse plugin
     // ignores any nodes added in classpath.file.withXml
     sourceSets {
         main {
-            java.srcDirs "src", 'gen'
+            java.srcDirs 'src', 'gen'
         }
     }
 
     jdt {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = JavaVersion.VERSION_1_6
+        targetCompatibility = JavaVersion.VERSION_1_6
     }
 
     classpath {
@@ -92,7 +51,6 @@ eclipse {
     }
 
     project {
-        name = appName + "-android"
         natures 'com.android.ide.eclipse.adt.AndroidNature'
         buildCommands.clear();
         buildCommand "com.android.ide.eclipse.adt.ResourceManagerBuilder"

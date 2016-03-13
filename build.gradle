@@ -15,6 +15,8 @@ plugins {
     id "com.jfrog.bintray" version "1.6"
 }
 
+def templateDir = project.file("template").getAbsoluteFile()
+
 allprojects {
     apply plugin: "eclipse"
 
@@ -26,9 +28,12 @@ allprojects {
         junitVersion = '4.12'
         slf4jVersion = '1.7.12'
         guavaVersion = '19.0'
-        styledTextVersion = '1.3.1'
+        styledTextVersion = '1.3.2'
         luajpp2Version = '2.1.1'
         tcommonVersion = '1.0.0'
+        
+        vnRootDir = templateDir
+        vnResDir = new File(vnRootDir, "res")
     }
 
     repositories {
