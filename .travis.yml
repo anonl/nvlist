@@ -8,4 +8,4 @@ android:
     - android-N
 
 jdk:
-  - openjdk8
+  - oraclejdk8
