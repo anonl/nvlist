@@ -19,7 +19,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha3'
+    version = '4.0.0-alpha4'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
@@ -132,6 +132,14 @@ apply plugin: 'maven-publish'
 
 publishing {
     publications {
+        api(MavenPublication) {
+            from project(':api').components.java
+            artifactId 'nvlist-api'
+        }
+        core(MavenPublication) {
+            from project(':core').components.java
+            artifactId 'nvlist-core'
+        }
         desktop(MavenPublication) {
             from project(':desktop').components.java
             artifactId 'nvlist-desktop'
@@ -147,7 +155,7 @@ publishing {
 bintray {   
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
-    publications = ['desktop', 'android']
+    publications = ['api', 'core', 'desktop', 'android']
     pkg {
         repo = 'nvlist'
         name = 'nvlist'
