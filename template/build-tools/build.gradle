@@ -81,7 +81,7 @@ project(':android') {
     }
     
     android {
-        buildToolsVersion '24.0.0 rc1'
+        buildToolsVersion '23.0.2'
         compileSdkVersion 'android-N'
         
         sourceSets {
