@@ -1,7 +1,7 @@
 
 android {
     buildToolsVersion '24.0.0 rc1'
-    compileSdkVersion 'android-N'
+    compileSdkVersion 'android-23'
     
     sourceSets {
         main {
@@ -22,7 +22,7 @@ android {
     }    
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 'N'
+        targetSdkVersion 23
     }
     lintOptions {
         textOutput 'stdout'

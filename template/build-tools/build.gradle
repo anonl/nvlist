@@ -71,7 +71,6 @@ project(':desktop') {
         workingDir = rootDir
         ignoreExitValue = true
     }
- 
 }
 
 project(':android') {
