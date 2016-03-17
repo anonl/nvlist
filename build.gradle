@@ -21,7 +21,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha7'
+    version = '4.0.0-alpha8'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
