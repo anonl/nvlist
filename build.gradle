@@ -21,7 +21,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha6'
+    version = '4.0.0-alpha7'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
@@ -123,13 +123,9 @@ project(':nvlist-android') {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
     }
 }
 
@@ -151,7 +147,26 @@ publishing {
         }
         android(MavenPublication) {
             def androidProj = project(':nvlist-android')
-            artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"
+            def configs = androidProj.configurations
+            
+            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
+            artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"            
+
+            // Gather dependencies
+            def projectDeps = []
+            projectDeps += configs.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
+            projectDeps += configs.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
+            
+            pom.withXml {
+                def depsNode = asNode().appendNode('dependencies')
+                projectDeps.each {
+                    def depNode = depsNode.appendNode('dependency')
+                    depNode.appendNode('groupId', it.moduleGroup)
+                    depNode.appendNode('artifactId', it.moduleName)
+                    depNode.appendNode('version', it.moduleVersion)
+                }
+            }
+            
             artifactId 'nvlist-android'
         }
     }
