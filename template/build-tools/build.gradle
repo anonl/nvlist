@@ -81,12 +81,12 @@ project(':android') {
     dependencies {
         compile("nl.weeaboo.vn:nvlist-android:$nvlistVersion@aar") {
             transitive = true
-        }        
+        }
     }
     
     android {
         buildToolsVersion '23.0.2'
-        compileSdkVersion 'android-N'
+        compileSdkVersion 'android-23'
         
         sourceSets {
             main {
@@ -103,7 +103,7 @@ project(':android') {
         }
         defaultConfig {
             minSdkVersion 8
-            targetSdkVersion 'N'
+            targetSdkVersion 23
         }
         lintOptions {
             textOutput 'stdout'

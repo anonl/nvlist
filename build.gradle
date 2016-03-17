@@ -127,6 +127,37 @@ project(':nvlist-android') {
         compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
     }
+    
+    android {
+        buildToolsVersion '23.0.2'
+        compileSdkVersion 'android-23'
+        
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+                jniLibs.srcDirs = ['libs']
+            }
+    
+            instrumentTest.setRoot('tests')
+        }
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_6
+            targetCompatibility JavaVersion.VERSION_1_6
+        }    
+        defaultConfig {
+            minSdkVersion 8
+            targetSdkVersion 23
+        }
+        lintOptions {
+            textOutput 'stdout'
+            textReport true
+        }
+    }
 }
 
 apply plugin: 'maven-publish'

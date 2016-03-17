@@ -1,35 +1,4 @@
 
-android {
-    buildToolsVersion '23.0.2'
-    compileSdkVersion 'android-23'
-    
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
-        }
-
-        instrumentTest.setRoot('tests')
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }    
-    defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 23
-    }
-    lintOptions {
-        textOutput 'stdout'
-        textReport true
-    }
-}
-
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {
     // need to specify Java source sets explicitely, SpringSource Gradle Eclipse plugin
