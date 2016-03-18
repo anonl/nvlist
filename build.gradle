@@ -21,7 +21,7 @@ allprojects {
     apply plugin: "eclipse"
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha8'
+    version = '4.0.0-alpha9'
     ext {
         appName = 'NVList'
         gdxVersion = '1.9.2'
@@ -201,6 +201,12 @@ publishing {
             artifactId 'nvlist-android'
         }
     }
+    repositories {
+        maven {
+            // Local repo for testing
+            url "$buildDir/repo"
+        }
+    }    
 }
 
 bintray {   
