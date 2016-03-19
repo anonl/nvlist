@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.debug;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
 
@@ -33,6 +32,7 @@ import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
+import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.impl.SaveParams;
@@ -281,7 +281,8 @@ public final class DebugControls {
                 mts.setFontStyle(EFontStyle.PLAIN);
             }
 
-            mts.setColor(0xFF000000 | Color.HSBtoRGB(random.nextFloat(), .8f, .9f));
+            mts.setColor(RenderUtil.packRGBAtoARGB(random.nextFloat(), random.nextFloat(),
+                    random.nextFloat(), 1f));
 
             mst.append(new StyledText(encoder.encode(bytes), mts.immutableCopy()));
             mst.append(' ', null);
