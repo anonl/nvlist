@@ -139,7 +139,7 @@ project(':nvlist-android') {
                 aidl.srcDirs = ['src']
                 renderscript.srcDirs = ['src']
                 res.srcDirs = ['res']
-                assets.srcDirs = ['assets']
+                assets.srcDirs = ['template/res']
                 jniLibs.srcDirs = ['libs']
             }
     

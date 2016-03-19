@@ -10,7 +10,9 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new Launcher(), config);
+        // Android resources are in the root of the assets dir, not in a subfolder 'res/'
+        initialize(new Launcher(""), config);
 	}
 }

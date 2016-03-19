@@ -21,7 +21,7 @@ eclipse {
         file {
             withXml {
                 def node = it.asNode()
-                node.appendNode('classpathentry', [ kind: 'src', path: 'assets', including: 'res/**' ])
+                node.appendNode('classpathentry', [kind: 'src', path: 'assets', including: 'res/**'])
             }
         }    
     }

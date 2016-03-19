@@ -61,10 +61,6 @@ import nl.weeaboo.vn.sound.impl.MusicStore;
 
 public class Launcher extends ApplicationAdapter {
 
-    static {
-        InitConfig.init();
-    }
-
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
     private final String resourceFolder;
@@ -124,6 +120,8 @@ public class Launcher extends ApplicationAdapter {
     private void initNovel() throws InitException {
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         MultiFileSystem fileSystem = new MultiFileSystem(resourceFileSystem, inMemoryFileSystem);
+
+        InitConfig.init();
 
         NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
         try {

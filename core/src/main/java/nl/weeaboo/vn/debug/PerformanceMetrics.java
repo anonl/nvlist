@@ -56,7 +56,7 @@ public final class PerformanceMetrics {
                 LOG.info("Error obtaining CPU load", e);
                 cpuLoadError = true;
             } catch (NoClassDefFoundError e) {
-                LOG.info("Error obtaining CPU load", e);
+                LOG.info("Error obtaining CPU load: Required method not implemented on this platform");
                 cpuLoadError = true;
             }
         }
