@@ -62,7 +62,7 @@ project(':desktop') {
         compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"        
     }
     
-    project.ext.mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
+    project.ext.mainClassName = settings.desktopMain
 
     task run(dependsOn: classes, type: JavaExec) {
         main = project.mainClassName
@@ -104,6 +104,11 @@ project(':android') {
         defaultConfig {
             minSdkVersion 8
             targetSdkVersion 23
+            versionCode = settings.androidVersionCode
+            versionName = project.version
+            manifestPlaceholders = [
+                androidMain: settings.androidMain
+            ]
         }
         lintOptions {
             textOutput 'stdout'
@@ -111,9 +116,7 @@ project(':android') {
         }
     }
     
-    // called every time gradle gets executed, takes the native dependencies of
-    // the natives configuration, and extracts them to the proper libs/ folders
-    // so they get packed with the APK.
+    // Called every time Gradle gets executed: extracts natives to libs/ so they get packed with the APK.
     task copyAndroidNatives() { 
         file('libs/armeabi/').mkdirs();
         file('libs/armeabi-v7a/').mkdirs();
@@ -121,10 +124,10 @@ project(':android') {
     
         configurations.natives.files.each { jar ->
             def outputDir = null
-            if(jar.name.endsWith('natives-armeabi-v7a.jar')) outputDir = file('libs/armeabi-v7a')
-            if(jar.name.endsWith('natives-armeabi.jar')) outputDir = file('libs/armeabi')
-            if(jar.name.endsWith('natives-x86.jar')) outputDir = file('libs/x86')
-            if(outputDir != null) {
+            if (jar.name.endsWith('natives-armeabi-v7a.jar')) outputDir = file('libs/armeabi-v7a')
+            if (jar.name.endsWith('natives-armeabi.jar')) outputDir = file('libs/armeabi')
+            if (jar.name.endsWith('natives-x86.jar')) outputDir = file('libs/x86')
+            if (outputDir != null) {
                 copy {
                     from zipTree(jar)
                     into outputDir
@@ -134,25 +137,17 @@ project(':android') {
         }
     }
     
-    task run(type: Exec) {
-        def path
-        def localProperties = project.file('../local.properties')
-        if (localProperties.exists()) {
-            Properties properties = new Properties()
-            localProperties.withInputStream { instr ->
-                properties.load(instr)
-            }
-            def sdkDir = properties.getProperty('sdk.dir')
-            if (sdkDir) {
-                path = sdkDir
-            } else {
-                path = "$System.env.ANDROID_HOME"
-            }
-        } else {
-            path = "$System.env.ANDROID_HOME"
-        }
-    
-        def adb = path + "/platform-tools/adb"
-        commandLine "$adb", 'shell', 'am', 'start', '-n', 'nl.weeaboo.vn.android/nl.weeaboo.vn.android.AndroidLauncher'
+    // Run installed app through adb
+    task runInstalled(type: Exec) {
+        def adb = android.getAdbExe()
+        def target = settings.androidPackage + '/' + settings.androidMain
+        commandLine "$adb", 'shell', 'am', 'start', '-n', target
+    }
+    // Install, then run debug build
+    task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
     }    
+    // Install, then run release build
+    task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
+    }    
+
 }
