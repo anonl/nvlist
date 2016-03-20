@@ -104,7 +104,7 @@ project(':android') {
         defaultConfig {
             minSdkVersion 8
             targetSdkVersion 23
-            versionCode = settings.androidVersionCode
+            versionCode = settings.androidVersionCode as int
             versionName = project.version
             manifestPlaceholders = [
                 androidMain: settings.androidMain
