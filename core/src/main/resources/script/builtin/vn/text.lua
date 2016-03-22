@@ -80,8 +80,7 @@ function text(str, triggers, meta)
 		str, triggers = Text.parseText(str, triggers)
 	end
 	
-	--TODO: Apply speaker state
-	currentStyle = speaker.textStyle
+	lineState.style = speaker.textStyle
 	
 	appendText(str)
 	
@@ -97,16 +96,16 @@ function text(str, triggers, meta)
 	waitClick()	
 	
 	--Reset speaker
-	currentStyle = nil
+	lineState.style = nil
 	if speaker.resetEOL then
 		say()
 	end
 	
 	--Register line as read
-	if meta.filename ~= nil and meta.line >= 1 then
-		seenLog:setTextLineRead(meta.filename, meta.line)
-	end
-	lineRead = true	
+	--if meta.filename ~= nil and meta.line >= 1 then
+	--	seenLog:setTextLineRead(meta.filename, meta.line)
+	--end
+	lineState.read = true	
 end
 
 ---Waits until the text in the main textbox (or other TextDrawable) has finished
@@ -143,7 +142,7 @@ end
 -- In ADV mode, the text is cleared between each line of text. In NVL mode, you
 -- need to call <code>clearText</code> manually.
 function clearText()
-    textState:setText("")
+    getTextState():setText("")
     appendTextLog("", true)
     hideSpeakerName()
 end
@@ -156,15 +155,16 @@ end
 function appendText(str, meta)
 	local styled = nil
 	local logStyled = nil
-	if lineRead and prefs.textReadStyle ~= nil then
-		styled = createStyledText(str, extendStyle(prefs.textReadStyle, currentStyle))
-		logStyled = createStyledText(str, currentStyle)
+	if lineState.read and prefs.textReadStyle ~= nil then
+		styled = Text.createStyledText(str, Text.extendStyle(prefs.textReadStyle, lineState.style))
+		logStyled = Text.createStyledText(str, lineState.style)
 	else
-		styled = createStyledText(str, currentStyle)
+		styled = Text.createStyledText(str, lineState.style)
 		logStyled = styled
 	end
 
 	local textBox = getMainTextBox()
+	local textState = getTextState()
 	if textBox == nil then
 		textState:appendText(styled)
 	    appendTextLog(logStyled)
