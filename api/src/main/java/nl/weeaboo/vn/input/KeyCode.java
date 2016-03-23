@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.input;
 
 public enum KeyCode {
     UNKNOWN,

@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.CoreTestUtil;
-import nl.weeaboo.vn.core.impl.Input;
 import nl.weeaboo.vn.core.impl.TestInputAdapter;
+import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
@@ -17,7 +17,7 @@ public class ButtonClickTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
 
-    private Input input;
+    private NativeInput input;
     private TestInputAdapter inputAdapter;
 
     private ScriptEventDispatcher eventDispatcher;
@@ -26,7 +26,7 @@ public class ButtonClickTest {
 
     @Before
     public void before() {
-        input = new Input();
+        input = new NativeInput();
         inputAdapter = new TestInputAdapter(input);
 
         eventDispatcher = new ScriptEventDispatcher();

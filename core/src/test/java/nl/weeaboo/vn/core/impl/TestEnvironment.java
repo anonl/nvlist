@@ -6,6 +6,7 @@ import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.TestFileSystem;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.image.impl.ImageModule;
+import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
@@ -27,7 +28,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
-        StaticEnvironment.INPUT.set(new Input());
+        StaticEnvironment.INPUT.set(new NativeInput());
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
         TestEnvironment env = new TestEnvironment();

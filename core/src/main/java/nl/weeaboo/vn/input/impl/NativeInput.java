@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core.impl;
+package nl.weeaboo.vn.input.impl;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -8,17 +8,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
-import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.KeyCode;
-import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.Event;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
+import nl.weeaboo.vn.core.impl.ButtonState;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.Event;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.math.Vec2;
 
-public final class Input implements IInput {
+public final class NativeInput implements INativeInput {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Input.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NativeInput.class);
 
     private final EnumMap<KeyCode, ButtonState> buttonStates = Maps.newEnumMap(KeyCode.class);
     private final Vec2 pointerPos = new Vec2();

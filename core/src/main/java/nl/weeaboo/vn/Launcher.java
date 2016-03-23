@@ -40,7 +40,6 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -52,6 +51,7 @@ import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
+import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
@@ -259,7 +259,7 @@ public class Launcher extends ApplicationAdapter {
 
     protected void update() {
         inputAdapter.update();
-        IInput input = inputAdapter.getInput();
+        INativeInput input = inputAdapter.getInput();
 
         debugControls.update(novel, input);
 

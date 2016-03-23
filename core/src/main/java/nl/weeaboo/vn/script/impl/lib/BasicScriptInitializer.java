@@ -4,8 +4,8 @@ import org.luaj.vm2.LuaTable;
 
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.VerticalAlign;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lua.ILuaScriptEnvInitializer;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;

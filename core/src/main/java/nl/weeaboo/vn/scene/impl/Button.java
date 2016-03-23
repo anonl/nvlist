@@ -6,11 +6,11 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
-import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -67,7 +67,7 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
-    protected void handleInput(IInput input) {
+    protected void handleInput(INativeInput input) {
         super.handleInput(input);
 
         boolean enabled = isEnabled() && isVisible(alphaEnableThreshold);

@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
@@ -78,7 +78,7 @@ public class VisualElement implements IVisualElement {
     /**
      * @param input Keyboard/mouse/gamepad input
      */
-    protected void handleInput(IInput input) {
+    protected void handleInput(INativeInput input) {
     }
 
     /**

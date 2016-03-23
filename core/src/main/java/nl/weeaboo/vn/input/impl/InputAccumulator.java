@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core.impl;
+package nl.weeaboo.vn.input.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.KeyCode;
+import nl.weeaboo.vn.input.KeyCode;
 
 public final class InputAccumulator {
 

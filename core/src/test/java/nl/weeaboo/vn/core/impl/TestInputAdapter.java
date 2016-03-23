@@ -1,21 +1,23 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.KeyCode;
-import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PressState;
+import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.impl.InputAccumulator;
+import nl.weeaboo.vn.input.impl.NativeInput;
+import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PressState;
 import nl.weeaboo.vn.scene.IVisualElement;
 
 public class TestInputAdapter {
 
-    private final Input input;
+    private final NativeInput input;
     private final InputAccumulator accum = new InputAccumulator();
 
     private long timestampMs;
 
-    public TestInputAdapter(Input input) {
+    public TestInputAdapter(NativeInput input) {
         this.input = input;
     }
 

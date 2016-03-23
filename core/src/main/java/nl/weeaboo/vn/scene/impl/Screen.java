@@ -3,10 +3,10 @@ package nl.weeaboo.vn.scene.impl;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
@@ -42,7 +42,7 @@ public class Screen implements IScreen {
 
         sendSignal(new TickSignal());
 
-        IInput input = StaticEnvironment.INPUT.get();
+        INativeInput input = StaticEnvironment.INPUT.get();
         if (!input.isIdle()) {
             sendSignal(new InputSignal(input), VisualOrdering.FRONT_TO_BACK);
 
@@ -50,7 +50,7 @@ public class Screen implements IScreen {
         }
     }
 
-    private void handleInput(IInput input) {
+    private void handleInput(INativeInput input) {
         ITextDrawable textDrawable = textState.getTextDrawable();
         if (textDrawable != null) {
             int lineCount = textDrawable.getLineCount();
