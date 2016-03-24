@@ -6,7 +6,6 @@ import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.scene.impl.ScreenTextState;
-import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.text.ITextModule;
@@ -41,7 +40,7 @@ public class ContextFactory implements IContextFactory<Context> {
         return new Context(contextArgs);
     }
 
-    protected IScriptContext newScriptContext() {
+    protected LuaScriptContext newScriptContext() {
         if (scriptEnv == null) {
             return null;
         }

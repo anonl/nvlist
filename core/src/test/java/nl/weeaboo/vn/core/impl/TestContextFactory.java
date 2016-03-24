@@ -4,7 +4,6 @@ import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.scene.impl.Screen;
-import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 
@@ -30,7 +29,7 @@ public class TestContextFactory implements IContextFactory<Context> {
         return CoreTestUtil.newScreen();
     }
 
-    protected IScriptContext newScriptContext() {
+    protected LuaScriptContext newScriptContext() {
         if (scriptEnv == null) {
             return null;
         }

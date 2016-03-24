@@ -14,7 +14,7 @@ import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.impl.Screen;
-import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 
 public class Context implements IContext {
 
@@ -22,7 +22,7 @@ public class Context implements IContext {
 	private static final Logger LOG = LoggerFactory.getLogger(Context.class);
 
     private final Screen screen;
-	private final IScriptContext scriptContext;
+    private final LuaScriptContext scriptContext;
     private final ISkipState skipState = new SkipState();
 
 	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<IContextListener>();
@@ -106,7 +106,7 @@ public class Context implements IContext {
     }
 
     @Override
-	public IScriptContext getScriptContext() {
+    public LuaScriptContext getScriptContext() {
 		return scriptContext;
 	}
 

@@ -11,7 +11,6 @@ import org.luaj.vm2.LuaTable;
 
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.lib.LuajavaLib;
-import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.impl.Context;
 import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.TestContextFactory;
@@ -19,9 +18,6 @@ import nl.weeaboo.vn.core.impl.TestEnvironment;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.impl.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.script.impl.lvn.LvnParseException;
 
@@ -109,7 +105,7 @@ public class BaseScriptTest {
 
         // Make context manager available to the script environment
         LuaTable globals = scriptEnv.getGlobals();
-        globals.rawset("contextManager", LuajavaLib.toUserdata(contextManager, IContextManager.class));
+        globals.rawset("contextManager", LuajavaLib.toUserdata(contextManager, ContextManager.class));
 
         // Create an initial context and activate it
         Context mainContext = contextManager.createContext();
