@@ -7,6 +7,9 @@ module("vn.context", package.seeall)
 --  Variables
 -- ----------------------------------------------------------------------------
 
+-- Init dummy prefs if needed (required while actual prefs are not implemented)
+prefs = prefs or {}
+
 -- ----------------------------------------------------------------------------
 --  Local Functions
 -- ----------------------------------------------------------------------------
@@ -23,6 +26,33 @@ function getTextState()
 	return getScreen():getTextState()
 end
 
+-- ----------------------------------------------------------------------------
+--  Skip functions
+-- ----------------------------------------------------------------------------
+
 function getSkipState()
 	return getCurrentContext():getSkipState()
+end
+
+function isSkipping()
+    return getSkipState():isSkipping()
+end
+
+function getSkipMode()
+    return getSkipState():getSkipMode()
+end
+
+function setSkipMode(mode)
+    return getSkipState():setSkipMode(mode)
+end
+
+function stopSkipping()
+    return getSkipState():stopSkipping()
+end
+
+function waitClick(hard)
+    --getSkipState():waitClick(hard)
+    while not Input.consume(VKeys.textContinue) do
+        yield()
+    end
 end

@@ -21,6 +21,11 @@ function titlescreen()
 	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() / 4)
 	textbox:setText("Test sentence for the text drawable.\nSecond line of text.")
 	textbox:setVisibleText(0)
+	
+	waitClick()
+	for n=1,10 do
+	   text("ABC " .. n)
+	end
 end
 
 @@

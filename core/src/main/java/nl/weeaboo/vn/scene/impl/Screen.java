@@ -3,10 +3,10 @@ package nl.weeaboo.vn.scene.impl;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
@@ -51,17 +51,16 @@ public class Screen implements IScreen {
     }
 
     private void handleInput(IInput input) {
-        ITextDrawable textDrawable = textState.getTextDrawable();
-        if (textDrawable != null) {
-            int lineCount = textDrawable.getLineCount();
-            int endLine = textDrawable.getEndLine();
-            int maxGlyphCount = textDrawable.getVisibleLayout().getGlyphCount();
-            if (textDrawable.getVisibleText() < maxGlyphCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
+        ITextDrawable td = textState.getTextDrawable();
+        if (td != null) {
+            int lineCount = td.getLineCount();
+            int endLine = td.getEndLine();
+            if (td.getVisibleText() < td.getMaxVisibleText() && input.consumePress(VKey.TEXT_CONTINUE)) {
                 // Make all glyphs in the current lines fully visible
-                textDrawable.setVisibleText(ITextRenderer.ALL_GLYPHS_VISIBLE);
-            } else if (endLine < lineCount && input.consumePress(KeyCode.MOUSE_LEFT)) {
+                td.setVisibleText(ITextRenderer.ALL_GLYPHS_VISIBLE);
+            } else if (endLine < lineCount && input.consumePress(VKey.TEXT_CONTINUE)) {
                 // Scroll to new visible lines
-                textDrawable.setVisibleText(endLine, 0f);
+                td.setVisibleText(endLine, 0f);
             }
         }
     }

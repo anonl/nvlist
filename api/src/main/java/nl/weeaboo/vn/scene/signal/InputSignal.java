@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.scene.signal;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.input.IInput;
 
 public final class InputSignal extends AbstractSignal {
 

@@ -12,7 +12,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-import nl.weeaboo.vn.core.KeyCode;
+import nl.weeaboo.vn.input.KeyCode;
 
 public class GdxInputAdapterTest {
 

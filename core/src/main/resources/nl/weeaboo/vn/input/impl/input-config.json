@@ -1,0 +1,11 @@
+{
+    "up": ["UP"],
+    "down": ["DOWN"],
+    "left": ["LEFT"],
+    "right": ["RIGHT"],
+    "confirm": ["ENTER"],
+    "cancel": ["ESCAPE", "MOUSE_RIGHT"],
+    "textContinue": ["ENTER", "MOUSE_LEFT", "DOWN", "RIGHT"],
+    "skip": ["CONTROL_LEFT", "CONTROL_RIGHT"],
+    "mouseLeft": ["MOUSE_LEFT"]
+}

@@ -29,7 +29,7 @@ allprojects {
         slf4jVersion = '1.7.12'
         guavaVersion = '19.0'
         styledTextVersion = '1.3.2'
-        luajpp2Version = '2.1.1'
+        luajpp2Version = '2.2.1'
         tcommonVersion = '1.0.0'
         
         vnRootDir = templateDir

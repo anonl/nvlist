@@ -95,7 +95,7 @@ public class ScreenTextState implements IScreenTextState {
 
         int sl = textDrawable.getStartLine();
         double visible = textDrawable.getVisibleText();
-        int maxVisible = textDrawable.getVisibleLayout().getGlyphCount();
+        int maxVisible = textDrawable.getMaxVisibleText();
         if (visible < 0 || visible >= maxVisible) {
             visible = maxVisible;
         }

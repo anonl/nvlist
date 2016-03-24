@@ -11,15 +11,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.annotations.VisibleForTesting;
 
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.IUpdateable;
-import nl.weeaboo.vn.core.KeyCode;
-import nl.weeaboo.vn.core.impl.Input;
-import nl.weeaboo.vn.core.impl.InputAccumulator;
-import nl.weeaboo.vn.core.impl.InputAccumulator.ButtonEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerPositionEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PointerScrollEvent;
-import nl.weeaboo.vn.core.impl.InputAccumulator.PressState;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.impl.InputAccumulator;
+import nl.weeaboo.vn.input.impl.NativeInput;
+import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
+import nl.weeaboo.vn.input.impl.InputAccumulator.PressState;
 
 public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
@@ -28,13 +28,13 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
     private final Viewport viewport;
 
     private final InputAccumulator accum = new InputAccumulator();
-    private final Input input = new Input();
+    private final NativeInput input = new NativeInput();
 
     public GdxInputAdapter(Viewport viewport) {
         this.viewport = viewport;
     }
 
-    public IInput getInput() {
+    public INativeInput getInput() {
         return input;
     }
 

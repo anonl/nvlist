@@ -21,6 +21,16 @@ public interface ITextRenderState extends IMultiLineText, Serializable {
     double getVisibleText();
 
     /**
+     * @return The number of glyphs between the start and end lines.
+     */
+    int getMaxVisibleText();
+
+    /**
+     * @return {@code true} if the final line is fully visible.
+     */
+    boolean isFinalLineFullyVisible();
+
+    /**
      * Sets the number of visible glyphs relative to the current start line.
      *
      * @see #setVisibleText(int, double)

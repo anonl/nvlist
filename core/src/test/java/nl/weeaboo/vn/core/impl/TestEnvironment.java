@@ -1,11 +1,19 @@
 package nl.weeaboo.vn.core.impl;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.TestFileSystem;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.image.impl.ImageModule;
+import nl.weeaboo.vn.input.impl.Input;
+import nl.weeaboo.vn.input.impl.InputConfig;
+import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.save.impl.SaveModule;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
@@ -18,16 +26,28 @@ public class TestEnvironment extends DefaultEnvironment {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(TestEnvironment.class);
+
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
         NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
 
+        NativeInput nativeInput = new NativeInput();
+        InputConfig inputConfig;
+        try {
+            inputConfig = InputConfig.readDefaultConfig();
+        } catch (IOException ioe) {
+            inputConfig = new InputConfig();
+            LOG.warn("Error reading input config", ioe);
+        }
+        Input input = new Input(nativeInput, inputConfig);
+
         StaticEnvironment.NOTIFIER.set(notifier);
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
-        StaticEnvironment.INPUT.set(new Input());
+        StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
         TestEnvironment env = new TestEnvironment();

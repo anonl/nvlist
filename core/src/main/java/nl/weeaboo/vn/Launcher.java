@@ -40,7 +40,6 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -52,6 +51,9 @@ import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.impl.Input;
+import nl.weeaboo.vn.input.impl.InputConfig;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
@@ -131,11 +133,20 @@ public class Launcher extends ApplicationAdapter {
             LOG.warn("Unable to load variables", ioe);
         }
 
+        InputConfig inputConfig;
+        try {
+            inputConfig = InputConfig.readDefaultConfig();
+        } catch (IOException ioe) {
+            inputConfig = new InputConfig();
+            LOG.warn("Error reading input config", ioe);
+        }
+        Input input = new Input(inputAdapter.getInput(), inputConfig);
+
         StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
         StaticEnvironment.PREFS.set(prefs);
-        StaticEnvironment.INPUT.set(inputAdapter.getInput());
+        StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
@@ -257,7 +268,7 @@ public class Launcher extends ApplicationAdapter {
 
     protected void update() {
         inputAdapter.update();
-        IInput input = inputAdapter.getInput();
+        INativeInput input = inputAdapter.getInput();
 
         debugControls.update(novel, input);
 

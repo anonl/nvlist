@@ -53,7 +53,7 @@ public final class PerformanceMetrics {
                 return ((Number)method.invoke(operatingSystem)).doubleValue();
             } catch (Exception e) {
                 // Method not supported
-                LOG.info("Error obtaining CPU load", e);
+                LOG.info("Error obtaining CPU load (method not supported): " + e);
                 cpuLoadError = true;
             } catch (NoClassDefFoundError e) {
                 LOG.info("Error obtaining CPU load: Required method not implemented on this platform");

@@ -1,6 +1,9 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.input;
 
-public interface IInput {
+/**
+ * @param <K> Key identifier.
+ */
+public interface IBaseInput<K> {
 
     /**
      * Reset button press states.
@@ -8,26 +11,26 @@ public interface IInput {
     void clearButtonStates();
 
     /**
-     * @return Same as {@link #isPressed(KeyCode)}, then marks the press as consumed so further calls return
+     * @return Same as {@link #isPressed(K)}, then marks the press as consumed so further calls return
      *         {@code false}.
      */
-    boolean consumePress(KeyCode button);
+    boolean consumePress(K button);
 
     /**
      * @return {@code true} if the specified button got pressed since the last frame.
      */
-    boolean isJustPressed(KeyCode button);
+    boolean isJustPressed(K button);
 
     /**
      * @return {@code true} if the specified button is currently pressed.
      */
-    boolean isPressed(KeyCode button, boolean allowConsumedPress);
+    boolean isPressed(K button, boolean allowConsumedPress);
 
     /**
      * @return The time in milliseconds that the specified button has been continuously held, or {@code 0} if
      *         that button isn't currently being held.
      */
-    long getPressedTime(KeyCode button, boolean allowConsumedPress);
+    long getPressedTime(K button, boolean allowConsumedPress);
 
     /**
      * The X-coordinate of the most recent mouse/touch position.
@@ -37,7 +40,7 @@ public interface IInput {
     /**
      * The Y-coordinate of the most recent mouse/touch position.
      */
-	double getPointerY();
+    double getPointerY();
 
     /**
      * The amount that the mouse scroll wheel was scrolled. Positive values indicate a downward scroll,
@@ -49,7 +52,6 @@ public interface IInput {
      * @return {@code true} if the user hasn't performed any type of input this frame (no button presses, no
      *         mouse/touch events).
      */
-	boolean isIdle();
+    boolean isIdle();
 
 }
-

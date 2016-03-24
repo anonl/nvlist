@@ -84,6 +84,24 @@ public class TextLib extends LuaLib {
     }
 
     /**
+     * Creates a new text style by merging two existing styles.
+     *
+     * @param args
+     *        <ol>
+     *        <li>base text style
+     *        <li>overriding text style
+     *        </ol>
+     * @return text style
+     */
+    @ScriptFunction
+    public Varargs extendStyle(Varargs args) throws ScriptException {
+        TextStyle baseStyle = LuaConvertUtil.getTextStyleArg(args.arg(1));
+        TextStyle extStyle = LuaConvertUtil.getTextStyleArg(args.arg(2));
+        TextStyle merged = TextStyle.extend(baseStyle, extStyle);
+        return LuajavaLib.toUserdata(merged, TextStyle.class);
+    }
+
+    /**
      * @param args
      *        <ol>
      *        <li>string or styled text

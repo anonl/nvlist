@@ -232,6 +232,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
+    public int getMaxVisibleText() {
+        return getVisibleLayout().getGlyphCount();
+    }
+
+    @Override
     public void setVisibleText(double vc) {
         if (visibleGlyphs != vc) {
             visibleGlyphs = vc;
@@ -287,6 +292,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         default:
             throw new IllegalArgumentException("Unsupported alignment: " + verticalAlign);
         }
+    }
+
+    @Override
+    public boolean isFinalLineFullyVisible() {
+        return getEndLine() >= getLineCount() && getVisibleText() >= getMaxVisibleText();
     }
 
 }

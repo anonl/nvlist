@@ -18,12 +18,10 @@ import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch.EArea;
@@ -32,6 +30,8 @@ import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
@@ -61,7 +61,7 @@ public final class DebugControls {
         this.luaConsole = new LuaConsole(sceneEnv);
     }
 
-    public void update(INovel novel, IInput input) {
+    public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
         IRenderEnv renderEnv = env.getRenderEnv();
 
@@ -173,7 +173,7 @@ public final class DebugControls {
         }
     }
 
-    public void update(ITransformable transformable, IInput input) {
+    public void update(ITransformable transformable, INativeInput input) {
         IRenderable renderer = null;
         if (transformable instanceof IImageDrawable) {
             IImageDrawable image = (IImageDrawable)transformable;
@@ -204,7 +204,7 @@ public final class DebugControls {
         }
 
         // Place image at mouse press location (useful for Android testing)
-        if (input.isPressed(KeyCode.MOUSE_LEFT, false)) {
+        if (input.isPressed(KeyCode.MOUSE_LEFT, true)) {
             transformable.setPos(input.getPointerX(), input.getPointerY());
         }
     }

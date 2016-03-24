@@ -6,11 +6,11 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IEventListener;
-import nl.weeaboo.vn.core.IInput;
-import nl.weeaboo.vn.core.KeyCode;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -75,10 +75,10 @@ public class Button extends Transformable implements IButton {
 
         if (enabled) {
             model.setRollover(mouseContains);
-            if (mouseContains && input.consumePress(KeyCode.MOUSE_LEFT)) {
+            if (mouseContains && input.consumePress(VKey.MOUSE_LEFT)) {
                 model.setPressed(true);
             }
-            if (!input.isPressed(KeyCode.MOUSE_LEFT, true)) {
+            if (!input.isPressed(VKey.MOUSE_LEFT, true)) {
                 model.setPressed(false);
             }
         } else {

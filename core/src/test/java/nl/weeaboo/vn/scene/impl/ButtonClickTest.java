@@ -1,12 +1,16 @@
 package nl.weeaboo.vn.scene.impl;
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.CoreTestUtil;
-import nl.weeaboo.vn.core.impl.Input;
 import nl.weeaboo.vn.core.impl.TestInputAdapter;
+import nl.weeaboo.vn.input.impl.Input;
+import nl.weeaboo.vn.input.impl.InputConfig;
+import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
@@ -25,9 +29,10 @@ public class ButtonClickTest {
     private Button button;
 
     @Before
-    public void before() {
-        input = new Input();
-        inputAdapter = new TestInputAdapter(input);
+    public void before() throws IOException {
+        NativeInput nativeInput = new NativeInput();
+        inputAdapter = new TestInputAdapter(nativeInput);
+        input = new Input(nativeInput, InputConfig.readDefaultConfig());
 
         eventDispatcher = new ScriptEventDispatcher();
         clickFunction = new ScriptFunctionStub();

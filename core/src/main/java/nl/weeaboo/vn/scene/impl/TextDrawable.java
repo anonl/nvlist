@@ -4,7 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
-import nl.weeaboo.vn.core.IInput;
+import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -178,6 +178,16 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public void setTextSpeed(double speed) {
         textSpeed = Checks.checkRange(speed, "speed", 0);
+    }
+
+    @Override
+    public boolean isFinalLineFullyVisible() {
+        return textRenderer.isFinalLineFullyVisible();
+    }
+
+    @Override
+    public int getMaxVisibleText() {
+        return textRenderer.getMaxVisibleText();
     }
 
 }

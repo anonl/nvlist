@@ -4,16 +4,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.core.KeyCode;
+import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.impl.NativeInput;
 
 public class InputTest {
 
-    private Input input;
+    private NativeInput input;
     private TestInputAdapter inputAdapter;
 
     @Before
     public void before() {
-        input = new Input();
+        input = new NativeInput();
         inputAdapter = new TestInputAdapter(input);
     }
 

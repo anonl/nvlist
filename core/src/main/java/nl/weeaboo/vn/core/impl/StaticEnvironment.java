@@ -10,12 +10,12 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.styledtext.layout.IFontStore;
-import nl.weeaboo.vn.core.IInput;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
+import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.sound.impl.MusicStore;
 
 public final class StaticEnvironment {

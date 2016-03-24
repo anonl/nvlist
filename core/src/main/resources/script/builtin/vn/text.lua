@@ -13,7 +13,7 @@ TextMode = {
 	NVL=2, --Novel style full screen text.
 }
 
-local textMode = 0
+local textMode = TextMode.ADV
 local speaker = {}
 
 local lineState = {
@@ -80,8 +80,7 @@ function text(str, triggers, meta)
 		str, triggers = Text.parseText(str, triggers)
 	end
 	
-	--TODO: Apply speaker state
-	currentStyle = speaker.textStyle
+	lineState.style = speaker.textStyle
 	
 	appendText(str)
 	
@@ -97,16 +96,16 @@ function text(str, triggers, meta)
 	waitClick()	
 	
 	--Reset speaker
-	currentStyle = nil
+	lineState.style = nil
 	if speaker.resetEOL then
 		say()
 	end
 	
 	--Register line as read
-	if meta.filename ~= nil and meta.line >= 1 then
-		seenLog:setTextLineRead(meta.filename, meta.line)
-	end
-	lineRead = true	
+	--if meta.filename ~= nil and meta.line >= 1 then
+	--	seenLog:setTextLineRead(meta.filename, meta.line)
+	--end
+	lineState.read = true	
 end
 
 ---Waits until the text in the main textbox (or other TextDrawable) has finished
@@ -121,7 +120,7 @@ function waitForTextVisible(textDrawable, triggers)
 	local i0 = 0
 	while textDrawable ~= nil and not textDrawable:isDestroyed() do
 		if triggers ~= nil then
-			local i1 = math.min(textDrawable:getMaxVisibleChars(), math.floor(textDrawable:getVisibleChars()))
+			local i1 = math.min(textDrawable:getMaxVisibleText(), math.floor(textDrawable:getVisibleText()))
 			for i=i0,i1 do
 --TODO: Add textdrawable's glyph offset (so we support startLine > 0 )
 				if triggers[i] ~= nil then
@@ -131,7 +130,7 @@ function waitForTextVisible(textDrawable, triggers)
 			i0 = i1 + 1
 		end
 		
-		if textDrawable:getFinalLineFullyVisible() then
+		if textDrawable:isFinalLineFullyVisible() then
 			break
 		end
 		
@@ -143,9 +142,10 @@ end
 -- In ADV mode, the text is cleared between each line of text. In NVL mode, you
 -- need to call <code>clearText</code> manually.
 function clearText()
-    textState:setText("")
+    getTextState():setText("")
     appendTextLog("", true)
-    hideSpeakerName()
+    -- TODO: Re-enable
+    -- hideSpeakerName()
 end
 
 ---Appends text to the main textbox.
@@ -154,17 +154,20 @@ end
 -- @tab[opt=nil] meta A table with metadata for this piece of text (autoPage,
 --      etc.)
 function appendText(str, meta)
+    meta = meta or {}
+
 	local styled = nil
 	local logStyled = nil
-	if lineRead and prefs.textReadStyle ~= nil then
-		styled = createStyledText(str, extendStyle(prefs.textReadStyle, currentStyle))
-		logStyled = createStyledText(str, currentStyle)
+	if lineState.read and prefs.textReadStyle ~= nil then
+		styled = Text.createStyledText(str, Text.extendStyle(prefs.textReadStyle, lineState.style))
+		logStyled = Text.createStyledText(str, lineState.style)
 	else
-		styled = createStyledText(str, currentStyle)
+		styled = Text.createStyledText(str, lineState.style)
 		logStyled = styled
 	end
 
 	local textBox = getMainTextBox()
+	local textState = getTextState()
 	if textBox == nil then
 		textState:appendText(styled)
 	    appendTextLog(logStyled)
@@ -176,7 +179,7 @@ function appendText(str, meta)
 	if oldLineCount > 0 then
 		textState:appendText(styled)
 		if meta.autoPage and textBox:getLineCount() > textBox:getEndLine() then
-			textBox:setVisibleChars(0)
+			textBox:setVisibleText(0)
 			local index = 0
 			while index < styled:length() and styled:charAt(index) == 0x0A do
 				index = index + 1
@@ -191,9 +194,20 @@ function appendText(str, meta)
     	appendTextLog(logStyled)
 	end
 
-	if quickRead then
-		textBox:setVisibleChars(999999)
+	if isSkipping() then
+		textBox:setVisibleText(999999)
 	end
+end
+
+---Appends text to the textlog, but not the main textbox. Allows you to manually
+-- add lines to the textlog, which can be useful if your VN has text that's not
+-- displayed in the main textbox.
+-- @param str The text to append (may be either a string or a StyledText
+--        object).
+-- @bool[opt=false] newPage If <code>true</code>, starts a new page in the
+--      textlog before appending the text.
+function appendTextLog(str, newPage)
+    getTextState():appendTextLog(str, newPage)
 end
 
 ---Changes the text mode to full-screen textbox mode
