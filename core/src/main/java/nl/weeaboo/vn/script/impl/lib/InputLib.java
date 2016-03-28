@@ -1,10 +1,9 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import org.luaj.vm2.LuaBoolean;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.Varargs;
-
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaBoolean;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.input.IInput;

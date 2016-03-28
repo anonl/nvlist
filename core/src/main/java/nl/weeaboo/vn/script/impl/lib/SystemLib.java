@@ -1,10 +1,9 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import org.luaj.vm2.LuaBoolean;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaBoolean;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
@@ -36,7 +35,7 @@ public class SystemLib extends LuaLib {
 
         ISystemModule system = env.getSystemModule();
         system.exit(force);
-        return LuaValue.NONE;
+        return LuaConstants.NONE;
     }
 
     /**
@@ -59,7 +58,7 @@ public class SystemLib extends LuaLib {
         } catch (InitException e) {
             throw new ScriptException("Error restarting", e);
         }
-        return LuaValue.NONE;
+        return LuaConstants.NONE;
     }
 
     /**
@@ -74,7 +73,7 @@ public class SystemLib extends LuaLib {
 
         ISystemModule system = env.getSystemModule();
         system.openWebsite(url);
-        return LuaValue.NONE;
+        return LuaConstants.NONE;
     }
 
     /**

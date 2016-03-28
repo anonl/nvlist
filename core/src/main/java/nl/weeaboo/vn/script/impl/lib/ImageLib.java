@@ -1,9 +1,8 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
@@ -84,7 +83,7 @@ public class ImageLib extends LuaLib {
         IScreen screen = context.getScreen();
         screen.setActiveLayer(layer);
 
-        return LuaValue.NONE;
+        return LuaConstants.NONE;
     }
 
     @ScriptFunction

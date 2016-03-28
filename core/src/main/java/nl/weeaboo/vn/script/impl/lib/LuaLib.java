@@ -4,12 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.VarArgFunction;
-
+import nl.weeaboo.lua2.lib.VarArgFunction;
+import nl.weeaboo.lua2.vm.LuaError;
+import nl.weeaboo.lua2.vm.LuaNil;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.script.impl.lua.ILuaScriptEnvInitializer;
@@ -62,7 +61,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
             }
 
             String name = method.getName();
-            if (table.rawget(name) != LuaValue.NIL) {
+            if (table.rawget(name) != LuaNil.NIL) {
                 throw new ScriptException("There's already a table entry named: " + name + " :: " + table.rawget(name));
             }
             table.rawset(name, wrapFunction(method.getName(), method.getParameterTypes()));

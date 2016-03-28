@@ -1,6 +1,16 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.styledtext.StyleParseException;
+import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 
 public class TextLibTest extends AbstractLibTest {
 
@@ -9,6 +19,61 @@ public class TextLibTest extends AbstractLibTest {
         scriptEnv.addInitializer(new TextLib(env));
     }
 
-    // TODO: Implement
+    @Test
+    public void createStyle() throws StyleParseException {
+        loadScript("text/createStyle");
+
+        LuaTestUtil.assertGlobal("simple",
+                TextStyle.fromString("fontName=a|fontSize=13.24"));
+        LuaTestUtil.assertGlobal("complex1",
+                TextStyle.fromString("fontName=b|fontStyle=italic|color=AABBCCDD"));
+    }
+
+    @Test
+    public void createTextDrawable() {
+        loadScript("text/createTextDrawable");
+
+        ITextDrawable fullDefault = LuaTestUtil.getGlobal("fullDefault", ITextDrawable.class);
+        Assert.assertNotNull(fullDefault);
+
+        ITextDrawable plainText = LuaTestUtil.getGlobal("plainText", ITextDrawable.class);
+        Assert.assertEquals(new StyledText("abc"), plainText.getText());
+
+        ITextDrawable styledText = LuaTestUtil.getGlobal("styledText", ITextDrawable.class);
+        Assert.assertEquals(new StyledText("def"), styledText.getText());
+    }
+
+    @Test
+    public void createStyledText() throws StyleParseException {
+        loadScript("text/createStyledText");
+
+        LuaTestUtil.assertGlobal("fromString",
+                new StyledText("abc"));
+        LuaTestUtil.assertGlobal("fromStyledText",
+                new StyledText("abc", TextStyle.fromString("color=AABBCCDD")));
+    }
+
+    @Test
+    public void extendStyle() throws StyleParseException {
+        loadScript("text/extendStyle");
+
+        LuaTestUtil.assertGlobal("merged", TextStyle.fromString("fontName=b|color=AABBCCDD"));
+
+    }
+
+    @Test
+    public void parseText() {
+        loadScript("text/parseText");
+
+        StyledText oneText = LuaTestUtil.getGlobal("oneText", StyledText.class);
+        LuaTable oneTriggers = LuaTestUtil.getGlobal("oneTriggers").opttable(null);
+        Assert.assertEquals("abc ghi", oneText.toString());
+        assertTrigger(oneTriggers, 4, "def");
+    }
+
+    private void assertTrigger(LuaTable triggers, int charIndex, String functionName) {
+        LuaValue val = triggers.get(charIndex);
+        Assert.assertTrue(val.isclosure());
+    }
 
 }

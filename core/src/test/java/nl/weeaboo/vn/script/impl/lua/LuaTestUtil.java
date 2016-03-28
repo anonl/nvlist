@@ -1,10 +1,10 @@
 package nl.weeaboo.vn.script.impl.lua;
 
 import org.junit.Assert;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
 
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -33,12 +33,10 @@ public final class LuaTestUtil {
     }
 
     public static void assertGlobal(String name, int val) {
-        LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
-        Assert.assertEquals(val, globals.get(name).optint(0));
+        Assert.assertEquals(val, getGlobal(name).optint(0));
     }
     public static void assertGlobal(String name, Object val) {
-        LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
-        LuaValue global = globals.get(name);
+        LuaValue global = getGlobal(name);
 
         if (val instanceof Boolean) {
             Assert.assertEquals(val, global.toboolean());
@@ -47,9 +45,13 @@ public final class LuaTestUtil {
         }
     }
 
-    public static <T> T getGlobal(String name, Class<T> type) {
+    public static LuaValue getGlobal(String name) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
-        return globals.get(name).optuserdata(type, null);
+        return globals.get(name);
+    }
+
+    public static <T> T getGlobal(String name, Class<T> type) {
+        return getGlobal(name).optuserdata(type, null);
     }
     public static boolean hasRunnableThreads(IScriptContext context) {
         for (IScriptThread thread : context.getThreads()) {

@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import static org.luaj.vm2.LuaValue.valueOf;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -13,19 +11,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.BaseLib;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.ResourceFinder;
-import org.luaj.vm2.lib.ResourceFinder.Resource;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.lua2.lib.BaseLib;
+import nl.weeaboo.lua2.lib.PackageLib;
+import nl.weeaboo.lua2.lib.ResourceFinder;
+import nl.weeaboo.lua2.lib.ResourceFinder.Resource;
+import nl.weeaboo.lua2.vm.LuaError;
+import nl.weeaboo.lua2.vm.LuaString;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.ResourceLoader;
@@ -43,7 +40,7 @@ public class LuaScriptLoader implements IScriptLoader {
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
     private static final int INPUT_BUFFER_SIZE = 4096;
-    private static final LuaString PATH = valueOf("path");
+    private static final LuaString PATH = LuaString.valueOf("path");
 
     private final LuaScriptResourceLoader resourceLoader;
     private final String engineTargetVersion;

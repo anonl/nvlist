@@ -1,8 +1,8 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import org.luaj.vm2.LuaTable;
-
 import nl.weeaboo.lua2.LuaUtil;
+import nl.weeaboo.lua2.lib.BaseLib;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.SkipMode;
 import nl.weeaboo.vn.core.VerticalAlign;
@@ -18,6 +18,8 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
     @Override
     public void initEnv(LuaScriptEnv env) throws ScriptException {
         LuaTable globals = env.getGlobals();
+
+        BaseLib.loadFile("builtin/stdlib").arg1().call();
 
         // Enums
         registerTypes(globals,

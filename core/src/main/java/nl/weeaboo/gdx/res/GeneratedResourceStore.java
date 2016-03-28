@@ -16,9 +16,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 /**
- * Handles dispose behavior for generated resources. Resources are registered through
- * {@link #register(Disposable)}, which returns an indirect reference to the resource. Once this reference
- * object is garbage collected, the referenced resource will be disposed.
+ * Handles dispose behavior for generated resources. Resources are registered through register(), which
+ * returns an indirect reference to the resource. Once this reference object is garbage collected, the
+ * referenced resource will be disposed.
  */
 public class GeneratedResourceStore extends AbstractResourceStore {
 

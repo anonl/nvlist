@@ -5,10 +5,11 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
 
-import nl.weeaboo.lua2.lib.CoerceJavaToLua;
+import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
+import nl.weeaboo.lua2.vm.LuaNil;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.ImageModuleStub;
 import nl.weeaboo.vn.image.impl.TestScreenshot;
@@ -16,7 +17,6 @@ import nl.weeaboo.vn.image.impl.TestTexture;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.impl.Layer;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 
 public class LuaConvertUtilTest {
 
@@ -106,7 +106,7 @@ public class LuaConvertUtilTest {
 
     public static Varargs createVararg(Object javaValue, int index) {
         LuaValue[] vals = new LuaValue[index + 1];
-        Arrays.fill(vals, LuaValue.NIL);
+        Arrays.fill(vals, LuaNil.NIL);
         vals[index] = CoerceJavaToLua.coerce(javaValue);
         return LuaValue.varargsOf(vals);
     }

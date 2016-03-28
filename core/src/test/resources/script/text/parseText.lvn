@@ -1,0 +1,5 @@
+@@
+
+oneText, oneTriggers = Text.parseText("abc [def()] ghi")
+
+@@

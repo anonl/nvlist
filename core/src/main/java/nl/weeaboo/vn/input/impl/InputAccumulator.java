@@ -61,7 +61,7 @@ public final class InputAccumulator {
          * coordinates, see {@link IRenderEnv#getVirtualSize()}.
          *
          * @param x Pointer X-coordinate in virtual coordinates.
-         * @param x Pointer Y-coordinate in virtual coordinates.
+         * @param y Pointer Y-coordinate in virtual coordinates.
          */
         public PointerPositionEvent(long timestampMs, double x, double y) {
             super(timestampMs);

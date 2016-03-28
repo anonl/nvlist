@@ -9,12 +9,6 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.OneArgFunction;
-import org.luaj.vm2.lib.TwoArgFunction;
-import org.luaj.vm2.lib.VarArgFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,14 +16,14 @@ import com.google.common.io.Resources;
 
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.lib.OneArgFunction;
+import nl.weeaboo.lua2.lib.TwoArgFunction;
+import nl.weeaboo.lua2.lib.VarArgFunction;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.script.impl.lvn.ICompiledLvnFile;
-import nl.weeaboo.vn.script.impl.lvn.ILvnParser;
-import nl.weeaboo.vn.script.impl.lvn.LvnParseException;
-import nl.weeaboo.vn.script.impl.lvn.LvnParserFactory;
-import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser;
-import nl.weeaboo.vn.script.impl.lvn.TextParser;
 import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.script.impl.lvn.TextParser.Token;
 

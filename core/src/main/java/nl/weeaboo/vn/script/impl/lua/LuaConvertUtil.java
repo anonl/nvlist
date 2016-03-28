@@ -1,10 +1,9 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
-import nl.weeaboo.lua2.lib.CoerceLuaToJava;
+import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.ETextAttribute;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyleParseException;
@@ -98,7 +97,8 @@ public final class LuaConvertUtil {
                     continue;
                 }
 
-                Object javaValue = parseTextAttribute(attribute, table.get(key));
+                LuaValue luaValue = table.get(key);
+                Object javaValue = parseTextAttribute(attribute, luaValue);
                 if (javaValue != null) {
                     mts.setProperty(attribute, javaValue);
                 }
@@ -110,7 +110,7 @@ public final class LuaConvertUtil {
     }
 
     public static Object parseTextAttribute(ETextAttribute attribute, LuaValue luaValue) {
-        if (luaValue.isstring()) {
+        if (luaValue.isstring() && !luaValue.isnumber()) {
             return attribute.valueFromString(luaValue.tojstring());
         } else {
             return CoerceLuaToJava.coerceArg(luaValue, attribute.getType());

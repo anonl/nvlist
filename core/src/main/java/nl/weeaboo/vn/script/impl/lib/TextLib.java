@@ -3,15 +3,17 @@ package nl.weeaboo.vn.script.impl.lib;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.compiler.LoadState;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaInteger;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaThread;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
@@ -41,8 +43,8 @@ public class TextLib extends LuaLib {
     /**
      * @param args
      *        <ol>
-     *        <li>Parent layer
-     *        <li>Initial text
+     *        <li>(optional) Parent layer
+     *        <li>(optional) Initial text
      *        </ol>
      * @return A text drawable
      */
@@ -105,7 +107,7 @@ public class TextLib extends LuaLib {
      * @param args
      *        <ol>
      *        <li>string or styled text
-     *        <li>text style
+     *        <li>(optional) text style
      *        </ol>
      * @return styled text
      */
@@ -131,7 +133,7 @@ public class TextLib extends LuaLib {
      * @param args
      *        <ol>
      *        <li>text to parse
-     *        <li>table of triggers
+     *        <li>(optional) table of triggers
      *        </ol>
      * @return (parsed text, triggers table)
      */
@@ -141,41 +143,48 @@ public class TextLib extends LuaLib {
         ParseResult res = textParser.parse(args.arg(1).tojstring());
 
         LuaTable oldTriggers = args.opttable(2, null);
-        LuaTable newTriggers = null;
-        if (oldTriggers != null) {
-            newTriggers = new LuaTable();
-            IntMap<String> commandMap = res.getCommands();
+        LuaTable newTriggers = new LuaTable();
 
-            LuaValue oldTableIndex = LuaValue.ZERO;
-            for (int n = 0; n < commandMap.size(); n++) {
+        LuaRunState lrs = LuaRunState.getCurrent();
+        IntMap<String> commandMap = res.getCommands();
+
+        LuaValue oldTableIndex = LuaInteger.valueOf(0);
+        for (int n = 0; n < commandMap.size(); n++) {
+            LuaValue func = null;
+
+            LuaValue env = lrs.getGlobalEnvironment();
+
+            LuaThread thread = lrs.getRunningThread();
+            if (thread != null) {
+                env = thread.getCallEnv();
+            }
+
+            if (oldTriggers != null) {
                 Varargs ipair = oldTriggers.inext(oldTableIndex);
                 oldTableIndex = ipair.arg(1);
-                LuaValue func = ipair.arg(2);
-
-                if (func == null) {
-                    /*
-                     * If no compiled trigger function given, compile it here. This means we may lose access
-                     * to any local variables.
-                     */
-                    String str = commandMap.valueAt(n);
-                    ByteArrayInputStream bin = new ByteArrayInputStream(StringUtil.toUTF8(str));
-                    try {
-                        func = LoadState.load(bin, "~trigger" + n, oldTriggers.getfenv());
-                    } catch (IOException ioe) {
-                        throw new ScriptException("Error compiling trigger function", ioe);
-                    }
-                }
-
-                newTriggers.rawset(commandMap.keyAt(n), func);
+                func = ipair.arg(2);
+                env = oldTriggers.getfenv();
             }
+
+            if (func == null) {
+                /*
+                 * If no compiled trigger function given, compile it here. This means we may lose access to
+                 * any local variables.
+                 */
+                String str = commandMap.valueAt(n);
+                ByteArrayInputStream bin = new ByteArrayInputStream(StringUtil.toUTF8(str));
+                try {
+                    func = LoadState.load(bin, "~trigger" + n, env);
+                } catch (IOException ioe) {
+                    throw new ScriptException("Error compiling trigger function", ioe);
+                }
+            }
+
+            newTriggers.rawset(commandMap.keyAt(n), func);
         }
 
         LuaValue resultText = LuajavaLib.toUserdata(res.getText(), StyledText.class);
-        if (newTriggers == null) {
-            return resultText;
-        } else {
-            return LuaValue.varargsOf(resultText, newTriggers);
-        }
+        return LuaValue.varargsOf(resultText, newTriggers);
     }
 
     /**

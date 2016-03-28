@@ -6,6 +6,10 @@
 -- ----------------------------------------------------------------------------
 -- ----------------------------------------------------------------------------
 
+function yield(w)
+    return Thread.yield(w)
+end
+
 ---Takes a list of tables and generates a new table containing SHALLOW copies
 -- of all attributes.
 function extend(...)

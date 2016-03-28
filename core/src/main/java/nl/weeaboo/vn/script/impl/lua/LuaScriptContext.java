@@ -3,12 +3,12 @@ package nl.weeaboo.vn.script.impl.lua;
 import java.util.Collection;
 import java.util.List;
 
-import org.luaj.vm2.LuaClosure;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.lua2.vm.LuaClosure;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DestructibleElemList;
@@ -40,7 +40,7 @@ public class LuaScriptContext implements IScriptContext {
     }
 
     public IScriptThread newThread(LuaClosure func) throws ScriptException {
-        return newThread(func, LuaValue.NONE);
+        return newThread(func, LuaConstants.NONE);
     }
     public IScriptThread newThread(LuaClosure func, Varargs args) throws ScriptException {
         return newThread(new LuaScriptFunction(func, args));

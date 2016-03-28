@@ -2,17 +2,19 @@ package nl.weeaboo.vn.script.impl.lib;
 
 import java.util.Collection;
 
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.VarArgFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.lib.VarArgFunction;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaNil;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.ETextAttribute;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
@@ -31,15 +33,15 @@ final class BasicTagHandler extends VarArgFunction {
         Tag tag = Tag.fromTagId(tagId);
         if (tag == null) {
             LOG.warn("Unsupported tag id: {}", tagId);
-            return NONE;
+            return LuaConstants.NONE;
         }
 
         TextStyle style = handleTag(tag, table);
         if (style == null) {
-            return NONE;
+            return LuaConstants.NONE;
         }
 
-        return varargsOf(NIL, LuajavaLib.toUserdata(style, TextStyle.class));
+        return varargsOf(LuaNil.NIL, LuajavaLib.toUserdata(style, TextStyle.class));
     }
 
     private TextStyle handleTag(Tag tag, LuaTable table) {

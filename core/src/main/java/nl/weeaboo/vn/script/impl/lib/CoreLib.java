@@ -1,9 +1,8 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
-import nl.weeaboo.lua2.lib.LuajavaLib;
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -67,7 +66,7 @@ public class CoreLib extends LuaLib {
         IContextManager contextManager = env.getContextManager();
         contextManager.setContextActive(context, active);
 
-        return LuaValue.NONE;
+        return LuaConstants.NONE;
     }
 
     /**

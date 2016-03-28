@@ -1,0 +1,9 @@
+@@
+
+-- Style encoded as a string
+simple = Text.createStyle("fontName=a|fontSize=13.24")
+
+-- Style encoded as a table
+complex1 = Text.createStyle{fontName="b", fontStyle="italic", color=0xAABBCCDD}
+
+@@

@@ -1,0 +1,8 @@
+@@
+
+local styleA = Text.createStyle{fontName="a", color=0xAABBCCDD}
+local styleB = Text.createStyle{fontName="b"}
+
+merged = Text.extendStyle(styleA, styleB)
+
+@@

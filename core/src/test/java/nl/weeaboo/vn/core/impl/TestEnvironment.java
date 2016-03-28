@@ -15,6 +15,7 @@ import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
 import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.save.impl.SaveModule;
+import nl.weeaboo.vn.script.impl.lib.BasicScriptInitializer;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
@@ -57,6 +58,7 @@ public class TestEnvironment extends DefaultEnvironment {
         LuaRunState runState = LuaTestUtil.newRunState();
         LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
+        scriptEnv.addInitializer(new BasicScriptInitializer());
         env.scriptEnv = scriptEnv;
 
         env.saveModule = new SaveModule(env);

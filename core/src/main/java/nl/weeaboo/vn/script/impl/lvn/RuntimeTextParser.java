@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.script.impl.lvn;
 
 import static nl.weeaboo.lua2.LuaUtil.unescape;
-import static org.luaj.vm2.LuaValue.valueOf;
+import static nl.weeaboo.lua2.vm.LuaValue.valueOf;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,12 +11,11 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;

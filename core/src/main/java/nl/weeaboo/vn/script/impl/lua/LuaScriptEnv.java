@@ -3,10 +3,9 @@ package nl.weeaboo.vn.script.impl.lua;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luaj.vm2.LuaTable;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.ScriptException;

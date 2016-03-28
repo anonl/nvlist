@@ -1,12 +1,9 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 
@@ -18,7 +15,7 @@ public class CoreLibTest extends AbstractLibTest {
     }
 
     @Test
-    public void createContext() throws IOException, ScriptException {
+    public void createContext() {
         loadScript(LuaTestUtil.SCRIPT_SCRIPTLIB);
 
         IContext createdContext = LuaTestUtil.getGlobal("context", IContext.class);
@@ -27,14 +24,14 @@ public class CoreLibTest extends AbstractLibTest {
     }
 
     @Test
-    public void newThread() throws IOException, ScriptException {
+    public void newThread() {
         loadScript(LuaTestUtil.SCRIPT_SCRIPTLIB);
 
         LuaTestUtil.assertGlobal("newThreadResult", 1 + 2 + 3);
     }
 
     @Test
-    public void setMode() throws IOException, ScriptException {
+    public void setMode() {
         loadScript(LuaTestUtil.SCRIPT_SETMODE);
 
         Assert.assertEquals(2, env.getContextManager().getContexts().size());

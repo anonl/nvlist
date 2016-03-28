@@ -1,0 +1,8 @@
+
+@@
+
+fullDefault = Text.createTextDrawable()
+plainText = Text.createTextDrawable(nil, "abc")
+styledText = Text.createTextDrawable(nil, Text.createStyledText("def"))
+
+@@

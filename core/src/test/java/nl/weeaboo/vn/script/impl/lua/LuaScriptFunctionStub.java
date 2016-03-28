@@ -1,12 +1,9 @@
 package nl.weeaboo.vn.script.impl.lua;
 
+import nl.weeaboo.lua2.vm.LuaClosure;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptFunction;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptThread;
-
-import org.luaj.vm2.LuaClosure;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
 
 public class LuaScriptFunctionStub extends LuaScriptFunction {
 
@@ -15,7 +12,7 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
     private int callCount;
 
     public LuaScriptFunctionStub() {
-        this(LuaValue.NONE);
+        this(LuaConstants.NONE);
     }
     public LuaScriptFunctionStub(Varargs args) {
         super(null, args);

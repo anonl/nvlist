@@ -1,0 +1,6 @@
+@@
+
+fromString = Text.createStyledText("abc")
+fromStyledText = Text.createStyledText(fromString, Text.createStyle{color=0xAABBCCDD})
+
+@@

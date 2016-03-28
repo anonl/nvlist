@@ -1,12 +1,11 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import org.luaj.vm2.LuaClosure;
-import org.luaj.vm2.Varargs;
-
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.link.ILuaLink;
 import nl.weeaboo.lua2.link.LuaFunctionLink;
-import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.lua2.vm.LuaClosure;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -28,13 +27,13 @@ class LuaScriptFunction implements IScriptFunction {
         call(runState.getCurrentLink());
     }
 
-    void call(LuaLink currentLink) throws ScriptException {
+    void call(ILuaLink currentLink) throws ScriptException {
         LuaRunState runState = LuaImpl.getRunState();
         if (runState == null || currentLink == null) {
             throw new ScriptException("Unable to call Lua function -- no thread is current");
         }
 
-        LuaLink oldLink = runState.getCurrentLink();
+        ILuaLink oldLink = runState.getCurrentLink();
         try {
             runState.setCurrentLink(currentLink);
             currentLink.call(func, args);

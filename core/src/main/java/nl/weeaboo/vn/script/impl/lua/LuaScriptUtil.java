@@ -3,15 +3,13 @@ package nl.weeaboo.vn.script.impl.lua;
 import java.io.IOException;
 import java.util.List;
 
-import org.luaj.vm2.LuaThread;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.DebugLib;
-
-import com.google.common.collect.ImmutableList;
-
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.lua2.vm.LuaThread;
+import nl.weeaboo.lua2.vm.LuaValue;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.ContextUtil;
@@ -22,7 +20,6 @@ import nl.weeaboo.vn.script.ScriptException;
 
 public final class LuaScriptUtil {
 
-    private static final int DEFAULT_STACK_LIMIT = 8;
     private static final String LVN_PATTERN = ".lvn:";
 
     private LuaScriptUtil() {
@@ -62,27 +59,6 @@ public final class LuaScriptUtil {
         return new LuaScriptThread(luaLink);
     }
 
-    /** @return The current call stack of the active Lua thread, or an empty list if no thread is active. */
-    public static List<String> getLuaStack() {
-        return getLuaStack(LuaThread.getRunning());
-    }
-
-    static List<String> getLuaStack(LuaThread thread) {
-        if (thread == null) {
-            return ImmutableList.of();
-        }
-
-        ImmutableList.Builder<String> result = ImmutableList.builder();
-        for (int level = 0; level < DEFAULT_STACK_LIMIT; level++) {
-            String line = DebugLib.fileline(thread, level);
-            if (line == null) {
-                break;
-            }
-            result.add(line);
-        }
-        return result.build();
-    }
-
     public static String getNearestLvnSrcloc(List<String> stack) {
         for (String frame : stack) {
             if (frame.contains(LVN_PATTERN)) {
@@ -93,7 +69,7 @@ public final class LuaScriptUtil {
     }
 
     public static ResourceLoadInfo createLoadInfo(String filename) {
-        return new ResourceLoadInfo(filename, getLuaStack());
+        return new ResourceLoadInfo(filename, LuaUtil.getLuaStack());
     }
 
     private static LuaScriptContext getScriptContext(IContext context) {
@@ -164,6 +140,13 @@ public final class LuaScriptUtil {
         }
 
         return result.tojstring();
+    }
+
+    public static LuaValue getFunctionEnv(LuaThread thread) {
+        if (thread.callstack != null) {
+            return thread.getCallstackFunction(0).getfenv();
+        }
+        return thread.getfenv();
     }
 
 }

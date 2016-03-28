@@ -12,7 +12,6 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.impl.TestEnvironment;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
-import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
 public class LuaScriptUtilTest {
 
@@ -20,8 +19,9 @@ public class LuaScriptUtilTest {
     private IContext mainContext;
 
     @Before
-    public void init() {
+    public void init() throws ScriptException {
         env = TestEnvironment.newInstance();
+        env.getScriptEnv().initEnv();
         mainContext = env.getContextManager().createContext();
     }
 
@@ -38,12 +38,12 @@ public class LuaScriptUtilTest {
 
     @Test
     public void toScriptException() {
-        LuaException original = new LuaException("message", new RuntimeException("cause"));
+        LuaException original = LuaException.wrap("message", new RuntimeException("cause"));
 
         ScriptException converted = LuaScriptUtil.toScriptException("newMessage", original);
 
         // The conversion doesn't wrap the entire exception in another layer!
-        Assert.assertEquals("newMessage: message", converted.getMessage());
+        Assert.assertEquals("newMessage: message: cause", converted.getMessage());
         Assert.assertSame(original.getCause(), converted.getCause());
     }
 
