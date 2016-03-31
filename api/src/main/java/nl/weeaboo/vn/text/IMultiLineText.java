@@ -41,7 +41,7 @@ public interface IMultiLineText extends IText {
 
     /**
      * @return The minimum bounding text height for the currently visible lines.
-     * @see #getTextWidth(int, int)
+     * @see #getTextHeight(int, int)
      */
     float getTextHeight();
 

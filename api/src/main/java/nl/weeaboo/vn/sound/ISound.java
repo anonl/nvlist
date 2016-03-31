@@ -8,7 +8,7 @@ public interface ISound extends Serializable {
 	// === Functions ===========================================================
 
     /**
-     * @see start(int)
+     * @see #start(int)
      */
     void start() throws IOException;
 

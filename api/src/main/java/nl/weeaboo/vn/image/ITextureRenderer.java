@@ -18,7 +18,6 @@ public interface ITextureRenderer extends IRenderable {
 
 	/**
 	 * Changes the texture used to render this image.
-	 * @see #setTexture(ITexture, double, double)
 	 */
     void setTexture(ITexture i);
 

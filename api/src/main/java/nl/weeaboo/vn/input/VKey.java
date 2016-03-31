@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 
-/** Virtual key code. Used by {@link InputConfig} for mapping logical actions to one or more inputs. */
+/** Virtual key code. Used by the key config for mapping logical actions to one or more inputs. */
 public final class VKey {
 
     public static final VKey UP = new VKey("up");

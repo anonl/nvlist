@@ -16,7 +16,7 @@ public interface ITextRenderState extends IMultiLineText, Serializable {
     void increaseVisibleText(double textSpeed);
 
     /**
-     * @see #setVisibleText(float)
+     * @see #setVisibleText(double)
      */
     double getVisibleText();
 

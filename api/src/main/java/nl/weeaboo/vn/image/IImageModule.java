@@ -27,7 +27,7 @@ public interface IImageModule extends IModule {
     /**
      * Creates a texture object from the specified filename.
      *
-     * @param loadInfo Filename of the requested resource and related metadata.
+     * @param info Filename of the requested resource and related metadata.
      * @param suppressErrors If <code>true</code> doesn't log any errors that may occur.
      */
     ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors);

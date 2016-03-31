@@ -35,7 +35,7 @@ public interface IButton extends ITransformable {
     /** @see IButtonModel#setToggle(boolean) */
 	public void setToggle(boolean t);
 
-    /** @see IButtonModel#getClickHandler() */
+    /** @see #setClickHandler(IScriptFunction) */
     public IScriptFunction getClickHandler();
 
     /**

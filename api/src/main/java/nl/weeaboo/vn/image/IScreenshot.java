@@ -24,9 +24,9 @@ public interface IScreenshot extends Serializable {
 	public boolean isAvailable();
 
 	/**
-	 * A volatile screenshot may lose its pixels at any time and doesn't support the {@link #getPixels()}
-	 * method. Use {@link #getVolatilePixels()} instead.
-	 */
+     * A volatile screenshot only stores its pixels on the GPU. As a consequence, it may lose its pixels at
+     * any time.
+     */
 	public boolean isVolatile();
 
 	/** @see #markTransient() */
@@ -44,7 +44,7 @@ public interface IScreenshot extends Serializable {
 	 * @return The screen size in pixels when this screenshot was taken.
 	 */
 	public Dim getScreenSize();
-	
+
 	public short getZ();
 
 }

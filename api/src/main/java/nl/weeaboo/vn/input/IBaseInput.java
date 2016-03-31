@@ -11,8 +11,8 @@ public interface IBaseInput<K> {
     void clearButtonStates();
 
     /**
-     * @return Same as {@link #isPressed(K)}, then marks the press as consumed so further calls return
-     *         {@code false}.
+     * @return Same as {@link #isPressed(Object, boolean)}, then marks the press as consumed so further calls
+     *         return {@code false}.
      */
     boolean consumePress(K button);
 
