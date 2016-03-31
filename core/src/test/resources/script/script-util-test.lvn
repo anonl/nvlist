@@ -12,7 +12,7 @@ function y()
 end
 
 function z()
-	yield(10)
+	Thread.yield(10)
 end
 
 @@
