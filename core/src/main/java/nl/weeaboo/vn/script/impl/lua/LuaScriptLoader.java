@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,10 +14,12 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.io.StreamUtil;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.lib.BaseLib;
+import nl.weeaboo.lua2.lib.LuaResource;
+import nl.weeaboo.lua2.lib.LuaResourceFinder;
 import nl.weeaboo.lua2.lib.PackageLib;
-import nl.weeaboo.lua2.lib.ResourceFinder;
-import nl.weeaboo.lua2.lib.ResourceFinder.Resource;
 import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -39,7 +40,6 @@ public class LuaScriptLoader implements IScriptLoader {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
-    private static final int INPUT_BUFFER_SIZE = 4096;
     private static final LuaString PATH = LuaString.valueOf("path");
 
     private final LuaScriptResourceLoader resourceLoader;
@@ -72,11 +72,14 @@ public class LuaScriptLoader implements IScriptLoader {
     }
 
     void initEnv() {
-        PackageLib.getCurrent().setLuaPath("?.lvn;?.lua");
+        LuaRunState lrs = LuaRunState.getCurrent();
 
-        BaseLib.FINDER = new ResourceFinder() {
+        PackageLib packageLib = lrs.getPackageLib();
+        packageLib.setLuaPath("?.lvn;?.lua");
+
+        lrs.setResourceFinder(new LuaResourceFinder() {
             @Override
-            public Resource findResource(String filename) {
+            public LuaResource findResource(String filename) {
                 try {
                     return luaOpenScript(filename);
                 } catch (LvnParseException e) {
@@ -87,12 +90,13 @@ public class LuaScriptLoader implements IScriptLoader {
                     throw new LuaError(e);
                 }
             }
-        };
+        });
     }
 
     @Override
     public String findScriptFile(String name) {
-        PackageLib packageLib = PackageLib.getCurrent();
+        LuaRunState lrs = LuaRunState.getCurrent();
+        PackageLib packageLib = lrs.getPackageLib();
         LuaTable packageTable = packageLib.PACKAGE;
         String path = packageTable.get(PATH).tojstring();
 
@@ -152,28 +156,29 @@ public class LuaScriptLoader implements IScriptLoader {
         return file;
     }
 
-    Resource luaOpenScript(String filename) throws LvnParseException, IOException {
+    LuaResource luaOpenScript(String filename) throws LvnParseException, IOException {
         filename = findScriptFile(filename);
 
+        final byte[] fileData;
         InputStream in = openScript(filename);
-
-        if (!LuaScriptUtil.isLvnFile(filename)) {
-            //Read as a normal file
-            if (INPUT_BUFFER_SIZE > 0) {
-                in = new BufferedInputStream(in, INPUT_BUFFER_SIZE);
+        try {
+            if (!LuaScriptUtil.isLvnFile(filename)) {
+                fileData = StreamUtil.readBytes(in);
+            } else {
+                ICompiledLvnFile file = compileScript(filename, in);
+                String contents = file.getCompiledContents();
+                fileData = StringUtil.toUTF8(contents);
             }
-        } else {
-            ICompiledLvnFile file;
-            try {
-                file = compileScript(filename, in);
-            } finally {
-                in.close();
-            }
-            String contents = file.getCompiledContents();
-            in = new ByteArrayInputStream(StringUtil.toUTF8(contents));
+        } finally {
+            in.close();
         }
 
-        return new Resource(filename, in);
+        return new LuaResource(filename) {
+            @Override
+            public InputStream open() throws IOException {
+                return new ByteArrayInputStream(fileData);
+            }
+        };
     }
 
     @Override

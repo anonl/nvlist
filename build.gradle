@@ -28,9 +28,9 @@ allprojects {
         junitVersion = '4.12'
         slf4jVersion = '1.7.12'
         guavaVersion = '19.0'
-        styledTextVersion = '1.4.0'
-        luajpp2Version = '2.3.1'
-        tcommonVersion = '1.0.0'
+        styledTextVersion = '1.4.1'
+        luajpp2Version = '2.3.3'
+        tcommonVersion = '1.0.1'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, "res")
