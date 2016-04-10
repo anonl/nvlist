@@ -9,18 +9,20 @@ import nl.weeaboo.vn.image.IScreenshot;
 
 public interface ISaveModule extends IModule {
 
-    public void loadPersistent();
-    public void savePersistent();
+    void loadPersistent();
 
-    public void delete(int slot) throws IOException;
-    public void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException;
+    void savePersistent();
 
-    public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl)
+    void delete(int slot) throws IOException;
+
+    void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException;
+
+    void save(INovel novel, int slot, ISaveParams params, IProgressListener pl)
             throws SaveFormatException, IOException;
 
-    public int getNextFreeSlot();
+    int getNextFreeSlot();
 
-    public boolean getSaveExists(int slot);
+    boolean getSaveExists(int slot);
 
     /**
      * Reads the header of a save file.
@@ -29,24 +31,24 @@ public interface ISaveModule extends IModule {
      * @see #getQuickSaveSlot(int)
      * @see #getAutoSaveSlot(int)
      */
-    public ISaveFileHeader readSaveHeader(int slot) throws SaveFormatException, IOException;
+    ISaveFileHeader readSaveHeader(int slot) throws SaveFormatException, IOException;
 
-    public IScreenshot readSaveThumbnail(int slot) throws SaveFormatException, IOException;
+    IScreenshot readSaveThumbnail(int slot) throws SaveFormatException, IOException;
 
     /**
      * @param slot The quicksave slot index in the range {@code (1, 99)}.
      * @return The general purpose save slot index.
      */
-    public int getQuickSaveSlot(int slot);
+    int getQuickSaveSlot(int slot);
 
     /**
      * @param slot The autosave slot index in the range {@code (1, 99)}.
      * @return The general purpose save slot index.
      */
-    public int getAutoSaveSlot(int slot);
+    int getAutoSaveSlot(int slot);
 
-    public IStorage getGlobals();
+    IStorage getGlobals();
 
-    public IStorage getSharedGlobals();
+    IStorage getSharedGlobals();
 
 }

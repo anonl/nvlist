@@ -36,7 +36,7 @@ import nl.weeaboo.vn.script.impl.lvn.LvnParseException;
 import nl.weeaboo.vn.script.impl.lvn.LvnParserFactory;
 
 @CustomSerializable
-public class LuaScriptLoader implements IScriptLoader {
+public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
@@ -77,20 +77,20 @@ public class LuaScriptLoader implements IScriptLoader {
         PackageLib packageLib = lrs.getPackageLib();
         packageLib.setLuaPath("?.lvn;?.lua");
 
-        lrs.setResourceFinder(new LuaResourceFinder() {
-            @Override
-            public LuaResource findResource(String filename) {
-                try {
-                    return luaOpenScript(filename);
-                } catch (LvnParseException e) {
-                    throw new LuaError(e);
-                } catch (FileNotFoundException e) {
-                    return null;
-                } catch (IOException e) {
-                    throw new LuaError(e);
-                }
-            }
-        });
+        lrs.setResourceFinder(this);
+    }
+
+    @Override
+    public LuaResource findResource(String filename) {
+        try {
+            return luaOpenScript(filename);
+        } catch (LvnParseException e) {
+            throw new LuaError(e);
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new LuaError(e);
+        }
     }
 
     @Override
