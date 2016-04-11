@@ -1,11 +1,15 @@
 package nl.weeaboo.vn.input;
 
+import java.io.Serializable;
+
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 
 /** Virtual key code. Used by the key config for mapping logical actions to one or more inputs. */
-public final class VKey {
+public final class VKey implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static final VKey UP = new VKey("up");
     public static final VKey DOWN = new VKey("down");

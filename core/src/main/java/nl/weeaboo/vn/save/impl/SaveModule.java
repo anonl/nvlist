@@ -22,7 +22,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
-import nl.weeaboo.lua2.io.ObjectSerializer.PackageLimit;
+import nl.weeaboo.lua2.io.ObjectSerializer.ErrorLevel;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
@@ -268,7 +268,8 @@ public class SaveModule implements ISaveModule {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ObjectSerializer os = luaSerializer.openSerializer(ProgressOutputStream.wrap(bout, pl));
         try {
-            os.setPackageLimit(PackageLimit.NONE);
+            os.setCollectStats(true);
+            os.setPackageErrorLevel(ErrorLevel.NONE);
             novel.writeAttributes(os);
             os.flush();
 
@@ -288,6 +289,9 @@ public class SaveModule implements ISaveModule {
      * @param warnings A collection of warnings generated while saving.
      */
     protected void handleSaveWarnings(INovel novel, List<String> warnings) {
+        for (String warning : warnings) {
+            LOG.warn("Save warning: {}", warning);
+        }
     }
 
     protected String getSaveFilename(int slot) {
