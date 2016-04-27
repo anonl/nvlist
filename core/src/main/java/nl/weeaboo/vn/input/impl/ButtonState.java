@@ -1,6 +1,6 @@
-package nl.weeaboo.vn.core.impl;
+package nl.weeaboo.vn.input.impl;
 
-public final class ButtonState {
+final class ButtonState {
 
     private boolean consumed;
     private boolean pressed;

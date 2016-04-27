@@ -60,7 +60,7 @@ function text(str, triggers, meta)
 
 	local textBox = getMainTextBox()
 	
-	--TODO: Update lineRead based on meta
+	--TODO: Update lineRead based on meta and seenlog
 
 	--Handle paragraph start differently based on text mode
 	if isTextModeADV() then
@@ -122,7 +122,6 @@ function waitForTextVisible(textDrawable, triggers)
             local startGlyph = textDrawable:getGlyphOffset(textDrawble:getStartLine())
 			local endGlyph = startGlyph + math.floor(textDrawable:getVisibleText())
 			for i=startGlyph,endGlyph do
---TODO: Add textdrawable's glyph offset (so we support startLine > 0 )
 				if triggers[i] ~= nil then
 					triggers[i]()
 				end

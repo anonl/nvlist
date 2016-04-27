@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
-import nl.weeaboo.vn.core.impl.ButtonState;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
