@@ -3,6 +3,7 @@ package nl.weeaboo.vn.script.impl.lib;
 import org.junit.Assert;
 import org.junit.Test;
 
+import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.styledtext.StyleParseException;
@@ -71,9 +72,26 @@ public class TextLibTest extends AbstractLibTest {
         assertTrigger(oneTriggers, 4, "def");
     }
 
+    @Test
+    public void registerBasicTagHandler() {
+        loadScript("text/basicTagHandlers");
+
+        LuaValue handlers = LuaTestUtil.getGlobal("handlers");
+
+        // Check that all tags were registered
+        for (String tag : BasicTagHandler.getSupportedTags()) {
+            LuaValue func = handlers.get(tag);
+            Assert.assertTrue(func instanceof BasicTagHandler);
+        }
+    }
+
     private void assertTrigger(LuaTable triggers, int charIndex, String functionName) {
         LuaValue val = triggers.get(charIndex);
         Assert.assertTrue(val.isclosure());
+        LuaClosure func = val.checkclosure();
+        func.call();
+
+        LuaTestUtil.assertGlobal(functionName + "_called", true);
     }
 
 }

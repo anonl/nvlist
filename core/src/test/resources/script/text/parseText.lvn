@@ -1,5 +1,9 @@
 @@
 
+function def()
+    def_called = true
+end
+
 oneText, oneTriggers = Text.parseText("abc [def()] ghi")
 
 @@
