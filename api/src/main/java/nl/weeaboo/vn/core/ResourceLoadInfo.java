@@ -18,6 +18,7 @@ public final class ResourceLoadInfo {
     public ResourceLoadInfo(String filename) {
         this(filename, Collections.<String> emptyList());
     }
+
     public ResourceLoadInfo(String filename, List<String> callStackTrace) {
         this.filename = Checks.checkNotNull(filename);
         this.callStackTrace = ImmutableList.copyOf(Checks.checkNotNull(callStackTrace));

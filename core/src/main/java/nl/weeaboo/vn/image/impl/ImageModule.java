@@ -12,6 +12,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.FileResourceLoader;
@@ -88,31 +89,31 @@ public class ImageModule implements IImageModule {
         String filename = loadInfo.getFilename();
         resourceLoader.checkRedundantFileExt(filename);
 
-        String normalized = resourceLoader.normalizeFilename(filename);
-        if (normalized == null) {
+        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        if (resourceId == null) {
             if (!suppressErrors) {
                 LOG.debug("Unable to find image file: " + filename);
             }
             return null;
         }
 
-        return getTextureNormalized(normalized, loadInfo);
+        return getTextureNormalized(resourceId, loadInfo);
     }
 
     /**
      * Is called from {@link #getTexture(ResourceLoadInfo, boolean)}
      */
-    protected ITexture getTextureNormalized(String filename, ResourceLoadInfo loadInfo) {
-        IResource<TextureRegion> tr = getTexRectNormalized(filename, loadInfo);
+    protected ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
+        IResource<TextureRegion> tr = getTexRectNormalized(resourceId, loadInfo);
 
         double scale = getImageScale();
         return texManager.newTexture(tr, scale, scale);
     }
 
-    private IResource<TextureRegion> getTexRectNormalized(String filename, ResourceLoadInfo loadInfo) {
-        resourceLoader.logLoad(loadInfo);
+    private IResource<TextureRegion> getTexRectNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
+        resourceLoader.logLoad(resourceId, loadInfo);
 
-        return texManager.getTexture(resourceLoader, filename);
+        return texManager.getTexture(resourceLoader, resourceId.getCanonicalFilename());
     }
 
     @Override

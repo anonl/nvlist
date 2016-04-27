@@ -12,13 +12,14 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.vn.core.ResourceId;
 
 public class FileResourceLoaderTest {
 
     private static final String BASE_FOLDER = "base/";
 
     private FileResourceLoader resourceLoader;
-    private String lastPreload;
+    private ResourceId lastPreload;
 
     @Before
     public void before() throws IOException {
@@ -32,10 +33,10 @@ public class FileResourceLoaderTest {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void preloadNormalized(String normalizedFilename) {
-                super.preloadNormalized(normalizedFilename);
+            protected void preloadNormalized(ResourceId resourceId) {
+                super.preloadNormalized(resourceId);
 
-                lastPreload = normalizedFilename;
+                lastPreload = resourceId;
             }
         };
     }
@@ -107,7 +108,8 @@ public class FileResourceLoaderTest {
     private void assertPreload(String expectedNormalized, String inputFilename) {
         lastPreload = null;
         resourceLoader.preload(inputFilename);
-        Assert.assertEquals(expectedNormalized, lastPreload);
+        String actual = (lastPreload != null ? lastPreload.getCanonicalFilename() : null);
+        Assert.assertEquals(expectedNormalized, actual);
     }
 
     private void assertFiles(Collection<String> expected) {
@@ -116,7 +118,9 @@ public class FileResourceLoaderTest {
     }
 
     private void assertNormalizedFilename(String expectedNormalized, String inputFilename) {
-        Assert.assertEquals(expectedNormalized, resourceLoader.normalizeFilename(inputFilename));
+        ResourceId resourceId = resourceLoader.resolveResource(inputFilename);
+        String actual = (resourceId != null ? resourceId.getCanonicalFilename() : null);
+        Assert.assertEquals(expectedNormalized, actual);
     }
 
     private void assertValidFilename(boolean expectedValid, String path) {

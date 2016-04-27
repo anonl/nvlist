@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.core.IResourceLoadLog;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public abstract class ResourceLoader implements Serializable {
@@ -40,19 +41,19 @@ public abstract class ResourceLoader implements Serializable {
         return Filenames.replaceExt(filename.substring(0, index), ext) + filename.substring(index);
     }
 
-    public String normalizeFilename(String filename) {
+    public ResourceId resolveResource(String filename) {
         if (filename == null) {
             return null;
         }
 
         if (isValidFilename(filename)) {
-            return filename; // The given extension works
+            return new ResourceId(filename); // The given extension works
         }
 
         for (String ext : autoFileExts) {
             String fn = replaceExt(filename, ext);
             if (isValidFilename(fn)) {
-                return fn; // This extension works
+                return new ResourceId(fn); // This extension works
             }
         }
         return null;
@@ -68,10 +69,11 @@ public abstract class ResourceLoader implements Serializable {
         }
 
         // If the file has an extension, isn't valid, but would be valid with a different extension...
-        if (!Filenames.getExtension(filename).isEmpty() && !isValidFilename(filename)
-                && isValidFilename(normalizeFilename(filename))) {
-
-            LOG.warn("Incorrect file extension: {}", filename);
+        if (!Filenames.getExtension(filename).isEmpty() && !isValidFilename(filename)) {
+            ResourceId resourceId = resolveResource(filename);
+            if (resourceId != null && isValidFilename(resourceId.getCanonicalFilename())) {
+                LOG.warn("Incorrect file extension: {}", filename);
+            }
         }
 
         //Check if a file extension in the default list has been specified.
@@ -94,27 +96,27 @@ public abstract class ResourceLoader implements Serializable {
             checkRedundantFileExt(filename);
         }
 
-        String normalized = normalizeFilename(filename);
-        if (normalized != null) {
-            preloadNormalized(normalized);
+        ResourceId resourceId = resolveResource(filename);
+        if (resourceId != null) {
+            preloadNormalized(resourceId);
         }
     }
 
     /**
-     * @param normalizedFilename The normalized filename of the resource to preload.
+     * @param resourceId Canonical identifier of the resource to preload.
      */
-    protected void preloadNormalized(String normalizedFilename) {
+    protected void preloadNormalized(ResourceId resourceId) {
         // Default implementation does nothing
     }
 
-    public void logLoad(ResourceLoadInfo info) {
-        resourceLoadLog.logLoad(info);
+    public void logLoad(ResourceId resourceId, ResourceLoadInfo info) {
+        resourceLoadLog.logLoad(resourceId, info);
     }
 
     /**
-     * @param normalizedFilename A normalized filename
+     * @param filename A normalized filename
      */
-    protected abstract boolean isValidFilename(String normalizedFilename);
+    protected abstract boolean isValidFilename(String filename);
 
     public Collection<String> getMediaFiles(String folder) {
         try {
