@@ -238,6 +238,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void setVisibleText(double vc) {
+        // Limit value to its maximum
+        vc = Math.min(vc, getMaxVisibleText());
+
         if (visibleGlyphs != vc) {
             visibleGlyphs = vc;
 

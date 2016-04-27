@@ -3,7 +3,6 @@ package nl.weeaboo.vn.script.impl.lib;
 import java.io.IOException;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 
 import nl.weeaboo.vn.core.impl.Context;
@@ -49,9 +48,9 @@ public abstract class AbstractLibTest {
         try {
             env.getScriptLoader().loadScript(mainThread, path);
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            throw new AssertionError(e);
         } catch (ScriptException e) {
-            Assert.fail(e.toString());
+            throw new AssertionError(e);
         }
     }
 

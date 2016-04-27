@@ -20,6 +20,7 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 import nl.weeaboo.vn.sound.impl.SoundModule;
+import nl.weeaboo.vn.text.impl.TestFontStore;
 import nl.weeaboo.vn.text.impl.TextModule;
 import nl.weeaboo.vn.video.impl.VideoModule;
 
@@ -50,6 +51,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.PREFS.set(prefs);
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
+        StaticEnvironment.FONT_STORE.set(new TestFontStore());
 
         TestEnvironment env = new TestEnvironment();
         env.renderEnv = CoreTestUtil.BASIC_ENV;

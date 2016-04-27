@@ -117,17 +117,16 @@ end
 function waitForTextVisible(textDrawable, triggers)
 	textDrawable = textDrawable or getMainTextBox()
 	
-	local i0 = 0
 	while textDrawable ~= nil and not textDrawable:isDestroyed() do
 		if triggers ~= nil then
-			local i1 = math.min(textDrawable:getMaxVisibleText(), math.floor(textDrawable:getVisibleText()))
-			for i=i0,i1 do
+            local startGlyph = textDrawable:getGlyphOffset(textDrawble:getStartLine())
+			local endGlyph = startGlyph + math.floor(textDrawable:getVisibleText())
+			for i=startGlyph,endGlyph do
 --TODO: Add textdrawable's glyph offset (so we support startLine > 0 )
 				if triggers[i] ~= nil then
 					triggers[i]()
 				end
 			end
-			i0 = i1 + 1
 		end
 		
 		if textDrawable:isFinalLineFullyVisible() then
