@@ -119,7 +119,7 @@ function waitForTextVisible(textDrawable, triggers)
 	
 	while textDrawable ~= nil and not textDrawable:isDestroyed() do
 		if triggers ~= nil then
-            local startGlyph = textDrawable:getGlyphOffset(textDrawble:getStartLine())
+            local startGlyph = textDrawable:getGlyphOffset(textDrawable:getStartLine())
 			local endGlyph = startGlyph + math.floor(textDrawable:getVisibleText())
 			for i=startGlyph,endGlyph do
 				if triggers[i] ~= nil then

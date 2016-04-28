@@ -10,17 +10,23 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 final class ResourceLoadLog implements IResourceLoadLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
-
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoadLog.class);
+
+    private final SeenSet seen = new SeenSet();
+
+    public ResourceLoadLog() {
+    }
 
     @Override
     public void logLoad(ResourceId resourceId, ResourceLoadInfo info) {
         LOG.trace("Load resource: {}", resourceId);
+
+        seen.add(resourceId);
     }
 
     @Override
     public boolean hasSeen(ResourceId resourceId) {
-        return false;
+        return seen.probablyContains(resourceId);
     }
 
 }
