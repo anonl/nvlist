@@ -8,10 +8,21 @@ public final class ResourceId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final MediaType type;
     private final String canonicalFilename;
 
-    public ResourceId(String canonicalFilename) {
+    public ResourceId(MediaType type, String canonicalFilename) {
+        this.type = Checks.checkNotNull(type);
         this.canonicalFilename = Checks.checkNotNull(canonicalFilename);
+    }
+
+    @Override
+    public String toString() {
+        return canonicalFilename;
+    }
+
+    public MediaType getType() {
+        return type;
     }
 
     public String getCanonicalFilename() {

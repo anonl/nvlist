@@ -7,6 +7,7 @@ import java.util.List;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 
 public class FileResourceLoader extends ResourceLoader {
 
@@ -18,8 +19,8 @@ public class FileResourceLoader extends ResourceLoader {
 
     private transient FileSystemView cachedFileSystemView;
 
-    public FileResourceLoader(IEnvironment env, String resourceFolder) {
-        super(env.getResourceLoadLog());
+    public FileResourceLoader(IEnvironment env, MediaType mediaType, String resourceFolder) {
+        super(mediaType, env.getResourceLoadLog());
 
         this.env = env;
         this.resourceFolder = Checks.checkNotNull(resourceFolder);

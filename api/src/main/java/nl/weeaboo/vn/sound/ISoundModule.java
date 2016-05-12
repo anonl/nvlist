@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.Collection;
 
 import nl.weeaboo.vn.core.IModule;
+import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface ISoundModule extends IModule {
+public interface ISoundModule extends IModule, IResourceResolver {
 
     /**
      * Creates a new sound entity that can be used for playing the audio file specified by {@code filename}.

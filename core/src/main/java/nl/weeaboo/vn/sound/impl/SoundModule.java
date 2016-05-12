@@ -50,6 +50,11 @@ public class SoundModule implements ISoundModule {
     }
 
     @Override
+    public ResourceId resolveResource(String filename) {
+        return resourceLoader.resolveResource(filename);
+    }
+
+    @Override
     public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
         String filename = loadInfo.getFilename();
         resourceLoader.checkRedundantFileExt(filename);

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
@@ -28,6 +29,11 @@ public class ImageModuleStub implements IImageModule {
 
     @Override
     public void update() {
+    }
+
+    @Override
+    public ResourceId resolveResource(String filename) {
+        return null;
     }
 
     @Override

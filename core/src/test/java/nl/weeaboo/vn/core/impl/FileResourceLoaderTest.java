@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 
 public class FileResourceLoaderTest {
@@ -28,7 +29,7 @@ public class FileResourceLoaderTest {
         IWritableFileSystem outputFileSystem = env.getOutputFileSystem();
         writeTestFiles(outputFileSystem);
 
-        resourceLoader = new FileResourceLoader(env, BASE_FOLDER) {
+        resourceLoader = new FileResourceLoader(env, MediaType.OTHER, BASE_FOLDER) {
 
             private static final long serialVersionUID = 1L;
 

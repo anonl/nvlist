@@ -12,9 +12,4 @@ public class ResourceLoadLogStub implements IResourceLoadLog {
     public void logLoad(ResourceId resourceId, ResourceLoadInfo info) {
     }
 
-    @Override
-    public boolean hasSeen(ResourceId resourceId) {
-        return false;
-    }
-
 }

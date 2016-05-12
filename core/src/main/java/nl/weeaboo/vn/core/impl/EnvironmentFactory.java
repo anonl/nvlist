@@ -50,7 +50,8 @@ public class EnvironmentFactory {
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
-        env.resourceLoadLog = new ResourceLoadLog();
+        env.seenLog = new SeenLog(env);
+        env.resourceLoadLog = new ResourceLoadLog(env.getSeenLog());
 
         // Init Lua script env
         LuaRunState runState = new LuaRunState();

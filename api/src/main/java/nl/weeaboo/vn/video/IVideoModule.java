@@ -5,9 +5,10 @@ import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IModule;
+import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface IVideoModule extends IModule {
+public interface IVideoModule extends IModule, IResourceResolver {
 
     /**
      * Starts a full-screen video.

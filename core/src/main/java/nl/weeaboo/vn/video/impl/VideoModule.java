@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.video.IVideo;
@@ -47,6 +48,11 @@ public class VideoModule implements IVideoModule {
 
     @Override
     public void update() {
+    }
+
+    @Override
+    public ResourceId resolveResource(String filename) {
+        return resourceLoader.resolveResource(filename);
     }
 
     @Override

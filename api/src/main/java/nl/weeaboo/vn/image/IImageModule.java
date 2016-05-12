@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IModule;
+import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
@@ -11,7 +12,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
 
-public interface IImageModule extends IModule {
+public interface IImageModule extends IModule, IResourceResolver {
 
     IImageDrawable createImage(ILayer layer);
 

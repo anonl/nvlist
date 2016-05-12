@@ -56,6 +56,7 @@ public class TestEnvironment extends DefaultEnvironment {
         TestEnvironment env = new TestEnvironment();
         env.renderEnv = CoreTestUtil.BASIC_ENV;
         env.resourceLoadLog = new ResourceLoadLogStub();
+        env.seenLog = new SeenLog(env);
 
         LuaRunState runState = LuaTestUtil.newRunState();
         LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);

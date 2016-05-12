@@ -31,6 +31,7 @@ public interface IEnvironment extends IDestructible {
     IScriptLoader getScriptLoader();
     IRenderEnv getRenderEnv();
     IResourceLoadLog getResourceLoadLog();
+    ISeenLog getSeenLog();
 
     IImageModule getImageModule();
     ISoundModule getSoundModule();

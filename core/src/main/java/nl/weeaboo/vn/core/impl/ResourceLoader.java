@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.core.impl;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,22 +12,26 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.core.IResourceLoadLog;
+import nl.weeaboo.vn.core.IResourceResolver;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public abstract class ResourceLoader implements Serializable {
+public abstract class ResourceLoader implements IResourceResolver {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
+    private final MediaType mediaType;
     private final IResourceLoadLog resourceLoadLog;
     private final LruSet<String> checkedFilenames;
 
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt = true;
 
-    public ResourceLoader(IResourceLoadLog resourceLoadLog) {
+    public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
+        this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
         this.checkedFilenames = new LruSet<String>(128);
     }
@@ -41,19 +44,20 @@ public abstract class ResourceLoader implements Serializable {
         return Filenames.replaceExt(filename.substring(0, index), ext) + filename.substring(index);
     }
 
+    @Override
     public ResourceId resolveResource(String filename) {
         if (filename == null) {
             return null;
         }
 
         if (isValidFilename(filename)) {
-            return new ResourceId(filename); // The given extension works
+            return new ResourceId(mediaType, filename); // The given extension works
         }
 
         for (String ext : autoFileExts) {
             String fn = replaceExt(filename, ext);
             if (isValidFilename(fn)) {
-                return new ResourceId(fn); // This extension works
+                return new ResourceId(mediaType, fn); // This extension works
             }
         }
         return null;

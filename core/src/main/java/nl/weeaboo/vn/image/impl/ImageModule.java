@@ -65,6 +65,11 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
+    public ResourceId resolveResource(String filename) {
+        return resourceLoader.resolveResource(filename);
+    }
+
+    @Override
     public IImageDrawable createImage(ILayer layer) {
         return entityHelper.createImage(layer);
     }
