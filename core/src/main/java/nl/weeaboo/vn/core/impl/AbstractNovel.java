@@ -42,6 +42,7 @@ public abstract class AbstractNovel implements INovel {
     public void start(String mainFuncName) throws InitException {
         StaticEnvironment.NOVEL.set(this);
 
+        // Building the environment also (re)loads persistent data
         env = envFactory.build();
 
         String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
@@ -55,6 +56,7 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void stop() {
+        getSaveModule().savePersistent();
     }
 
     @Override

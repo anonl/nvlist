@@ -1,8 +1,11 @@
 package nl.weeaboo.vn.core.impl;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.BitSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -12,26 +15,48 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.SecureFileWriter;
+import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.lua2.io.LuaSerializable;
+import nl.weeaboo.lua2.io.LuaSerializer;
+import nl.weeaboo.lua2.io.ObjectDeserializer;
+import nl.weeaboo.lua2.io.ObjectSerializer;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISeenLog;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 
+@CustomSerializable
 final class SeenLog implements ISeenLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);
 
     private final IEnvironment env;
-    private final Map<MediaType, MediaSeen> mediaSeen = Maps.newEnumMap(MediaType.class);
-    private final Map<String, ScriptSeen> scriptSeen = Maps.newHashMap();
+
+    // Actual seen state is stored in a separate (shared) file
+    private transient Map<MediaType, MediaSeen> mediaSeen;
+    private transient Map<String, ScriptSeen> scriptSeen;
 
     public SeenLog(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
 
+        initTransients();
+    }
+
+    private void initTransients() {
+        mediaSeen = Maps.newEnumMap(MediaType.class);
         for (MediaType type : MediaType.values()) {
             mediaSeen.put(type, new MediaSeen());
         }
+
+        scriptSeen = Maps.newHashMap();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
     }
 
     private ResourceId resolveResource(MediaType type, String filename) {
@@ -83,9 +108,23 @@ final class SeenLog implements ISeenLog {
     }
 
     @Override
+    public boolean hasSeenLine(String filename, int lineNumber) {
+        ResourceId resourceId = resolveResource(MediaType.SCRIPT, filename);
+        return resourceId != null && hasSeenLine(resourceId, lineNumber);
+    }
+
+    @Override
     public boolean hasSeenLine(ResourceId resourceId, int lineNumber) {
         ScriptSeen seen = scriptSeen.get(resourceId.getCanonicalFilename());
         return seen != null && seen.hasSeenLine(lineNumber);
+    }
+
+    @Override
+    public void markLineSeen(String filename, int lineNumber) {
+        ResourceId resourceId = resolveResource(MediaType.SCRIPT, filename);
+        if (resourceId != null) {
+            markLineSeen(resourceId, lineNumber);
+        }
     }
 
     @Override
@@ -98,9 +137,64 @@ final class SeenLog implements ISeenLog {
         }
     }
 
+    @Override
+    public void save(SecureFileWriter sfw, String filename) throws IOException {
+        LOG.info("Save seen log: {}", filename);
+
+        LuaSerializer ls = new LuaSerializer();
+        ObjectSerializer out = ls.openSerializer(sfw.newOutputStream(filename, false));
+        try {
+            out.writeInt(mediaSeen.size());
+            for (Entry<MediaType, MediaSeen> entry : mediaSeen.entrySet()) {
+                out.writeObject(entry.getKey());
+                out.writeObject(entry.getValue());
+            }
+
+            out.writeInt(scriptSeen.size());
+            for (Entry<String, ScriptSeen> entry : scriptSeen.entrySet()) {
+                out.writeUTF(entry.getKey());
+                out.writeObject(entry.getValue());
+            }
+        } finally {
+            out.close();
+        }
+    }
+
+    @Override
+    public void load(SecureFileWriter sfw, String filename) throws IOException {
+        LOG.info("Load seen log: {}", filename);
+
+        LuaSerializer ls = new LuaSerializer();
+        ObjectDeserializer in = ls.openDeserializer(sfw.newInputStream(filename));
+        try {
+            mediaSeen.clear();
+            scriptSeen.clear();
+
+            int mediaSeenSize = in.readInt();
+            for (int n = 0; n < mediaSeenSize; n++) {
+                MediaType key = (MediaType)in.readObject();
+                MediaSeen value = (MediaSeen)in.readObject();
+                mediaSeen.put(key, value);
+            }
+
+            int scriptSeenSize = in.readInt();
+            for (int n = 0; n < scriptSeenSize; n++) {
+                String key = in.readUTF();
+                ScriptSeen value = (ScriptSeen)in.readObject();
+                scriptSeen.put(key, value);
+            }
+        } catch (ClassNotFoundException e) {
+            LOG.error("Invalid seen log: {}", filename, e);
+            throw new IOException(e);
+        } finally {
+            in.close();
+        }
+    }
+
+    @LuaSerializable
     private static class MediaSeen implements Serializable {
 
-        private static final long serialVersionUID = CoreImpl.serialVersionUID;
+        private static final long serialVersionUID = 1L;
 
         private final Set<String> seenResources = Sets.newHashSet();
 
@@ -114,9 +208,10 @@ final class SeenLog implements ISeenLog {
 
     }
 
+    @LuaSerializable
     private static class ScriptSeen implements Serializable {
 
-        private static final long serialVersionUID = CoreImpl.serialVersionUID;
+        private static final long serialVersionUID = 1L;
 
         private final String filename;
         private final int numTextLines;
@@ -144,6 +239,7 @@ final class SeenLog implements ISeenLog {
                 LOG.warn("Line number out of range: {}:{}", filename, lineNumber);
             } else {
                 seenLines.set(lineNumber - 1);
+                LOG.trace("Mark line seen {}:{}", filename, lineNumber);
             }
         }
 

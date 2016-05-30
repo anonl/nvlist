@@ -4,6 +4,7 @@ import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.lib.BaseLib;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.BlendMode;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.SkipMode;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.input.KeyCode;
@@ -25,6 +26,7 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
         registerTypes(globals,
             BlendMode.class,
             KeyCode.class,
+            MediaType.class,
             SkipMode.class,
             VerticalAlign.class
         );

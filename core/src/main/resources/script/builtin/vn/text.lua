@@ -58,10 +58,13 @@ end
 function text(str, triggers, meta)
 	meta = meta or {}
 
+    lineState.read = false
+    if meta.filename ~= nil and meta.line >= 1 then
+        lineState.read = Seen.hasSeenLine(meta.filename, meta.line)
+    end
+
 	local textBox = getMainTextBox()
 	
-	--TODO: Update lineRead based on meta and seenlog
-
 	--Handle paragraph start differently based on text mode
 	if isTextModeADV() then
 		clearText()
@@ -102,9 +105,9 @@ function text(str, triggers, meta)
 	end
 	
 	--Register line as read
-	--if meta.filename ~= nil and meta.line >= 1 then
-	--	seenLog:setTextLineRead(meta.filename, meta.line)
-	--end
+	if meta.filename ~= nil and meta.line >= 1 then
+		Seen.markLineSeen(meta.filename, meta.line)
+	end
 	lineState.read = true	
 end
 

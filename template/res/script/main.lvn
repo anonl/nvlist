@@ -23,9 +23,17 @@ function titlescreen()
 	textbox:setVisibleText(0)
 	
 	waitClick()
-	for n=1,10 do
-	   text("ABC " .. n)
-	end
+@@
+ABC 1   
+ABC 2   
+ABC 3   
+ABC 4   
+ABC 5   
+ABC 6   
+ABC 7   
+ABC 8   
+ABC 9   
+@@
 end
 
 @@
