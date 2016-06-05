@@ -14,7 +14,11 @@ TextMode = {
 }
 
 local textMode = TextMode.ADV
-local speaker = {}
+
+local currentSpeaker = {
+    textStyle = nil,
+    resetEOL = false
+}
 
 local lineState = {
 	read = true,
@@ -83,7 +87,7 @@ function text(str, triggers, meta)
 		str, triggers = Text.parseText(str, triggers)
 	end
 	
-	lineState.style = speaker.textStyle
+	lineState.style = currentSpeaker.textStyle
 	
 	appendText(str)
 	
@@ -100,7 +104,7 @@ function text(str, triggers, meta)
 	
 	--Reset speaker
 	lineState.style = nil
-	if speaker.resetEOL then
+	if currentSpeaker.resetEOL then
 		say()
 	end
 	
