@@ -4,10 +4,10 @@ import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
-import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -15,9 +15,9 @@ public class SystemLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
-    private final DefaultEnvironment env;
+    private final IEnvironment env;
 
-    public SystemLib(DefaultEnvironment env) {
+    public SystemLib(IEnvironment env) {
         super("System");
 
         this.env = env;

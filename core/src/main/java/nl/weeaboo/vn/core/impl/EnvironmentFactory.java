@@ -7,6 +7,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.settings.Preference;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -80,12 +81,7 @@ public class EnvironmentFactory {
         scriptEnv.addInitializer(new BasicScriptInitializer());
 
         // Register script libs
-        scriptEnv.addInitializer(new CoreLib(env));
-        scriptEnv.addInitializer(new SeenLib(env));
-        scriptEnv.addInitializer(new ImageLib(env));
-        scriptEnv.addInitializer(new InputLib());
-        scriptEnv.addInitializer(new TextLib(env));
-        scriptEnv.addInitializer(new SystemLib(env));
+        registerLuaLibs(env, scriptEnv);
 
      // TODO LVN-017
 //      if (isVNDS()) {
@@ -102,6 +98,15 @@ public class EnvironmentFactory {
         } catch (RuntimeException e) {
             throw new InitException(e);
         }
+    }
+
+    public static void registerLuaLibs(IEnvironment env, LuaScriptEnv scriptEnv) {
+        scriptEnv.addInitializer(new CoreLib(env));
+        scriptEnv.addInitializer(new SeenLib(env));
+        scriptEnv.addInitializer(new ImageLib(env));
+        scriptEnv.addInitializer(new InputLib());
+        scriptEnv.addInitializer(new TextLib(env, scriptEnv));
+        scriptEnv.addInitializer(new SystemLib(env));
     }
 
     private static IPreferenceStore getPrefs() {

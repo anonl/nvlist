@@ -17,7 +17,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.core.impl.DefaultEnvironment;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
@@ -32,12 +32,14 @@ public class TextLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
-    private final DefaultEnvironment env;
+    private final IEnvironment env;
+    private final LuaScriptEnv scriptEnv;
 
-    public TextLib(DefaultEnvironment env) {
+    public TextLib(IEnvironment env, LuaScriptEnv scriptEnv) {
         super("Text");
 
         this.env = env;
+        this.scriptEnv = scriptEnv;
     }
 
     /**
@@ -214,7 +216,6 @@ public class TextLib extends LuaLib {
     }
 
     private RuntimeTextParser getRuntimeTextParser() {
-        LuaScriptEnv scriptEnv = env.getScriptEnv();
         return new RuntimeTextParser(scriptEnv.getGlobals());
     }
 

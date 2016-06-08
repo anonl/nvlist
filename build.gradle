@@ -24,12 +24,14 @@ allprojects {
     version = '4.0.0-alpha9'
     ext {
         appName = 'NVList'
-        gdxVersion = '1.9.2'
+        
+        gdxVersion = '1.9.3'
         junitVersion = '4.12'
-        slf4jVersion = '1.7.20'
+        slf4jVersion = '1.7.21'
         guavaVersion = '19.0'
+        
         styledTextVersion = '1.4.1'
-        luajpp2Version = '2.3.7'
+        luajpp2Version = '2.3.8'
         tcommonVersion = '1.0.2'
         
         vnRootDir = templateDir

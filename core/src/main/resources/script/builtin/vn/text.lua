@@ -3,9 +3,8 @@
 -- 
 module("vn.text", package.seeall)
 
--- ----------------------------------------------------------------------------
---  Variables
--- ----------------------------------------------------------------------------
+---Global declarations
+-------------------------------------------------------------------------------------------------------------- @section globals
 
 ---Text modes. These determine the way the textbox looks.
 TextMode = {
@@ -13,7 +12,8 @@ TextMode = {
 	NVL=2, --Novel style full screen text.
 }
 
-local textMode = TextMode.ADV
+---Text functions
+-------------------------------------------------------------------------------------------------------------- @section text
 
 local currentSpeaker = {
     textStyle = nil,
@@ -21,35 +21,9 @@ local currentSpeaker = {
 }
 
 local lineState = {
-	read = true,
-	style = nil
+    read = true,
+    style = nil
 }
-
--- ----------------------------------------------------------------------------
---  Local Functions
--- ----------------------------------------------------------------------------
-
-local function getText()
-	local textBox = getMainTextBox()
-	if textBox == nil then
-		return nil
-	end
-	return textBox:getText()
-end
-
--- ----------------------------------------------------------------------------
---  Functions
--- ----------------------------------------------------------------------------
-
-function getMainTextBox()
-	return getTextState():getTextDrawable()
-end
-
-function setMainTextBox(textDrawable)
-	getTextState():setTextDrawable(textDrawable)
-end
-
--- ----------------------------------------------------------------------------
 
 ---Sets the current text of the main textbox.
 -- @param str The new text (may be either a string or a StyledText object). Any
@@ -215,6 +189,58 @@ function appendTextLog(str, newPage)
     getTextState():appendTextLog(str, newPage)
 end
 
+---Stringifiers
+-------------------------------------------------------------------------------------------------------------- @section stringifiers
+
+-- id -> value/function
+local stringifiers = {}
+
+---Registers the specified function to be used whenever <code>id</code> needs to be stringified.
+--
+-- @string id The word to register a custom stringifier function for.
+-- @func func A function that returns a string or StyledText object.
+function registerStringifier(id, func)
+    stringifiers[id] = func
+end
+
+---Gets called during execution of a text line to replace words starting with a dollar sign. If a stringify
+-- handler function is registered for the word, that function is evaluated. Otherwise, if <code>word</code> is
+-- a valid variable in the local context, its value is converted to a string representation.
+-- 
+-- @param word The characters following the dollar sign
+-- @param level The relative level to search for local variables, depends on the depth of the call tree before
+--     stringify is called.
+function stringify(word, level)
+    level = level or 3
+
+    local value = stringifiers[word]    
+    if value == nil then
+        value = getDeepField(getLocalVars(level + 1), word) or getDeepField(getfenv(level), word)
+    end
+    
+    --Evaluate functions fully
+    while type(value) == "function" do
+        value = value()
+    end
+    
+    if value ~= nil then
+        --Convert value to StyledText
+        value = Text.createStyledText(value)
+    end
+        
+    --Don't append when nil or empty string
+    if value == nil or value:length() == 0 then
+        return
+    end
+    
+    return value
+end
+
+---Text mode
+-------------------------------------------------------------------------------------------------------------- @section textmode
+
+local textMode = TextMode.ADV
+
 ---Changes the text mode to full-screen textbox mode
 function setTextModeNVL()
 	setTextMode(TextMode.NVL)
@@ -245,3 +271,26 @@ end
 function isTextModeADV()
 	return getTextMode() == TextMode.ADV
 end
+
+---Text box
+-------------------------------------------------------------------------------------------------------------- @section textbox
+
+local function getText()
+    local textBox = getMainTextBox()
+    if textBox == nil then
+        return nil
+    end
+    return textBox:getText()
+end
+
+function getMainTextBox()
+    return getTextState():getTextDrawable()
+end
+
+function setMainTextBox(textDrawable)
+    getTextState():setTextDrawable(textDrawable)
+end
+
+-- -----------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------
