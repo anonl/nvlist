@@ -324,11 +324,7 @@ end
 -------------------------------------------------------------------------------------------------------------- @section textbox
 
 local function getText()
-    local textBox = getMainTextBox()
-    if textBox == nil then
-        return nil
-    end
-    return textBox:getText()
+    return getTextState():getText()
 end
 
 function getMainTextBox()

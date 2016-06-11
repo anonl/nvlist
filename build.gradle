@@ -30,7 +30,7 @@ allprojects {
         slf4jVersion = '1.7.21'
         guavaVersion = '19.0'
         
-        styledTextVersion = '1.4.1'
+        styledTextVersion = '1.4.2'
         luajpp2Version = '2.3.8'
         tcommonVersion = '1.0.2'
         

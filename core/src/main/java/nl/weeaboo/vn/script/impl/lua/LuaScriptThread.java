@@ -56,7 +56,6 @@ public class LuaScriptThread implements IScriptThread {
         try {
             luaLink.call(func, LuaConstants.NONE);
         } catch (LuaException e) {
-            e.getCause().printStackTrace();
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
         }
     }
