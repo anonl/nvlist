@@ -192,7 +192,7 @@ end
 ---Stringifiers
 -------------------------------------------------------------------------------------------------------------- @section stringifiers
 
--- id -> value/function
+--- id -> value/function
 local stringifiers = {}
 
 ---Registers the specified function to be used whenever <code>id</code> needs to be stringified.
@@ -234,6 +234,54 @@ function stringify(word, level)
     end
     
     return value
+end
+
+
+---Text tags
+-------------------------------------------------------------------------------------------------------------- @section textTags
+
+---Tag id -> function
+local tagHandlers = {}
+
+if not prefs.vnds then
+    Text.registerBasicTagHandlers(tagHandlers)
+end
+
+---Registers text tag handler functions (open/close) for a specific text tag.
+function registerTextTagHandler(tag, openFunc, closeFunc)
+    tagHandlers[tag] = openFunc
+    tagHandlers["/" .. tag] = closeFunc
+end
+
+---Gets called when an open tag is encountered within text.
+function textTagOpen(tag, values, level)
+    values = values or {}
+    level = level or 3
+
+    local func = tagHandlers[tag]
+    if func == nil then
+        return
+    end
+    
+    --Resolve argument strings to their proper types/values
+    local newValues = {}
+    for k,v in pairs(values) do
+        v = getDeepField(getLocalVars(level + 1), v)
+          or getDeepField(getfenv(level), v)
+          or Text.resolveConstant(v)
+        newValues[k] = v
+    end
+
+    return func(tag, newValues)
+end
+
+---Gets called whenever a close tag is encountered within text.
+function textTagClose(tag)
+    local func = tagHandlers["/" .. (tag or "")]
+    if func == nil then
+        return
+    end
+    return func(tag, values)
 end
 
 ---Text mode

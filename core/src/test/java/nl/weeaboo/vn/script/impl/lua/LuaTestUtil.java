@@ -40,6 +40,8 @@ public final class LuaTestUtil {
 
         if (val instanceof Boolean) {
             Assert.assertEquals(val, global.toboolean());
+        } else if (val instanceof String) {
+            Assert.assertEquals(val, global.tojstring());
         } else {
             Assert.assertEquals(val, global.optuserdata(null));
         }

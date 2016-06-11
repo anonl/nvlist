@@ -10,6 +10,7 @@ import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lua.ILuaScriptEnvInitializer;
+import nl.weeaboo.vn.script.impl.lua.LuaPrefsAdapter;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 
 public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
@@ -30,6 +31,9 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
             SkipMode.class,
             VerticalAlign.class
         );
+
+        LuaPrefsAdapter prefsAdapter = new LuaPrefsAdapter();
+        globals.rawset("prefs", prefsAdapter.createPrefsTable());
     }
 
     private void registerTypes(LuaTable globals, Class<?>... types) {
