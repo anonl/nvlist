@@ -10,6 +10,7 @@ import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.TestEnvironment;
+import nl.weeaboo.vn.input.impl.TestInputConfig;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -19,6 +20,7 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 public abstract class LuaIntegrationTest {
 
     protected TestEnvironment env;
+    protected ContextManager contextManager;
     protected Context mainContext;
     protected IScriptThread mainThread;
 
@@ -30,7 +32,7 @@ public abstract class LuaIntegrationTest {
         env.getScriptEnv().initEnv();
 
         // Create an initial context and activate it
-        ContextManager contextManager = env.getContextManager();
+        contextManager = env.getContextManager();
         mainContext = contextManager.createContext();
         contextManager.setContextActive(mainContext, true);
         ContextUtil.setCurrentContext(mainContext);
@@ -59,6 +61,11 @@ public abstract class LuaIntegrationTest {
         } catch (ScriptException e) {
             throw new AssertionError(e);
         }
+    }
+
+    protected void textContinue() {
+        env.getInputAdapter().buttonPressed(TestInputConfig.TEXT_CONTINUE);
+        env.update();
     }
 
 }

@@ -35,4 +35,21 @@ public class LuaTextTest extends LuaIntegrationTest {
         Assert.assertEquals(expected.immutableCopy(), textState.getText());
     }
 
+    @Test
+    public void testSpeakerRegistry() {
+        loadScript("integration/text/speakers");
+
+        IScreenTextState textState = mainContext.getScreen().getTextState();
+
+        MutableStyledText expected = new MutableStyledText("test");
+        expected.setStyle(TextStyle.ITALIC);
+        Assert.assertEquals(expected.immutableCopy(), textState.getText());
+
+        textContinue();
+        Assert.assertEquals(new StyledText("line2"), textState.getText());
+
+        textContinue();
+        Assert.assertEquals(new StyledText("line3"), textState.getText());
+    }
+
 }

@@ -3,6 +3,17 @@
 -- 
 module("vn.text", package.seeall)
 
+-- Local functions shared between sections
+--------------------------------------------------------------------------------------------------------------
+
+local function hideSpeakerName()
+    -- TODO #16: Implement textboxes
+end
+
+local function updateSpeakerName()
+    -- TODO #16: Implement textboxes
+end
+
 ---Global declarations
 -------------------------------------------------------------------------------------------------------------- @section globals
 
@@ -16,6 +27,8 @@ TextMode = {
 -------------------------------------------------------------------------------------------------------------- @section text
 
 local currentSpeaker = {
+    name = nil,
+    nameChanged = false,
     textStyle = nil,
     resetEOL = false
 }
@@ -61,6 +74,7 @@ function text(str, triggers, meta)
 		str, triggers = Text.parseText(str, triggers)
 	end
 	
+    updateSpeakerName()	
 	lineState.style = currentSpeaker.textStyle
 	
 	appendText(str)
@@ -123,8 +137,7 @@ end
 function clearText()
     getTextState():setText("")
     appendTextLog("", true)
-    -- TODO: Re-enable
-    -- hideSpeakerName()
+    hideSpeakerName()
 end
 
 ---Appends text to the main textbox.
@@ -284,6 +297,45 @@ function textTagClose(tag)
     return func(tag, values)
 end
 
+---Speakers
+-------------------------------------------------------------------------------------------------------------- @section speakers
+
+---Changes the name of currently speaking character.
+-- @string name The character's display name. May be either an unstyled string, or styled text.
+-- @tparam[opt=nil] TextStyle textStyle Default text style to use for text added
+--        to the main textbox while this character is speaking.
+function say(name, textStyle)
+    if currentSpeaker.name ~= name then
+        currentSpeaker.name = name
+        currentSpeaker.nameChanged = true
+    end
+    
+    currentSpeaker.textStyle = textStyle
+    currentSpeaker.resetEOL = false
+end
+
+---Like <code>say</code>, but resets the speaking character at the end of the current paragraph.
+-- @see say
+function sayLine(...)
+    local result = say(...)
+    currentSpeaker.resetEOL = true
+    return result
+end
+
+---Registers a stringifier function to replace occurrences of $<code>id</code> with a call to
+-- <code>sayLine</code>.
+-- <br/>
+-- Example use: <code>registerSpeaker("bal", "Balthasar")
+-- $bal This line is now said with my name, Balthasar.</code>
+-- @string id Unique identifier string for the speaker.
+-- @param ... All other parameters are passed to <code>sayLine</code>.
+function registerSpeaker(id, ...)
+    local args = getTableOrVarArg(...)
+    registerStringifier(id, function()
+        return sayLine(unpack(args))
+    end)
+end
+
 ---Text mode
 -------------------------------------------------------------------------------------------------------------- @section textmode
 
@@ -301,7 +353,7 @@ end
 
 ---Changes the current text mode
 function setTextMode(mode)
-	--TODO: Change textbox based on the new mode
+    -- TODO #16: Implement textboxes
 	textMode = mode
 end
 
@@ -323,7 +375,7 @@ end
 ---Text box
 -------------------------------------------------------------------------------------------------------------- @section textbox
 
-local function getText()
+function getText()
     return getTextState():getText()
 end
 

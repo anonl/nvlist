@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.CoreTestUtil;
@@ -27,8 +28,13 @@ import nl.weeaboo.vn.video.impl.VideoModule;
 public class TestEnvironment extends DefaultEnvironment {
 
     private static final long serialVersionUID = 1L;
-
     private static final Logger LOG = LoggerFactory.getLogger(TestEnvironment.class);
+
+    private final TestInputAdapter inputAdapter;
+
+    public TestEnvironment(TestInputAdapter inputAdapter) {
+        this.inputAdapter = Checks.checkNotNull(inputAdapter);
+    }
 
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
@@ -36,6 +42,7 @@ public class TestEnvironment extends DefaultEnvironment {
         NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();
+        TestInputAdapter inputAdapter = new TestInputAdapter(nativeInput);
         InputConfig inputConfig;
         try {
             inputConfig = InputConfig.readDefaultConfig();
@@ -53,7 +60,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
         StaticEnvironment.FONT_STORE.set(new TestFontStore());
 
-        TestEnvironment env = new TestEnvironment();
+        TestEnvironment env = new TestEnvironment(inputAdapter);
         env.renderEnv = CoreTestUtil.BASIC_ENV;
         env.resourceLoadLog = new ResourceLoadLogStub();
         env.seenLog = new SeenLog(env);
@@ -94,6 +101,16 @@ public class TestEnvironment extends DefaultEnvironment {
     @Override
     public ContextManager getContextManager() {
         return (ContextManager)super.getContextManager();
+    }
+
+    public TestInputAdapter getInputAdapter() {
+        return inputAdapter;
+    }
+
+    public void update() {
+        inputAdapter.updateInput(100);
+
+        contextManager.update();
     }
 
 }

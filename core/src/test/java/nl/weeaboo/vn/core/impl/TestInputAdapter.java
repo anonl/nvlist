@@ -3,11 +3,11 @@ package nl.weeaboo.vn.core.impl;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.impl.InputAccumulator;
-import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PressState;
+import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.scene.IVisualElement;
 
 public class TestInputAdapter {
@@ -75,4 +75,5 @@ public class TestInputAdapter {
         Rect2D bounds = elem.getVisualBounds();
         pointerMoved(bounds.x + bounds.w / 2, bounds.y + bounds.h / 2);
     }
+
 }
