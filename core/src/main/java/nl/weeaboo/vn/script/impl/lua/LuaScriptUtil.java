@@ -53,8 +53,8 @@ public final class LuaScriptUtil {
      *
      * @see LuaLink#setPersistent(boolean)
      */
-    public static LuaScriptThread createPersistentThread(LuaRunState runState) {
-        LuaLink luaLink = new LuaLink(runState);
+    public static LuaScriptThread createPersistentThread(LuaRunState runState, LuaValue environment) {
+        LuaLink luaLink = new LuaLink(runState, environment);
         luaLink.setPersistent(true);
         return new LuaScriptThread(luaLink);
     }

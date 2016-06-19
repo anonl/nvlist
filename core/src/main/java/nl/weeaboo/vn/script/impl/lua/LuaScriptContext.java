@@ -6,8 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.impl.ContextUtil;
@@ -24,6 +27,8 @@ public class LuaScriptContext implements IScriptContext {
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(LuaScriptContext.class);
 
+    private final LuaScriptEnv scriptEnv;
+    private final LuaTable contextGlobals;
     private final IScriptEventDispatcher eventDispatcher;
     private final LuaScriptThread mainThread;
     private final LuaScriptThread eventThread;
@@ -31,15 +36,19 @@ public class LuaScriptContext implements IScriptContext {
     private final DestructibleElemList<LuaScriptThread> threads = new DestructibleElemList<LuaScriptThread>();
 
     public LuaScriptContext(LuaScriptEnv scriptEnv) {
+        this.scriptEnv = Checks.checkNotNull(scriptEnv);
+        this.contextGlobals = new LuaTable();
+
         eventDispatcher = new ScriptEventDispatcher();
 
-        eventThread = LuaScriptUtil.createPersistentThread(scriptEnv.getRunState());
+        LuaRunState lrs = scriptEnv.getRunState();
+        LuaTable globals = lrs.getGlobalEnvironment();
+
+        eventThread = LuaScriptUtil.createPersistentThread(lrs, globals);
         threads.add(eventThread);
 
-        mainThread = LuaScriptUtil.createPersistentThread(scriptEnv.getRunState());
+        mainThread = LuaScriptUtil.createPersistentThread(lrs, globals);
         threads.add(mainThread);
-
-        TODO: Register context-local table
     }
 
     public IScriptThread newThread(LuaClosure func) throws ScriptException {
@@ -56,6 +65,10 @@ public class LuaScriptContext implements IScriptContext {
         LuaScriptThread thread = luaFunc.callInNewThread();
         threads.add(thread);
         return thread;
+    }
+
+    public LuaTable getContextGlobals() {
+        return contextGlobals;
     }
 
     @Override
@@ -77,6 +90,9 @@ public class LuaScriptContext implements IScriptContext {
     public void updateThreads(IContext context) {
         IContext oldContext = ContextUtil.setCurrentContext(context);
         try {
+            LuaTable globals = scriptEnv.getGlobals();
+            globals.rawset("context", contextGlobals);
+
             runEvents();
             runThreads();
         } finally {
