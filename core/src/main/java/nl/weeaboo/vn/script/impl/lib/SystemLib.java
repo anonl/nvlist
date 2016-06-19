@@ -3,13 +3,16 @@ package nl.weeaboo.vn.script.impl.lib;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
+import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 
 public class SystemLib extends LuaLib {
 
@@ -21,6 +24,17 @@ public class SystemLib extends LuaLib {
         super("System");
 
         this.env = env;
+    }
+
+    @Override
+    public void initEnv(LuaScriptEnv scriptEnv) throws ScriptException {
+        super.initEnv(scriptEnv);
+
+        IRenderEnv renderEnv = env.getRenderEnv();
+
+        LuaTable globals = scriptEnv.getGlobals();
+        globals.rawset("screenWidth", renderEnv.getWidth());
+        globals.rawset("screenHeight", renderEnv.getHeight());
     }
 
     /**

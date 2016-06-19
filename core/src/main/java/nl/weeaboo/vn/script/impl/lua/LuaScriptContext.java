@@ -34,9 +34,12 @@ public class LuaScriptContext implements IScriptContext {
         eventDispatcher = new ScriptEventDispatcher();
 
         eventThread = LuaScriptUtil.createPersistentThread(scriptEnv.getRunState());
+        threads.add(eventThread);
 
         mainThread = LuaScriptUtil.createPersistentThread(scriptEnv.getRunState());
         threads.add(mainThread);
+
+        TODO: Register context-local table
     }
 
     public IScriptThread newThread(LuaClosure func) throws ScriptException {

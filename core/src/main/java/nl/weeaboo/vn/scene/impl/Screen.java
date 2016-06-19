@@ -151,7 +151,7 @@ public class Screen implements IScreen {
 
 	@Override
     public void setRenderEnv(IRenderEnv env) {
-		renderEnv = env;
+        renderEnv = Checks.checkNotNull(env);
 
         sendSignal(new RenderEnvChangeSignal(env));
 	}

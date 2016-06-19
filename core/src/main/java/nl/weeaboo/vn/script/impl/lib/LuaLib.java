@@ -30,15 +30,15 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
     }
 
     @Override
-    public void initEnv(LuaScriptEnv env) throws ScriptException {
-        LuaTable globals = env.getGlobals();
+    public void initEnv(LuaScriptEnv scriptEnv) throws ScriptException {
+        LuaTable globals = scriptEnv.getGlobals();
 
         if (tableName != null) {
             LuaTable table = new LuaTable();
-            initTable(table, env);
+            initTable(table, scriptEnv);
             globals.rawset(tableName, table);
         } else {
-            initTable(globals, env);
+            initTable(globals, scriptEnv);
         }
     }
 

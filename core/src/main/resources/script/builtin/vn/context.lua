@@ -26,6 +26,10 @@ function getTextState()
 	return getScreen():getTextState()
 end
 
+function getRenderEnv()
+    return getScreen():getRenderEnv()
+end
+
 -- ----------------------------------------------------------------------------
 --  Skip functions
 -- ----------------------------------------------------------------------------
