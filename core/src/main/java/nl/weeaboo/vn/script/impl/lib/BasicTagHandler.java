@@ -67,7 +67,7 @@ final class BasicTagHandler extends VarArgFunction {
         MutableTextStyle mts = new MutableTextStyle();
         Object javaValue = LuaConvertUtil.parseTextAttribute(attribute, luaValue);
         if (javaValue != null) {
-            mts.setProperty(attribute, javaValue);
+            mts.setAttribute(attribute, javaValue);
         }
         return mts.immutableCopy();
     }

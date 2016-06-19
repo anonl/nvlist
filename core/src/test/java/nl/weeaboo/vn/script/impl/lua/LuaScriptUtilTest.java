@@ -3,6 +3,7 @@ package nl.weeaboo.vn.script.impl.lua;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,7 @@ public class LuaScriptUtilTest {
         mainContext = env.getContextManager().createContext();
     }
 
+    @After
     public void deinit() {
         env.destroy();
     }

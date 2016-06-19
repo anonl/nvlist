@@ -7,7 +7,7 @@ module("vn.context", package.seeall)
 --  Variables
 -- ----------------------------------------------------------------------------
 
--- Init dummy prefs if needed (required while actual prefs are not implemented)
+-- Init dummy prefs if needed
 prefs = prefs or {}
 
 -- ----------------------------------------------------------------------------

@@ -27,8 +27,8 @@ public class DesktopLauncher {
         final Launcher launcher = new Launcher();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
-            public boolean windowIsClosing() {
-                return launcher.onWindowIsClosing();
+            public boolean closeRequested() {
+                return launcher.onCloseRequested();
             }
         });
 

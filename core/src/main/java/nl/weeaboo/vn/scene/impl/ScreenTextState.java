@@ -50,6 +50,11 @@ public class ScreenTextState implements IScreenTextState {
     }
 
     @Override
+    public StyledText getText() {
+        return stext;
+    }
+
+    @Override
     public void setText(String s) {
         setText(toStyledText(s));
     }

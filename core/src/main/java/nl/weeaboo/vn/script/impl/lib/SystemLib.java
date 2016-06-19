@@ -18,9 +18,9 @@ public class SystemLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
-    private final DefaultEnvironment env;
+    private final IEnvironment env;
 
-    public SystemLib(DefaultEnvironment env) {
+    public SystemLib(IEnvironment env) {
         super("System");
 
         this.env = env;

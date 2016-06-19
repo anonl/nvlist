@@ -1,0 +1,35 @@
+@@
+
+require("builtin/vn")
+
+-- Value replacement (string)
+registerStringifier("apple", "banana")
+
+-- Value replacement (integer)
+registerStringifier("int", 123)
+
+-- Value replacement (float)
+registerStringifier("float", 2.5)
+
+-- Function
+registerStringifier("cherry", function()
+    return "durian"
+end)
+
+-- Function returning nil
+registerStringifier("funcnil", function()
+    return nil
+end)
+
+-- Function returning none
+registerStringifier("funcnone", function()
+    -- Don't return anything
+end)
+
+resultApple = stringify("apple")
+resultInt = stringify("int")
+resultFloat = stringify("float")
+resultCherry = stringify("cherry")
+resultFuncnil = stringify("funcnil")
+
+@@

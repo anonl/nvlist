@@ -4,8 +4,8 @@ import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.impl.ContextUtil;
-import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
@@ -20,9 +20,9 @@ public class ImageLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
-    private final DefaultEnvironment env;
+    private final IEnvironment env;
 
-    public ImageLib(DefaultEnvironment env) {
+    public ImageLib(IEnvironment env) {
         super("Image");
 
         this.env = env;

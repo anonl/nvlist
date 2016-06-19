@@ -100,7 +100,7 @@ public final class LuaConvertUtil {
                 LuaValue luaValue = table.get(key);
                 Object javaValue = parseTextAttribute(attribute, luaValue);
                 if (javaValue != null) {
-                    mts.setProperty(attribute, javaValue);
+                    mts.setAttribute(attribute, javaValue);
                 }
             }
             return mts.immutableCopy();

@@ -343,7 +343,7 @@ public class Launcher extends ApplicationAdapter {
      *
      * @return {@code true} if the window should close, {@code false} to cancel.
      */
-    public boolean onWindowIsClosing() {
+    public boolean onCloseRequested() {
         if (novel != null) {
             IEnvironment env = novel.getEnv();
             env.getSystemModule().exit(false);

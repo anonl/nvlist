@@ -14,6 +14,8 @@ public interface IScreenTextState extends Serializable, IUpdateable {
     double getTextSpeed();
     void setTextSpeed(double speed);
 
+    StyledText getText();
+
     void setText(String s);
     void setText(StyledText st);
 

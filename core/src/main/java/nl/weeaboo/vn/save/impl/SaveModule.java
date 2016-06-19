@@ -40,6 +40,7 @@ public class SaveModule implements ISaveModule {
     private static final long serialVersionUID = SaveImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SaveModule.class);
     private static final String SHARED_GLOBALS_PATH = "save-shared.bin";
+    private static final String SEEN_LOG_PATH = "seen.bin";
     private static final int QUICK_SAVE_OFFSET = 800;
     private static final int AUTO_SAVE_OFFSET = 900;
 
@@ -90,6 +91,15 @@ public class SaveModule implements ISaveModule {
     @Override
     public void loadPersistent() {
         tryLoadSharedGlobals();
+
+        SecureFileWriter sfw = getSecureFileWriter();
+        try {
+            env.getSeenLog().load(sfw, SEEN_LOG_PATH);
+        } catch (FileNotFoundException fnfe) {
+            // Seen log doesn't exist yet, not an error
+        } catch (IOException ioe) {
+            LOG.error("Error loading seen log", ioe);
+        }
     }
 
     private void tryLoadSharedGlobals() {
@@ -116,17 +126,18 @@ public class SaveModule implements ISaveModule {
 
     @Override
     public void savePersistent() {
+        SecureFileWriter sfw = getSecureFileWriter();
         try {
-            saveSharedGlobals();
+            StorageIO.write(sharedGlobals, sfw, SHARED_GLOBALS_PATH);
         } catch (IOException e) {
             LOG.error("Unable to save shared globals", e);
         }
+        try {
+            env.getSeenLog().save(getSecureFileWriter(), SEEN_LOG_PATH);
+        } catch (IOException e) {
+            LOG.error("Unable to save seen log", e);
+        }
         generatePreloaderData();
-    }
-
-    private void saveSharedGlobals() throws IOException {
-        SecureFileWriter sfw = getSecureFileWriter();
-        StorageIO.write(sharedGlobals, sfw, SHARED_GLOBALS_PATH);
     }
 
     protected void generatePreloaderData() {
