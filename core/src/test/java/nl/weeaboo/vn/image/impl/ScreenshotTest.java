@@ -44,11 +44,11 @@ public class ScreenshotTest {
 		PixelTextureData pixels = TestImageUtil.newTestTextureData(w, h);
 
 		WritableScreenshot s = new WritableScreenshot((short)0, false);
-		s.setPixels(pixels, new Dim(w, h));
+		s.setPixels(pixels, Dim.of(w, h));
 		TestImageUtil.assertEquals(pixels, s.getPixels());
 
 		s = new WritableScreenshot((short)0, true);
-		s.setPixels(pixels, new Dim(w, h));
+		s.setPixels(pixels, Dim.of(w, h));
         TestImageUtil.assertEquals(pixels, s.getPixels());
 	}
 

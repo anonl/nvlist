@@ -55,7 +55,7 @@ public final class RenderEnv implements IRenderEnv {
 
     public static RenderEnv newDefaultInstance(Dim vsize, boolean isTouchScreen) {
         Rect rclip = Rect.of(0, 0, vsize.w, vsize.h);
-        Dim rscreen = new Dim(vsize.w, vsize.h);
+        Dim rscreen = Dim.of(vsize.w, vsize.h);
         return new RenderEnv(vsize, rclip, rscreen, isTouchScreen);
     }
 

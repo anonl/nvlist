@@ -19,7 +19,7 @@ public class TestScreenshot extends AbstractScreenshot implements IWritableScree
 
     public void makeAvailable(int w, int h) {
         PixelTextureData texData = TestImageUtil.newTestTextureData(w, h);
-        setPixels(texData, new Dim(1280, 720));
+        setPixels(texData, Dim.of(1280, 720));
     }
 
 }

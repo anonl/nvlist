@@ -1,0 +1,9 @@
+@@
+
+Log.trace("trace {} {}", "abc", 123)
+Log.debug("debug {} {}", "abc", 123)
+Log.info("info {} {}", "abc", 123)
+Log.warn("warn {} {}", "abc", 123)
+Log.error("error {} {}", "abc", 123)
+
+@@

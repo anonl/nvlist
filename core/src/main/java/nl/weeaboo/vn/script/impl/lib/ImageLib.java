@@ -102,4 +102,16 @@ public class ImageLib extends LuaLib {
 
     }
 
+    /**
+     * @param args Any number of string arguments representing filenames of images to load.
+     */
+    @ScriptFunction
+    public Varargs preload(Varargs args) {
+        IImageModule imageModule = env.getImageModule();
+        for (int n = 1; n <= args.narg(); n++) {
+            imageModule.preload(args.tojstring(n));
+        }
+        return LuaConstants.NONE;
+    }
+
 }

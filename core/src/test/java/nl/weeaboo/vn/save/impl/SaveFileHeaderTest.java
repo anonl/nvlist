@@ -22,7 +22,7 @@ public class SaveFileHeaderTest {
 
         SaveFileHeader header = new SaveFileHeader(12345);
         header.setUserData(userData);
-        header.setThumbnail(new ThumbnailInfo("abc", new Dim(12, 34)));
+        header.setThumbnail(new ThumbnailInfo("abc", Dim.of(12, 34)));
 
         SaveFileHeaderJson json = SaveFileHeaderJson.encode(header);
 

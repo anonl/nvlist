@@ -1,0 +1,9 @@
+@@
+
+Log.trace("trace")
+Log.debug("debug")
+Log.info("info")
+Log.warn("warn")
+Log.error("error")
+
+@@

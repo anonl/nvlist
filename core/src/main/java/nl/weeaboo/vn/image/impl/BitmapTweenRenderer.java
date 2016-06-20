@@ -69,7 +69,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         ControlImage controlImage = config.getControlImage();
 
         // Create remap texture
-        remapTextureSize = new Dim(INTERPOLATOR_MAX + 1, 1);
+        remapTextureSize = Dim.of(INTERPOLATOR_MAX + 1, 1);
 
         // Create geometry
         InputTexture tex0 = config.getStartTexture();

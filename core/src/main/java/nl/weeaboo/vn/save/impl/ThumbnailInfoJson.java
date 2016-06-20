@@ -11,10 +11,10 @@ final class ThumbnailInfoJson {
     public String path;
     public int width;
     public int height;
-    
+
     public static ThumbnailInfo decode(ThumbnailInfoJson json) throws SaveFormatException, IOException {
         try {
-            return new ThumbnailInfo(json.path, new Dim(json.width, json.height));
+            return new ThumbnailInfo(json.path, Dim.of(json.width, json.height));
         } catch (IllegalArgumentException iae) {
             throw new SaveFormatException("Invalid parameters", iae);
         }

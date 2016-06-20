@@ -32,7 +32,7 @@ allprojects {
         
         styledTextVersion = '1.4.2'
         luajpp2Version = '2.3.10'
-        tcommonVersion = '1.0.2'
+        tcommonVersion = '1.1.0'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, "res")
@@ -58,6 +58,7 @@ project(':nvlist-api') {
     
     dependencies {
         compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+        compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
         compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
         compile "com.google.guava:guava:$guavaVersion"
         

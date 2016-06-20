@@ -154,7 +154,7 @@ public class LayerTest {
         Assert.assertEquals(renderEnv, image.getRenderEnv());
 
         // Recursively passes to sub-layers and sub-drawables within those layers
-        RenderEnv newEnv = new RenderEnv(new Dim(123, 456), Rect.EMPTY, new Dim(0, 0), false);
+        RenderEnv newEnv = new RenderEnv(Dim.of(123, 456), Rect.EMPTY, Dim.EMPTY, false);
         layer.setRenderEnv(newEnv);
         Assert.assertEquals(newEnv, image.getRenderEnv());
     }

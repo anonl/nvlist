@@ -17,6 +17,7 @@ import nl.weeaboo.vn.script.impl.lib.BasicScriptInitializer;
 import nl.weeaboo.vn.script.impl.lib.CoreLib;
 import nl.weeaboo.vn.script.impl.lib.ImageLib;
 import nl.weeaboo.vn.script.impl.lib.InputLib;
+import nl.weeaboo.vn.script.impl.lib.LogLib;
 import nl.weeaboo.vn.script.impl.lib.SeenLib;
 import nl.weeaboo.vn.script.impl.lib.SystemLib;
 import nl.weeaboo.vn.script.impl.lib.TextLib;
@@ -48,7 +49,7 @@ public class EnvironmentFactory {
      * @throws InitException If an unrecoverable initialization error occurs.
      */
     protected void initEnvironment(DefaultEnvironment env) throws InitException {
-        final Dim vsize = new Dim(getPref(WIDTH), getPref(HEIGHT));
+        final Dim vsize = Dim.of(getPref(WIDTH), getPref(HEIGHT));
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
@@ -101,6 +102,7 @@ public class EnvironmentFactory {
     }
 
     public static void registerLuaLibs(IEnvironment env, LuaScriptEnv scriptEnv) {
+        scriptEnv.addInitializer(new LogLib());
         scriptEnv.addInitializer(new CoreLib(env));
         scriptEnv.addInitializer(new SeenLib(env));
         scriptEnv.addInitializer(new ImageLib(env));

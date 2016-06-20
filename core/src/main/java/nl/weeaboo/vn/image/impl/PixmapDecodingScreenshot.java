@@ -13,7 +13,7 @@ public class PixmapDecodingScreenshot extends DecodingScreenshot {
     @Override
     protected void tryLoad(byte[] data) {
         PixelTextureData pixels = PixelTextureData.fromImageFile(data, 0, data.length);
-        setPixels(pixels, new Dim(pixels.getWidth(), pixels.getHeight()));
+        setPixels(pixels, Dim.of(pixels.getWidth(), pixels.getHeight()));
     }
 
 }

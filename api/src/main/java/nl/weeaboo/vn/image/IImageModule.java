@@ -69,4 +69,10 @@ public interface IImageModule extends IModule, IResourceResolver {
      */
     IScreenshot screenshot(ILayer layer, short z, boolean isVolatile, boolean clipEnabled);
 
+    /**
+     * Suggests to the resource loader that the image with the given filename should be preloaded into memory.
+     * @param filename Path to the image file.
+     */
+    void preload(String filename);
+
 }

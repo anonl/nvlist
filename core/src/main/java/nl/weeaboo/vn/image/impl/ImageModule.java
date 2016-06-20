@@ -142,6 +142,11 @@ public class ImageModule implements IImageModule {
         return ss;
     }
 
+    @Override
+    public void preload(String filename) {
+        resourceLoader.preload(filename);
+    }
+
     protected void onImageScaleChanged() {
 
     }

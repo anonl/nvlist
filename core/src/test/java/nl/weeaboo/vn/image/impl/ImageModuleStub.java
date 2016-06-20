@@ -87,4 +87,8 @@ public class ImageModuleStub implements IImageModule {
         return screenshot;
     }
 
+    @Override
+    public void preload(String filename) {
+    }
+
 }

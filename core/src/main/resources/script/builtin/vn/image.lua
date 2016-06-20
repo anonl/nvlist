@@ -139,7 +139,7 @@ function bg(tex, properties)
     properties = extend({z=30000}, properties or {})
     background = img(tex, properties)
 
-    setImageStateAttribute("background", background)
+    context.background = background
     return background
 end
 
@@ -174,7 +174,7 @@ function bgf(tex, fadeTimeFrames, properties)
         background = newbg
     end
 
-    setImageStateAttribute("background", background)
+    context.background = background
     return background
 end
 
@@ -183,29 +183,27 @@ end
 --          no background image currently exists.
 function getBackground()
     local imageLayer = getImageLayer()
-    local background = getImageStateAttribute("background")
-    if imageLayer == nil or not imageLayer:contains(background) then
-        setImageStateAttribute("background", nil)
-        background = nil
+    if imageLayer == nil or not imageLayer:contains(context.background) then
+        context.background = nil
     end
-    return background
+    return context.background
 end
 
 ---Replaces the current background with the <code>bg</code>.
 -- @tparam ImageDrawable bg The new background image.
 function setBackground(bg)
-    local old = getImageStateAttribute("background")
+    local old = context.background
     if old ~= nil and old ~= bg then
         rmbg()
     end
-    setImageStateAttribute("background", bg)
+    context.background = bg
 end
 
 ---Removes and destroys the background image previously created with
 -- <code>bg</code>.
 function rmbg()
     local bg = getBackground()
-    setImageStateAttribute("background", nil)
+    context.background = nil
     if bg == nil then
         return
     end
@@ -218,7 +216,7 @@ end
 -- @see rmbg
 function rmbgf(fadeTimeFrames)
     local bg = getBackground()
-    setImageStateAttribute("background", nil)
+    context.background = nil
     if bg == nil then
         return
     end
@@ -298,7 +296,7 @@ function screenshot(layer, z, clip, volatile)
     while ss == nil do
         ss = Image.screenshot(layer, z, clip, volatile)
         while not ss:isAvailable() and not ss:isCancelled() do
-            --print("looping", ss:isCancelled())
+            Log.debug("Waiting for screenshot to become available: {}", ss)
             yield()
         end
 
@@ -378,16 +376,16 @@ function translateTo(i, x, y, durationFrames, interpolator)
     i:setPos(x, y)
 end
 
----Gradually moves <code>i</code> by <code>(dx, dy)</code>, relative to its
--- current position.
+-- TODO: What to do with effectSpeed?
+
+---Gradually moves <code>i</code> by <code>(dx, dy)</code>, relative to its current position.
 -- @tparam Drawable i The image to move.
 -- @number dx The end x-position for <code>i</code>
 -- @number dy The end y-position for <code>i</code>
--- @number durationFrames The duration of the movement in frames (gets
---         multiplied with <code>effectSpeed</code> internally)
--- @tparam Interpolator interpolator A function or interpolator object mapping
---         an input in the range <code>(0, 1)</code> to an output in the range
---         <code>(0, 1)</code>.
+-- @number durationFrames The duration of the movement in frames (gets multiplied with
+--         <code>effectSpeed</code> internally)
+-- @tparam Interpolator interpolator A function or interpolator object mapping an input in the range
+--         <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 function translateRelative(i, dx, dy, durationFrames, interpolator)
     if i == nil then
         i = {}
@@ -412,54 +410,23 @@ function preload(...)
     return Image.preload(...)
 end
 
----Changes the current image layer. Functions that create Drawables such as
--- <code>img</code> typically create them in the image layer.
--- @tparam Layer layer The layer to use as image layer.
-function setImageLayer(layer)
-    setImageStateAttribute("layer", layer)
-end
-
----Returns the current image layer.
--- @treturn Layer The current image layer.
--- @see setImageLayer
-function getImageLayer()
-    local layer = getImageStateAttribute("layer")
-    if layer == nil or layer:isDestroyed() then
-        layer = imageState:getDefaultLayer()
-        setImageStateAttribute("layer", layer)
-    end
-    return layer
-end
-
----Returns the overlay layer which lies on top of (most) other layers and can
--- be used for effects that need to cover most things on the screen, including
--- the text box.
--- @treturn Layer The overlay layer.
-function getOverlayLayer()
-    return imageState:getOverlayLayer()
-end
-
 ---Returns the root layer which (recursively) contains all other layers.
 -- @treturn Layer The root layer.
 function getRootLayer()
-    return imageState:getRootLayer()
+    return Image.getRootLayer()
 end
 
----Sets an attribute that gets pushed/popped together with the image state when
--- <code>pushImageState</code>/<code>popImageState</code> is called.
--- @string key The name of the attribute to set.
--- @param val The new value to store for the given name.
-function setImageStateAttribute(key, val)
-    local meta = imageStateMeta[#imageStateMeta]
-    meta[key] = val
+---Returns the current default layer for newly created images/drawables.
+-- @treturn Layer The active image layer.
+-- @see setActiveLayer
+function getActiveLayer()
+    return Image.getActiveLayer()
 end
 
----Returns the value of an attribute stored with
--- <code>setImageStateAttribute</code>.
--- @string key The name of the attribute to get the value of.
--- @return The current value of the attribute specified by <code>key</code>.
--- @see setImageStateAttribute
-function getImageStateAttribute(key)
-    local meta = imageStateMeta[#imageStateMeta]
-    return meta[key]
+---Changes the current image layer. Functions that create Drawables such as <code>img</code> typically create
+-- them in the image layer.
+-- @tparam Layer layer The layer to use as image layer.
+-- @see getActiveLayer
+function setActiveLayer(layer)
+    Image.setActiveLayer(layer)
 end

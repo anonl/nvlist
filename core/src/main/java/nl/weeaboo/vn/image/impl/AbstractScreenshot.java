@@ -20,7 +20,7 @@ public abstract class AbstractScreenshot implements IScreenshot {
 
 	private boolean cancelled;
 	private transient ITextureData pixels;
-	private Dim screenSize = new Dim(0, 0);
+	private Dim screenSize = Dim.EMPTY;
 
 	protected boolean isAvailable;
 	private boolean isTransient;

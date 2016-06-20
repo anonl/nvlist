@@ -70,7 +70,7 @@ public class Launcher extends ApplicationAdapter {
     private GdxFileSystem resourceFileSystem;
     private AssetManager assetManager;
 	private FrameBuffer frameBuffer;
-	private Dim vsize = new Dim(1280, 720);
+	private Dim vsize = Dim.of(1280, 720);
 
 	private FitViewport frameBufferViewport;
 	private FitViewport screenViewport;
