@@ -9,17 +9,17 @@ public class ThumbnailInfoTest {
 
     @Test
     public void validArgs() {
-        ThumbnailInfo info = new ThumbnailInfo("path", new Dim(23, 45));
+        ThumbnailInfo info = new ThumbnailInfo("path", Dim.of(23, 45));
         Assert.assertEquals("path", info.getPath());
-        Assert.assertEquals(new Dim(23, 45), info.getImageSize());
+        Assert.assertEquals(Dim.of(23, 45), info.getImageSize());
     }
 
     @Test
     public void invalidArgs() {
-        assertInvalidArg(null, new Dim(23, 45));
+        assertInvalidArg(null, Dim.of(23, 45));
         assertInvalidArg("path", null);
-        assertInvalidArg("path", new Dim(0, 45));
-        assertInvalidArg("path", new Dim(23, 0));
+        assertInvalidArg("path", Dim.of(0, 45));
+        assertInvalidArg("path", Dim.of(23, 0));
     }
 
     private void assertInvalidArg(String path, Dim imageSize) {
