@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +20,7 @@ import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
+import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
@@ -52,22 +51,15 @@ public class LuaPrefsAdapter {
      */
     static List<Preference<?>> getDeclaredPrefs(Class<?> clazz) {
         List<Preference<?>> result = Lists.newArrayList();
-        for (Field field : clazz.getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isStatic(mod) && Modifier.isPublic(mod)) {
-                if (Preference.class.isAssignableFrom(field.getType())) {
-                    try {
-                        Preference<?> pref = (Preference<?>)field.get(null);
-                        if (pref != null) {
-                            LOG.trace("Found declared preference: {}", pref.getKey());
 
-                            result.add(pref);
-                        }
-                    } catch (IllegalAccessException e) {
-                        LOG.warn("Error retrieving attribute from preference holder: {}", field, e);
-                    }
-                }
+        try {
+            for (Preference<?> pref : ReflectUtil.getConstants(clazz, Preference.class).values()) {
+                LOG.trace("Found declared preference: {}", pref.getKey());
+
+                result.add(pref);
             }
+        } catch (IllegalAccessException e) {
+            LOG.warn("Error retrieving attributes from preference holder: {}", clazz, e);
         }
         return result;
     }

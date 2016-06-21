@@ -169,6 +169,7 @@ public final class DebugControls {
         // Lua console
         luaConsole.setActiveContext(activeContext);
         if (input.consumePress(KeyCode.F1)) {
+            // TODO: LuaConsole needs to intercept the F1 key in order to hide itself
             luaConsole.setVisible(!luaConsole.isVisible());
         }
     }

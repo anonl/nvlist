@@ -101,11 +101,25 @@ public class LuaConsole {
         float pad = Math.min(stage.getWidth(), stage.getHeight()) / 10;
 
         layout = new Table(skin);
-        layout.setBounds(pad, pad, stage.getWidth() - pad * 2, stage.getHeight() - pad * 2);
+        float layoutW = stage.getWidth() / 2 - pad * 2;
+        float layoutH = stage.getHeight() - pad * 2;
+        layout.setBounds(stage.getWidth() - layoutW - pad, pad, layoutW, layoutH);
         layout.add(console).colspan(2).expand().fill();
         layout.row();
         layout.add(inputField).bottom().expandX().fill();
         layout.add(inputButton).bottom().fill();
+
+        layout.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Keys.F1) {
+                    setVisible(false);
+                    return true;
+                }
+                return false;
+            }
+
+        });
 
         stage.addActor(layout);
         stage.setKeyboardFocus(inputField);

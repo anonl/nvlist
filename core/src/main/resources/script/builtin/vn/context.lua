@@ -30,6 +30,10 @@ function getRenderEnv()
     return getScreen():getRenderEnv()
 end
 
+function getEffectSpeed()
+    return prefs.effectSpeed or 1
+end
+
 -- ----------------------------------------------------------------------------
 --  Skip functions
 -- ----------------------------------------------------------------------------

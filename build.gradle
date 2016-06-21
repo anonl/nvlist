@@ -32,7 +32,7 @@ allprojects {
         
         styledTextVersion = '1.4.2'
         luajpp2Version = '2.3.10'
-        tcommonVersion = '1.1.0'
+        tcommonVersion = '1.1.1'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, "res")

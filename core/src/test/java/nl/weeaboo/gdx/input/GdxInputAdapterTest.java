@@ -1,7 +1,7 @@
 package nl.weeaboo.gdx.input;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.vn.input.KeyCode;
 
 public class GdxInputAdapterTest {
@@ -19,13 +20,13 @@ public class GdxInputAdapterTest {
     @Test
     public void convertKeyboard() throws IllegalArgumentException, IllegalAccessException {
         Set<Integer> unmapped = Sets.newHashSet();
-        for (Field field : Keys.class.getFields()) {
-            if (Modifier.isStatic(field.getModifiers()) && field.getType() == Integer.TYPE) {
-                Integer keycode = (Integer)field.get(null);
-                KeyCode result = GdxInputAdapter.convertKeyboard(keycode);
-                if (result == KeyCode.UNKNOWN) {
-                    unmapped.add(keycode);
-                }
+
+        Map<String, Integer> keyConstants = ReflectUtil.getConstants(Keys.class, Integer.TYPE);
+        for (Entry<String, Integer> entry : keyConstants.entrySet()) {
+            int keycode = entry.getValue();
+            KeyCode result = GdxInputAdapter.convertKeyboard(keycode);
+            if (result == KeyCode.UNKNOWN) {
+                unmapped.add(keycode);
             }
         }
 
@@ -40,13 +41,12 @@ public class GdxInputAdapterTest {
     @Test
     public void convertMouse() throws IllegalArgumentException, IllegalAccessException {
         Set<Integer> unmapped = Sets.newHashSet();
-        for (Field field : Buttons.class.getFields()) {
-            if (Modifier.isStatic(field.getModifiers()) && field.getType() == Integer.TYPE) {
-                Integer button = (Integer)field.get(null);
-                KeyCode result = GdxInputAdapter.convertMouse(button);
-                if (result == KeyCode.UNKNOWN) {
-                    unmapped.add(button);
-                }
+        Map<String, Integer> keyConstants = ReflectUtil.getConstants(Buttons.class, Integer.TYPE);
+        for (Entry<String, Integer> entry : keyConstants.entrySet()) {
+            int button = entry.getValue();
+            KeyCode result = GdxInputAdapter.convertMouse(button);
+            if (result == KeyCode.UNKNOWN) {
+                unmapped.add(button);
             }
         }
 

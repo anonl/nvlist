@@ -63,7 +63,7 @@ function img(tex, x, y, properties)
         properties = y
     end
 
-    local i = Image.createImage(getImageLayer(), tex)
+    local i = Image.createImage(getActiveLayer(), tex)
 
     if type(x) == "string" then
         local z = 0
@@ -182,7 +182,7 @@ end
 -- @treturn ImageDrawable The current background image, or <code>nil</code> if
 --          no background image currently exists.
 function getBackground()
-    local imageLayer = getImageLayer()
+    local imageLayer = getActiveLayer()
     if imageLayer == nil or not imageLayer:contains(context.background) then
         context.background = nil
     end
@@ -253,21 +253,21 @@ end
 -- @string filename Path to an image file (relative to <code>res/img</code>).
 -- @treturn ButtonDrawable The newly created button.
 function button(filename)
-    return Image.createButton(getImageLayer(), filename)
+    return Image.createButton(getActiveLayer(), filename)
 end
 
 ---Creates a new TextDrawable, used to display dynamic text on the screen.
 -- @string[opt=""] text The initial text to display.
 -- @treturn TextDrawable The newly created text drawable.
 function textimg(text)
-    return Image.createText(getImageLayer(), text)
+    return Image.createText(getActiveLayer(), text)
 end
 
 ---Creates a new layer.
 -- @tparam Layer parentLayer The parent layer for the new layer.
 -- @treturn Layer The newly created layer.
 function createLayer(parentLayer)
-    parentLayer = parentLayer or getImageLayer()
+    parentLayer = parentLayer or getActiveLayer()
     return Image.createLayer(parentLayer)
 end
 
@@ -275,7 +275,7 @@ end
 -- @tparam Layer layer The layer to create the camera on.
 -- @treturn Camera The newly created camera object.
 function createCamera(layer)
-    layer = layer or getImageLayer()
+    layer = layer or getActiveLayer()
     return Image.createCamera(layer)
 end
 
@@ -320,10 +320,10 @@ end
 --                  screenshot's pixels to disappear at any time.
 -- @treturn ImageDrawable The image created from the screenshot.
 function screen2image(layer, z, clip, volatile)
-    layer = layer or getImageLayer()
+    layer = layer or getActiveLayer()
     z = z or -999
 
-    i = Image.createImage(layer, screenshot(layer, z, clip, volatile))
+    local i = Image.createImage(layer, screenshot(layer, z, clip, volatile))
     i:setZ(z + 1)
     return i
 end
@@ -332,16 +332,16 @@ end
 -- @tparam Drawable i The image to change the alpha of.
 -- @number targetAlpha The end alpha for <code>i</code>.
 -- @number durationFrames The duration of the movement in frames (gets
---         multiplied with <code>effectSpeed</code> internally)
+--         multiplied with <code>getEffectSpeed()</code> internally)
 function fadeTo(i, targetAlpha, durationFrames)
     durationFrames = durationFrames or 20
 
     local startAlpha = i:getAlpha()
     local frame = 1
-    while frame + effectSpeed <= durationFrames do
+    while frame + getEffectSpeed() <= durationFrames do
         local f = frame / durationFrames
         i:setAlpha(startAlpha + (targetAlpha - startAlpha) * f)
-        frame = frame + effectSpeed
+        frame = frame + getEffectSpeed()
         yield()
     end
 
@@ -353,7 +353,7 @@ end
 -- @number x The end x-position for <code>i</code>
 -- @number y The end y-position for <code>i</code>
 -- @number durationFrames The duration of the movement in frames (gets
---         multiplied with <code>effectSpeed</code> internally)
+--         multiplied with <code>getEffectSpeed()</code> internally)
 -- @tparam Interpolator interpolator A function or interpolator object mapping
 --         an input in the range <code>(0, 1)</code> to an output in the range
 --         <code>(0, 1)</code>.
@@ -367,23 +367,21 @@ function translateTo(i, x, y, durationFrames, interpolator)
     local startY = i:getY()
 
     local frame = 1
-    while not i:isDestroyed() and frame + effectSpeed <= durationFrames do
+    while not i:isDestroyed() and frame + getEffectSpeed() <= durationFrames do
         local f = interpolator:remap(frame / durationFrames)
         i:setPos(startX + (x-startX) * f, startY + (y-startY) * f)
-        frame = frame + effectSpeed
+        frame = frame + getEffectSpeed()
         yield()
     end
     i:setPos(x, y)
 end
-
--- TODO: What to do with effectSpeed?
 
 ---Gradually moves <code>i</code> by <code>(dx, dy)</code>, relative to its current position.
 -- @tparam Drawable i The image to move.
 -- @number dx The end x-position for <code>i</code>
 -- @number dy The end y-position for <code>i</code>
 -- @number durationFrames The duration of the movement in frames (gets multiplied with
---         <code>effectSpeed</code> internally)
+--         <code>getEffectSpeed()</code> internally)
 -- @tparam Interpolator interpolator A function or interpolator object mapping an input in the range
 --         <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 function translateRelative(i, dx, dy, durationFrames, interpolator)
