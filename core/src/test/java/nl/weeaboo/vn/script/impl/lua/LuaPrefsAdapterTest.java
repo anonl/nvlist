@@ -29,13 +29,12 @@ public class LuaPrefsAdapterTest extends LuaIntegrationTest {
         LuaTestUtil.assertGlobal("engineMinVersion", NovelPrefs.ENGINE_MIN_VERSION.getDefaultValue());
     }
 
-    private static class PrefsHolder {
+    public static class PrefsHolder {
 
         public static final Preference<String> strPref = newPreference("str", "str", "value", "");
         public static final Preference<Integer> intPref = newPreference("int", "int", 111, "");
 
         // Non-static fields are ignored
-        @SuppressWarnings("unused")
         public final Preference<Integer> instanceField = newPreference("instance", "instance", 222, "");
 
         // Non-public fields are ignored
