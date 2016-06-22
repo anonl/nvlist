@@ -62,6 +62,12 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
+    public ITexture createTexture(int colorARGB, int width, int height, double scaleX, double scaleY) {
+        PixelTextureData texData = TestImageUtil.newTestTextureData(width, height);
+        return createTexture(texData, scaleX, scaleY);
+    }
+
+    @Override
     public ITexture createTexture(ITextureData texData, double scaleX, double scaleY) {
         return new TestTexture(texData);
     }

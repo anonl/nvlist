@@ -47,16 +47,20 @@ public final class LuaConvertUtil {
         return getCurrentScreen().getRootLayer();
     }
 
-    public static ITexture getTextureArg(IImageModule imageModule, Varargs args, int index)
+    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue)
             throws ScriptException {
+        return getTextureArg(imageModule, luaValue, false);
+    }
+    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue,
+            boolean suppressLoadErrors) throws ScriptException {
 
-        if (args.isstring(index)) {
+        if (luaValue.isstring()) {
             // Texture filename
-            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(args.tojstring(index));
-            return imageModule.getTexture(loadInfo, false);
-        } else if (args.isuserdata(index)) {
+            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(luaValue.tojstring());
+            return imageModule.getTexture(loadInfo, suppressLoadErrors);
+        } else if (luaValue.isuserdata()) {
             // Texture or screenshot object
-            Object obj = args.touserdata(index);
+            Object obj = luaValue.touserdata();
             if (obj instanceof ITexture) {
                 return (ITexture)obj;
             } else if (obj instanceof IScreenshot) {
@@ -68,7 +72,7 @@ public final class LuaConvertUtil {
             } else {
                 throw new ScriptException("Invalid arguments");
             }
-        } else if (!args.isnil(index)) {
+        } else if (!luaValue.isnil()) {
             throw new ScriptException("Invalid arguments");
         }
         return null;

@@ -11,24 +11,28 @@ import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
 import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.ITextureData;
+import nl.weeaboo.vn.render.RenderUtil;
 
 public final class TestImageUtil {
 
     static {
         HeadlessGdx.init();
     }
-    
-    private TestImageUtil() {        
+
+    private TestImageUtil() {
     }
-        
+
     public static void writePng(Pixmap pixmap, OutputStream out) throws IOException {
         PNG encoder = new PixmapIO.PNG();
         encoder.write(out, pixmap);
     }
 
     public static PixelTextureData newTestTextureData(int w, int h) {
+        return newTestTextureData(0xAA996633, w, h);
+    }
+    public static PixelTextureData newTestTextureData(int argb, int w, int h) {
         Pixmap pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0xAA996633);
+        pixmap.setColor(RenderUtil.toRGBA(argb));
         pixmap.fill();
         return PixelTextureData.fromPixmap(pixmap);
     }
@@ -45,5 +49,5 @@ public final class TestImageUtil {
             }
         }
     }
-    
+
 }

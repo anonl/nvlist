@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
@@ -21,6 +23,7 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
+import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -119,6 +122,17 @@ public class ImageModule implements IImageModule {
         resourceLoader.logLoad(resourceId, loadInfo);
 
         return texManager.getTexture(resourceLoader, resourceId.getCanonicalFilename());
+    }
+
+    @Override
+    public ITexture createTexture(int colorARGB, int width, int height, double sx, double sy) {
+        // Create solid-colored pixmap texture data
+        Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
+        pixmap.setColor(RenderUtil.toRGBA(colorARGB));
+        pixmap.fill();
+        PixelTextureData texData = PixelTextureData.fromPixmap(pixmap);
+
+        return texManager.generateTexture(texData, sx, sy);
     }
 
     @Override

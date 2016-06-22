@@ -39,7 +39,7 @@ public class ImageLib extends LuaLib {
 
         IImageDrawable image = imageModule.createImage(layer);
 
-        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args, 2);
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(2));
         if (tex != null) {
             image.setTexture(tex);
         }
@@ -59,6 +59,14 @@ public class ImageLib extends LuaLib {
 
         ILayer layer = screen.createLayer(parentLayer);
         return LuajavaLib.toUserdata(layer, ILayer.class);
+    }
+
+    /**
+     * @param args ignored
+     */
+    @ScriptFunction
+    public Varargs getRootLayer(Varargs args) throws ScriptException {
+        return LuajavaLib.toUserdata(LuaConvertUtil.getRootLayer(), ILayer.class);
     }
 
     /**
@@ -112,6 +120,49 @@ public class ImageLib extends LuaLib {
             imageModule.preload(args.tojstring(n));
         }
         return LuaConstants.NONE;
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>filename
+     *        <li>(optional) boolean suppressErrors
+     *        </ol>
+     * @return A texture object, or {@code null} if the requested texture couldn't be loaded.
+     */
+    @ScriptFunction
+    public Varargs getTexture(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        boolean suppressErrors = args.toboolean(2);
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1), suppressErrors);
+        return LuajavaLib.toUserdata(tex, ITexture.class);
+    }
+
+    /**
+     * Creates a solid-color texture with the requested dimensions.
+     *
+     * @param args
+     *        <ol>
+     *        <li>argb color
+     *        <li>texture width
+     *        <li>texture height
+     *        </ol>
+     * @return A texture.
+     */
+    @ScriptFunction
+    public Varargs createColorTexture(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        int colorARGB = args.checkint(1);
+        int w = args.toint(2);
+        int h = args.toint(3);
+        if (w < 1 || h < 1) {
+            throw new ScriptException("Invalid dimensions (must be greater than zero): w=" + w + ", h=" + h);
+        }
+
+        ITexture tex = imageModule.createTexture(colorARGB, w, h, 1.0, 1.0);
+        return LuajavaLib.toUserdata(tex, ITexture.class);
     }
 
 }

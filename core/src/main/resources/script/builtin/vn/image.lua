@@ -249,34 +249,12 @@ function colorTex(argb, w, h)
     return Image.createColorTexture(argb, w, h)
 end
 
----Creates a new on-screen button.
--- @string filename Path to an image file (relative to <code>res/img</code>).
--- @treturn ButtonDrawable The newly created button.
-function button(filename)
-    return Image.createButton(getActiveLayer(), filename)
-end
-
----Creates a new TextDrawable, used to display dynamic text on the screen.
--- @string[opt=""] text The initial text to display.
--- @treturn TextDrawable The newly created text drawable.
-function textimg(text)
-    return Image.createText(getActiveLayer(), text)
-end
-
 ---Creates a new layer.
 -- @tparam Layer parentLayer The parent layer for the new layer.
 -- @treturn Layer The newly created layer.
 function createLayer(parentLayer)
     parentLayer = parentLayer or getActiveLayer()
     return Image.createLayer(parentLayer)
-end
-
----Creates a new camera object.
--- @tparam Layer layer The layer to create the camera on.
--- @treturn Camera The newly created camera object.
-function createCamera(layer)
-    layer = layer or getActiveLayer()
-    return Image.createCamera(layer)
 end
 
 ---Takes a screenshot to be used later (usually to create an ImageDrawable by

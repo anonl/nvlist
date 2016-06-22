@@ -82,12 +82,12 @@ public class LuaConvertUtilTest {
 
     private void assertTextureArgNotNull(Object javaValue, int index) throws ScriptException {
         Varargs varargs = createVararg(javaValue, index);
-        Assert.assertNotNull(LuaConvertUtil.getTextureArg(imageModule, varargs, index + 1));
+        Assert.assertNotNull(LuaConvertUtil.getTextureArg(imageModule, varargs.arg(index + 1)));
     }
 
     private void assertTextureArg(Object javaValue, int index) throws ScriptException {
         Varargs varargs = createVararg(javaValue, index);
-        Assert.assertEquals(javaValue, LuaConvertUtil.getTextureArg(imageModule, varargs, index + 1));
+        Assert.assertEquals(javaValue, LuaConvertUtil.getTextureArg(imageModule, varargs.arg(index + 1)));
     }
 
     private void assertLayerArgException(Object javaValue, int index) {

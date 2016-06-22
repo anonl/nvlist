@@ -50,6 +50,7 @@ module("vn", package.seeall)
 --Require submodules
 local submodules = {
 	"context",
+	--"gui",
 	"image",
 	"system",
 	"text"
