@@ -228,6 +228,9 @@ public class SaveModule implements ISaveModule {
         InputStream in = ProgressInputStream.wrap(fs.openInputStream(SaveFileConstants.SAVEDATA_PATH),
                 fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
 
+        // Clean up resources for current environment before we start loading a new one
+        novel.getEnv().destroy();
+
         try {
             ObjectDeserializer is = luaSerializer.openDeserializer(in);
             try {
