@@ -19,6 +19,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.video.VideoPlayer;
+import com.badlogic.gdx.video.VideoPlayerCreator;
+import com.badlogic.gdx.video.VideoPlayerInitException;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Checks;
@@ -85,6 +88,8 @@ public class Launcher extends ApplicationAdapter {
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
 
+    private VideoPlayer videoPlayer;
+
     public Launcher() {
         this("res/");
     }
@@ -117,6 +122,17 @@ public class Launcher extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
 
         initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        try {
+            videoPlayer = VideoPlayerCreator.createVideoPlayer();
+
+            FileHandle handle = resourceFileSystem.resolve("video/test.webm");
+            videoPlayer.play(handle);
+        } catch (IOException e) {
+            LOG.error("Error playing video", e);
+        } catch (VideoPlayerInitException e) {
+            LOG.error("Error playing video", e);
+        }
     }
 
     private void initNovel() throws InitException {
@@ -209,6 +225,11 @@ public class Launcher extends ApplicationAdapter {
 	        novel = null;
 	    }
 
+	    if (videoPlayer != null) {
+	        videoPlayer.dispose();
+	        videoPlayer = null;
+	    }
+
         disposeRenderer();
 		disposeFrameBuffer();
         osd = DisposeUtil.dispose(osd);
@@ -254,6 +275,10 @@ public class Launcher extends ApplicationAdapter {
         } catch (RuntimeException re) {
             onUncaughtException(re);
         }
+
+        videoPlayer.resize(vsize.w / 2, vsize.h / 2);
+        videoPlayer.render();
+
 		frameBuffer.end();
 
         screenViewport.apply();
