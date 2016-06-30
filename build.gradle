@@ -42,9 +42,9 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-video/" }
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
-        flatDir { dirs "$rootProject.projectDir/libs" }
     }
     
     plugins.withType(JavaPlugin) {
@@ -81,7 +81,7 @@ project(':nvlist-core') {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
         compile "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"        
-        compile ":gdx-video-$gdxVideoVersion:"
+        compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion:"
     
         testCompile "junit:junit:$junitVersion"
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
@@ -103,8 +103,8 @@ project(':nvlist-desktop') {
         runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
         runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        runtime ":gdx-video-desktop-$gdxVideoVersion:"
-        runtime ":gdx-video-desktop-natives-$gdxVideoVersion:"
+        runtime "nl.weeaboo.gdx.video:gdx-video-desktop:$gdxVideoVersion"
+        runtime "nl.weeaboo.gdx.video:gdx-video-desktop-natives:$gdxVideoVersion"
         
         testCompile "junit:junit:$junitVersion"
     }
@@ -134,7 +134,7 @@ project(':nvlist-android') {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile ":gdx-video-android-$gdxVideoVersion:"
+        compile "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
         
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
