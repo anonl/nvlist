@@ -14,18 +14,16 @@ public class Sound implements ISound {
     private final ISoundController soundController;
     private final SoundType soundType;
     private final String filename;
-    private final IAudioAdapter audioAdapter;
+    private final INativeAudio nativeAudio;
 
     private double privateVolume = 1.0;
     private double masterVolume = 1.0;
 
-    public Sound(ISoundController sctrl, SoundType soundType, String filename,
-            IAudioAdapter audioAdapter) {
-
+    public Sound(ISoundController sctrl, SoundType soundType, String filename, INativeAudio nativeAudio) {
         this.soundController = Checks.checkNotNull(sctrl);
         this.soundType = Checks.checkNotNull(soundType);
         this.filename = Checks.checkNotNull(filename);
-        this.audioAdapter = Checks.checkNotNull(audioAdapter);
+        this.nativeAudio = Checks.checkNotNull(nativeAudio);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class Sound implements ISound {
 
     @Override
     public void start(int loops) throws IOException {
-        audioAdapter.play(loops);
+        nativeAudio.play(loops);
 
         int channel = soundController.getFreeChannel();
         soundController.set(channel, this);
@@ -48,31 +46,31 @@ public class Sound implements ISound {
 
     @Override
     public void stop(int fadeOutMillis) {
-        audioAdapter.stop(fadeOutMillis);
+        nativeAudio.stop(fadeOutMillis);
     }
 
     @Override
     public void pause() {
-        audioAdapter.pause();
+        nativeAudio.pause();
     }
 
     @Override
     public void resume() {
-        audioAdapter.resume();
+        nativeAudio.resume();
     }
 
     @Override
     public boolean isPlaying() {
-        return audioAdapter.isPlaying();
+        return nativeAudio.isPlaying();
     }
 
     @Override
     public boolean isPaused() {
-        return audioAdapter.isPaused();
+        return nativeAudio.isPaused();
     }
 
     protected void onVolumeChanged() {
-        audioAdapter.setVolume(getVolume());
+        nativeAudio.setVolume(getVolume());
     }
 
     @Override
@@ -87,7 +85,7 @@ public class Sound implements ISound {
 
     @Override
     public int getLoopsLeft() {
-        return audioAdapter.getLoopsLeft();
+        return nativeAudio.getLoopsLeft();
     }
 
     @Override

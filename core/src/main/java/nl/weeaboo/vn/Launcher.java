@@ -19,9 +19,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.video.VideoPlayer;
-import com.badlogic.gdx.video.VideoPlayerCreator;
-import com.badlogic.gdx.video.VideoPlayerInitException;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Checks;
@@ -43,6 +40,7 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -63,6 +61,7 @@ import nl.weeaboo.vn.render.impl.RenderStats;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.sound.impl.MusicStore;
+import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter {
 
@@ -87,8 +86,6 @@ public class Launcher extends ApplicationAdapter {
     private Novel novel;
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
-
-    private VideoPlayer videoPlayer;
 
     public Launcher() {
         this("res/");
@@ -122,17 +119,6 @@ public class Launcher extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
 
         initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        try {
-            videoPlayer = VideoPlayerCreator.createVideoPlayer();
-
-            FileHandle handle = resourceFileSystem.resolve("video/test.webm");
-            videoPlayer.play(handle);
-        } catch (IOException e) {
-            LOG.error("Error playing video", e);
-        } catch (VideoPlayerInitException e) {
-            LOG.error("Error playing video", e);
-        }
     }
 
     private void initNovel() throws InitException {
@@ -167,7 +153,7 @@ public class Launcher extends ApplicationAdapter {
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
-        StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
+        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(createFontStore());
@@ -225,11 +211,6 @@ public class Launcher extends ApplicationAdapter {
 	        novel = null;
 	    }
 
-	    if (videoPlayer != null) {
-	        videoPlayer.dispose();
-	        videoPlayer = null;
-	    }
-
         disposeRenderer();
 		disposeFrameBuffer();
         osd = DisposeUtil.dispose(osd);
@@ -276,9 +257,6 @@ public class Launcher extends ApplicationAdapter {
             onUncaughtException(re);
         }
 
-        videoPlayer.resize(vsize.w / 2, vsize.h / 2);
-        videoPlayer.render();
-
 		frameBuffer.end();
 
         screenViewport.apply();
@@ -315,8 +293,9 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
 
         // Render novel
+        IRenderEnv renderEnv = env.getRenderEnv();
         if (renderer == null) {
-            renderer = new GLScreenRenderer(env.getRenderEnv(), new RenderStats());
+            renderer = new GLScreenRenderer(renderEnv, new RenderStats());
         }
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         if (drawBuffer == null) {
@@ -327,8 +306,13 @@ public class Launcher extends ApplicationAdapter {
         novel.draw(drawBuffer);
 
         renderer.render(drawBuffer);
-
         sceneEnv.getStage().draw();
+
+        IVideo movie = env.getVideoModule().getBlocking();
+        if (movie != null) {
+            movie.setRenderEnv(renderEnv);
+            movie.render();
+        }
 
 		batch.begin();
         osd.render(batch, env);

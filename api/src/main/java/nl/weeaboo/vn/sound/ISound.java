@@ -49,23 +49,18 @@ public interface ISound extends Serializable {
     SoundType getSoundType();
 
     boolean isPlaying();
-
     boolean isPaused();
-
     boolean isStopped();
 
     int getLoopsLeft();
 
-    double getVolume();
-
     double getPrivateVolume();
-
     double getMasterVolume();
+    double getVolume();
 
 	// === Setters =============================================================
 
     void setPrivateVolume(double v);
-
     void setMasterVolume(double v);
 
 }

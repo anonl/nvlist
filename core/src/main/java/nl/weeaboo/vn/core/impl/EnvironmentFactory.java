@@ -22,6 +22,7 @@ import nl.weeaboo.vn.script.impl.lib.LogLib;
 import nl.weeaboo.vn.script.impl.lib.SeenLib;
 import nl.weeaboo.vn.script.impl.lib.SystemLib;
 import nl.weeaboo.vn.script.impl.lib.TextLib;
+import nl.weeaboo.vn.script.impl.lib.VideoLib;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptLoader;
 import nl.weeaboo.vn.sound.impl.SoundModule;
@@ -111,6 +112,7 @@ public class EnvironmentFactory {
         scriptEnv.addInitializer(new InputLib());
         scriptEnv.addInitializer(new TextLib(env, scriptEnv));
         scriptEnv.addInitializer(new SystemLib(env));
+        scriptEnv.addInitializer(new VideoLib(env));
     }
 
     private static IPreferenceStore getPrefs() {

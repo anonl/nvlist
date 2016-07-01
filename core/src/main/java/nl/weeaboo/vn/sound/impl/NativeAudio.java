@@ -11,7 +11,7 @@ import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.io.CustomSerializable;
 
 @CustomSerializable
-public class MusicAudioAdapter implements IAudioAdapter {
+public class NativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
@@ -19,7 +19,7 @@ public class MusicAudioAdapter implements IAudioAdapter {
 
     private boolean paused;
 
-    public MusicAudioAdapter(IResource<Music> music) {
+    public NativeAudio(IResource<Music> music) {
         this.musicRef = Checks.checkNotNull(music);
     }
 
@@ -29,7 +29,7 @@ public class MusicAudioAdapter implements IAudioAdapter {
         boolean playing = in.readBoolean();
         int loopsLeft = in.readInt();
         if (playing) {
-            play(loopsLeft);
+            doPlay(loopsLeft);
         }
     }
 

@@ -57,19 +57,46 @@ public class VideoModule implements IVideoModule {
 
     @Override
     public IVideo movie(ResourceLoadInfo loadInfo) throws IOException {
+        checkIfMovieFinished();
+
     	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 
         LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getFilename());
 
-        // TODO LVN-021 Implement
-        // fullscreenMovie = ...
+        fullscreenMovie = createVideo(loadInfo);
 
         return fullscreenMovie;
     }
 
+    private IVideo createVideo(ResourceLoadInfo loadInfo) {
+        String filename = loadInfo.getFilename();
+        resourceLoader.checkRedundantFileExt(filename);
+
+        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        if (resourceId == null) {
+            LOG.warn("Unable to find video file: {}", filename);
+            return null;
+        }
+
+        resourceLoader.logLoad(resourceId, loadInfo);
+
+        // Note: VideoAdapter currently
+        IRenderEnv renderEnv = env.getRenderEnv();
+        NativeVideo video = new NativeVideo(resourceLoader, resourceId.getCanonicalFilename(), renderEnv);
+        return new Video(resourceId.getCanonicalFilename(), video);
+
+    }
+
     @Override
     public IVideo getBlocking() {
+        checkIfMovieFinished();
         return fullscreenMovie;
+    }
+
+    private void checkIfMovieFinished() {
+        if (fullscreenMovie != null && fullscreenMovie.isStopped()) {
+            fullscreenMovie = null;
+        }
     }
 
     @Override

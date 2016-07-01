@@ -10,6 +10,8 @@ final class VideoResourceLoader extends FileResourceLoader {
 
     public VideoResourceLoader(IEnvironment env) {
         super(env, MediaType.VIDEO, "video/");
+
+        setAutoFileExts("webm", "ogv");
     }
 
 }

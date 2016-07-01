@@ -6,9 +6,15 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.audio.Music;
+
+import nl.weeaboo.gdx.res.IResource;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.core.impl.DefaultEnvironment;
+import nl.weeaboo.vn.core.impl.FileResourceLoader;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
@@ -19,23 +25,23 @@ public class SoundModule implements ISoundModule {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SoundModule.class);
 
-    protected final DefaultEnvironment env;
+    private final StaticRef<MusicStore> musicStore = StaticEnvironment.MUSIC_STORE;
+
+    protected final IEnvironment env;
     protected final SoundResourceLoader resourceLoader;
 
-    private final AudioManager soundStore;
     private final ISoundController soundController;
 
-    public SoundModule(DefaultEnvironment env) {
-        this(env, new SoundResourceLoader(env), new AudioManager(), new SoundController());
+    public SoundModule(IEnvironment env) {
+        this(env, new SoundResourceLoader(env), new SoundController());
     }
 
-    public SoundModule(DefaultEnvironment env, SoundResourceLoader resourceLoader, AudioManager soundStore,
+    public SoundModule(IEnvironment env, SoundResourceLoader resourceLoader,
             ISoundController soundController) {
 
         this.env = env;
         this.resourceLoader = resourceLoader;
 
-        this.soundStore = soundStore;
         this.soundController = soundController;
     }
 
@@ -64,20 +70,39 @@ public class SoundModule implements ISoundModule {
             LOG.debug("Unable to find sound file: " + filename);
             return null;
         }
+
+        INativeAudio audio = createNativeAudio(resourceLoader, resourceId);
+        if (audio == null) {
+            LOG.debug("Unable to find sound file: " + filename);
+            return null;
+        }
+
         resourceLoader.logLoad(resourceId, loadInfo);
-
-        IAudioAdapter audio = soundStore.getMusic(resourceLoader, resourceId.getCanonicalFilename());
-
         return new Sound(soundController, stype, resourceId.getCanonicalFilename(), audio);
     }
 
+    /**
+     * @param filename Path to an audio file
+     */
     @Override
     public String getDisplayName(String filename) {
         ResourceId resourceId = resourceLoader.resolveResource(filename);
         if (resourceId == null) {
             return null;
         }
-        return soundStore.getDisplayName(resourceId.getCanonicalFilename());
+        return "";
+    }
+
+    private INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
+        String filename = resourceId.getCanonicalFilename();
+        filename = loader.getAbsolutePath(filename);
+
+        IResource<Music> resource = musicStore.get().get(filename);
+        if (resource == null) {
+            return null;
+        }
+
+        return new NativeAudio(resource);
     }
 
     @Override
