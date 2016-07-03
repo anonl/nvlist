@@ -53,7 +53,8 @@ local submodules = {
 	--"gui",
 	"image",
 	"system",
-	"text"
+	"text",
+	"video"
 }
 for _,module in ipairs(submodules) do
 	require("builtin/vn/" .. module)

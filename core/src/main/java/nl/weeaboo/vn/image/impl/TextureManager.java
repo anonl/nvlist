@@ -18,7 +18,7 @@ public class TextureManager implements Serializable {
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
     private final StaticRef<TextureStore> textureStore = StaticEnvironment.TEXTURE_STORE;
-    private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_TEXTURE_STORE;
+    private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_RESOURCES;
 
     public IResource<TextureRegion> getTexture(FileResourceLoader loader, String filename) {
         filename = loader.getAbsolutePath(filename);

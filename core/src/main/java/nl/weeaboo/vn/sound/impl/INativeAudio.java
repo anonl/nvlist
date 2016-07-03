@@ -2,7 +2,7 @@ package nl.weeaboo.vn.sound.impl;
 
 import java.io.Serializable;
 
-public interface IAudioAdapter extends Serializable {
+public interface INativeAudio extends Serializable {
 
     void play(int loops);
 

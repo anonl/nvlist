@@ -29,11 +29,14 @@ ABC 2
 ABC 3   
 ABC 4   
 ABC 5   
-ABC 6   
-ABC 7   
-ABC 8   
-ABC 9   
 @@
+
+    movie("test")
+    
+@@    
+Finished
+@@
+
 end
 
 @@

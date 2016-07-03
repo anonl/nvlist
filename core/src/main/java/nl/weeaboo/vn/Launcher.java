@@ -40,6 +40,7 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -60,6 +61,7 @@ import nl.weeaboo.vn.render.impl.RenderStats;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.sound.impl.MusicStore;
+import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter {
 
@@ -151,7 +153,7 @@ public class Launcher extends ApplicationAdapter {
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
-        StaticEnvironment.GENERATED_TEXTURE_STORE.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_TEXTURE_STORE));
+        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(createFontStore());
@@ -254,6 +256,7 @@ public class Launcher extends ApplicationAdapter {
         } catch (RuntimeException re) {
             onUncaughtException(re);
         }
+
 		frameBuffer.end();
 
         screenViewport.apply();
@@ -290,8 +293,9 @@ public class Launcher extends ApplicationAdapter {
         IEnvironment env = novel.getEnv();
 
         // Render novel
+        IRenderEnv renderEnv = env.getRenderEnv();
         if (renderer == null) {
-            renderer = new GLScreenRenderer(env.getRenderEnv(), new RenderStats());
+            renderer = new GLScreenRenderer(renderEnv, new RenderStats());
         }
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         if (drawBuffer == null) {
@@ -302,8 +306,13 @@ public class Launcher extends ApplicationAdapter {
         novel.draw(drawBuffer);
 
         renderer.render(drawBuffer);
-
         sceneEnv.getStage().draw();
+
+        IVideo movie = env.getVideoModule().getBlocking();
+        if (movie != null) {
+            movie.setRenderEnv(renderEnv);
+            movie.render();
+        }
 
 		batch.begin();
         osd.render(batch, env);
