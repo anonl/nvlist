@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.TestFileSystem;
@@ -58,6 +59,8 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.PREFS.set(prefs);
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
+
+        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new TestFontStore());
 
         TestEnvironment env = new TestEnvironment(inputAdapter);

@@ -61,4 +61,9 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
         return children;
     }
 
+    @Override
+    public boolean contains(IVisualElement elem) {
+        return children.contains(elem);
+    }
+
 }

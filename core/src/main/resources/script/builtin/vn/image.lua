@@ -75,11 +75,7 @@ function img(tex, x, y, properties)
     end
 
     --Handle properties given in a table
-    if type(properties) == "table" then
-        for k,v in pairs(properties) do
-            setProperty(i, k, v)
-        end
-    end
+    setProperties(i, properties)
 
     return i
 end
@@ -125,10 +121,8 @@ function rmf(image, fadeTimeFrames)
 end
 
 ---Changes the current background image.
--- @param tex A texture object or a path to a valid image file (relative to
---        <code>res/img</code>).
--- @tab properties Optional argument containing a table with overrides for
---      the new image's properties.
+-- @param tex A texture object or a path to a valid image file (relative to <code>res/img</code>).
+-- @tab properties Optional argument containing a table with overrides for the new image's properties.
 -- @treturn ImageDrawable The new background image.
 function bg(tex, properties)
     local background = getBackground()

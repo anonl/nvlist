@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
-import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -81,7 +81,7 @@ public class ImageLib extends LuaLib {
      * @param args The layer to make active
      */
     @ScriptFunction
-    public Varargs setActiveLayer(Varargs args) throws ScriptException {
+    public void setActiveLayer(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
         if (layer == null) {
             throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
@@ -90,8 +90,6 @@ public class ImageLib extends LuaLib {
         IContext context = ContextUtil.getCurrentContext();
         IScreen screen = context.getScreen();
         screen.setActiveLayer(layer);
-
-        return LuaConstants.NONE;
     }
 
     @ScriptFunction
@@ -114,12 +112,11 @@ public class ImageLib extends LuaLib {
      * @param args Any number of string arguments representing filenames of images to load.
      */
     @ScriptFunction
-    public Varargs preload(Varargs args) {
+    public void preload(Varargs args) {
         IImageModule imageModule = env.getImageModule();
         for (int n = 1; n <= args.narg(); n++) {
             imageModule.preload(args.tojstring(n));
         }
-        return LuaConstants.NONE;
     }
 
     /**
@@ -136,6 +133,9 @@ public class ImageLib extends LuaLib {
 
         boolean suppressErrors = args.toboolean(2);
         ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1), suppressErrors);
+        if (tex == null) {
+            return LuaNil.NIL;
+        }
         return LuajavaLib.toUserdata(tex, ITexture.class);
     }
 

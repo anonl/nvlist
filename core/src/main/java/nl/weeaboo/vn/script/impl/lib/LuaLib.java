@@ -52,8 +52,9 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                 continue;
             }
 
-            if (!method.getReturnType().equals(Varargs.class)) {
-                throw new ScriptException("Return type must be Varargs");
+            Class<?> returnType = method.getReturnType();
+            if (!returnType.equals(Varargs.class) && !returnType.equals(Void.TYPE)) {
+                throw new ScriptException("Return type must be Varargs or void");
             }
 
             if (!Arrays.equals(method.getParameterTypes(), new Class<?>[] { Varargs.class })) {

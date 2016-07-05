@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.script.impl.lib;
 
-import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -86,11 +85,10 @@ public class SeenLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs markLineSeen(Varargs args) {
+    public void markLineSeen(Varargs args) {
         String filename = args.checkjstring(1);
         int lineNumber = args.checkint(2);
         getSeenLog().markLineSeen(filename, lineNumber);
-        return LuaConstants.NONE;
     }
 
 }

@@ -199,6 +199,49 @@ function getLocalVars(level, max)
 	return result
 end
 
+---Calls the <code>setProperty</code> function for each key/value pair in <code>props</code>.
+-- @param obj The object to set the property value on.
+-- @param props The table of properties to set.
+function setProperties(obj, props)
+    if props ~= nil then
+        for k,v in pairs(props) do
+            setProperty(obj, k, v)
+        end
+    end
+end
+
+---Calls the default setter function corresponding to a property called <code>name</code>.
+-- @param obj The object to set the property value on.
+-- @param name The name of the property to change.
+-- @param ... The parameters to pass to the setter function (the new value for the property).
+function setProperty(obj, name, ...)
+    local vals = getTableOrVarArg(...)
+    
+    local setterName = "set" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)
+    local setter = obj[setterName]
+    if setter == nil then
+        Log.warn("Invalid property: {}", setterName)
+        return
+    end
+    return setter(obj, unpack(vals))
+end
+
+---Calls the default getter function corresponding to a property called <code>name</code>.
+-- @param obj The object to get the property value of.
+-- @param name The name of the property to get the value of.
+-- @return The value of the property (result of calling the property getter function).
+function getProperty(obj, name)    
+    --TODO Use Java's Introspector class? That would give use a little more well-defined behavior.
+    local getterName = "get" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)
+    
+    local getter = obj[getterName]
+    if getter == nil then
+        Log.warn("Invalid property: {}", getterName)
+        return
+    end    
+    return getter(obj)
+end
+
 -- ----------------------------------------------------------------------------
 -- ----------------------------------------------------------------------------
 -- ----------------------------------------------------------------------------

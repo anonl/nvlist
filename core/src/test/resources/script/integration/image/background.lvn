@@ -1,0 +1,20 @@
+
+@@
+
+require("builtin/vn")
+
+local bg1 = bg("test")
+luaAssert(bg1 ~= nil)
+
+bg1 = bg("test", {colorRGB=0xAABBCC}) --Note: Can't use ARGB because the int overflows in Java
+luaAssertEquals(0xAABBCC, bg1:getColorRGB())
+
+local bg2 = bgf("test")
+-- Calling bgf replaces the current background
+luaAssert(bg2 ~= nil)
+luaAssert(bg1:isDestroyed())
+
+rmbg()
+luaAssert(bg2:isDestroyed())
+
+@@

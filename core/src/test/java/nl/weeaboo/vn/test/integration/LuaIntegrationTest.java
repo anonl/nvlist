@@ -46,6 +46,9 @@ public abstract class LuaIntegrationTest {
      */
     protected void addInitializers(LuaScriptEnv scriptEnv) {
         EnvironmentFactory.registerLuaLibs(env, scriptEnv);
+
+        // Add unit test helper functions
+        scriptEnv.addInitializer(new LuaAssertLib());
     }
 
     @After

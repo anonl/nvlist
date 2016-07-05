@@ -1,0 +1,33 @@
+
+@@
+
+require("builtin/vn")
+
+local testTex = colorTex(0xFFFF0000, 10, 10)
+
+local i1 = img(testTex)
+
+-- Images are created at (0, 0) by default
+luaAssertEquals(0, i1:getX())
+luaAssertEquals(0, i1:getY())
+luaAssertEquals(false, i1:isDestroyed())
+
+rm(i1)
+luaAssertEquals(true, i1:isDestroyed())
+
+--Check sprite slot positions
+function assertSlotPosition(slot, expectedCenterX, expectedY, expectedZ)
+    local temp = img(testTex, slot)
+    luaAssertEquals(expectedCenterX, temp:getX() + testTex:getWidth() / 2)
+    luaAssertEquals(expectedY, temp:getY())
+    luaAssertEquals(expectedZ, temp:getZ())
+    temp:destroy()
+end
+
+assertSlotPosition("l",  1280*1/5, 0, 1)
+assertSlotPosition("lc", 1280*1/3, 0, 2)
+assertSlotPosition("c",  1280*1/2, 0, 0)
+assertSlotPosition("rc", 1280*2/3, 0, 2)
+assertSlotPosition("r",  1280*4/5, 0, 1)
+
+@@

@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
-import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
@@ -59,14 +58,12 @@ public class CoreLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs setContextActive(Varargs args) {
+    public void setContextActive(Varargs args) {
         IContext context = args.touserdata(1, IContext.class);
         boolean active = args.toboolean(2);
 
         IContextManager contextManager = env.getContextManager();
         contextManager.setContextActive(context, active);
-
-        return LuaConstants.NONE;
     }
 
     /**

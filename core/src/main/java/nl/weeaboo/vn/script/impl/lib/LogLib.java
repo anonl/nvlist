@@ -9,7 +9,6 @@ import com.google.common.collect.Iterables;
 
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
-import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -49,9 +48,8 @@ public class LogLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs trace(Varargs args) {
+    public void trace(Varargs args) {
         getLogger().trace(getLogFormat(args), getLogArgs(args));
-        return LuaConstants.NONE;
     }
 
     /**
@@ -62,9 +60,8 @@ public class LogLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs debug(Varargs args) {
+    public void debug(Varargs args) {
         getLogger().debug(getLogFormat(args), getLogArgs(args));
-        return LuaConstants.NONE;
     }
 
     /**
@@ -75,9 +72,8 @@ public class LogLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs info(Varargs args) {
+    public void info(Varargs args) {
         getLogger().info(getLogFormat(args), getLogArgs(args));
-        return LuaConstants.NONE;
     }
 
     /**
@@ -88,9 +84,8 @@ public class LogLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs warn(Varargs args) {
+    public void warn(Varargs args) {
         getLogger().warn(getLogFormat(args), getLogArgs(args));
-        return LuaConstants.NONE;
     }
 
     /**
@@ -101,9 +96,8 @@ public class LogLib extends LuaLib {
      *        </ol>
      */
     @ScriptFunction
-    public Varargs error(Varargs args) {
+    public void error(Varargs args) {
         getLogger().error(getLogFormat(args), getLogArgs(args));
-        return LuaConstants.NONE;
     }
 
 }
