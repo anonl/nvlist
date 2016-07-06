@@ -15,7 +15,7 @@ public class VisualOrdering extends Ordering<IVisualElement> implements Serializ
     public static final VisualOrdering FRONT_TO_BACK = new VisualOrdering(false);
     public static final VisualOrdering BACK_TO_FRONT = new VisualOrdering(true);
 
-    protected final boolean backToFront;
+    private final boolean backToFront;
 
     protected VisualOrdering(boolean backToFront) {
         this.backToFront = backToFront;
