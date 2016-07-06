@@ -13,11 +13,11 @@ import nl.weeaboo.vn.script.IScriptThread;
 
 public final class LuaTestUtil {
 
-    public static final String SCRIPT_HELLOWORLD = "helloworld";
-    public static final String SCRIPT_YIELD = "yield";
-    public static final String SCRIPT_CREATECONTEXT = "createcontext";
-    public static final String SCRIPT_SCRIPTLIB = "scriptlib";
-    public static final String SCRIPT_SETMODE = "setmode";
+    public static final String SCRIPT_HELLOWORLD = "helloworld.lvn";
+    public static final String SCRIPT_YIELD = "yield.lvn";
+    public static final String SCRIPT_CREATECONTEXT = "createcontext.lvn";
+    public static final String SCRIPT_SCRIPTLIB = "scriptlib.lvn";
+    public static final String SCRIPT_SETMODE = "setmode.lvn";
 
     private LuaTestUtil() {
     }
