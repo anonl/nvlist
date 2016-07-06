@@ -248,7 +248,7 @@ public class Launcher extends ApplicationAdapter {
         frameBufferViewport.apply();
         Gdx.gl.glClearColor(.514f, .380f, .584f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Camera camera = frameBufferViewport.getCamera();
+        Camera camera = frameBufferViewport.getCamera();
         batch.setProjectionMatrix(camera.combined);
 
         try {
@@ -260,12 +260,14 @@ public class Launcher extends ApplicationAdapter {
 		frameBuffer.end();
 
         screenViewport.apply();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(screenViewport.getCamera().combined);
 
 		batch.begin();
+        batch.disableBlending();
 		batch.draw(frameBuffer.getColorBufferTexture(), 0, vsize.h, vsize.w, -vsize.h);
+        batch.enableBlending();
         batch.end();
 	}
 
