@@ -16,4 +16,10 @@ public class LuaImageModuleTest extends LuaIntegrationTest {
     public void testImageFunctions() {
         loadScript("integration/image/image");
     }
+
+    /** Each context should have separate image state*/
+    @Test
+    public void imageStatesInConcurrentContexts() {
+        loadScript("integration/image/multicontext");
+    }
 }

@@ -1,0 +1,23 @@
+# Image-related state should be stored in context-local fields 
+
+@@
+
+require("builtin/vn")
+
+function test()
+    local background = bg("test")
+    yield()
+    luaAssertEquals(background, getBackground())
+end
+
+luaAssertEquals(nil, getBackground())
+
+-- Create a background in another context
+createContext(test)
+-- The current background was not changed by what happened in the other context
+luaAssertEquals(nil, getBackground())
+
+test()
+luaAssert(getBackground() ~= nil)
+
+@@
