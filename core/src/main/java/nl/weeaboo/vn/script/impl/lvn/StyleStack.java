@@ -35,7 +35,7 @@ final class StyleStack {
 		ListIterator<TaggedEntry> litr = stack.listIterator(stack.size());
 		while (litr.hasPrevious()) {
 			TaggedEntry entry  = litr.previous();
-			if (tag == entry.tag || (tag != null && tag.equals(entry.tag))) {
+			if (tag.equals(entry.tag)) {
 				litr.remove();
 				onStackChanged();
 				return true;
@@ -65,8 +65,8 @@ final class StyleStack {
 		final TextStyle style;
 
 		public TaggedEntry(String tag, TextStyle style) {
-			this.tag = tag;
-			this.style = style;
+			this.tag = Checks.checkNotNull(tag);
+			this.style = Checks.checkNotNull(style);
 		}
 
 	}
