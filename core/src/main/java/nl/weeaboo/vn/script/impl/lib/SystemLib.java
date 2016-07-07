@@ -5,6 +5,7 @@ import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
@@ -95,6 +96,17 @@ public class SystemLib extends LuaLib {
         ISystemModule system = env.getSystemModule();
 
         return LuajavaLib.toUserdata(system.getSystemEnv(), ISystemEnv.class);
+    }
+
+    /**
+     * @param args not used
+     * @return A {@link IPlayTimer} which can be queried for the total play time.
+     */
+    @ScriptFunction
+    public Varargs getTimer(Varargs args) {
+        IPlayTimer playTimer = env.getPlayTimer();
+
+        return LuajavaLib.toUserdata(playTimer, IPlayTimer.class);
     }
 
 }

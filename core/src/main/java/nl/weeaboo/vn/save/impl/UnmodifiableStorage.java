@@ -79,6 +79,11 @@ public final class UnmodifiableStorage implements IStorage {
     }
 
     @Override
+    public long getLong(String keyTotal, long defaultValue) {
+        return inner.getLong(keyTotal, defaultValue);
+    }
+
+    @Override
     public double getDouble(String key, double defaultValue) {
         return inner.getDouble(key, defaultValue);
     }
@@ -100,6 +105,11 @@ public final class UnmodifiableStorage implements IStorage {
 
     @Override
     public void setInt(String key, int val) {
+        throw modificationException();
+    }
+
+    @Override
+    public void setLong(String key, long val) {
         throw modificationException();
     }
 

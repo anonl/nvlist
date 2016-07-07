@@ -6,6 +6,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IModule;
+import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ISeenLog;
@@ -26,6 +27,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     LuaScriptEnv scriptEnv;
     IResourceLoadLog resourceLoadLog;
     ISeenLog seenLog;
+    IPlayTimer playTimer;
 
     IImageModule imageModule;
     ISoundModule soundModule;
@@ -84,6 +86,11 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public ISeenLog getSeenLog() {
         return checkSet(seenLog);
+    }
+
+    @Override
+    public IPlayTimer getPlayTimer() {
+        return checkSet(playTimer);
     }
 
     @Override

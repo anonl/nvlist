@@ -190,6 +190,11 @@ public class Storage implements IStorage, Json.Serializable {
     }
 
     @Override
+    public long getLong(String key, long defaultValue) {
+        return (long)getDouble(key, defaultValue);
+    }
+
+    @Override
     public double getDouble(String key, double defaultValue) {
         StoragePrimitive obj = get(key);
 
@@ -234,6 +239,11 @@ public class Storage implements IStorage, Json.Serializable {
 
     @Override
     public void setInt(String key, int val) {
+        setDouble(key, val);
+    }
+
+    @Override
+    public void setLong(String key, long val) {
         setDouble(key, val);
     }
 

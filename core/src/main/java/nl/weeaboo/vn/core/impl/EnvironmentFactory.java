@@ -57,6 +57,7 @@ public class EnvironmentFactory {
         env.renderEnv = renderEnv;
         env.seenLog = new SeenLog(env);
         env.resourceLoadLog = new ResourceLoadLog(env.getSeenLog());
+        env.playTimer = new PlayTimer();
 
         // Init Lua script env
         LuaRunState runState = new LuaRunState();
@@ -65,11 +66,11 @@ public class EnvironmentFactory {
         env.scriptEnv = scriptEnv;
 
         // Init modules
+        env.saveModule = new SaveModule(env);
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
         env.videoModule = new VideoModule(env);
         env.textModule = new TextModule();
-        env.saveModule = new SaveModule(env);
         env.systemModule = new SystemModule(env);
 
         // Init context

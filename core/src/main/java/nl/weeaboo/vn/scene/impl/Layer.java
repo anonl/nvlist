@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.scene.impl;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +77,7 @@ public class Layer extends VisualGroup implements ILayer {
 
         drawBuffer.startLayer(layerId, this);
 
-        List<Layer> subLayers = ImmutableList.copyOf(getSubLayers());
+        ImmutableList<Layer> subLayers = ImmutableList.<Layer>copyOf(getSubLayers());
 
         // Render children (except sub-layers)
         for (IVisualElement child : getChildren()) {

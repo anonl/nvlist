@@ -52,8 +52,13 @@ abstract class AbstractEnvironment implements IEnvironment {
 
     @Override
     public Collection<IModule> getModules() {
-        return Arrays.asList(getImageModule(), getSoundModule(), getVideoModule(), getTextModule(),
-                getSaveModule(), getSystemModule());
+        return Arrays.asList(
+            getImageModule(),
+            getSoundModule(),
+            getVideoModule(),
+            getTextModule(),
+            getSystemModule(),
+            getSaveModule()); // Destroy save module last, so other modules can still save during destroy()
     }
 
 }

@@ -16,7 +16,7 @@ import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
-public class SystemModule implements ISystemModule{
+public class SystemModule implements ISystemModule {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SystemModule.class);

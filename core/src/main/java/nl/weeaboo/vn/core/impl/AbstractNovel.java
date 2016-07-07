@@ -57,6 +57,8 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void update() {
+        env.getPlayTimer().update();
+
         for (IModule module : env.getModules()) {
             module.update();
         }

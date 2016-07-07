@@ -92,6 +92,12 @@ public class SaveModule implements ISaveModule {
     public void loadPersistent() {
         tryLoadSharedGlobals();
 
+        try {
+            env.getPlayTimer().load(sharedGlobals);
+        } catch (IOException e) {
+            LOG.error("Unable to load play timer state from shared globals", e);
+        }
+
         SecureFileWriter sfw = getSecureFileWriter();
         try {
             env.getSeenLog().load(sfw, SEEN_LOG_PATH);
@@ -127,13 +133,21 @@ public class SaveModule implements ISaveModule {
     @Override
     public void savePersistent() {
         SecureFileWriter sfw = getSecureFileWriter();
+
+        try {
+            env.getPlayTimer().save(sharedGlobals);
+        } catch (IOException e) {
+            LOG.error("Unable to save play timer state to shared globals", e);
+        }
+
         try {
             StorageIO.write(sharedGlobals, sfw, SHARED_GLOBALS_PATH);
         } catch (IOException e) {
             LOG.error("Unable to save shared globals", e);
         }
+
         try {
-            env.getSeenLog().save(getSecureFileWriter(), SEEN_LOG_PATH);
+            env.getSeenLog().save(sfw, SEEN_LOG_PATH);
         } catch (IOException e) {
             LOG.error("Unable to save seen log", e);
         }

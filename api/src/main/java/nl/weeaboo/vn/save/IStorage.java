@@ -82,6 +82,14 @@ public interface IStorage extends Serializable {
     int getInt(String key, int defaultValue);
 
     /**
+     * Convenience method for retrieving a 64-bit signed integer. This is equivalent to calling
+     * {@link IStorage#getDouble(String, double)} and casting the result to long.
+     *
+     * @see #getDouble(String, double)
+     */
+    long getLong(String keyTotal, long defaultValue);
+
+    /**
      * Returns value stored under the given key converted to a double.
      *
      * @param defaultValue This value is returned instead if no value was stored under the given key, or if
@@ -117,6 +125,14 @@ public interface IStorage extends Serializable {
      * @see #setDouble(String, double)
      */
     void setInt(String key, int val);
+
+    /**
+     * Convenience method for storing a long. All values are stored as double-precision floating point
+     * internally.
+     *
+     * @see #setDouble(String, double)
+     */
+    void setLong(String key, long val);
 
     /**
      * Stores a double-precision floating point value under the given key.

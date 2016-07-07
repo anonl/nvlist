@@ -43,3 +43,8 @@ end
 function website(url)
     return System.openWebsite(url)
 end
+
+---Returns a textual representation of the total play time.
+function getPlayTime()
+    return System.getTimer():getTotalTime():toString()
+end
