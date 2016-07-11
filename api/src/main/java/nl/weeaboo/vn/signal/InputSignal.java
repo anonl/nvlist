@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.scene.signal;
+package nl.weeaboo.vn.signal;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.input.IInput;

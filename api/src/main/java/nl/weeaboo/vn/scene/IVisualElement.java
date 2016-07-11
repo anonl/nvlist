@@ -6,7 +6,7 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.scene.signal.ISignalHandler;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 public interface IVisualElement extends Serializable, IDestructible, ISignalHandler {
 

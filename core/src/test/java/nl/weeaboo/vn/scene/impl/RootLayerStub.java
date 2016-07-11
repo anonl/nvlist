@@ -2,7 +2,7 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 public class RootLayerStub extends Layer {
 

@@ -12,10 +12,10 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.scene.ITextDrawable;
-import nl.weeaboo.vn.scene.signal.ISignal;
-import nl.weeaboo.vn.scene.signal.InputSignal;
-import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
-import nl.weeaboo.vn.scene.signal.TickSignal;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.InputSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
+import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.text.ITextRenderer;
 
 @CustomSerializable

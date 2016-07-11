@@ -3,8 +3,8 @@ package nl.weeaboo.vn.scene.impl;
 import nl.weeaboo.vn.core.impl.DestructibleElemList;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
-import nl.weeaboo.vn.scene.signal.DestroySignal;
-import nl.weeaboo.vn.scene.signal.ISignal;
+import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
+import nl.weeaboo.vn.signal.ISignal;
 
 public class VisualGroup extends VisualElement implements IVisualGroup {
 
@@ -23,8 +23,8 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
 
     @Override
     public void handleSignal(ISignal signal) {
-        if (signal instanceof DestroySignal) {
-            IVisualElement elem = ((DestroySignal)signal).getDestroyedElement();
+        if (signal instanceof VisualElementDestroySignal) {
+            IVisualElement elem = ((VisualElementDestroySignal)signal).getDestroyedElement();
             if (children.contains(elem)) {
                 onChildDestroyed(elem);
             }

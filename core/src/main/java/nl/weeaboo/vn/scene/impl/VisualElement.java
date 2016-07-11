@@ -9,12 +9,13 @@ import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
-import nl.weeaboo.vn.scene.signal.DestroySignal;
-import nl.weeaboo.vn.scene.signal.ISignal;
-import nl.weeaboo.vn.scene.signal.ISignalHandler;
-import nl.weeaboo.vn.scene.signal.InputSignal;
-import nl.weeaboo.vn.scene.signal.RenderEnvChangeSignal;
-import nl.weeaboo.vn.scene.signal.TickSignal;
+import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.ISignalHandler;
+import nl.weeaboo.vn.signal.InputSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
+import nl.weeaboo.vn.signal.TickSignal;
+import nl.weeaboo.vn.signal.impl.SignalSupport;
 
 public class VisualElement implements IVisualElement {
 
@@ -41,7 +42,7 @@ public class VisualElement implements IVisualElement {
 
             onDestroyed();
 
-            sendSignal(new DestroySignal(this));
+            sendSignal(new VisualElementDestroySignal(this));
         }
     }
 

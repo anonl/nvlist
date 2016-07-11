@@ -2,7 +2,7 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
-import nl.weeaboo.vn.scene.signal.ISignal;
+import nl.weeaboo.vn.signal.ISignal;
 
 public final class SceneUtil {
 

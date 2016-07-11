@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.scene.impl;
+package nl.weeaboo.vn.signal.impl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,13 +7,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.scene.signal.ISignal;
-import nl.weeaboo.vn.scene.signal.ISignalHandler;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 /** Convenience class for registering and notifying signal handlers */
 public class SignalSupport implements ISignalHandler, Serializable {
 
-    private static final long serialVersionUID = SceneImpl.serialVersionUID;
+    private static final long serialVersionUID = SignalImpl.serialVersionUID;
 
     /*
      * Copy-on-write behavior is used to prevent ConcurrentModificationException when listeners are
