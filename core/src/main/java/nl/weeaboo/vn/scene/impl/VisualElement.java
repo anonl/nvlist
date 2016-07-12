@@ -6,13 +6,13 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
 import nl.weeaboo.vn.signal.ISignal;
 import nl.weeaboo.vn.signal.ISignalHandler;
-import nl.weeaboo.vn.signal.InputSignal;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.signal.impl.SignalSupport;
@@ -76,10 +76,8 @@ public class VisualElement implements IVisualElement {
     protected void onTick() {
     }
 
-    /**
-     * @param input Keyboard/mouse/gamepad input
-     */
-    protected void handleInput(IInput input) {
+    @Override
+    public void handleInput(Matrix parentTransform, IInput input) {
     }
 
     /**
@@ -144,9 +142,6 @@ public class VisualElement implements IVisualElement {
         public void handleSignal(ISignal signal) {
             if (!signal.isHandled() && signal instanceof TickSignal) {
                 self.onTick();
-            }
-            if (!signal.isHandled() && signal instanceof InputSignal) {
-                self.handleInput(((InputSignal)signal).input);
             }
             if (!signal.isHandled() && signal instanceof RenderEnvChangeSignal) {
                 self.onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);

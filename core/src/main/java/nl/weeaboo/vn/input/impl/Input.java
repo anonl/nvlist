@@ -5,6 +5,8 @@ import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
 
 public final class Input implements IInput {
 
@@ -61,13 +63,8 @@ public final class Input implements IInput {
     }
 
     @Override
-    public double getPointerX() {
-        return delegate.getPointerX();
-    }
-
-    @Override
-    public double getPointerY() {
-        return delegate.getPointerY();
+    public Vec2 getPointerPos(Matrix transform) {
+        return delegate.getPointerPos(transform);
     }
 
     @Override

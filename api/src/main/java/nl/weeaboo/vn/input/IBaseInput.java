@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.input;
 
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
+
 /**
  * @param <K> Key identifier.
  */
@@ -33,14 +36,9 @@ public interface IBaseInput<K> {
     long getPressedTime(K button, boolean allowConsumedPress);
 
     /**
-     * The X-coordinate of the most recent mouse/touch position.
+     * The X/Y-coordinates of the most recent mouse/touch position, transformed by the given transform.
      */
-    double getPointerX();
-
-    /**
-     * The Y-coordinate of the most recent mouse/touch position.
-     */
-    double getPointerY();
+    Vec2 getPointerPos(Matrix transform);
 
     /**
      * The amount that the mouse scroll wheel was scrolled. Positive values indicate a downward scroll,

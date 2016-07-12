@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.impl.NativeInput;
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
 
 public class InputTest {
 
@@ -114,8 +116,9 @@ public class InputTest {
 
     private void assertPointerPos(int x, int y) {
         // Assert using whole-pixel coordinates, no level of sub-pixel accuracy is guaranteed
-        Assert.assertEquals(x, Math.round(input.getPointerX()));
-        Assert.assertEquals(y, Math.round(input.getPointerY()));
+        Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());
+        Assert.assertEquals(x, Math.round(pointerPos.x));
+        Assert.assertEquals(y, Math.round(pointerPos.y));
     }
 
     private void assertPointerScroll(int expected) {

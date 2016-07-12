@@ -11,6 +11,7 @@ import nl.weeaboo.vn.core.impl.TestInputAdapter;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
 import nl.weeaboo.vn.input.impl.NativeInput;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
@@ -143,7 +144,7 @@ public class ButtonClickTest {
 
     private void handleInput() {
         inputAdapter.updateInput();
-        button.handleInput(input);
+        button.handleInput(Matrix.identityMatrix(), input);
 
         for (IScriptFunction func : eventDispatcher.retrieveWork()) {
             try {

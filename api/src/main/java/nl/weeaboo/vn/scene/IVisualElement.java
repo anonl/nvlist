@@ -5,10 +5,11 @@ import java.io.Serializable;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.input.IInputHandler;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.signal.ISignalHandler;
 
-public interface IVisualElement extends Serializable, IDestructible, ISignalHandler {
+public interface IVisualElement extends Serializable, IDestructible, ISignalHandler, IInputHandler {
 
     <T extends ISignalHandler & Serializable> void addSignalHandler(int order, T handler);
     void removeSignalHandler(ISignalHandler handler);

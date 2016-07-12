@@ -7,13 +7,13 @@ import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.VKey;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.signal.ISignal;
-import nl.weeaboo.vn.signal.InputSignal;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -44,7 +44,7 @@ public class Screen implements IScreen {
 
         IInput input = StaticEnvironment.INPUT.get();
         if (!input.isIdle()) {
-            sendSignal(new InputSignal(input), VisualOrdering.FRONT_TO_BACK);
+            getRootLayer().handleInput(Matrix.identityMatrix(), input);
 
             handleInput(input);
         }
@@ -67,10 +67,6 @@ public class Screen implements IScreen {
 
     protected void sendSignal(ISignal signal) {
         SceneUtil.sendSignal(getRootLayer(), signal);
-    }
-
-    protected void sendSignal(ISignal signal, VisualOrdering order) {
-        SceneUtil.sendSignal(getRootLayer(), signal, order);
     }
 
 	public void draw(IDrawBuffer buffer) {

@@ -5,6 +5,7 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -29,8 +30,8 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void handleInput(IInput input) {
-        super.handleInput(input);
+    public void handleInput(Matrix parentTransform, IInput input) {
+        super.handleInput(parentTransform, input);
 
     }
 

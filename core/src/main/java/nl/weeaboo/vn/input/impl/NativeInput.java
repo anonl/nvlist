@@ -14,6 +14,7 @@ import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.Event;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 
 public final class NativeInput implements INativeInput {
@@ -123,13 +124,10 @@ public final class NativeInput implements INativeInput {
     }
 
     @Override
-    public double getPointerX() {
-        return pointerPos.x;
-    }
-
-    @Override
-    public double getPointerY() {
-        return pointerPos.y;
+    public Vec2 getPointerPos(Matrix transform) {
+        Vec2 result = new Vec2(pointerPos);
+        transform.transform(result);
+        return result;
     }
 
     @Override

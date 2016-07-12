@@ -8,6 +8,8 @@ import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
+import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.impl.ScreenshotBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
@@ -63,6 +65,18 @@ public class Layer extends VisualGroup implements ILayer {
         // Remember: Drawable coordinates are relative to the coordinates of their parent layer.
         final Rect2D r = getBounds();
         return elem.getVisualBounds().intersects(0, 0, r.w, r.h);
+    }
+
+
+    @Override
+    public void handleInput(Matrix parentTransform, IInput input) {
+        // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
+        Matrix inputTransform = parentTransform.translatedCopy(-getX(), -getY());
+        for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
+            elem.handleInput(inputTransform, input);
+        }
+
+        super.handleInput(parentTransform, input);
     }
 
     @Override

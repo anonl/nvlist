@@ -12,7 +12,9 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.IShape;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Polygon;
+import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
@@ -67,11 +69,13 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
-    protected void handleInput(IInput input) {
-        super.handleInput(input);
+    public void handleInput(Matrix parentTransform, IInput input) {
+        super.handleInput(parentTransform, input);
+
+        Vec2 pointerPos = input.getPointerPos(parentTransform);
 
         boolean enabled = isEnabled() && isVisible(alphaEnableThreshold);
-        boolean mouseContains = enabled && contains(input.getPointerX(), input.getPointerY());
+        boolean mouseContains = enabled && contains(pointerPos.x, pointerPos.y);
 
         if (enabled) {
             model.setRollover(mouseContains);

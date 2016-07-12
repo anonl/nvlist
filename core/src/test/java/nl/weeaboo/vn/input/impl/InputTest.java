@@ -10,6 +10,8 @@ import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.impl.TestInputAdapter;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
 
 public class InputTest {
 
@@ -120,8 +122,10 @@ public class InputTest {
         inputAdapter.pointerMoved(1, 2);
         inputAdapter.pointerScrolled(3);
 
-        Assert.assertEquals(nativeInput.getPointerX(), input.getPointerX(), EPSILON);
-        Assert.assertEquals(nativeInput.getPointerY(), input.getPointerY(), EPSILON);
+        Vec2 expectedPos = input.getPointerPos(Matrix.identityMatrix());
+        Vec2 actualPos = input.getPointerPos(Matrix.identityMatrix());
+        Assert.assertEquals(expectedPos.x, actualPos.x, EPSILON);
+        Assert.assertEquals(expectedPos.y, actualPos.y, EPSILON);
         Assert.assertEquals(nativeInput.getPointerScroll(), input.getPointerScroll());
     }
 
