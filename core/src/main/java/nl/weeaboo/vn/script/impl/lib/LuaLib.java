@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import nl.weeaboo.lua2.lib.VarArgFunction;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -95,7 +96,15 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                 if (method == null) {
                     method = object.getClass().getMethod(methodName, parameterTypes);
                 }
-                return (Varargs)method.invoke(object, args);
+                Object result = method.invoke(object, args);
+                if (result instanceof Varargs) {
+                    return (Varargs)result;
+                } else if (result == null && method.getReturnType() == Void.TYPE) {
+                    return LuaConstants.NONE;
+                } else {
+                    throw new LuaError("Java method (" + method + ") returned non-varargs: " +
+                            (result != null ? result.getClass().getName() : "null"));
+                }
             } catch (InvocationTargetException ite) {
                 Throwable cause = ite.getCause();
                 throw new LuaError(invokeErrorMessage(args, cause), cause);
