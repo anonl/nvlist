@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -35,6 +34,8 @@ import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.settings.IPreferenceListener;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.styledtext.EFontStyle;
+import nl.weeaboo.styledtext.MutableTextStyle;
+import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.styledtext.layout.IFontStore;
@@ -193,9 +194,13 @@ public class Launcher extends ApplicationAdapter {
                 if (style.isItalic()) name += "Oblique";
 
                 FileHandle fileHandle = resourceFileSystem.resolve("font/" + name + ".ttf");
-                BitmapFont[] fonts = GdxFontUtil.load(fileHandle, sizes);
+
+                MutableTextStyle ts = new MutableTextStyle();
+                ts.setFontName(name);
+                ts.setFontStyle(style);
+                GdxFontInfo[] fonts = GdxFontUtil.load(fileHandle, ts.immutableCopy(), sizes);
                 for (int n = 0; n < fonts.length; n++) {
-                    fontStore.registerFont(fontFamily, style, fonts[n], sizes[n]);
+                    fontStore.registerFont(fonts[n]);
                 }
             }
         } catch (IOException ioe) {

@@ -16,7 +16,7 @@ function deprecated(deprecatedSince)
             and System.compareVersion(deprecatedSince, targetVersion) <= 0
     then
         local info = debug.getinfo(3, 'n')
-        notifier:d("Warning: Deprecated function used (" .. info.name .. ")")
+        Log.warn("Warning: Deprecated function used (" .. info.name .. ")")
     end
 end
 

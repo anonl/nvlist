@@ -58,9 +58,23 @@ function stopSkipping()
     return getSkipState():stopSkipping()
 end
 
-function waitClick(hard)
-    --getSkipState():waitClick(hard)
-    while not Input.consume(VKeys.textContinue) do
+---Waits for the specified time to pass. Time progression is influenced by the current
+-- <code>effectSpeed</code> and the wait may be cancelled by holding the skip key or pressing the text
+-- continue key.
+-- @number durationFrames The wait time in frames (default is 60 frames per second).
+function wait(durationFrames)
+    while durationFrames > 0 do
+        if isSkipping() or Input.consume(VKeys.textContinue) then
+            break
+        end
+        durationFrames = durationFrames - getEffectSpeed()
+        yield()
+    end    
+end
+
+---Waits until the text continue key is pressed. Skipping ignores the wait.
+function waitClick()
+    while not isSkipping() and not Input.consume(VKeys.textContinue) do
         yield()
     end
 end
