@@ -20,7 +20,6 @@ import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
-import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
@@ -95,6 +94,7 @@ public final class Osd implements Disposable {
         int wrapWidth = vsize.w - pad * 2;
 
         MutableStyledText text = new MutableStyledText();
+        text.setStyle(smallStyle);
         text.append(performanceMetrics.getPerformanceSummary());
 
         for (IContext active : env.getContextManager().getActiveContexts()) {
@@ -103,14 +103,14 @@ public final class Osd implements Disposable {
             if (screen != null) {
                 printLayers(layers, 0, screen.getRootLayer());
             }
-            text.append(new StyledText("\n" + Joiner.on('\n').join(layers), smallStyle));
+            text.append("\n" + Joiner.on('\n').join(layers));
 
             IScriptContext scriptContext = active.getScriptContext();
             IScriptThread mainThread = scriptContext.getMainThread();
             if (mainThread != null) {
                 String srcloc = LuaScriptUtil.getNearestLvnSrcloc(mainThread.getStackTrace());
                 if (srcloc != null) {
-                    text.append(new StyledText("\n" + srcloc, smallStyle));
+                    text.append("\n" + srcloc);
                 }
             }
         }
