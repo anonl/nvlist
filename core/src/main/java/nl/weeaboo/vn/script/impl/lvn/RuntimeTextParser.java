@@ -106,7 +106,10 @@ public class RuntimeTextParser implements Serializable {
 		case TAG: {
 			StringBuilder sb = new StringBuilder();
 			CharacterIterator itr = new StringCharacterIterator(token.getText());
-			ParserUtil.findBlockEnd(itr, ' ', sb);
+			ParserUtil.findBlockEnd(itr, '=', sb);
+            if (itr.current() == '=') {
+                itr.next(); // Skip '=' character
+            }
 
 			String tag = sb.toString().trim();
 			sb.delete(0, sb.length());
