@@ -32,6 +32,7 @@ allprojects {
         guavaVersion = '19.0'
         
         styledTextVersion = '1.5.1'
+        gdxTestVersion = '1.0.1'
         luajpp2Version = '2.3.10'
         tcommonVersion = '1.1.1'
         
@@ -41,6 +42,7 @@ allprojects {
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/anonl/gdx/" }
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
         maven { url "https://dl.bintray.com/anonl/gdx-video/" }
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
@@ -51,7 +53,21 @@ allprojects {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
         compileJava.options.encoding = 'UTF-8'
-        compileTestJava.options.encoding = 'UTF-8'        
+        compileTestJava.options.encoding = 'UTF-8'
+        
+	    dependencies {
+	        testCompile "junit:junit:$junitVersion"
+	        testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
+	    }
+        
+        test {
+            useJUnit {
+	            if (!project.hasProperty('uiTest')) {            
+	                // Exclude UI tests by default
+	                excludeCategories 'nl.weeaboo.gdx.test.junit.GdxUiTest'
+	            }
+            }
+        }      
     }
 }
 
@@ -63,8 +79,6 @@ project(':nvlist-api') {
         compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
         compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
         compile "com.google.guava:guava:$guavaVersion"
-        
-        testCompile "junit:junit:$junitVersion"
     }
 }
 
@@ -83,7 +97,6 @@ project(':nvlist-core') {
         compile "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"        
         compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion:"
     
-        testCompile "junit:junit:$junitVersion"
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
@@ -105,8 +118,6 @@ project(':nvlist-desktop') {
         runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         runtime "nl.weeaboo.gdx.video:gdx-video-desktop:$gdxVideoVersion"
         runtime "nl.weeaboo.gdx.video:gdx-video-desktop-natives:$gdxVideoVersion"
-        
-        testCompile "junit:junit:$junitVersion"
     }
 }
 
