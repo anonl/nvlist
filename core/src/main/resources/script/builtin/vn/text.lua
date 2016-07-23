@@ -6,11 +6,11 @@ module("vn.text", package.seeall)
 -- Local functions shared between sections
 --------------------------------------------------------------------------------------------------------------
 
-local function hideSpeakerName()
+local function hideSpeaker()
     -- TODO #16: Implement textboxes
 end
 
-local function updateSpeakerName()
+local function updateSpeaker()
     -- TODO #16: Implement textboxes
 end
 
@@ -26,17 +26,27 @@ TextMode = {
 ---Text functions
 -------------------------------------------------------------------------------------------------------------- @section text
 
-local currentSpeaker = {
-    name = nil,
-    nameChanged = false,
-    textStyle = nil,
-    resetEOL = false
-}
+local function getSpeakerState()
+    if context.speakerState == nil then
+        context.speakerState = {
+            name = nil, -- Speaker's name (styled text)
+            textStyle = nil, -- Default text style for this speaker
+            resetEOL = false, -- Speaker state should be reset at the end of the line
+            changed = false -- Speaker was modified since it was last passed to the textbox
+        }
+    end
+    return context.speakerState
+end
 
-local lineState = {
-    read = true,
-    style = nil
-}
+local function getLineState()
+    if context.lineState == nil then
+        context.lineState = {
+            read = true,
+            style = nil
+        }
+    end
+    return context.lineState
+end
 
 ---Sets the current text of the main textbox.
 -- @param str The new text (may be either a string or a StyledText object). Any
@@ -49,13 +59,14 @@ local lineState = {
 function text(str, triggers, meta)
 	meta = meta or {}
 
+    local lineState = getLineState()
+    local currentSpeaker = getSpeakerState()
+    
     lineState.read = false
     if meta.filename ~= nil and meta.line >= 1 then
         lineState.read = Seen.hasSeenLine(meta.filename, meta.line)
     end
 
-	local textBox = getMainTextBox()
-	
 	--Handle paragraph start differently based on text mode
 	if isTextModeADV() then
 		clearText()
@@ -74,13 +85,13 @@ function text(str, triggers, meta)
 		str, triggers = Text.parseText(str, triggers)
 	end
 	
-    updateSpeakerName()	
+    updateSpeaker()	
 	lineState.style = currentSpeaker.textStyle
 	
 	appendText(str)
 	
 	--Now wait until all text has faded in and execute triggers at appropriate times
-	waitForTextVisible(textBox, triggers)
+	waitForTextVisible(getMainTextDrawable(), triggers)
 
 	--Turn off skip mode if applicable
 	if getSkipMode() == SkipMode.PARAGRAPH then
@@ -105,13 +116,10 @@ end
 
 ---Waits until the text in the main textbox (or other TextDrawable) has finished
 -- appearing.
--- @tparam[opt=nil] TextDrawable textDrawable An optional TextDrawable to wait
---        for. If not specified, waits for the text in the main textbox.
+-- @tparam TextDrawable textDrawable An optional TextDrawable to wait for.
 -- @tab[opt=nil] triggers An optional table containing functions that should be
 --               called at specific text positions.
 function waitForTextVisible(textDrawable, triggers)
-	textDrawable = textDrawable or getMainTextBox()
-	
 	while textDrawable ~= nil and not textDrawable:isDestroyed() do
 		if triggers ~= nil then
             local startGlyph = textDrawable:getGlyphOffset(textDrawable:getStartLine())
@@ -137,7 +145,7 @@ end
 function clearText()
     getTextState():setText("")
     appendTextLog("", true)
-    hideSpeakerName()
+    hideSpeaker()
 end
 
 ---Appends text to the main textbox.
@@ -148,30 +156,30 @@ end
 function appendText(str, meta)
     meta = meta or {}
 
-	local styled = nil
-	local logStyled = nil
+    local lineState = getLineState()
+    print(lineState.style)
+    
+	local styled = Text.createStyledText(str, lineState.style)
+	local logStyled = styled
 	if lineState.read and prefs.textReadStyle ~= nil then
 		styled = Text.createStyledText(str, Text.extendStyle(prefs.textReadStyle, lineState.style))
-		logStyled = Text.createStyledText(str, lineState.style)
-	else
-		styled = Text.createStyledText(str, lineState.style)
-		logStyled = styled
 	end
 
-	local textBox = getMainTextBox()
+	local textDrawable = getMainTextDrawable()
 	local textState = getTextState()
-	if textBox == nil then
+	if textDrawable == nil then
+        Log.info("No text drawable set, unable to display text")
 		textState:appendText(styled)
 	    appendTextLog(logStyled)
 		return
 	end
 	
-	local oldText = textBox:getText()
-	local oldLineCount = textBox:getLineCount()
+	local oldText = textDrawable:getText()
+	local oldLineCount = textDrawable:getLineCount()
 	if oldLineCount > 0 then
 		textState:appendText(styled)
-		if meta.autoPage and textBox:getLineCount() > textBox:getEndLine() then
-			textBox:setVisibleText(0)
+		if meta.autoPage and textDrawable:getLineCount() > textDrawable:getEndLine() then
+			textDrawable:setVisibleText(0)
 			local index = 0
 			while index < styled:length() and styled:charAt(index) == 0x0A do
 				index = index + 1
@@ -187,17 +195,14 @@ function appendText(str, meta)
 	end
 
 	if isSkipping() then
-		textBox:setVisibleText(999999)
+		textDrawable:setVisibleText(999999)
 	end
 end
 
----Appends text to the textlog, but not the main textbox. Allows you to manually
--- add lines to the textlog, which can be useful if your VN has text that's not
--- displayed in the main textbox.
--- @param str The text to append (may be either a string or a StyledText
---        object).
--- @bool[opt=false] newPage If <code>true</code>, starts a new page in the
---      textlog before appending the text.
+---Appends text to the textlog, but not the main textbox. Allows you to manually add lines to the textlog,
+-- which can be useful if your VN has text that's not displayed in the main textbox.
+-- @param str The text to append (may be either a string or a StyledText object).
+-- @bool[opt=false] newPage If <code>true</code>, starts a new page in the textlog before appending the text.
 function appendTextLog(str, newPage)
     getTextState():appendTextLog(str, newPage)
 end
@@ -290,7 +295,8 @@ end
 
 ---Gets called whenever a close tag is encountered within text.
 function textTagClose(tag)
-    local func = tagHandlers["/" .. (tag or "")]
+    tag = tag or ""
+    local func = tagHandlers["/" .. tag]
     if func == nil then
         return
     end
@@ -305,19 +311,18 @@ end
 -- @tparam[opt=nil] TextStyle textStyle Default text style to use for text added
 --        to the main textbox while this character is speaking.
 function say(name, textStyle)
-    if currentSpeaker.name ~= name then
-        currentSpeaker.name = name
-        currentSpeaker.nameChanged = true
-    end
-    
+    local currentSpeaker = getSpeakerState()
+    currentSpeaker.name = name
     currentSpeaker.textStyle = textStyle
     currentSpeaker.resetEOL = false
+    currentSpeaker.changed = true
 end
 
 ---Like <code>say</code>, but resets the speaking character at the end of the current paragraph.
 -- @see say
 function sayLine(...)
     local result = say(...)
+    local currentSpeaker = getSpeakerState()
     currentSpeaker.resetEOL = true
     return result
 end
@@ -339,8 +344,6 @@ end
 ---Text mode
 -------------------------------------------------------------------------------------------------------------- @section textmode
 
-local textMode = TextMode.ADV
-
 ---Changes the text mode to full-screen textbox mode
 function setTextModeNVL()
 	setTextMode(TextMode.NVL)
@@ -354,12 +357,12 @@ end
 ---Changes the current text mode
 function setTextMode(mode)
     -- TODO #16: Implement textboxes
-	textMode = mode
+	context.textMode = mode
 end
 
 ---Returns the current text mode.
 function getTextMode()
-	return textMode
+	return context.textMode or TextMode.ADV
 end
 
 --- @return <code>true</code> if the text mode is NVL
@@ -370,21 +373,6 @@ end
 --- @return <code>true</code> if the text mode is NVL
 function isTextModeADV()
 	return getTextMode() == TextMode.ADV
-end
-
----Text box
--------------------------------------------------------------------------------------------------------------- @section textbox
-
-function getText()
-    return getTextState():getText()
-end
-
-function getMainTextBox()
-    return getTextState():getTextDrawable()
-end
-
-function setMainTextBox(textDrawable)
-    getTextState():setTextDrawable(textDrawable)
 end
 
 -- -----------------------------------------------------------------------------------------------------------
