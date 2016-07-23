@@ -25,4 +25,7 @@ public interface IContext extends Serializable, IDestructible {
 
     void setRenderEnv(IRenderEnv env);
 
+    /** Callback for when this context is made current (only the current context can run) */
+    void onCurrent();
+
 }

@@ -14,6 +14,8 @@ function titlescreen()
 
 	print(System.getEnv())
 	
+	registerSpeaker("guy", "Mr. Guy")
+	
 	local textLayer = createLayer(getRootLayer())
 	textLayer:setZ(-1000)
 	local textBox = AdvTextBox.new{layer=textLayer}
@@ -21,11 +23,11 @@ function titlescreen()
 	
 	waitClick()
 @@
-ABC 1   
-ABC 2   
-ABC 3   
-ABC 4   
-ABC 5   
+$guy ABC 1   
+$guy ABC 2   
+$guy ABC 3   
+$guy ABC 4   
+$guy ABC 5   
 @@
 
     movie("test")

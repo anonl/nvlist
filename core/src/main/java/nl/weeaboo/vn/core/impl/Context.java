@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -70,6 +71,12 @@ public class Context implements IContext {
 	        }
 	    }
 	}
+
+    @Override
+    public void onCurrent() {
+        LuaTable globals = scriptContext.getGlobals();
+        globals.rawset("context", scriptContext.getContextGlobals());
+    }
 
 	@Override
 	public void updateScreen() {

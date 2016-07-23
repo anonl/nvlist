@@ -206,6 +206,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     @Override
+    public void extendDefaultStyle(TextStyle ts) {
+        setDefaultStyle(getDefaultStyle().extend(ts));
+    }
+
+    @Override
     public void setDefaultStyle(TextStyle ts) {
         Checks.checkNotNull(ts);
 

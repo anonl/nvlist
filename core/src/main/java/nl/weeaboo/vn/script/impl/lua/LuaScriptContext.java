@@ -67,6 +67,10 @@ public class LuaScriptContext implements IScriptContext {
         return thread;
     }
 
+    public LuaTable getGlobals() {
+        return scriptEnv.getGlobals();
+    }
+
     public LuaTable getContextGlobals() {
         return contextGlobals;
     }
@@ -90,9 +94,6 @@ public class LuaScriptContext implements IScriptContext {
     public void updateThreads(IContext context) {
         IContext oldContext = ContextUtil.setCurrentContext(context);
         try {
-            LuaTable globals = scriptEnv.getGlobals();
-            globals.rawset("context", contextGlobals);
-
             runEvents();
             runThreads();
         } finally {

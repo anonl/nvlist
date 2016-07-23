@@ -17,6 +17,9 @@ public final class ContextUtil {
     public static IContext setCurrentContext(IContext context) {
         IContext oldContext = getCurrentContext();
         currentContext.set(context);
+        if (context != null) {
+            context.onCurrent();
+        }
         return oldContext;
     }
 

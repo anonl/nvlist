@@ -10,6 +10,10 @@ function getText()
     return getTextState():getText()
 end
 
+function getTextBox()
+    return context.textBox
+end
+
 function getMainTextDrawable()
     return getTextState():getTextDrawable()
 end
@@ -30,6 +34,11 @@ local TextBox = {
     getTextDrawable = nil,
     setSpeaker = nil
 }
+
+function TextBox:install()
+    context.textBox = self
+    setMainTextDrawable(self:getTextDrawable())
+end
 
 --- Creates and returns a new colored box in the given color
 local function createBgBox(layer, colorARGB)
@@ -74,7 +83,6 @@ function AdvTextBox.new(self)
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "NAME")
     nameLabel:setZ(-100)
-    nameLabel:setDefaultStyle(Text.createStyle{fontStyle="bold"})
 
     local nameBox = createBgBox(layer, bgColor)    
     local namePad = .01 * math.min(screenWidth, screenHeight)
@@ -90,7 +98,20 @@ function AdvTextBox.new(self)
     return self
 end
 
-function AdvTextBox:install()
-    setMainTextDrawable(self.textArea)
+function AdvTextBox:destroy()
+    destroyValues{self.textArea, self.textBox, self.nameLabel, self.nameBox}
 end
 
+function AdvTextBox:getTextDrawable()
+    return self.textArea
+end
+
+function AdvTextBox:setSpeaker(speaker)
+    if speaker == nil then
+        self.nameLabel:setText("")
+        self.nameBox:setVisible(false)
+    else
+        self.nameLabel:setText(speaker)
+        self.nameBox:setVisible(true)        
+    end
+end

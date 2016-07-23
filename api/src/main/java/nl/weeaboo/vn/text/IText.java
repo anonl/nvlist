@@ -22,6 +22,9 @@ public interface IText {
     /** Sets the default text style for the rendered text. */
     void setDefaultStyle(TextStyle style);
 
+    /** Convenience method for changing the default style by extending it with the given value */
+    void extendDefaultStyle(TextStyle ts);
+
     /** @return {@code true} if the default direction of this text is right-to-left */
     boolean isRightToLeft();
 

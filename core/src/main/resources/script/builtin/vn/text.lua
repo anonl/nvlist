@@ -6,26 +6,6 @@ module("vn.text", package.seeall)
 -- Local functions shared between sections
 --------------------------------------------------------------------------------------------------------------
 
-local function hideSpeaker()
-    -- TODO #16: Implement textboxes
-end
-
-local function updateSpeaker()
-    -- TODO #16: Implement textboxes
-end
-
----Global declarations
--------------------------------------------------------------------------------------------------------------- @section globals
-
----Text modes. These determine the way the textbox looks.
-TextMode = {
-	ADV=1, --Adventure game style bottom-aligned text.
-	NVL=2, --Novel style full screen text.
-}
-
----Text functions
--------------------------------------------------------------------------------------------------------------- @section text
-
 local function getSpeakerState()
     if context.speakerState == nil then
         context.speakerState = {
@@ -47,6 +27,33 @@ local function getLineState()
     end
     return context.lineState
 end
+
+local function hideSpeaker()
+    local textBox = getTextBox()
+    if textBox ~= nil then
+        textBox:setSpeaker(nil)
+    end
+end
+
+local function updateSpeaker()
+    local textBox = getTextBox()
+    if textBox ~= nil then
+        local currentSpeaker = getSpeakerState()
+        textBox:setSpeaker(currentSpeaker.name)
+    end
+end
+
+---Global declarations
+-------------------------------------------------------------------------------------------------------------- @section globals
+
+---Text modes. These determine the way the textbox looks.
+TextMode = {
+	ADV=1, --Adventure game style bottom-aligned text.
+	NVL=2, --Novel style full screen text.
+}
+
+---Text functions
+-------------------------------------------------------------------------------------------------------------- @section text
 
 ---Sets the current text of the main textbox.
 -- @param str The new text (may be either a string or a StyledText object). Any

@@ -127,6 +127,11 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
+    public void extendDefaultStyle(TextStyle style) {
+        textRenderer.extendDefaultStyle(style);
+    }
+
+    @Override
     public double getMaxHeight() {
         return textRenderer.getMaxHeight();
     }
