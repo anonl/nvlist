@@ -157,7 +157,6 @@ function appendText(str, meta)
     meta = meta or {}
 
     local lineState = getLineState()
-    print(lineState.style)
     
 	local styled = Text.createStyledText(str, lineState.style)
 	local logStyled = styled

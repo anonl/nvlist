@@ -13,14 +13,11 @@ function titlescreen()
 	print("titlescreen")
 
 	print(System.getEnv())
-
-	local textbox = Text.createTextDrawable()
-	setMainTextDrawable(textbox)
 	
-	local pad = 16
-	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() / 4)
-	textbox:setText("Test sentence for the text drawable.\nSecond line of text.")
-	textbox:setVisibleText(0)
+	local textLayer = createLayer(getRootLayer())
+	textLayer:setZ(-1000)
+	local textBox = AdvTextBox.new{layer=textLayer}
+	textBox:install()
 	
 	waitClick()
 @@

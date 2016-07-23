@@ -2,6 +2,8 @@ package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
+import nl.weeaboo.lua2.vm.LuaString;
+import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -19,6 +21,8 @@ import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 public class ImageLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
+    private static final LuaString BLANK_TEX_PATH = LuaString.valueOf("blank");
+    private static final LuaString WHITE_TEX_PATH = LuaString.valueOf("white");
 
     private final IEnvironment env;
 
@@ -129,14 +133,36 @@ public class ImageLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs getTexture(Varargs args) throws ScriptException {
+        boolean suppressErrors = args.toboolean(2);
+        return getLuaTexture(args.arg(1), suppressErrors);
+    }
+
+    private Varargs getLuaTexture(LuaValue luaValue, boolean suppressErrors) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
 
-        boolean suppressErrors = args.toboolean(2);
-        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1), suppressErrors);
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, luaValue, suppressErrors);
         if (tex == null) {
             return LuaNil.NIL;
         }
         return LuajavaLib.toUserdata(tex, ITexture.class);
+    }
+
+    /**
+     * @param args Not used
+     * @return A 1x1 transparent texture object
+     */
+    @ScriptFunction
+    public Varargs getBlankTexture(Varargs args) throws ScriptException {
+        return getLuaTexture(BLANK_TEX_PATH, false);
+    }
+
+    /**
+     * @param args Not used
+     * @return A 1x1 white texture object
+     */
+    @ScriptFunction
+    public Varargs getWhiteTexture(Varargs args) throws ScriptException {
+        return getLuaTexture(WHITE_TEX_PATH, false);
     }
 
     /**
