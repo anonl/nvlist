@@ -15,7 +15,7 @@ function titlescreen()
 	print(System.getEnv())
 
 	local textbox = Text.createTextDrawable()
-	setMainTextBox(textbox)
+	setMainTextDrawable(textbox)
 	
 	local pad = 16
 	textbox:setBounds(pad, pad, textbox:getWidth() - pad * 2, textbox:getHeight() / 4)
