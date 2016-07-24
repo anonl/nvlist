@@ -103,7 +103,7 @@ function update1join(...)
 	local threads = getTableOrVarArg(...)
 
 	for _,thread in ipairs(threads) do
-		if not thread:isFinished() then
+		if thread:isRunnable() then
 			thread:update()
 		end
 	end
@@ -118,7 +118,7 @@ function join(...)
 	while true do
 		local finished = true
 		for _,thread in ipairs(threads) do
-			if not thread:isFinished() then
+            if thread:isRunnable() then
 				finished = false
 				break
 			end

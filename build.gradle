@@ -26,14 +26,14 @@ allprojects {
         appName = 'NVList'
         
         gdxVersion = '1.9.3'
-        gdxVideoVersion = '0.0.2-anonl'
+        gdxVideoVersion = '0.0.4-anonl'
         junitVersion = '4.12'
         slf4jVersion = '1.7.21'
         guavaVersion = '19.0'
         
         styledTextVersion = '1.5.1'
         gdxTestVersion = '1.0.1'
-        luajpp2Version = '2.3.10'
+        luajpp2Version = '2.3.12'
         tcommonVersion = '1.1.1'
         
         vnRootDir = templateDir

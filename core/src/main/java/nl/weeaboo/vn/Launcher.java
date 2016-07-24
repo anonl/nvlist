@@ -355,7 +355,7 @@ public class Launcher extends ApplicationAdapter {
 
     /**
      * This method is called when the user attempts to close the window. This method is only called on the
-     * desktop, where close events can be canceled.
+     * desktop, where close events can be cancelled.
      *
      * @return {@code true} if the window should close, {@code false} to cancel.
      */

@@ -38,6 +38,43 @@ local TextBox = {
 function TextBox:install()
     context.textBox = self
     setMainTextDrawable(self:getTextDrawable())
+    
+    -- Store initial alpha values for each subcomponent so we can restore the alpha after fading out
+    self.baseAlpha = {}
+    for _,d in ipairs(self:getDrawables()) do
+        self.baseAlpha[d] = d:getAlpha()
+    end
+end
+
+function TextBox:destroy()
+    self.layer:destroy()
+end
+
+function TextBox:getDrawables()
+    return Image.getDrawables(self.layer)
+end
+
+function TextBox:fadeTo(targetAlpha, duration)
+    local threads = {}
+    for _,d in ipairs(self:getDrawables()) do
+        local a = targetAlpha * (self.baseAlpha[d] or 1.0)
+        table.insert(threads, newThread(fadeTo, d, a, duration))
+    end
+    update1join(threads)
+end
+
+function TextBox:show(duration)
+    self:fadeTo(1.0, duration)
+end
+
+function TextBox:hide(duration)
+    self:fadeTo(0.0, duration)
+end
+
+local function createTextBoxLayer()
+    local textLayer = createLayer(getRootLayer())
+    textLayer:setZ(-1000)
+    return textLayer
 end
 
 --- Creates and returns a new colored box in the given color
@@ -67,7 +104,7 @@ AdvTextBox = extend(TextBox, {
 function AdvTextBox.new(self)
     self = extend(AdvTextBox, self)
     
-    local layer = self.layer or error("No layer specified")
+    local layer = createTextBoxLayer()
     local bgColor = 0xE0000000
 
     -- Create the main text box
@@ -90,6 +127,7 @@ function AdvTextBox.new(self)
     nameBox:setPos(textBox:getX(), textBox:getY() + textBox:getHeight())    
     layoutPadded(nameBox, nameLabel, namePad)
     
+    self.layer = layer
     self.textArea = textArea
     self.textBox = textBox
     self.nameLabel = nameLabel

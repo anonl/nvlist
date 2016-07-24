@@ -16,18 +16,18 @@ function titlescreen()
 	
 	registerSpeaker("guy", "Mr. Guy")
 	
-	local textLayer = createLayer(getRootLayer())
-	textLayer:setZ(-1000)
-	local textBox = AdvTextBox.new{layer=textLayer}
+	local textBox = AdvTextBox.new()
 	textBox:install()
 	
 	waitClick()
 @@
-$guy ABC 1   
-$guy ABC 2   
-$guy ABC 3   
-$guy ABC 4   
-$guy ABC 5   
+$guy ABC 1
+@textBox:hide()
+$guy Hidden
+@textBox:show()
+$guy ABC 3
+$guy ABC 4
+$guy ABC 5
 @@
 
     movie("test")

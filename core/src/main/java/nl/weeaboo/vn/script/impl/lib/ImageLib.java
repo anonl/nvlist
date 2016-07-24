@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import com.google.common.collect.Iterables;
+
+import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaString;
@@ -11,9 +14,11 @@ import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
@@ -94,6 +99,23 @@ public class ImageLib extends LuaLib {
         IContext context = ContextUtil.getCurrentContext();
         IScreen screen = context.getScreen();
         screen.setActiveLayer(layer);
+    }
+
+    /**
+     * Fetches a snaphot of all the drawables contained in a specific layer
+     *
+     * @param args The layer to get the drawables from.
+     */
+    @ScriptFunction
+    public Varargs getDrawables(Varargs args) throws ScriptException {
+        // We don't require the layer interface, IVisualGroup is good enough
+        IVisualGroup layer = args.arg1().touserdata(IVisualGroup.class);
+        if (layer == null) {
+            throw new ScriptException("Invalid visual group arg: " + args.tojstring(1));
+        }
+
+        Iterable<IDrawable> drawables = Iterables.filter(layer.getChildren(), IDrawable.class);
+        return CoerceJavaToLua.toTable(drawables, IDrawable.class);
     }
 
     @ScriptFunction
