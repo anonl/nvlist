@@ -12,6 +12,9 @@ final class SkipState implements ISkipState {
 
     private SkipMode skipMode = SkipMode.NONE;
 
+    // TODO: Implement an alt skip key that toggles between skip-read and skip-all
+    private boolean skipUnread = false;
+
     @Override
     public boolean isSkipping() {
         return getSkipMode() != SkipMode.NONE;
@@ -46,6 +49,14 @@ final class SkipState implements ISkipState {
 
     private boolean isSkipKeyHeld(IInput input) {
         return input.isPressed(VKey.SKIP, false);
+    }
+
+    @Override
+    public boolean shouldSkipLine(boolean lineRead) {
+        if (!isSkipping()) {
+            return false;
+        }
+        return lineRead || skipUnread;
     }
 
 }

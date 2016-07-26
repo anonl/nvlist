@@ -10,6 +10,9 @@ public interface ISkipState extends Serializable {
     /** @return {@code true} if currently skipping. */
     boolean isSkipping();
 
+    /** @return {@code true} if the text line should be skipped according to the current skip mode. */
+    boolean shouldSkipLine(boolean lineRead);
+
     /** @return The current skip mode */
     SkipMode getSkipMode();
 

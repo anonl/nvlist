@@ -50,6 +50,10 @@ function isSkipping()
     return getSkipState():isSkipping()
 end
 
+function shouldSkipLine()
+    return getSkipState():shouldSkipLine(isLineRead())
+end
+
 function getSkipMode()
     return getSkipState():getSkipMode()
 end
@@ -68,7 +72,7 @@ end
 -- @number durationFrames The wait time in frames (default is 60 frames per second).
 function wait(durationFrames)
     while durationFrames > 0 do
-        if isSkipping() or Input.consume(VKeys.textContinue) then
+        if shouldSkipLine() or Input.consume(VKeys.textContinue) then
             break
         end
         durationFrames = durationFrames - getEffectSpeed()
@@ -78,7 +82,7 @@ end
 
 ---Waits until the text continue key is pressed. Skipping ignores the wait.
 function waitClick()
-    while not isSkipping() and not Input.consume(VKeys.textContinue) do
+    while not shouldSkipLine() and not Input.consume(VKeys.textContinue) do
         yield()
     end
 end

@@ -223,6 +223,11 @@ function appendTextLog(str, newPage)
     getTextState():appendTextLog(str, newPage)
 end
 
+function isLineRead()
+    local lineState = getLineState()
+    return lineState.read
+end
+
 ---Stringifiers
 -------------------------------------------------------------------------------------------------------------- @section stringifiers
 
