@@ -123,7 +123,8 @@ public final class LuaConvertUtil {
     }
 
     public static Object[] toObjectArray(Varargs luaArgs, int luaStartIndex) {
-        Checks.checkRange(luaStartIndex, "luaStartIndex", 1, luaArgs.narg());
+        // Don't check upper bound -- otherwise varargs after an optional arg are annoying to use
+        Checks.checkRange(luaStartIndex, "luaStartIndex", 1);
 
         Object[] result = new Object[luaArgs.narg() + 1 - luaStartIndex];
         for (int n = 0; n < result.length; n++) {
