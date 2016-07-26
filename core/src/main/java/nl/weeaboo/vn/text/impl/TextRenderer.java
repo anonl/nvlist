@@ -49,6 +49,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         StyledText stext = newText.immutableCopy();
 
         LayoutParameters layoutParams = new LayoutParameters();
+        if (isRightToLeft()) {
+            layoutParams.x = getCursorWidth();
+        }
         layoutParams.wrapWidth = wrapWidth;
         layoutParams.isRightToLeft = isRightToLeft();
         return LayoutUtil.layout(fontStore.get(), stext, layoutParams);
