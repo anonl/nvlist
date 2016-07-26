@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 
 public class LogLib extends LuaLib {
 
@@ -33,11 +33,7 @@ public class LogLib extends LuaLib {
         return args.tojstring(1);
     }
     private Object[] getLogArgs(Varargs args) {
-        Object[] result = new Object[args.narg() - 1];
-        for (int n = 0; n < result.length; n++) {
-            result[n] = CoerceLuaToJava.coerceArg(args.arg(2 + n), Object.class);
-        }
-        return result;
+        return LuaConvertUtil.toObjectArray(args, 2);
     }
 
     /**

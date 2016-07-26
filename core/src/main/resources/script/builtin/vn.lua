@@ -41,9 +41,8 @@ function jump(filename)
     return Thread.jump(filename)
 end
 
--- ----------------------------------------------------------------------------
---  Include submodules
--- ----------------------------------------------------------------------------
+---Include submodules
+-------------------------------------------------------------------------------------------------------------- @section submodules
 
 module("vn", package.seeall)
 
@@ -89,3 +88,10 @@ end
 
 -- Flatten submodules into main namespace
 flattenModule(_G)
+
+---Initialization
+-------------------------------------------------------------------------------------------------------------- @section init
+
+-- Register default textboxes
+registerTextBox(TextMode.NVL, NvlTextBox.new)
+registerTextBox(TextMode.ADV, AdvTextBox.new)

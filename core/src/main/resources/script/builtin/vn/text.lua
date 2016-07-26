@@ -9,10 +9,10 @@ module("vn.text", package.seeall)
 local function getSpeakerState()
     if context.speakerState == nil then
         context.speakerState = {
-            name = nil, -- Speaker's name (styled text)
-            textStyle = nil, -- Default text style for this speaker
+            name = nil,       -- Speaker's name (styled text)
+            textStyle = nil,  -- Default text style for this speaker
             resetEOL = false, -- Speaker state should be reset at the end of the line
-            changed = false -- Speaker was modified since it was last passed to the textbox
+            changed = false   -- Speaker was modified since it was last passed to the textbox
         }
     end
     return context.speakerState
@@ -39,7 +39,17 @@ local function updateSpeaker()
     local textBox = getTextBox()
     if textBox ~= nil then
         local currentSpeaker = getSpeakerState()
-        textBox:setSpeaker(currentSpeaker.name)
+        if currentSpeaker.changed then
+            if textBox:setSpeaker(currentSpeaker.name) then
+                appendTextLog(Text.format("[{}]\n", currentSpeaker.name))
+            else
+                if isTextModeADV() then
+                    appendText(Text.format("[{}]", currentSpeaker.name))
+                else
+                    appendText(Text.format("[{}]\n", currentSpeaker.name))
+                end                
+            end
+        end
     end
 end
 
@@ -362,8 +372,11 @@ end
 
 ---Changes the current text mode
 function setTextMode(mode)
-    -- TODO #16: Implement textboxes
-	context.textMode = mode
+    if context.textMode ~= mode then
+    	context.textMode = mode
+
+        setActiveTextBox(mode)
+    end
 end
 
 ---Returns the current text mode.

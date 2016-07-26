@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.script.impl.lua;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
@@ -119,6 +120,16 @@ public final class LuaConvertUtil {
         } else {
             return CoerceLuaToJava.coerceArg(luaValue, attribute.getType());
         }
+    }
+
+    public static Object[] toObjectArray(Varargs luaArgs, int luaStartIndex) {
+        Checks.checkRange(luaStartIndex, "luaStartIndex", 1, luaArgs.narg());
+
+        Object[] result = new Object[luaArgs.narg() + 1 - luaStartIndex];
+        for (int n = 0; n < result.length; n++) {
+            result[n] = CoerceLuaToJava.coerceArg(luaArgs.arg(luaStartIndex + n), Object.class);
+        }
+        return result;
     }
 
 }

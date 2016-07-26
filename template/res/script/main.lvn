@@ -14,20 +14,27 @@ function titlescreen()
 
 	print(System.getEnv())
 	
-	registerSpeaker("guy", "Mr. Guy")
+    registerSpeaker("guy", "Mr. Guy")
+    registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
 	
-	local textBox = AdvTextBox.new()
-	textBox:install()
-	
-	waitClick()
+	setTextModeNVL()
+
 @@
+No speaker
 $guy ABC 1
-@textBox:hide()
-$guy Hidden
-@textBox:show()
+$man ABC 2
 $guy ABC 3
 $guy ABC 4
-$guy ABC 5
+@@
+
+    setTextModeADV()
+
+@@
+No speaker
+$guy ABC 1
+$man ABC 2
+$guy ABC 3
+$guy ABC 4
 @@
 
     movie("test")

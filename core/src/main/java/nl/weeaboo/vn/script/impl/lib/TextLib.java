@@ -109,7 +109,8 @@ public class TextLib extends LuaLib {
      * @param args
      *        <ol>
      *        <li>string or styled text
-     *        <li>(optional) text style
+     *        <li>(optional) Base text style. Style information in the passed styled text takes precedence if
+     *        available.
      *        </ol>
      * @return styled text
      */
@@ -129,6 +130,33 @@ public class TextLib extends LuaLib {
             st = new StyledText(text, style);
         }
         return LuajavaLib.toUserdata(st, StyledText.class);
+    }
+
+    /**
+     * Replaces all occurrences of '{}' in the format string
+     *
+     * @param args
+     *        <ol>
+     *        <li>format string or styled text
+     *        <li>(optional) variable number of arguments to insert in place of the format string's '{}'
+     *        placeholders.
+     *        </ol>
+     * @return styled text
+     */
+    @ScriptFunction
+    public Varargs format(Varargs args) throws ScriptException {
+        CharSequence format = args.touserdata(1, CharSequence.class);
+        if (format == null) {
+            format = (args.isnil(1) ? "" : args.tojstring(1));
+        }
+
+        try {
+            Object[] javaArgs = LuaConvertUtil.toObjectArray(args, 2);
+            StyledText result = StyledText.format(format, javaArgs);
+            return LuajavaLib.toUserdata(result, StyledText.class);
+        } catch (IllegalArgumentException iae) {
+            throw new ScriptException("Formatting error", iae);
+        }
     }
 
     /**
