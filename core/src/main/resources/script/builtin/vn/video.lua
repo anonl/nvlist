@@ -17,5 +17,10 @@ function movie(filename)
     local video = Video.movie(filename)
     repeat
         yield()
-    until video == nil or video:isStopped()
+    until video == nil or video:isStopped() or Input.consume(VKeys.cancel)
+    
+    -- Stop video if cancelled
+    if video ~= nil and not video:isStopped() then
+        video:stop()
+    end
 end
