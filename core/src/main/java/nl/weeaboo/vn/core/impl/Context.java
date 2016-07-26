@@ -12,6 +12,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISkipState;
+import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.impl.Screen;
@@ -81,6 +82,10 @@ public class Context implements IContext {
 	@Override
 	public void updateScreen() {
 	    screen.update();
+
+        // Handle skip mode
+        IInput input = StaticEnvironment.INPUT.get();
+        getSkipState().handleInput(input);
 	}
 
     public void drawScreen(IDrawBuffer drawBuffer) {

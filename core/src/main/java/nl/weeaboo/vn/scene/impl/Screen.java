@@ -51,6 +51,7 @@ public class Screen implements IScreen {
     }
 
     private void handleInput(IInput input) {
+        // Handle text continue
         ITextDrawable td = textState.getTextDrawable();
         if (td != null) {
             int lineCount = td.getLineCount();

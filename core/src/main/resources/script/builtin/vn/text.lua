@@ -112,7 +112,7 @@ function text(str, triggers, meta)
 
 	--Turn off skip mode if applicable
 	if getSkipMode() == SkipMode.PARAGRAPH then
-		setSkipMode(0)
+		setSkipMode(SkipMode.NONE)
 	end
 	
 	--Wait for click

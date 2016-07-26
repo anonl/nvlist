@@ -2,6 +2,8 @@ package nl.weeaboo.vn.core;
 
 import java.io.Serializable;
 
+import nl.weeaboo.vn.input.IInput;
+
 /** Skip, pause, auto read state */
 public interface ISkipState extends Serializable {
 
@@ -20,5 +22,8 @@ public interface ISkipState extends Serializable {
      * @see #setSkipMode(SkipMode)
      */
     void stopSkipping();
+
+    /** Process user input */
+    void handleInput(IInput input);
 
 }

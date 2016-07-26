@@ -26,6 +26,7 @@ import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
@@ -98,6 +99,11 @@ public final class Osd implements Disposable {
         text.append(performanceMetrics.getPerformanceSummary());
 
         for (IContext active : env.getContextManager().getActiveContexts()) {
+            ISkipState skipState = active.getSkipState();
+            if (skipState.isSkipping()) {
+                text.append("\nSkipping: " + skipState.getSkipMode());
+            }
+
             List<String> layers = Lists.newArrayList();
             IScreen screen = active.getScreen();
             if (screen != null) {

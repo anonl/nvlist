@@ -31,7 +31,11 @@ function getRenderEnv()
 end
 
 function getEffectSpeed()
-    return prefs.effectSpeed or 1
+    local speed = prefs.effectSpeed or 1
+    if isSkipping() then
+        speed = speed * 4
+    end
+    return speed
 end
 
 -- ----------------------------------------------------------------------------
