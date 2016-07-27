@@ -172,6 +172,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public int[] getHitTags(double cx, double cy) {
+        // TODO: Implement
         return new int[0];
     }
 

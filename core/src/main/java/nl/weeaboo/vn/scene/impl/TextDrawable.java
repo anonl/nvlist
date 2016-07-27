@@ -4,11 +4,11 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
-import nl.weeaboo.vn.input.IInput;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
+import nl.weeaboo.vn.text.IClickIndicator;
 import nl.weeaboo.vn.text.ITextRenderer;
+import nl.weeaboo.vn.text.impl.ClickIndicator;
 import nl.weeaboo.vn.text.impl.TextRenderer;
 
 public class TextDrawable extends Transformable implements ITextDrawable {
@@ -16,6 +16,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     private final ITextRenderer textRenderer = new TextRenderer();
+    private final IClickIndicator clickIndicator = new ClickIndicator();
 
     private double textSpeed = 0;
 
@@ -23,16 +24,24 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
+    protected void onDestroyed() {
+        clickIndicator.destroy();
+
+        super.onDestroyed();
+    }
+
+    @Override
     public void onTick() {
         increaseVisibleText(textSpeed);
 
         textRenderer.update();
+
+        clickIndicator.update(this);
     }
 
     @Override
-    public void handleInput(Matrix parentTransform, IInput input) {
-        super.handleInput(parentTransform, input);
-
+    public IClickIndicator getClickIndicator() {
+        return clickIndicator;
     }
 
     @Override

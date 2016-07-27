@@ -151,6 +151,18 @@ local function layoutPadded(outer, inner, pad)
         outer:getWidth() - pad*2, outer:getHeight() - pad*2)
 end
 
+local function initClickIndicator(textDrawable, texture)
+    local d = Image.createImage(textDrawable:getLayer(), texture)
+
+    local ci = textDrawable:getClickIndicator()
+    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
+    ci:setSize(scale * d:getWidth(), scale * d:getHeight())
+    ci:setDrawable(d)
+    
+    -- Reserve some room for the continue indicator
+    textDrawable:setWidth(textDrawable:getWidth() - ci:getWidth())
+end
+
 ---NVL textbox
 -------------------------------------------------------------------------------------------------------------- @section NVL textbox
 
@@ -210,6 +222,9 @@ function AdvTextBox.new(self)
         math.ceil(screenHeight/4 - textPad*2))
     textBox:setPos(math.floor((screenWidth - textBox:getWidth()) / 2), math.floor(textPad))
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
+    
+    -- Add continue indicator
+    initClickIndicator(textArea, "test")
     
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "?")

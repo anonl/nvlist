@@ -8,6 +8,7 @@ import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.MutableMatrix;
 import nl.weeaboo.vn.math.Polygon;
+import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITransformable;
 
 public abstract class Transformable extends VisualElement implements ITransformable {
@@ -70,6 +71,11 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     protected void invalidateCollisionShape() {
         _collisionShape = null;
+    }
+
+    @Override
+    public ILayer getLayer() {
+        return SceneUtil.getParentLayer(this);
     }
 
 	@Override

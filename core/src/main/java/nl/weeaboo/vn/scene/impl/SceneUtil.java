@@ -2,6 +2,7 @@ package nl.weeaboo.vn.scene.impl;
 
 import com.google.common.collect.ImmutableSet;
 
+import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.signal.ISignal;
@@ -16,6 +17,16 @@ public final class SceneUtil {
             elem = elem.getParent();
         }
         return elem;
+    }
+
+    public static ILayer getParentLayer(IVisualElement elem) {
+        while (elem.getParent() != null) {
+            elem = elem.getParent();
+            if (elem instanceof ILayer) {
+                return (ILayer)elem;
+            }
+        }
+        return null;
     }
 
     public static Iterable<? extends IVisualElement> getChildren(IVisualElement elem, VisualOrdering order) {

@@ -4,7 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 
-final class BoundsHelper extends TransientListenerSupport {
+public final class BoundsHelper extends TransientListenerSupport {
 
 	private static final long serialVersionUID = 1L;
 
