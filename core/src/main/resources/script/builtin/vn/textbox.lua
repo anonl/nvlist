@@ -60,11 +60,37 @@ function setActiveTextBox(textMode)
         textBox = textBoxConstr()
         textBox:install()
         if wasVisible then
-            textBox:hide(0) -- Set alpha to 0.0 (starts at 1.0)
+            textBox:hide(1) -- Set alpha to 0.0 (starts at 1.0)
             textBox:show() -- Gradually fade to visibility
         end
     end
     context.textBox = textBox
+end
+
+---Click indicator functions
+-------------------------------------------------------------------------------------------------------------- @section click indicator
+
+local ClickIndicator = {
+    width = 32,
+    height= 32,
+    drawable = nil
+}
+
+function ClickIndicator.new(self)
+    self = extend(ClickIndicator, self)
+    
+    -- Initially invisible
+    self.drawable:setVisible(false)
+    
+    return self
+end
+
+function ClickIndicator:show()
+    self.drawable:setVisible(true)
+end
+
+function ClickIndicator:hide()
+    self.drawable:setVisible(false)
 end
 
 ---Textbox functions
@@ -72,13 +98,8 @@ end
 
 -- Prototype for TextBox implementations
 local TextBox = {
-    install = nil,
-    destroy = nil,
-    show = nil,
-    hide = nil,
     visible = true,
-    getTextDrawable = nil,
-    setSpeaker = nil
+    clickIndicator = nil
 }
 
 function TextBox:install()
@@ -131,6 +152,18 @@ function TextBox:hide(duration)
     self.visible = false
 end
 
+function TextBox:showClickIndicator()
+    if self.clickIndicator ~= nil then
+        self.clickIndicator:show()
+    end
+end
+
+function TextBox:hideClickIndicator()
+    if self.clickIndicator ~= nil then
+        self.clickIndicator:hide()
+    end
+end
+
 local function createTextBoxLayer()
     local textLayer = createLayer(getRootLayer())
     textLayer:setZ(-1000)
@@ -153,14 +186,24 @@ end
 
 local function initClickIndicator(textDrawable, texture)
     local d = Image.createImage(textDrawable:getLayer(), texture)
-
-    local ci = textDrawable:getClickIndicator()
-    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
-    ci:setSize(scale * d:getWidth(), scale * d:getHeight())
-    ci:setDrawable(d)
+    newThread(function()
+        while not d:isDestroyed() do
+            d:rotate(1)
+            yield()
+        end
+    end)
     
+    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
+    local dw = scale * d:getWidth()
+    local dh = scale * d:getHeight()
+    d:setSize(dw, dh)
+    d:setAlign(0.5, 0.5)
+    d:setPos(textDrawable:getX() + textDrawable:getWidth() - dw / 2, textDrawable:getY() + dh / 2)
+
     -- Reserve some room for the continue indicator
-    textDrawable:setWidth(textDrawable:getWidth() - ci:getWidth())
+    textDrawable:setWidth(textDrawable:getWidth() - dw)
+
+    return ClickIndicator.new{drawable = d}
 end
 
 ---NVL textbox
@@ -224,7 +267,7 @@ function AdvTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
     
     -- Add continue indicator
-    initClickIndicator(textArea, "test")
+    self.clickIndicator = initClickIndicator(textArea, "test")
     
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "?")
