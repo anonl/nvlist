@@ -49,9 +49,6 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         StyledText stext = newText.immutableCopy();
 
         LayoutParameters layoutParams = new LayoutParameters();
-        if (isRightToLeft()) {
-            layoutParams.x = getCursorWidth();
-        }
         layoutParams.wrapWidth = wrapWidth;
         layoutParams.isRightToLeft = isRightToLeft();
         return LayoutUtil.layout(fontStore.get(), stext, layoutParams);
@@ -149,12 +146,8 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         }
     }
 
-    protected float getCursorWidth() {
-        return 0f;
-    }
-
     protected int getLayoutMaxWidth() {
-        return (int)Math.floor(getMaxWidth() - getCursorWidth());
+        return (int)Math.floor(getMaxWidth());
     }
 
     protected int getLayoutMaxHeight() {
