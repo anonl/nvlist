@@ -111,3 +111,10 @@ function waitClick()
         textBox:hideClickIndicator()
     end
 end
+
+---Waits indefinitely.
+function waitForever()
+    while true do
+        yield(60) --A high yield value will prevent the thread from waking up.
+    end
+end
