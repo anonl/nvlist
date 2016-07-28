@@ -1,18 +1,7 @@
 package nl.weeaboo.vn.image.impl;
 
-import java.nio.ByteBuffer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.gdx.graphics.GdxTextureUtil;
-import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
@@ -25,18 +14,14 @@ import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 public abstract class BitmapTweenRenderer extends AnimatedRenderable {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
-    private static final Logger LOG = LoggerFactory.getLogger(BitmapTweenRenderer.class);
-
-    private static final int INTERPOLATOR_MAX = 255;
 
     protected final IImageModule imageModule;
 
-    private final BitmapTweenConfig config;
+    protected final BitmapTweenConfig config;
 
     private Area2D baseUV = ITexture.DEFAULT_UV;
 
     // --- Initialized in prepare() ---
-    private Dim remapTextureSize;
     private ITexture remapTexture;
     private TriangleGrid grid;
 
@@ -55,7 +40,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         grid = null;
     }
 
-    private void disposeRemapTexture() {
+    protected void disposeRemapTexture() {
         remapTexture = null;
     }
 
@@ -67,9 +52,6 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         double height = getHeight();
 
         ControlImage controlImage = config.getControlImage();
-
-        // Create remap texture
-        remapTextureSize = Dim.of(INTERPOLATOR_MAX + 1, 1);
 
         // Create geometry
         InputTexture tex0 = config.getStartTexture();
@@ -109,65 +91,17 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
                 bounds1.toArea2D(), getEndTextureUV(), wrap1,
                 controlBounds.toArea2D(), controlTexUV, controlWrap);
 
-        updateRemapTex(); // Init remapTex
+        remapTexture = updateRemapTexture(remapTexture); // Init remapTex
     }
 
     @Override
     protected void updateResources() {
         super.updateResources();
 
-        updateRemapTex();
+        remapTexture = updateRemapTexture(remapTexture);
     }
 
-    private boolean updateRemapTex() {
-        double i1 = INTERPOLATOR_MAX * getNormalizedTime() * (1 + config.getRange());
-        double i0 = i1 - INTERPOLATOR_MAX * config.getRange();
-
-        int w = remapTextureSize.w;
-        int h = remapTextureSize.h;
-        Pixmap pixmap = new Pixmap(w, h, Pixmap.Format.Intensity);
-        try {
-            ByteBuffer buf = pixmap.getPixels();
-
-            IInterpolator interpolator = config.getInterpolator();
-            for (int n = 0; n < w * h; n++) {
-                byte value;
-                if (n <= i0) {
-                    // Fully visible
-                    value = (byte)INTERPOLATOR_MAX;
-                } else if (n >= i1) {
-                    // Not visible yet
-                    value = (byte)0;
-                } else {
-                    // Value between i0 and i1; partially visible
-                    // f is 1.0 at i0, 0.0 at i1
-                    double f = (i1 - n) / (i1 - i0);
-                    float val = INTERPOLATOR_MAX * interpolator.remap((float)f);
-                    value = (byte)Math.max(0, Math.min(INTERPOLATOR_MAX, val));
-                }
-                buf.put(n, value);
-            }
-
-            Texture backingTexture = GdxTextureUtil.getTexture(remapTexture);
-
-            LOG.debug("Remap tex: {}->{} ({})", i0, i1, (backingTexture == null ? "alloc" : "update"));
-
-            if (backingTexture != null) {
-                // Update existing texture
-                backingTexture.draw(pixmap, 0, 0);
-                pixmap.dispose();
-            } else {
-                // (Re)allocate texture
-                disposeRemapTexture();
-                remapTexture = imageModule.createTexture(PixelTextureData.fromPixmap(pixmap), 1, 1);
-            }
-        } catch (RuntimeException re) {
-            pixmap.dispose();
-            throw re;
-        }
-
-        return true;
-    }
+    protected abstract ITexture updateRemapTexture(ITexture remapTexture);
 
     protected TriangleGrid getGeometry() {
         return grid;
