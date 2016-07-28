@@ -71,8 +71,6 @@ end
 -------------------------------------------------------------------------------------------------------------- @section click indicator
 
 local ClickIndicator = {
-    width = 32,
-    height= 32,
     drawable = nil
 }
 
@@ -91,6 +89,48 @@ end
 
 function ClickIndicator:hide()
     self.drawable:setVisible(false)
+end
+
+local ClickIndicatorSide = {
+    RIGHT = 0,      -- Fixed position on the bottom-right
+    TEXT_BOTTOM = 1 -- Dynamic position directly underneath the current text, aligned on the left side
+}
+
+local function initClickIndicator(textDrawable, texture, side)
+    local d = Image.createImage(textDrawable:getLayer(), texture)
+    newThread(function()
+        while not d:isDestroyed() do
+            if side == ClickIndicatorSide.TEXT_BOTTOM then
+                local topY = textDrawable:getY() + textDrawable:getHeight()
+                d:setY(topY - textDrawable:getTextHeight() - d:getHeight() / 2)
+            end
+            d:rotate(1)
+            yield()
+        end
+    end)
+    
+    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
+    local dw = scale * d:getWidth()
+    local dh = scale * d:getHeight()
+    d:setSize(dw, dh)
+    d:setAlign(0.5, 0.5)
+    
+    if side == ClickIndicatorSide.RIGHT then
+        d:setPos(textDrawable:getX() + textDrawable:getWidth() - dw / 2, textDrawable:getY() + dh / 2)
+    
+        -- Reserve some room for the continue indicator
+        textDrawable:setWidth(textDrawable:getWidth() - dw)
+    elseif side == ClickIndicatorSide.TEXT_BOTTOM then
+        d:setPos(textDrawable:getX() + dw / 2, textDrawable:getY() + dh / 2)
+
+        -- Reserve some room for the continue indicator
+        textDrawable:setY(textDrawable:getY() + dh)
+        textDrawable:setHeight(textDrawable:getHeight() - dh)
+    else
+        Log.warn("Unknown click indicator side: {}", side)
+    end
+    
+    return ClickIndicator.new{drawable = d}
 end
 
 ---Textbox functions
@@ -184,28 +224,6 @@ local function layoutPadded(outer, inner, pad)
         outer:getWidth() - pad*2, outer:getHeight() - pad*2)
 end
 
-local function initClickIndicator(textDrawable, texture)
-    local d = Image.createImage(textDrawable:getLayer(), texture)
-    newThread(function()
-        while not d:isDestroyed() do
-            d:rotate(1)
-            yield()
-        end
-    end)
-    
-    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
-    local dw = scale * d:getWidth()
-    local dh = scale * d:getHeight()
-    d:setSize(dw, dh)
-    d:setAlign(0.5, 0.5)
-    d:setPos(textDrawable:getX() + textDrawable:getWidth() - dw / 2, textDrawable:getY() + dh / 2)
-
-    -- Reserve some room for the continue indicator
-    textDrawable:setWidth(textDrawable:getWidth() - dw)
-
-    return ClickIndicator.new{drawable = d}
-end
-
 ---NVL textbox
 -------------------------------------------------------------------------------------------------------------- @section NVL textbox
 
@@ -228,6 +246,9 @@ function NvlTextBox.new(self)
     textBox:setPos(math.floor(textPad), math.floor(textPad))
     textBox:setSize(math.ceil(screenWidth - textPad*2), math.ceil(screenHeight - textPad*2))
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
+    
+    -- Add continue indicator
+    self.clickIndicator = initClickIndicator(textArea, "test", ClickIndicatorSide.TEXT_BOTTOM)
         
     self.layer = layer
     self.textArea = textArea
@@ -267,7 +288,7 @@ function AdvTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "test")
+    self.clickIndicator = initClickIndicator(textArea, "test", ClickIndicatorSide.RIGHT)
     
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "?")
