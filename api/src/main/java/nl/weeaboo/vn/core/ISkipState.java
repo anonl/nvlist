@@ -20,6 +20,12 @@ public interface ISkipState extends Serializable {
     void setSkipMode(SkipMode mode);
 
     /**
+     * Increases the skip level to the specified mode. If the skip level is already at that level or higher,
+     * nothing is changed.
+     */
+    void skip(SkipMode mode);
+
+    /**
      * Equivalent to {@code setSkipMode(SkipMode.NONE)}
      *
      * @see #setSkipMode(SkipMode)

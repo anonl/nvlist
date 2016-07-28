@@ -38,9 +38,8 @@ function getEffectSpeed()
     return speed
 end
 
--- ----------------------------------------------------------------------------
---  Skip functions
--- ----------------------------------------------------------------------------
+---Skip functions
+-------------------------------------------------------------------------------------------------------------- @section skip functions
 
 function getSkipState()
 	return getCurrentContext():getSkipState()
@@ -54,17 +53,34 @@ function shouldSkipLine()
     return getSkipState():shouldSkipLine(isLineRead())
 end
 
+function stopSkipping()
+    return getSkipState():stopSkipping()
+end
+
 function getSkipMode()
     return getSkipState():getSkipMode()
 end
 
-function setSkipMode(mode)
-    return getSkipState():setSkipMode(mode)
+---Increases the skip level to the specified mode. If the skip level is already at that level or higher,
+-- nothing is changed.
+function skip(mode)
+    getSkipState():skip(mode)
 end
 
-function stopSkipping()
-    return getSkipState():stopSkipping()
+---Turns skip mode on for the remainder of the paragraph.
+-- @see skip
+function skipParagraph()
+    return skip(SkipMode.PARAGRAPH)
 end
+
+---Turns skip mode on for the remainder of the scene (the end of the file, or when a choice appears).
+-- @see skip
+function skipScene()
+    return skip(SkipMode.SCENE)
+end
+
+---Wait functions
+-------------------------------------------------------------------------------------------------------------- @section wait functions
 
 ---Waits for the specified time to pass. Time progression is influenced by the current
 -- <code>effectSpeed</code> and the wait may be cancelled by holding the skip key or pressing the text

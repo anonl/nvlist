@@ -26,6 +26,11 @@ final class SkipState implements ISkipState {
     }
 
     @Override
+    public void skip(SkipMode mode) {
+        setSkipMode(SkipMode.max(getSkipMode(), mode));
+    }
+
+    @Override
     public void setSkipMode(SkipMode mode) {
         skipMode = Checks.checkNotNull(mode);
     }
