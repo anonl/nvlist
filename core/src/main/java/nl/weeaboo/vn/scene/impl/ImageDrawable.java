@@ -52,6 +52,13 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
     }
 
     @Override
+    protected void onDestroyed() {
+        renderer.onDetached(rendererListener);
+
+        super.onDestroyed();
+    }
+
+    @Override
     public void onTick() {
         super.onTick();
 
