@@ -41,13 +41,28 @@ The standard coordinate system used by libGDX/Scene2D has the y-axis pointing up
 #Event handling
 
 @@@ Signal passing system
-@@@ I'd like to expand signal passing to outside the scene graph. The root node would be notified by the general system, and then the signal would travel down the tree using scenegraph-specific logic.
+@@@ Application-wide event bus. All modules and screens are connected. Used to broadcast events throughout the framework.
+@@@ Screen is notified by EventBus, then dispatches through the scenegraph.
+@@@ Scenegraph events don't leave the scenegraph (for now).
+@@@ Event order can be guaranteed for scenegraph events, but not for eventbus events.
+@@@ Event bus is not currently needed, so don't build it yet until I have some good uses for it.
+
+@@@ Think about to whom each signal should be passed. For example, see javafx EventTarget or Scene2d Actor.
 
 ##Input handling
 
 @@@ Input is special, needs to take parent transform into account.
 
 @@@ See: input.md
+
+@@@ How to determine which nodes need to receive the input event?
+@@@ If a parent node has no visual components, does it still receive input events?
+@@@ If a child component lies outside its parent's visual bounds, does the parent receive bubbled input events?
+@@@ If a single input event touches multiple hierarchies, are both hierarchies notified? In what order do the events bubble?
+
+###Mouse input
+
+@@@ alphaEnableThreshold, touchMargin -> PointerInputHelper
 
 ###Keyboard focus
 
@@ -63,13 +78,19 @@ The standard coordinate system used by libGDX/Scene2D has the y-axis pointing up
 * [Toggle-button, checkbox](#toggle-button)
 * ~~Radio button~~ _(not yet implemented)_
 * ~~List~~ _(not yet implemented)_
+* ~~Combo box~~ _(not implemented)_
+* ~~Slider~~ _(not implemented)_
 
 ##Layer
 Layers have their own coordinate system. 
 
-@@@ Layers are axis-aligned. Future extension: control layer blending via shader (layer renders to FBO,
+@@@ Layers are axis-aligned.
+
+@@@ Future extension: control layer blending via shader (layer renders to FBO,
  then renders the FBO texture using the user-supplied shader). This could also be used to set the alpha of
  a layer, or use a bitmap tween on it.
+
+@@@ Future extension: Support for 3D rendering.
 
 ##Image
 fdsf
@@ -83,6 +104,12 @@ fdsf
 
 ###Text renderer features
 * Text styles
+** Font
+** Style (normal, bold, italic)
+** Size
+** Outline (color + size)
+** Shadow (offset + color)
+** Underline
 * Right-to-left and BiDi text
 * Kerning (through libGDX)
 
@@ -121,8 +148,13 @@ Implemented by [Button](#button)
 
 @@@ This section will become very big
 
+@@@ [ ] How to determine when to require a relayout? When does a layout become dirty?
+
 @@@ How do I integrate a layout system with my scene graph?
  - Check how scene2d javafx do it.
+   javafx has specialized panel implementations per layout type. That's actually quite a good idea. It allows you to restrict the way sub-components can be added to the container.
+   -- Panel -> FlowPanel, GridPanel
+   - JavaFX has separate layoutXY vs translateXY properties. This allows the translation to be used as a relative offset compared to the layout.
  - Possibility, let visual elements implement ILayoutElement, (ILayoutGroup?) to let them opt into layout
    support.
  - The way scene2d does it is wrap the visual elements in layout containers. The layout containers then
@@ -146,6 +178,20 @@ Component attributes: anchor/dock, grow/stretch + weight, hidemode, min/pref/max
 @@@ Split into interfaces for all the various aspects: node, layout, signal, input, etc.
 @@@ Create a list of everything that would need to be changed to implement this design
     [ ] Port textbox code to use a layout to position its elements and clickindicator.
+    [ ] Better define in which coordinate system the collision shape and contains method function.
+    [ ] To render components in visual groups, I need to concatenate the node's transform with its parents's transform. I don't think this is always done properly in the current implementation. Notably, IDrawable can't implement IDrawTransform.
 @@@ Create a new Git branch and start implementing
 
+
+
+
+@@@
+[ ] Op welke plekken introduceer ik een nieuw coordinatensysteem?
+  - Elke branch node in de boom. Als je geen rotaties hebt, dan kun je de x/y translaties vna de parents optellen, maar bij ortaties kun je beter elke keer met een nieuw coordinatenstelsel beginnen.
+[ ] Op welke plekken heb ik mogelijk last van een nested transform?
+  1. Rendering
+  2. collision detection
+  - Voor rendering kan ik gewoon de parent transform meegeven als parameter.
+  - Collision detection als in picking (bepalen welk component op een bepaalde scherm-pixel ligt) is wat vervelender, maar in mijn huidige opzet worden input signalen getransformeerd doorgeven door de boom. De sub-nodes doen dan hun eigen bounds checking. Als ik straks iets met capture/bubble event handling wil doen, dan kan ik dit hierarchische systeem gebruiken voor de capture fase. Als ik dan eenmaal een lijst van affected nodes heb, dan zijn dat er weinig genoeg dat efficiëntie niet zo belangrijk meer is.
+  
 

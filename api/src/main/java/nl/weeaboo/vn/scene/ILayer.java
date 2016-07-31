@@ -5,6 +5,9 @@ import nl.weeaboo.vn.image.IScreenshotBuffer;
 
 public interface ILayer extends IVisualGroup {
 
+    @Override
+    ILayer getParent();
+
     void add(IDrawable d);
 
 	/**

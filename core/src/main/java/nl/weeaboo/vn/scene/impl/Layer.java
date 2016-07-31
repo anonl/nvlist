@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.input.IInput;
@@ -15,6 +16,7 @@ import nl.weeaboo.vn.render.impl.ScreenshotBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
+import nl.weeaboo.vn.scene.IVisualGroup;
 
 public class Layer extends VisualGroup implements ILayer {
 
@@ -36,6 +38,19 @@ public class Layer extends VisualGroup implements ILayer {
         add(subLayer);
         LOG.debug("Sub-layer created: {}, parent={}", subLayer, this);
         return subLayer;
+    }
+
+    @Override
+    public ILayer getParent() {
+        return (ILayer)super.getParent();
+    }
+
+    @Override
+    public void setParent(IVisualGroup parent) {
+        Checks.checkArgument(parent == null || parent instanceof ILayer,
+                "Layers may only have other layers as parent, was: " + parent);
+        
+        super.setParent(parent);
     }
 
     @Override
