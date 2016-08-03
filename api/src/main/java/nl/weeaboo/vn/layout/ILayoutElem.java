@@ -2,10 +2,10 @@ package nl.weeaboo.vn.layout;
 
 import java.io.Serializable;
 
-import nl.weeaboo.common.Dim2D;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.core.IDestructible;
 
-public interface ILayoutElem extends Serializable {
+public interface ILayoutElem extends Serializable, IDestructible {
 
     /**
      * @return {@code true} if this element is currently visible. This information is used by the layout
@@ -13,17 +13,17 @@ public interface ILayoutElem extends Serializable {
      */
     boolean isVisible();
 
-    /** @return The configured size for the specified layout size type (min/pref/max) */
-    Dim2D getLayoutSize(SizeType type);
+    /**
+     * @param heightHint The height for which to calculate the corresponding layout width. May be
+     *        {@link LayoutSize#INFINITE} or {@link LayoutSize#UNKNOWN}, but never {@code null}.
+     */
+    LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint);
 
-    /** @see #getLayoutSize(SizeType) */
-    Dim2D getMinSize();
-
-    /** @see #getLayoutSize(SizeType) */
-    Dim2D getPrefSize();
-
-    /** @see #getLayoutSize(SizeType) */
-    Dim2D getMaxSize();
+    /**
+     * @param widthHint The width for which to calculate the corresponding layout height. May be
+     *        {@link LayoutSize#INFINITE} or {@link LayoutSize#UNKNOWN}, but never {@code null}.
+     */
+    LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint);
 
     /** @return The current position and size of this element within its parent layout. */
     Rect2D getLayoutBounds();
@@ -33,5 +33,10 @@ public interface ILayoutElem extends Serializable {
      * layout system.
      */
     void setLayoutBounds(Rect2D rect);
+
+    /**
+     * @return {@code true} if this layout element wraps the specified peer.
+     */
+    boolean contains(ILayoutElemPeer peer);
 
 }

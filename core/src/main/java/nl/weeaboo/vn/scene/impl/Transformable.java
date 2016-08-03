@@ -4,6 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.impl.AlignUtil;
+import nl.weeaboo.vn.layout.ILayoutElemPeer;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.MutableMatrix;
@@ -11,7 +12,7 @@ import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITransformable;
 
-public abstract class Transformable extends VisualElement implements ITransformable {
+public abstract class Transformable extends VisualElement implements ITransformable, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -268,6 +269,13 @@ public abstract class Transformable extends VisualElement implements ITransforma
 		setPos(x, y);
 		setSize(w, h);
 	}
+
+    @Override
+    public void setLayoutBounds(Rect2D rect) {
+        setAlign(0, 0);
+        setPos(rect.x, rect.y);
+        setUnscaledSize(rect.w, rect.h);
+    }
 
     @Override
     public final void setAlpha(double a) {

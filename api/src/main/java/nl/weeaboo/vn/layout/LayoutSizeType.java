@@ -1,13 +1,12 @@
 package nl.weeaboo.vn.layout;
 
-public enum SizeType {
+public enum LayoutSizeType {
     /** Minimum size */
     MIN,
 
-    /** Preferred size */
+    /** Preferred or intrinsic size */
     PREF,
 
     /** Maximum size */
     MAX;
-
 }

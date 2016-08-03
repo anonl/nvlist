@@ -1,22 +1,27 @@
 package nl.weeaboo.vn.layout;
 
+import nl.weeaboo.common.Rect2D;
+
 /**
  * Represents a group of elements that can be positioned by a layout algorithm.
  */
 public interface ILayoutGroup extends ILayoutElem {
 
-    /** @return {@code true} if the layout is considered 'dirty', requiring a {@link #layout()} to fix. */
-    boolean isLayoutRequired();
+    /** @return {@code true} if the layout is valid. Use {@link #layout()} to re-layout when invalid. */
+    boolean isLayoutValid();
 
     /**
      * Marks the layout as 'dirty'.
      *
-     * @see #isLayoutRequired()
+     * @see #isLayoutValid()
      * @see #layout()
      */
-    void requireLayout();
+    void invalidateLayout();
 
     /** Applies the layout algorithm to this group and its sub-elements. */
     void layout();
+
+    /** @return The bounding rectangle within which child elements should be laid out. */
+    Rect2D getChildLayoutBounds();
 
 }

@@ -69,7 +69,7 @@ public class VisualElement implements IVisualElement {
     }
 
     @Override
-    public void handleSignal(ISignal signal) {
+    public final void handleSignal(ISignal signal) {
         signalSupport.handleSignal(signal);
     }
 

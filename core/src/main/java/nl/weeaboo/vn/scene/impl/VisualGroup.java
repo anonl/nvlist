@@ -1,64 +1,36 @@
 package nl.weeaboo.vn.scene.impl;
 
-import nl.weeaboo.vn.core.impl.DestructibleElemList;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
-import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
-import nl.weeaboo.vn.signal.ISignal;
 
 public class VisualGroup extends VisualElement implements IVisualGroup {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final DestructibleElemList<IVisualElement> children = new DestructibleElemList<IVisualElement>();
+    private final ChildCollection children;
 
     public VisualGroup() {
+        children = new ChildCollection(this);
+        addSignalHandler(0, children);
     }
 
     public VisualGroup(IVisualGroup parent) {
-        super();
+        this();
 
         this.parent = parent;
     }
 
-    @Override
-    public void handleSignal(ISignal signal) {
-        if (signal instanceof VisualElementDestroySignal) {
-            IVisualElement elem = ((VisualElementDestroySignal)signal).getDestroyedElement();
-            if (children.contains(elem)) {
-                onChildDestroyed(elem);
-            }
-        }
-
-        super.handleSignal(signal);
+    protected void add(IVisualElement child) {
+        children.add(child);
     }
 
-    protected void add(IVisualElement elem) {
-        children.add(elem);
-        elem.setParent(this);
-    }
-
-    protected void remove(IVisualElement elem) {
-        children.remove(elem);
-        if (elem.getParent() == this) {
-            elem.setParent(null);
-        }
-    }
-
-    @Override
-    protected void onDestroyed() {
-        super.onDestroyed();
-
-        children.destroyAll();
-    }
-
-    protected void onChildDestroyed(IVisualElement elem) {
-        remove(elem);
+    protected void remove(IVisualElement child) {
+        children.remove(child);
     }
 
     @Override
     public Iterable<? extends IVisualElement> getChildren() {
-        return children;
+        return children.getSnapshot();
     }
 
     @Override

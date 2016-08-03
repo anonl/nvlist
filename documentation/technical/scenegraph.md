@@ -1,4 +1,8 @@
 
+
+@@@ Rethink naming. I want a consistent naming between visual world and layout world.
+
+
 #Scene graph structure
 Screen is the wrapper around the scene graph. The visual hierarchy starts at a single root layer which is created by the screen. Each layer may contain any number of sub-layers and/or other visual elements.
 
@@ -145,34 +149,7 @@ fdsf
 Implemented by [Button](#button)
 
 #Layout
-
-@@@ This section will become very big
-
-@@@ [ ] How to determine when to require a relayout? When does a layout become dirty?
-
-@@@ How do I integrate a layout system with my scene graph?
- - Check how scene2d javafx do it.
-   javafx has specialized panel implementations per layout type. That's actually quite a good idea. It allows you to restrict the way sub-components can be added to the container.
-   -- Panel -> FlowPanel, GridPanel
-   - JavaFX has separate layoutXY vs translateXY properties. This allows the translation to be used as a relative offset compared to the layout.
- - Possibility, let visual elements implement ILayoutElement, (ILayoutGroup?) to let them opt into layout
-   support.
- - The way scene2d does it is wrap the visual elements in layout containers. The layout containers then
-   transfer their bounds to the wrapper visual elements.
-
-@@@ Research: Use a custom MigLayout back-end for my layouting purposes. That would save me from having to
-    implement flow/grid/etc layouts myself. It's a bit more work initially, but I'd have a high quality
-    layout engine and implementing a new back-end for it might point me to some layout problems I otherwise
-    wouldn't have considered.
-  - I should at least read the MigLayout source code to understand what kinds of operations my components
-    and containers would need to support.
-    
-## GridLayout
-
-Layout attributes: rows, cols, insets
- - rows/cols can be auto-determined
-Component attributes: anchor/dock, grow/stretch + weight, hidemode, min/pref/max sizes, insets
-
+See [layout.md](layout.md)
 
 
 @@@ Split into interfaces for all the various aspects: node, layout, signal, input, etc.
@@ -180,6 +157,8 @@ Component attributes: anchor/dock, grow/stretch + weight, hidemode, min/pref/max
     [ ] Port textbox code to use a layout to position its elements and clickindicator.
     [ ] Better define in which coordinate system the collision shape and contains method function.
     [ ] To render components in visual groups, I need to concatenate the node's transform with its parents's transform. I don't think this is always done properly in the current implementation. Notably, IDrawable can't implement IDrawTransform.
+    [ ] Use package name vn.impl.* instead of vn.*.impl
+    [ ] I don't want to implement IRenderable<->ITransformable multiple times. Just integrate it into Transformable and make all Transformables use a renderer.
 @@@ Create a new Git branch and start implementing
 
 

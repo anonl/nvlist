@@ -30,29 +30,32 @@ public final class BoundsHelper extends TransientListenerSupport {
 	}
 
 	public void setPos(double x, double y) {
-		Checks.checkRange(x, "x");
-		Checks.checkRange(y, "y");
-
-		if (this.x != x || this.y != y) {
-			this.x = x;
-			this.y = y;
-
-            cachedBounds = null;
-			fireListeners();
-		}
+        setBounds(x, y, this.w, this.h);
 	}
 
 	public void setSize(double w, double h) {
-	    Checks.checkRange(w, "w", 0);
-	    Checks.checkRange(h, "h", 0);
+        setBounds(this.x, this.y, w, h);
+	}
 
-		if (this.w != w || this.h != h) {
-			this.w = w;
-			this.h = h;
+    public void setBounds(Rect2D rect) {
+        setBounds(rect.x, rect.y, rect.w, rect.h);
+    }
+
+    public void setBounds(double x, double y, double w, double h) {
+        Checks.checkRange(x, "x");
+        Checks.checkRange(y, "y");
+        Checks.checkRange(w, "w", 0);
+        Checks.checkRange(h, "h", 0);
+
+        if (this.x != x || this.y != y || this.w != w || this.h != h) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
 
             cachedBounds = null;
-			fireListeners();
-		}
-	}
+            fireListeners();
+        }
+    }
 
 }
