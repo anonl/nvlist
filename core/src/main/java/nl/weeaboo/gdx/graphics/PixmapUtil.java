@@ -3,6 +3,7 @@ package nl.weeaboo.gdx.graphics;
 import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import nl.weeaboo.common.Checks;
@@ -39,6 +40,30 @@ public final class PixmapUtil {
             pixelsBuffer.put(lineBuffer1);
         }
         pixelsBuffer.rewind();
+    }
+
+    /**
+     * Converts the given pixmap to the specified target color format. If the source pixmap is already in the
+     * correct format, the original pixmap is returned unmodified.
+     */
+    public static Pixmap convert(Pixmap source, Format targetFormat, boolean disposeSource) {
+        if (source.getFormat() == targetFormat) {
+            return source; // Already the correct format
+        }
+
+        Blending oldBlend = Pixmap.getBlending();
+        Pixmap result;
+        try {
+            result = new Pixmap(source.getWidth(), source.getHeight(), targetFormat);
+            Pixmap.setBlending(Blending.None);
+            result.drawPixmap(source, 0, 0, 0, 0, source.getWidth(), source.getHeight());
+        } finally {
+            Pixmap.setBlending(oldBlend);
+            if (disposeSource) {
+                source.dispose();
+            }
+        }
+        return result;
     }
 
 }

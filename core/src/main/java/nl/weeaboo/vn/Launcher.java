@@ -26,6 +26,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.graphics.JngTextureLoader;
 import nl.weeaboo.gdx.input.GdxInputAdapter;
 import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.gdx.res.GdxFileSystem;
@@ -99,6 +100,7 @@ public class Launcher extends ApplicationAdapter {
 	public void create() {
         resourceFileSystem = new GdxFileSystem(resourceFolder, true);
         assetManager = new AssetManager(resourceFileSystem);
+        JngTextureLoader.register(assetManager);
         Texture.setAssetManager(assetManager);
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 
