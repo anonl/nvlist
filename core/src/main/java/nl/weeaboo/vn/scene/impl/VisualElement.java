@@ -6,6 +6,8 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.layout.ILayoutElem;
+import nl.weeaboo.vn.layout.impl.VisualElemLayoutAdapter;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
@@ -29,6 +31,8 @@ public class VisualElement implements IVisualElement {
     private short z;
     private boolean visible = true;
     private boolean destroyed;
+
+    private ILayoutElem layoutAdapter;
 
     public VisualElement() {
         // Add self at index 0
@@ -128,6 +132,18 @@ public class VisualElement implements IVisualElement {
         return (parent != null ? parent.getRenderEnv() : null);
     }
 
+    @Override
+    public final ILayoutElem getLayoutAdapter() {
+        if (layoutAdapter == null) {
+            layoutAdapter = createLayoutAdapter();
+        }
+        return layoutAdapter;
+    }
+
+    protected ILayoutElem createLayoutAdapter() {
+        return new VisualElemLayoutAdapter(this);
+    }
+
     private static class SelfSignalHandler implements ISignalHandler, Serializable {
 
         private static final long serialVersionUID = VisualElement.serialVersionUID;
@@ -149,4 +165,5 @@ public class VisualElement implements IVisualElement {
         }
 
     }
+
 }

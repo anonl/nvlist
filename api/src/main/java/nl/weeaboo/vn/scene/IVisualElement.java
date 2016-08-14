@@ -6,6 +6,7 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.IInputHandler;
+import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.signal.ISignalHandler;
 
@@ -32,5 +33,10 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
      * Returns information about the rendering environment.
      */
     IRenderEnv getRenderEnv();
+
+    /**
+     * @return The interface used to access this visual element's layout properties.
+     */
+    ILayoutElem getLayoutAdapter();
 
 }

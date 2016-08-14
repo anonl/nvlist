@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutGroup;
-import nl.weeaboo.vn.layout.ILayoutGroupPeer;
 
-public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
+public abstract class LayoutGroup extends AbstractLayoutElem implements ILayoutGroup {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(LayoutGroup.class);
@@ -18,10 +17,6 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     /** True if we're currently inside the {@link #layout()} method. */
     private volatile boolean performingLayout;
-
-    public LayoutGroup(ILayoutGroupPeer peer) {
-        super(peer);
-    }
 
     @Override
     public final boolean isLayoutValid() {
@@ -54,8 +49,6 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     @Override
     protected void onLayoutBoundsChanged(Rect2D rect) {
-        super.onLayoutBoundsChanged(rect);
-
         invalidateLayout();
     }
 

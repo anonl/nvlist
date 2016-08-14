@@ -34,9 +34,4 @@ public interface ILayoutElem extends Serializable, IDestructible {
      */
     void setLayoutBounds(Rect2D rect);
 
-    /**
-     * @return {@code true} if this layout element wraps the specified peer.
-     */
-    boolean contains(ILayoutElemPeer peer);
-
 }

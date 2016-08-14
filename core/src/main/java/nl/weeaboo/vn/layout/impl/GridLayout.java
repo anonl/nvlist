@@ -10,8 +10,6 @@ import com.google.common.collect.Lists;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutElem;
-import nl.weeaboo.vn.layout.ILayoutElemPeer;
-import nl.weeaboo.vn.layout.ILayoutGroupPeer;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
@@ -21,10 +19,6 @@ public class GridLayout extends LayoutGroup {
     private static final double ADJUST_EPSILON = 0.001;
 
     private final List<GridRow> rows = Lists.newArrayList();
-
-    public GridLayout(ILayoutGroupPeer peer) {
-        super(peer);
-    }
 
     public void add(ILayoutElem elem, GridCellConstraints constraints) {
         GridRow row = reserveRow();
@@ -40,9 +34,9 @@ public class GridLayout extends LayoutGroup {
         return rows.get(rows.size() - 1);
     }
 
-    public void remove(ILayoutElemPeer elem) {
+    public void remove(ILayoutElem elem) {
         for (GridRow row : rows) {
-            if (row.removeByPeer(elem)) {
+            if (row.remove(elem)) {
                 break;
             }
         }
@@ -195,7 +189,7 @@ public class GridLayout extends LayoutGroup {
 
         public final List<GridCell> cells = Lists.newArrayList();
 
-        public boolean removeByPeer(ILayoutElemPeer elem) {
+        public boolean remove(ILayoutElem elem) {
             for (Iterator<GridCell> itr = cells.iterator(); itr.hasNext();) {
                 GridCell cell = itr.next();
                 if (cell.contains(elem)) {
@@ -240,8 +234,8 @@ public class GridLayout extends LayoutGroup {
             contents.setLayoutBounds(Rect2D.of(x, y, w, h));
         }
 
-        public boolean contains(ILayoutElemPeer peer) {
-            return contents.contains(peer);
+        public boolean contains(ILayoutElem elem) {
+            return contents.equals(elem);
         }
 
         public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
