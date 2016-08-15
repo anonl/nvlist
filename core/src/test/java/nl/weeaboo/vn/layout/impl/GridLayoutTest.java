@@ -10,7 +10,7 @@ public class GridLayoutTest {
 
     @Before
     public void before() {
-        layout = new GridLayout(new DummyLayoutGroupPeer());
+        layout = new GridLayout(new DummyLayoutElemPeer());
         helper = new LayoutTestHelper(layout);
     }
 

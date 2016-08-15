@@ -20,6 +20,10 @@ public class GridLayout extends LayoutGroup {
 
     private final List<GridRow> rows = Lists.newArrayList();
 
+    public GridLayout(ILayoutElemPeer visualElem) {
+        super(visualElem);
+    }
+
     public void add(ILayoutElem elem, GridCellConstraints constraints) {
         GridRow row = reserveRow();
         row.cells.add(new GridCell(elem, constraints));

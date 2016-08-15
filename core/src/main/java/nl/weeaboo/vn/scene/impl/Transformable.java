@@ -4,6 +4,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.impl.AlignUtil;
+import nl.weeaboo.vn.layout.ILayoutElem;
+import nl.weeaboo.vn.layout.impl.ILayoutElemPeer;
+import nl.weeaboo.vn.layout.impl.LayoutElem;
 import nl.weeaboo.vn.math.IShape;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.MutableMatrix;
@@ -11,7 +14,7 @@ import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITransformable;
 
-public abstract class Transformable extends VisualElement implements ITransformable {
+public abstract class Transformable extends VisualElement implements ITransformable, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -259,7 +262,8 @@ public abstract class Transformable extends VisualElement implements ITransforma
         setUnscaledSize(w / getScaleX(), h / getScaleY());
     }
 
-    protected abstract void setUnscaledSize(double w, double h);
+    @Override
+    public abstract void setUnscaledSize(double w, double h);
 
     @Override
 	public void setBounds(double x, double y, double w, double h) {
@@ -268,6 +272,11 @@ public abstract class Transformable extends VisualElement implements ITransforma
 		setPos(x, y);
 		setSize(w, h);
 	}
+
+    @Override
+    protected ILayoutElem createLayoutAdapter() {
+        return new LayoutElem(this);
+    }
 
     @Override
     public void setLayoutBounds(Rect2D rect) {

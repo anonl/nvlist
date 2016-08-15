@@ -7,7 +7,6 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutElem;
-import nl.weeaboo.vn.layout.impl.VisualElemLayoutAdapter;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IVisualElement;
@@ -19,7 +18,7 @@ import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.signal.impl.SignalSupport;
 
-public class VisualElement implements IVisualElement {
+public abstract class VisualElement implements IVisualElement {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -42,11 +41,11 @@ public class VisualElement implements IVisualElement {
     @Override
     public final void destroy() {
         if (!destroyed) {
+            sendSignal(new VisualElementDestroySignal(this));
+
             destroyed = true;
 
             onDestroyed();
-
-            sendSignal(new VisualElementDestroySignal(this));
         }
     }
 
@@ -140,9 +139,7 @@ public class VisualElement implements IVisualElement {
         return layoutAdapter;
     }
 
-    protected ILayoutElem createLayoutAdapter() {
-        return new VisualElemLayoutAdapter(this);
-    }
+    protected abstract ILayoutElem createLayoutAdapter();
 
     private static class SelfSignalHandler implements ISignalHandler, Serializable {
 

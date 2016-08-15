@@ -1,9 +1,10 @@
 package nl.weeaboo.vn.scene.impl;
 
+import nl.weeaboo.vn.layout.ILayoutGroup;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
-public class VisualGroup extends VisualElement implements IVisualGroup {
+public abstract class VisualGroup extends VisualElement implements IVisualGroup {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -37,5 +38,8 @@ public class VisualGroup extends VisualElement implements IVisualGroup {
     public boolean contains(IVisualElement elem) {
         return children.contains(elem);
     }
+
+    @Override
+    protected abstract ILayoutGroup createLayoutAdapter();
 
 }

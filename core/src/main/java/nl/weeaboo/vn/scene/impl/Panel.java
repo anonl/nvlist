@@ -4,12 +4,11 @@ import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.layout.ILayoutGroup;
-import nl.weeaboo.vn.layout.ILayoutGroupPeer;
 import nl.weeaboo.vn.layout.impl.GridLayout;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
-public final class Panel extends Transformable implements IVisualGroup, ILayoutGroupPeer {
+public final class Panel extends Transformable implements IVisualGroup {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -64,7 +63,7 @@ public final class Panel extends Transformable implements IVisualGroup, ILayoutG
     }
 
     @Override
-    protected void setUnscaledSize(double w, double h) {
+    public void setUnscaledSize(double w, double h) {
         renderer.setSize(w, h);
 
         invalidateTransform();

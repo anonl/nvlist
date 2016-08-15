@@ -1,17 +1,27 @@
 package nl.weeaboo.vn.layout.impl;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 import nl.weeaboo.vn.scene.impl.BoundsHelper;
 
-public abstract class AbstractLayoutElem implements ILayoutElem {
+public class LayoutElem implements ILayoutElem {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
-    private static final LayoutSize DEFAULT_SIZE = LayoutSize.of(10);
 
+    private final ILayoutElemPeer visualElem;
     private final BoundsHelper layoutBounds = new BoundsHelper();
+
+    public LayoutElem(ILayoutElemPeer visualElem) {
+        this.visualElem = Checks.checkNotNull(visualElem);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return visualElem.isVisible();
+    }
 
     @Override
     public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
@@ -19,7 +29,7 @@ public abstract class AbstractLayoutElem implements ILayoutElem {
         case MIN:
             return LayoutSize.ZERO;
         case PREF:
-            return DEFAULT_SIZE;
+            return LayoutSize.of(visualElem.getWidth());
         case MAX:
             return LayoutSize.INFINITE;
         default:
@@ -33,7 +43,7 @@ public abstract class AbstractLayoutElem implements ILayoutElem {
         case MIN:
             return LayoutSize.ZERO;
         case PREF:
-            return DEFAULT_SIZE;
+            return LayoutSize.of(visualElem.getHeight());
         case MAX:
             return LayoutSize.INFINITE;
         default:
@@ -76,6 +86,8 @@ public abstract class AbstractLayoutElem implements ILayoutElem {
     /**
      * @param rect The new layout bounds.
      */
-    protected abstract void onLayoutBoundsChanged(Rect2D rect);
+    protected void onLayoutBoundsChanged(Rect2D rect) {
+        visualElem.setLayoutBounds(rect);
+    }
 
 }

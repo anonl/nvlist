@@ -208,7 +208,7 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
-    protected void setUnscaledSize(double w, double h) {
+    public void setUnscaledSize(double w, double h) {
         renderer.setSize(w, h);
 
         invalidateTransform();

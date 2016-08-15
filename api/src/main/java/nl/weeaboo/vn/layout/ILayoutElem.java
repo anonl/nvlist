@@ -3,9 +3,8 @@ package nl.weeaboo.vn.layout;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IDestructible;
 
-public interface ILayoutElem extends Serializable, IDestructible {
+public interface ILayoutElem extends Serializable {
 
     /**
      * @return {@code true} if this element is currently visible. This information is used by the layout

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.scene.impl;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.vn.scene.ILayer;
@@ -29,7 +30,7 @@ public final class SceneUtil {
         return null;
     }
 
-    public static Iterable<? extends IVisualElement> getChildren(IVisualElement elem, VisualOrdering order) {
+    public static ImmutableCollection<? extends IVisualElement> getChildren(IVisualElement elem, VisualOrdering order) {
         if (elem instanceof IVisualGroup) {
             IVisualGroup group = (IVisualGroup)elem;
             return order.immutableSortedCopy(group.getChildren());
@@ -45,12 +46,15 @@ public final class SceneUtil {
             return;
         }
 
+        // Retrieve children now, since handleSignal may change the hierarchy otherwise
+        ImmutableCollection<? extends IVisualElement> children = getChildren(elem, VisualOrdering.BACK_TO_FRONT);
+
         elem.handleSignal(signal);
         if (signal.isHandled()) {
             return;
         }
 
-        for (IVisualElement child : getChildren(elem, VisualOrdering.BACK_TO_FRONT)) {
+        for (IVisualElement child : children) {
             doSendSignal(child, signal);
             if (signal.isHandled()) {
                 return;

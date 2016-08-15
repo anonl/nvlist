@@ -112,4 +112,9 @@ public interface ITransformable extends IDrawable {
 	 */
     void setAlign(double xFrac, double yFrac);
 
+    /**
+     * Sets the size before scaling. The final size is the unscaled times multiplied by the scale factors.
+     */
+    void setUnscaledSize(double w, double h);
+
 }

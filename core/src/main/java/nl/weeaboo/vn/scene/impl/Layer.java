@@ -10,6 +10,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.layout.ILayoutGroup;
+import nl.weeaboo.vn.layout.impl.ILayoutElemPeer;
+import nl.weeaboo.vn.layout.impl.NullLayout;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.impl.ScreenshotBuffer;
@@ -18,7 +21,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
-public class Layer extends VisualGroup implements ILayer {
+public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Layer.class);
@@ -49,7 +52,7 @@ public class Layer extends VisualGroup implements ILayer {
     public void setParent(IVisualGroup parent) {
         Checks.checkArgument(parent == null || parent instanceof ILayer,
                 "Layers may only have other layers as parent, was: " + parent);
-        
+
         super.setParent(parent);
     }
 
@@ -228,6 +231,16 @@ public class Layer extends VisualGroup implements ILayer {
     public void setBounds(double x, double y, double w, double h) {
         setPos(x, y);
         setSize(w, h);
+    }
+
+    @Override
+    protected ILayoutGroup createLayoutAdapter() {
+        return new NullLayout(this);
+    }
+
+    @Override
+    public void setLayoutBounds(Rect2D rect) {
+        setBounds(rect.x, rect.y, rect.w, rect.h);
     }
 
 }

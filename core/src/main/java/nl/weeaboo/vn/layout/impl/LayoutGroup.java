@@ -7,7 +7,7 @@ import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutGroup;
 
-public abstract class LayoutGroup extends AbstractLayoutElem implements ILayoutGroup {
+public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(LayoutGroup.class);
@@ -17,6 +17,10 @@ public abstract class LayoutGroup extends AbstractLayoutElem implements ILayoutG
 
     /** True if we're currently inside the {@link #layout()} method. */
     private volatile boolean performingLayout;
+
+    public LayoutGroup(ILayoutElemPeer visualElem) {
+        super(visualElem);
+    }
 
     @Override
     public final boolean isLayoutValid() {
@@ -64,5 +68,6 @@ public abstract class LayoutGroup extends AbstractLayoutElem implements ILayoutG
     public final Rect2D getChildLayoutBounds() {
         return Rect2D.of(insets.left, insets.top, getChildLayoutWidth(), getChildLayoutHeight());
     }
+
 
 }
