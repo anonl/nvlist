@@ -31,11 +31,19 @@ public class GridLayout extends LayoutGroup {
         invalidateLayout();
     }
 
+    /** Ends the current row and starts a new one */
+    public void endRow() {
+        addRow();
+    }
+
     private GridRow reserveRow() {
         if (rows.isEmpty()) {
-            rows.add(new GridRow());
+            addRow();
         }
         return rows.get(rows.size() - 1);
+    }
+    private void addRow() {
+        rows.add(new GridRow());
     }
 
     public void remove(ILayoutElem elem) {
@@ -167,10 +175,10 @@ public class GridLayout extends LayoutGroup {
             TrackMetrics tm = new TrackMetrics();
             int c = 0;
             for (GridCell cell : getRowCells(r)) {
-                LayoutSize heightHint = LayoutSize.of(colSizes[c].breadth);
-                tm.updatePrefBreadth(cell.calculateLayoutHeight(LayoutSizeType.PREF, heightHint));
-                tm.updateMinBreadth(cell.calculateLayoutHeight(LayoutSizeType.MIN, heightHint));
-                tm.updateMaxBreadth(cell.calculateLayoutHeight(LayoutSizeType.MAX, heightHint));
+                LayoutSize widthHint = LayoutSize.of(colSizes[c].breadth);
+                tm.updatePrefBreadth(cell.calculateLayoutHeight(LayoutSizeType.PREF, widthHint));
+                tm.updateMinBreadth(cell.calculateLayoutHeight(LayoutSizeType.MIN, widthHint));
+                tm.updateMaxBreadth(cell.calculateLayoutHeight(LayoutSizeType.MAX, widthHint));
                 c++;
             }
             tm.init();
@@ -233,9 +241,14 @@ public class GridLayout extends LayoutGroup {
         }
 
         public void setBounds(double x, double y, double w, double h) {
-            // TODO: consider cell constraints
-            // TODO: limit content size to its max size
-            contents.setLayoutBounds(Rect2D.of(x, y, w, h));
+            // Limit to max cell size
+            LayoutSize layoutW = LayoutSize.of(w);
+            LayoutSize layoutH = LayoutSize.of(h);
+
+            layoutW = LayoutSize.min(calculateLayoutWidth(LayoutSizeType.MAX, LayoutSize.UNKNOWN), layoutW);
+            layoutH = LayoutSize.min(calculateLayoutHeight(LayoutSizeType.MAX, layoutW), layoutH);
+
+            contents.setLayoutBounds(Rect2D.of(x, y, layoutW.value(w), layoutH.value(h)));
         }
 
         public boolean contains(ILayoutElem elem) {
@@ -243,10 +256,16 @@ public class GridLayout extends LayoutGroup {
         }
 
         public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
+            if (type == LayoutSizeType.MAX && !constraints.growX) {
+                type = LayoutSizeType.PREF;
+            }
             return contents.calculateLayoutWidth(type, heightHint);
         }
 
         public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
+            if (type == LayoutSizeType.MAX && !constraints.growY) {
+                type = LayoutSizeType.PREF;
+            }
             return contents.calculateLayoutHeight(type, widthHint);
         }
 

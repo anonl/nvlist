@@ -16,13 +16,13 @@ public class GridLayoutTest {
 
     @Test
     public void singleRow() {
-        DummyLayoutElem alpha = addDummy();
-        DummyLayoutElem beta = addDummy();
-        DummyLayoutElem gamma = addDummy();
+        DummyLayoutElem alpha = addDummy(new GridCellConstraints().grow());
+        DummyLayoutElem beta = addDummy(new GridCellConstraints().grow());
+        DummyLayoutElem gamma = addDummy(new GridCellConstraints().grow());
 
         alpha.setLayoutWidths(0.0, 50.0, 100.0);
         beta.setLayoutWidths(20.0, 25.0, 200.0);
-        gamma.setLayoutWidths(Double.NaN, Double.POSITIVE_INFINITY, 50.0);
+        gamma.setLayoutWidths(Double.NaN, Double.POSITIVE_INFINITY, Double.NaN);
         helper.layout(400, 300);
 
         // Because gamma has an infinitely large preferred width, it takes up all the remaining room after the
@@ -40,9 +40,36 @@ public class GridLayoutTest {
         helper.assertSize(gamma, 50, 300);
     }
 
-    private DummyLayoutElem addDummy() {
+    @Test
+    public void growConstraint() {
+        /*
+         * A | B
+         * -----
+         * C | D
+         */
+        DummyLayoutElem alpha = addDummy(new GridCellConstraints().growX());
+        DummyLayoutElem beta = addDummy(new GridCellConstraints().growY());
+        layout.endRow();
+        DummyLayoutElem gamma = addDummy(new GridCellConstraints().growY());
+        DummyLayoutElem delta = addDummy(new GridCellConstraints().growX());
+
+        alpha.setLayoutWidths(0.0, 50.0, 100.0);
+        beta.setLayoutWidths(20.0, 25.0, 200.0);
+        beta.setLayoutHeights(20.0, 30.0, 40.0);
+        gamma.setLayoutWidths(0.0, 125.0, 200.0);
+        gamma.setLayoutHeights(20.0, 25.0, 35.0);
+        delta.setLayoutWidths(0.0, 10.0, 300.0);
+        helper.layout(400, 300);
+
+        helper.assertSize(alpha, 100, 10); // grow x (10 is the pref. height for alpha)
+        helper.assertSize(beta, 25, 30);   // grow y (30 is the pref. height for beta)
+        helper.assertSize(gamma, 125, 25); // grow y
+        helper.assertSize(delta, 25, 10);  // grow x
+    }
+
+    private DummyLayoutElem addDummy(GridCellConstraints constraints) {
         DummyLayoutElem elem = new DummyLayoutElem();
-        layout.add(elem, new GridCellConstraints());
+        layout.add(elem, constraints);
         return elem;
     }
 }
