@@ -23,6 +23,7 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
@@ -52,16 +53,20 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
+import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
+import nl.weeaboo.vn.layout.impl.GridCellConstraints;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.impl.ImageDrawable;
+import nl.weeaboo.vn.scene.impl.Panel;
 import nl.weeaboo.vn.sound.impl.MusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -183,7 +188,33 @@ public class Launcher extends ApplicationAdapter {
         image.setPos(640, 360);
         image.setZ((short)-100);
         image.setTexture(env.getImageModule().getTexture("test"), 5);
+
+        createPanel(rootLayer, env.getImageModule());
 	}
+
+    private void createPanel(ILayer layer, IImageModule imageModule) {
+        Panel panel = new Panel();
+        panel.setLayoutBounds(Rect2D.of(320, 160, 640, 360));
+        layer.add(panel);
+
+        ImageDrawable image = new ImageDrawable();
+        image.setTexture(imageModule.createTexture(0xFFFF0000, 100, 100, 1, 1));
+        panel.add(image, new GridCellConstraints().grow());
+
+        image = new ImageDrawable();
+        image.setTexture(imageModule.createTexture(0xFFFFFF00, 50, 50, 1, 1));
+        panel.add(image, new GridCellConstraints().growX());
+
+        panel.endRow();
+
+        image = new ImageDrawable();
+        image.setTexture(imageModule.createTexture(0xFF0000FF, 100, 100, 1, 1));
+        panel.add(image, new GridCellConstraints().grow());
+
+        image = new ImageDrawable();
+        image.setTexture(imageModule.createTexture(0xFF00FF00, 50, 50, 1, 1));
+        panel.add(image, new GridCellConstraints().growY());
+    }
 
     private IFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();
