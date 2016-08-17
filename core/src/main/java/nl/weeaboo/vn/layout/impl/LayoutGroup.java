@@ -46,7 +46,7 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
             performingLayout = false;
         }
         // Outside the finally block because we don't want to clear this flag in case of an exception
-        layoutValid = false;
+        layoutValid = true;
     }
 
     protected abstract void doLayout();
@@ -66,7 +66,8 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     @Override
     public final Rect2D getChildLayoutBounds() {
-        return Rect2D.of(insets.left, insets.top, getChildLayoutWidth(), getChildLayoutHeight());
+        Rect2D r = getLayoutBounds();
+        return Rect2D.of(r.x + insets.left, r.y + insets.top, getChildLayoutWidth(), getChildLayoutHeight());
     }
 
 
