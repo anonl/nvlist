@@ -3,6 +3,8 @@ package nl.weeaboo.vn.layout.impl;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.vn.layout.GridCellConstraints;
+
 public class GridLayoutTest {
 
     private GridLayout layout;

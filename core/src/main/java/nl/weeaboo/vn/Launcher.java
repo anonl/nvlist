@@ -59,14 +59,14 @@ import nl.weeaboo.vn.image.impl.TextureStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
-import nl.weeaboo.vn.layout.impl.GridCellConstraints;
+import nl.weeaboo.vn.layout.GridCellConstraints;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.impl.GridPanel;
 import nl.weeaboo.vn.scene.impl.ImageDrawable;
-import nl.weeaboo.vn.scene.impl.Panel;
 import nl.weeaboo.vn.sound.impl.MusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -193,7 +193,7 @@ public class Launcher extends ApplicationAdapter {
 	}
 
     private void createPanel(ILayer layer, IImageModule imageModule) {
-        Panel panel = new Panel();
+        GridPanel panel = new GridPanel();
         panel.setLayoutBounds(Rect2D.of(320, 160, 640, 360));
         layer.add(panel);
 

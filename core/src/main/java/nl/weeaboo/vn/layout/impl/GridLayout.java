@@ -9,11 +9,13 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.layout.GridCellConstraints;
+import nl.weeaboo.vn.layout.IGridLayout;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
-public class GridLayout extends LayoutGroup {
+public class GridLayout extends LayoutGroup implements IGridLayout {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
     private static final double ADJUST_EPSILON = 0.001;
@@ -24,6 +26,7 @@ public class GridLayout extends LayoutGroup {
         super(visualElem);
     }
 
+    @Override
     public void add(ILayoutElem elem, GridCellConstraints constraints) {
         GridRow row = reserveRow();
         row.cells.add(new GridCell(elem, constraints));
@@ -31,7 +34,7 @@ public class GridLayout extends LayoutGroup {
         invalidateLayout();
     }
 
-    /** Ends the current row and starts a new one */
+    @Override
     public void endRow() {
         addRow();
     }
@@ -46,6 +49,7 @@ public class GridLayout extends LayoutGroup {
         rows.add(new GridRow());
     }
 
+    @Override
     public void remove(ILayoutElem elem) {
         for (GridRow row : rows) {
             if (row.remove(elem)) {
@@ -54,10 +58,12 @@ public class GridLayout extends LayoutGroup {
         }
     }
 
+    @Override
     public int getRowCount() {
         return rows.size();
     }
 
+    @Override
     public int getColCount() {
         int cols = 0;
         for (GridRow row : rows) {

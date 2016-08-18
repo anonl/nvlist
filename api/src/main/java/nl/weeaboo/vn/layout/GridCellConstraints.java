@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.layout.impl;
+package nl.weeaboo.vn.layout;
 
 import java.io.Serializable;
 

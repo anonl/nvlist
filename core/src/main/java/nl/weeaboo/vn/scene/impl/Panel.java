@@ -5,27 +5,22 @@ import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.layout.ILayoutGroup;
-import nl.weeaboo.vn.layout.impl.GridCellConstraints;
-import nl.weeaboo.vn.layout.impl.GridLayout;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.scene.IPanel;
 import nl.weeaboo.vn.scene.IVisualElement;
-import nl.weeaboo.vn.scene.IVisualGroup;
 
-public final class Panel extends Transformable implements IVisualGroup {
+public abstract class Panel extends Transformable implements IPanel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     private final NinePatchRenderer renderer = new NinePatchRenderer();
     private final ChildCollection children;
-    private final GridLayout layout;
 
     private transient IEventListener rendererListener;
 
     public Panel() {
         children = new ChildCollection(this);
         addSignalHandler(0, children);
-
-        layout = new GridLayout(this);
 
         initTransients();
     }
@@ -39,6 +34,15 @@ public final class Panel extends Transformable implements IVisualGroup {
         };
 
         renderer.onAttached(rendererListener);
+    }
+
+    protected abstract ILayoutGroup getLayout();
+
+    protected void validateLayout() {
+        ILayoutGroup layout = getLayout();
+        if (!layout.isLayoutValid()) {
+            layout.layout();
+        }
     }
 
     @Override
@@ -59,9 +63,8 @@ public final class Panel extends Transformable implements IVisualGroup {
     public void draw(IDrawBuffer drawBuffer) {
         super.draw(drawBuffer);
 
-        if (!layout.isLayoutValid()) {
-            layout.layout();
-        }
+        validateLayout();
+
         renderer.render(drawBuffer, this, 0, 0);
 
         for (IVisualElement elem : getChildren()) {
@@ -86,25 +89,9 @@ public final class Panel extends Transformable implements IVisualGroup {
         invalidateTransform();
     }
 
-    public ILayoutGroup getLayout() {
-        return layout;
-    }
-
+    @Override
     public void setBackground(INinePatch ninePatch) {
         renderer.set(ninePatch);
-    }
-
-    /** @deprecated Temporary method for testing */
-    @Deprecated
-    public void add(IVisualElement elem, GridCellConstraints constraints) {
-        layout.add(elem.getLayoutAdapter(), constraints);
-        add(elem);
-    }
-
-    /** @deprecated Temporary method for testing */
-    @Deprecated
-    public void endRow() {
-        layout.endRow();
     }
 
     /**
@@ -119,7 +106,7 @@ public final class Panel extends Transformable implements IVisualGroup {
      * Removes an element from the panel and its layout.
      */
     protected void remove(IVisualElement child) {
-        layout.remove(child.getLayoutAdapter());
+        getLayout().remove(child.getLayoutAdapter());
         children.remove(child);
     }
 
@@ -137,7 +124,7 @@ public final class Panel extends Transformable implements IVisualGroup {
     public void setLayoutBounds(Rect2D rect) {
         super.setLayoutBounds(rect);
 
-        layout.setLayoutBounds(rect);
+        getLayout().setLayoutBounds(rect);
     }
 
 }
