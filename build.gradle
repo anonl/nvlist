@@ -61,8 +61,10 @@ allprojects {
 	    }
         
         test {
-            useJUnit {
-	            if (!project.hasProperty('uiTest')) {            
+	        def uiTest = project.hasProperty('uiTest')
+	        inputs.property('uiTest', uiTest) // Re-execute task if uiTest property changes        
+	        useJUnit {
+	            if (!uiTest) {            
 	                // Exclude UI tests by default
 	                excludeCategories 'nl.weeaboo.gdx.test.junit.GdxUiTest'
 	            }
@@ -94,8 +96,7 @@ project(':nvlist-core') {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"        
-        compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion:"
+        compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion"
     
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
