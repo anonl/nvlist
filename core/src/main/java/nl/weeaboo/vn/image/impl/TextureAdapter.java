@@ -56,7 +56,7 @@ public class TextureAdapter implements ITexture {
         float u2 = u + uspan * (float)uv.w;
 
         float vspan = tr.getV2() - tr.getV();
-        float v = tr.getU() + vspan * (float)uv.y;
+        float v = tr.getV() + vspan * (float)uv.y;
         float v2 = v + vspan * (float)uv.h;
 
         return new TextureRegion(tr.getTexture(), u, v, u2, v2);

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.gdx.res.TransformedResource;
@@ -53,7 +54,7 @@ public class TextureManager implements Serializable {
 
         @Override
         protected TextureRegion transform(Texture original) {
-            return new TextureRegion(original);
+            return GdxTextureUtil.getDefaultRegion(original);
         }
 
     }
@@ -69,7 +70,7 @@ public class TextureManager implements Serializable {
 
         @Override
         protected TextureRegion transform(PixelTextureData original) {
-            return new TextureRegion(new Texture(original.getPixels()));
+            return GdxTextureUtil.getDefaultRegion(new Texture(original.getPixels()));
         }
 
     }

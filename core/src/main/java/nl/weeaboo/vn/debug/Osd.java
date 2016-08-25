@@ -21,8 +21,10 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
+import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -64,9 +66,11 @@ public final class Osd implements Disposable {
         fontStore = new GdxFontStore();
         textRenderer = new TextRenderer();
 
+        GdxFontGenerator fontGenerator = new GdxFontGenerator();
+        fontGenerator.setYDir(YDir.DOWN);
         try {
             TextStyle normal = new TextStyle("normal", EFontStyle.PLAIN, 16);
-            fontStore.registerFont(GdxFontUtil.load(fontFile, normal));
+            fontStore.registerFont(fontGenerator.load(fontFile, normal));
             textRenderer.setDefaultStyle(normal);
         } catch (IOException ioe) {
             LOG.warn("Error loading 'normal' OSD font", ioe);
@@ -77,7 +81,7 @@ public final class Osd implements Disposable {
             small.setOutlineSize(.5f);
             small.setOutlineColor(0xFFFFFFFF);
             smallStyle = small.immutableCopy();
-            fontStore.registerFont(GdxFontUtil.load(fontFile, smallStyle));
+            fontStore.registerFont(fontGenerator.load(fontFile, smallStyle));
         } catch (IOException ioe) {
             LOG.warn("Error loading 'small' OSD font", ioe);
         }
@@ -123,7 +127,7 @@ public final class Osd implements Disposable {
 
         textRenderer.setMaxSize(wrapWidth, vsize.h - pad * 2);
         textRenderer.setText(text.immutableCopy());
-        GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, vsize.h - pad, -1);
+        GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, pad, -1);
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {

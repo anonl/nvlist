@@ -13,6 +13,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,9 +38,10 @@ import nl.weeaboo.settings.IPreferenceListener;
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableTextStyle;
+import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
-import nl.weeaboo.styledtext.gdx.GdxFontUtil;
+import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -107,9 +109,10 @@ public class Launcher extends ApplicationAdapter {
         assetManager = new AssetManager(resourceFileSystem);
         JngTextureLoader.register(assetManager);
         Texture.setAssetManager(assetManager);
-        frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 
+        frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
+
         inputAdapter = new GdxInputAdapter(screenViewport);
 
 		batch = new SpriteBatch();
@@ -231,7 +234,10 @@ public class Launcher extends ApplicationAdapter {
                 MutableTextStyle ts = new MutableTextStyle();
                 ts.setFontName(name);
                 ts.setFontStyle(style);
-                GdxFontInfo[] fonts = GdxFontUtil.load(fileHandle, ts.immutableCopy(), sizes);
+
+                GdxFontGenerator fontGenerator = new GdxFontGenerator();
+                fontGenerator.setYDir(YDir.DOWN);
+                GdxFontInfo[] fonts = fontGenerator.load(fileHandle, ts.immutableCopy(), sizes);
                 for (int n = 0; n < fonts.length; n++) {
                     fontStore.registerFont(fonts[n]);
                 }
@@ -272,6 +278,11 @@ public class Launcher extends ApplicationAdapter {
 
 		frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
         frameBufferViewport.update(vsize.w, vsize.h, true);
+
+        // TODO: Make utility method
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(true, vsize.w, vsize.h);
+        frameBufferViewport.setCamera(camera);
 	}
 
 	@Override

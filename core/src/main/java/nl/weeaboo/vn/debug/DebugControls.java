@@ -184,8 +184,8 @@ public final class DebugControls {
         }
 
         if (input.isPressed(KeyCode.CONTROL_LEFT, true)) {
-            if (input.isPressed(KeyCode.LEFT, false)) transformable.rotate(4);
-            if (input.isPressed(KeyCode.RIGHT, false)) transformable.rotate(-4);
+            if (input.isPressed(KeyCode.LEFT, false)) transformable.rotate(-4);
+            if (input.isPressed(KeyCode.RIGHT, false)) transformable.rotate(4);
         } else if (input.isPressed(KeyCode.SHIFT_LEFT, true)) {
             if (input.isPressed(KeyCode.UP, false)) transformable.scale(1, 8 / 9.);
             if (input.isPressed(KeyCode.DOWN, false)) transformable.scale(1, 1.125);
@@ -194,14 +194,14 @@ public final class DebugControls {
         } else if (input.isPressed(KeyCode.ALT_LEFT, true)) {
             if (renderer instanceof ITextureRenderer) {
                 ITextureRenderer texRenderer = (ITextureRenderer)renderer;
-                if (input.isPressed(KeyCode.UP, false)) texRenderer.scrollUV(0, .05);
-                if (input.isPressed(KeyCode.DOWN, false)) texRenderer.scrollUV(0, -.05);
+                if (input.isPressed(KeyCode.UP, false)) texRenderer.scrollUV(0, -.05);
+                if (input.isPressed(KeyCode.DOWN, false)) texRenderer.scrollUV(0, .05);
                 if (input.isPressed(KeyCode.LEFT, false)) texRenderer.scrollUV(.05, 0);
                 if (input.isPressed(KeyCode.RIGHT, false)) texRenderer.scrollUV(-.05, 0);
             }
         } else {
-            if (input.isPressed(KeyCode.UP, false)) transformable.translate(0, 5);
-            if (input.isPressed(KeyCode.DOWN, false)) transformable.translate(0, -5);
+            if (input.isPressed(KeyCode.UP, false)) transformable.translate(0, -5);
+            if (input.isPressed(KeyCode.DOWN, false)) transformable.translate(0, 5);
             if (input.isPressed(KeyCode.LEFT, false)) transformable.translate(-5, 0);
             if (input.isPressed(KeyCode.RIGHT, false)) transformable.translate(5, 0);
         }

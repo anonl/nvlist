@@ -24,7 +24,7 @@ The z-coordinate determines the draw order of elements within a layer. The eleme
 ##Other coordinate systems
 @@@ TODO: Expand other coordinates: screen coordinates, OpenGL coordinates.
 
-The standard coordinate system used by libGDX/Scene2D has the y-axis pointing up (like OpenGL) instead of the traditional y-down used by most software. For easier libGDX integration, NVLis could choose to use y-up as well. However, since y-up is so rarely seen outside libGDX and because previous NVList versions used y-down, NVList 4 uses y-down.
+The standard coordinate system used by libGDX/Scene2D has the y-axis pointing up (like OpenGL) instead of the traditional y-down used by most software. For easier libGDX integration, NVList could choose to use y-up as well. However, since y-up is so rarely seen outside libGDX and because previous NVList versions used y-down, NVList 4 uses y-down.
 
 ## Nested transforms
 @@@ Explain that x/y-coordinates are parent-relative and z-coordinates layer-relative.

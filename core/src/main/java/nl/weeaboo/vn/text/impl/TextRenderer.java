@@ -49,6 +49,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         StyledText stext = newText.immutableCopy();
 
         LayoutParameters layoutParams = new LayoutParameters();
+        layoutParams.ydir = 1;
         layoutParams.wrapWidth = wrapWidth;
         layoutParams.isRightToLeft = isRightToLeft();
         return LayoutUtil.layout(fontStore.get(), stext, layoutParams);
@@ -63,7 +64,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
         ITextLayout textLayout = getVisibleLayout();
         double dx = bounds.x;
-        double dy = bounds.y + getHeight();
+        double dy = bounds.y;
         buffer.drawText(d, dx, dy, textLayout, visibleText);
     }
 

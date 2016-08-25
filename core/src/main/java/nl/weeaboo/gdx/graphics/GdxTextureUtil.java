@@ -40,4 +40,10 @@ public final class GdxTextureUtil {
         }
     }
 
+    public static TextureRegion getDefaultRegion(Texture texture) {
+        TextureRegion region = new TextureRegion(texture);
+        region.flip(false, true);
+        return region;
+    }
+
 }
