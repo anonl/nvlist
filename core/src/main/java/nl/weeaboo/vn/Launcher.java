@@ -113,7 +113,7 @@ public class Launcher extends ApplicationAdapter {
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 
-        inputAdapter = new GdxInputAdapter(screenViewport);
+        inputAdapter = new GdxInputAdapter(frameBufferViewport);
 
 		batch = new SpriteBatch();
 
