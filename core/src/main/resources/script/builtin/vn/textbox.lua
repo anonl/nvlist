@@ -101,8 +101,8 @@ local function initClickIndicator(textDrawable, texture, side)
     newThread(function()
         while not d:isDestroyed() do
             if side == ClickIndicatorSide.TEXT_BOTTOM then
-                local topY = textDrawable:getY() + textDrawable:getHeight()
-                d:setY(topY - textDrawable:getTextHeight() - d:getHeight() / 2)
+                local textBottomY = textDrawable:getY() + textDrawable:getTextHeight()
+                d:setY(textBottomY + d:getHeight() / 2)
             end
             d:rotate(1)
             yield()
@@ -115,16 +115,17 @@ local function initClickIndicator(textDrawable, texture, side)
     d:setSize(dw, dh)
     d:setAlign(0.5, 0.5)
     
+    local tx = textDrawable:getX()
+    local ty = textDrawable:getY()
     if side == ClickIndicatorSide.RIGHT then
-        d:setPos(textDrawable:getX() + textDrawable:getWidth() - dw / 2, textDrawable:getY() + dh / 2)
+        d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
     
         -- Reserve some room for the continue indicator
         textDrawable:setWidth(textDrawable:getWidth() - dw)
     elseif side == ClickIndicatorSide.TEXT_BOTTOM then
-        d:setPos(textDrawable:getX() + dw / 2, textDrawable:getY() + dh / 2)
+        d:setPos(tx + dw / 2, ty + textDrawable:getHeight() - dh / 2)
 
         -- Reserve some room for the continue indicator
-        textDrawable:setY(textDrawable:getY() + dh)
         textDrawable:setHeight(textDrawable:getHeight() - dh)
     else
         Log.warn("Unknown click indicator side: {}", side)
@@ -284,7 +285,8 @@ function AdvTextBox.new(self)
     local textPad = .025 * math.min(screenWidth, screenHeight);
     textBox:setSize(math.ceil(math.min(screenWidth, screenHeight * 1.30) - textPad*2),
         math.ceil(screenHeight/4 - textPad*2))
-    textBox:setPos(math.floor((screenWidth - textBox:getWidth()) / 2), math.floor(textPad))
+    textBox:setPos(math.floor((screenWidth - textBox:getWidth()) / 2),
+        math.floor(screenHeight - textPad - textBox:getHeight()))
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
     
     -- Add continue indicator
@@ -297,7 +299,7 @@ function AdvTextBox.new(self)
     local nameBox = createBgBox(layer, bgColor)    
     local namePad = .01 * math.min(screenWidth, screenHeight)
     nameBox:setSize(textBox:getWidth(), nameLabel:getTextHeight() + namePad * 2)
-    nameBox:setPos(textBox:getX(), textBox:getY() + textBox:getHeight())    
+    nameBox:setPos(textBox:getX(), textBox:getY() - nameBox:getHeight())    
     layoutPadded(nameBox, nameLabel, namePad)
     
     self.layer = layer

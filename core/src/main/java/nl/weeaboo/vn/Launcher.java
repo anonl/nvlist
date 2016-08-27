@@ -13,7 +13,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,6 +27,7 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.graphics.JngTextureLoader;
 import nl.weeaboo.gdx.input.GdxInputAdapter;
 import nl.weeaboo.gdx.res.DisposeUtil;
@@ -113,6 +113,7 @@ public class Launcher extends ApplicationAdapter {
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 
+		// TODO: Input adapter wants a transform from screen to world
         inputAdapter = new GdxInputAdapter(frameBufferViewport);
 
 		batch = new SpriteBatch();
@@ -123,6 +124,7 @@ public class Launcher extends ApplicationAdapter {
             throw new RuntimeException("Fatal error during init", e);
         }
 
+        // TODO: Screen wants a y-up viewport
         sceneEnv = new Scene2dEnv(resourceFileSystem, frameBufferViewport);
         osd = Osd.newInstance(resourceFileSystem);
         debugControls = new DebugControls(sceneEnv);
@@ -277,12 +279,8 @@ public class Launcher extends ApplicationAdapter {
 		disposeFrameBuffer();
 
 		frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
+		GdxViewportUtil.setToOrtho(frameBufferViewport, vsize, true);
         frameBufferViewport.update(vsize.w, vsize.h, true);
-
-        // TODO: Make utility method
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(true, vsize.w, vsize.h);
-        frameBufferViewport.setCamera(camera);
 	}
 
 	@Override
