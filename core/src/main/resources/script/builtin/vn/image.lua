@@ -17,7 +17,7 @@ module("vn.image", package.seeall)
 -- @return Three values, the natural <code>x, y, z</code> for the image in the specified sprite slot.
 local function getSpriteSlotPosition(i, slot, y)
     local x = 0
-    local y = y or 0
+    local y = y or screenHeight - i:getHeight()
     local z = 0
 
     if slot == "l" then

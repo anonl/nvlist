@@ -124,8 +124,7 @@ public class Launcher extends ApplicationAdapter {
             throw new RuntimeException("Fatal error during init", e);
         }
 
-        // TODO: Screen wants a y-up viewport
-        sceneEnv = new Scene2dEnv(resourceFileSystem, frameBufferViewport);
+        sceneEnv = new Scene2dEnv(resourceFileSystem, screenViewport);
         osd = Osd.newInstance(resourceFileSystem);
         debugControls = new DebugControls(sceneEnv);
 
@@ -355,7 +354,7 @@ public class Launcher extends ApplicationAdapter {
         novel.draw(drawBuffer);
 
         renderer.render(drawBuffer);
-        sceneEnv.getStage().draw();
+        sceneEnv.draw();
 
         IVideo movie = env.getVideoModule().getBlocking();
         if (movie != null) {
