@@ -28,7 +28,7 @@ end
 --         folder.
 function call(filename)
     savepoint(filename)
-    return _dofile(filename)
+    return dofile(filename)
 end
 
 
