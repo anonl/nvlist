@@ -1,0 +1,12 @@
+
+Image test script
+
+Showing sprite (left)
+@local alpha = imgf("testjng", "l")
+
+Showing sprite (right)
+@local beta = imgf("testjng", "r")
+
+Removing sprites...
+@rmf(alpha)
+@rmf(beta)

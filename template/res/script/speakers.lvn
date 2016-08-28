@@ -1,0 +1,17 @@
+
+@setTextModeNVL()
+No speaker
+$guy 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+@skipParagraph()
+$man 2: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+$guy 3: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+$guy 4: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+@@
+setTextModeADV()
+@@
+No speaker
+$guy ABC 1
+$man ABC 2
+$guy ABC 3
+$guy ABC 4

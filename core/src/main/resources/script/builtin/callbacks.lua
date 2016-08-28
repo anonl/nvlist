@@ -12,3 +12,6 @@ end
 
 function onPrefsChanged()
 end
+
+function savepoint(filename)
+end
