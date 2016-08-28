@@ -55,13 +55,14 @@ public class NinePatchRendererTest {
         for (int n = 0; n < EArea.values().length; n++) {
             renderer.setTexture(EArea.values()[n], textures[n]);
         }
-        assertNativeSize(renderer, 0, 0);
+        ITexture center = textures[EArea.CENTER.ordinal()];
+        assertNativeSize(renderer, center.getWidth(), center.getHeight());
 
         // Cols = 1, 7, 2
         // Rows = 1, 6, 3
         renderer.setInsets(Insets2D.of(1, 2, 3, 1));
         CoreTestUtil.assertEquals(Insets2D.of(1, 2, 3, 1), renderer.getInsets());
-        assertNativeSize(renderer, 1 + 2, 1 + 3);
+        assertNativeSize(renderer, center.getWidth() + 1 + 2, center.getHeight() + 1 + 3);
 
         renderer.render(drawBuffer, imageDrawable, Area2D.of(0, 0, 10, 10));
 

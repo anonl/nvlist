@@ -24,10 +24,11 @@ function assertSlotPosition(slot, expectedCenterX, expectedY, expectedZ)
     temp:destroy()
 end
 
-assertSlotPosition("l",  1280*1/5, 0, 1)
-assertSlotPosition("lc", 1280*1/3, 0, 2)
-assertSlotPosition("c",  1280*1/2, 0, 0)
-assertSlotPosition("rc", 1280*2/3, 0, 2)
-assertSlotPosition("r",  1280*4/5, 0, 1)
+local y = screenHeight - i1:getHeight()
+assertSlotPosition("l",  1280*1/5, y, 1)
+assertSlotPosition("lc", 1280*1/3, y, 2)
+assertSlotPosition("c",  1280*1/2, y, 0)
+assertSlotPosition("rc", 1280*2/3, y, 2)
+assertSlotPosition("r",  1280*4/5, y, 1)
 
 @@

@@ -14,7 +14,6 @@ public class LuaTextTest extends LuaIntegrationTest {
     @Test
     public void testStringifiers() {
         loadScript("integration/text/stringifiers");
-        new StyledText("test").length();
 
         LuaTestUtil.assertGlobal("resultApple", new StyledText("banana"));
         LuaTestUtil.assertGlobal("resultCherry", new StyledText("durian"));
