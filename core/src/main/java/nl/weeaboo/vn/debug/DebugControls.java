@@ -162,7 +162,7 @@ public final class DebugControls {
             try {
                 ISound sound = soundModule.createSound(SoundType.MUSIC,
                         new ResourceLoadInfo("music.ogg"));
-                sound.start(-1);
+                sound.start(2);
             } catch (IOException e) {
                 LOG.warn("Audio error", e);
             }

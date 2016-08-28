@@ -3,6 +3,10 @@ package nl.weeaboo.vn.sound.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.audio.Music;
 
@@ -14,9 +18,11 @@ import nl.weeaboo.io.CustomSerializable;
 public class NativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(NativeAudio.class);
 
     private final IResource<Music> musicRef;
 
+    private final AtomicInteger loopsLeft = new AtomicInteger();
     private boolean paused;
 
     public NativeAudio(IResource<Music> music) {
@@ -46,10 +52,28 @@ public class NativeAudio implements INativeAudio {
     }
 
     private void doPlay(int loops) {
-        // TODO Implement finite looping
-
         Music music = musicRef.get();
         if (music != null) {
+            if (loops <= 0) {
+                music.setOnCompletionListener(null);
+            } else {
+                // TODO: Doesn't work on Desktop, unlike Android the completion listener is only called
+                //       when the music ends, not on every loop.
+                music.setOnCompletionListener(new Music.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(Music music) {
+                        int left = loopsLeft.decrementAndGet();
+                        if (left <= 0) {
+                            LOG.debug("Music all loops finished");
+                            stop(0);
+                        } else {
+                            LOG.debug("Decrease music loops -> {}", left);
+                        }
+                    }
+                });
+            }
+
+            loopsLeft.set(loops);
             music.setLooping(loops < 0 || loops > 1);
             music.play();
             paused = false;
@@ -98,8 +122,7 @@ public class NativeAudio implements INativeAudio {
 
     @Override
     public int getLoopsLeft() {
-        // TODO Implement looping
-        return 0;
+        return loopsLeft.get();
     }
 
     @Override
