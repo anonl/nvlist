@@ -23,7 +23,7 @@ public abstract class IntegrationTest {
 
     @Before
     public final void beforeIntegration() {
-        Launcher launcher = new Launcher();
+        launcher = new Launcher();
         launcher.create();
 
         novel = launcher.getNovel();
@@ -31,9 +31,7 @@ public abstract class IntegrationTest {
 
     @After
     public final void afterIntegration() {
-        if (launcher != null) {
-            launcher.dispose();
-        }
+        launcher.dispose();
 
         final Application app = Gdx.app;
         if (app != null) {
