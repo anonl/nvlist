@@ -3,9 +3,11 @@ package nl.weeaboo.gdx.res;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.google.common.base.Stopwatch;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -17,6 +19,8 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 public class LoadingResourceStore<T> extends AbstractResourceStore {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LoadingResourceStore.class);
 
     private final StaticRef<? extends LoadingResourceStore<T>> selfId;
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
@@ -47,10 +51,15 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     }
 
     protected T loadResource(String filename) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
         AssetManager am = assetManager.get();
         am.load(filename, assetType);
         am.finishLoadingAsset(filename);
-        return am.get(filename);
+        T resource = am.get(filename);
+
+        LOG.debug("Loading resource '{}' took {}", filename, stopwatch);
+        return resource;
     }
 
     protected void unloadResource(String filename, Ref<T> entry) {

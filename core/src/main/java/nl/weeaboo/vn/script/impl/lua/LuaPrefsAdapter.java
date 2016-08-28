@@ -124,7 +124,7 @@ public class LuaPrefsAdapter {
 
             Preference<?> pref = getCachedPref(key);
             if (pref == null) {
-                LOG.debug("Lua code tries to access unknown pref, key={}", key);
+                LOG.trace("Lua code tries to access unknown pref, key={}", key);
                 return defaultResult;
             }
 

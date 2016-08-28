@@ -3,6 +3,7 @@ package nl.weeaboo.vn;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 import org.slf4j.Logger;
@@ -41,6 +42,14 @@ final class InitConfig {
                 }
             }
         }
+
+        setLogLevel("nl.weeaboo.vn", Level.FINE);
+        setLogLevel("nl.weeaboo.gdx", Level.FINE);
+    }
+
+    private static void setLogLevel(String loggerName, Level level) {
+        java.util.logging.Logger logger = java.util.logging.Logger.getLogger(loggerName);
+        logger.setLevel(level);
     }
 
 }

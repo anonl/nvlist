@@ -88,7 +88,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
             int endLine = Math.min(layout.getLineCount(), startLine + count);
             _visibleLayout = layout.getLineRange(startLine, endLine);
 
-            LOG.debug("Text layout created: startLine={}, endLine={}, height={}/{}",
+            LOG.trace("Text layout created: startLine={}, endLine={}, height={}/{}",
                     startLine, endLine, _visibleLayout.getTextHeight(), getLayoutMaxHeight());
         }
         return _visibleLayout;
