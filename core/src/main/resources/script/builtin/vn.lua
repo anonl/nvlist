@@ -96,3 +96,4 @@ flattenModule(_G)
 -- Register default textboxes
 registerTextBox(TextMode.NVL, NvlTextBox.new)
 registerTextBox(TextMode.ADV, AdvTextBox.new)
+

@@ -22,6 +22,7 @@ import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
 public class ImageLib extends LuaLib {
 
@@ -41,7 +42,7 @@ public class ImageLib extends LuaLib {
     public Varargs createImage(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
         if (layer == null) {
-            layer = LuaConvertUtil.getActiveLayer();
+            layer = LuaScriptUtil.getActiveLayer();
         }
 
         IImageModule imageModule = env.getImageModule();
@@ -60,7 +61,7 @@ public class ImageLib extends LuaLib {
     public Varargs createLayer(Varargs args) throws ScriptException {
         ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
         if (parentLayer == null) {
-            parentLayer = LuaConvertUtil.getRootLayer();
+            parentLayer = LuaScriptUtil.getRootLayer();
         }
 
         IContext context = ContextUtil.getCurrentContext();
@@ -75,7 +76,7 @@ public class ImageLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs getRootLayer(Varargs args) throws ScriptException {
-        return LuajavaLib.toUserdata(LuaConvertUtil.getRootLayer(), ILayer.class);
+        return LuajavaLib.toUserdata(LuaScriptUtil.getRootLayer(), ILayer.class);
     }
 
     /**
@@ -83,7 +84,7 @@ public class ImageLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs getActiveLayer(Varargs args) throws ScriptException {
-        return LuajavaLib.toUserdata(LuaConvertUtil.getActiveLayer(), ILayer.class);
+        return LuajavaLib.toUserdata(LuaScriptUtil.getActiveLayer(), ILayer.class);
     }
 
     /**
@@ -122,7 +123,7 @@ public class ImageLib extends LuaLib {
     public Varargs screenshot(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
         if (layer == null) {
-            layer = LuaConvertUtil.getRootLayer();
+            layer = LuaScriptUtil.getRootLayer();
         }
         int z = args.optint(2, Short.MIN_VALUE);
         boolean clip = args.optboolean(3, true);

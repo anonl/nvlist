@@ -18,6 +18,8 @@ function titlescreen()
     
     setTextModeADV()
 
+    button("test")
+
     --movie("test")
     call("images")    
     --call("speakers")    

@@ -25,6 +25,7 @@ import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser;
 import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser.ParseResult;
 
@@ -54,7 +55,7 @@ public class TextLib extends LuaLib {
     public Varargs createTextDrawable(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
         if (layer == null) {
-            layer = LuaConvertUtil.getActiveLayer();
+            layer = LuaScriptUtil.getActiveLayer();
         }
 
         IImageModule imageModule = env.getImageModule();

@@ -13,6 +13,9 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.ContextUtil;
+import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
@@ -147,6 +150,30 @@ public final class LuaScriptUtil {
             return thread.getCallstackFunction(0).getfenv();
         }
         return thread.getfenv();
+    }
+
+    private static IScreen getCurrentScreen() throws ScriptException {
+        IScreen currentScreen = ContextUtil.getCurrentScreen();
+        if (currentScreen == null) {
+            throw new ScriptException("No screen active");
+        }
+        return currentScreen;
+    }
+
+    public static ILayer getActiveLayer() throws ScriptException {
+        return getCurrentScreen().getActiveLayer();
+    }
+
+    public static ILayer getRootLayer() throws ScriptException {
+        return getCurrentScreen().getRootLayer();
+    }
+
+    public static IScriptContext getCurrentScriptContext() throws ScriptException {
+        IContext context = ContextUtil.getCurrentContext();
+        if (context == null) {
+            throw new ScriptException("No script context active");
+        }
+        return context.getScriptContext();
     }
 
 }

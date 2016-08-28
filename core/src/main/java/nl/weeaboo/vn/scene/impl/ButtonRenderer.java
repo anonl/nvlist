@@ -80,12 +80,12 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
 
     @Override
     public double getNativeWidth() {
-        return Math.max(background.getWidth(), textRenderer.getWidth());
+        return Math.max(background.getNativeWidth(), textRenderer.getWidth());
     }
 
     @Override
     public double getNativeHeight() {
-        return Math.max(background.getHeight(), textRenderer.getHeight());
+        return Math.max(background.getNativeHeight(), textRenderer.getHeight());
     }
 
     @Override
@@ -120,6 +120,7 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
         }
 
         invalidateBackground();
+        pack();
     }
 
     @Override

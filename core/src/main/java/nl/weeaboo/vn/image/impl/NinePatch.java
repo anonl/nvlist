@@ -44,12 +44,22 @@ public final class NinePatch implements INinePatch {
 
     @Override
     public double getNativeWidth() {
-        return insets.left + insets.right;
+        double width = insets.left + insets.right;
+        ITexture center = getTexture(EArea.CENTER);
+        if (center != null) {
+            width += center.getWidth();
+        }
+        return width;
     }
 
     @Override
     public double getNativeHeight() {
-        return insets.top + insets.bottom;
+        double height = insets.top + insets.bottom;
+        ITexture center = getTexture(EArea.CENTER);
+        if (center != null) {
+            height += center.getHeight();
+        }
+        return height;
     }
 
     @Override
