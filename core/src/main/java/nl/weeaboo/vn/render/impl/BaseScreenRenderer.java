@@ -20,9 +20,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 	protected final IRenderEnv renderEnv;
 	protected final RenderStats renderStats;
 
-    /** This boolean is {@code true} when inside a call to render() */
-	protected boolean rendering;
-
 	//--- Properties only valid while render==true beneath this line ----------------------
 	private boolean clipping;
 	private BlendMode blendMode;
@@ -44,7 +41,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 
 	@Override
 	public void render(DrawBuffer d) {
-		rendering = true;
         renderStats.startRender();
 		try {
 			renderReset();
@@ -57,7 +53,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 
             renderEnd();
 		} finally {
-			rendering = false;
 			renderStats.stopRender();
 		}
 	}
