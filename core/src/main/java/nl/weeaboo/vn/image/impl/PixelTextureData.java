@@ -5,14 +5,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.image.ITextureData;
 
 @CustomSerializable
-public final class PixelTextureData implements ITextureData, Disposable {
+public final class PixelTextureData implements IGdxTextureData {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +46,12 @@ public final class PixelTextureData implements ITextureData, Disposable {
 
     public Pixmap getPixels() {
         return pixels;
+    }
+
+    @Override
+    public TextureRegion toTextureRegion() {
+        Texture texture = new Texture(getPixels());
+        return GdxTextureUtil.getDefaultRegion(texture);
     }
 
     @Override

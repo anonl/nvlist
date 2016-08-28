@@ -34,14 +34,13 @@ public class TextureManager implements Serializable {
         return new TextureAdapter(tr, sx, sy);
     }
 
-    public IResource<TextureRegion> generateTextureRegion(PixelTextureData texData) {
+    public IResource<TextureRegion> generateTextureRegion(IGdxTextureData texData) {
         GeneratedResourceStore generatedStore = generatedTextureStore.get();
         return new GeneratedRegionResource(generatedStore.register(texData));
     }
 
-    public ITexture generateTexture(PixelTextureData texData, double sx, double sy) {
-        IResource<TextureRegion> tr = generateTextureRegion(texData);
-        return newTexture(tr, sx, sy);
+    public ITexture generateTexture(IGdxTextureData texData, double sx, double sy) {
+        return newTexture(generateTextureRegion(texData), sx, sy);
     }
 
     private static class RegionResource extends TransformedResource<Texture, TextureRegion> {
@@ -59,18 +58,17 @@ public class TextureManager implements Serializable {
 
     }
 
-    private static class GeneratedRegionResource
-            extends TransformedResource<PixelTextureData, TextureRegion> {
+    private static class GeneratedRegionResource extends TransformedResource<IGdxTextureData, TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 
-        public GeneratedRegionResource(IResource<PixelTextureData> inner) {
+        public GeneratedRegionResource(IResource<IGdxTextureData> inner) {
             super(inner);
         }
 
         @Override
-        protected TextureRegion transform(PixelTextureData original) {
-            return GdxTextureUtil.getDefaultRegion(new Texture(original.getPixels()));
+        protected TextureRegion transform(IGdxTextureData original) {
+            return original.toTextureRegion();
         }
 
     }

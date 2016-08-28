@@ -24,8 +24,10 @@ import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
+import nl.weeaboo.vn.image.impl.VolatileTextureData;
 
 public class GLScreenRenderer extends BaseScreenRenderer {
 
@@ -213,15 +215,16 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
     @Override
     public void renderScreenshot(IWritableScreenshot ss, Rect glRect) {
-        /*
-         * TODO Support volatile screenshots (libGDX doesn't seem to have built-in support for GPU-only
-         * texturedata objects) EDIT: Support added in 1.7.2 (GLOnlyTextureData)
-         */
-
-        Pixmap pixels = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
-        PixmapUtil.flipVertical(pixels);
-
-        PixelTextureData texData = PixelTextureData.fromPixmap(pixels);
+        final ITextureData texData;
+        if (ss.isVolatile()) {
+            TextureRegion textureRegion = ScreenUtils.getFrameBufferTexture(glRect.x, glRect.y, glRect.w, glRect.h);
+            textureRegion.flip(false, true);
+            texData = VolatileTextureData.fromRegion(textureRegion, false);
+        } else {
+            Pixmap pixels = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
+            PixmapUtil.flipVertical(pixels);
+            texData = PixelTextureData.fromPixmap(pixels);
+        }
         ss.setPixels(texData, renderEnv.getScreenSize());
     }
 

@@ -35,15 +35,18 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
         }
 
         if (original != null) {
-            result = transform(original);
             cachedOriginal = new WeakReference<S>(original);
-            cachedTransformed = result;
+            result = transform(original);
+            if (result != null) {
+                cachedTransformed = result;
+            }
         }
         return result;
     }
 
     /**
      * @param original The original resource, will never be {@code null}.
+     * @return The transformed resource, or {@code null} if the resource couldn't be transformed.
      */
     protected abstract D transform(S original);
 

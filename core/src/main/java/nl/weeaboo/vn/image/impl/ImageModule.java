@@ -137,7 +137,7 @@ public class ImageModule implements IImageModule {
 
     @Override
     public ITexture createTexture(ITextureData texData, double sx, double sy) {
-        return texManager.generateTexture((PixelTextureData)texData, sx, sy);
+        return texManager.generateTexture((IGdxTextureData)texData, sx, sy);
     }
 
     @Override
