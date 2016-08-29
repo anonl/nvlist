@@ -26,12 +26,22 @@ public interface IImageModule extends IModule, IResourceResolver {
     ITexture getTexture(String filename);
 
     /**
-     * Creates a texture object from the specified filename.
+     * Attempts to load the texture with the specified filename.
      *
-     * @param info Filename of the requested resource and related metadata.
-     * @param suppressErrors If <code>true</code> doesn't log any errors that may occur.
+     * @param path Filename of the requested resource and related metadata.
+     * @param suppressErrors If {@code true} doesn't log any errors that may occur.
+     * @return The texture, or {@code null} if loading failed.
      */
-    ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors);
+    ITexture getTexture(ResourceLoadInfo path, boolean suppressErrors);
+
+    /**
+     * Attempts to load a ninepatch based on the specified filename.
+     *
+     * @param path Filename of the requested resource and related metadata.
+     * @param suppressErrors If {@code true} doesn't log any errors that may occur.
+     * @return The ninepatch, or {@code null} if loading failed.
+     */
+    INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors);
 
     /**
      * Creates a solid-color texture with the given color and dimensions. The {@code scaleX} and

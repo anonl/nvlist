@@ -36,55 +36,52 @@ public abstract class ResourceLoader implements IResourceResolver {
         this.checkedFilenames = new LruSet<String>(128);
     }
 
-    protected String replaceExt(String filename, String ext) {
-        int index = filename.indexOf('#');
-        if (index < 0) {
-            return Filenames.replaceExt(filename, ext);
-        }
-        return Filenames.replaceExt(filename.substring(0, index), ext) + filename.substring(index);
-    }
-
     @Override
-    public ResourceId resolveResource(String filename) {
-        if (filename == null) {
+    public ResourceId resolveResource(String resourcePath) {
+        if (resourcePath == null) {
             return null;
         }
 
-        if (isValidFilename(filename)) {
-            return new ResourceId(mediaType, filename); // The given extension works
+        String filePath = ResourceId.getFilePath(resourcePath);
+        String subId = ResourceId.getSubId(resourcePath);
+        if (isValidFilename(filePath)) {
+            // The given extension works
+            return new ResourceId(mediaType, filePath, subId);
         }
 
         for (String ext : autoFileExts) {
-            String fn = replaceExt(filename, ext);
+            String fn = Filenames.replaceExt(filePath, ext);
             if (isValidFilename(fn)) {
-                return new ResourceId(mediaType, fn); // This extension works
+                // This extension works
+                return new ResourceId(mediaType, fn, subId);
             }
         }
         return null;
     }
 
-    public void checkRedundantFileExt(String filename) {
-        if (filename == null || !checkFileExt) {
+    public void checkRedundantFileExt(String resourcePath) {
+        String filePath = ResourceId.getFilePath(resourcePath);
+        if (filePath == null || !checkFileExt) {
             return;
         }
 
-        if (!checkedFilenames.add(filename)) {
+        if (!checkedFilenames.add(filePath)) {
             return;
         }
 
         // If the file has an extension, isn't valid, but would be valid with a different extension...
-        if (!Filenames.getExtension(filename).isEmpty() && !isValidFilename(filename)) {
-            ResourceId resourceId = resolveResource(filename);
-            if (resourceId != null && isValidFilename(resourceId.getCanonicalFilename())) {
-                LOG.warn("Incorrect file extension: {}", filename);
+        if (!Filenames.getExtension(filePath).isEmpty() && !isValidFilename(filePath)) {
+            ResourceId resourceId = resolveResource(filePath);
+            if (resourceId != null && isValidFilename(resourceId.getFilePath())) {
+                LOG.warn("Incorrect file extension: {}", filePath);
             }
         }
 
         //Check if a file extension in the default list has been specified.
         for (String ext : autoFileExts) {
-            if (filename.endsWith("." + ext)) {
-                if (isValidFilename(filename)) {
-                    LOG.debug("You don't need to specify the file extension: {}", filename);
+            if (filePath.endsWith("." + ext)) {
+                if (isValidFilename(filePath)) {
+                    LOG.debug("You don't need to specify the file extension: {}", filePath);
                 }
                 break;
             }

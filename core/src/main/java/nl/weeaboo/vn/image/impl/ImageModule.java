@@ -19,6 +19,7 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.core.impl.DefaultEnvironment;
 import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
@@ -94,18 +95,24 @@ public class ImageModule implements IImageModule {
 
     @Override
     public ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
-        String filename = loadInfo.getFilename();
-        resourceLoader.checkRedundantFileExt(filename);
+        String path = loadInfo.getPath();
+        resourceLoader.checkRedundantFileExt(path);
 
-        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        ResourceId resourceId = resourceLoader.resolveResource(path);
         if (resourceId == null) {
             if (!suppressErrors) {
-                LOG.debug("Unable to find image file: " + filename);
+                LOG.debug("Unable to find image file: " + path);
             }
             return null;
         }
 
         return getTextureNormalized(resourceId, loadInfo);
+    }
+
+    @Override
+    public INinePatch getNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
+        NinePatchLoader loader = new NinePatchLoader(env.getImageModule());
+        return loader.loadNinePatch(loadInfo, suppressErrors);
     }
 
     /**
@@ -121,7 +128,7 @@ public class ImageModule implements IImageModule {
     private IResource<TextureRegion> getTexRectNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(resourceId, loadInfo);
 
-        return texManager.getTexture(resourceLoader, resourceId.getCanonicalFilename());
+        return texManager.getTexture(resourceLoader, resourceId);
     }
 
     @Override

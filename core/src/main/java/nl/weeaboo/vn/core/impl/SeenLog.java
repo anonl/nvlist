@@ -95,7 +95,7 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public void registerScriptFile(ResourceId resourceId, int numTextLines) {
-        String filename = resourceId.getCanonicalFilename();
+        String filename = resourceId.getFilePath();
         ScriptSeen seen = scriptSeen.get(filename);
         if (seen != null && seen.getNumTextLines() == numTextLines) {
             return; // ScriptSeen exists and is up-to-date
@@ -115,7 +115,7 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public boolean hasSeenLine(ResourceId resourceId, int lineNumber) {
-        ScriptSeen seen = scriptSeen.get(resourceId.getCanonicalFilename());
+        ScriptSeen seen = scriptSeen.get(resourceId.getFilePath());
         return seen != null && seen.hasSeenLine(lineNumber);
     }
 
@@ -129,7 +129,7 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public void markLineSeen(ResourceId resourceId, int lineNumber) {
-        ScriptSeen seen = scriptSeen.get(resourceId.getCanonicalFilename());
+        ScriptSeen seen = scriptSeen.get(resourceId.getFilePath());
         if (seen == null) {
             LOG.warn("Marking line of unknown script file: {}:{}", resourceId, lineNumber);
         } else {
@@ -199,11 +199,11 @@ final class SeenLog implements ISeenLog {
         private final Set<String> seenResources = Sets.newHashSet();
 
         public boolean addResource(ResourceId resourceId) {
-            return seenResources.add(resourceId.getCanonicalFilename());
+            return seenResources.add(resourceId.getFilePath());
         }
 
         public boolean contains(ResourceId resourceId) {
-            return seenResources.contains(resourceId.getCanonicalFilename());
+            return seenResources.contains(resourceId.getFilePath());
         }
 
     }

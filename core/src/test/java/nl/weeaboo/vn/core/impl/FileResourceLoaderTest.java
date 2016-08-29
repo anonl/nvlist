@@ -109,7 +109,7 @@ public class FileResourceLoaderTest {
     private void assertPreload(String expectedNormalized, String inputFilename) {
         lastPreload = null;
         resourceLoader.preload(inputFilename);
-        String actual = (lastPreload != null ? lastPreload.getCanonicalFilename() : null);
+        String actual = (lastPreload != null ? lastPreload.getFilePath() : null);
         Assert.assertEquals(expectedNormalized, actual);
     }
 
@@ -120,7 +120,7 @@ public class FileResourceLoaderTest {
 
     private void assertNormalizedFilename(String expectedNormalized, String inputFilename) {
         ResourceId resourceId = resourceLoader.resolveResource(inputFilename);
-        String actual = (resourceId != null ? resourceId.getCanonicalFilename() : null);
+        String actual = (resourceId != null ? resourceId.getFilePath() : null);
         Assert.assertEquals(expectedNormalized, actual);
     }
 

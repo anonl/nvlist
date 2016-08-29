@@ -61,7 +61,7 @@ public class VideoModule implements IVideoModule {
 
     	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 
-        LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getFilename());
+        LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getPath());
 
         fullscreenMovie = createVideo(loadInfo);
 
@@ -69,12 +69,12 @@ public class VideoModule implements IVideoModule {
     }
 
     private IVideo createVideo(ResourceLoadInfo loadInfo) {
-        String filename = loadInfo.getFilename();
-        resourceLoader.checkRedundantFileExt(filename);
+        String path = loadInfo.getPath();
+        resourceLoader.checkRedundantFileExt(path);
 
-        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        ResourceId resourceId = resourceLoader.resolveResource(path);
         if (resourceId == null) {
-            LOG.warn("Unable to find video file: {}", filename);
+            LOG.warn("Unable to find video file: {}", path);
             return null;
         }
 
@@ -82,8 +82,8 @@ public class VideoModule implements IVideoModule {
 
         // Note: VideoAdapter currently
         IRenderEnv renderEnv = env.getRenderEnv();
-        NativeVideo video = new NativeVideo(resourceLoader, resourceId.getCanonicalFilename(), renderEnv);
-        return new Video(resourceId.getCanonicalFilename(), video);
+        NativeVideo video = new NativeVideo(resourceLoader, resourceId.getFilePath(), renderEnv);
+        return new Video(resourceId.getFilePath(), video);
 
     }
 

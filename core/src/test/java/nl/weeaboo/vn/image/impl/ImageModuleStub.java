@@ -7,6 +7,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
@@ -59,6 +60,11 @@ public class ImageModuleStub implements IImageModule {
     @Override
     public ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors) {
         return new TestTexture();
+    }
+
+    @Override
+    public INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors) {
+        return null;
     }
 
     @Override

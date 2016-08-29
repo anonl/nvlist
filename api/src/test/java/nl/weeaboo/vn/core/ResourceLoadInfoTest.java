@@ -14,7 +14,7 @@ public class ResourceLoadInfoTest {
     @Test
     public void validArgs() {
         ResourceLoadInfo info = new ResourceLoadInfo("path", STACK_TRACE);
-        Assert.assertEquals("path", info.getFilename());
+        Assert.assertEquals("path", info.getPath());
         Assert.assertEquals(STACK_TRACE, info.getCallStackTrace());
 
         info = new ResourceLoadInfo("path", Collections.<String> emptyList());

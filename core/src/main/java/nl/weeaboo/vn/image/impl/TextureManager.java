@@ -9,6 +9,7 @@ import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.gdx.res.TransformedResource;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
@@ -21,12 +22,13 @@ public class TextureManager implements Serializable {
     private final StaticRef<TextureStore> textureStore = StaticEnvironment.TEXTURE_STORE;
     private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_RESOURCES;
 
-    public IResource<TextureRegion> getTexture(FileResourceLoader loader, String filename) {
-        filename = loader.getAbsolutePath(filename);
+    public IResource<TextureRegion> getTexture(FileResourceLoader loader, ResourceId resourceId) {
+        String filename = loader.getAbsolutePath(resourceId.getFilePath());
         IResource<Texture> texture = textureStore.get().get(filename);
         if (texture == null) {
             return null;
         }
+        // TODO: Resolve region based on sub-resource id
         return new RegionResource(texture);
     }
 

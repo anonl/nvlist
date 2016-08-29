@@ -62,23 +62,23 @@ public class SoundModule implements ISoundModule {
 
     @Override
     public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
-        String filename = loadInfo.getFilename();
-        resourceLoader.checkRedundantFileExt(filename);
+        String path = loadInfo.getPath();
+        resourceLoader.checkRedundantFileExt(path);
 
-        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        ResourceId resourceId = resourceLoader.resolveResource(path);
         if (resourceId == null) {
-            LOG.debug("Unable to find sound file: " + filename);
+            LOG.debug("Unable to find sound file: " + path);
             return null;
         }
 
         INativeAudio audio = createNativeAudio(resourceLoader, resourceId);
         if (audio == null) {
-            LOG.debug("Unable to find sound file: " + filename);
+            LOG.debug("Unable to create native sound: " + path);
             return null;
         }
 
         resourceLoader.logLoad(resourceId, loadInfo);
-        return new Sound(soundController, stype, resourceId.getCanonicalFilename(), audio);
+        return new Sound(soundController, stype, resourceId.getFilePath(), audio);
     }
 
     /**
@@ -94,7 +94,7 @@ public class SoundModule implements ISoundModule {
     }
 
     private INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
-        String filename = resourceId.getCanonicalFilename();
+        String filename = resourceId.getFilePath();
         filename = loader.getAbsolutePath(filename);
 
         IResource<Music> resource = musicStore.get().get(filename);
