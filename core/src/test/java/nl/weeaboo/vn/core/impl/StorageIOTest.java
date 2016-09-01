@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
@@ -15,7 +16,7 @@ import nl.weeaboo.vn.save.impl.StorageIO;
 
 public class StorageIOTest {
 
-    private static final String FILENAME = "test.json";
+    private static final FilePath FILENAME = FilePath.of("test.json");
 
     private StorageTestHelper testHelper;
     private MultiFileSystem fileSystem;

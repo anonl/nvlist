@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -69,7 +70,7 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ResourceId resolveResource(String filename) {
+    public ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 
@@ -89,13 +90,13 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ITexture getTexture(String filename) {
+    public ITexture getTexture(FilePath filename) {
         return getTexture(new ResourceLoadInfo(filename), false);
     }
 
     @Override
     public ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
-        String path = loadInfo.getPath();
+        FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
         ResourceId resourceId = resourceLoader.resolveResource(path);
@@ -164,7 +165,7 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public void preload(String filename) {
+    public void preload(FilePath filename) {
         resourceLoader.preload(filename);
     }
 
@@ -173,7 +174,7 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public Collection<String> getImageFiles(String folder) {
+    public Collection<FilePath> getImageFiles(FilePath folder) {
         return resourceLoader.getMediaFiles(folder);
     }
 

@@ -15,6 +15,7 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
@@ -26,10 +27,10 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
-    private final CacheLoader<String, Ref<T>> loadingFunction = new LoadingFunction();
+    private final CacheLoader<FilePath, Ref<T>> loadingFunction = new LoadingFunction();
     private final AssetRemovalListener assetRemovalListener = new AssetRemovalListener();
 
-    private LoadingCache<String, Ref<T>> cache;
+    private LoadingCache<FilePath, Ref<T>> cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
         super(LoggerFactory.getLogger("LoadingResourceStore<" + type.getSimpleName() + ">"));
@@ -40,7 +41,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache = buildCache(CacheBuilder.newBuilder().expireAfterAccess(15, TimeUnit.SECONDS));
     }
 
-    private LoadingCache<String, Ref<T>> buildCache(CacheBuilder<Object, Object> builder) {
+    private LoadingCache<FilePath, Ref<T>> buildCache(CacheBuilder<Object, Object> builder) {
         return builder.removalListener(assetRemovalListener)
                 .build(loadingFunction);
     }
@@ -50,26 +51,27 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache.invalidateAll();
     }
 
-    protected T loadResource(String filename) {
+    protected T loadResource(FilePath path) {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         AssetManager am = assetManager.get();
-        am.load(filename, assetType);
-        am.finishLoadingAsset(filename);
-        T resource = am.get(filename);
+        String pathString = path.toString();
+        am.load(pathString, assetType);
+        am.finishLoadingAsset(pathString);
+        T resource = am.get(pathString);
 
-        LOG.debug("Loading resource '{}' took {}", filename, stopwatch);
+        LOG.debug("Loading resource '{}' took {}", path, stopwatch);
         return resource;
     }
 
-    protected void unloadResource(String filename, Ref<T> entry) {
+    protected void unloadResource(FilePath filename, Ref<T> entry) {
         entry.invalidate();
 
         AssetManager am = assetManager.get();
-        am.unload(filename);
+        am.unload(filename.toString());
     }
 
-    public IResource<T> get(String filename) {
+    public IResource<T> get(FilePath filename) {
         Ref<T> entry = getEntry(filename);
         if (entry == null) {
             return null;
@@ -80,7 +82,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         return resource;
     }
 
-    protected Ref<T> getEntry(String filename) {
+    protected Ref<T> getEntry(FilePath filename) {
         try {
             return cache.get(filename);
         } catch (ExecutionException e) {
@@ -93,10 +95,10 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache = buildCache(builder);
     }
 
-    private class LoadingFunction extends CacheLoader<String, Ref<T>> {
+    private class LoadingFunction extends CacheLoader<FilePath, Ref<T>> {
 
         @Override
-        public Ref<T> load(String filename) {
+        public Ref<T> load(FilePath filename) {
             T resource;
             try {
                 resource = loadResource(filename);
@@ -109,10 +111,10 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
     }
 
-    private class AssetRemovalListener implements RemovalListener<String, Ref<T>> {
+    private class AssetRemovalListener implements RemovalListener<FilePath, Ref<T>> {
 
         @Override
-        public void onRemoval(RemovalNotification<String, Ref<T>> notification) {
+        public void onRemoval(RemovalNotification<FilePath, Ref<T>> notification) {
             unloadResource(notification.getKey(), notification.getValue());
         }
 

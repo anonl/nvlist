@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.ResourceId;
@@ -54,7 +55,7 @@ public class BaseScriptTest {
     /** Make sure .lvn loading isn't completely broken. */
     @Test
     public void loadScript() throws LvnParseException, IOException {
-        String filename = LuaTestUtil.SCRIPT_HELLOWORLD;
+        FilePath filename = LuaTestUtil.SCRIPT_HELLOWORLD;
 
         ICompiledLvnFile compiled;
         InputStream in = scriptLoader.openScript(filename);

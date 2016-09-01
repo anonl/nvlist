@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
@@ -23,12 +24,17 @@ public class TextureManager implements Serializable {
     private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_RESOURCES;
 
     public IResource<TextureRegion> getTexture(FileResourceLoader loader, ResourceId resourceId) {
-        String filename = loader.getAbsolutePath(resourceId.getFilePath());
+        FilePath filename = loader.getAbsolutePath(resourceId.getFilePath());
         IResource<Texture> texture = textureStore.get().get(filename);
         if (texture == null) {
             return null;
         }
-        // TODO: Resolve region based on sub-resource id
+
+        /*
+         * TODO: Resolve region based on sub-resource id
+         *
+         * That means I actually need to parse texture atlas files (eith libGDX's version, or my own)
+         */
         return new RegionResource(texture);
     }
 

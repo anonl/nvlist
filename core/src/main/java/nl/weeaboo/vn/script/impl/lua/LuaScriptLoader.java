@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.filesystem.FileCollectOptions;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.io.StreamUtil;
@@ -87,7 +90,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
     @Override
     public LuaResource findResource(String filename) {
-        ResourceId resourceId = resolveResource(filename);
+        ResourceId resourceId = resolveResource(FilePath.of(filename));
         if (resourceId == null) {
             return null;
         }
@@ -104,45 +107,42 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     }
 
     @Override
-    public ResourceId resolveResource(String resourcePath) {
-        if (getScriptExists(resourcePath)) {
-            return new ResourceId(MediaType.SCRIPT, resourcePath);
+    public ResourceId resolveResource(FilePath path) {
+        if (getScriptExists(path)) {
+            return new ResourceId(MediaType.SCRIPT, path);
         }
 
         // Use Lua PATH to find the file
         LuaRunState lrs = LuaRunState.getCurrent();
         PackageLib packageLib = lrs.getPackageLib();
-        String path = packageLib.PACKAGE.get(PATH).tojstring();
-
-        for (String pattern : path.split(";")) {
-            String filename = pattern.replaceFirst("\\?", resourcePath);
+        for (String pattern : packageLib.PACKAGE.get(PATH).tojstring().split(";")) {
+            FilePath filename = FilePath.of(pattern.replaceFirst("\\?", path.toString()));
             if (getScriptExists(filename)) {
                 return new ResourceId(MediaType.SCRIPT, filename);
             }
         }
-
         return null;
     }
 
-    protected boolean getScriptExists(String filename) {
+    protected boolean getScriptExists(FilePath filename) {
         return resourceLoader.isValidFilename(filename);
     }
 
-    public boolean isBuiltInScript(String filename) {
+    public boolean isBuiltInScript(FilePath filename) {
         return LuaScriptResourceLoader.isBuiltInScript(filename);
     }
 
     @Override
-    public InputStream openScript(String filename) throws IOException {
+    public InputStream openScript(FilePath filename) throws IOException {
         ResourceId resourceId = resolveResource(filename);
         if (resourceId == null) {
-            throw new FileNotFoundException(filename);
+            throw new FileNotFoundException(filename.toString());
         }
         return resourceLoader.newInputStream(resourceId.getFilePath());
     }
 
     @Override
-    public Collection<String> getScriptFiles(String folder) {
+    public Collection<FilePath> getScriptFiles(FilePath folder) {
         return resourceLoader.getMediaFiles(folder);
     }
 
@@ -164,10 +164,13 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     }
 
     LuaResource luaOpenScript(ResourceId resourceId) throws LvnParseException, IOException {
+        FilePath path = resourceId.getFilePath();
+        String pathString = path.toString();
+
         final byte[] fileData;
-        InputStream in = resourceLoader.newInputStream(resourceId.getFilePath());
+        InputStream in = resourceLoader.newInputStream(path);
         try {
-            if (!LuaScriptUtil.isLvnFile(resourceId.getFilePath())) {
+            if (!LuaScriptUtil.isLvnFile(pathString)) {
                 fileData = StreamUtil.readBytes(in);
             } else {
                 ICompiledLvnFile file = compileScript(resourceId, in);
@@ -178,7 +181,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
             in.close();
         }
 
-        return new LuaResource(resourceId.getFilePath()) {
+        return new LuaResource(pathString) {
             @Override
             public InputStream open() throws IOException {
                 return new ByteArrayInputStream(fileData);
@@ -187,10 +190,10 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     }
 
     @Override
-    public void loadScript(IScriptThread thread, String filename) throws IOException, ScriptException {
+    public void loadScript(IScriptThread thread, FilePath filename) throws IOException, ScriptException {
         LuaScriptThread luaThread = (LuaScriptThread)thread;
 
-        Varargs loadResult = BaseLib.loadFile(filename);
+        Varargs loadResult = BaseLib.loadFile(filename.toString());
         if (!loadResult.arg1().isclosure()) {
             throw new ScriptException("Error loading script, " + filename + ": " + loadResult.arg(2));
         }
@@ -214,32 +217,32 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
         protected final FileSystemView getFileSystem() {
             if (cachedFileSystemView == null) {
-                cachedFileSystemView = new FileSystemView(env.getFileSystem(), "script/");
+                cachedFileSystemView = new FileSystemView(env.getFileSystem(), FilePath.of("script/"));
             }
             return cachedFileSystemView;
         }
 
-        public static boolean isBuiltInScript(String filename) {
-            return filename.startsWith("builtin/");
+        public static boolean isBuiltInScript(FilePath filename) {
+            return filename.toString().startsWith("builtin/");
         }
 
-        public static URL getClassResource(String filename) {
+        public static URL getClassResource(FilePath filename) {
             return LuaScriptLoader.class.getResource("/script/" + filename);
         }
 
         @Override
-        protected boolean isValidFilename(String filename) {
+        protected boolean isValidFilename(FilePath filename) {
             if (isBuiltInScript(filename)) {
                 return getClassResource(filename) != null;
             }
             return getFileSystem().getFileExists(filename);
         }
 
-        public InputStream newInputStream(String filename) throws IOException {
+        public InputStream newInputStream(FilePath filename) throws IOException {
             if (isBuiltInScript(filename)) {
                 URL url = LuaScriptResourceLoader.getClassResource(filename);
                 if (url == null) {
-                    throw new FileNotFoundException(filename);
+                    throw new FileNotFoundException(filename.toString());
                 }
                 return url.openStream();
             }
@@ -248,10 +251,9 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         }
 
         @Override
-        protected List<String> getFiles(String folder) throws IOException {
-            List<String> out = new ArrayList<String>();
-            getFileSystem().getFiles(out, folder, true);
-            return out;
+        protected List<FilePath> getFiles(FilePath folder) throws IOException {
+            FileCollectOptions opts = new FileCollectOptions(folder);
+            return ImmutableList.copyOf(getFileSystem().getFiles(opts));
         }
 
     }

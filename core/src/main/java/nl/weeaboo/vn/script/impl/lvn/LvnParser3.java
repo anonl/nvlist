@@ -11,6 +11,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import nl.weeaboo.filesystem.FilePath;
+
 class LvnParser3 implements ILvnParser {
 
     private List<LvnLine> compiledLines;
@@ -19,7 +21,7 @@ class LvnParser3 implements ILvnParser {
 	}
 
 	@Override
-	public CompiledLvnFile parseFile(String filename, InputStream in) throws LvnParseException, IOException {
+	public CompiledLvnFile parseFile(FilePath filename, InputStream in) throws LvnParseException, IOException {
         List<String> src = ParserUtil.readLinesUtf8(in);
 
         compiledLines = Lists.newArrayList();
@@ -28,7 +30,7 @@ class LvnParser3 implements ILvnParser {
         return new CompiledLvnFile(filename, compiledLines);
 	}
 
-    private void parseLines(String filename, List<String> lines) throws LvnParseException {
+    private void parseLines(FilePath filename, List<String> lines) throws LvnParseException {
 		LvnMode mode = LvnMode.TEXT;
 
         int lineNum = 1;
@@ -101,7 +103,7 @@ class LvnParser3 implements ILvnParser {
 		}
 	}
 
-	protected String parseTextLine(String filename, String line, int textLineNum) {
+	protected String parseTextLine(FilePath filename, String line, int textLineNum) {
 		if (line.length() == 0) {
 			return ""; //Empty line
 		}
@@ -182,8 +184,8 @@ class LvnParser3 implements ILvnParser {
 		return "paragraph.stringify(\"" + escape(str) + "\")";
 	}
 
-	protected String beginParagraphCommand(String filename, int textLineNum) {
-		return "paragraph.start(\"" + escape(filename) + "\", " + textLineNum + ")";
+	protected String beginParagraphCommand(FilePath filename, int textLineNum) {
+		return "paragraph.start(\"" + escape(filename.toString()) + "\", " + textLineNum + ")";
 	}
 	protected String appendTextCommand(String line) {
 		if (line.length() == 0) return "";

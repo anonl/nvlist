@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.io.Filenames;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.MediaType;
@@ -25,7 +25,7 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private final MediaType mediaType;
     private final IResourceLoadLog resourceLoadLog;
-    private final LruSet<String> checkedFilenames;
+    private final LruSet<FilePath> checkedFilenames;
 
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt = true;
@@ -33,24 +33,24 @@ public abstract class ResourceLoader implements IResourceResolver {
     public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
-        this.checkedFilenames = new LruSet<String>(128);
+        this.checkedFilenames = new LruSet<FilePath>(128);
     }
 
     @Override
-    public ResourceId resolveResource(String resourcePath) {
-        if (resourcePath == null) {
+    public ResourceId resolveResource(FilePath path) {
+        if (path == null) {
             return null;
         }
 
-        String filePath = ResourceId.getFilePath(resourcePath);
-        String subId = ResourceId.getSubId(resourcePath);
+        FilePath filePath = ResourceId.getFilePath(path.toString());
+        String subId = ResourceId.getSubId(path.getName());
         if (isValidFilename(filePath)) {
             // The given extension works
             return new ResourceId(mediaType, filePath, subId);
         }
 
         for (String ext : autoFileExts) {
-            String fn = Filenames.replaceExt(filePath, ext);
+            FilePath fn = filePath.withExt(ext);
             if (isValidFilename(fn)) {
                 // This extension works
                 return new ResourceId(mediaType, fn, subId);
@@ -59,8 +59,8 @@ public abstract class ResourceLoader implements IResourceResolver {
         return null;
     }
 
-    public void checkRedundantFileExt(String resourcePath) {
-        String filePath = ResourceId.getFilePath(resourcePath);
+    public void checkRedundantFileExt(FilePath resourcePath) {
+        FilePath filePath = ResourceId.getFilePath(resourcePath.toString());
         if (filePath == null || !checkFileExt) {
             return;
         }
@@ -70,7 +70,7 @@ public abstract class ResourceLoader implements IResourceResolver {
         }
 
         // If the file has an extension, isn't valid, but would be valid with a different extension...
-        if (!Filenames.getExtension(filePath).isEmpty() && !isValidFilename(filePath)) {
+        if (!filePath.getExt().isEmpty() && !isValidFilename(filePath)) {
             ResourceId resourceId = resolveResource(filePath);
             if (resourceId != null && isValidFilename(resourceId.getFilePath())) {
                 LOG.warn("Incorrect file extension: {}", filePath);
@@ -79,7 +79,7 @@ public abstract class ResourceLoader implements IResourceResolver {
 
         //Check if a file extension in the default list has been specified.
         for (String ext : autoFileExts) {
-            if (filePath.endsWith("." + ext)) {
+            if (filePath.getName().endsWith("." + ext)) {
                 if (isValidFilename(filePath)) {
                     LOG.debug("You don't need to specify the file extension: {}", filePath);
                 }
@@ -88,11 +88,11 @@ public abstract class ResourceLoader implements IResourceResolver {
         }
     }
 
-    public void preload(String filename) {
+    public void preload(FilePath filename) {
         preload(filename, false);
     }
 
-    public void preload(String filename, boolean suppressErrors) {
+    public void preload(FilePath filename, boolean suppressErrors) {
         if (!suppressErrors) {
             checkRedundantFileExt(filename);
         }
@@ -114,16 +114,13 @@ public abstract class ResourceLoader implements IResourceResolver {
         resourceLoadLog.logLoad(resourceId, info);
     }
 
-    /**
-     * @param filename A normalized filename
-     */
-    protected abstract boolean isValidFilename(String filename);
+    protected abstract boolean isValidFilename(FilePath filePath);
 
-    public Collection<String> getMediaFiles(String folder) {
+    public Collection<FilePath> getMediaFiles(FilePath folder) {
         try {
-            Collection<String> files = getFiles(folder);
-            List<String> filtered = new ArrayList<String>(files.size());
-            for (String file : files) {
+            Collection<FilePath> files = getFiles(folder);
+            List<FilePath> filtered = new ArrayList<FilePath>(files.size());
+            for (FilePath file : files) {
                 if (isValidFilename(file)) {
                     filtered.add(file);
                 }
@@ -135,7 +132,7 @@ public abstract class ResourceLoader implements IResourceResolver {
         }
     }
 
-    protected abstract List<String> getFiles(String folder) throws IOException;
+    protected abstract List<FilePath> getFiles(FilePath folder) throws IOException;
 
     public void setAutoFileExts(String... exts) {
         autoFileExts = exts.clone();

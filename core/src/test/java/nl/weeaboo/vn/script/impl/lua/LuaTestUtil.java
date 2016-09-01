@@ -2,6 +2,7 @@ package nl.weeaboo.vn.script.impl.lua;
 
 import org.junit.Assert;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
@@ -13,11 +14,11 @@ import nl.weeaboo.vn.script.IScriptThread;
 
 public final class LuaTestUtil {
 
-    public static final String SCRIPT_HELLOWORLD = "helloworld.lvn";
-    public static final String SCRIPT_YIELD = "yield.lvn";
-    public static final String SCRIPT_CREATECONTEXT = "createcontext.lvn";
-    public static final String SCRIPT_SCRIPTLIB = "scriptlib.lvn";
-    public static final String SCRIPT_SETMODE = "setmode.lvn";
+    public static final FilePath SCRIPT_HELLOWORLD = FilePath.of("helloworld.lvn");
+    public static final FilePath SCRIPT_YIELD = FilePath.of("yield.lvn");
+    public static final FilePath SCRIPT_CREATECONTEXT = FilePath.of("createcontext.lvn");
+    public static final FilePath SCRIPT_SCRIPTLIB = FilePath.of("scriptlib.lvn");
+    public static final FilePath SCRIPT_SETMODE = FilePath.of("setmode.lvn");
 
     private LuaTestUtil() {
     }

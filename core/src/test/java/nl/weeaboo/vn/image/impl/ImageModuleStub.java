@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
@@ -33,7 +34,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public ResourceId resolveResource(String filename) {
+    public ResourceId resolveResource(FilePath filename) {
         return null;
     }
 
@@ -53,7 +54,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public ITexture getTexture(String filename) {
+    public ITexture getTexture(FilePath filename) {
         return getTexture(new ResourceLoadInfo(filename), false);
     }
 
@@ -84,7 +85,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public Collection<String> getImageFiles(String folder) {
+    public Collection<FilePath> getImageFiles(FilePath folder) {
         return Collections.emptySet();
     }
 
@@ -100,7 +101,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public void preload(String filename) {
+    public void preload(FilePath filename) {
     }
 
 }

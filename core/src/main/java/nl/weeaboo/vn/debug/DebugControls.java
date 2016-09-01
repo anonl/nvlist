@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.google.common.io.BaseEncoding;
 
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.EFontStyle;
@@ -161,7 +162,7 @@ public final class DebugControls {
         if (alt && input.consumePress(KeyCode.M)) {
             try {
                 ISound sound = soundModule.createSound(SoundType.MUSIC,
-                        new ResourceLoadInfo("music.ogg"));
+                        new ResourceLoadInfo(FilePath.of("music.ogg")));
                 sound.start(2);
             } catch (IOException e) {
                 LOG.warn("Audio error", e);
@@ -220,15 +221,19 @@ public final class DebugControls {
         image.setPos(640, 360);
         image.setAlign(.5, .5);
 
-        ITexture texture = imageModule.getTexture("test");
+        ITexture texture = getTestTexture(imageModule);
         image.setTexture(texture);
+    }
+
+    private static ITexture getTestTexture(IImageModule imageModule) {
+        return imageModule.getTexture(FilePath.of("test"));
     }
 
     private void createNinePatchImage(ILayer layer, IImageModule imageModule) {
         IImageDrawable image = imageModule.createImage(layer);
         image.setPos(640, 360);
 
-        ITexture texture = imageModule.getTexture("test");
+        ITexture texture = getTestTexture(imageModule);
         NinePatchRenderer renderer = new NinePatchRenderer();
         renderer.setInsets(Insets2D.of(50));
         for (EArea area : EArea.values()) {
@@ -242,7 +247,7 @@ public final class DebugControls {
         ComponentFactory entityHelper = new ComponentFactory();
         IButton button = entityHelper.createButton(layer, scriptContext);
         button.setSize(150, 150);
-        button.setTexture(ButtonViewState.DEFAULT, imageModule.getTexture("test"));
+        button.setTexture(ButtonViewState.DEFAULT, getTestTexture(imageModule));
         button.setText("MgZx\nZxMg");
         button.setPos(800, 0);
     }
@@ -301,8 +306,8 @@ public final class DebugControls {
         image.setPos(0, 0);
         image.setAlign(.5, .5);
 
-        ITexture texture = imageModule.getTexture("test");
-        ITexture control = imageModule.getTexture("fade/shutter-right");
+        ITexture texture = getTestTexture(imageModule);
+        ITexture control = imageModule.getTexture(FilePath.of("fade/shutter-right"));
 
         BitmapTweenConfig config = new BitmapTweenConfig(600, new ControlImage(control, false));
         config.setStartTexture(texture);

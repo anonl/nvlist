@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -25,12 +26,12 @@ public interface ISoundModule extends IModule, IResourceResolver {
      *
      * @return The name, or {@code null} if no human-readable name is defined.
      */
-    public String getDisplayName(String filename);
+    public String getDisplayName(FilePath filename);
 
     /**
      * Returns the paths for all sound files in the specified folder and its sub-folders.
      */
-    public Collection<String> getSoundFiles(String folder);
+    public Collection<FilePath> getSoundFiles(FilePath folder);
 
     /**
      * Returns the sound controller, which provides functions for manipulating audio playback.

@@ -3,6 +3,7 @@ package nl.weeaboo.vn.script.impl.lua;
 import java.io.IOException;
 import java.util.List;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
@@ -71,7 +72,7 @@ public final class LuaScriptUtil {
         return null;
     }
 
-    public static ResourceLoadInfo createLoadInfo(String filename) {
+    public static ResourceLoadInfo createLoadInfo(FilePath filename) {
         return new ResourceLoadInfo(filename, LuaUtil.getLuaStack());
     }
 
@@ -82,9 +83,9 @@ public final class LuaScriptUtil {
     /**
      * Loads a script in the main thread of the given context.
      *
-     * @see IScriptLoader#loadScript(IScriptThread, String)
+     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
-    public static void loadScript(IContext mainContext, IScriptLoader scriptLoader, String scriptFilename)
+    public static void loadScript(IContext mainContext, IScriptLoader scriptLoader, FilePath scriptFilename)
             throws IOException, ScriptException {
 
         LuaScriptContext scriptContext = getScriptContext(mainContext);
@@ -113,7 +114,7 @@ public final class LuaScriptUtil {
     /**
      * Calls a function in the main thread of the given context.
      *
-     * @see IScriptLoader#loadScript(IScriptThread, String)
+     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static void callFunction(IContext mainContext, IScriptFunction func) throws ScriptException {
         LuaScriptContext scriptContext = getScriptContext(mainContext);
@@ -128,7 +129,7 @@ public final class LuaScriptUtil {
     /**
      * Runs arbitrary Lua code in the main thread of the given context.
      *
-     * @see IScriptLoader#loadScript(IScriptThread, String)
+     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static String eval(IContext mainContext, String luaCode) throws ScriptException {
         LuaScriptContext scriptContext = getScriptContext(mainContext);

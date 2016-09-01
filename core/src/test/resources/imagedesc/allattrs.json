@@ -1,0 +1,15 @@
+{
+    "version": "1.0",
+    
+    "images": [
+        {
+            "file": "allattrs",
+            "width": 64,
+            "height": 128,
+            "minFilter": "nearest",
+            "magFilter": "linear",
+            "wrapX": "clamp",
+            "wrapY": "repeat"
+        }
+    ]
+}

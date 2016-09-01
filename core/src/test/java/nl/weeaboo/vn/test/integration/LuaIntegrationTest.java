@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.impl.Context;
 import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.ContextUtil;
@@ -57,6 +58,9 @@ public abstract class LuaIntegrationTest {
     }
 
     protected void loadScript(String path) {
+        loadScript(FilePath.of(path));
+    }
+    protected void loadScript(FilePath path) {
         try {
             env.getScriptLoader().loadScript(mainThread, path);
         } catch (IOException e) {

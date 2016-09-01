@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
@@ -39,8 +40,8 @@ public class SaveModule implements ISaveModule {
 
     private static final long serialVersionUID = SaveImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SaveModule.class);
-    private static final String SHARED_GLOBALS_PATH = "save-shared.bin";
-    private static final String SEEN_LOG_PATH = "seen.bin";
+    private static final FilePath SHARED_GLOBALS_PATH = FilePath.of("save-shared.bin");
+    private static final FilePath SEEN_LOG_PATH = FilePath.of("seen.bin");
     private static final int QUICK_SAVE_OFFSET = 800;
     private static final int AUTO_SAVE_OFFSET = 900;
 
@@ -181,7 +182,7 @@ public class SaveModule implements ISaveModule {
     public void delete(int slot) throws IOException {
         try {
             IWritableFileSystem fs = getFileSystem();
-            fs.delete(getSaveFilename(slot));
+            fs.delete(getSavePath(slot));
         } catch (FileNotFoundException fnfe) {
             //Ignore
         }
@@ -202,7 +203,7 @@ public class SaveModule implements ISaveModule {
     }
 
     private IFileSystem openSaveArchive(int slot) throws IOException {
-        return SaveFileIO.openArchive(getFileSystem(), getSaveFilename(slot));
+        return SaveFileIO.openArchive(getFileSystem(), getSavePath(slot));
     }
 
     private static SaveFileHeader readSaveHeader(IFileSystem arc) throws SaveFormatException, IOException {
@@ -263,8 +264,8 @@ public class SaveModule implements ISaveModule {
     public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException {
         IWritableFileSystem fs = getFileSystem();
 
-        String filename = getSaveFilename(slot);
-        ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(filename, false));
+        FilePath savePath = getSavePath(slot);
+        ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(savePath, false));
         try {
             ThumbnailInfo thumbnailInfo = params.getThumbnailInfo();
 
@@ -289,7 +290,7 @@ public class SaveModule implements ISaveModule {
             }
         }
 
-        LOG.info("Save written: {}", StringUtil.formatMemoryAmount(fs.getFileSize(filename)));
+        LOG.info("Save written: {}", StringUtil.formatMemoryAmount(fs.getFileSize(savePath)));
     }
 
     private void writeSaveData(ZipOutputStream zout, INovel novel, IProgressListener pl) throws IOException {
@@ -322,8 +323,8 @@ public class SaveModule implements ISaveModule {
         }
     }
 
-    protected String getSaveFilename(int slot) {
-        return StringUtil.formatRoot("save-%03d.sav", slot);
+    protected FilePath getSavePath(int slot) {
+        return FilePath.of(StringUtil.formatRoot("save-%03d.sav", slot));
     }
 
     @Override
@@ -338,7 +339,7 @@ public class SaveModule implements ISaveModule {
     @Override
     public boolean getSaveExists(int slot) {
         IFileSystem fs = getFileSystem();
-        return fs.getFileExists(getSaveFilename(slot));
+        return fs.getFileExists(getSavePath(slot));
     }
 
     @Override

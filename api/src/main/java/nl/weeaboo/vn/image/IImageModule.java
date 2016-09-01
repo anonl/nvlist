@@ -3,6 +3,7 @@ package nl.weeaboo.vn.image;
 import java.util.Collection;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -23,7 +24,7 @@ public interface IImageModule extends IModule, IResourceResolver {
     /**
      * Convenience method for {@link #getTexture(ResourceLoadInfo, boolean)}
      */
-    ITexture getTexture(String filename);
+    ITexture getTexture(FilePath filename);
 
     /**
      * Attempts to load the texture with the specified filename.
@@ -63,7 +64,7 @@ public interface IImageModule extends IModule, IResourceResolver {
     /**
      * Returns the paths for all image files in the specified folder and its sub-folders.
      */
-    Collection<String> getImageFiles(String folder);
+    Collection<FilePath> getImageFiles(FilePath folder);
 
     /**
      * Changes the desired image resolution (width x height). Images are loaded from the resource folder that
@@ -89,6 +90,6 @@ public interface IImageModule extends IModule, IResourceResolver {
      * Suggests to the resource loader that the image with the given filename should be preloaded into memory.
      * @param filename Path to the image file.
      */
-    void preload(String filename);
+    void preload(FilePath filename);
 
 }

@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
@@ -22,7 +23,7 @@ public class SaveFileHeaderTest {
 
         SaveFileHeader header = new SaveFileHeader(12345);
         header.setUserData(userData);
-        header.setThumbnail(new ThumbnailInfo("abc", Dim.of(12, 34)));
+        header.setThumbnail(new ThumbnailInfo(FilePath.of("abc"), Dim.of(12, 34)));
 
         SaveFileHeaderJson json = SaveFileHeaderJson.encode(header);
 

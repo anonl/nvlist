@@ -11,13 +11,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.script.impl.lvn.TextParser.Token;
 
 class LvnParser4 implements ILvnParser {
 
 	private final TextParser textParser;
 
-	private String filename;
+	private FilePath filename;
     private ImmutableList<String> sourceLines;
     private List<LvnLine> compiledLines;
 
@@ -25,7 +26,7 @@ class LvnParser4 implements ILvnParser {
 		textParser = new TextParser();
 	}
 
-	private void init(String filename, InputStream in) throws IOException {
+	private void init(FilePath filename, InputStream in) throws IOException {
         List<String> lines = ParserUtil.readLinesUtf8(in);
 
         this.filename = filename;
@@ -40,7 +41,7 @@ class LvnParser4 implements ILvnParser {
 	}
 
 	@Override
-	public CompiledLvnFile parseFile(String filename, InputStream in) throws LvnParseException, IOException {
+	public CompiledLvnFile parseFile(FilePath filename, InputStream in) throws LvnParseException, IOException {
 	    init(filename, in);
 
         doParseFile();
@@ -128,7 +129,7 @@ class LvnParser4 implements ILvnParser {
 		}
 	}
 
-	protected void parseTextLine(StringBuilder out, String filename, String line, int textLineNum) {
+	protected void parseTextLine(StringBuilder out, FilePath filename, String line, int textLineNum) {
 		if (line.length() == 0) {
 			return; //Empty line
 		}
@@ -154,7 +155,7 @@ class LvnParser4 implements ILvnParser {
 			out.append("}");
 		}
 		out.append(", {");
-		out.append("filename=\"").append(escape(filename)).append("\", ");
+		out.append("filename=\"").append(escape(filename.toString())).append("\", ");
 		out.append("line=").append(textLineNum).append(",");
 		out.append("}");
 

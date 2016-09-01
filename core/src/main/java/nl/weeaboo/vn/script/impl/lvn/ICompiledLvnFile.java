@@ -1,11 +1,13 @@
 package nl.weeaboo.vn.script.impl.lvn;
 
+import nl.weeaboo.filesystem.FilePath;
+
 public interface ICompiledLvnFile {
 
     /**
      * @return The filename of the LVN source file.
      */
-    public String getFilename();
+    public FilePath getFilename();
 
     /**
      * @return The compiled version of the LVN file.

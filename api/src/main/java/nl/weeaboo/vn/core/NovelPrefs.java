@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.AbstractPreferenceStore;
 import nl.weeaboo.settings.Preference;
@@ -73,9 +74,9 @@ public final class NovelPrefs extends AbstractPreferenceStore {
 //	public static final Preference<Boolean> ENABLE_PROOFREADER_TOOLS = newPreference("vn.enableProofreaderTools", false, "Enable Proofreader Tools", "Enables available bug reporting features for proofreaders/editors.");
 //	public static final Preference<Boolean> RTL = newPreference("vn.rtl", false, "Right-to-Left Text", "Sets the default text direction to RTL (right to left).");
 
-    private static final String CONSTANTS_FILENAME = "config.ini";
-    private static final String DEFAULTS_FILENAME = "prefs.default.ini";
-    private static final String VARIABLES_FILENAME = "prefs.ini";
+    private static final FilePath CONSTANTS_FILENAME = FilePath.of("config.ini");
+    private static final FilePath DEFAULTS_FILENAME = FilePath.of("prefs.default.ini");
+    private static final FilePath VARIABLES_FILENAME = FilePath.of("prefs.ini");
 
     private final IWritableFileSystem fileSystem;
 
@@ -90,7 +91,7 @@ public final class NovelPrefs extends AbstractPreferenceStore {
         setAll(load(VARIABLES_FILENAME));
     }
 
-    private Map<String, String> load(String filename) throws IOException {
+    private Map<String, String> load(FilePath filename) throws IOException {
         if (!fileSystem.getFileExists(filename)) {
             return Collections.emptyMap();
         }

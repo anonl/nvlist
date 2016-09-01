@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.io.LuaSerializable;
@@ -36,7 +37,7 @@ final class SeenLog implements ISeenLog {
 
     // Actual seen state is stored in a separate (shared) file
     private transient Map<MediaType, MediaSeen> mediaSeen;
-    private transient Map<String, ScriptSeen> scriptSeen;
+    private transient Map<FilePath, ScriptSeen> scriptSeen;
 
     public SeenLog(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
@@ -59,7 +60,7 @@ final class SeenLog implements ISeenLog {
         initTransients();
     }
 
-    private ResourceId resolveResource(MediaType type, String filename) {
+    private ResourceId resolveResource(MediaType type, FilePath filename) {
         switch (type) {
         case IMAGE:
             return env.getImageModule().resolveResource(filename);
@@ -78,7 +79,7 @@ final class SeenLog implements ISeenLog {
     }
 
     @Override
-    public boolean hasSeen(MediaType type, String filename) {
+    public boolean hasSeen(MediaType type, FilePath filename) {
         ResourceId resourceId = resolveResource(type, filename);
         return resourceId != null && hasSeen(resourceId);
     }
@@ -95,20 +96,20 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public void registerScriptFile(ResourceId resourceId, int numTextLines) {
-        String filename = resourceId.getFilePath();
-        ScriptSeen seen = scriptSeen.get(filename);
+        FilePath filePath = resourceId.getFilePath();
+        ScriptSeen seen = scriptSeen.get(filePath);
         if (seen != null && seen.getNumTextLines() == numTextLines) {
             return; // ScriptSeen exists and is up-to-date
         }
 
         LOG.debug("Registered script file: {}", resourceId);
 
-        seen = new ScriptSeen(filename, numTextLines);
-        scriptSeen.put(filename, seen);
+        seen = new ScriptSeen(numTextLines);
+        scriptSeen.put(filePath, seen);
     }
 
     @Override
-    public boolean hasSeenLine(String filename, int lineNumber) {
+    public boolean hasSeenLine(FilePath filename, int lineNumber) {
         ResourceId resourceId = resolveResource(MediaType.SCRIPT, filename);
         return resourceId != null && hasSeenLine(resourceId, lineNumber);
     }
@@ -120,7 +121,7 @@ final class SeenLog implements ISeenLog {
     }
 
     @Override
-    public void markLineSeen(String filename, int lineNumber) {
+    public void markLineSeen(FilePath filename, int lineNumber) {
         ResourceId resourceId = resolveResource(MediaType.SCRIPT, filename);
         if (resourceId != null) {
             markLineSeen(resourceId, lineNumber);
@@ -133,16 +134,16 @@ final class SeenLog implements ISeenLog {
         if (seen == null) {
             LOG.warn("Marking line of unknown script file: {}:{}", resourceId, lineNumber);
         } else {
-            seen.markLineSeen(lineNumber);
+            seen.markLineSeen(resourceId.getFilePath(), lineNumber);
         }
     }
 
     @Override
-    public void save(SecureFileWriter sfw, String filename) throws IOException {
-        LOG.info("Save seen log: {}", filename);
+    public void save(SecureFileWriter sfw, FilePath path) throws IOException {
+        LOG.info("Save seen log: {}", path);
 
         LuaSerializer ls = new LuaSerializer();
-        ObjectSerializer out = ls.openSerializer(sfw.newOutputStream(filename, false));
+        ObjectSerializer out = ls.openSerializer(sfw.newOutputStream(path, false));
         try {
             out.writeInt(mediaSeen.size());
             for (Entry<MediaType, MediaSeen> entry : mediaSeen.entrySet()) {
@@ -151,8 +152,8 @@ final class SeenLog implements ISeenLog {
             }
 
             out.writeInt(scriptSeen.size());
-            for (Entry<String, ScriptSeen> entry : scriptSeen.entrySet()) {
-                out.writeUTF(entry.getKey());
+            for (Entry<FilePath, ScriptSeen> entry : scriptSeen.entrySet()) {
+                out.writeUTF(entry.getKey().toString());
                 out.writeObject(entry.getValue());
             }
         } finally {
@@ -161,11 +162,11 @@ final class SeenLog implements ISeenLog {
     }
 
     @Override
-    public void load(SecureFileWriter sfw, String filename) throws IOException {
-        LOG.info("Load seen log: {}", filename);
+    public void load(SecureFileWriter sfw, FilePath path) throws IOException {
+        LOG.info("Load seen log: {}", path);
 
         LuaSerializer ls = new LuaSerializer();
-        ObjectDeserializer in = ls.openDeserializer(sfw.newInputStream(filename));
+        ObjectDeserializer in = ls.openDeserializer(sfw.newInputStream(path));
         try {
             mediaSeen.clear();
             scriptSeen.clear();
@@ -179,12 +180,12 @@ final class SeenLog implements ISeenLog {
 
             int scriptSeenSize = in.readInt();
             for (int n = 0; n < scriptSeenSize; n++) {
-                String key = in.readUTF();
+                FilePath key = FilePath.of(in.readUTF());
                 ScriptSeen value = (ScriptSeen)in.readObject();
                 scriptSeen.put(key, value);
             }
         } catch (ClassNotFoundException e) {
-            LOG.error("Invalid seen log: {}", filename, e);
+            LOG.error("Invalid seen log: {}", path, e);
             throw new IOException(e);
         } finally {
             in.close();
@@ -196,7 +197,7 @@ final class SeenLog implements ISeenLog {
 
         private static final long serialVersionUID = 1L;
 
-        private final Set<String> seenResources = Sets.newHashSet();
+        private final Set<FilePath> seenResources = Sets.newHashSet();
 
         public boolean addResource(ResourceId resourceId) {
             return seenResources.add(resourceId.getFilePath());
@@ -213,12 +214,10 @@ final class SeenLog implements ISeenLog {
 
         private static final long serialVersionUID = 1L;
 
-        private final String filename;
         private final int numTextLines;
         private final BitSet seenLines;
 
-        public ScriptSeen(String filename, int numTextLines) {
-            this.filename = Checks.checkNotNull(filename);
+        public ScriptSeen(int numTextLines) {
             this.numTextLines = numTextLines;
             this.seenLines = new BitSet(numTextLines);
         }
@@ -234,19 +233,18 @@ final class SeenLog implements ISeenLog {
             return seenLines.get(lineNumber - 1);
         }
 
-        public void markLineSeen(int lineNumber) {
+        public void markLineSeen(FilePath file, int lineNumber) {
             if (!inRange(lineNumber)) {
-                LOG.warn("Line number out of range: {}:{}", filename, lineNumber);
+                LOG.warn("Line number out of range: {}:{}", file, lineNumber);
             } else {
                 seenLines.set(lineNumber - 1);
-                LOG.trace("Mark line seen {}:{}", filename, lineNumber);
+                LOG.trace("Mark line seen {}:{}", file, lineNumber);
             }
         }
 
         public int getNumTextLines() {
             return numTextLines;
         }
-
     }
 
 }

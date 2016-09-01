@@ -3,6 +3,7 @@ package nl.weeaboo.vn.sound.impl;
 import java.io.IOException;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
@@ -13,13 +14,13 @@ public class Sound implements ISound {
 
     private final ISoundController soundController;
     private final SoundType soundType;
-    private final String filename;
+    private final FilePath filename;
     private final INativeAudio nativeAudio;
 
     private double privateVolume = 1.0;
     private double masterVolume = 1.0;
 
-    public Sound(ISoundController sctrl, SoundType soundType, String filename, INativeAudio nativeAudio) {
+    public Sound(ISoundController sctrl, SoundType soundType, FilePath filename, INativeAudio nativeAudio) {
         this.soundController = Checks.checkNotNull(sctrl);
         this.soundType = Checks.checkNotNull(soundType);
         this.filename = Checks.checkNotNull(filename);
@@ -74,7 +75,7 @@ public class Sound implements ISound {
     }
 
     @Override
-    public String getFilename() {
+    public FilePath getFilename() {
         return filename;
     }
 

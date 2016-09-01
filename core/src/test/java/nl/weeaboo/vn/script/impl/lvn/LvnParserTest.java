@@ -16,6 +16,7 @@ import com.google.common.io.Resources;
 
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.lib.OneArgFunction;
 import nl.weeaboo.lua2.lib.TwoArgFunction;
 import nl.weeaboo.lua2.lib.VarArgFunction;
@@ -43,11 +44,11 @@ public class LvnParserTest {
     }
 
 	private static void syntaxTest(int version) throws IOException, LvnParseException {
-        String filename = "test";
+        FilePath filename = FilePath.of("test");
 
         final ICompiledLvnFile lvnFile;
         final String contents;
-        LOG.info(filename);
+        LOG.info(filename.toString());
         InputStream in = LvnParserTest.class.getResourceAsStream(scriptDir + filename + ".lvn");
         try {
             ILvnParser parser = LvnParserFactory.getParser(Integer.toString(version));

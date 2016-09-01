@@ -2,6 +2,7 @@ package nl.weeaboo.vn.script.impl.lib;
 
 import java.io.IOException;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
@@ -9,6 +10,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
@@ -35,7 +37,7 @@ public class VideoLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs movie(Varargs args) throws ScriptException {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(filename);
 
         IVideoModule videoModule = env.getVideoModule();

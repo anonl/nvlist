@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.vn.core.MediaType;
@@ -17,7 +18,7 @@ import nl.weeaboo.vn.core.ResourceId;
 
 public class FileResourceLoaderTest {
 
-    private static final String BASE_FOLDER = "base/";
+    private static final FilePath BASE_FOLDER = FilePath.of("base/");
 
     private FileResourceLoader resourceLoader;
     private ResourceId lastPreload;
@@ -84,10 +85,10 @@ public class FileResourceLoaderTest {
         assertValidFilename(false, "a.txt");
 
         // Change resource folder
-        String subFolder = BASE_FOLDER + "subfolder/";
+        FilePath subFolder = BASE_FOLDER.resolve("subfolder/");
         resourceLoader.setResourceFolder(subFolder);
         Assert.assertEquals(subFolder, resourceLoader.getResourceFolder());
-        Assert.assertEquals(subFolder + "test", resourceLoader.getAbsolutePath("test"));
+        Assert.assertEquals(subFolder + "test", resourceLoader.getAbsolutePath(FilePath.of("test")));
         assertValidFilename(false, "valid.jpg");
         assertValidFilename(true, "a.txt");
         assertFiles(Arrays.asList("a.txt", "b.txt"));
@@ -108,28 +109,28 @@ public class FileResourceLoaderTest {
 
     private void assertPreload(String expectedNormalized, String inputFilename) {
         lastPreload = null;
-        resourceLoader.preload(inputFilename);
-        String actual = (lastPreload != null ? lastPreload.getFilePath() : null);
-        Assert.assertEquals(expectedNormalized, actual);
+        resourceLoader.preload(FilePath.of(inputFilename));
+        FilePath actual = (lastPreload != null ? lastPreload.getFilePath() : null);
+        Assert.assertEquals(expectedNormalized, actual.toString());
     }
 
     private void assertFiles(Collection<String> expected) {
         Assert.assertEquals(ImmutableSet.copyOf(expected),
-                ImmutableSet.copyOf(resourceLoader.getMediaFiles("")));
+                ImmutableSet.copyOf(resourceLoader.getMediaFiles(FilePath.empty())));
     }
 
     private void assertNormalizedFilename(String expectedNormalized, String inputFilename) {
-        ResourceId resourceId = resourceLoader.resolveResource(inputFilename);
-        String actual = (resourceId != null ? resourceId.getFilePath() : null);
-        Assert.assertEquals(expectedNormalized, actual);
+        ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(inputFilename));
+        FilePath actual = (resourceId != null ? resourceId.getFilePath() : null);
+        Assert.assertEquals(expectedNormalized, actual.toString());
     }
 
     private void assertValidFilename(boolean expectedValid, String path) {
-        Assert.assertEquals(expectedValid, resourceLoader.isValidFilename(path));
+        Assert.assertEquals(expectedValid, resourceLoader.isValidFilename(FilePath.of(path)));
     }
 
     private static void writeString(IWritableFileSystem fs, String path) throws IOException {
-        FileSystemUtil.writeString(fs, path, path);
+        FileSystemUtil.writeString(fs, FilePath.of(path), path);
     }
 
 }

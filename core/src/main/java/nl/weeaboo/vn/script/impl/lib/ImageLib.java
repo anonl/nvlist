@@ -142,7 +142,7 @@ public class ImageLib extends LuaLib {
     public void preload(Varargs args) {
         IImageModule imageModule = env.getImageModule();
         for (int n = 1; n <= args.narg(); n++) {
-            imageModule.preload(args.tojstring(n));
+            imageModule.preload(LuaConvertUtil.getPath(args, n));
         }
     }
 

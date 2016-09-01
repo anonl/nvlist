@@ -3,6 +3,7 @@ package nl.weeaboo.vn.core;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 
 public final class ResourceId implements Serializable {
 
@@ -10,35 +11,37 @@ public final class ResourceId implements Serializable {
     private static final char SEPARATOR = '#';
 
     private final MediaType type;
-    private final String filePath;
+    private final FilePath filePath;
     private final String subResourceId;
 
-    public ResourceId(MediaType type, String filePath) {
+    public ResourceId(MediaType type, FilePath filePath) {
         this(type, filePath, "");
     }
-    public ResourceId(MediaType type, String filePath, String subResourceId) {
+    public ResourceId(MediaType type, FilePath filePath, String subResourceId) {
         this.type = Checks.checkNotNull(type);
-        this.filePath = checkValidChars(filePath);
-        this.subResourceId = checkValidChars(subResourceId);
+
+        checkValidChars(filePath.toString());
+        this.filePath = filePath;
+
+        checkValidChars(subResourceId);
+        this.subResourceId = subResourceId;
     }
 
-    private static String checkValidChars(String path) {
-        Checks.checkNotNull(path);
-        Checks.checkArgument(path.indexOf(SEPARATOR) < 0,
-                "Illegal character '" + SEPARATOR + "' in name '" + path + "'");
-        return path;
+    private static void checkValidChars(String str) {
+        Checks.checkArgument(str.indexOf(SEPARATOR) < 0,
+                "Illegal character '" + SEPARATOR + "' in name '" + str + "'");
     }
 
     @Override
     public String toString() {
-        return filePath + SEPARATOR + subResourceId;
+        return filePath.toString() + SEPARATOR + subResourceId;
     }
 
     public MediaType getType() {
         return type;
     }
 
-    public String getFilePath() {
+    public FilePath getFilePath() {
         return filePath;
     }
 
@@ -56,14 +59,14 @@ public final class ResourceId implements Serializable {
      * @see #getFilePath(String)
      * @see #getSubId(String)
      */
-    public static String toResourcePath(String filePath, String subId) {
-        checkValidChars(filePath);
+    public static FilePath toResourcePath(FilePath filePath, String subId) {
+        checkValidChars(filePath.toString());
         checkValidChars(subId);
 
         if (subId.length() == 0) {
             return filePath;
         }
-        return filePath + SEPARATOR + subId;
+        return FilePath.of(filePath.toString() + SEPARATOR + subId);
     }
 
     /**
@@ -71,9 +74,9 @@ public final class ResourceId implements Serializable {
      * <p>
      * Example: {@code "a/b.png#sub" -> "a/b.png"}
      */
-    public static String getFilePath(String path) {
+    public static FilePath getFilePath(String path) {
         int index = path.indexOf(SEPARATOR);
-        return (index < 0 ? path : path.substring(0, index));
+        return FilePath.of(index < 0 ? path : path.substring(0, index));
     }
 
     /**

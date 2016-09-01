@@ -1,10 +1,13 @@
 package nl.weeaboo.vn.core.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FileCollectOptions;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
@@ -15,11 +18,11 @@ public class FileResourceLoader extends ResourceLoader {
 
     private final IEnvironment env;
 
-    private String resourceFolder;
+    private FilePath resourceFolder;
 
     private transient FileSystemView cachedFileSystemView;
 
-    public FileResourceLoader(IEnvironment env, MediaType mediaType, String resourceFolder) {
+    public FileResourceLoader(IEnvironment env, MediaType mediaType, FilePath resourceFolder) {
         super(mediaType, env.getResourceLoadLog());
 
         this.env = env;
@@ -34,29 +37,28 @@ public class FileResourceLoader extends ResourceLoader {
     }
 
     @Override
-    protected boolean isValidFilename(String filename) {
-        if (filename == null) {
+    protected boolean isValidFilename(FilePath filePath) {
+        if (filePath == null) {
             return false;
         }
-        return getFileSystem().getFileExists(filename);
+        return getFileSystem().getFileExists(filePath);
     }
 
     @Override
-    protected List<String> getFiles(String folder) throws IOException {
-        List<String> out = new ArrayList<String>();
-        getFileSystem().getFiles(out, folder, true);
-        return out;
+    protected List<FilePath> getFiles(FilePath folder) throws IOException {
+        FileCollectOptions opts = new FileCollectOptions(folder);
+        return ImmutableList.copyOf(getFileSystem().getFiles(opts));
     }
 
-    public String getAbsolutePath(String filename) {
-        return resourceFolder + filename;
+    public FilePath getAbsolutePath(FilePath relPath) {
+        return resourceFolder.resolve(relPath);
     }
 
-    public String getResourceFolder() {
+    public FilePath getResourceFolder() {
         return resourceFolder;
     }
 
-    public void setResourceFolder(String folder) {
+    public void setResourceFolder(FilePath folder) {
         if (!resourceFolder.equals(folder)) {
             cachedFileSystemView = null;
             resourceFolder = folder;

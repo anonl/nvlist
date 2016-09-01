@@ -3,6 +3,8 @@ package nl.weeaboo.vn.sound;
 import java.io.IOException;
 import java.io.Serializable;
 
+import nl.weeaboo.filesystem.FilePath;
+
 public interface ISound extends Serializable {
 
 	// === Functions ===========================================================
@@ -44,7 +46,7 @@ public interface ISound extends Serializable {
 
 	// === Getters =============================================================
 
-    String getFilename();
+    FilePath getFilename();
 
     SoundType getSoundType();
 

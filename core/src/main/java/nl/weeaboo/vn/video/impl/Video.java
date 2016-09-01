@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -12,13 +13,13 @@ public class Video implements IVideo {
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
 
-    private final String filename;
+    private final FilePath filename;
     private final IVideoAdapter videoAdapter;
 
     private double privateVolume = 1.0;
     private double masterVolume = 1.0;
 
-    public Video(String filename, IVideoAdapter videoAdapter) {
+    public Video(FilePath filename, IVideoAdapter videoAdapter) {
         this.filename = Checks.checkNotNull(filename);
         this.videoAdapter = Checks.checkNotNull(videoAdapter);
     }
@@ -77,7 +78,7 @@ public class Video implements IVideo {
     }
 
     @Override
-    public String getFilename() {
+    public FilePath getFilename() {
         return filename;
     }
 

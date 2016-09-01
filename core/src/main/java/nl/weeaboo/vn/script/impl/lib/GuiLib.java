@@ -49,6 +49,9 @@ public class GuiLib extends LuaLib {
         IScriptContext scriptContext = LuaScriptUtil.getCurrentScriptContext();
         IButton button = imageModule.createButton(parentLayer, scriptContext);
         if (tex != null) {
+            // TODO: Also support loading ninepatches
+            // TODO: Also support loading the other view states if automatic naming is used (see NVList3)
+
             button.setTexture(ButtonViewState.DEFAULT, tex);
         } else {
             button.setText("ERROR");

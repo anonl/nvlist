@@ -1,6 +1,7 @@
 package nl.weeaboo.gdx.res;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 final class FileResource<T> implements IResource<T> {
@@ -8,11 +9,11 @@ final class FileResource<T> implements IResource<T> {
     private static final long serialVersionUID = 1L;
 
     private final StaticRef<? extends LoadingResourceStore<T>> store;
-    private final String filename;
+    private final FilePath filename;
 
     private transient Ref<T> valueRef;
 
-    public FileResource(StaticRef<? extends LoadingResourceStore<T>> store, String filename) {
+    public FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename) {
         this.store = Checks.checkNotNull(store);
         this.filename = Checks.checkNotNull(filename);
     }

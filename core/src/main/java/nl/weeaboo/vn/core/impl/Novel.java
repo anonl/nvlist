@@ -7,6 +7,7 @@ import java.io.ObjectOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
@@ -47,7 +48,7 @@ public class Novel extends AbstractNovel {
 
         // Load main script and call main function
         try {
-            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), KnownScriptFunctions.MAIN);
+            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), FilePath.of("main"));
             LuaScriptUtil.callFunction(mainContext, mainFunctionName);
         } catch (Exception e) {
             LOG.warn("Error executing main function: \"{}\"", mainFunctionName, e);

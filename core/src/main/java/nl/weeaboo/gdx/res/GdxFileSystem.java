@@ -3,7 +3,9 @@ package nl.weeaboo.gdx.res;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.files.FileHandle;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.AbstractFileSystem;
 import nl.weeaboo.filesystem.FileCollectOptions;
+import nl.weeaboo.filesystem.FilePath;
 
 public class GdxFileSystem extends AbstractFileSystem implements FileHandleResolver {
 
@@ -46,31 +49,33 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
     }
 
     @Override
-    protected InputStream openInputStreamImpl(String path) throws IOException {
-        return resolveExisting(path).read();
+    protected InputStream openInputStreamImpl(FilePath path) throws IOException {
+        return resolveExisting(path.toString()).read();
     }
 
     @Override
-    protected boolean getFileExistsImpl(String path) {
-        return resolve(path).exists();
+    protected boolean getFileExistsImpl(FilePath path) {
+        return resolve(path.toString()).exists();
     }
 
     @Override
-    protected long getFileSizeImpl(String path) throws IOException {
-        return resolveExisting(path).length();
+    protected long getFileSizeImpl(FilePath path) throws IOException {
+        return resolveExisting(path.toString()).length();
     }
 
     @Override
-    protected long getFileModifiedTimeImpl(String path) throws IOException {
-        return resolveExisting(path).lastModified();
+    protected long getFileModifiedTimeImpl(FilePath path) throws IOException {
+        return resolveExisting(path.toString()).lastModified();
     }
 
     @Override
-    protected void getFiles(Collection<String> out, String prefix, FileCollectOptions opts) throws IOException {
-        getFilesImpl(out, prefix, opts, resolveExisting(prefix));
+    public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
+        List<FilePath> result = new ArrayList<FilePath>();
+        getFilesImpl(result, FilePath.of(prefix + opts.prefix), opts, resolveExisting(prefix));
+        return result;
     }
 
-    private void getFilesImpl(Collection<String> out, String prefix, FileCollectOptions opts,
+    private void getFilesImpl(Collection<FilePath> out, FilePath path, FileCollectOptions opts,
             FileHandle file) {
 
         if (!file.exists()) {
@@ -78,25 +83,20 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
         }
 
         if (file.isDirectory()) {
-            // Append folder name to prefix
-            if (prefix.length() > 0 && !prefix.endsWith("/")) {
-                prefix += "/" + file.name();
-            } else {
-                prefix += file.name();
-            }
+            path = path.resolve(file.name());
 
             for (FileHandle child : file.list()) {
                 boolean isDirectory = child.isDirectory();
                 if ((isDirectory && opts.collectFolders) || (!isDirectory && opts.collectFiles)) {
-                    out.add(prefix + "/" + child.name());
+                    out.add(path.resolve(child.name()));
 
                     if (isDirectory && opts.recursive) {
-                        getFilesImpl(out, prefix, opts, file);
+                        getFilesImpl(out, path, opts, file);
                     }
                 }
             }
         } else if (opts.collectFiles) {
-            out.add(prefix);
+            out.add(path);
         }
     }
 

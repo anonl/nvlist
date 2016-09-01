@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.impl.TestEnvironment;
@@ -55,7 +56,7 @@ public class LuaScriptUtilTest {
         IScriptThread mainThread = mainContext.getScriptContext().getMainThread();
 
         // Load script with some test functions
-        LuaScriptUtil.loadScript(mainContext, env.getScriptLoader(), "script-util-test");
+        LuaScriptUtil.loadScript(mainContext, env.getScriptLoader(), FilePath.of("script-util-test"));
 
         // Call test function
         LuaScriptUtil.callFunction(mainContext, "x", 1, 2, 3);

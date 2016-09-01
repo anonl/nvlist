@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ResourceId;
@@ -19,7 +20,7 @@ import nl.weeaboo.vn.video.IVideoModule;
 
 public class VideoModule implements IVideoModule {
 
-    protected static final String DEFAULT_VIDEO_FOLDER = "video/";
+    protected static final FilePath DEFAULT_VIDEO_FOLDER = FilePath.of("video/");
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(VideoModule.class);
@@ -28,7 +29,7 @@ public class VideoModule implements IVideoModule {
     protected final VideoResourceLoader resourceLoader;
 
     private IVideo fullscreenMovie;
-    private String videoFolder = DEFAULT_VIDEO_FOLDER;
+    private FilePath videoFolder = DEFAULT_VIDEO_FOLDER;
     private Dim videoResolution;
 
     public VideoModule(DefaultEnvironment env) {
@@ -51,7 +52,7 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public ResourceId resolveResource(String filename) {
+    public ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 
@@ -69,7 +70,7 @@ public class VideoModule implements IVideoModule {
     }
 
     private IVideo createVideo(ResourceLoadInfo loadInfo) {
-        String path = loadInfo.getPath();
+        FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
         ResourceId resourceId = resourceLoader.resolveResource(path);
@@ -100,7 +101,7 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public Collection<String> getVideoFiles(String folder) {
+    public Collection<FilePath> getVideoFiles(FilePath folder) {
         return resourceLoader.getMediaFiles(folder);
     }
 
@@ -114,7 +115,7 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public void setVideoFolder(String folder, Dim size) {
+    public void setVideoFolder(FilePath folder, Dim size) {
     	Preconditions.checkNotNull(folder);
     	Preconditions.checkNotNull(size);
 

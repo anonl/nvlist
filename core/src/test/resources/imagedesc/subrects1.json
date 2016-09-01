@@ -1,0 +1,18 @@
+{
+    "version": "1.0",
+    
+    "images": [
+        {
+            "file": "subrects1",
+            "width": 16,
+            "height": 32,
+            
+            "subRects": [
+                {
+                    "id": "r1",
+                    "rect": [1, 2, 3, 4]
+                }
+            ]
+        }
+    ]
+}

@@ -13,6 +13,7 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -28,7 +29,7 @@ final class NativeVideo implements IVideoAdapter {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
 
     private FileResourceLoader resourceLoader;
-    private final String filename;
+    private final FilePath filePath;
 
     private boolean paused = false;
     private double volume = 1.0;
@@ -36,15 +37,16 @@ final class NativeVideo implements IVideoAdapter {
 
     private IResource<VideoPlayerResource> videoPlayerRef;
 
-    public NativeVideo(FileResourceLoader resourceLoader, String filename, IRenderEnv renderEnv) {
+    public NativeVideo(FileResourceLoader resourceLoader, FilePath filePath, IRenderEnv renderEnv) {
         this.resourceLoader = Checks.checkNotNull(resourceLoader);
-        this.filename = Checks.checkNotNull(filename);
+        this.filePath = Checks.checkNotNull(filePath);
         this.renderEnv = Checks.checkNotNull(renderEnv);
     }
 
     private FileHandle resolveFileHandle() {
         FileHandleResolver fileResolver = assetManager.get().getFileHandleResolver();
-        return fileResolver.resolve(resourceLoader.getAbsolutePath(filename));
+        FilePath absolutePath = resourceLoader.getAbsolutePath(filePath);
+        return fileResolver.resolve(absolutePath.toString());
     }
 
     @Override

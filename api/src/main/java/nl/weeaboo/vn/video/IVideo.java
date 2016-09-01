@@ -3,11 +3,11 @@ package nl.weeaboo.vn.video;
 import java.io.IOException;
 import java.io.Serializable;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IRenderEnv;
 
 public interface IVideo extends Serializable {
 
-    // === Functions ===========================================================
     void prepare() throws IOException;
     void start() throws IOException;
     void pause();
@@ -16,18 +16,16 @@ public interface IVideo extends Serializable {
 
     void render();
 
-    // === Getters =============================================================
     boolean isPrepared();
     boolean isPlaying();
     boolean isPaused();
     boolean isStopped();
 
-    String getFilename();
+    FilePath getFilename();
     double getPrivateVolume();
     double getMasterVolume();
     double getVolume();
 
-    // === Setters =============================================================
     void setPrivateVolume(double v);
     void setMasterVolume(double v);
     void setRenderEnv(IRenderEnv renderEnv);

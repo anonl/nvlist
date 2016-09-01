@@ -6,11 +6,13 @@ import org.junit.Test;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 public class LoadingResourceStoreTest {
 
+    private static final FilePath TEST_FILENAME = FilePath.of("test.png");
     private StaticRef<PixmapResourceStore> TEST_ID = StaticRef.from("test", PixmapResourceStore.class);
     private PixmapResourceStore cam;
 
@@ -22,7 +24,7 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void load() {
-        IResource<Pixmap> imgResource = cam.get("test.png");
+        IResource<Pixmap> imgResource = cam.get(TEST_FILENAME);
         Assert.assertNotNull(imgResource);
         Pixmap img = imgResource.get();
         Assert.assertNotNull(img);
@@ -32,7 +34,7 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void invalidateCache() {
-        IResource<Pixmap> imgResource = cam.get("test.png");
+        IResource<Pixmap> imgResource = cam.get(TEST_FILENAME);
         Assert.assertNotNull(imgResource);
         Pixmap img1 = imgResource.get();
         Assert.assertNotNull(img1);

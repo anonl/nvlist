@@ -3,6 +3,7 @@ package nl.weeaboo.gdx.res;
 import org.slf4j.Logger;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 
 abstract class AbstractResourceStore implements IResourceStore {
 
@@ -12,7 +13,7 @@ abstract class AbstractResourceStore implements IResourceStore {
         this.log = Checks.checkNotNull(log);
     }
 
-    protected void loadError(String filename, Throwable cause) {
+    protected void loadError(FilePath filename, Throwable cause) {
         log.info("Load error: {}", filename, cause);
     }
 

@@ -7,13 +7,11 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import nl.weeaboo.vn.script.impl.lvn.CompiledLvnFile;
-import nl.weeaboo.vn.script.impl.lvn.LvnLine;
-import nl.weeaboo.vn.script.impl.lvn.LvnMode;
+import nl.weeaboo.filesystem.FilePath;
 
 public class CompiledLvnFileTest {
 
-    private static final String FILENAME = "test.lvn";
+    private static final FilePath FILENAME = FilePath.of("test.lvn");
 
     @Test
     public void linesCount() {

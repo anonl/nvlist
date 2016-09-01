@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.script.impl.lua;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
@@ -39,7 +40,7 @@ public final class LuaConvertUtil {
 
         if (luaValue.isstring()) {
             // Texture filename
-            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(luaValue.tojstring());
+            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(getPath(luaValue));
             return imageModule.getTexture(loadInfo, suppressLoadErrors);
         } else if (luaValue.isuserdata()) {
             // Texture or screenshot object
@@ -59,6 +60,13 @@ public final class LuaConvertUtil {
             throw new ScriptException("Invalid arguments");
         }
         return null;
+    }
+
+    public static FilePath getPath(Varargs args, int index) {
+        return getPath(args.arg(index));
+    }
+    public static FilePath getPath(LuaValue luaValue) {
+        return FilePath.of(luaValue.checkjstring());
     }
 
     public static TextStyle getTextStyleArg(LuaValue val) throws ScriptException {

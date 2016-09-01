@@ -24,6 +24,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
@@ -113,8 +114,8 @@ public class Launcher extends ApplicationAdapter {
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 
-		// TODO: Input adapter wants a transform from screen to world
-        inputAdapter = new GdxInputAdapter(frameBufferViewport);
+		// TODO: Input adapter wants a transform from screen to world (y-down)
+        inputAdapter = new GdxInputAdapter(screenViewport);
 
 		batch = new SpriteBatch();
 
@@ -191,7 +192,7 @@ public class Launcher extends ApplicationAdapter {
         IImageDrawable image = env.getImageModule().createImage(rootLayer);
         image.setPos(640, 360);
         image.setZ((short)-100);
-        image.setTexture(env.getImageModule().getTexture("test"), 5);
+        image.setTexture(env.getImageModule().getTexture(FilePath.of("test")), 5);
 
         createPanel(rootLayer, env.getImageModule());
 	}

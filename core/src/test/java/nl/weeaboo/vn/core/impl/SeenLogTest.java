@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
@@ -25,14 +26,19 @@ public class SeenLogTest {
     /** Test behavior when adding only a few items */
     @Test
     public void addSeveral() {
-        add("a");
-        add("b");
-        add("c");
+        FilePath pathA = FilePath.of("a");
+        FilePath pathB = FilePath.of("b");
+        FilePath pathC = FilePath.of("c");
+        FilePath pathD = FilePath.of("d");
 
-        assertContains(true, "a");
-        assertContains(true, "b");
-        assertContains(true, "c");
-        assertContains(false, "d");
+        add(pathA);
+        add(pathB);
+        add(pathC);
+
+        assertContains(true, pathA);
+        assertContains(true, pathB);
+        assertContains(true, pathC);
+        assertContains(false, pathD);
     }
 
     /** Test behavior when adding way too many items */
@@ -41,7 +47,7 @@ public class SeenLogTest {
         int totalAdded = 0;
         final int itemCount = 100000;
         for (int n = 0; n < itemCount; n++) {
-            boolean added = add(Integer.toHexString(n));
+            boolean added = add(FilePath.of(Integer.toHexString(n)));
             if (added) {
                 totalAdded++;
             }
@@ -53,12 +59,15 @@ public class SeenLogTest {
 
     @Test
     public void testPersist() throws IOException {
+        FilePath pathX = FilePath.of("x");
+        FilePath pathY = FilePath.of("y");
+
         // Add a resource for each type
         for (MediaType type : MediaType.values()) {
-            add("x", type);
+            add(pathX, type);
         }
 
-        String filename = LuaTestUtil.SCRIPT_HELLOWORLD;
+        FilePath filename = LuaTestUtil.SCRIPT_HELLOWORLD;
         ResourceId fileId = new ResourceId(MediaType.SCRIPT, filename);
         seenLog.registerScriptFile(fileId, 5);
         seenLog.markLineSeen(filename, 1);
@@ -67,20 +76,21 @@ public class SeenLogTest {
 
         // Store current state
         SecureFileWriter sfw = new SecureFileWriter(env.getOutputFileSystem());
-        seenLog.save(sfw, "seen.bin");
+        FilePath seenFile = FilePath.of("seen.bin");
+        seenLog.save(sfw, seenFile);
 
         // Add some additional resources after saving
         for (MediaType type : MediaType.values()) {
-            add("y", type);
+            add(pathY, type);
         }
         seenLog.markLineSeen(filename, 2);
         seenLog.markLineSeen(filename, 4);
 
         // Load previously stored state. The extra resources should no longer be contained
-        seenLog.load(sfw, "seen.bin");
+        seenLog.load(sfw, seenFile);
         for (MediaType type : MediaType.values()) {
-            assertContains(true, "x", type);
-            assertContains(false, "y", type);
+            assertContains(true, pathX, type);
+            assertContains(false, pathY, type);
         }
         assertLineSeen(true, filename, 1);
         assertLineSeen(false, filename, 2);
@@ -91,7 +101,7 @@ public class SeenLogTest {
 
     @Test
     public void scriptLinesSeen() {
-        String filename = LuaTestUtil.SCRIPT_HELLOWORLD;
+        FilePath filename = LuaTestUtil.SCRIPT_HELLOWORLD;
         ResourceId fileId = new ResourceId(MediaType.SCRIPT, filename);
 
         seenLog.markLineSeen(filename, 1); // Script file not registered (yet)
@@ -117,21 +127,21 @@ public class SeenLogTest {
         assertLineSeen(false, filename, 3); // Lines seen was cleared
     }
 
-    private void assertLineSeen(boolean expected, String filename, int lineNum) {
+    private void assertLineSeen(boolean expected, FilePath filename, int lineNum) {
         Assert.assertEquals(expected, seenLog.hasSeenLine(filename, lineNum));
     }
 
-    private void assertContains(boolean expected, String fn) {
+    private void assertContains(boolean expected, FilePath fn) {
         assertContains(expected, fn, MediaType.OTHER);
     }
-    private void assertContains(boolean expected, String fn, MediaType mediaType) {
+    private void assertContains(boolean expected, FilePath fn, MediaType mediaType) {
         Assert.assertEquals(expected, seenLog.hasSeen(new ResourceId(mediaType, fn)));
     }
 
-    private boolean add(String fn) {
+    private boolean add(FilePath fn) {
         return add(fn, MediaType.OTHER);
     }
-    private boolean add(String fn, MediaType mediaType) {
+    private boolean add(FilePath fn, MediaType mediaType) {
         return seenLog.markSeen(new ResourceId(mediaType, fn));
     }
 

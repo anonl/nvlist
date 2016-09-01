@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.audio.Music;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ResourceId;
@@ -56,13 +57,13 @@ public class SoundModule implements ISoundModule {
     }
 
     @Override
-    public ResourceId resolveResource(String filename) {
+    public ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 
     @Override
     public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
-        String path = loadInfo.getPath();
+        FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
         ResourceId resourceId = resourceLoader.resolveResource(path);
@@ -85,7 +86,7 @@ public class SoundModule implements ISoundModule {
      * @param filename Path to an audio file
      */
     @Override
-    public String getDisplayName(String filename) {
+    public String getDisplayName(FilePath filename) {
         ResourceId resourceId = resourceLoader.resolveResource(filename);
         if (resourceId == null) {
             return null;
@@ -94,7 +95,7 @@ public class SoundModule implements ISoundModule {
     }
 
     private INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
-        String filename = resourceId.getFilePath();
+        FilePath filename = resourceId.getFilePath();
         filename = loader.getAbsolutePath(filename);
 
         IResource<Music> resource = musicStore.get().get(filename);
@@ -106,7 +107,7 @@ public class SoundModule implements ISoundModule {
     }
 
     @Override
-    public Collection<String> getSoundFiles(String folder) {
+    public Collection<FilePath> getSoundFiles(FilePath folder) {
         return resourceLoader.getMediaFiles(folder);
     }
 

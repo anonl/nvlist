@@ -7,13 +7,14 @@ import java.util.Locale;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 
 final class CompiledLvnFile implements ICompiledLvnFile {
 
-	private final String filename;
+	private final FilePath filename;
     private final ImmutableList<LvnLine> lines;
 
-    public CompiledLvnFile(String filename, List<LvnLine> lines) {
+    public CompiledLvnFile(FilePath filename, List<LvnLine> lines) {
         this.filename = Checks.checkNotNull(filename);
         this.lines = ImmutableList.copyOf(lines);
 	}
@@ -62,7 +63,7 @@ final class CompiledLvnFile implements ICompiledLvnFile {
     }
 
 	@Override
-	public String getFilename() {
+	public FilePath getFilename() {
 		return filename;
 	}
 

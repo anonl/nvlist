@@ -5,20 +5,21 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 
 /**
  * Contains information about a callsite of a resource load operation.
  */
 public final class ResourceLoadInfo {
 
-    private final String path;
+    private final FilePath path;
     private final ImmutableList<String> callStackTrace;
 
-    public ResourceLoadInfo(String path) {
+    public ResourceLoadInfo(FilePath path) {
         this(path, ImmutableList.<String>of());
     }
 
-    public ResourceLoadInfo(String path, List<String> callStackTrace) {
+    public ResourceLoadInfo(FilePath path, List<String> callStackTrace) {
         this.path = Checks.checkNotNull(path);
         this.callStackTrace = ImmutableList.copyOf(Checks.checkNotNull(callStackTrace));
     }
@@ -26,22 +27,22 @@ public final class ResourceLoadInfo {
     /**
      * Creates a copy of this resource load info, but with the given path instead.
      */
-    public ResourceLoadInfo withPath(String path) {
+    public ResourceLoadInfo withPath(FilePath path) {
         return new ResourceLoadInfo(path, callStackTrace);
     }
 
     public ResourceLoadInfo withFileSuffix(String suffix) {
-        String filePath = ResourceId.getFilePath(path);
-        String subId = ResourceId.getSubId(path);
-        return withPath(ResourceId.toResourcePath(filePath + suffix, subId));
+        FilePath filePath = ResourceId.getFilePath(path.toString());
+        String subId = ResourceId.getSubId(path.getName());
+        return withPath(ResourceId.toResourcePath(FilePath.of(filePath + suffix), subId));
     }
 
     public ResourceLoadInfo withSubId(String subId) {
-        String filePath = ResourceId.getFilePath(path);
+        FilePath filePath = ResourceId.getFilePath(path.toString());
         return withPath(ResourceId.toResourcePath(filePath, subId));
     }
 
-    public String getPath() {
+    public FilePath getPath() {
         return path;
     }
 

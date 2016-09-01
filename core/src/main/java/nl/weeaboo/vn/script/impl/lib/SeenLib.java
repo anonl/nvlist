@@ -1,11 +1,13 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISeenLog;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 
 public class SeenLib extends LuaLib {
 
@@ -32,7 +34,7 @@ public class SeenLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs hasSeenImage(Varargs args) {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.IMAGE, filename));
     }
 
@@ -45,7 +47,7 @@ public class SeenLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs hasSeenSound(Varargs args) {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.SOUND, filename));
     }
 
@@ -58,7 +60,7 @@ public class SeenLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs hasSeenVideo(Varargs args) {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.VIDEO, filename));
     }
 
@@ -72,7 +74,7 @@ public class SeenLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs hasSeenLine(Varargs args) {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         int lineNumber = args.checkint(2);
         return LuaValue.valueOf(getSeenLog().hasSeenLine(filename, lineNumber));
     }
@@ -86,7 +88,7 @@ public class SeenLib extends LuaLib {
      */
     @ScriptFunction
     public void markLineSeen(Varargs args) {
-        String filename = args.checkjstring(1);
+        FilePath filename = LuaConvertUtil.getPath(args, 1);
         int lineNumber = args.checkint(2);
         getSeenLog().markLineSeen(filename, lineNumber);
     }
