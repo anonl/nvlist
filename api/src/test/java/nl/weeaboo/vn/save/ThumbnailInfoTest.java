@@ -13,7 +13,7 @@ public class ThumbnailInfoTest {
     @Test
     public void validArgs() {
         ThumbnailInfo info = new ThumbnailInfo(PATH, Dim.of(23, 45));
-        Assert.assertEquals("path", info.getPath());
+        Assert.assertEquals(FilePath.of("path"), info.getPath());
         Assert.assertEquals(Dim.of(23, 45), info.getImageSize());
     }
 
