@@ -88,7 +88,7 @@ public class FileResourceLoaderTest {
         FilePath subFolder = BASE_FOLDER.resolve("subfolder/");
         resourceLoader.setResourceFolder(subFolder);
         Assert.assertEquals(subFolder, resourceLoader.getResourceFolder());
-        Assert.assertEquals(subFolder + "test", resourceLoader.getAbsolutePath(FilePath.of("test")));
+        Assert.assertEquals(subFolder.resolve("test"), resourceLoader.getAbsolutePath(FilePath.of("test")));
         assertValidFilename(false, "valid.jpg");
         assertValidFilename(true, "a.txt");
         assertFiles(Arrays.asList("a.txt", "b.txt"));
@@ -110,23 +110,30 @@ public class FileResourceLoaderTest {
     private void assertPreload(String expectedNormalized, String inputFilename) {
         lastPreload = null;
         resourceLoader.preload(FilePath.of(inputFilename));
-        FilePath actual = (lastPreload != null ? lastPreload.getFilePath() : null);
-        Assert.assertEquals(expectedNormalized, actual.toString());
+        String actual = (lastPreload != null ? lastPreload.getFilePath().toString() : null);
+        Assert.assertEquals(expectedNormalized, actual);
     }
 
     private void assertFiles(Collection<String> expected) {
-        Assert.assertEquals(ImmutableSet.copyOf(expected),
+        ImmutableSet.Builder<FilePath> expectedSet = ImmutableSet.builder();
+        for (String exp : expected) {
+            expectedSet.add(FilePath.of(exp));
+        }
+
+        Assert.assertEquals(expectedSet.build(),
                 ImmutableSet.copyOf(resourceLoader.getMediaFiles(FilePath.empty())));
     }
 
     private void assertNormalizedFilename(String expectedNormalized, String inputFilename) {
-        ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(inputFilename));
-        FilePath actual = (resourceId != null ? resourceId.getFilePath() : null);
-        Assert.assertEquals(expectedNormalized, actual.toString());
+        ResourceId resourceId = resourceLoader.resolveResource(
+                inputFilename != null ? FilePath.of(inputFilename) : null);
+        String actual = (resourceId != null ? resourceId.getFilePath().toString() : null);
+        Assert.assertEquals(expectedNormalized, actual);
     }
 
     private void assertValidFilename(boolean expectedValid, String path) {
-        Assert.assertEquals(expectedValid, resourceLoader.isValidFilename(FilePath.of(path)));
+        Assert.assertEquals(expectedValid, resourceLoader.isValidFilename(
+                path != null ? FilePath.of(path) : null));
     }
 
     private static void writeString(IWritableFileSystem fs, String path) throws IOException {

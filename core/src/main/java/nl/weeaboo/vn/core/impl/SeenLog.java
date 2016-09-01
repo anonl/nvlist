@@ -197,14 +197,14 @@ final class SeenLog implements ISeenLog {
 
         private static final long serialVersionUID = 1L;
 
-        private final Set<FilePath> seenResources = Sets.newHashSet();
+        private final Set<String> seenResources = Sets.newHashSet();
 
         public boolean addResource(ResourceId resourceId) {
-            return seenResources.add(resourceId.getFilePath());
+            return seenResources.add(resourceId.getFilePath().toString());
         }
 
         public boolean contains(ResourceId resourceId) {
-            return seenResources.contains(resourceId.getFilePath());
+            return seenResources.contains(resourceId.getFilePath().toString());
         }
 
     }
