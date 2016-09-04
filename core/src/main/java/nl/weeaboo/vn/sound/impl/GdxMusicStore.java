@@ -5,9 +5,9 @@ import com.badlogic.gdx.audio.Music;
 import nl.weeaboo.gdx.res.LoadingResourceStore;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
-public class MusicStore extends LoadingResourceStore<Music> {
+public final class GdxMusicStore extends LoadingResourceStore<Music> {
 
-    public MusicStore(StaticRef<MusicStore> selfId) {
+    public GdxMusicStore(StaticRef<GdxMusicStore> selfId) {
         super(selfId, Music.class);
     }
 

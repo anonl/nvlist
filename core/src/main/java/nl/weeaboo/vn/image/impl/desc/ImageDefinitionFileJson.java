@@ -22,7 +22,7 @@ final class ImageDefinitionFileJson {
     static final class ImageSubRectJson {
 
         public String id;
-        public int[] rect;
+        public int[] area;
 
     }
 

@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 
+import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.FastMath;
@@ -57,8 +58,8 @@ public final class ImageDefinition implements IImageDefinition {
 		// Validate sub-rects
 		Rect bounds = Rect.of(0, 0, size.w, size.h);
         for (ImageSubRect subRect : subRects) {
-            Rect r = subRect.getRect();
-            Checks.checkArgument(bounds.contains(r.x, r.y, r.w, r.h),
+            Area area = subRect.getArea();
+            Checks.checkArgument(bounds.contains(area.x, area.y, area.w, area.h),
                     "Sub-rect " + subRect + " is invalid for image size " + size);
         }
         this.subRects = ImmutableList.copyOf(subRects);
@@ -102,6 +103,16 @@ public final class ImageDefinition implements IImageDefinition {
     @Override
     public ImmutableCollection<? extends IImageSubRect> getSubRects() {
         return subRects;
+    }
+
+    @Override
+    public IImageSubRect findSubRect(String id) {
+        for (IImageSubRect subRect : subRects) {
+            if (subRect.getId().equals(id)) {
+                return subRect;
+            }
+        }
+        return null;
     }
 
 }

@@ -29,7 +29,11 @@ public class FileResourceLoader extends ResourceLoader {
         this.resourceFolder = Checks.checkNotNull(resourceFolder);
     }
 
-    protected final FileSystemView getFileSystem() {
+    /**
+     * @return The current file system view used by this resource loader. Over time, the returned filesystem
+     *         may change or point to a different (sub)folder.
+     */
+    public final FileSystemView getFileSystem() {
         if (cachedFileSystemView == null) {
             cachedFileSystemView = new FileSystemView(env.getFileSystem(), resourceFolder);
         }

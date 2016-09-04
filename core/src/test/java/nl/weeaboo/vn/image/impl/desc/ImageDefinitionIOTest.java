@@ -46,7 +46,7 @@ public class ImageDefinitionIOTest {
         ImageDefinition def = Iterables.getOnlyElement(load("subrects1.json"));
         IImageSubRect subRect = Iterables.getOnlyElement(def.getSubRects());
         Assert.assertEquals("r1", subRect.getId());
-        CoreTestUtil.assertEquals(1, 2, 3, 4, subRect.getRect().toRect2D());
+        CoreTestUtil.assertEquals(1, 2, 3, 4, subRect.getArea().toArea2D());
     }
 
     private Collection<ImageDefinition> load(String path) throws IOException {

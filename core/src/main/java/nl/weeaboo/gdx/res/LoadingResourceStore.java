@@ -51,42 +51,42 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache.invalidateAll();
     }
 
-    protected T loadResource(FilePath path) {
+    protected T loadResource(FilePath absolutePath) {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         AssetManager am = assetManager.get();
-        String pathString = path.toString();
+        String pathString = absolutePath.toString();
         am.load(pathString, assetType);
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
-        LOG.debug("Loading resource '{}' took {}", path, stopwatch);
+        LOG.debug("Loading resource '{}' took {}", absolutePath, stopwatch);
         return resource;
     }
 
-    protected void unloadResource(FilePath filename, Ref<T> entry) {
+    protected void unloadResource(FilePath absolutePath, Ref<T> entry) {
         entry.invalidate();
 
         AssetManager am = assetManager.get();
-        am.unload(filename.toString());
+        am.unload(absolutePath.toString());
     }
 
-    public IResource<T> get(FilePath filename) {
-        Ref<T> entry = getEntry(filename);
+    public IResource<T> get(FilePath absolutePath) {
+        Ref<T> entry = getEntry(absolutePath);
         if (entry == null) {
             return null;
         }
 
-        FileResource<T> resource = new FileResource<T>(selfId, filename);
+        FileResource<T> resource = new FileResource<T>(selfId, absolutePath);
         resource.set(entry);
         return resource;
     }
 
-    protected Ref<T> getEntry(FilePath filename) {
+    protected Ref<T> getEntry(FilePath absolutePath) {
         try {
-            return cache.get(filename);
+            return cache.get(absolutePath);
         } catch (ExecutionException e) {
-            loadError(filename, e.getCause());
+            loadError(absolutePath, e.getCause());
             return null;
         }
     }

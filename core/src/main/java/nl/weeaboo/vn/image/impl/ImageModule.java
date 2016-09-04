@@ -5,14 +5,9 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ResourceId;
@@ -25,7 +20,6 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
-import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -47,18 +41,18 @@ public class ImageModule implements IImageModule {
     private Dim imageResolution;
 
     public ImageModule(DefaultEnvironment env) {
-        this(env, new ImageResourceLoader(env), new TextureManager());
+        this(env, new ImageResourceLoader(env));
     }
 
-    public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader, TextureManager texManager) {
+    public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader) {
         this.env = env;
         this.resourceLoader = resourceLoader;
         this.entityHelper = new ComponentFactory();
 
-        this.texManager = texManager;
-
         IRenderEnv renderEnv = env.getRenderEnv();
         imageResolution = renderEnv.getVirtualSize();
+
+        texManager = new TextureManager(resourceLoader);
     }
 
     @Override
@@ -112,7 +106,7 @@ public class ImageModule implements IImageModule {
 
     @Override
     public INinePatch getNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
-        NinePatchLoader loader = new NinePatchLoader(env.getImageModule());
+        NinePatchLoader loader = new NinePatchLoader(this);
         return loader.loadNinePatch(loadInfo, suppressErrors);
     }
 
@@ -120,27 +114,15 @@ public class ImageModule implements IImageModule {
      * Is called from {@link #getTexture(ResourceLoadInfo, boolean)}
      */
     protected ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
-        IResource<TextureRegion> tr = getTexRectNormalized(resourceId, loadInfo);
-
-        double scale = getImageScale();
-        return texManager.newTexture(tr, scale, scale);
-    }
-
-    private IResource<TextureRegion> getTexRectNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(resourceId, loadInfo);
 
-        return texManager.getTexture(resourceLoader, resourceId);
+        double scale = getImageScale();
+        return texManager.getTexture(resourceId, scale, scale);
     }
 
     @Override
     public ITexture createTexture(int colorARGB, int width, int height, double sx, double sy) {
-        // Create solid-colored pixmap texture data
-        Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
-        pixmap.setColor(RenderUtil.toRGBA(colorARGB));
-        pixmap.fill();
-        PixelTextureData texData = PixelTextureData.fromPixmap(pixmap);
-
-        return texManager.generateTexture(texData, sx, sy);
+        return texManager.generateTexture(colorARGB, Dim.of(width, height), sx, sy);
     }
 
     @Override
@@ -170,7 +152,7 @@ public class ImageModule implements IImageModule {
     }
 
     protected void onImageScaleChanged() {
-
+        texManager.invalidateImageDefinitions();
     }
 
     @Override

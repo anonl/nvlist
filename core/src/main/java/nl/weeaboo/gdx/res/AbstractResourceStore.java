@@ -13,8 +13,8 @@ abstract class AbstractResourceStore implements IResourceStore {
         this.log = Checks.checkNotNull(log);
     }
 
-    protected void loadError(FilePath filename, Throwable cause) {
-        log.info("Load error: {}", filename, cause);
+    protected void loadError(FilePath path, Throwable cause) {
+        log.info("Load error: {}", path, cause);
     }
 
 }

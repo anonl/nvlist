@@ -58,7 +58,7 @@ import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.impl.ShaderStore;
-import nl.weeaboo.vn.image.impl.TextureStore;
+import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
@@ -70,7 +70,7 @@ import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.impl.GridPanel;
 import nl.weeaboo.vn.scene.impl.ImageDrawable;
-import nl.weeaboo.vn.sound.impl.MusicStore;
+import nl.weeaboo.vn.sound.impl.GdxMusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter {
@@ -165,10 +165,10 @@ public class Launcher extends ApplicationAdapter {
         StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
-        StaticEnvironment.TEXTURE_STORE.set(new TextureStore(StaticEnvironment.TEXTURE_STORE));
+        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(new ShaderStore());
-        StaticEnvironment.MUSIC_STORE.set(new MusicStore(StaticEnvironment.MUSIC_STORE));
+        StaticEnvironment.MUSIC_STORE.set(new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(createFontStore());
 
         EnvironmentFactory envFactory = new EnvironmentFactory();

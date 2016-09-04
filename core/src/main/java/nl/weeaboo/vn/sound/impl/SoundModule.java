@@ -26,7 +26,7 @@ public class SoundModule implements ISoundModule {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SoundModule.class);
 
-    private final StaticRef<MusicStore> musicStore = StaticEnvironment.MUSIC_STORE;
+    private final StaticRef<GdxMusicStore> musicStore = StaticEnvironment.MUSIC_STORE;
 
     protected final IEnvironment env;
     protected final SoundResourceLoader resourceLoader;

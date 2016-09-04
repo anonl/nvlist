@@ -12,8 +12,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
@@ -107,12 +107,12 @@ public final class ImageDefinitionIO {
     private static ImageSubRectJson encodeJson(IImageSubRect subRect) {
         ImageSubRectJson subRectJson = new ImageSubRectJson();
         subRectJson.id = subRect.getId();
-        subRectJson.rect = encodeJson(subRect.getRect());
+        subRectJson.area = encodeJson(subRect.getArea());
         return subRectJson;
     }
 
-    private static int[] encodeJson(Rect rect) {
-        return new int[] {rect.x, rect.y, rect.w, rect.h};
+    private static int[] encodeJson(Area area) {
+        return new int[] {area.x, area.y, area.w, area.h};
     }
 
     private static ImageDefinition decodeJson(ImageDefinitionJson imageDefJson) {
@@ -147,11 +147,11 @@ public final class ImageDefinitionIO {
     }
 
     private static ImageSubRect parseSubRect(ImageSubRectJson subRectJson) {
-        return new ImageSubRect(subRectJson.id, parseRect(subRectJson.rect));
+        return new ImageSubRect(subRectJson.id, parseArea(subRectJson.area));
     }
 
-    private static Rect parseRect(int[] rect) {
-        return Rect.of(rect[0], rect[1], rect[2], rect[3]);
+    private static Area parseArea(int[] area) {
+        return Area.of(area[0], area[1], area[2], area[3]);
     }
 
 }

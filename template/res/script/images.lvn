@@ -10,3 +10,11 @@ Showing sprite (right)
 Removing sprites...
 @rmf(alpha)
 @rmf(beta)
+
+Showing sub-rects
+@@
+local subA = imgf("test#a", 1280 - 128 * 4)
+local subB = imgf("test#b", 1280 - 128 * 3)
+local subC = imgf("test#c", 1280 - 128 * 2)
+local subD = imgf("test#d", 1280 - 128 * 1)
+@@

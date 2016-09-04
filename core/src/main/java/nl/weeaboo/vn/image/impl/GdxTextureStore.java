@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import nl.weeaboo.gdx.res.LoadingResourceStore;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
-public class TextureStore extends LoadingResourceStore<Texture> {
+public final class GdxTextureStore extends LoadingResourceStore<Texture> {
 
-    public TextureStore(StaticRef<TextureStore> selfId) {
+    public GdxTextureStore(StaticRef<GdxTextureStore> selfId) {
         super(selfId, Texture.class);
     }
 
