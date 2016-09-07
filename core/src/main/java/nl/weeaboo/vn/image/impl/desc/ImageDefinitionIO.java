@@ -9,11 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
@@ -36,30 +38,32 @@ public final class ImageDefinitionIO {
 	private ImageDefinitionIO() {
 	}
 
-	public static Map<FilePath, IImageDefinition> fromFileManager(IFileSystem fileSystem, FilePath rootFolder)
+	public static Map<FilePath, IImageDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
 			throws IOException, SaveFormatException
 	{
 	    Map<FilePath, IImageDefinition> result = Maps.newHashMap();
-
-	    FileCollectOptions opts = new FileCollectOptions();
-	    opts.collectFiles = false;
-	    opts.collectFolders = true;
-		for (FilePath folder : fileSystem.getFiles(opts)) {
+		for (FilePath folder : getFolders(fileSystem, rootFolder)) {
 			FilePath path = folder.resolve("img.json");
 			if (!fileSystem.getFileExists(path)) {
 			    continue;
 			}
 
 			for (ImageDefinition imageDef : deserialize(FileSystemUtil.readString(fileSystem, path))) {
-			    FilePath relPath = rootFolder.relativize(imageDef.getFile());
+			    FilePath relPath = folder.resolve(imageDef.getFilename());
 			    result.put(relPath, imageDef);
 			}
 		}
 	    return result;
 	}
 
-	public static String serialize(Collection<ImageDefinition> imageDefs) {
+	private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) throws IOException {
+	    return Iterables.concat(ImmutableList.of(rootFolder),
+	            fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
+	}
+
+    public static String serialize(Collection<ImageDefinition> imageDefs) {
 	    ImageDefinitionFileJson fileJson = new ImageDefinitionFileJson();
+	    fileJson.version = VERSION;
 	    fileJson.images = new ImageDefinitionJson[imageDefs.size()];
 	    int t = 0;
 	    for (ImageDefinition imageDef : imageDefs) {
@@ -87,7 +91,7 @@ public final class ImageDefinitionIO {
 
 	private static ImageDefinitionJson encodeJson(ImageDefinition imageDef) {
 	    ImageDefinitionJson imageDefJson = new ImageDefinitionJson();
-	    imageDefJson.file = imageDef.getFile().toString();
+	    imageDefJson.file = imageDef.getFilename();
         imageDefJson.width = imageDef.getSize().w;
         imageDefJson.height = imageDef.getSize().h;
         imageDefJson.minFilter = imageDef.getMinifyFilter().toString();
@@ -107,16 +111,16 @@ public final class ImageDefinitionIO {
     private static ImageSubRectJson encodeJson(IImageSubRect subRect) {
         ImageSubRectJson subRectJson = new ImageSubRectJson();
         subRectJson.id = subRect.getId();
-        subRectJson.rect = encodeJson(subRect.getRect());
+        subRectJson.rect = encodeJson(subRect.getArea());
         return subRectJson;
     }
 
-    private static int[] encodeJson(Rect rect) {
-        return new int[] {rect.x, rect.y, rect.w, rect.h};
+    private static int[] encodeJson(Area area) {
+        return new int[] {area.x, area.y, area.w, area.h};
     }
 
     private static ImageDefinition decodeJson(ImageDefinitionJson imageDefJson) {
-        FilePath file = FilePath.of(imageDefJson.file);
+        String filename = imageDefJson.file;
         Dim size = Dim.of(imageDefJson.width, imageDefJson.height);
         GLScaleFilter minf = parseScaleFilter(imageDefJson.minFilter);
         GLScaleFilter magf = parseScaleFilter(imageDefJson.magFilter);
@@ -129,7 +133,7 @@ public final class ImageDefinitionIO {
                 subRects.add(parseSubRect(subRectJson));
             }
         }
-        return new ImageDefinition(file, size, minf, magf, wrapX, wrapY, subRects);
+        return new ImageDefinition(filename, size, minf, magf, wrapX, wrapY, subRects);
     }
 
     private static GLScaleFilter parseScaleFilter(String filterString) {
@@ -147,11 +151,11 @@ public final class ImageDefinitionIO {
     }
 
     private static ImageSubRect parseSubRect(ImageSubRectJson subRectJson) {
-        return new ImageSubRect(subRectJson.id, parseRect(subRectJson.rect));
+        return new ImageSubRect(subRectJson.id, parseArea(subRectJson.rect));
     }
 
-    private static Rect parseRect(int[] rect) {
-        return Rect.of(rect[0], rect[1], rect[2], rect[3]);
+    private static Area parseArea(int[] area) {
+        return Area.of(area[0], area[1], area[2], area[3]);
     }
 
 }

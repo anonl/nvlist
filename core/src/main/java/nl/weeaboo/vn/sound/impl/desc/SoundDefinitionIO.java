@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -29,30 +31,32 @@ public final class SoundDefinitionIO {
 	private SoundDefinitionIO() {
 	}
 
-	public static Map<FilePath, ISoundDefinition> fromFileManager(IFileSystem fileSystem, FilePath rootFolder)
+	public static Map<FilePath, ISoundDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
 			throws IOException, SaveFormatException
 	{
 	    Map<FilePath, ISoundDefinition> result = Maps.newHashMap();
-
-	    FileCollectOptions opts = new FileCollectOptions();
-	    opts.collectFiles = false;
-	    opts.collectFolders = true;
-		for (FilePath folder : fileSystem.getFiles(opts)) {
+		for (FilePath folder : getFolders(fileSystem, rootFolder)) {
 			FilePath path = folder.resolve("snd.json");
 			if (!fileSystem.getFileExists(path)) {
 			    continue;
 			}
 
 			for (SoundDefinition soundDef : deserialize(FileSystemUtil.readString(fileSystem, path))) {
-			    FilePath relPath = rootFolder.relativize(soundDef.getFile());
+			    FilePath relPath = folder.resolve(soundDef.getFilename());
 			    result.put(relPath, soundDef);
 			}
 		}
 	    return result;
 	}
 
+    private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) throws IOException {
+        return Iterables.concat(ImmutableList.of(rootFolder),
+                fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
+    }
+
 	public static String serialize(Collection<SoundDefinition> soundDefs) {
 	    SoundDefinitionFileJson fileJson = new SoundDefinitionFileJson();
+	    fileJson.version = VERSION;
 	    fileJson.sounds = new SoundDefinitionJson[soundDefs.size()];
 	    int t = 0;
 	    for (SoundDefinition soundDef : soundDefs) {
@@ -80,15 +84,15 @@ public final class SoundDefinitionIO {
 
 	private static SoundDefinitionJson encodeJson(SoundDefinition soundDef) {
 	    SoundDefinitionJson soundDefJson = new SoundDefinitionJson();
-	    soundDefJson.file = soundDef.getFile().toString();
+	    soundDefJson.file = soundDef.getFilename().toString();
         soundDefJson.displayName = soundDef.getDisplayName();
         return soundDefJson;
 	}
 
     private static SoundDefinition decodeJson(SoundDefinitionJson soundDefJson) {
-        FilePath file = FilePath.of(soundDefJson.file);
+        String filename = soundDefJson.file;
         String displayName = soundDefJson.displayName;
-        return new SoundDefinition(file, displayName);
+        return new SoundDefinition(filename, displayName);
     }
 
 }

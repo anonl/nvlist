@@ -83,16 +83,17 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
         }
 
         if (file.isDirectory()) {
-            path = path.resolve(file.name());
-
             for (FileHandle child : file.list()) {
                 boolean isDirectory = child.isDirectory();
-                if ((isDirectory && opts.collectFolders) || (!isDirectory && opts.collectFiles)) {
-                    out.add(path.resolve(child.name()));
+                FilePath childPath = path.resolve(child.name());
+                if (isDirectory && opts.collectFolders) {
+                    out.add(childPath);
 
-                    if (isDirectory && opts.recursive) {
+                    if (opts.recursive) {
                         getFilesImpl(out, path, opts, file);
                     }
+                } else if (!isDirectory && opts.collectFiles) {
+                    out.add(childPath);
                 }
             }
         } else if (opts.collectFiles) {

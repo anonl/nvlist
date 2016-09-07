@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.sound.impl.desc;
 
+import com.google.common.base.Preconditions;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
@@ -8,15 +10,17 @@ import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 public final class SoundDefinition implements ISoundDefinition {
 
     // --- Also update SoundDefinitionJson when changing attributes ---
-    private final FilePath file;
+    private final String filename;
 	private final String displayName; // May be null
     // --- Also update SoundDefinitionJson when changing attributes ---
 
 	/**
 	 * @param displayName (optional) Display name for this audio file.
 	 */
-	public SoundDefinition(FilePath file, String displayName) {
-	    this.file = Checks.checkNotNull(file);
+	public SoundDefinition(String filename, String displayName) {
+        Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
+                "Filename may not be a path: " + filename);
+        this.filename = filename;
 
 	    if (displayName != null) {
 	        Checks.checkArgument(displayName.length() > 0,
@@ -27,12 +31,12 @@ public final class SoundDefinition implements ISoundDefinition {
 
 	@Override
 	public String toString() {
-		return StringUtil.formatRoot("SoundDesc(%s)", file);
+		return StringUtil.formatRoot("SoundDesc(%s)", filename);
 	}
 
 	@Override
-    public FilePath getFile() {
-        return file;
+    public String getFilename() {
+        return filename;
     }
 
 	public boolean hasDisplayName() {
