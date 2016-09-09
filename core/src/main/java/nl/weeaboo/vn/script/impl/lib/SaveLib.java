@@ -1,6 +1,15 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import java.util.Collection;
+
+import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.save.ISaveFile;
+import nl.weeaboo.vn.save.ISaveFileHeader;
+import nl.weeaboo.vn.save.ISaveModule;
+import nl.weeaboo.vn.script.ScriptFunction;
 
 public class SaveLib extends LuaLib {
 
@@ -22,19 +31,19 @@ public class SaveLib extends LuaLib {
      *        </ol>
      * @return All used save slots in the range {@code [start, start + maxResultCount)}.
      */
-//    @ScriptFunction
-//    public Varargs getSaves(Varargs args) {
-//        int offset = args.optint(1, 0);
-//        int maxResults = args.optint(2, 10);
-//
-//        ISaveModule saveModule = env.getSaveModule();
-//        Collection<ISaveFileHeader> saves = saveModule.getSaves(offset, maxResults);
-//        LuaTable table = new LuaTable(saves.size(), 0);
-//        for (ISaveFileHeader saveHeader : saves) {
-//            table.rawset(saveHeader.getSlot(), LuajavaLib.toUserdata(saveHeader, ISaveFileHeader.class));
-//        }
-//        return table;
-//    }
+    @ScriptFunction
+    public Varargs getSaves(Varargs args) {
+        int offset = args.optint(1, 0);
+        int maxResults = args.optint(2, 10);
+
+        ISaveModule saveModule = env.getSaveModule();
+        Collection<ISaveFile> saves = saveModule.getSaves(offset, maxResults);
+        LuaTable table = new LuaTable(saves.size(), 0);
+        for (ISaveFile saveInfo : saves) {
+            table.rawset(saveInfo.getSlot(), LuajavaLib.toUserdata(saveInfo, ISaveFileHeader.class));
+        }
+        return table;
+    }
 
 /*
 

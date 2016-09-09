@@ -1,11 +1,11 @@
 package nl.weeaboo.vn.save;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
-import nl.weeaboo.vn.image.IScreenshot;
 
 public interface ISaveModule extends IModule {
 
@@ -25,15 +25,24 @@ public interface ISaveModule extends IModule {
     boolean getSaveExists(int slot);
 
     /**
-     * Reads the header of a save file.
+     * Reads all metadata from a save file.
      *
      * @param slot The save slot to load.
      * @see #getQuickSaveSlot(int)
      * @see #getAutoSaveSlot(int)
+     * @see #readSaveHeader(int)
+     */
+    ISaveFile readSave(int slot) throws SaveFormatException, IOException;
+
+    /**
+     * Reads only the header of a save file.
+     *
+     * @param slot The save slot to load.
+     * @see #getQuickSaveSlot(int)
+     * @see #getAutoSaveSlot(int)
+     * @see #readSave(int)
      */
     ISaveFileHeader readSaveHeader(int slot) throws SaveFormatException, IOException;
-
-    IScreenshot readSaveThumbnail(int slot) throws SaveFormatException, IOException;
 
     /**
      * @param slot The quicksave slot index in the range {@code (1, 99)}.
@@ -50,5 +59,7 @@ public interface ISaveModule extends IModule {
     IStorage getGlobals();
 
     IStorage getSharedGlobals();
+
+    Collection<ISaveFile> getSaves(int offset, int maxResults);
 
 }
