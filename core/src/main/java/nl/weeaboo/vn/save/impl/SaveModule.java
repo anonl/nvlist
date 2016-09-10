@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
@@ -29,6 +31,7 @@ import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.impl.PixmapDecodingScreenshot;
+import nl.weeaboo.vn.save.ISaveFile;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.ISaveParams;
 import nl.weeaboo.vn.save.IStorage;
@@ -213,6 +216,38 @@ public class SaveModule implements ISaveModule {
     }
 
     @Override
+    public Collection<ISaveFile> getSaves(int fromSlot, int count) {
+        List<ISaveFile> result = Lists.newArrayList();
+        for (int slot = fromSlot; slot < fromSlot + count; slot++) {
+            if (getSaveExists(slot)) {
+                try {
+                    result.add(readSave(slot));
+                } catch (IOException ioe) {
+                    LOG.warn("Error reading save slot: {}", slot, ioe);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public ISaveFile readSave(int slot) throws SaveFormatException, IOException {
+        IFileSystem arc = openSaveArchive(slot);
+        try {
+            SaveFileHeader header = readSaveHeader(arc);
+
+            IScreenshot screenshot = null;
+            if (header.getThumbnail() != null) {
+                screenshot = readSaveThumbnail(arc, header.getThumbnail());
+            }
+
+            return new SaveFile(slot, header, screenshot);
+        } finally {
+            arc.close();
+        }
+    }
+
+    @Override
     public SaveFileHeader readSaveHeader(int slot) throws SaveFormatException, IOException {
         IFileSystem arc = openSaveArchive(slot);
         try {
@@ -222,21 +257,9 @@ public class SaveModule implements ISaveModule {
         }
     }
 
-    @Override
-    public IScreenshot readSaveThumbnail(int slot) throws IOException {
-        IFileSystem arc = openSaveArchive(slot);
-        try {
-            SaveFileHeader saveHeader = readSaveHeader(arc);
-            ThumbnailInfo thumbnail = saveHeader.getThumbnail();
-            if (thumbnail == null) {
-                return null;
-            }
-
-            byte[] bytes = SaveFileIO.readBytes(arc, thumbnail.getPath());
-            return new PixmapDecodingScreenshot(bytes);
-        } finally {
-            arc.close();
-        }
+    private static IScreenshot readSaveThumbnail(IFileSystem arc, ThumbnailInfo thumbnail) throws IOException {
+        byte[] bytes = SaveFileIO.readBytes(arc, thumbnail.getPath());
+        return new PixmapDecodingScreenshot(bytes);
     }
 
     private void readSaveData(IFileSystem fs, INovel novel, IProgressListener pl) throws IOException {

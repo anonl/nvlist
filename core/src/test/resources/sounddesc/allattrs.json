@@ -1,0 +1,10 @@
+{
+    "version": "1.0",
+    
+    "sounds": [
+        {
+            "file": "allattrs",
+            "displayName": "MyDisplayName"
+        }
+    ]
+}

@@ -16,8 +16,7 @@ public class PolygonTest {
         ApiTestUtil.assertEquals(r, aligned.getBoundingRect());
 
         // Bounds when one or more coords are NaN
-        r = r.translatedCopy(Double.NaN, 0);
-        Polygon nanPoly = Polygon.transformedRect(Matrix.identityMatrix(), r);
+        Polygon nanPoly = Polygon.transformedRect(Matrix.translationMatrix(Double.NaN, 0), r);
         ApiTestUtil.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect());
         Assert.assertFalse(nanPoly.contains(0, 0)); // Bound w/h are exclusive
     }

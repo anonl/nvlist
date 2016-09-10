@@ -15,6 +15,8 @@ public final class ImageSubRect implements IImageSubRect {
     public ImageSubRect(String id, Area area) {
         this.id = Checks.checkNotNull(id);
 
+        Checks.checkArgument(area.w != 0 && area.h != 0,
+                "Sub-rect dimensions must be non-zero, was: " + area);
         this.area = area;
     }
 

@@ -34,7 +34,11 @@ public final class ResourceId implements Serializable {
 
     @Override
     public String toString() {
-        return filePath.toString() + SEPARATOR + subResourceId;
+        if (subResourceId.length() > 0) {
+            return filePath.toString() + SEPARATOR + subResourceId;
+        } else {
+            return filePath.toString();
+        }
     }
 
     public MediaType getType() {

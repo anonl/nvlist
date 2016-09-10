@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
+import com.google.common.primitives.Doubles;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
@@ -42,6 +44,10 @@ public final class RenderEnv implements IRenderEnv {
     private static Rect2D calculateGLScreenVirtualBounds(int clipX, int clipY, int screenWidth,
             int screenHeight, double scale) {
         double s = 1.0 / scale;
+        if (!Doubles.isFinite(s)) {
+            return Rect2D.EMPTY;
+        }
+
         double x = s * -clipX;
         double y = s * -clipY;
         double w = s * screenWidth;

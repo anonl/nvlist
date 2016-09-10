@@ -2,6 +2,10 @@ package nl.weeaboo.vn.image.impl.desc;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 
@@ -19,8 +23,10 @@ import nl.weeaboo.vn.image.desc.IImageSubRect;
 
 public final class ImageDefinition implements IImageDefinition {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ImageDefinition.class);
+
     // --- Also update ImageDefinitionJson when changing attributes ---
-    private final FilePath file;
+    private final String filename;
 	private final Dim size;
     private final GLScaleFilter minFilter;
     private final GLScaleFilter magFilter;
@@ -29,18 +35,21 @@ public final class ImageDefinition implements IImageDefinition {
     private final ImmutableList<ImageSubRect> subRects;
     // --- Also update ImageDefinitionJson when changing attributes ---
 
-	public ImageDefinition(FilePath file, int w, int h) {
-		this(file, Dim.of(w, h),
+	public ImageDefinition(String filename, int w, int h) {
+		this(filename, Dim.of(w, h),
 		        GLScaleFilter.DEFAULT, GLScaleFilter.DEFAULT,
 		        GLTilingMode.DEFAULT, GLTilingMode.DEFAULT,
 		        ImmutableList.<ImageSubRect>of());
 	}
-	public ImageDefinition(FilePath file, Dim size,
+	public ImageDefinition(String filename, Dim size,
 	        GLScaleFilter minf, GLScaleFilter magf,
 	        GLTilingMode wrapX, GLTilingMode wrapY,
 	        Collection<ImageSubRect> subRects) {
 
-	    this.file = Checks.checkNotNull(file);
+	    Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
+	            "Filename may not be a path: " + filename);
+	    this.filename = filename;
+
 	    this.size = Checks.checkNotNull(size);
         this.minFilter = Checks.checkNotNull(minf);
         this.magFilter = Checks.checkNotNull(magf);
@@ -67,12 +76,12 @@ public final class ImageDefinition implements IImageDefinition {
 
 	@Override
 	public String toString() {
-		return StringUtil.formatRoot("ImageDesc(%s: %dx%d)", file, size.w, size.h);
+		return StringUtil.formatRoot("ImageDesc(%s: %dx%d)", filename, size.w, size.h);
 	}
 
 	@Override
-    public FilePath getFile() {
-        return file;
+    public String getFilename() {
+        return filename;
     }
 
 	@Override
@@ -112,6 +121,7 @@ public final class ImageDefinition implements IImageDefinition {
                 return subRect;
             }
         }
+        LOG.trace("Sub-rect not found: {}#{}", filename, id);
         return null;
     }
 
