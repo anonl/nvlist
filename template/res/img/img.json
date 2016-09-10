@@ -4,8 +4,8 @@
     "images": [
         {
             "file": "test",
-            "width": 64,
-            "height": 128,
+            "width": 256,
+            "height": 256,
             "subRects": [
                 {
                     "id": "a",
