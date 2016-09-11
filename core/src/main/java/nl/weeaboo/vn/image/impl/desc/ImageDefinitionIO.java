@@ -111,7 +111,7 @@ public final class ImageDefinitionIO {
     private static ImageSubRectJson encodeJson(IImageSubRect subRect) {
         ImageSubRectJson subRectJson = new ImageSubRectJson();
         subRectJson.id = subRect.getId();
-        subRectJson.area = encodeJson(subRect.getArea());
+        subRectJson.rect = encodeJson(subRect.getArea());
         return subRectJson;
     }
 
@@ -151,7 +151,7 @@ public final class ImageDefinitionIO {
     }
 
     private static ImageSubRect parseSubRect(ImageSubRectJson subRectJson) {
-        return new ImageSubRect(subRectJson.id, parseArea(subRectJson.area));
+        return new ImageSubRect(subRectJson.id, parseArea(subRectJson.rect));
     }
 
     private static Area parseArea(int[] area) {

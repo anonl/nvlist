@@ -34,7 +34,7 @@ allprojects {
         styledTextVersion = '1.5.4'
         gdxTestVersion = '1.0.1'
         luajpp2Version = '2.3.13'
-        tcommonVersion = '1.2.2'
+        tcommonVersion = '1.2.3'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, "res")
