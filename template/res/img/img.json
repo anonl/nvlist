@@ -3,7 +3,7 @@
     
     "images": [
         {
-            "file": "test",
+            "file": "test.png",
             "width": 256,
             "height": 256,
             "subRects": [
