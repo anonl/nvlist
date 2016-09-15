@@ -1,13 +1,16 @@
 package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.impl.ButtonImageLoader;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -43,19 +46,25 @@ public class GuiLib extends LuaLib {
             parentLayer = LuaScriptUtil.getRootLayer();
         }
 
-        IImageModule imageModule = env.getImageModule();
-        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(2));
-
         IScriptContext scriptContext = LuaScriptUtil.getCurrentScriptContext();
+        IImageModule imageModule = env.getImageModule();
         IButton button = imageModule.createButton(parentLayer, scriptContext);
-        if (tex != null) {
-            // TODO: Also support loading ninepatches
-            // TODO: Also support loading the other view states if automatic naming is used (see NVList3)
 
-            button.setTexture(ButtonViewState.DEFAULT, tex);
+        // TODO: Consider moving this block of code to a named function
+        LuaValue imageArg = args.arg(2);
+        if (imageArg.isstring()) {
+            ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(imageArg);
+            ButtonImageLoader imageLoader = new ButtonImageLoader(imageModule);
+            imageLoader.loadImages(button, loadInfo);
         } else {
-            button.setText("ERROR");
+            ITexture tex = LuaConvertUtil.getTextureArg(imageModule, imageArg);
+            if (tex != null) {
+                button.setTexture(ButtonViewState.DEFAULT, tex);
+            } else {
+                button.setText("ERROR");
+            }
         }
+
         return LuajavaLib.toUserdata(button, IButton.class);
     }
 

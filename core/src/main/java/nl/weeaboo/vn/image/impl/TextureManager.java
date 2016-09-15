@@ -69,7 +69,6 @@ final class TextureManager implements Serializable {
 
     public ITexture getTexture(ResourceId resourceId, double sx, double sy) {
         FilePath relPath = resourceId.getFilePath();
-        String subId = resourceId.getSubId();
 
         IResource<Texture> res = textureStore.get().get(resourceLoader.getAbsolutePath(relPath));
         if (res == null) {
@@ -77,18 +76,21 @@ final class TextureManager implements Serializable {
         }
 
         IImageDefinition imageDef = getImageDef(relPath);
-        if (imageDef != null) {
+        if (imageDef == null) {
+            LOG.trace("Image definition not found: {}", relPath);
+        } else {
             LOG.trace("Image definition found: {}", relPath);
-
-            IImageSubRect subRect = imageDef.findSubRect(subId);
-            if (subRect == null) {
-                LOG.warn("Image definition sub-rect not found: {}#{}", relPath, subId);
-            } else {
-                LOG.debug("Load image sub-rect: {}#{}: {}", relPath, subId, subRect.getArea());
-                return newTexture(new RegionResource(res, subRect.getArea()), sx, sy);
+            if (resourceId.hasSubId()) {
+                IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
+                if (subRect != null) {
+                    LOG.debug("Load image sub-rect: {}: {}", resourceId, subRect.getArea());
+                    return newTexture(new RegionResource(res, subRect.getArea()), sx, sy);
+                } else {
+                    LOG.warn("Image definition sub-rect not found: {}", resourceId);
+                    // Fall-through to default full-texture case
+                }
             }
         }
-        LOG.trace("Image definition not found: {}", relPath);
         return newTexture(new RegionResource(res), sx, sy);
     }
 

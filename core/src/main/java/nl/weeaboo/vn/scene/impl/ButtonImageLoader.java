@@ -2,6 +2,8 @@ package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.INinePatch;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 
@@ -9,7 +11,7 @@ public final class ButtonImageLoader {
 
     private final IImageModule imageModule;
 
-    private ButtonImageLoader(IImageModule imageModule) {
+    public ButtonImageLoader(IImageModule imageModule) {
         this.imageModule = imageModule;
     }
 
@@ -21,7 +23,15 @@ public final class ButtonImageLoader {
     }
 
     private void loadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo path) {
-        button.setTexture(viewState, imageModule.getNinePatch(path, true));
+        INinePatch ninePatch = imageModule.getNinePatch(path, true);
+        if (ninePatch != null) {
+            button.setTexture(viewState, ninePatch);
+        } else {
+            ITexture tex = imageModule.getTexture(path, true);
+            if (tex != null) {
+                button.setTexture(viewState, tex);
+            }
+        }
     }
 
 }

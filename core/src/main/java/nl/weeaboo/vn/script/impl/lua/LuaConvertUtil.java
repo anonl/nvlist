@@ -40,7 +40,7 @@ public final class LuaConvertUtil {
 
         if (luaValue.isstring()) {
             // Texture filename
-            ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(getPath(luaValue));
+            ResourceLoadInfo loadInfo = getLoadInfo(luaValue);
             return imageModule.getTexture(loadInfo, suppressLoadErrors);
         } else if (luaValue.isuserdata()) {
             // Texture or screenshot object
@@ -60,6 +60,10 @@ public final class LuaConvertUtil {
             throw new ScriptException("Invalid arguments");
         }
         return null;
+    }
+
+    public static ResourceLoadInfo getLoadInfo(LuaValue luaValue) {
+        return LuaScriptUtil.createLoadInfo(getPath(luaValue));
     }
 
     public static FilePath getPath(Varargs args, int index) {
