@@ -70,18 +70,18 @@ public class NinePatchRendererTest {
         Assert.assertEquals(9, commands.size());
 
         // Check bounds of rendered segments
-        double bottomY = 0;
-        assertRenderBounds(EArea.BOTTOM_LEFT, Area2D.of(0, bottomY, 1, 3));
-        assertRenderBounds(EArea.BOTTOM, Area2D.of(1, bottomY, 7, 3));
-        assertRenderBounds(EArea.BOTTOM_RIGHT, Area2D.of(8, bottomY, 2, 3));
-        double centerY = 3;
-        assertRenderBounds(EArea.LEFT, Area2D.of(0, centerY, 1, 6));
-        assertRenderBounds(EArea.CENTER, Area2D.of(1, centerY, 7, 6));
-        assertRenderBounds(EArea.RIGHT, Area2D.of(8, centerY, 2, 6));
-        double topY = 9;
+        double topY = 0;
         assertRenderBounds(EArea.TOP_LEFT, Area2D.of(0, topY, 1, 1));
         assertRenderBounds(EArea.TOP, Area2D.of(1, topY, 7, 1));
         assertRenderBounds(EArea.TOP_RIGHT, Area2D.of(8, topY, 2, 1));
+        double centerY = 1;
+        assertRenderBounds(EArea.LEFT, Area2D.of(0, centerY, 1, 6));
+        assertRenderBounds(EArea.CENTER, Area2D.of(1, centerY, 7, 6));
+        assertRenderBounds(EArea.RIGHT, Area2D.of(8, centerY, 2, 6));
+        double bottomY = 7;
+        assertRenderBounds(EArea.BOTTOM_LEFT, Area2D.of(0, bottomY, 1, 3));
+        assertRenderBounds(EArea.BOTTOM, Area2D.of(1, bottomY, 7, 3));
+        assertRenderBounds(EArea.BOTTOM_RIGHT, Area2D.of(8, bottomY, 2, 3));
     }
 
     private void assertNativeSize(INinePatch ninePatch, double expectedW, double expectedH) {
