@@ -32,34 +32,34 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
         // Corners
         ITexture topLeft = getTexture(EArea.TOP_LEFT);
         if (topLeft != null) {
-            Area2D bounds = Area2D.of(r.x, r.y + r.h - i.top, i.left, i.top);
+            Area2D bounds = Area2D.of(r.x, r.y, i.left, i.bottom);
             drawBuffer.drawQuad(d, color, topLeft, bounds, uv);
         }
         ITexture topRight = getTexture(EArea.TOP_RIGHT);
         if (topRight != null) {
-            Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y + r.h - i.top, i.right, i.top);
+            Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y, i.right, i.bottom);
             drawBuffer.drawQuad(d, color, topRight, bounds, uv);
         }
         ITexture bottomLeft = getTexture(EArea.BOTTOM_LEFT);
         if (bottomLeft != null) {
-            Area2D bounds = Area2D.of(r.x, r.y, i.left, i.bottom);
+            Area2D bounds = Area2D.of(r.x, r.y + r.h - i.top, i.left, i.top);
             drawBuffer.drawQuad(d, color, bottomLeft, bounds, uv);
         }
         ITexture bottomRight = getTexture(EArea.BOTTOM_RIGHT);
         if (bottomRight != null) {
-            Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y, i.right, i.bottom);
+            Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y + r.h - i.top, i.right, i.top);
             drawBuffer.drawQuad(d, color, bottomRight, bounds, uv);
         }
 
         // Sides
         ITexture top = getTexture(EArea.TOP);
         if (top != null) {
-            Area2D bounds = Area2D.of(r.x + i.left, r.y + r.h - i.top, r.w - i.left - i.right, i.top);
+            Area2D bounds = Area2D.of(r.x + i.left, r.y, r.w - i.left - i.right, i.bottom);
             drawBuffer.drawQuad(d, color, top, bounds, uv);
         }
         ITexture bottom = getTexture(EArea.BOTTOM);
         if (bottom != null) {
-            Area2D bounds = Area2D.of(r.x + i.left, r.y, r.w - i.left - i.right, i.bottom);
+            Area2D bounds = Area2D.of(r.x + i.left, r.y + r.h - i.top, r.w - i.left - i.right, i.top);
             drawBuffer.drawQuad(d, color, bottom, bounds, uv);
         }
         ITexture left = getTexture(EArea.LEFT);

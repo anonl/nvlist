@@ -86,4 +86,33 @@ public final class NinePatch implements INinePatch {
         this.insets = Checks.checkNotNull(i);
     }
 
+    public static Insets2D calculateNativeInsets(INinePatch ninePatch) {
+        double top = 0;
+        double right = 0;
+        double bottom = 0;
+        double left = 0;
+        for (EArea area : EArea.values()) {
+            ITexture tex = ninePatch.getTexture(area);
+            if (tex == null) {
+                continue;
+            }
+
+            double tw = tex.getWidth();
+            double th = tex.getHeight();
+            if (area.isTop()) {
+                top = Math.max(top, th);
+            }
+            if (area.isRight()) {
+                right = Math.max(right, tw);
+            }
+            if (area.isBottom()) {
+                bottom = Math.max(bottom, th);
+            }
+            if (area.isLeft()) {
+                left = Math.max(left, tw);
+            }
+        }
+        return Insets2D.of(top, right, bottom, left);
+    }
+
 }

@@ -17,6 +17,23 @@ public interface INinePatch extends Serializable {
         BOTTOM_LEFT,
         BOTTOM,
         BOTTOM_RIGHT;
+
+        public boolean isTop() {
+            return this == TOP_LEFT || this == TOP || this == TOP_RIGHT;
+        }
+
+        public boolean isRight() {
+            return this == TOP_RIGHT || this == RIGHT || this == BOTTOM_RIGHT;
+        }
+
+        public boolean isBottom() {
+            return this == BOTTOM_LEFT || this == BOTTOM || this == BOTTOM_RIGHT;
+        }
+
+        public boolean isLeft() {
+            return this == TOP_LEFT || this == LEFT || this == BOTTOM_LEFT;
+        }
+
     }
 
     /**

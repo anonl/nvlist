@@ -23,6 +23,7 @@ public final class NinePatchLoader {
                 ninePatch.setTexture(area, tex);
             }
         }
+        ninePatch.setInsets(NinePatch.calculateNativeInsets(ninePatch));
         return ninePatch;
     }
 
