@@ -1,0 +1,52 @@
+{
+    "version": "1.0",
+    
+    "images": [
+        {
+            "file": "button.png",
+            "width": 128,
+            "height": 128,
+            "subRects": [
+                { "id": "topleft",     "rect": [ 0,  0, 16, 16] },
+                { "id": "top",         "rect": [16,  0, 32, 16] },
+                { "id": "topright",    "rect": [48,  0, 16, 16] },
+                { "id": "left",        "rect": [ 0, 16, 16, 32] },
+                { "id": "center",      "rect": [16, 16, 32, 32] },
+                { "id": "right",       "rect": [48, 16, 16, 32] },
+                { "id": "bottomleft",  "rect": [ 0, 48, 16, 16] },
+                { "id": "bottom",      "rect": [16, 48, 32, 16] },
+                { "id": "bottomright", "rect": [48, 48, 16, 16] },
+
+                { "id": "pressed-topleft",     "rect": [ 64,  0, 16, 16] },
+                { "id": "pressed-top",         "rect": [ 80,  0, 32, 16] },
+                { "id": "pressed-topright",    "rect": [112,  0, 16, 16] },
+                { "id": "pressed-left",        "rect": [ 64, 16, 16, 32] },
+                { "id": "pressed-center",      "rect": [ 80, 16, 32, 32] },
+                { "id": "pressed-right",       "rect": [112, 16, 16, 32] },
+                { "id": "pressed-bottomleft",  "rect": [ 64, 48, 16, 16] },
+                { "id": "pressed-bottom",      "rect": [ 80, 48, 32, 16] },
+                { "id": "pressed-bottomright", "rect": [112, 48, 16, 16] },
+                
+                { "id": "rollover-topleft",     "rect": [ 0,  64, 16, 16] },
+                { "id": "rollover-top",         "rect": [16,  64, 32, 16] },
+                { "id": "rollover-topright",    "rect": [48,  64, 16, 16] },
+                { "id": "rollover-left",        "rect": [ 0,  80, 16, 32] },
+                { "id": "rollover-center",      "rect": [16,  80, 32, 32] },
+                { "id": "rollover-right",       "rect": [48,  80, 16, 32] },
+                { "id": "rollover-bottomleft",  "rect": [ 0, 112, 16, 16] },
+                { "id": "rollover-bottom",      "rect": [16, 112, 32, 16] },
+                { "id": "rollover-bottomright", "rect": [48, 112, 16, 16] },
+
+                { "id": "disabled-topleft",     "rect": [ 64,  64, 16, 16] },
+                { "id": "disabled-top",         "rect": [ 80,  64, 32, 16] },
+                { "id": "disabled-topright",    "rect": [112,  64, 16, 16] },
+                { "id": "disabled-left",        "rect": [ 64,  80, 16, 32] },
+                { "id": "disabled-center",      "rect": [ 80,  80, 32, 32] },
+                { "id": "disabled-right",       "rect": [112,  80, 16, 32] },
+                { "id": "disabled-bottomleft",  "rect": [ 64, 112, 16, 16] },
+                { "id": "disabled-bottom",      "rect": [ 80, 112, 32, 16] },
+                { "id": "disabled-bottomright", "rect": [112, 112, 16, 16] },
+            ]
+        }
+    ]
+}

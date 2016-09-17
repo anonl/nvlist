@@ -50,4 +50,9 @@ public final class ResourceLoadInfo {
         return callStackTrace;
     }
 
+    @Override
+    public String toString() {
+        return path.toString();
+    }
+
 }

@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.image.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch;
@@ -7,6 +10,8 @@ import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
 
 public final class NinePatchLoader {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NinePatchLoader.class);
 
     private IImageModule imageModule;
 
@@ -18,8 +23,14 @@ public final class NinePatchLoader {
         NinePatch ninePatch = new NinePatch();
         for (EArea area : EArea.values()) {
             String subId = getSubId(area);
-            ITexture tex = imageModule.getTexture(loadInfo.withSubId(subId), suppressErrors);
-            if (tex != null) {
+            ResourceLoadInfo subPath = loadInfo.withSubId(subId);
+            ITexture tex = imageModule.getTexture(subPath, suppressErrors);
+            if (tex == null) {
+                if (!suppressErrors) {
+                    LOG.warn("Incomplete ninePatch: {}, {}", area, subPath);
+                }
+                return null;
+            } else {
                 ninePatch.setTexture(area, tex);
             }
         }

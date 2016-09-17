@@ -18,7 +18,7 @@ function titlescreen()
     
     setTextModeADV()
 
-    button("test")
+    button("gui/button")
 
     --movie("test")
     call("images")    

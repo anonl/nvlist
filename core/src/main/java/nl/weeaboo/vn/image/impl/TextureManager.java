@@ -77,6 +77,11 @@ final class TextureManager implements Serializable {
 
         IImageDefinition imageDef = getImageDef(relPath);
         if (imageDef == null) {
+            if (resourceId.hasSubId()) {
+                LOG.warn("Image definition not found: {}", relPath);
+                return null;
+            }
+
             LOG.trace("Image definition not found: {}", relPath);
         } else {
             LOG.trace("Image definition found: {}", relPath);
@@ -87,7 +92,7 @@ final class TextureManager implements Serializable {
                     return newTexture(new RegionResource(res, subRect.getArea()), sx, sy);
                 } else {
                     LOG.warn("Image definition sub-rect not found: {}", resourceId);
-                    // Fall-through to default full-texture case
+                    return null;
                 }
             }
         }
