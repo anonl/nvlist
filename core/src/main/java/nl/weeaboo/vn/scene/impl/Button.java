@@ -65,6 +65,16 @@ public class Button extends Transformable implements IButton {
     public void onTick() {
         super.onTick();
 
+        if (!isEnabled()) {
+            renderer.setViewState(ButtonViewState.DISABLED);
+        } else if (isPressed()) {
+            renderer.setViewState(ButtonViewState.PRESSED);
+        } else if (isRollover()) {
+            renderer.setViewState(ButtonViewState.ROLLOVER);
+        } else {
+            renderer.setViewState(ButtonViewState.DEFAULT);
+        }
+
         renderer.update();
     }
 

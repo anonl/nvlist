@@ -71,7 +71,7 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
     @Override
     public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
         List<FilePath> result = new ArrayList<FilePath>();
-        getFilesImpl(result, FilePath.of(prefix + opts.prefix), opts,
+        getFilesImpl(result, opts.prefix, opts,
                 resolveExisting(opts.prefix.toString()));
         return result;
     }
@@ -83,15 +83,20 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
             return;
         }
 
-        // TODO: Make sure to get files from classpath
         if (file.isDirectory()) {
             for (FileHandle child : file.list()) {
-                FilePath childPath = path.resolve(child.name());
+                FilePath childPath;
+                if (child.isDirectory()) {
+                    childPath = path.resolve(child.name() + "/");
+                } else {
+                    childPath = path.resolve(child.name());
+                }
+
                 if (childPath.isFolder() && opts.collectFolders) {
                     out.add(childPath);
 
                     if (opts.recursive) {
-                        getFilesImpl(out, path, opts, file);
+                        getFilesImpl(out, childPath, opts, child);
                     }
                 } else if (!childPath.isFolder() && opts.collectFiles) {
                     out.add(childPath);

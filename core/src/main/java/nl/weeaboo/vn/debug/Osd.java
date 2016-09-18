@@ -29,6 +29,10 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISkipState;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
@@ -124,6 +128,10 @@ public final class Osd implements Disposable {
                 }
             }
         }
+
+        IInput input = StaticEnvironment.INPUT.get();
+        Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());
+        text.append("\nMouse: (" + Math.round(pointerPos.x) + ", " + Math.round(pointerPos.y) + ")");
 
         textRenderer.setMaxSize(wrapWidth, vsize.h - pad * 2);
         textRenderer.setText(text.immutableCopy());

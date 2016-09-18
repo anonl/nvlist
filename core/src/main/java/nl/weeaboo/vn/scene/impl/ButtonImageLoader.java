@@ -33,7 +33,7 @@ public final class ButtonImageLoader {
 
     private void loadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo basePath, String suffix) {
         // Attempt to load as a single image file with sub-rects for each view state
-        if (tryLoadImage(button, viewState, basePath.withSubId(suffix))) {
+        if (tryLoadImage(button, viewState, basePath.withAppendedSubId(suffix))) {
             return;
         }
 

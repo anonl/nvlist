@@ -23,7 +23,7 @@ public final class NinePatchLoader {
         NinePatch ninePatch = new NinePatch();
         for (EArea area : EArea.values()) {
             String subId = getSubId(area);
-            ResourceLoadInfo subPath = loadInfo.withSubId(subId);
+            ResourceLoadInfo subPath = loadInfo.withAppendedSubId(subId);
             ITexture tex = imageModule.getTexture(subPath, suppressErrors);
             if (tex == null) {
                 if (!suppressErrors) {

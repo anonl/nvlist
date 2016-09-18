@@ -57,8 +57,8 @@ import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
+import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
@@ -313,7 +313,7 @@ public class Launcher extends ApplicationAdapter {
 
 		batch.begin();
         batch.disableBlending();
-		batch.draw(frameBuffer.getColorBufferTexture(), 0, vsize.h, vsize.w, -vsize.h);
+		batch.draw(frameBuffer.getColorBufferTexture(), 0, 0, vsize.w, vsize.h);
         batch.enableBlending();
         batch.end();
 	}
@@ -378,6 +378,7 @@ public class Launcher extends ApplicationAdapter {
     }
 
     private void initWindow(int width, int height) {
+        GdxViewportUtil.setToOrtho(screenViewport, vsize, true);
         screenViewport.update(width, height, true);
 
         IEnvironment env = novel.getEnv();
