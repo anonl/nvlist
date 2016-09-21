@@ -17,7 +17,7 @@ import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 
-public class ContextManager implements IContextManager {
+public final class ContextManager implements IContextManager {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(ContextManager.class);

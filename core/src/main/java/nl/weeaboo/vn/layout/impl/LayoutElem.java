@@ -2,6 +2,7 @@ package nl.weeaboo.vn.layout.impl;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.core.impl.Indirect;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
@@ -11,20 +12,22 @@ public class LayoutElem implements ILayoutElem {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
 
-    private final ILayoutElemPeer visualElem;
+    private final Indirect<ILayoutElemPeer> visualElemRef;
     private final BoundsHelper layoutBounds = new BoundsHelper();
 
     public LayoutElem(ILayoutElemPeer visualElem) {
-        this.visualElem = Checks.checkNotNull(visualElem);
+        this.visualElemRef = Indirect.of(Checks.checkNotNull(visualElem));
     }
 
     @Override
     public boolean isVisible() {
-        return visualElem.isVisible();
+        return visualElemRef.get().isVisible();
     }
 
     @Override
     public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
+        ILayoutElemPeer visualElem = visualElemRef.get();
+
         switch (type) {
         case MIN:
             return LayoutSize.ZERO;
@@ -39,6 +42,8 @@ public class LayoutElem implements ILayoutElem {
 
     @Override
     public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
+        ILayoutElemPeer visualElem = visualElemRef.get();
+
         switch (type) {
         case MIN:
             return LayoutSize.ZERO;
@@ -87,6 +92,8 @@ public class LayoutElem implements ILayoutElem {
      * @param rect The new layout bounds.
      */
     protected void onLayoutBoundsChanged(Rect2D rect) {
+        ILayoutElemPeer visualElem = visualElemRef.get();
+
         visualElem.setLayoutBounds(rect);
     }
 

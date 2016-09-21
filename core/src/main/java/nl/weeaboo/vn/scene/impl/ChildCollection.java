@@ -3,33 +3,33 @@ package nl.weeaboo.vn.scene.impl;
 import java.io.Serializable;
 import java.util.Collection;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.impl.DestructibleElemList;
+import nl.weeaboo.vn.core.impl.Indirect;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
 import nl.weeaboo.vn.signal.ISignal;
 import nl.weeaboo.vn.signal.ISignalHandler;
 
-public class ChildCollection implements Serializable, ISignalHandler {
+public final class ChildCollection implements Serializable, ISignalHandler {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final IVisualGroup parent;
+    private final Indirect<IVisualGroup> parentRef;
     private final DestructibleElemList<IVisualElement> children = new DestructibleElemList<IVisualElement>();
 
     public ChildCollection(IVisualGroup parent) {
-        this.parent = Checks.checkNotNull(parent);
+        this.parentRef = Indirect.of(parent);
     }
 
     public void add(IVisualElement elem) {
         children.add(elem);
-        elem.setParent(parent);
+        elem.setParent(parentRef.get());
     }
 
     public void remove(IVisualElement elem) {
         children.remove(elem);
-        if (elem.getParent() == parent) {
+        if (elem.getParent() == parentRef.get()) {
             elem.setParent(null);
         }
     }
@@ -45,7 +45,7 @@ public class ChildCollection implements Serializable, ISignalHandler {
             if (children.contains(elem)) {
                 remove(elem);
             }
-            if (elem == parent) {
+            if (elem == parentRef.get()) {
                 destroyAll();
             }
         }
