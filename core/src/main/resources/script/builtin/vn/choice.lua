@@ -66,7 +66,20 @@ end
 --        triggered.
 -- @param options Table of styled text option descriptions.
 function ChoiceScreen:choose(uniqueChoiceId, options)
+    local panel = gridPanel()
+    local pad = 100
+    panel:setBounds(pad, pad, screenWidth - pad*2, screenHeight - pad*2)
+    for i,option in ipairs(options) do
+        local b = button("gui/button")
+        b:setZ(-1000)
+        b:setText(option)
+        panel:add(b, panel:newConstraints():growX())
+        panel:endRow()
+    end
     
+    while true do
+        yield()
+    end
 end
 
 registerChoiceScreen(ChoiceScreen.new)

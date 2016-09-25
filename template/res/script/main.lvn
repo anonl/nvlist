@@ -19,6 +19,7 @@ function titlescreen()
     setTextModeADV()
 
     button("gui/button")
+    choice("a", "b", "Agh")
 
     --movie("test")
     call("images")    

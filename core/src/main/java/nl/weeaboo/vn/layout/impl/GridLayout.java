@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
@@ -18,6 +21,7 @@ import nl.weeaboo.vn.layout.LayoutSizeType;
 public class GridLayout extends LayoutGroup implements IGridLayout {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(GridLayout.class);
     private static final double ADJUST_EPSILON = 0.001;
 
     private final List<GridRow> rows = Lists.newArrayList();
@@ -108,6 +112,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
 
                 GridCell cell = row.findColCell(c);
                 if (cell != null) {
+                    LOG.debug("Set cell bounds: x={}, y={}, w={}, h={}", x, y, colW, rowH);
                     cell.setBounds(x, y, colW, rowH);
                 }
 

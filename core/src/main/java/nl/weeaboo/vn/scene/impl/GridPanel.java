@@ -31,4 +31,9 @@ public class GridPanel extends Panel implements IGridPanel {
         layout.endRow();
     }
 
+    @Override
+    public GridCellConstraints newConstraints() {
+        return new GridCellConstraints();
+    }
+
 }

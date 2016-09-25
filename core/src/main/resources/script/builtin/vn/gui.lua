@@ -23,3 +23,8 @@ end
 function textimg(text)
     return Text.createTextDrawable(getActiveLayer(), text)
 end
+
+---Creates a new panel with a grid layout
+function gridPanel()
+    return Gui.createGridPanel(getActiveLayer())
+end

@@ -8,4 +8,7 @@ public interface IGridPanel extends IPanel {
 
     void endRow();
 
+    /** Provides convenient access to the layout-specific constraints used by this panel. */
+    GridCellConstraints newConstraints();
+
 }

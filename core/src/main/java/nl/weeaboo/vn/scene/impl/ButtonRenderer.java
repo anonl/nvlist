@@ -73,6 +73,7 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     protected void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         background.render(drawBuffer, parent, bounds);
 
+        // TODO: Button text seems to be rendered too far down
         double ty = TextRenderer.getOffsetY(textRenderer, verticalTextAlign);
         Area2D textBounds = Area2D.of(bounds.x, bounds.y + ty, bounds.w, textRenderer.getTextHeight());
         textRenderer.render(drawBuffer, parent, textBounds);

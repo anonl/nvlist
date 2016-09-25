@@ -9,8 +9,10 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
+import nl.weeaboo.vn.scene.IGridPanel;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.impl.ButtonImageLoader;
+import nl.weeaboo.vn.scene.impl.GridPanel;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -66,6 +68,28 @@ public class GuiLib extends LuaLib {
         }
 
         return LuajavaLib.toUserdata(button, IButton.class);
+    }
+
+    /**
+     * Creates a new {@link IGridPanel}.
+     *
+     * @param args
+     *        <ol>
+     *        <li>(optional) Parent layer
+     *        </ol>
+     * @return A button
+     */
+    @ScriptFunction
+    public Varargs createGridPanel(Varargs args) throws ScriptException {
+        ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
+        if (parentLayer == null) {
+            parentLayer = LuaScriptUtil.getRootLayer();
+        }
+
+        GridPanel panel = new GridPanel();
+        parentLayer.add(panel);
+
+        return LuajavaLib.toUserdata(panel, IGridPanel.class);
     }
 
 }

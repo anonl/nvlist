@@ -292,9 +292,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         case TOP:
             return 0;
         case MIDDLE:
-            return (contentHeight - boundingHeight) / 2;
+            return (boundingHeight - contentHeight) / 2;
         case BOTTOM:
-            return (contentHeight - boundingHeight);
+            return (boundingHeight - contentHeight);
         default:
             throw new IllegalArgumentException("Unsupported alignment: " + verticalAlign);
         }
