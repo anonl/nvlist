@@ -66,20 +66,41 @@ end
 --        triggered.
 -- @param options Table of styled text option descriptions.
 function ChoiceScreen:choose(uniqueChoiceId, options)
+    if #options == 0 then
+        return
+    end
+
+    Log.info("Showing choice screen (id={}): {}", uniqueChoiceId, table.concat(options, ", "))
+
     local panel = gridPanel()
     local pad = 100
     panel:setBounds(pad, pad, screenWidth - pad*2, screenHeight - pad*2)
+    
+    local buttons = {}
     for i,option in ipairs(options) do
         local b = button("gui/button")
         b:setZ(-1000)
         b:setText(option)
+        buttons[i] = b
+        
         panel:add(b, panel:newConstraints():growX())
         panel:endRow()
     end
     
-    while true do
+    local selected = 0
+    while selected == 0 do
+        for i,b in ipairs(buttons) do
+            if b:consumePress() then
+                selected = i
+            end
+        end
         yield()
     end
+    panel:destroy()
+    
+    Log.info("Choice selected (id={}): [{}] {}", uniqueChoiceId, selected, options[selected])
+    
+    return selected
 end
 
 registerChoiceScreen(ChoiceScreen.new)
