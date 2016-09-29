@@ -85,7 +85,8 @@ public class Launcher extends ApplicationAdapter {
 	private Dim vsize = Dim.of(1280, 720);
 
 	private FitViewport frameBufferViewport;
-	private FitViewport screenViewport;
+    private FitViewport screenViewport;
+    private FitViewport scene2dViewport;
 
     private Scene2dEnv sceneEnv;
 	private Osd osd;
@@ -113,6 +114,7 @@ public class Launcher extends ApplicationAdapter {
 
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
+		scene2dViewport = new FitViewport(vsize.w, vsize.h);
 
 		// TODO: Input adapter wants a transform from screen to world (y-down)
         inputAdapter = new GdxInputAdapter(screenViewport);
@@ -125,7 +127,7 @@ public class Launcher extends ApplicationAdapter {
             throw new RuntimeException("Fatal error during init", e);
         }
 
-        sceneEnv = new Scene2dEnv(resourceFileSystem, screenViewport);
+        sceneEnv = new Scene2dEnv(resourceFileSystem, scene2dViewport);
         osd = Osd.newInstance(resourceFileSystem);
         debugControls = new DebugControls(sceneEnv);
 
@@ -380,6 +382,8 @@ public class Launcher extends ApplicationAdapter {
     private void initWindow(int width, int height) {
         GdxViewportUtil.setToOrtho(screenViewport, vsize, true);
         screenViewport.update(width, height, true);
+
+        scene2dViewport.update(width, height, true);
 
         IEnvironment env = novel.getEnv();
         env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
