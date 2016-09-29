@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.image.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.common.cache.CacheLoader;
 import com.google.common.collect.ImmutableMap;
 
 import nl.weeaboo.common.Area;
@@ -44,15 +46,26 @@ final class TextureManager implements Serializable {
     private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_RESOURCES;
 
     private final FileResourceLoader resourceLoader;
+    private final Dim virtualSize;
+    private Dim imageResolution;
 
+    private transient TextureCache textureCache;
     private transient ImmutableMap<FilePath, IImageDefinition> cachedImageDefs;
 
-    public TextureManager(FileResourceLoader resourceLoader) {
+    public TextureManager(FileResourceLoader resourceLoader, Dim virtualSize) {
         this.resourceLoader = resourceLoader;
+        this.virtualSize = virtualSize;
+        this.imageResolution = virtualSize;
     }
 
-    public void invalidateImageDefinitions() {
-        cachedImageDefs = null;
+    public void setImageResolution(Dim size) {
+        size = Checks.checkNotNull(size);
+        if (!imageResolution.equals(size)) {
+            imageResolution = size;
+
+            // Image resolution changed
+            cachedImageDefs = null;
+        }
     }
 
     private final IImageDefinition getImageDef(FilePath relPath) {
@@ -67,19 +80,38 @@ final class TextureManager implements Serializable {
         return cachedImageDefs.get(relPath);
     }
 
-    public ITexture getTexture(ResourceId resourceId, double sx, double sy) {
-        FilePath relPath = resourceId.getFilePath();
-
-        IResource<Texture> res = textureStore.get().get(resourceLoader.getAbsolutePath(relPath));
-        if (res == null) {
-            return null;
+    public ITexture getTexture(ResourceId resourceId) {
+        if (textureCache == null) {
+            textureCache = new TextureCache(new CacheLoader<ResourceId, ITexture>() {
+                @Override
+                public ITexture load(ResourceId resourceId) throws Exception {
+                    return loadTexture(resourceId);
+                }
+            });
         }
+        return textureCache.getTexture(resourceId);
+    }
+
+    /**
+     * @return The loaded texture (never {@code null}).
+     * @throws IOException If loading the texture failed.
+     */
+    private ITexture loadTexture(ResourceId resourceId) throws IOException {
+        FilePath relPath = resourceId.getFilePath();
+        FilePath absolutePath = resourceLoader.getAbsolutePath(relPath);
+        IResource<Texture> res = textureStore.get().get(absolutePath);
+        if (res == null) {
+            throw new FileNotFoundException("Texture resource not found: " + absolutePath);
+        }
+
+        double scale = getImageScale();
 
         IImageDefinition imageDef = getImageDef(relPath);
         if (imageDef == null) {
             if (resourceId.hasSubId()) {
                 LOG.warn("Image definition not found: {}", relPath);
-                return null;
+                throw new FileNotFoundException("Texture sub-rect not found (missing image definition): " +
+                        resourceId);
             }
 
             LOG.trace("Image definition not found: {}", relPath);
@@ -89,14 +121,19 @@ final class TextureManager implements Serializable {
                 IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
                 if (subRect != null) {
                     LOG.debug("Load image sub-rect: {}: {}", resourceId, subRect.getArea());
-                    return newTexture(new RegionResource(res, subRect.getArea()), sx, sy);
+                    return newTexture(new RegionResource(res, subRect.getArea()), scale, scale);
                 } else {
                     LOG.warn("Image definition sub-rect not found: {}", resourceId);
-                    return null;
+                    throw new FileNotFoundException("Texture sub-rect not found: " + resourceId);
                 }
             }
         }
-        return newTexture(new RegionResource(res), sx, sy);
+        return newTexture(new RegionResource(res), scale, scale);
+    }
+
+    protected double getImageScale() {
+        return Math.min(virtualSize.w / (double)imageResolution.w,
+                virtualSize.h / (double)imageResolution.h);
     }
 
     public IResource<TextureRegion> generateTextureRegion(IGdxTextureData texData) {

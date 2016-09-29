@@ -10,9 +10,11 @@ public final class ResourceId implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final char SEPARATOR = '#';
 
+    // --- Note: Update hashCode()/equals() ---
     private final MediaType type;
     private final FilePath filePath;
     private final String subResourceId;
+    // --- Note: Update hashCode()/equals() ---
 
     public ResourceId(MediaType type, FilePath filePath) {
         this(type, filePath, "");
@@ -30,6 +32,25 @@ public final class ResourceId implements Serializable {
     private static void checkValidChars(String str) {
         Checks.checkArgument(str.indexOf(SEPARATOR) < 0,
                 "Illegal character '" + SEPARATOR + "' in name '" + str + "'");
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode() ^ filePath.hashCode() ^ subResourceId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (!(obj instanceof ResourceId)) {
+            return false;
+        }
+
+        ResourceId other = (ResourceId)obj;
+        return type == other.type
+            && filePath.equals(other.filePath)
+            && subResourceId.equals(other.subResourceId);
     }
 
     @Override

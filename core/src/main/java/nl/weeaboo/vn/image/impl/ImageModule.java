@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -38,8 +37,6 @@ public class ImageModule implements IImageModule {
 
     private final TextureManager texManager;
 
-    private Dim imageResolution;
-
     public ImageModule(DefaultEnvironment env) {
         this(env, new ImageResourceLoader(env));
     }
@@ -50,9 +47,8 @@ public class ImageModule implements IImageModule {
         this.entityHelper = new ComponentFactory();
 
         IRenderEnv renderEnv = env.getRenderEnv();
-        imageResolution = renderEnv.getVirtualSize();
 
-        texManager = new TextureManager(resourceLoader);
+        texManager = new TextureManager(resourceLoader, renderEnv.getVirtualSize());
     }
 
     @Override
@@ -116,8 +112,7 @@ public class ImageModule implements IImageModule {
     protected ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(resourceId, loadInfo);
 
-        double scale = getImageScale();
-        return texManager.getTexture(resourceId, scale, scale);
+        return texManager.getTexture(resourceId);
     }
 
     @Override
@@ -151,28 +146,14 @@ public class ImageModule implements IImageModule {
         resourceLoader.preload(filename);
     }
 
-    protected void onImageScaleChanged() {
-        texManager.invalidateImageDefinitions();
-    }
-
     @Override
     public Collection<FilePath> getImageFiles(FilePath folder) {
         return resourceLoader.getMediaFiles(folder);
     }
 
-    protected double getImageScale() {
-        IRenderEnv renderEnv = env.getRenderEnv();
-        return Math.min(renderEnv.getWidth() / (double)imageResolution.w,
-                renderEnv.getHeight() / (double)imageResolution.h);
-    }
-
     @Override
     public void setImageResolution(Dim size) {
-        size = Checks.checkNotNull(size);
-        if (!imageResolution.equals(size)) {
-            imageResolution = size;
-            onImageScaleChanged();
-        }
+        texManager.setImageResolution(size);
     }
 
 }
