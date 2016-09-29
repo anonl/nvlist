@@ -37,7 +37,7 @@ final class TextureCache {
         try {
             return cache.get(resourceId);
         } catch (ExecutionException e) {
-            LOG.warn("Error loading texture: {}", resourceId, e);
+            LOG.warn("Error loading texture ({}): {}", resourceId, e.getCause().toString());
             return null;
         }
     }
