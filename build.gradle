@@ -155,8 +155,8 @@ project(':nvlist-android') {
     }
     
     android {
-        buildToolsVersion '23.0.2'
-        compileSdkVersion 'android-23'
+        buildToolsVersion '24.0.3'
+        compileSdkVersion 'android-24'
         
         sourceSets {
             main {
@@ -170,15 +170,18 @@ project(':nvlist-android') {
             }
     
             instrumentTest.setRoot('tests')
+        }                
+        defaultConfig {
+            minSdkVersion 8
+            targetSdkVersion 24
+	        jackOptions {
+	           enabled true
+	        }            
         }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_6
             targetCompatibility JavaVersion.VERSION_1_6
         }    
-        defaultConfig {
-            minSdkVersion 8
-            targetSdkVersion 23
-        }
         lintOptions {
             textOutput 'stdout'
             textReport true
