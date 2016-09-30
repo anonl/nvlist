@@ -2,10 +2,11 @@
 language: android
 android:
   components:
-    - platform-tools-24.0.3
-    - tools
-    - build-tools-24.0.3
     - android-24
+    - build-tools-24.0.3
+    - platform-tools
+    - tools
+    - tools
 
 jdk:
   - oraclejdk8
