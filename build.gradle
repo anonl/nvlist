@@ -25,6 +25,7 @@ allprojects {
     ext {
         appName = 'NVList'
         
+        javaVersion = JavaVersion.VERSION_1_8
         gdxVersion = '1.9.3'
         gdxVideoVersion = '0.0.4-anonl'
         junitVersion = '4.12'
@@ -50,8 +51,8 @@ allprojects {
     }
     
     plugins.withType(JavaPlugin) {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
         compileJava.options.encoding = 'UTF-8'
         compileTestJava.options.encoding = 'UTF-8'
         
@@ -179,8 +180,8 @@ project(':nvlist-android') {
 	        }            
         }
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_6
-            targetCompatibility JavaVersion.VERSION_1_6
+            sourceCompatibility javaVersion
+            targetCompatibility javaVersion
         }    
         lintOptions {
             textOutput 'stdout'

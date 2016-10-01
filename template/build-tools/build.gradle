@@ -37,6 +37,7 @@ allprojects {
 
     ext {
         nvlistVersion = settings.nvlistVersion
+        javaVersion = JavaVersion.VERSION_1_8
     }
 
     repositories {
@@ -48,8 +49,8 @@ allprojects {
     }
     
     plugins.withType(JavaPlugin) {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
         compileJava.options.encoding = 'UTF-8'
         compileTestJava.options.encoding = 'UTF-8'
     }
@@ -85,8 +86,8 @@ project(':android') {
     }
     
     android {
-        buildToolsVersion '23.0.2'
-        compileSdkVersion 'android-23'
+        buildToolsVersion '24.0.3'
+        compileSdkVersion 'android-24'
         
         sourceSets {
             main {
@@ -103,7 +104,7 @@ project(':android') {
         }
         defaultConfig {
             minSdkVersion 8
-            targetSdkVersion 23
+            targetSdkVersion 24
             versionCode = settings.androidVersionCode as int
             versionName = project.version
             manifestPlaceholders = [
