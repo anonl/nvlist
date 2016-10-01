@@ -19,7 +19,7 @@ public class TextureAdapterTest {
     /** Check behavior when the internal resource returns {@code null} */
     @Test
     public void nullResource() {
-        ResourceStub<TextureRegion> res = new ResourceStub<TextureRegion>();
+        ResourceStub<TextureRegion> res = new ResourceStub<>();
         TextureAdapter adapter = new TextureAdapter(res, 2, 3);
 
         Assert.assertEquals(0, adapter.getHandle());
@@ -33,7 +33,7 @@ public class TextureAdapterTest {
 
     @Test
     public void textureRegion() {
-        ResourceStub<TextureRegion> res = new ResourceStub<TextureRegion>();
+        ResourceStub<TextureRegion> res = new ResourceStub<>();
         TextureAdapter adapter = new TextureAdapter(res, 1, 1);
 
         Texture tex = GdxGraphicsTestUtil.createTestTexture(20, 40);
@@ -53,7 +53,7 @@ public class TextureAdapterTest {
     /** {@link TextureAdapter#getTextureRegion(Area2D)} */
     @Test
     public void getSubRegion() {
-        ResourceStub<TextureRegion> res = new ResourceStub<TextureRegion>();
+        ResourceStub<TextureRegion> res = new ResourceStub<>();
         TextureAdapter adapter = new TextureAdapter(res, 1, 1);
 
         Texture tex = GdxGraphicsTestUtil.createTestTexture(10, 10);

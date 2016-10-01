@@ -33,7 +33,7 @@ public class LuaScriptContext implements IScriptContext {
     private final LuaScriptThread mainThread;
     private final LuaScriptThread eventThread;
 
-    private final DestructibleElemList<LuaScriptThread> threads = new DestructibleElemList<LuaScriptThread>();
+    private final DestructibleElemList<LuaScriptThread> threads = new DestructibleElemList<>();
 
     public LuaScriptContext(LuaScriptEnv scriptEnv) {
         this.scriptEnv = Checks.checkNotNull(scriptEnv);

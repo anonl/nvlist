@@ -77,7 +77,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
             return null;
         }
 
-        FileResource<T> resource = new FileResource<T>(selfId, absolutePath);
+        FileResource<T> resource = new FileResource<>(selfId, absolutePath);
         resource.set(entry);
         return resource;
     }
@@ -106,7 +106,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
                 loadError(filename, re);
                 resource = null;
             }
-            return new Ref<T>(resource);
+            return new Ref<>(resource);
         }
 
     }

@@ -13,7 +13,7 @@ class SystemModuleMock extends SystemModule {
     private static final long serialVersionUID = 1L;
 
     private final AtomicInteger doExitCalled = new AtomicInteger();
-    private final AtomicReference<String> lastCalled = new AtomicReference<String>();
+    private final AtomicReference<String> lastCalled = new AtomicReference<>();
     private final Set<String> existingFunctions = Sets.newHashSet();
 
     public SystemModuleMock(IEnvironment env) {

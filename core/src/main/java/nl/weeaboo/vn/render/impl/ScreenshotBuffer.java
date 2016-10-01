@@ -15,7 +15,7 @@ public class ScreenshotBuffer implements IScreenshotBuffer {
 	private Collection<ScreenshotEntry> screenshots;
 
 	public ScreenshotBuffer() {
-		screenshots = new ArrayList<ScreenshotEntry>();
+		screenshots = new ArrayList<>();
 	}
 
 	@Override

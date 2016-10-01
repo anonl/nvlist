@@ -27,7 +27,7 @@ public final class Indirect<T> implements Externalizable {
     }
 
     public static <T> Indirect<T> of(T referent) {
-        return new Indirect<T>(referent);
+        return new Indirect<>(referent);
     }
 
     public T get() {

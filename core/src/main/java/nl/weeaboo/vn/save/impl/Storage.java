@@ -47,7 +47,7 @@ public class Storage implements IStorage, Json.Serializable {
     }
 
     private static Map<String, StoragePrimitive> newPropertiesMap() {
-        return new LinkedHashMap<String, StoragePrimitive>();
+        return new LinkedHashMap<>();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Storage implements IStorage, Json.Serializable {
 
     @Override
     public Collection<String> getKeys(String prefix) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (String key : properties.keySet()) {
             if (prefix == null || key.startsWith(prefix)) {
                 result.add(key);

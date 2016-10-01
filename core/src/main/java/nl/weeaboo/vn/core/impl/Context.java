@@ -27,7 +27,7 @@ public class Context implements IContext {
     private final LuaScriptContext scriptContext;
     private final ISkipState skipState = new SkipState();
 
-	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<IContextListener>();
+	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<>();
 
 	private boolean active;
 	private boolean destroyed;

@@ -17,7 +17,7 @@ public final class StaticRef<T> implements Serializable {
     }
 
     public static <T> StaticRef<T> from(String id, Class<T> type) {
-        return new StaticRef<T>(id, type);
+        return new StaticRef<>(id, type);
     }
 
     public final T get() {

@@ -85,7 +85,7 @@ public class LuaPrefsAdapter {
 
         private Preference<?> getCachedPref(String requestedKey) {
             if (cachedPrefs == null) {
-                cachedPrefs = new HashMap<String, Preference<?>>();
+                cachedPrefs = new HashMap<>();
                 for (String className : prefHolderClasses) {
                     LOG.debug("Registering preferences for class: {}", className);
 

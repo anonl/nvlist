@@ -37,7 +37,7 @@ public final class StaticEnvironment {
 
     private static final StaticEnvironment INSTANCE = new StaticEnvironment();
 
-    private final Map<String, Object> objects = new HashMap<String, Object>();
+    private final Map<String, Object> objects = new HashMap<>();
 
     private StaticEnvironment() {
     }

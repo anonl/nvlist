@@ -16,8 +16,8 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
 	private static final Comparator<Task> TASK_SORTER = new TaskSorter();
 
-	private final List<IScriptFunction> events = new ArrayList<IScriptFunction>();
-	private final List<Task> tasks = new ArrayList<Task>();
+	private final List<IScriptFunction> events = new ArrayList<>();
+	private final List<Task> tasks = new ArrayList<>();
 
 	private transient boolean tasksSorted = false;
 
@@ -58,7 +58,7 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
 	@Override
 	public List<IScriptFunction> retrieveWork() {
-		List<IScriptFunction> result = new ArrayList<IScriptFunction>(tasks.size() + events.size());
+		List<IScriptFunction> result = new ArrayList<>(tasks.size() + events.size());
 
 		// Tasks (sorted by descending priority)
 		sortTasks();

@@ -16,7 +16,7 @@ public class LuaScriptEnv implements IScriptEnv {
 
     private final LuaRunState runState;
 	private final LuaScriptLoader loader;
-	private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<ILuaScriptEnvInitializer>();
+	private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<>();
 
 	private boolean initialized;
 

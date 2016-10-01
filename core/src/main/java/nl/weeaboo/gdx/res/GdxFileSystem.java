@@ -70,7 +70,7 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
 
     @Override
     public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
-        List<FilePath> result = new ArrayList<FilePath>();
+        List<FilePath> result = new ArrayList<>();
         getFilesImpl(result, opts.prefix, opts,
                 resolveExisting(opts.prefix.toString()));
         return result;

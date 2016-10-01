@@ -108,7 +108,7 @@ class LvnParser3 implements ILvnParser {
 			return ""; //Empty line
 		}
 
-		List<String> out = new ArrayList<String>(8);
+		List<String> out = new ArrayList<>(8);
 		out.add(beginParagraphCommand(filename, textLineNum));
 
 		StringBuilder sb = new StringBuilder(line.length());

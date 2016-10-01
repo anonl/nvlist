@@ -35,7 +35,7 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
         }
 
         if (original != null) {
-            cachedOriginal = new WeakReference<S>(original);
+            cachedOriginal = new WeakReference<>(original);
             result = transform(original);
             if (result != null) {
                 cachedTransformed = result;

@@ -14,7 +14,7 @@ final class StyleStack {
 	private transient TextStyle calculated;
 
 	public StyleStack() {
-		stack = new ArrayList<TaggedEntry>();
+		stack = new ArrayList<>();
 	}
 
 	public void clear() {

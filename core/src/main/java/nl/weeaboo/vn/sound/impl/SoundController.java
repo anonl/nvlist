@@ -25,13 +25,13 @@ public class SoundController implements ISoundController {
     private boolean paused;
 
     protected SoundController() {
-        masterVolume = new EnumMap<SoundType, Double>(SoundType.class);
+        masterVolume = new EnumMap<>(SoundType.class);
         for (SoundType type : SoundType.values()) {
             masterVolume.put(type, 1.0);
         }
 
-        sounds = new HashMap<Integer, ISound>();
-        pausedList = new ArrayList<ISound>();
+        sounds = new HashMap<>();
+        pausedList = new ArrayList<>();
     }
 
     //Functions
@@ -89,7 +89,7 @@ public class SoundController implements ISoundController {
     }
 
     protected Iterable<ISound> getSounds(SoundType type) {
-        Collection<ISound> result = new ArrayList<ISound>();
+        Collection<ISound> result = new ArrayList<>();
         for (ISound sound : sounds.values()) {
             if (sound.getSoundType() == type) {
                 result.add(sound);

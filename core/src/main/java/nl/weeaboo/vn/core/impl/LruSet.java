@@ -16,7 +16,7 @@ public final class LruSet<T> implements Serializable {
 	public LruSet(int maxSize) {
 	    Checks.checkRange(maxSize, "maxSize", 1);
 
-		this.backing = new LinkedHashSet<T>();
+		this.backing = new LinkedHashSet<>();
 		this.maxSize = maxSize;
 	}
 

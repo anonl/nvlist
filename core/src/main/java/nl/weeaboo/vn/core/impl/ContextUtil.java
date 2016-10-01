@@ -5,7 +5,7 @@ import nl.weeaboo.vn.scene.IScreen;
 
 public final class ContextUtil {
 
-    private static final ThreadLocal<IContext> currentContext = new ThreadLocal<IContext>();
+    private static final ThreadLocal<IContext> currentContext = new ThreadLocal<>();
 
     private ContextUtil() {
     }

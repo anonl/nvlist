@@ -33,7 +33,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
-        this.checkedFilenames = new LruSet<FilePath>(128);
+        this.checkedFilenames = new LruSet<>(128);
     }
 
     @Override
@@ -119,7 +119,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     public Collection<FilePath> getMediaFiles(FilePath folder) {
         try {
             Collection<FilePath> files = getFiles(folder);
-            List<FilePath> filtered = new ArrayList<FilePath>(files.size());
+            List<FilePath> filtered = new ArrayList<>(files.size());
             for (FilePath file : files) {
                 if (isValidFilename(file)) {
                     filtered.add(file);

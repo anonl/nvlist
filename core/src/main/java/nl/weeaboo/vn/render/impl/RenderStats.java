@@ -23,7 +23,7 @@ public class RenderStats {
 
 	public RenderStats() {
 		cmdStats = new CommandStats[256]; //Command ID is a byte, so max 256 possibilities
-		quadBatchSizes = new ArrayList<Integer>();
+		quadBatchSizes = new ArrayList<>();
 	}
 
 	public void startRender() {

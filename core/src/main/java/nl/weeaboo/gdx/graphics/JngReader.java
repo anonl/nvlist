@@ -40,10 +40,10 @@ final class JngReader {
         return read(din);
     }
     public static Pixmap read(DataInput din) throws IOException {
-        List<byte[]> colorBytes = new ArrayList<byte[]>(); // Forms a valid JPEG file
+        List<byte[]> colorBytes = new ArrayList<>(); // Forms a valid JPEG file
 
         JNGAlphaType alphaType = null;
-        List<byte[]> alphaBytes = new ArrayList<byte[]>(); // Forms a valid JPEG/PNG file
+        List<byte[]> alphaBytes = new ArrayList<>(); // Forms a valid JPEG/PNG file
 
         JNGHeader header = JNGHeader.fromDataInput(din);
 

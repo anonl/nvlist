@@ -41,7 +41,7 @@ public class ContextTest  {
     }
 
     private void assertActiveContexts(IContext... actives) {
-        Set<IContext> activesSet = new HashSet<IContext>();
+        Set<IContext> activesSet = new HashSet<>();
         Collections.addAll(activesSet, actives);
 
         for (IContext context : contextManager.getContexts()) {

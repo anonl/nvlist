@@ -52,14 +52,14 @@ public class RuntimeTextParser implements Serializable {
 
 	public ParseResult parse(String line) {
 		// Process non-command tokens into StyledText objects.
-		List<Object> processed = new ArrayList<Object>();
+		List<Object> processed = new ArrayList<>();
 		StyleStack styleStack = new StyleStack();
 		for (Token token : parser.tokenize(line)) {
 			processToken(processed, token, styleStack);
 		}
 
 		// Second pass: collapse whitespace and process command tokens
-		IntMap<String> commandMap = new IntMap<String>();
+		IntMap<String> commandMap = new IntMap<>();
 		MutableStyledText mts = new MutableStyledText();
 		boolean lastCharCollapsible = true;
 		for (Object obj : processed) {
@@ -120,7 +120,7 @@ public class RuntimeTextParser implements Serializable {
 				isOpenTag = false;
 			}
 
-			List<String> args = new ArrayList<String>();
+			List<String> args = new ArrayList<>();
 			if (isOpenTag) {
 				//Parse list of values aaa,bbb,ccc
 				int start = itr.getIndex();

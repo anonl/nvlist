@@ -136,7 +136,7 @@ class LvnParser4 implements ILvnParser {
 
 		line = unescape(line);
 
-		List<String> triggers = new ArrayList<String>(4);
+		List<String> triggers = new ArrayList<>(4);
 		for (Token token : textParser.tokenize(line)) {
 			if (token.getType() == TextParser.ETokenType.COMMAND) {
 				triggers.add(token.getText());

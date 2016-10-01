@@ -20,7 +20,7 @@ final class TextParser {
 
 	private void init(CharacterIterator itr) {
         input = itr;
-        tokens = new ArrayList<Token>();
+        tokens = new ArrayList<>();
 	}
 
 	private void reset() {

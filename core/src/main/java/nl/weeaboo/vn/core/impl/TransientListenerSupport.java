@@ -16,7 +16,7 @@ public class TransientListenerSupport implements Serializable {
     /** @return The internal (mutable) collection storing the transient listeners. */
     private List<IEventListener> transientListeners() {
         if (transientListeners == null) {
-            transientListeners = new CopyOnWriteArrayList<IEventListener>();
+            transientListeners = new CopyOnWriteArrayList<>();
         }
         return transientListeners;
     }

@@ -24,7 +24,7 @@ public final class ContextManager implements IContextManager {
 
     private final IContextFactory<Context> contextFactory;
 
-    private final DestructibleElemList<Context> contexts = new DestructibleElemList<Context>();
+    private final DestructibleElemList<Context> contexts = new DestructibleElemList<>();
 
     public ContextManager(IContextFactory<Context> contextFactory) {
         this.contextFactory = contextFactory;

@@ -26,21 +26,21 @@ public class GeneratedResourceStore extends AbstractResourceStore {
 
     private final StaticRef<? extends GeneratedResourceStore> selfId;
     private final ReferenceQueue<GeneratedResource<?>> garbage;
-    private final Array<ResourceRef<?>> resources = new Array<ResourceRef<?>>(false, 8);
+    private final Array<ResourceRef<?>> resources = new Array<>(false, 8);
 
     public GeneratedResourceStore(StaticRef<? extends GeneratedResourceStore> selfId) {
         super(LoggerFactory.getLogger("GeneratedResourceStore"));
 
         this.selfId = Checks.checkNotNull(selfId);
 
-        garbage = new ReferenceQueue<GeneratedResource<?>>();
+        garbage = new ReferenceQueue<>();
     }
 
     public <T extends Serializable & Disposable> IResource<T> register(T value) {
         cleanUp();
 
-        GeneratedResource<T> resource = new GeneratedResource<T>(selfId, value);
-        resources.add(new ResourceRef<T>(resource, value, garbage));
+        GeneratedResource<T> resource = new GeneratedResource<>(selfId, value);
+        resources.add(new ResourceRef<>(resource, value, garbage));
         return resource;
     }
 

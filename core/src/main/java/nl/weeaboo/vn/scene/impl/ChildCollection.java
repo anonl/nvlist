@@ -16,7 +16,7 @@ public final class ChildCollection implements Serializable, ISignalHandler {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     private final Indirect<IVisualGroup> parentRef;
-    private final DestructibleElemList<IVisualElement> children = new DestructibleElemList<IVisualElement>();
+    private final DestructibleElemList<IVisualElement> children = new DestructibleElemList<>();
 
     public ChildCollection(IVisualGroup parent) {
         this.parentRef = Indirect.of(parent);

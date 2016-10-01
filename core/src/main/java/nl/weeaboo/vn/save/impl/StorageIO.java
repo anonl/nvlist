@@ -66,7 +66,7 @@ public final class StorageIO {
     }
 
     public static void write(OutputStream out, IStorage storage) throws IOException {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         for (String key : storage.getKeys()) {
             StoragePrimitive val = storage.get(key);
             if (val != null) {
