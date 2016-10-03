@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -91,6 +92,48 @@ public class SeenLib extends LuaLib {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
         int lineNumber = args.checkint(2);
         getSeenLog().markLineSeen(filename, lineNumber);
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Choice ID (string)
+     *        <li>Number of options
+     *        </ol>
+     */
+    @ScriptFunction
+    public void registerChoice(Varargs args) {
+        String uniqueChoiceId = args.tojstring(1);
+        int numOptions = args.checkint(2);
+        getSeenLog().registerChoice(uniqueChoiceId, numOptions);
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Choice ID (string)
+     *        <li>Option index (starts at 1)
+     *        </ol>
+     */
+    @ScriptFunction
+    public void markChoiceSelected(Varargs args) {
+        String uniqueChoiceId = args.tojstring(1);
+        int optionIndex = args.checkint(2);
+        getSeenLog().markChoiceSelected(uniqueChoiceId, optionIndex);
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Choice ID (string)
+     *        <li>Option index (starts at 1)
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs hasSelectedChoice(Varargs args) {
+        String uniqueChoiceId = args.tojstring(1);
+        int optionIndex = args.checkint(2);
+        return LuaBoolean.valueOf(getSeenLog().hasSelectedChoice(uniqueChoiceId, optionIndex));
     }
 
 }

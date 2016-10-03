@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.io.CustomSerializable;
@@ -32,12 +33,14 @@ final class SeenLog implements ISeenLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);
+    private static final int VERSION = 1;
 
     private final IEnvironment env;
 
     // Actual seen state is stored in a separate (shared) file
     private transient Map<MediaType, MediaSeen> mediaSeen;
-    private transient Map<FilePath, ScriptSeen> scriptSeen;
+    private transient Map<FilePath, IndexBasedSeen> scriptSeen;
+    private transient Map<String, IndexBasedSeen> choiceSeen;
 
     public SeenLog(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
@@ -52,6 +55,7 @@ final class SeenLog implements ISeenLog {
         }
 
         scriptSeen = Maps.newHashMap();
+        choiceSeen = Maps.newHashMap();
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -97,14 +101,14 @@ final class SeenLog implements ISeenLog {
     @Override
     public void registerScriptFile(ResourceId resourceId, int numTextLines) {
         FilePath filePath = resourceId.getFilePath();
-        ScriptSeen seen = scriptSeen.get(filePath);
-        if (seen != null && seen.getNumTextLines() == numTextLines) {
+        IndexBasedSeen seen = scriptSeen.get(filePath);
+        if (seen != null && seen.getMaxIndex() == numTextLines) {
             return; // ScriptSeen exists and is up-to-date
         }
 
         LOG.debug("Registered script file: {}", resourceId);
 
-        seen = new ScriptSeen(numTextLines);
+        seen = new IndexBasedSeen(numTextLines);
         scriptSeen.put(filePath, seen);
     }
 
@@ -116,8 +120,8 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public boolean hasSeenLine(ResourceId resourceId, int lineNumber) {
-        ScriptSeen seen = scriptSeen.get(resourceId.getFilePath());
-        return seen != null && seen.hasSeenLine(lineNumber);
+        IndexBasedSeen seen = scriptSeen.get(resourceId.getFilePath());
+        return seen != null && seen.hasSeenIndex(lineNumber);
     }
 
     @Override
@@ -130,11 +134,38 @@ final class SeenLog implements ISeenLog {
 
     @Override
     public void markLineSeen(ResourceId resourceId, int lineNumber) {
-        ScriptSeen seen = scriptSeen.get(resourceId.getFilePath());
+        IndexBasedSeen seen = scriptSeen.get(resourceId.getFilePath());
         if (seen == null) {
             LOG.warn("Marking line of unknown script file: {}:{}", resourceId, lineNumber);
         } else {
-            seen.markLineSeen(resourceId.getFilePath(), lineNumber);
+            seen.markIndexSeen(resourceId.toString(), lineNumber);
+        }
+    }
+
+    @Override
+    public void registerChoice(String uniqueChoiceId, int numOptions) {
+        IndexBasedSeen seen = choiceSeen.get(uniqueChoiceId);
+        if (seen != null && seen.getMaxIndex() == numOptions) {
+            return; // ChoiceSeen exists and is up-to-date
+        }
+
+        LOG.debug("Registered choice: {}", uniqueChoiceId);
+
+        seen = new IndexBasedSeen(numOptions);
+        choiceSeen.put(uniqueChoiceId, seen);
+    }
+
+    @Override
+    public boolean hasSelectedChoice(String uniqueChoiceId, int optionIndex) {
+        IndexBasedSeen seen = choiceSeen.get(uniqueChoiceId);
+        return seen != null && seen.hasSeenIndex(optionIndex);
+    }
+
+    @Override
+    public void markChoiceSelected(String uniqueChoiceId, int optionIndex) {
+        IndexBasedSeen seen = choiceSeen.get(uniqueChoiceId);
+        if (seen != null) {
+            seen.markIndexSeen(uniqueChoiceId, optionIndex);
         }
     }
 
@@ -145,6 +176,8 @@ final class SeenLog implements ISeenLog {
         LuaSerializer ls = new LuaSerializer();
         ObjectSerializer out = ls.openSerializer(sfw.newOutputStream(path, false));
         try {
+            out.writeInt(VERSION);
+
             out.writeInt(mediaSeen.size());
             for (Entry<MediaType, MediaSeen> entry : mediaSeen.entrySet()) {
                 out.writeObject(entry.getKey());
@@ -152,8 +185,14 @@ final class SeenLog implements ISeenLog {
             }
 
             out.writeInt(scriptSeen.size());
-            for (Entry<FilePath, ScriptSeen> entry : scriptSeen.entrySet()) {
+            for (Entry<FilePath, IndexBasedSeen> entry : scriptSeen.entrySet()) {
                 out.writeUTF(entry.getKey().toString());
+                out.writeObject(entry.getValue());
+            }
+
+            out.writeInt(choiceSeen.size());
+            for (Entry<String, IndexBasedSeen> entry : choiceSeen.entrySet()) {
+                out.writeUTF(entry.getKey());
                 out.writeObject(entry.getValue());
             }
         } finally {
@@ -168,8 +207,15 @@ final class SeenLog implements ISeenLog {
         LuaSerializer ls = new LuaSerializer();
         ObjectDeserializer in = ls.openDeserializer(sfw.newInputStream(path));
         try {
+            int version = in.readInt();
+            if (version != VERSION) {
+                throw new IOException(StringUtil.formatRoot("Unsupported version (%s), expected (%s)",
+                        version, VERSION));
+            }
+
             mediaSeen.clear();
             scriptSeen.clear();
+            choiceSeen.clear();
 
             int mediaSeenSize = in.readInt();
             for (int n = 0; n < mediaSeenSize; n++) {
@@ -181,7 +227,7 @@ final class SeenLog implements ISeenLog {
             int scriptSeenSize = in.readInt();
             for (int n = 0; n < scriptSeenSize; n++) {
                 FilePath key = FilePath.of(in.readUTF());
-                ScriptSeen value = (ScriptSeen)in.readObject();
+                IndexBasedSeen value = (IndexBasedSeen)in.readObject();
                 scriptSeen.put(key, value);
             }
         } catch (ClassNotFoundException e) {
@@ -210,40 +256,40 @@ final class SeenLog implements ISeenLog {
     }
 
     @LuaSerializable
-    private static class ScriptSeen implements Serializable {
+    private static class IndexBasedSeen implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private final int numTextLines;
-        private final BitSet seenLines;
+        private final int maxIndex;
+        private final BitSet seenIndices;
 
-        public ScriptSeen(int numTextLines) {
-            this.numTextLines = numTextLines;
-            this.seenLines = new BitSet(numTextLines);
+        public IndexBasedSeen(int maxIndex) {
+            this.maxIndex = maxIndex;
+            this.seenIndices = new BitSet(maxIndex);
         }
 
-        private boolean inRange(int lineNumber) {
-            return lineNumber >= 1 && lineNumber <= numTextLines;
+        private boolean inRange(int index) {
+            return index >= 1 && index <= maxIndex;
         }
 
-        public boolean hasSeenLine(int lineNumber) {
-            if (!inRange(lineNumber)) {
+        public boolean hasSeenIndex(int index) {
+            if (!inRange(index)) {
                 return false;
             }
-            return seenLines.get(lineNumber - 1);
+            return seenIndices.get(index - 1);
         }
 
-        public void markLineSeen(FilePath file, int lineNumber) {
-            if (!inRange(lineNumber)) {
-                LOG.warn("Line number out of range: {}:{}", file, lineNumber);
+        public void markIndexSeen(String id, int index) {
+            if (!inRange(index)) {
+                LOG.warn("Index number out of range: {}:{}", id, index);
             } else {
-                seenLines.set(lineNumber - 1);
-                LOG.trace("Mark line seen {}:{}", file, lineNumber);
+                seenIndices.set(index - 1);
+                LOG.trace("Mark index seen {}:{}", id, index);
             }
         }
 
-        public int getNumTextLines() {
-            return numTextLines;
+        public int getMaxIndex() {
+            return maxIndex;
         }
     }
 

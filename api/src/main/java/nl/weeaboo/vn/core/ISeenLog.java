@@ -18,6 +18,14 @@ public interface ISeenLog extends Serializable {
     void markLineSeen(FilePath filename, int lineNumber);
     void markLineSeen(ResourceId resourceId, int lineNumber);
 
+    void registerChoice(String uniqueChoiceId, int numOptions);
+
+    /** @param optionIndex Starts at 1 */
+    boolean hasSelectedChoice(String uniqueChoiceId, int optionIndex);
+
+    /** @param optionIndex Starts at 1 */
+    void markChoiceSelected(String uniqueChoiceId, int optionIndex);
+
     void load(SecureFileWriter sfw, FilePath path) throws IOException;
     void save(SecureFileWriter sfw, FilePath path) throws IOException;
 

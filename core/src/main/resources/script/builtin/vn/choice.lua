@@ -38,11 +38,14 @@ function choice2(uniqueChoiceId, ...)
     local choiceScreenConstr = choiceScreenRegistry.constructor
     if choiceScreenConstr == nil then
         Log.warn("No choice screen registered")
-    else    
+    else
+        Seen.registerChoice(uniqueChoiceId, #options)
+    
         local screen = choiceScreenConstr()
         selected = screen:choose(uniqueChoiceId, options)
-        -- seenLog:setChoiceSelected(uniqueChoiceId, selected)
         screen:destroy()
+        
+        Seen.markChoiceSelected(uniqueChoiceId, selected)
     end
     return selected
 end
