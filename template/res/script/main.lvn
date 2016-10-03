@@ -19,7 +19,10 @@ function titlescreen()
     setTextModeADV()
 
     button("gui/button")
-    choice("a", "b", "Agh")
+    for i=1,3 do
+        local selected = choice("a", "b", "Agh")
+        print("selected", selected)
+    end
 
     --movie("test")
     call("images")    

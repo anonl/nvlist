@@ -54,10 +54,14 @@ end
 -------------------------------------------------------------------------------------------------------------- @section default choice screen
 
 ChoiceScreen = {
+    seenStyle=nil --Text style extension for previously selected choices
 }
 
 function ChoiceScreen.new(self)
-    self = extend(ChoiceScreen, self)    
+    self = extend(ChoiceScreen, self)
+    
+    self.seenStyle = self.seenStyle or Text.createStyle{color=0xFF808080}
+    
     return self
 end
 
@@ -83,7 +87,13 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
     for i,option in ipairs(options) do
         local b = button("gui/button")
         b:setZ(-1000)
-        b:setText(option)
+        
+        local styledText = option
+        if Seen.hasSelectedChoice(uniqueChoiceId, i) then
+            --Apply a custom text style if the user has selected this choice before
+            styledText = Text.createStyledText(option, self.seenStyle)
+        end
+        b:setText(styledText)
         buttons[i] = b
         
         panel:add(b, panel:newConstraints():growX())
