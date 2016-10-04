@@ -58,9 +58,9 @@ public final class RenderUtil {
 
     public static int premultiplyAlpha(int argb) {
         int a = (argb >> 24) & 0xFF;
-        int r = Math.min(255, (a * ((argb>>16)&0xFF) + 127) / 255);
-        int g = Math.min(255, (a * ((argb>> 8)&0xFF) + 127) / 255);
-        int b = Math.min(255, (a * ((argb    )&0xFF) + 127) / 255);
+        int r = (a * ((argb>>16)&0xFF) + 127) / 255;
+        int g = (a * ((argb>> 8)&0xFF) + 127) / 255;
+        int b = (a * ((argb    )&0xFF) + 127) / 255;
         return (a<<24)|(r<<16)|(g<<8)|(b);
     }
 
@@ -71,9 +71,9 @@ public final class RenderUtil {
         }
 
         int round = a / 2;
-        int r = Math.min(255, (255 * ((argb >> 16) & 0xFF) + round) / a);
-        int g = Math.min(255, (255 * ((argb >> 8 ) & 0xFF) + round) / a);
-        int b = Math.min(255, (255 * ((argb      ) & 0xFF) + round) / a);
+        int r = (255 * ((argb >> 16) & 0xFF) + round) / a;
+        int g = (255 * ((argb >> 8 ) & 0xFF) + round) / a;
+        int b = (255 * ((argb      ) & 0xFF) + round) / a;
         return (a<<24)|(r<<16)|(g<<8)|(b);
     }
 

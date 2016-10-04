@@ -17,7 +17,7 @@ public final class PixmapUtil {
      * @param pixels A Pixmap in {@link Format#RGBA8888}.
      */
     public static void flipVertical(Pixmap pixels) {
-        Checks.checkState(pixels.getFormat() == Format.RGBA8888,
+        Checks.checkArgument(pixels.getFormat() == Format.RGBA8888,
                 "Pixmap with unsupported format: " + pixels.getFormat());
 
         int bytesPerRow = pixels.getWidth() * 4; // RGBA8888
@@ -64,6 +64,53 @@ public final class PixmapUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * Converts an RGBA8888 pixmap with unassociated alpha to premultiplied alpha.
+     */
+    public static void premultiplyAlpha(Pixmap pixmap) {
+        Format format = pixmap.getFormat();
+        switch (format) {
+        case Intensity:
+        case RGB565:
+        case RGB888:
+            break; // Format doesn't have alpha, so nothing to do
+        case Alpha:
+            break; // Format only has alpha, so nothing to do
+        case LuminanceAlpha: {
+            final ByteBuffer pixels = pixmap.getPixels();
+            final int limit = pixmap.getWidth() * pixmap.getHeight() * 2;
+            for (int n = 0; n < limit; n += 2) {
+                int i = pixels.get(n    ) & 0xFF;
+                int a = pixels.get(n + 1) & 0xFF;
+
+                i = (a * i + 127) / 255;
+
+                pixels.put(n, (byte)i);
+            }
+        } break;
+        case RGBA8888: {
+            final ByteBuffer pixels = pixmap.getPixels();
+            final int limit = pixmap.getWidth() * pixmap.getHeight() * 4;
+            for (int n = 0; n < limit; n += 4) {
+                int r = pixels.get(n    ) & 0xFF;
+                int g = pixels.get(n + 1) & 0xFF;
+                int b = pixels.get(n + 2) & 0xFF;
+                int a = pixels.get(n + 3) & 0xFF;
+
+                r = (a * r + 127) / 255;
+                g = (a * g + 127) / 255;
+                b = (a * b + 127) / 255;
+
+                pixels.put(n    , (byte)r);
+                pixels.put(n + 1, (byte)g);
+                pixels.put(n + 2, (byte)b);
+            }
+        } break;
+        default:
+           throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
+        }
     }
 
 }

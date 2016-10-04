@@ -3,6 +3,9 @@ package nl.weeaboo.vn.render.impl;
 import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +33,8 @@ import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.image.impl.VolatileTextureData;
 
 public class GLScreenRenderer extends BaseScreenRenderer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GLScreenRenderer.class);
 
     private boolean destroyed;
 
@@ -80,6 +85,10 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     @Override
     public void renderQuad(QuadRenderCommand qrc) {
         TextureRegion tex = GdxTextureUtil.getTextureRegion(qrc.tex, qrc.uv);
+        if (tex == null) {
+            LOG.trace("Skip drawing quad with null texture");
+            return;
+        }
 
         double x = qrc.bounds.x;
         double y = qrc.bounds.y;
@@ -262,7 +271,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     protected void applyBlendMode(BlendMode bm) {
         switch (bm) {
         case DEFAULT:
-            GLBlendMode.DEFAULT.apply(spriteBatch);
+            GLBlendMode.DEFAULT_PREMULT.apply(spriteBatch);
             break;
         case ADD:
             GLBlendMode.ADD.apply(spriteBatch);

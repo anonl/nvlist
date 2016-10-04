@@ -17,6 +17,8 @@ function titlescreen()
     registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
     
     setTextModeADV()
+    
+    img("alphablend", 200, 200)
 
     button("gui/button")
     for i=1,3 do
