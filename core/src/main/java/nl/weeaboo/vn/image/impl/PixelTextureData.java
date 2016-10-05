@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
-import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.io.CustomSerializable;
 
 @CustomSerializable
@@ -26,12 +25,6 @@ public final class PixelTextureData implements IGdxTextureData {
     }
 
     public static PixelTextureData fromPremultipliedPixmap(Pixmap pixmap) {
-        return new PixelTextureData(pixmap);
-    }
-
-    public static PixelTextureData fromImageFile(byte[] encoded, int off, int len) {
-        Pixmap pixmap = new Pixmap(encoded, off, len);
-        PixmapUtil.premultiplyAlpha(pixmap);
         return new PixelTextureData(pixmap);
     }
 

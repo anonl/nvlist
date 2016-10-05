@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.image.impl;
 
+import com.badlogic.gdx.graphics.Pixmap;
+
 import nl.weeaboo.common.Dim;
 
 public class PixmapDecodingScreenshot extends DecodingScreenshot {
@@ -12,8 +14,11 @@ public class PixmapDecodingScreenshot extends DecodingScreenshot {
 
     @Override
     protected void tryLoad(byte[] data) {
-        PixelTextureData pixels = PixelTextureData.fromImageFile(data, 0, data.length);
-        setPixels(pixels, Dim.of(pixels.getWidth(), pixels.getHeight()));
+        Pixmap pixmap = new Pixmap(data, 0, data.length);
+        // The stored data is already premultiplied
+        PixelTextureData texData = PixelTextureData.fromPremultipliedPixmap(pixmap);
+
+        setPixels(texData, Dim.of(texData.getWidth(), texData.getHeight()));
     }
 
 }
