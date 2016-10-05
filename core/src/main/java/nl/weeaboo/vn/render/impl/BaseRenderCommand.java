@@ -7,6 +7,8 @@ class BaseRenderCommand extends RenderCommand {
 	public final short z;
 	public final boolean clipEnabled;
 	public final BlendMode blendMode;
+
+	/** ARGB8888, unassociated alpha */
 	public final int argb;
 
 	protected BaseRenderCommand(byte id, short z, boolean clipEnabled,

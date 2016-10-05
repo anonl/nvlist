@@ -23,9 +23,10 @@ void main() {
 	vec2 lutPos = texture2D(u_controlTex, v_controlCoord).rr;
 	float alpha = texture2D(u_interpolationLUT, lutPos).a;
 
-	// Premultiply because libGDX doesn't premultiply textures for some reason
-	c0.rgb *= c0.a;
-	c1.rgb *= c1.a;
+    // EDIT: NVList now uses premultiplied alpha
+	  // Premultiply because libGDX doesn't premultiply textures for some reason
+	  // c0.rgb *= c0.a;
+	  // c1.rgb *= c1.a;
     
     gl_FragColor = v_color * mix(c0, c1, alpha);    
 }

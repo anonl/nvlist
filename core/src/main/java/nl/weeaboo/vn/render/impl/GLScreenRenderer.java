@@ -31,6 +31,7 @@ import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.image.impl.VolatileTextureData;
+import nl.weeaboo.vn.render.RenderUtil;
 
 public class GLScreenRenderer extends BaseScreenRenderer {
 
@@ -129,10 +130,16 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         int dx = (int)Math.round(trc.dx);
         int dy = (int)Math.round(trc.dy);
 
+        // Temporarily change the blend mode for non-premultiplied alpha
+        GLBlendMode.DEFAULT.apply(spriteBatch);
+
         matrixStack.pushMatrix();
         matrixStack.multiply(trc.transform);
         GdxFontUtil.draw(spriteBatch, trc.textLayout, dx, dy, (float)trc.visibleGlyphs);
         matrixStack.popMatrix();
+
+        // Restore previous blend mode
+        applyRenderState();
     }
 
     @Override
@@ -260,10 +267,13 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
     @Override
     protected void applyColor(int argb) {
+        argb = RenderUtil.premultiplyAlpha(argb);
+
         int a = (argb >> 24) & 0xFF;
         int r = (argb >> 16) & 0xFF;
         int g = (argb >> 8) & 0xFF;
         int b = (argb) & 0xFF;
+
         spriteBatch.setColor(Color.toFloatBits(r, g, b, a));
     }
 

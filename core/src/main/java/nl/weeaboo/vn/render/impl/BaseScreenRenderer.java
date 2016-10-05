@@ -67,7 +67,7 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 		applyRenderState();
 	}
 
-	private void applyRenderState() {
+	protected final void applyRenderState() {
 		applyClip(clipping);
 		applyBlendMode(blendMode);
 		applyColor(foreground);
