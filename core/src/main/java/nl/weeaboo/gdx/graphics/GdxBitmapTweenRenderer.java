@@ -141,7 +141,8 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
             } else {
                 // (Re)allocate texture
                 disposeRemapTexture();
-                remapTexture = imageModule.createTexture(PixelTextureData.fromPixmap(pixmap), 1, 1);
+                PixelTextureData texData = PixelTextureData.fromPremultipliedPixmap(pixmap);
+                remapTexture = imageModule.createTexture(texData, 1, 1);
             }
         } catch (RuntimeException re) {
             pixmap.dispose();

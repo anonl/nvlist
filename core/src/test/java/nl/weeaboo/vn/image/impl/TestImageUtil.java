@@ -30,11 +30,15 @@ public final class TestImageUtil {
     public static PixelTextureData newTestTextureData(int w, int h) {
         return newTestTextureData(0xAA996633, w, h);
     }
+
+    /**
+     * @param argb ARGB8888, unassociated alpha
+     */
     public static PixelTextureData newTestTextureData(int argb, int w, int h) {
         Pixmap pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
-        pixmap.setColor(RenderUtil.toRGBA(argb));
+        pixmap.setColor(RenderUtil.toRGBA(RenderUtil.premultiplyAlpha(argb)));
         pixmap.fill();
-        return PixelTextureData.fromPixmap(pixmap);
+        return PixelTextureData.fromPremultipliedPixmap(pixmap);
     }
 
     public static void assertEquals(ITextureData a, ITextureData b) {

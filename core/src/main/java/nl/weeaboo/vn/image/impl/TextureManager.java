@@ -145,12 +145,15 @@ final class TextureManager implements Serializable {
         return newTexture(generateTextureRegion(texData), sx, sy);
     }
 
+    /**
+     * @param colorARGB ARGB8888, unassociated alpha
+     */
     public ITexture generateTexture(int colorARGB, Dim size, double sx, double sy) {
         // Create solid-colored pixmap texture data
         Pixmap pixmap = new Pixmap(size.w, size.h, Format.RGBA8888);
-        pixmap.setColor(RenderUtil.toRGBA(colorARGB));
+        pixmap.setColor(RenderUtil.toRGBA(RenderUtil.premultiplyAlpha(colorARGB)));
         pixmap.fill();
-        PixelTextureData texData = PixelTextureData.fromPixmap(pixmap);
+        PixelTextureData texData = PixelTextureData.fromPremultipliedPixmap(pixmap);
 
         return generateTexture(texData, sx, sy);
     }

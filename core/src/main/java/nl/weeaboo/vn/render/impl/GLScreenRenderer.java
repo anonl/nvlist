@@ -239,7 +239,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         } else {
             Pixmap pixels = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
             PixmapUtil.flipVertical(pixels);
-            texData = PixelTextureData.fromPixmap(pixels);
+            texData = PixelTextureData.fromPremultipliedPixmap(pixels);
         }
         ss.setPixels(texData, renderEnv.getScreenSize());
     }

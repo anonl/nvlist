@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.io.CustomSerializable;
 
 @CustomSerializable
@@ -24,12 +25,14 @@ public final class PixelTextureData implements IGdxTextureData {
         this.pixels = Checks.checkNotNull(pixels);
     }
 
-    public static PixelTextureData fromPixmap(Pixmap pixmap) {
+    public static PixelTextureData fromPremultipliedPixmap(Pixmap pixmap) {
         return new PixelTextureData(pixmap);
     }
 
     public static PixelTextureData fromImageFile(byte[] encoded, int off, int len) {
-        return new PixelTextureData(new Pixmap(encoded, off, len));
+        Pixmap pixmap = new Pixmap(encoded, off, len);
+        PixmapUtil.premultiplyAlpha(pixmap);
+        return new PixelTextureData(pixmap);
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -44,6 +47,9 @@ public final class PixelTextureData implements IGdxTextureData {
         pixels = PngUtil.readPng(in);
     }
 
+    /**
+     * @return The backing pixmap for this texture data object. Uses premultiplied alpha.
+     */
     public Pixmap getPixels() {
         return pixels;
     }
