@@ -78,20 +78,10 @@ public final class RenderUtil {
     }
 
     /**
-     * Converts AARRGGBB to AABBGGRR
-     */
-    public static int toABGR(int argb) {
-        return (argb&0xFF000000) | ((argb<<16)&0xFF0000) | (argb&0xFF00) | ((argb>>16)&0xFF);
-    }
-
-    /**
      * Converts AARRGGBB to RRGGBBAA
      */
-    public static int toRGBA(int argb) {
+    public static int argb2rgba(int argb) {
         return ((argb<<8) & 0xFFFFFF00) | ((argb>>24) & 0xFF);
-    }
-    public static int toARGB(int abgr) {
-        return (abgr&0xFF000000) | ((abgr<<16)&0xFF0000) | (abgr&0xFF00) | ((abgr>>16)&0xFF);
     }
 
     public static int packRGBAtoARGB(double r, double g, double b, double a) {

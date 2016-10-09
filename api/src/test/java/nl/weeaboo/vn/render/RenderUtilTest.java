@@ -1,13 +1,12 @@
 package nl.weeaboo.vn.render;
 
-import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.ApiTestUtil;
 
 public class RenderUtilTest {
@@ -24,28 +23,31 @@ public class RenderUtilTest {
 
     @Test
     public void premultiplyAlpha() {
-        Assert.assertEquals("ff224466", Integer.toHexString(RenderUtil.premultiplyAlpha(0xFF224466)));
-        Assert.assertEquals("7f112233", Integer.toHexString(RenderUtil.premultiplyAlpha(0x7f224466)));
-        Assert.assertEquals("80112233", Integer.toHexString(RenderUtil.premultiplyAlpha(0x80224466)));
-        Assert.assertEquals("0", Integer.toHexString(RenderUtil.premultiplyAlpha(0x00224466)));
+        assertColorEquals("ff224466", RenderUtil.premultiplyAlpha(0xFF224466));
+        assertColorEquals("7f112233", RenderUtil.premultiplyAlpha(0x7f224466));
+        assertColorEquals("80112233", RenderUtil.premultiplyAlpha(0x80224466));
+        assertColorEquals("00000000", RenderUtil.premultiplyAlpha(0x00224466));
     }
 
     @Test
     public void unPremultiplyAlpha() {
-        Assert.assertEquals("ff224466", Integer.toHexString(RenderUtil.unPremultiplyAlpha(0xFF224466)));
-        Assert.assertEquals("7f224466", Integer.toHexString(RenderUtil.unPremultiplyAlpha(0x7f112233)));
-        Assert.assertEquals("80224466", Integer.toHexString(RenderUtil.unPremultiplyAlpha(0x80112233)));
-        Assert.assertEquals("0", Integer.toHexString(RenderUtil.unPremultiplyAlpha(0x00000000)));
+        assertColorEquals("ff224466", RenderUtil.unPremultiplyAlpha(0xFF224466));
+        assertColorEquals("7f224466", RenderUtil.unPremultiplyAlpha(0x7f112233));
+        assertColorEquals("80224466", RenderUtil.unPremultiplyAlpha(0x80112233));
+        assertColorEquals("00000000", RenderUtil.unPremultiplyAlpha(0x00000000));
     }
 
     @Test
     public void argb2rgba() {
-        Random random = new Random();
-        for (int n = 0; n < 100; n++) {
-            int argb = random.nextInt();
-            int transformed = RenderUtil.toARGB(RenderUtil.toABGR(argb));
-            Assert.assertEquals(Integer.toHexString(argb), Integer.toHexString(transformed));
-        }
+        assertColorEquals("22334411", RenderUtil.argb2rgba(0x11223344));
+        assertColorEquals("112233ff", RenderUtil.argb2rgba(0xFF112233));
+    }
+
+    @Test
+    public void packRGBAtoARGB() {
+        assertColorEquals("20ff8040", RenderUtil.packRGBAtoARGB(1.0, .5, .25, .125));
+        // Check that values are clipped when out of range
+        assertColorEquals("00ff8040", RenderUtil.packRGBAtoARGB(2.0, .5, .25, -.123));
     }
 
     @Test
@@ -70,6 +72,10 @@ public class RenderUtilTest {
                 0.4 * base.h);
 
         ApiTestUtil.assertEquals(expected, combined);
+    }
+
+    private static void assertColorEquals(String expectedHex, int color) {
+        Assert.assertEquals(expectedHex, StringUtil.formatRoot("%08x", color));
     }
 
 }

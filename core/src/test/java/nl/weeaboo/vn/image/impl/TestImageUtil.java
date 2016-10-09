@@ -36,7 +36,7 @@ public final class TestImageUtil {
      */
     public static PixelTextureData newTestTextureData(int argb, int w, int h) {
         Pixmap pixmap = new Pixmap(w, h, Pixmap.Format.RGBA8888);
-        pixmap.setColor(RenderUtil.toRGBA(RenderUtil.premultiplyAlpha(argb)));
+        pixmap.setColor(RenderUtil.argb2rgba(RenderUtil.premultiplyAlpha(argb)));
         pixmap.fill();
         return PixelTextureData.fromPremultipliedPixmap(pixmap);
     }
