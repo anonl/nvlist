@@ -17,13 +17,15 @@ public final class LayoutSize implements Serializable {
     private final double value;
 
     private LayoutSize(double value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("Negative sizes aren't allowed: " + value);
+        }
+
         this.value = value;
     }
 
     public static LayoutSize of(double value) {
-        if (value == Double.NEGATIVE_INFINITY) {
-            throw new IllegalArgumentException("Negative infinity isn't a valid value");
-        } else if (value == Double.POSITIVE_INFINITY) {
+        if (value == Double.POSITIVE_INFINITY) {
             return INFINITE;
         } else if (Double.isNaN(value)) {
             return UNKNOWN;
@@ -43,7 +45,7 @@ public final class LayoutSize implements Serializable {
 
     public double value() {
         if (!Doubles.isFinite(value)) {
-            throw new UnsupportedOperationException("Size is not convertible to a scalar value: " + this);
+            throw new IllegalStateException("LayoutSize is not convertible to a scalar value: " + this);
         }
         return value;
     }
