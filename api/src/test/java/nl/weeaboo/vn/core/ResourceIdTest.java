@@ -27,6 +27,21 @@ public class ResourceIdTest {
     }
 
     @Test
+    public void testGetters() {
+        ResourceId one = new ResourceId(MediaType.OTHER, FilePath.of("a/b"), "c");
+        Assert.assertEquals(MediaType.OTHER, one.getType());
+        Assert.assertEquals(FilePath.of("a/b"), one.getFilePath());
+        Assert.assertEquals(true, one.hasSubId());
+        Assert.assertEquals("c", one.getSubId());
+
+        ResourceId two = new ResourceId(MediaType.SOUND, FilePath.of("d"));
+        Assert.assertEquals(MediaType.SOUND, two.getType());
+        Assert.assertEquals(FilePath.of("d"), two.getFilePath());
+        Assert.assertEquals(false, two.hasSubId());
+        Assert.assertEquals("", two.getSubId()); // No sub id -> empty string
+    }
+
+    @Test
     public void joinPathWithSubId() {
         assertJoinedPath("a/b", "c", "a/b#c");
 

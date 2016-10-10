@@ -26,22 +26,13 @@ public enum GLScaleFilter {
 		this.isMipmap = isMipmap;
 	}
 
-    public static GLScaleFilter fromOrdinal(int ordinal) {
-        if (ordinal >= 0 && ordinal < VALUES.size()) {
-            return VALUES.get(ordinal);
-        } else {
-            LOG.warn("Invalid GLScaleFilter ordinal: {}", ordinal);
-            return DEFAULT;
-        }
-    }
-
-
 	public static GLScaleFilter fromString(String s) {
-		for (GLScaleFilter filter : values()) {
+		for (GLScaleFilter filter : VALUES) {
 			if (s.equalsIgnoreCase(filter.name)) {
 				return filter;
 			}
 		}
+
         LOG.warn("Invalid GLScaleFilter string: {}", s);
 		return GLScaleFilter.DEFAULT;
 	}

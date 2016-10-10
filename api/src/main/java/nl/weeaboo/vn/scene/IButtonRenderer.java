@@ -17,5 +17,5 @@ public interface IButtonRenderer extends IRenderable {
 
     VerticalAlign getVerticalAlign();
     void setVerticalAlign(VerticalAlign align);
-    
+
 }
