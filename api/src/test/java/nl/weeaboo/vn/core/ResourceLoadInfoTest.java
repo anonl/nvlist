@@ -39,4 +39,22 @@ public class ResourceLoadInfoTest {
         }
     }
 
+    @Test
+    public void testAppenders() {
+        ResourceLoadInfo info = new ResourceLoadInfo(FilePath.of("x"));
+        assertPath("a", info.withPath(FilePath.of("a")));
+        assertPath("xy", info.withFileSuffix("y"));
+        assertPath("x#y", info.withSubId("y"));
+        assertPath("x#y", info.withAppendedSubId("y"));
+        assertPath("x#y-z", info.withSubId("y").withAppendedSubId("z"));
+    }
+
+    private void assertPath(String expected, ResourceLoadInfo loadInfo) {
+        FilePath actualPath = loadInfo.getPath();
+        Assert.assertEquals(expected, actualPath.toString());
+
+        // ResourceLoadInfo.toString() prints the path
+        Assert.assertEquals(actualPath.toString(), loadInfo.toString());
+    }
+
 }

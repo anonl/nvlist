@@ -50,10 +50,6 @@ public final class ResourceLoadInfo {
         }
     }
 
-    public boolean hasSubId() {
-        return ResourceId.getSubId(path.getName()).length() > 0;
-    }
-
     public FilePath getPath() {
         return path;
     }
