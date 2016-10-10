@@ -6,7 +6,7 @@ import org.junit.Test;
 public class VerticalAlignTest {
 
     @Test
-    public void checkKeycodesUnchanged() {
+    public void checkUnchanged() {
         int hash = 0;
         for (VerticalAlign e : VerticalAlign.values()) {
             hash ^= e.name().hashCode();

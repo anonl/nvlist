@@ -6,7 +6,7 @@ import org.junit.Test;
 public class BlendModeTest {
 
     @Test
-    public void checkKeycodesUnchanged() {
+    public void checkUnchanged() {
         int hash = 0;
         for (BlendMode e : BlendMode.values()) {
             hash ^= e.name().hashCode();
