@@ -59,6 +59,7 @@ allprojects {
         
 	    dependencies {
 	        testCompile "junit:junit:$junitVersion"
+            testCompile "com.google.guava:guava-testlib:$guavaVersion"
 	        testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
 	    }
         

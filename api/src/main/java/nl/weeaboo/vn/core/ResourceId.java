@@ -22,11 +22,21 @@ public final class ResourceId implements Serializable {
     public ResourceId(MediaType type, FilePath filePath, String subResourceId) {
         this.type = Checks.checkNotNull(type);
 
-        checkValidChars(filePath.toString());
+        checkFilePath(filePath);
         this.filePath = filePath;
 
-        checkValidChars(subResourceId);
+        checkSubId(subResourceId);
         this.subResourceId = subResourceId;
+    }
+
+    private static void checkFilePath(FilePath filePath) {
+        String filePathString = filePath.toString();
+        Checks.checkArgument(filePathString.length() > 0, "File path shouldn't be an empty string");
+        checkSubId(filePathString);
+    }
+
+    private static void checkSubId(String subResourceId) {
+        checkValidChars(subResourceId);
     }
 
     private static void checkValidChars(String str) {
@@ -85,8 +95,8 @@ public final class ResourceId implements Serializable {
      * @see #getSubId(String)
      */
     public static FilePath toResourcePath(FilePath filePath, String subId) {
-        checkValidChars(filePath.toString());
-        checkValidChars(subId);
+        checkFilePath(filePath);
+        checkSubId(subId);
 
         if (subId.length() == 0) {
             return filePath;

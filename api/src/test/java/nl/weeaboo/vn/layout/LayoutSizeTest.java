@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.testing.EqualsTester;
+
 public class LayoutSizeTest {
 
     private final LayoutSize s0 = LayoutSize.of(0);
@@ -64,17 +66,13 @@ public class LayoutSizeTest {
 
     @Test
     public void testEquals() {
-        for (LayoutSize size : Arrays.asList(s0, s1, s2, si, su)) {
-            // Everything is equal to itself
-            assertEquals(size, size, true);
-            // Nothing is equal to null
-            assertEquals(size, null, false);
-        }
-
-        // Test some interesting combinations
-        assertEquals(s1, s2, false);
-        assertEquals(si, su, false);
-        assertEquals(si, s0, false);
+        new EqualsTester()
+            .addEqualityGroup(s0, LayoutSize.ZERO)
+            .addEqualityGroup(s1, LayoutSize.of(1.0))
+            .addEqualityGroup(s2)
+            .addEqualityGroup(si, LayoutSize.INFINITE)
+            .addEqualityGroup(su, LayoutSize.UNKNOWN)
+            .testEquals();
     }
 
     @Test
@@ -103,18 +101,6 @@ public class LayoutSizeTest {
     private void assertMax(LayoutSize a, LayoutSize b, LayoutSize expectedResult) {
         Assert.assertSame(expectedResult, LayoutSize.max(a, b));
         Assert.assertSame(expectedResult, LayoutSize.max(b, a));
-    }
-
-    private void assertEquals(LayoutSize a, LayoutSize b, boolean expected) {
-        if (expected) {
-            Assert.assertEquals(a, b);
-            // If a==b, then a.hashCode()==b.hashCode()
-            Assert.assertEquals(a.hashCode(), b.hashCode());
-            // If a==b, then b==a
-            Assert.assertEquals(b, a);
-        } else {
-            Assert.assertNotEquals(a, b);
-        }
     }
 
     private static void assertValueUndefined(LayoutSize size) {

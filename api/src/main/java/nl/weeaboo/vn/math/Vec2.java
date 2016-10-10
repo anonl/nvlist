@@ -10,7 +10,7 @@ import com.google.common.math.DoubleMath;
 
 import nl.weeaboo.common.StringUtil;
 
-public final class Vec2 implements Cloneable, Externalizable {
+public final class Vec2 implements Externalizable {
 
     public double x, y;
 
@@ -26,7 +26,6 @@ public final class Vec2 implements Cloneable, Externalizable {
 		this.y = v.y;
 	}
 
-	//Functions
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeDouble(x);
@@ -37,11 +36,6 @@ public final class Vec2 implements Cloneable, Externalizable {
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		x = in.readDouble();
 		y = in.readDouble();
-	}
-
-	@Override
-	public Vec2 clone() {
-		return new Vec2(x, y);
 	}
 
 	@Override
@@ -102,9 +96,5 @@ public final class Vec2 implements Cloneable, Externalizable {
 	public double length() {
 		return Math.sqrt(x*x + y*y);
 	}
-
-	//Getters
-
-	//Setters
 
 }

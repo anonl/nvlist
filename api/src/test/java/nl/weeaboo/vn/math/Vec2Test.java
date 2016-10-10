@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.ApiTestUtil;
 
-public class VectorTest {
+public class Vec2Test {
 
 	private static final double E = ApiTestUtil.EPSILON;
 
@@ -25,8 +25,6 @@ public class VectorTest {
 		// Copy constructor
         ApiTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);
         Assert.assertEquals(a.hashCode(), new Vec2(a).hashCode());
-        ApiTestUtil.assertEquals(a.x, a.y, a.clone(), 0);
-        Assert.assertEquals(a.hashCode(), a.clone().hashCode());
 
 		// Dot product
 		Assert.assertEquals(10, a.dot(b), E);
