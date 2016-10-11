@@ -282,7 +282,7 @@ end
 ---Tag id -> function
 local tagHandlers = {}
 
-if not prefs.vnds then
+if Text ~= nil and not prefs.vnds then
     Text.registerBasicTagHandlers(tagHandlers)
 end
 

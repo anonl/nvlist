@@ -1,6 +1,9 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import org.junit.Test;
+
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
+import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 
 public class InputLibTest extends AbstractLibTest {
 
@@ -9,6 +12,13 @@ public class InputLibTest extends AbstractLibTest {
         scriptEnv.addInitializer(new InputLib());
     }
 
-    // TODO: Implement
+    @Test
+    public void testConsumeButton() {
+        textContinue();
+
+        loadScript("integration/input/consumeinput.lvn");
+
+        LuaTestUtil.assertGlobal("pressed", true);
+    }
 
 }
