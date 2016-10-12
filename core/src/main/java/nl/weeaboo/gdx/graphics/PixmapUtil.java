@@ -1,6 +1,8 @@
 package nl.weeaboo.gdx.graphics;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
@@ -72,10 +74,11 @@ public final class PixmapUtil {
     public static void premultiplyAlpha(Pixmap pixmap) {
         Format format = pixmap.getFormat();
         switch (format) {
-        case Intensity:
         case RGB565:
         case RGB888:
             break; // Format doesn't have alpha, so nothing to do
+        case Intensity:
+            break; // GDX treats incorrectly treats INTENSITY as ALPHA
         case Alpha:
             break; // Format only has alpha, so nothing to do
         case LuminanceAlpha: {
@@ -88,6 +91,27 @@ public final class PixmapUtil {
                 i = (a * i + 127) / 255;
 
                 pixels.put(n, (byte)i);
+            }
+        } break;
+        case RGBA4444: {
+            final ByteBuffer byteBuffer = pixmap.getPixels();
+            byteBuffer.order(ByteOrder.nativeOrder());
+            ShortBuffer pixels = byteBuffer.asShortBuffer();
+
+            final int limit = pixmap.getWidth() * pixmap.getHeight();
+            for (int n = 0; n < limit; n++) {
+                int rgba16 = pixels.get(n);
+
+                int r = (rgba16 >> 12) & 0xF;
+                int g = (rgba16 >> 8 ) & 0xF;
+                int b = (rgba16 >> 4 ) & 0xF;
+                int a = (rgba16      ) & 0xF;
+
+                r = (a * r + 7) / 15;
+                g = (a * g + 7) / 15;
+                b = (a * b + 7) / 15;
+
+                pixels.put(n, (short)((r<<12) | (g<<8) | (b<<4) | a));
             }
         } break;
         case RGBA8888: {

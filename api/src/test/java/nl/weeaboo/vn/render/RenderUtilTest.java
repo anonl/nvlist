@@ -44,6 +44,12 @@ public class RenderUtilTest {
     }
 
     @Test
+    public void rgba2argb() {
+        assertColorEquals("11223344", RenderUtil.rgba2argb(0x22334411));
+        assertColorEquals("ff112233", RenderUtil.rgba2argb(0x112233FF));
+    }
+
+    @Test
     public void packRGBAtoARGB() {
         assertColorEquals("20ff8040", RenderUtil.packRGBAtoARGB(1.0, .5, .25, .125));
         // Check that values are clipped when out of range

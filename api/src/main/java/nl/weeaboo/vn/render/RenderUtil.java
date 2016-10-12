@@ -84,6 +84,13 @@ public final class RenderUtil {
         return ((argb<<8) & 0xFFFFFF00) | ((argb>>24) & 0xFF);
     }
 
+    /**
+     * Converts RRGGBBAA to AARRGGBB
+     */
+    public static int rgba2argb(int rgba) {
+        return ((rgba&0xFF) << 24) | ((rgba>>8) & 0xFFFFFF);
+    }
+
     public static int packRGBAtoARGB(double r, double g, double b, double a) {
         int ri = Math.max(0, Math.min(255, (int)Math.round(r * 255)));
         int gi = Math.max(0, Math.min(255, (int)Math.round(g * 255)));

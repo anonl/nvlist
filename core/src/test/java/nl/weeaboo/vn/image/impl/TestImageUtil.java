@@ -5,7 +5,9 @@ import java.io.OutputStream;
 
 import org.junit.Assert;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
@@ -39,6 +41,25 @@ public final class TestImageUtil {
         pixmap.setColor(RenderUtil.argb2rgba(RenderUtil.premultiplyAlpha(argb)));
         pixmap.fill();
         return PixelTextureData.fromPremultipliedPixmap(pixmap);
+    }
+
+    public static int toFormat(Format format, int argb) {
+        int a = (argb>>24) & 0xFF;
+        int r = (argb>>16) & 0xFF;
+        int g = (argb>>8 ) & 0xFF;
+        int b = (argb    ) & 0xFF;
+
+        switch (format) {
+        case Alpha:
+            return Color.toIntBits(r, g, b, a);
+        case Intensity:
+        case LuminanceAlpha:
+        case RGB565:
+        case RGBA4444:
+        case RGB888:
+        case RGBA8888:
+        default: throw new IllegalArgumentException("Unsupported format: " + format);
+        }
     }
 
     public static void assertEquals(ITextureData a, ITextureData b) {
