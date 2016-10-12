@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.RenderEnv;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
@@ -22,6 +21,7 @@ import nl.weeaboo.vn.render.impl.RenderCommand;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class LayerTest {
 

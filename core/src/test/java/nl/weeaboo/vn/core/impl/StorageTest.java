@@ -1,11 +1,11 @@
 package nl.weeaboo.vn.core.impl;
 
-import static nl.weeaboo.vn.CoreTestUtil.deserializeObject;
-import static nl.weeaboo.vn.CoreTestUtil.serializeObject;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_BOOL;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_DOUBLE;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_INT;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_STRING;
+import static nl.weeaboo.vn.test.CoreTestUtil.deserializeObject;
+import static nl.weeaboo.vn.test.CoreTestUtil.serializeObject;
 
 import java.io.IOException;
 

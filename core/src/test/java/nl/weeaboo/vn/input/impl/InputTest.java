@@ -6,12 +6,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.impl.TestInputAdapter;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class InputTest {
 

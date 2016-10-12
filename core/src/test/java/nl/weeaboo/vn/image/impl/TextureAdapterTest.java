@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.gdx.graphics.GdxGraphicsTestUtil;
 import nl.weeaboo.gdx.res.ResourceStub;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class TextureAdapterTest {
 

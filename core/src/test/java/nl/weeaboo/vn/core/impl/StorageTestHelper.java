@@ -6,9 +6,9 @@ import org.junit.Assert;
 
 import com.google.common.collect.ImmutableSet;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.impl.Storage;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 final class StorageTestHelper {
 

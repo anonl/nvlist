@@ -22,7 +22,7 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.TestFileSystem;
+import nl.weeaboo.vn.test.TestFileSystem;
 
 public class SoundDefinitionIOTest {
 

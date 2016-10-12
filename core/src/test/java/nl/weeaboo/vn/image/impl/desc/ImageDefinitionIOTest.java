@@ -23,11 +23,11 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.CoreTestUtil;
-import nl.weeaboo.vn.TestFileSystem;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
+import nl.weeaboo.vn.test.CoreTestUtil;
+import nl.weeaboo.vn.test.TestFileSystem;
 
 public class ImageDefinitionIOTest {
 

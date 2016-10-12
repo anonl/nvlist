@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.settings.Preference;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.test.integration.LuaIntegrationTest;
+import nl.weeaboo.vn.test.integration.lua.LuaIntegrationTest;
 
 public class LuaPrefsAdapterTest extends LuaIntegrationTest {
 

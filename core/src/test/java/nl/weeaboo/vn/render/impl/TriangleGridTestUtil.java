@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 
 import org.junit.Assert;
 
-import nl.weeaboo.vn.CoreTestUtil;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public final class TriangleGridTestUtil {
 

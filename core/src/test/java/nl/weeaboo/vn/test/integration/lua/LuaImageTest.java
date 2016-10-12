@@ -1,11 +1,9 @@
-package nl.weeaboo.vn.script.impl.lib;
+package nl.weeaboo.vn.test.integration.lua;
 
 import org.junit.Test;
 
-import nl.weeaboo.vn.test.integration.LuaIntegrationTest;
-
 /** Test for image.lua module */
-public class LuaImageModuleTest extends LuaIntegrationTest {
+public class LuaImageTest extends LuaIntegrationTest {
 
     @Test
     public void testBackgroundFunctions() {

@@ -1,0 +1,10 @@
+
+@@
+
+--Import built-in NVList functions
+require("builtin/vn")
+
+function main()
+end
+
+@@

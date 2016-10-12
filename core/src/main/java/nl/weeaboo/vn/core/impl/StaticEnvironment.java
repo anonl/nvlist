@@ -13,8 +13,8 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
-import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
+import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.sound.impl.GdxMusicStore;
 
@@ -63,6 +63,12 @@ public final class StaticEnvironment {
     public <T> void set(StaticRef<T> ref, T value) {
         synchronized (objects) {
             objects.put(ref.getId(), value);
+        }
+    }
+
+    public void clear() {
+        synchronized (objects) {
+            objects.clear();
         }
     }
 

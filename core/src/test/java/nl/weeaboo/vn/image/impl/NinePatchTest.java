@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Insets2D;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class NinePatchTest {
 

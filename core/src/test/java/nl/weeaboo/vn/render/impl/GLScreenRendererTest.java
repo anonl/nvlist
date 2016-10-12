@@ -8,10 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.gdx.HeadlessGdx;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 import nl.weeaboo.vn.scene.impl.Layer;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class GLScreenRendererTest {
 

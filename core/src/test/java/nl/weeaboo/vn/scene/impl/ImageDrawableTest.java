@@ -3,11 +3,11 @@ package nl.weeaboo.vn.scene.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.TestTexture;
 import nl.weeaboo.vn.image.impl.TextureStub;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class ImageDrawableTest {
 

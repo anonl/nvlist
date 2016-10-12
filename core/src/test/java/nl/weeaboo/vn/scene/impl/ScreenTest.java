@@ -3,8 +3,8 @@ package nl.weeaboo.vn.scene.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class ScreenTest {
 

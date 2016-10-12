@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Insets2D;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
@@ -18,6 +17,7 @@ import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.QuadRenderCommand;
 import nl.weeaboo.vn.render.impl.RenderCommand;
 import nl.weeaboo.vn.scene.impl.ImageDrawable;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class NinePatchRendererTest {
 

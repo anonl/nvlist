@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.script.impl.lib;
 
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
-import nl.weeaboo.vn.test.integration.LuaIntegrationTest;
+import nl.weeaboo.vn.test.integration.lua.LuaIntegrationTest;
 
 public abstract class AbstractLibTest extends LuaIntegrationTest {
 

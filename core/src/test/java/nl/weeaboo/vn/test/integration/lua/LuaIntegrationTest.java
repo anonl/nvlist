@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.test.integration;
+package nl.weeaboo.vn.test.integration.lua;
 
 import java.io.IOException;
 

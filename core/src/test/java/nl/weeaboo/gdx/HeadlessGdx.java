@@ -12,10 +12,9 @@ import nl.weeaboo.gdx.graphics.MockGL;
 
 public class HeadlessGdx {
 
-    private static boolean initialized;
-
     public static synchronized void init() {
-        if (initialized) {
+        if (Gdx.gl instanceof MockGL) {
+            // Already initialized
             return;
         }
 
@@ -28,7 +27,6 @@ public class HeadlessGdx {
         Gdx.gl = Gdx.gl20;
         Gdx.audio = new MockAudio();
         Gdx.input = new MockInput();
-        initialized = true;
     }
 
 }

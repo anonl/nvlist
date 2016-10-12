@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.impl.TestInputAdapter;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
@@ -17,6 +16,7 @@ import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.ScriptEventDispatcher;
 import nl.weeaboo.vn.script.impl.ScriptFunctionStub;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class ButtonClickTest {
 

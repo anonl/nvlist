@@ -9,10 +9,10 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
-import nl.weeaboo.vn.TestFileSystem;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.impl.Storage;
 import nl.weeaboo.vn.save.impl.StorageIO;
+import nl.weeaboo.vn.test.TestFileSystem;
 
 public class StorageIOTest {
 

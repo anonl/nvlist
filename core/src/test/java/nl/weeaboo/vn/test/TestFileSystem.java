@@ -1,4 +1,4 @@
-package nl.weeaboo.vn;
+package nl.weeaboo.vn.test;
 
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;

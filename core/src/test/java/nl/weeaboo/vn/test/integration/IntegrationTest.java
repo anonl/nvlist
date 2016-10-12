@@ -12,6 +12,7 @@ import nl.weeaboo.gdx.test.junit.GdxLwjgl3TestRunner;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.Launcher;
 import nl.weeaboo.vn.core.impl.Novel;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
 
 @RunWith(GdxLwjgl3TestRunner.class)
 @Category(GdxUiTest.class)
@@ -37,6 +38,9 @@ public abstract class IntegrationTest {
         if (app != null) {
             app.exit();
         }
+
+        // Clear static state
+        StaticEnvironment.getInstance().clear();
     }
 
 }

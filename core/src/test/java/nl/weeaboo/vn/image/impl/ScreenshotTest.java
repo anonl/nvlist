@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
@@ -17,6 +16,7 @@ import nl.weeaboo.vn.render.impl.RenderCommand;
 import nl.weeaboo.vn.render.impl.ScreenshotRenderCommand;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.impl.Screen;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class ScreenshotTest {
 

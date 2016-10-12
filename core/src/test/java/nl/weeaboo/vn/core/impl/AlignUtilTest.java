@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.math.Vec2;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class AlignUtilTest {
 

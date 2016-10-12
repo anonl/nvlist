@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.utils.Disposable;
 
-import nl.weeaboo.vn.CoreTestUtil;
 import nl.weeaboo.vn.core.impl.StaticRef;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class GeneratedResourceStoreTest {
 
