@@ -9,12 +9,15 @@ import org.junit.Test;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
+import nl.weeaboo.gdx.HeadlessGdx;
+
 public class JngReaderTest {
 
     private static JngTestSuite testSuite;
 
     @BeforeClass
     public static void beforeClass() throws IOException {
+        HeadlessGdx.init();
         testSuite = JngTestSuite.open();
     }
 

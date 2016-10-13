@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.vn.core.impl.Context;
 import nl.weeaboo.vn.core.impl.ContextManager;
 import nl.weeaboo.vn.core.impl.ContextUtil;
@@ -27,6 +28,7 @@ public abstract class LuaIntegrationTest {
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         addInitializers(env.getScriptEnv());
