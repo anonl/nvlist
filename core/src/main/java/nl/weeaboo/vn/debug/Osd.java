@@ -62,10 +62,6 @@ public final class Osd implements Disposable {
 
     public void init(GdxFileSystem fileSystem) {
         FileHandle fontFile = fileSystem.resolve(fontPath);
-        if (!fontFile.exists()) {
-            LOG.warn("OSD font doesn't exist: " + fontPath);
-            return;
-        }
 
         fontStore = new GdxFontStore();
         textRenderer = new TextRenderer();

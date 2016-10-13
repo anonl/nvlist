@@ -18,9 +18,8 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 @Category(GdxUiTest.class)
 public abstract class IntegrationTest {
 
+    protected Launcher launcher;
     protected Novel novel;
-
-    private Launcher launcher;
 
     @Before
     public final void beforeIntegration() {
