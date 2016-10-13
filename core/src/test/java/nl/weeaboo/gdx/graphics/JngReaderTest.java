@@ -1,44 +1,26 @@
 package nl.weeaboo.gdx.graphics;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.google.common.io.Resources;
-
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.ZipFileArchive;
-import nl.weeaboo.gdx.HeadlessGdx;
-import nl.weeaboo.io.RandomAccessUtil;
 
 public class JngReaderTest {
 
-    static {
-        HeadlessGdx.init();
-    }
-
-    private static final Logger LOG = LoggerFactory.getLogger(JngReaderTest.class);
-
-    private static ZipFileArchive archive;
+    private static JngTestSuite testSuite;
 
     @BeforeClass
     public static void beforeClass() throws IOException {
-        byte[] zipBytes = Resources.toByteArray(JngReaderTest.class.getResource("/jng/JNGsuite-20021214.zip"));
-
-        archive = new ZipFileArchive();
-        archive.open(RandomAccessUtil.wrap(zipBytes, 0, zipBytes.length));
+        testSuite = JngTestSuite.open();
     }
 
     @AfterClass
     public static void afterClass() {
-        archive.close();
+        testSuite.dispose();
     }
 
     @Test
@@ -80,19 +62,9 @@ public class JngReaderTest {
     }
 
     private void assertImage(String path, int w, int h) throws IOException {
-        Pixmap pixmap = loadImage(path);
+        Pixmap pixmap = testSuite.loadImage(path);
         Assert.assertEquals(w, pixmap.getWidth());
         Assert.assertEquals(h, pixmap.getHeight());
-    }
-
-    private Pixmap loadImage(String path) throws IOException {
-        InputStream in = archive.openInputStream(FilePath.of(path));
-        try {
-            LOG.info("Reading JNG file: {}", path);
-            return JngReader.read(in);
-        } finally {
-            in.close();
-        }
     }
 
 }
