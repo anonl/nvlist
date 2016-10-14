@@ -1,20 +1,32 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import java.io.IOException;
 import java.util.Collection;
 
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.core.impl.StaticEnvironment;
+import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.save.ISaveFile;
 import nl.weeaboo.vn.save.ISaveFileHeader;
 import nl.weeaboo.vn.save.ISaveModule;
+import nl.weeaboo.vn.save.IStorage;
+import nl.weeaboo.vn.save.impl.SaveParams;
+import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 
 public class SaveLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
+    private final StaticRef<INovel> novelRef = StaticEnvironment.NOVEL;
     private final IEnvironment env;
 
     public SaveLib(IEnvironment env) {
@@ -45,60 +57,58 @@ public class SaveLib extends LuaLib {
         return table;
     }
 
-/*
-
-    protected Varargs save(Varargs args) {
+    /**
+     * @param args
+     *        <ol>
+     *        <li>save slot (int)
+     *        <li>(optional) userdata table
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs save(Varargs args) throws ScriptException {
         int slot = args.checkint(1);
+        IStorage userData = LuaConvertUtil.toStorage(args.opttable(2, new LuaTable()));
 
-        //Screenshot
-        Object screenshotObj;
-        int ssw = 224;
-        int ssh = 126;
-        if (args.istable(2)) {
-            LuaTable t = args.checktable(2);
-            screenshotObj = t.get("screenshot").touserdata();
-            ssw = t.get("width").optint(ssw);
-            ssh = t.get("height").optint(ssh);
-        } else {
-            screenshotObj = args.touserdata(2);
-        }
-        final IScreenshot ss = (screenshotObj instanceof IScreenshot ? (IScreenshot)screenshotObj : null);
+        // Gather required params
+        ISaveModule saveModule = env.getSaveModule();
+        INovel novel = novelRef.get();
+        SaveParams saveParams = new SaveParams();
+        saveParams.setUserData(userData);
 
-        //Meta data
-        IStorage metaData = new BaseStorage();
-        if (args.istable(3)) {
-            LuaTable table = args.checktable(3);
-            metaData.set("", table);
-        }
+        // TODO: Store screenshot in the save data
 
-        //Save
+        // Save
         final LuaRunState lrs = LuaRunState.getCurrent();
         final LuaThread thread = lrs.getRunningThread();
-        Varargs result = thread.yield(NONE);
+        Varargs result = thread.yield(LuaConstants.NONE);
         try {
-            saveHandler.save(slot, ss, new Dim(ssw, ssh), metaData, null);
+            saveModule.save(novel, slot, saveParams, null);
         } catch (IOException e) {
-            throw new LuaError(e.getMessage(), e);
+            throw new ScriptException("Error saving to slot " + slot, e);
         }
         return result;
     }
 
-    protected Varargs load(Varargs args) {
+    @ScriptFunction
+    public Varargs load(Varargs args) throws ScriptException {
+        int slot = args.checkint(1);
+        ISaveModule saveModule = env.getSaveModule();
+        INovel novel = novelRef.get();
+
         final LuaRunState lrs = LuaRunState.getCurrent();
         final LuaThread thread = lrs.getRunningThread();
-        Varargs result = thread.yield(NONE);
+        Varargs result = thread.yield(LuaConstants.NONE);
         lrs.destroy();
-
-        int slot = args.checkint(1);
         try {
-            saveHandler.load(slot, null);
+            saveModule.load(novel, slot, null);
         } catch (IOException e) {
-            throw new LuaError(e);
+            throw new ScriptException("Error loading save slot: " + slot, e);
         }
-
         return result;
     }
 
+    // TODO: Implement the rest of the save lib functions
+    /*
     protected Varargs getSavepointStorage(Varargs args) {
         return LuajavaLib.toUserdata(saveHandler.getSavepointStorage(), IStorage.class);
     }

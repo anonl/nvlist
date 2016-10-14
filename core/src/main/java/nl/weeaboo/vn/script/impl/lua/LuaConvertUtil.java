@@ -14,6 +14,8 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.save.StoragePrimitive;
+import nl.weeaboo.vn.save.impl.Storage;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -125,6 +127,27 @@ public final class LuaConvertUtil {
             result[n] = CoerceLuaToJava.coerceArg(luaArgs.arg(luaStartIndex + n), Object.class);
         }
         return result;
+    }
+
+    public static Storage toStorage(LuaTable table) throws ScriptException {
+        Storage storage = new Storage();
+        for (LuaValue subkey : table.keys()) {
+            storage.set(subkey.tojstring(), toStoragePrimitive(table.get(subkey)));
+        }
+        return storage;
+    }
+
+    private static StoragePrimitive toStoragePrimitive(LuaValue value) throws ScriptException {
+        if (value.isnil()) {
+            return null;
+        } else if (value.isboolean()) {
+            return StoragePrimitive.fromBoolean(value.checkboolean());
+        } else if (value.isnumber()) {
+            return StoragePrimitive.fromDouble(value.checkdouble());
+        } else if (value.isstring()) {
+            return StoragePrimitive.fromString(value.tojstring());
+        }
+        throw new ScriptException("Unable to convert Lua type for storage: " + value.typename());
     }
 
 }

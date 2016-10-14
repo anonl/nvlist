@@ -30,6 +30,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
 import nl.weeaboo.vn.image.IScreenshot;
+import nl.weeaboo.vn.image.impl.EmptyScreenshot;
 import nl.weeaboo.vn.image.impl.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.save.ISaveFile;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -236,7 +237,7 @@ public class SaveModule implements ISaveModule {
         try {
             SaveFileHeader header = readSaveHeader(arc);
 
-            IScreenshot screenshot = null;
+            IScreenshot screenshot = EmptyScreenshot.getInstance();
             if (header.getThumbnail() != null) {
                 screenshot = readSaveThumbnail(arc, header.getThumbnail());
             }

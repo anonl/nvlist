@@ -11,6 +11,7 @@ import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
+import nl.weeaboo.vn.script.impl.TestScriptExceptionHandler;
 
 public final class LuaTestUtil {
 
@@ -74,7 +75,7 @@ public final class LuaTestUtil {
                 IScriptContext scriptContext = context.getScriptContext();
                 if (hasRunnableThreads(scriptContext)) {
                     anyRunnableThreads = true;
-                    scriptContext.updateThreads(context);
+                    scriptContext.updateThreads(context, TestScriptExceptionHandler.INSTANCE);
                 }
             }
 
@@ -88,9 +89,9 @@ public final class LuaTestUtil {
         int iteration = 0;
         IScriptContext scriptContext = context.getScriptContext();
         while (hasRunnableThreads(scriptContext)) {
-            scriptContext.updateThreads(context);
+            scriptContext.updateThreads(context, TestScriptExceptionHandler.INSTANCE);
 
-            if (++iteration >= 10000) {
+            if (++iteration >= 10_000) {
                 throw new AssertionError("One or more threads refuse to die");
             }
         }

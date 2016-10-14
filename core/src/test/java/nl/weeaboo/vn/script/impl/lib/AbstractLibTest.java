@@ -6,6 +6,8 @@ import nl.weeaboo.vn.test.integration.lua.LuaIntegrationTest;
 public abstract class AbstractLibTest extends LuaIntegrationTest {
 
     @Override
-    protected abstract void addInitializers(LuaScriptEnv scriptEnv);
+    protected void addInitializers(LuaScriptEnv scriptEnv) {
+        super.addInitializers(scriptEnv);
+    }
 
 }

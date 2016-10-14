@@ -16,6 +16,7 @@ import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.impl.Screen;
+import nl.weeaboo.vn.script.impl.DummyScriptExceptionHandler;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 
 public class Context implements IContext {
@@ -94,7 +95,7 @@ public class Context implements IContext {
 
 	@Override
 	public void updateScripts() {
-	    scriptContext.updateThreads(this);
+	    scriptContext.updateThreads(this, DummyScriptExceptionHandler.INSTANCE);
 	}
 
 	@Override

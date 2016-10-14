@@ -6,11 +6,17 @@ import nl.weeaboo.filesystem.FilePath;
 
 public final class ThumbnailInfo {
 
+    public static final FilePath DEFAULT_THUMBNAIL_PATH = FilePath.of("thumbnail.jpg");
+
     private final FilePath path;
     private final Dim imageSize;
 
+    public ThumbnailInfo(Dim imageSize) {
+        this(DEFAULT_THUMBNAIL_PATH, imageSize);
+    }
     public ThumbnailInfo(FilePath path, Dim imageSize) {
         this.path = Checks.checkNotNull(path);
+
         this.imageSize = Checks.checkNotNull(imageSize);
         Checks.checkRange(imageSize.w, "imageSize.w", 1);
         Checks.checkRange(imageSize.h, "imageSize.h", 1);

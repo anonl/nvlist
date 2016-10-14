@@ -21,7 +21,7 @@ public final class StaticRef<T> implements Serializable {
     }
 
     public final T get() {
-        return Checks.checkNotNull(getIfPresent());
+        return Checks.checkNotNull(getIfPresent(), "StaticRef." + id);
     }
 
     public final T getIfPresent() {

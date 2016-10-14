@@ -4,11 +4,11 @@ import nl.weeaboo.vn.image.IScreenshot;
 
 public interface ISaveFile {
 
-    public ISaveFileHeader getHeader();
+    ISaveFileHeader getHeader();
 
-    public int getSlot();
+    int getSlot();
 
-    public IScreenshot getScreenshot();
-    public IScreenshot getScreenshot(int maxW, int maxH);
+    IScreenshot getScreenshot();
+    IScreenshot getScreenshot(int maxW, int maxH);
 
 }

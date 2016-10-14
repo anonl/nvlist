@@ -17,6 +17,7 @@ import nl.weeaboo.vn.core.impl.ContextUtil;
 import nl.weeaboo.vn.core.impl.DestructibleElemList;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
+import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -91,33 +92,35 @@ public class LuaScriptContext implements IScriptContext {
     }
 
     @Override
-    public void updateThreads(IContext context) {
+    public void updateThreads(IContext context, IScriptExceptionHandler exceptionHandler) {
         IContext oldContext = ContextUtil.setCurrentContext(context);
         try {
-            runEvents();
-            runThreads();
+            runEvents(exceptionHandler);
+            runThreads(exceptionHandler);
         } finally {
             ContextUtil.setCurrentContext(oldContext);
         }
     }
 
-    private void runEvents() {
+    private void runEvents(IScriptExceptionHandler exceptionHandler) {
         List<IScriptFunction> eventWork = eventDispatcher.retrieveWork();
         for (IScriptFunction func : eventWork) {
             try {
                eventThread.call((LuaScriptFunction)func);
             } catch (ScriptException e) {
-                LOG.warn("Exception while executing event: " + func, e);
+                LOG.warn("Exception while executing event: {}", func, e);
+                exceptionHandler.onScriptException(eventThread, e);
             }
         }
     }
 
-    private void runThreads() {
+    private void runThreads(IScriptExceptionHandler exceptionHandler) {
         for (LuaScriptThread thread : threads) {
             try {
                 thread.update();
             } catch (ScriptException e) {
-                LOG.warn("Exception while executing thread: " + thread, e);
+                LOG.warn("Exception while executing thread: {}", thread, e);
+                exceptionHandler.onScriptException(thread, e);
             }
         }
     }
