@@ -32,10 +32,10 @@ public class RenderQuadTest extends RenderIntegrationTest {
 
         DrawTransform dt = new DrawTransform();
         MutableMatrix mm = new MutableMatrix();
-        mm.translate(640, 0);
+        mm.translate(400, 0);
         mm.rotate(128); // Rotate right around (0,0) by a quarter turn
         dt.setTransform(mm.immutableCopy());
-        renderer.drawQuad(tex, dt, Area2D.of(0, 0, 720, 720));
+        renderer.drawQuad(tex, dt, Area2D.of(0, 0, 640, 400));
         renderer.render();
 
         checkRenderResult("quad-rotated");
