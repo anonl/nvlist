@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.lib.VarArgFunction;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaError;
@@ -53,25 +54,27 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                 continue;
             }
 
-            Class<?> returnType = method.getReturnType();
-            if (!returnType.equals(Varargs.class) && !returnType.equals(Void.TYPE)) {
-                throw new ScriptException("Return type must be Varargs or void");
-            }
-
-            if (!Arrays.equals(method.getParameterTypes(), new Class<?>[] { Varargs.class })) {
-                throw new ScriptException("Method must have a single parameter of type Varargs");
-            }
-
             String name = method.getName();
             if (table.rawget(name) != LuaNil.NIL) {
                 throw new ScriptException("There's already a table entry named: " + name + " :: " + table.rawget(name));
             }
-            table.rawset(name, wrapFunction(method.getName(), method.getParameterTypes()));
+
+            table.rawset(name, wrapFunction(method));
         }
     }
 
-    protected VarArgFunction wrapFunction(String methodName, Class<?>[] parameterTypes) {
-        return new FunctionWrapper(this, methodName, parameterTypes);
+    protected VarArgFunction wrapFunction(Method method) throws ScriptException {
+        Class<?> returnType = method.getReturnType();
+        if (!returnType.equals(Varargs.class) && !returnType.equals(Void.TYPE)) {
+            throw new ScriptException("Return type must be Varargs or void");
+        }
+
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        if (!Arrays.equals(parameterTypes, new Class<?>[] { Varargs.class })) {
+            throw new ScriptException("Method must have a single parameter of type Varargs");
+        }
+
+        return new FunctionWrapper(this, method.getName(), parameterTypes);
     }
 
     private static class FunctionWrapper extends VarArgFunction {
@@ -102,6 +105,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                 } else if (result == null && method.getReturnType() == Void.TYPE) {
                     return LuaConstants.NONE;
                 } else {
+                    // This may happen if the methods return type changed (can happen due to serialization)
                     throw new LuaError("Java method (" + method + ") returned non-varargs: " +
                             (result != null ? result.getClass().getName() : "null"));
                 }
@@ -114,7 +118,8 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
         }
 
         private String invokeErrorMessage(Varargs args, Throwable cause) {
-            String error = "Error invoking Java method: " + method.getName() + "(" + args + ")";
+            String error = StringUtil.formatRoot("Error invoking Java method: %s%s",
+                    methodName, args);
             if (cause != null) {
                 error += " :: " + cause;
             }
