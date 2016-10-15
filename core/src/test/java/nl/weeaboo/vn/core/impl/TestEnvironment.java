@@ -10,6 +10,7 @@ import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
@@ -60,6 +61,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
+        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new TestFontStore());
 

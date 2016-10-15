@@ -18,7 +18,7 @@ import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.RenderTestHelper;
 import nl.weeaboo.vn.test.integration.IntegrationTest;
 
-public class RenderIntegrationTest extends IntegrationTest {
+public abstract class RenderIntegrationTest extends IntegrationTest {
 
     // Allow a small difference in color to account for rounding errors
     private static final int MAX_COLOR_DIFF = 2;
