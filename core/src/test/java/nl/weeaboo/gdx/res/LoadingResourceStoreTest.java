@@ -12,7 +12,7 @@ import nl.weeaboo.vn.core.impl.StaticRef;
 
 public class LoadingResourceStoreTest {
 
-    private static final FilePath TEST_FILENAME = FilePath.of("test.png");
+    private static final FilePath TEST_FILENAME = FilePath.of("img/test.png");
     private StaticRef<PixmapResourceStore> TEST_ID = StaticRef.from("test", PixmapResourceStore.class);
     private PixmapResourceStore cam;
 

@@ -10,7 +10,6 @@ import org.junit.Test;
 import nl.weeaboo.gdx.HeadlessGdx;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
-import nl.weeaboo.vn.scene.impl.Layer;
 import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class GLScreenRendererTest {
@@ -19,13 +18,11 @@ public class GLScreenRendererTest {
         HeadlessGdx.init();
     }
 
-    private GLScreenRenderer renderer;
-    private DrawBuffer drawBuffer;
+    private RenderTestHelper renderer;
 
     @Before
     public void before() {
-        renderer = new GLScreenRenderer(CoreTestUtil.BASIC_ENV, new RenderStats());
-        drawBuffer = new DrawBuffer();
+        renderer = new RenderTestHelper(CoreTestUtil.BASIC_ENV);
     }
 
     @After
@@ -36,13 +33,15 @@ public class GLScreenRendererTest {
     /** Trivial test to see if nothing crashes trying to render an empty draw buffer */
     @Test
     public void renderNothing() {
-        renderer.render(drawBuffer);
+        renderer.render();
     }
 
     /** Trivial test to see if nothing crashes trying to render an empty draw buffer */
     @Test
     public void renderCustom() {
-        startLayer();
+        renderer.startLayer();
+        DrawBuffer drawBuffer = renderer.getDrawBuffer();
+
         final AtomicBoolean renderCalled = new AtomicBoolean();
         DrawTransform dt = new DrawTransform();
         drawBuffer.drawCustom(dt, 0xFFFFFFFF, new IRenderLogic() {
@@ -52,13 +51,8 @@ public class GLScreenRendererTest {
             }
         });
 
-        renderer.render(drawBuffer);
+        renderer.render();
         Assert.assertEquals(true, renderCalled.get());
-    }
-
-    private void startLayer() {
-        int layerId = drawBuffer.reserveLayerIds(1);
-        drawBuffer.startLayer(layerId, new Layer(null));
     }
 
 }
