@@ -1,0 +1,6 @@
+@@
+
+local saves = Save.getSaves()
+luaAssertEquals(1, #saves)
+
+@@
