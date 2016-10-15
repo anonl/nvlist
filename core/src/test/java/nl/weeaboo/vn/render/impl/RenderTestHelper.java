@@ -3,9 +3,11 @@ package nl.weeaboo.vn.render.impl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import nl.weeaboo.common.Area2D;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.impl.Layer;
 
 public class RenderTestHelper implements IDestructible {
@@ -57,4 +59,10 @@ public class RenderTestHelper implements IDestructible {
         return drawBuffer;
     }
 
+    public void drawQuad(ITexture tex, Area2D bounds) {
+        drawQuad(tex, new DrawTransform(), bounds);
+    }
+    public void drawQuad(ITexture tex, DrawTransform transform, Area2D bounds) {
+        drawBuffer.drawQuad(transform, 0xFFFFFFFF, tex, bounds, ITexture.DEFAULT_UV);
+    }
 }
