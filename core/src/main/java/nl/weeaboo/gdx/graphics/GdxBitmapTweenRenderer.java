@@ -181,7 +181,6 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
             LOG.trace("BitmapTween[start={}, end={}, control={}]", startTexture, endTexture, controlTexture);
 
             Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GLBlendMode.DEFAULT_PREMULT.srcFunc, GLBlendMode.DEFAULT_PREMULT.dstFunc);
 
             shader.begin();
             try {

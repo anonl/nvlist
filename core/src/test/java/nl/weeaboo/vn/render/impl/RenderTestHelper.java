@@ -1,13 +1,19 @@
 package nl.weeaboo.vn.render.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.gdx.graphics.GdxShaderUtil;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.render.IRenderLogic;
+import nl.weeaboo.vn.render.IScreenRenderer;
+import nl.weeaboo.vn.render.impl.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.scene.impl.Layer;
 
 public class RenderTestHelper implements IDestructible {
@@ -65,4 +71,27 @@ public class RenderTestHelper implements IDestructible {
     public void drawQuad(ITexture tex, DrawTransform transform, Area2D bounds) {
         drawBuffer.drawQuad(transform, 0xFFFFFFFF, tex, bounds, ITexture.DEFAULT_UV);
     }
+
+    public void drawTriangleGrid(ITexture tex, Area2D bounds) {
+        TriangleGrid grid = TriangleGrid.layout1(bounds, tex.getUV(), TextureWrap.CLAMP);
+        drawTriangleGrid(grid, tex);
+    }
+    public void drawTriangleGrid(TriangleGrid grid, ITexture tex) {
+        drawBuffer.drawCustom(new DrawTransform(), 0xFFFFFFFF, new IRenderLogic() {
+            @Override
+            public void render(IScreenRenderer<?> r) {
+                ShaderProgram shader = SpriteBatch.createDefaultShader();
+                shader.begin();
+                try {
+                    GdxShaderUtil.setTexture(shader, 0, tex, "u_texture");
+                    renderer.renderTriangleGrid(grid, shader);
+                } finally {
+                    shader.end();
+                    shader.dispose();
+                }
+            }
+        });
+    }
+
+
 }
