@@ -5,7 +5,9 @@ import java.util.Collection;
 
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
@@ -105,6 +107,52 @@ public class SaveLib extends LuaLib {
             throw new ScriptException("Error loading save slot: " + slot, e);
         }
         return result;
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>save slot index
+     *        </ol>
+     * @return {@code true} if the save slot exists, {@code false} otherwise.
+     */
+    @ScriptFunction
+    public Varargs getSaveExists(Varargs args) {
+        int slot = args.checkint(1);
+        ISaveModule saveModule = env.getSaveModule();
+
+        return LuaBoolean.valueOf(saveModule.getSaveExists(slot));
+    }
+
+    /**
+     * @param args Not used.
+     * @return The index of a free save slot.
+     */
+    @ScriptFunction
+    public Varargs getNextFreeSlot(Varargs args) {
+        ISaveModule saveModule = env.getSaveModule();
+        return LuaInteger.valueOf(saveModule.getNextFreeSlot());
+    }
+
+    /**
+     * Deletes a save file.
+     *
+     * @param args
+     *        <ol>
+     *        <li>save slot index
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs delete(Varargs args) throws ScriptException {
+        int slot = args.checkint(1);
+        ISaveModule saveModule = env.getSaveModule();
+
+        try {
+            saveModule.delete(slot);
+            return LuaConstants.NONE;
+        } catch (IOException e) {
+            throw new ScriptException("Unable to delete save slot: " + slot, e);
+        }
     }
 
     // TODO: Implement the rest of the save lib functions

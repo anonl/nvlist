@@ -19,8 +19,10 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
+import nl.weeaboo.vn.test.integration.lua.LuaAssertLib;
 
 @RunWith(GdxLwjgl3TestRunner.class)
 @Category(GdxUiTest.class)
@@ -31,12 +33,15 @@ public abstract class IntegrationTest {
     protected IEnvironment env;
 
     @Before
-    public final void beforeIntegration() {
+    public final void beforeIntegration() throws ScriptException {
         launcher = new Launcher("");
         launcher.create();
 
         novel = launcher.getNovel();
         env = novel.getEnv();
+
+        // Add assert lib
+        new LuaAssertLib().initEnv((LuaScriptEnv)env.getScriptEnv());
     }
 
     @After

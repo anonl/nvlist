@@ -1,0 +1,20 @@
+@@
+
+local usedSlots = {}
+for i=1,3 do
+    local free = Save.getNextFreeSlot()
+    -- The slot should be free
+    luaAssertEquals(false, Save.getSaveExists(free))
+    -- Save in the free slot
+    Save.save(free)
+    table.insert(usedSlots, free)
+    -- The slot is no longer free
+    luaAssertEquals(true, Save.getSaveExists(free))
+end
+
+for _,slot in ipairs(usedSlots) do
+    Save.delete(slot)
+    luaAssertEquals(false, Save.getSaveExists(slot))
+end
+
+@@

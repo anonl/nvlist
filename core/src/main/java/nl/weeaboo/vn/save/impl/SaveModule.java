@@ -307,11 +307,7 @@ public class SaveModule implements ISaveModule {
             // Save data
             writeSaveData(zout, novel, pl);
         } finally {
-            try {
-                zout.close();
-            } catch (IOException ioe) {
-                LOG.warn("Error closing save file: slot=" + slot, ioe);
-            }
+            zout.close();
         }
 
         LOG.info("Save written: {}", StringUtil.formatMemoryAmount(fs.getFileSize(savePath)));

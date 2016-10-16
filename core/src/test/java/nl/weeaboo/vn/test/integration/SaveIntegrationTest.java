@@ -11,4 +11,14 @@ public class SaveIntegrationTest extends IntegrationTest {
         waitForAllThreads();
     }
 
+    /**
+     * Create/delete multiple save files
+     */
+    @Test
+    public void manageSaves() {
+        loadScript("integration/save/managesaves.lvn");
+
+        waitForAllThreads();
+    }
+
 }
