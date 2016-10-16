@@ -52,10 +52,12 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
     @Override
     public void destroy() {
-        destroyed = true;
-        spriteBatch.dispose();
-        if (triangleMesh != null) {
-            triangleMesh.dispose();
+        if (!isDestroyed()) {
+            destroyed = true;
+            spriteBatch.dispose();
+            if (triangleMesh != null) {
+                triangleMesh.dispose();
+            }
         }
     }
 
