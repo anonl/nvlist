@@ -20,4 +20,9 @@ public class LuaImageTest extends LuaIntegrationTest {
     public void imageStatesInConcurrentContexts() {
         loadScript("integration/image/multicontext");
     }
+
+    @Test
+    public void testLayerFunctions() {
+        loadScript("integration/image/layer");
+    }
 }

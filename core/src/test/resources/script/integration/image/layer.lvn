@@ -1,0 +1,12 @@
+@@
+
+require("builtin/vn")
+
+local newLayer = createLayer()
+
+luaAssert(newLayer ~= nil)
+
+setActiveLayer(newLayer)
+luaAssertEquals(newLayer, getActiveLayer())
+
+@@
