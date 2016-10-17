@@ -13,7 +13,7 @@ public class RenderTextTest extends RenderIntegrationTest {
 
     @Test
     public void render() {
-        ITextLayout layout = createLayout(styledText("--- --- --- --- --- --- --- --- --- --- ---"), 400);
+        ITextLayout layout = createLayout(styledText("--- --- --- --- --- --- --- --- --- --- ---"), -1);
 
         renderer.startLayer();
         renderer.drawText(0, 0, layout);
@@ -23,7 +23,7 @@ public class RenderTextTest extends RenderIntegrationTest {
     }
 
     private StyledText styledText(String string) {
-        return new StyledText(string, new TextStyle(null, 72));
+        return new StyledText(string, new TextStyle("RobotoSlab", 16));
     }
 
     private ITextLayout createLayout(StyledText text, int wrapWidth) {
