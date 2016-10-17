@@ -11,9 +11,13 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 
 public class RenderTextTest extends RenderIntegrationTest {
 
+    {
+        generate = true;
+    }
+
     @Test
     public void render() {
-        ITextLayout layout = createLayout(styledText("--- --- --- --- --- --- --- --- --- --- ---"), -1);
+        ITextLayout layout = createLayout(styledText("---"), -1);
 
         renderer.startLayer();
         renderer.drawText(0, 0, layout);
