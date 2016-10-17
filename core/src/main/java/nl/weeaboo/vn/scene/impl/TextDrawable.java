@@ -13,11 +13,16 @@ public class TextDrawable extends Transformable implements ITextDrawable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final ITextRenderer textRenderer = new TextRenderer();
+    private final ITextRenderer textRenderer;
 
     private double textSpeed = 0;
 
     public TextDrawable() {
+        this(new TextRenderer());
+    }
+
+    public TextDrawable(ITextRenderer renderer) {
+        this.textRenderer = Checks.checkNotNull(renderer);
     }
 
     @Override

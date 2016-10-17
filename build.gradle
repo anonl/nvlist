@@ -34,7 +34,7 @@ allprojects {
         guavaVersion = '19.0'
         
         styledTextVersion = '1.5.4'
-        gdxTestVersion = '1.0.2'
+        gdxTestVersion = '1.0.3'
         luajpp2Version = '2.3.13'
         tcommonVersion = '1.2.3'
         
