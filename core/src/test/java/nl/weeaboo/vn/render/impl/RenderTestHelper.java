@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.gdx.graphics.GdxShaderUtil;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
+import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.image.ITexture;
@@ -70,6 +71,10 @@ public class RenderTestHelper implements IDestructible {
     }
     public void drawQuad(ITexture tex, DrawTransform transform, Area2D bounds) {
         drawBuffer.drawQuad(transform, 0xFFFFFFFF, tex, bounds, ITexture.DEFAULT_UV);
+    }
+
+    public void drawText(double dx, double dy, ITextLayout textLayout) {
+        drawBuffer.drawText(new DrawTransform(), dx, dy, textLayout, -1f);
     }
 
     public void drawTriangleGrid(ITexture tex, Area2D bounds) {

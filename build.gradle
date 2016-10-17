@@ -109,6 +109,7 @@ project(':nvlist-core') {
     
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testRuntime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
     }
 }
