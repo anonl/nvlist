@@ -28,13 +28,18 @@ public class RenderTestHelper implements IDestructible {
 
         drawBuffer = new DrawBuffer();
 
+        FitViewport viewPort = createViewport(renderEnv);
+
+        renderer = new GLScreenRenderer(renderEnv, new RenderStats());
+        renderer.setProjectionMatrix(viewPort.getCamera().combined);
+    }
+
+    public static FitViewport createViewport(IRenderEnv renderEnv) {
         FitViewport viewPort = new FitViewport(renderEnv.getWidth(), renderEnv.getHeight());
         GdxViewportUtil.setToOrtho(viewPort, renderEnv.getVirtualSize(), true);
         viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         viewPort.apply();
-
-        renderer = new GLScreenRenderer(renderEnv, new RenderStats());
-        renderer.setProjectionMatrix(viewPort.getCamera().combined);
+        return viewPort;
     }
 
     @Override

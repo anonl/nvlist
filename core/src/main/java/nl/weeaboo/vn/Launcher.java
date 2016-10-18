@@ -423,4 +423,8 @@ public class Launcher extends ApplicationAdapter {
         }
     }
 
+    public Scene2dEnv getSceneEnv() {
+        return sceneEnv;
+    }
+
 }

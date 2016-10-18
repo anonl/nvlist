@@ -72,7 +72,7 @@ public class LuaConsole {
         inputField = new TextField(Iterables.getLast(inputBuffer, ""), skin);
         inputField.addListener(new InputListener() {
             @Override
-            public boolean keyDown (InputEvent event, int keycode) {
+            public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Keys.UP) {
                     return updateInputBufferIndex(-1);
                 } else if (keycode == Keys.DOWN) {
@@ -154,15 +154,14 @@ public class LuaConsole {
     protected void eval(String luaCode) {
         if (activeContext == null) {
             append("No script context active");
-            return;
-        }
-
-        try {
-            String result = LuaScriptUtil.eval(activeContext, luaCode);
-            append("> " + result);
-        } catch (ScriptException e) {
-            LOG.info("Error during eval", e);
-            append("> Error: " + e.getLocalizedMessage());
+        } else {
+            try {
+                String result = LuaScriptUtil.eval(activeContext, luaCode);
+                append("> " + result);
+            } catch (ScriptException e) {
+                LOG.info("Error during eval", e);
+                append("> Error: " + e.getLocalizedMessage());
+            }
         }
     }
 
