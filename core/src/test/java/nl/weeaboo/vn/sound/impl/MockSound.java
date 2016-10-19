@@ -2,21 +2,20 @@ package nl.weeaboo.vn.sound.impl;
 
 import java.io.IOException;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
-public class Sound extends AbstractSound {
+public class MockSound extends AbstractSound {
 
-    private static final long serialVersionUID = SoundImpl.serialVersionUID;
+    private static final long serialVersionUID = 1L;
 
-    private final INativeAudio nativeAudio;
+    private final MockNativeAudio nativeAudio;
 
-    public Sound(ISoundController sctrl, SoundType soundType, FilePath filename, INativeAudio nativeAudio) {
-        super(sctrl, soundType, filename);
+    public MockSound(ISoundController sctrl, SoundType soundType) {
+        super(sctrl, soundType, FilePath.of("test.snd"));
 
-        this.nativeAudio = Checks.checkNotNull(nativeAudio);
+        nativeAudio = new MockNativeAudio();
     }
 
     @Override
@@ -47,13 +46,6 @@ public class Sound extends AbstractSound {
     @Override
     public boolean isPaused() {
         return nativeAudio.isPaused();
-    }
-
-    @Override
-    protected void onVolumeChanged() {
-        super.onVolumeChanged();
-
-        nativeAudio.setVolume(getVolume());
     }
 
     @Override

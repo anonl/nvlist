@@ -6,6 +6,9 @@ import nl.weeaboo.vn.core.IUpdateable;
 
 public interface ISoundController extends Serializable, IUpdateable {
 
+    int MIN_CHANNEL = 1;
+    int MAX_CHANNEL = 9999;
+
     /**
      * Stops all sounds.
      */

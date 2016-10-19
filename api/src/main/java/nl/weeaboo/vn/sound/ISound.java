@@ -7,8 +7,6 @@ import nl.weeaboo.filesystem.FilePath;
 
 public interface ISound extends Serializable {
 
-	// === Functions ===========================================================
-
     /**
      * @see #start(int)
      */
@@ -44,8 +42,6 @@ public interface ISound extends Serializable {
 	 */
     void resume();
 
-	// === Getters =============================================================
-
     FilePath getFilename();
 
     SoundType getSoundType();
@@ -59,8 +55,6 @@ public interface ISound extends Serializable {
     double getPrivateVolume();
     double getMasterVolume();
     double getVolume();
-
-	// === Setters =============================================================
 
     void setPrivateVolume(double v);
     void setMasterVolume(double v);

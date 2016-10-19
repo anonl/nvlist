@@ -10,9 +10,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
-import nl.weeaboo.vn.sound.ISoundController;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.sound.ISound;
+import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
 public class SoundController implements ISoundController {
@@ -20,8 +22,9 @@ public class SoundController implements ISoundController {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
     private final Map<SoundType, Double> masterVolume;
-    private final Map<Integer, ISound> sounds;
-    private final List<ISound> pausedList;
+    private final Map<Integer, ISound> sounds = new HashMap<>();
+    private final List<ISound> pausedList = new ArrayList<>();
+
     private boolean paused;
 
     protected SoundController() {
@@ -29,12 +32,8 @@ public class SoundController implements ISoundController {
         for (SoundType type : SoundType.values()) {
             masterVolume.put(type, 1.0);
         }
-
-        sounds = new HashMap<>();
-        pausedList = new ArrayList<>();
     }
 
-    //Functions
     @Override
     public void update() {
         Iterator<Entry<Integer, ISound>> itr = sounds.entrySet().iterator();
@@ -50,15 +49,8 @@ public class SoundController implements ISoundController {
 
     @Override
     public void stopAll() {
-        Integer channels[] = sounds.keySet().toArray(new Integer[sounds.size()]);
-        for (int channel : channels) {
+        for (int channel : ImmutableList.copyOf(sounds.keySet())) {
             stop(channel);
-        }
-
-        ISound ps[] = pausedList.toArray(new ISound[pausedList.size()]);
-        pausedList.clear();
-        for (ISound sound : ps) {
-            sound.stop(0);
         }
     }
 
@@ -76,7 +68,6 @@ public class SoundController implements ISoundController {
         }
     }
 
-    //Getters
     @Override
     public ISound get(int channel) {
         return sounds.get(channel);
@@ -105,16 +96,18 @@ public class SoundController implements ISoundController {
 
     @Override
     public int getFreeChannel() {
-        for (int n = 1; n < 10000; n++) {
+        for (int n = MIN_CHANNEL; n <= MAX_CHANNEL; n++) {
             if (!sounds.containsKey(n)) {
                 return n;
             }
         }
-        throw new RuntimeException("No free channels left");
+        throw new IllegalStateException("No free channels left");
     }
 
     @Override
     public void set(int channel, ISound sound) {
+        Checks.checkState(!isPaused(), "Unable to add sounds while paused");
+
         stop(channel);
 
         if (sounds.containsKey(channel)) {
