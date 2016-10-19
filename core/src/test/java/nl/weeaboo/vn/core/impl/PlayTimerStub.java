@@ -2,7 +2,7 @@ package nl.weeaboo.vn.core.impl;
 
 import java.io.IOException;
 
-import nl.weeaboo.vn.core.IDuration;
+import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.save.IStorage;
 
@@ -23,12 +23,12 @@ public class PlayTimerStub implements IPlayTimer {
     }
 
     @Override
-    public IDuration getTotalTime() {
+    public Duration getTotalTime() {
         return Duration.ZERO;
     }
 
     @Override
-    public IDuration getIdleTime() {
+    public Duration getIdleTime() {
         return Duration.ZERO;
     }
 

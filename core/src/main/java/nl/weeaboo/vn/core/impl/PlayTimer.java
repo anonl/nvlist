@@ -3,7 +3,7 @@ package nl.weeaboo.vn.core.impl;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import nl.weeaboo.vn.core.IDuration;
+import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.save.IStorage;
@@ -67,12 +67,12 @@ public class PlayTimer implements IPlayTimer {
     }
 
     @Override
-    public IDuration getTotalTime() {
+    public Duration getTotalTime() {
         return Duration.fromDuration(totalNanos, TimeUnit.NANOSECONDS);
     }
 
     @Override
-    public IDuration getIdleTime() {
+    public Duration getIdleTime() {
         return Duration.fromDuration(idleNanos, TimeUnit.NANOSECONDS);
     }
 
