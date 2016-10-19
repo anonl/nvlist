@@ -10,7 +10,7 @@ public interface IPlayTimer extends IUpdateable, Serializable {
     void load(IStorage storage) throws IOException;
     void save(IStorage storage) throws IOException;
 
-    IDuration getTotalTime();
-    IDuration getIdleTime();
+    Duration getTotalTime();
+    Duration getIdleTime();
 
 }
