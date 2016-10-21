@@ -3,6 +3,7 @@ package nl.weeaboo.vn.sound.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -59,18 +60,7 @@ public class NativeAudio implements INativeAudio {
             } else {
                 // TODO: Doesn't work on Desktop, unlike Android the completion listener is only called
                 //       when the music ends, not on every loop.
-                music.setOnCompletionListener(new Music.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(Music music) {
-                        int left = loopsLeft.decrementAndGet();
-                        if (left <= 0) {
-                            LOG.debug("Music all loops finished");
-                            stop(0);
-                        } else {
-                            LOG.debug("Decrease music loops -> {}", left);
-                        }
-                    }
-                });
+                music.setOnCompletionListener(new LoopEndListener());
             }
 
             loopsLeft.set(loops);
@@ -133,4 +123,20 @@ public class NativeAudio implements INativeAudio {
         }
     }
 
+    private final class LoopEndListener implements Music.OnCompletionListener, Serializable {
+
+        private static final long serialVersionUID = SoundImpl.serialVersionUID;
+
+        @Override
+        public void onCompletion(Music music) {
+            int left = loopsLeft.decrementAndGet();
+            if (left <= 0) {
+                LOG.debug("Music all loops finished");
+                stop(0);
+            } else {
+                LOG.debug("Decrease music loops -> {}", left);
+            }
+        }
+
+    }
 }

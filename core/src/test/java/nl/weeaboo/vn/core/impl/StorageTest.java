@@ -4,8 +4,6 @@ import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_BOOL;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_DOUBLE;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_INT;
 import static nl.weeaboo.vn.core.impl.StorageTestHelper.KEY_STRING;
-import static nl.weeaboo.vn.test.CoreTestUtil.deserializeObject;
-import static nl.weeaboo.vn.test.CoreTestUtil.serializeObject;
 
 import java.io.IOException;
 
@@ -14,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.save.impl.Storage;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class StorageTest {
 
@@ -80,7 +79,7 @@ public class StorageTest {
     public void javaSerialize() throws IOException, ClassNotFoundException {
         Storage testData = testHelper.createTestData();
 
-        Storage deserialized = deserializeObject(serializeObject(testData), Storage.class);
+        Storage deserialized = CoreTestUtil.reserialize(testData);
 
         testHelper.assertStorageEquals(testData, deserialized);
     }

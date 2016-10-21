@@ -138,4 +138,10 @@ public final class CoreTestUtil {
         return clazz.cast(oin.readObject());
     }
 
+    public static <T> T reserialize(T object) throws IOException, ClassNotFoundException {
+        @SuppressWarnings("unchecked")
+        Class<? extends T> type = (Class<? extends T>)object.getClass();
+        return deserializeObject(serializeObject(object), type);
+    }
+
 }

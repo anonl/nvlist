@@ -6,6 +6,13 @@ public class ResourceStub<T> implements IResource<T> {
 
     private T resource;
 
+    public ResourceStub() {
+    }
+
+    public ResourceStub(T resource) {
+        this.resource = resource;
+    }
+
     @Override
     public T get() {
         return resource;

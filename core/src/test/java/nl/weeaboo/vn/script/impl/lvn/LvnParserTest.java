@@ -1,8 +1,5 @@
 package nl.weeaboo.vn.script.impl.lvn;
 
-import static nl.weeaboo.vn.test.CoreTestUtil.deserializeObject;
-import static nl.weeaboo.vn.test.CoreTestUtil.serializeObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,6 +24,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.script.impl.lvn.TextParser.Token;
+import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class LvnParserTest {
 
@@ -87,7 +85,7 @@ public class LvnParserTest {
 		RuntimeTextParser runtimeParser = new RuntimeTextParser(debugTable);
 
 		// Serialize->Deserialize to make sure that doesn't break anything
-        runtimeParser = deserializeObject(serializeObject(runtimeParser), RuntimeTextParser.class);
+        runtimeParser = CoreTestUtil.reserialize(runtimeParser);
 
 		ParseResult parseResult = runtimeParser.parse(input);
 		IntMap<String> commandMap = parseResult.getCommands();
