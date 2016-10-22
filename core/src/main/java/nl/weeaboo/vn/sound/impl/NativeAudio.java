@@ -3,7 +3,6 @@ package nl.weeaboo.vn.sound.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -123,9 +122,7 @@ public class NativeAudio implements INativeAudio {
         }
     }
 
-    private final class LoopEndListener implements Music.OnCompletionListener, Serializable {
-
-        private static final long serialVersionUID = SoundImpl.serialVersionUID;
+    private final class LoopEndListener implements Music.OnCompletionListener {
 
         @Override
         public void onCompletion(Music music) {

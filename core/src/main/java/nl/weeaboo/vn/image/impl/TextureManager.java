@@ -75,6 +75,7 @@ final class TextureManager implements Serializable {
                 cachedImageDefs = ImmutableMap.copyOf(ImageDefinitionIO.fromFileSystem(fs, FilePath.empty()));
             } catch (IOException e) {
                 LOG.warn("Error loading image definitions", e);
+                return null;
             }
         }
         return cachedImageDefs.get(relPath);

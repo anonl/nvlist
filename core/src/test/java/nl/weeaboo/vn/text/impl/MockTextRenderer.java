@@ -24,7 +24,6 @@ public class MockTextRenderer implements ITextRenderer {
 
     private boolean rightToLeft;
 
-    private ITextLayout visibleLayout;
     private StyledText text = new StyledText("abcdefghij");
     private TextStyle defaultStyle = TextStyle.defaultInstance();
 
@@ -63,7 +62,7 @@ public class MockTextRenderer implements ITextRenderer {
 
     @Override
     public ITextLayout getVisibleLayout() {
-        return visibleLayout;
+        return new TextLayoutStub();
     }
 
     @Override
