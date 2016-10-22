@@ -21,10 +21,6 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
 /** Base class for tests of the Lua script environment */
 public abstract class LuaIntegrationTest {
 
-    static {
-        HeadlessGdx.init();
-    }
-
     protected TestEnvironment env;
     protected ContextManager contextManager;
     protected Context mainContext;
@@ -32,6 +28,7 @@ public abstract class LuaIntegrationTest {
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         addInitializers(env.getScriptEnv());

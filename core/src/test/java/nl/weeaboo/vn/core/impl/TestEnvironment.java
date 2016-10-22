@@ -5,8 +5,11 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -41,6 +44,7 @@ public class TestEnvironment extends DefaultEnvironment {
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
+        GdxFileSystem gdxFileSystem = new GdxFileSystem("", true);
         NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();
@@ -61,6 +65,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
+        StaticEnvironment.ASSET_MANAGER.set(new AssetManager(gdxFileSystem));
         StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new TestFontStore());
@@ -101,6 +106,10 @@ public class TestEnvironment extends DefaultEnvironment {
             super.destroy();
 
             scriptEnv.getRunState().destroy();
+
+            StaticEnvironment.ASSET_MANAGER.get().dispose();
+
+            StaticEnvironment.getInstance().clear();
         }
     }
 
