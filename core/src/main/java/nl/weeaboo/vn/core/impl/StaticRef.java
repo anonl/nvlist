@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import nl.weeaboo.common.Checks;
 
@@ -16,6 +17,9 @@ public final class StaticRef<T> implements Serializable {
         this.type = Checks.checkNotNull(type);
     }
 
+    public static <T> StaticRef<T> anonymous(Class<T> type) {
+        return new StaticRef<>(UUID.randomUUID().toString(), type);
+    }
     public static <T> StaticRef<T> from(String id, Class<T> type) {
         return new StaticRef<>(id, type);
     }
@@ -31,7 +35,7 @@ public final class StaticRef<T> implements Serializable {
 
     public final void set(T value) {
         StaticEnvironment instance = StaticEnvironment.getInstance();
-        instance.set(this, Checks.checkNotNull(value));
+        instance.set(this, value);
     }
 
     String getId() {

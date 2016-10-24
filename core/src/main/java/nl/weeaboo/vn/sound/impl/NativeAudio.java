@@ -24,6 +24,7 @@ public class NativeAudio implements INativeAudio {
 
     private final AtomicInteger loopsLeft = new AtomicInteger();
     private boolean paused;
+    private double volume;
 
     public NativeAudio(IResource<Music> music) {
         this.musicRef = Checks.checkNotNull(music);
@@ -34,6 +35,8 @@ public class NativeAudio implements INativeAudio {
 
         boolean playing = in.readBoolean();
         int loopsLeft = in.readInt();
+
+        applyVolume();
         if (playing) {
             doPlay(loopsLeft);
         }
@@ -64,6 +67,7 @@ public class NativeAudio implements INativeAudio {
 
             loopsLeft.set(loops);
             music.setLooping(loops < 0 || loops > 1);
+            applyVolume(); // Re-apply volume in case Music object had to be reloaded
             music.play();
             paused = false;
         }
@@ -115,7 +119,15 @@ public class NativeAudio implements INativeAudio {
     }
 
     @Override
-    public void setVolume(double volume) {
+    public void setVolume(double vol) {
+        if (volume != vol) {
+            volume = vol;
+
+            applyVolume();
+        }
+    }
+
+    private void applyVolume() {
         Music music = musicRef.get();
         if (music != null) {
             music.setVolume((float)volume);

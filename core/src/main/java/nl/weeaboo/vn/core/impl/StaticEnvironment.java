@@ -62,7 +62,11 @@ public final class StaticEnvironment {
 
     public <T> void set(StaticRef<T> ref, T value) {
         synchronized (objects) {
-            objects.put(ref.getId(), value);
+            if (value == null) {
+                objects.remove(ref.getId());
+            } else {
+                objects.put(ref.getId(), value);
+            }
         }
     }
 

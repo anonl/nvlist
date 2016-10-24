@@ -2,27 +2,35 @@ package nl.weeaboo.vn.sound.impl;
 
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.badlogic.gdx.audio.Music;
 
-import nl.weeaboo.gdx.res.ResourceStub;
+import nl.weeaboo.gdx.res.StaticResourceStub;
+import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class NativeAudioTest {
 
+    private StaticRef<Music> musicRef = StaticRef.anonymous(Music.class);
+
     private NativeAudio nativeAudio;
-    private ResourceStub<Music> musicRef;
     private MockGdxMusic mockGdxMusic;
 
     @Before
     public void before() {
         mockGdxMusic = new MockGdxMusic();
-        musicRef = new ResourceStub<>(mockGdxMusic);
-        nativeAudio = new NativeAudio(musicRef);
+        musicRef.set(mockGdxMusic);
+
+        nativeAudio = new NativeAudio(new StaticResourceStub<>(musicRef));
+    }
+
+    @After
+    public void after() {
+        musicRef.set(null);
     }
 
     @Test
@@ -109,7 +117,6 @@ public class NativeAudioTest {
     /**
      * After deserialization, {@link NativeAudio} should resume playback.
      */
-    @Ignore
     @Test
     public void testSerialization() throws ClassNotFoundException, IOException {
         nativeAudio.play(1);
@@ -130,11 +137,9 @@ public class NativeAudioTest {
 
     private void reserialize() throws IOException, ClassNotFoundException {
         byte[] serialized = CoreTestUtil.serializeObject(nativeAudio);
+
         // Reset music object to mimic real deserialization of a save file
         mockGdxMusic.reset();
-
-        // TODO: Serialization effectively copies all the internals of the object.
-        // That means my references to mockGdxMusic and musicRef become invalid.
 
         nativeAudio = CoreTestUtil.deserializeObject(serialized, NativeAudio.class);
     }
