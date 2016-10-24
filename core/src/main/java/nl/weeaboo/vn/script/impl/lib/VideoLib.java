@@ -47,7 +47,6 @@ public class VideoLib extends LuaLib {
                 return LuaNil.NIL;
             }
 
-            video.start();
             return LuajavaLib.toUserdata(video, IVideo.class);
         } catch (IOException e) {
             throw new ScriptException("Error starting movie: " + filename, e);

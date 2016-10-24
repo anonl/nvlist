@@ -21,7 +21,7 @@ import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
-final class NativeVideo implements IVideoAdapter {
+final class NativeVideo implements INativeVideo {
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
 

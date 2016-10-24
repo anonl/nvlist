@@ -7,7 +7,7 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.vn.core.IRenderEnv;
 
-public interface IVideoAdapter extends Serializable {
+public interface INativeVideo extends Serializable {
 
     void prepare();
     void play() throws VideoPlayerInitException, IOException;

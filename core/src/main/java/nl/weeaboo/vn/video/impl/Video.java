@@ -14,12 +14,12 @@ public class Video implements IVideo {
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
 
     private final FilePath filename;
-    private final IVideoAdapter videoAdapter;
+    private final INativeVideo videoAdapter;
 
     private double privateVolume = 1.0;
     private double masterVolume = 1.0;
 
-    public Video(FilePath filename, IVideoAdapter videoAdapter) {
+    public Video(FilePath filename, INativeVideo videoAdapter) {
         this.filename = Checks.checkNotNull(filename);
         this.videoAdapter = Checks.checkNotNull(videoAdapter);
     }

@@ -27,17 +27,21 @@ public class VideoModule implements IVideoModule {
 
     protected final IEnvironment env;
     protected final VideoResourceLoader resourceLoader;
+    private final INativeVideoFactory nativeVideoFactory;
 
     private IVideo fullscreenMovie;
     private FilePath videoFolder = DEFAULT_VIDEO_FOLDER;
     private Dim videoResolution;
 
     public VideoModule(DefaultEnvironment env) {
-        this(env, new VideoResourceLoader(env));
+        this(env, new VideoResourceLoader(env), new NativeVideoFactory());
     }
-    public VideoModule(DefaultEnvironment env, VideoResourceLoader resourceLoader) {
+    public VideoModule(DefaultEnvironment env, VideoResourceLoader resourceLoader,
+            INativeVideoFactory nativeVideoFactory) {
+
         this.env = env;
         this.resourceLoader = resourceLoader;
+        this.nativeVideoFactory = nativeVideoFactory;
 
         IRenderEnv renderEnv = env.getRenderEnv();
         videoResolution = renderEnv.getVirtualSize();
@@ -66,6 +70,8 @@ public class VideoModule implements IVideoModule {
 
         fullscreenMovie = createVideo(loadInfo);
 
+        fullscreenMovie.start();
+
         return fullscreenMovie;
     }
 
@@ -81,11 +87,9 @@ public class VideoModule implements IVideoModule {
 
         resourceLoader.logLoad(resourceId, loadInfo);
 
-        // Note: VideoAdapter currently
         IRenderEnv renderEnv = env.getRenderEnv();
-        NativeVideo video = new NativeVideo(resourceLoader, resourceId.getFilePath(), renderEnv);
+        INativeVideo video = nativeVideoFactory.createNativeVideo(resourceLoader, resourceId.getFilePath(), renderEnv);
         return new Video(resourceId.getFilePath(), video);
-
     }
 
     @Override
