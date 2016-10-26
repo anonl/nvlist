@@ -3,13 +3,13 @@ package nl.weeaboo.vn.video.impl;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.files.FileHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.video.VideoPlayer;
-import com.badlogic.gdx.video.VideoPlayerCreator;
 import com.badlogic.gdx.video.VideoPlayerInitException;
+import com.google.common.annotations.VisibleForTesting;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
@@ -17,18 +17,17 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
 final class NativeVideo implements INativeVideo {
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(NativeVideo.class);
 
     private final StaticRef<GeneratedResourceStore> resourceStore = StaticEnvironment.GENERATED_RESOURCES;
-    private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
 
-    private FileResourceLoader resourceLoader;
+    private final IGdxVideoPlayerFactory videoPlayerFactory;
     private final FilePath filePath;
 
     private boolean paused = false;
@@ -37,20 +36,19 @@ final class NativeVideo implements INativeVideo {
 
     private IResource<VideoPlayerResource> videoPlayerRef;
 
-    public NativeVideo(FileResourceLoader resourceLoader, FilePath filePath, IRenderEnv renderEnv) {
-        this.resourceLoader = Checks.checkNotNull(resourceLoader);
+    public NativeVideo(IGdxVideoPlayerFactory videoPlayerFactory, FilePath filePath, IRenderEnv renderEnv) {
+        this.videoPlayerFactory = Checks.checkNotNull(videoPlayerFactory);
         this.filePath = Checks.checkNotNull(filePath);
         this.renderEnv = Checks.checkNotNull(renderEnv);
     }
 
-    private FileHandle resolveFileHandle() {
-        FileHandleResolver fileResolver = assetManager.get().getFileHandleResolver();
-        FilePath absolutePath = resourceLoader.getAbsolutePath(filePath);
-        return fileResolver.resolve(absolutePath.toString());
-    }
-
     @Override
     public void prepare() {
+        try {
+            initVideoPlayer();
+        } catch (VideoPlayerInitException e) {
+            LOG.debug("Prepare failed", e);
+        }
     }
 
     @Override
@@ -60,13 +58,14 @@ final class NativeVideo implements INativeVideo {
 
         VideoPlayer player = getVideoPlayer();
         if (player != null) {
-            player.play(resolveFileHandle());
+            player.play(videoPlayerFactory.resolveFileHandle(filePath));
         }
     }
 
     private void initVideoPlayer() throws VideoPlayerInitException {
         if (videoPlayerRef == null) {
-            videoPlayerRef = resourceStore.get().register(new VideoPlayerResource());
+            VideoPlayerResource res = new VideoPlayerResource(videoPlayerFactory);
+            videoPlayerRef = resourceStore.get().register(res);
         }
         videoPlayerRef.get().initVideoPlayer();
     }
@@ -132,7 +131,8 @@ final class NativeVideo implements INativeVideo {
         }
     }
 
-    private VideoPlayer getVideoPlayer() {
+    @VisibleForTesting
+    VideoPlayer getVideoPlayer() {
         if (videoPlayerRef == null) {
             return null;
         }
@@ -157,9 +157,14 @@ final class NativeVideo implements INativeVideo {
 
     private static final class VideoPlayerResource implements Serializable, Disposable {
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = VideoImpl.serialVersionUID;
 
+        private final IGdxVideoPlayerFactory videoPlayerFactory;
         private transient VideoPlayer player;
+
+        public VideoPlayerResource(IGdxVideoPlayerFactory videoPlayerFactory) {
+            this.videoPlayerFactory = Checks.checkNotNull(videoPlayerFactory);
+        }
 
         @Override
         public void dispose() {
@@ -170,7 +175,7 @@ final class NativeVideo implements INativeVideo {
 
         public void initVideoPlayer() throws VideoPlayerInitException {
             if (player == null) {
-                player = VideoPlayerCreator.createVideoPlayer();
+                player = videoPlayerFactory.createVideoPlayer();
             }
         }
 

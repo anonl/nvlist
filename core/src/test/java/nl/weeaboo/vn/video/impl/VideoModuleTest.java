@@ -46,6 +46,4 @@ public class VideoModuleTest {
         videoModule.movie(new ResourceLoadInfo(blankPath));
     }
 
-    // TOODO setvideofolder
-
 }
