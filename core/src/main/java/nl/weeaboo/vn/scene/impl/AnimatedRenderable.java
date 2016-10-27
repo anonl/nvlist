@@ -37,7 +37,7 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
         super.update();
 
         if (!isFinished()) {
-            time = Math.min(getDuration(), time + 1);
+            setTime(time + 1);
 
             checkedPrepare();
             updateResources();
@@ -88,6 +88,10 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
 
     public double getTime() {
         return time;
+    }
+
+    public void setTime(double newTime) {
+        time = Math.min(getDuration(), newTime);
     }
 
     public double getDuration() {

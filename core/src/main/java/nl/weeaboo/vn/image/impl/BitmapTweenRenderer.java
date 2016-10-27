@@ -19,8 +19,6 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
 
     protected final BitmapTweenConfig config;
 
-    private Area2D baseUV = ITexture.DEFAULT_UV;
-
     // --- Initialized in prepare() ---
     private ITexture remapTexture;
     private TriangleGrid grid;
@@ -68,7 +66,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
 
         ITexture controlTex = controlImage.getTexture();
         Rect2D b = AlignUtil.getAlignedBounds(controlTex, 0, 0);
-        Area2D uv = controlTex.getUV();
+        Area2D uv = controlImage.getUV();
         if (controlImage.isTile()) {
             controlTexUV = Area2D.of(uv.x, uv.y, uv.w * width / b.w, uv.h * height / b.h);
             controlWrap = TextureWrap.REPEAT_BOTH;
@@ -110,13 +108,13 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         return config.getStartTexture().getTexture();
     }
     protected Area2D getStartTextureUV() {
-        return config.getStartTexture().getUV(baseUV);
+        return config.getStartTexture().getUV();
     }
     protected ITexture getEndTexture() {
         return config.getEndTexture().getTexture();
     }
     protected Area2D getEndTextureUV() {
-        return config.getEndTexture().getUV(baseUV);
+        return config.getEndTexture().getUV();
     }
     protected ITexture getControlTexture() {
         return config.getControlImage().getTexture();

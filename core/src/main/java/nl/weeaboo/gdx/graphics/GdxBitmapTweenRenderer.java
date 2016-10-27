@@ -66,7 +66,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         if (shader == null) {
             String filename = "bitmaptween";
             try {
-                shader = shaderStore.get().createShader(filename);
+                shader = shaderStore.get().createShaderFromClasspath(GdxBitmapTweenRenderer.class, filename);
             } catch (IOException e) {
                 LOG.warn("Unable to create shader: {}", filename, e);
             }
@@ -82,7 +82,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getStartTexture();
         if (tex != null) {
-            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getStartTextureUV());
+            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, ITexture.DEFAULT_UV);
         }
     }
 
@@ -95,7 +95,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     protected void renderEnd(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getEndTexture();
         if (tex != null) {
-            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getEndTextureUV());
+            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, ITexture.DEFAULT_UV);
         }
     }
 

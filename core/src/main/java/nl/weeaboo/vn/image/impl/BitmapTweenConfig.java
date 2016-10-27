@@ -9,12 +9,11 @@ import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.Interpolators;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.render.RenderUtil;
 
 public class BitmapTweenConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final double duration;
     private final ControlImage controlImage;
 
@@ -79,7 +78,7 @@ public class BitmapTweenConfig implements Serializable {
     public static class ControlImage implements Serializable {
 
         private static final long serialVersionUID = 1L;
-        
+
         private final ITexture texture;
         private final boolean tile;
 
@@ -104,12 +103,16 @@ public class BitmapTweenConfig implements Serializable {
             }
         }
 
+        public Area2D getUV() {
+            return ITexture.DEFAULT_UV;
+        }
+
     }
 
     public static class InputTexture implements Serializable {
 
         private static final long serialVersionUID = 1L;
-        
+
         /** May be null */
         private final ITexture texture;
         private final double alignX, alignY;
@@ -131,8 +134,8 @@ public class BitmapTweenConfig implements Serializable {
             return AlignUtil.getAlignedBounds(texture, alignX, alignY);
         }
 
-        public Area2D getUV(Area2D baseUV) {
-            return RenderUtil.combineUV(baseUV, texture != null ? texture.getUV() : ITexture.DEFAULT_UV);
+        public Area2D getUV() {
+            return ITexture.DEFAULT_UV;
         }
 
     }
