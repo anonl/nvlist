@@ -303,8 +303,6 @@ public final class DebugControls {
 
     private static void createBitmapTweenImage(ILayer layer, IImageModule imageModule) {
         IImageDrawable image = imageModule.createImage(layer);
-        image.setPos(0, 0);
-        image.setAlign(.5, .5);
 
         ITexture texture = getTestTexture(imageModule);
         ITexture control = imageModule.getTexture(FilePath.of("fade/shutter-right"));
@@ -314,7 +312,7 @@ public final class DebugControls {
         config.setEndTexture(null);
 
         image.setRenderer(new GdxBitmapTweenRenderer(imageModule, config));
-        image.setSize(150, 75);
+        image.setSize(256, 256);
     }
 
 }

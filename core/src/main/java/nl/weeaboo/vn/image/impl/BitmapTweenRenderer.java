@@ -123,14 +123,20 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         return remapTexture;
     }
 
+    private Rect2D getControlBounds() {
+        InputTexture start = config.getStartTexture();
+        InputTexture end = config.getEndTexture();
+        return config.getControlImage().getBounds(start.getBounds(), end.getBounds());
+    }
+
     @Override
     public double getNativeWidth() {
-        return getControlTexture().getWidth();
+        return getControlBounds().w;
     }
 
     @Override
     public double getNativeHeight() {
-        return getControlTexture().getHeight();
+        return getControlBounds().h;
     }
 
 }

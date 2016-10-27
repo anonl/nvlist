@@ -23,9 +23,11 @@ import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
 import nl.weeaboo.vn.image.impl.BitmapTweenRenderer;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.image.impl.ShaderStore;
+import nl.weeaboo.vn.math.MutableMatrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
+import nl.weeaboo.vn.render.impl.DrawTransform;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.TriangleGrid;
 import nl.weeaboo.vn.scene.IDrawable;
@@ -88,7 +90,13 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
 
     @Override
     protected void renderIntermediate(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
-        drawBuffer.drawCustom(parent, parent.getColorARGB(), new Logic());
+        DrawTransform transform = new DrawTransform(parent);
+        MutableMatrix matrix = transform.getTransform().mutableCopy();
+        matrix.translate(bounds.x, bounds.y);
+        matrix.scale(getWidth() / getNativeWidth(), getHeight() / getNativeHeight());
+        transform.setTransform(matrix.immutableCopy());
+
+        drawBuffer.drawCustom(transform, parent.getColorARGB(), new Logic());
     }
 
     @Override
