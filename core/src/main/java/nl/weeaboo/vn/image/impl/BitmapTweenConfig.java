@@ -104,6 +104,7 @@ public class BitmapTweenConfig implements Serializable {
         }
 
         public Area2D getUV() {
+            // TODO: Should this be texture.getUV()?
             return ITexture.DEFAULT_UV;
         }
 
@@ -135,7 +136,7 @@ public class BitmapTweenConfig implements Serializable {
         }
 
         public Area2D getUV() {
-            return ITexture.DEFAULT_UV;
+            return (texture != null ? texture.getUV() : ITexture.DEFAULT_UV);
         }
 
     }

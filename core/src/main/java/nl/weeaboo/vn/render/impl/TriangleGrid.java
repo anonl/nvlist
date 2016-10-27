@@ -136,7 +136,7 @@ public final class TriangleGrid implements Serializable {
 		}
 
         coords.put((float)u);
-        coords.put((float)v);
+        coords.put(1 - (float)v);
 	}
 
     public int getVerticesPerRow() {
