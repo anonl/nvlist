@@ -11,10 +11,6 @@ import nl.weeaboo.vn.scene.impl.ImageDrawable;
 
 public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
 
-    {
-        generate = true;
-    }
-
     private GdxBitmapTweenRenderer tween;
     private ImageDrawable drawable;
 
