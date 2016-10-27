@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.test.integration.render;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,13 +12,14 @@ import nl.weeaboo.vn.scene.impl.ImageDrawable;
 
 public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
 
+    private BitmapTweenConfig tweenConfig;
     private GdxBitmapTweenRenderer tween;
     private ImageDrawable drawable;
 
     @Before
     public void before() {
         ITexture control = getTexture("vshutter");
-        BitmapTweenConfig tweenConfig = new BitmapTweenConfig(30, new ControlImage(control, false));
+        tweenConfig = new BitmapTweenConfig(30, new ControlImage(control, false));
         tweenConfig.setStartTexture(getTexture("a"));
         tweenConfig.setEndTexture(getTexture("b"));
 
@@ -25,6 +27,11 @@ public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
         drawable = new ImageDrawable();
         drawable.setRenderer(tween);
         drawable.setSize(1280, 720);
+    }
+
+    @After
+    public void after() {
+        drawable.destroy();
     }
 
     @Test
@@ -46,6 +53,22 @@ public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
         setTime(1.0);
         doRender();
         checkRenderResult("gdx-bitmaptween-100");
+    }
+
+    @Test
+    public void renderBlankStart() {
+        tweenConfig.setStartTexture(null);
+        setTime(0.5);
+        doRender();
+        checkRenderResult("gdx-bitmaptween-blank-start");
+    }
+
+    @Test
+    public void renderBlankEnd() {
+        tweenConfig.setEndTexture(null);
+        setTime(0.5);
+        doRender();
+        checkRenderResult("gdx-bitmaptween-blank-end");
     }
 
     private void setTime(double relativeTime) {
