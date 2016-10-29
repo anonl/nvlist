@@ -27,9 +27,9 @@ public class Button extends Transformable implements IButton {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private final IButtonModel model = new ButtonModel();
-    private final IButtonRenderer renderer = new ButtonRenderer();
     private final IScriptEventDispatcher eventDispatcher;
+    private final IButtonModel model;
+    private final IButtonRenderer renderer;
 
     private double touchMargin;
     private double alphaEnableThreshold = 0.9;
@@ -38,7 +38,12 @@ public class Button extends Transformable implements IButton {
     private transient IEventListener rendererListener;
 
     public Button(IScriptEventDispatcher eventDispatcher) {
+        this(eventDispatcher, new ButtonModel(), new ButtonRenderer());
+    }
+    public Button(IScriptEventDispatcher eventDispatcher, ButtonModel model, ButtonRenderer renderer) {
         this.eventDispatcher = Checks.checkNotNull(eventDispatcher);
+        this.model = Checks.checkNotNull(model);
+        this.renderer = Checks.checkNotNull(renderer);
 
         initTransients();
     }

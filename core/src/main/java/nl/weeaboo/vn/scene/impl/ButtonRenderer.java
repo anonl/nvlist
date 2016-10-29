@@ -125,6 +125,11 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     }
 
     @Override
+    public ButtonViewState getViewState() {
+        return currentViewState;
+    }
+
+    @Override
     public void setViewState(ButtonViewState state) {
         currentViewState = state;
 

@@ -13,6 +13,7 @@ public interface IButtonRenderer extends IRenderable {
     void setTexture(ButtonViewState viewState, ITexture tex);
     void setTexture(ButtonViewState viewState, INinePatch tex);
 
+    ButtonViewState getViewState();
     void setViewState(ButtonViewState viewState);
 
     VerticalAlign getVerticalAlign();
