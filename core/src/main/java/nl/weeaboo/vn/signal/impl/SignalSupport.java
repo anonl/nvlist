@@ -21,6 +21,9 @@ public class SignalSupport implements ISignalHandler, Serializable {
      */
     private final List<HandlerEntry> handlers = Lists.newCopyOnWriteArrayList();
 
+    /**
+     * @param order Handlers are called in ascending order whenever a signal is received.
+     */
     public <T extends ISignalHandler & Serializable> void addSignalHandler(int order, T handler) {
         HandlerEntry newEntry = new HandlerEntry(order, handler);
 
