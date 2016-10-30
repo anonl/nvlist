@@ -11,7 +11,7 @@ public class MockNativeVideoFactory implements INativeVideoFactory {
     @Override
     public INativeVideo createNativeVideo(FileResourceLoader resourceLoader, FilePath filePath,
             IRenderEnv renderEnv) {
-        return new MockNativeVideo(filePath);
+        return new MockNativeVideo();
     }
 
 }
