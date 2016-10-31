@@ -9,7 +9,6 @@ local imageA = img("a")
 imageA:setBounds(0, 0, 1280, 720)
 local imageB = img("b")
 imageB:setBounds(640, 0, 1280, 720)
-imageB:getRenderer():setUv(320, 0, 320, 240)
 
 local ss = screenshot()
 
