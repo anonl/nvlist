@@ -230,6 +230,13 @@ final class SeenLog implements ISeenLog {
                 IndexBasedSeen value = (IndexBasedSeen)in.readObject();
                 scriptSeen.put(key, value);
             }
+
+            int choiceSeenSize = in.readInt();
+            for (int n = 0; n < choiceSeenSize; n++) {
+                String key = in.readUTF();
+                IndexBasedSeen value = (IndexBasedSeen)in.readObject();
+                choiceSeen.put(key, value);
+            }
         } catch (ClassNotFoundException e) {
             LOG.error("Invalid seen log: {}", path, e);
             throw new IOException(e);

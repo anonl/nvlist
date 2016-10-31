@@ -14,6 +14,9 @@ import nl.weeaboo.vn.script.impl.lua.LuaTestUtil;
 
 public class SeenLogTest {
 
+    private static final String CHOICE_A = "choiceA";
+    private static final String CHOICE_B = "choiceB";
+
     private TestEnvironment env;
     private SeenLog seenLog;
 
@@ -67,12 +70,19 @@ public class SeenLogTest {
             add(pathX, type);
         }
 
+        // Mark some script lines as seen
         FilePath filename = LuaTestUtil.SCRIPT_HELLOWORLD;
         ResourceId fileId = new ResourceId(MediaType.SCRIPT, filename);
         seenLog.registerScriptFile(fileId, 5);
         seenLog.markLineSeen(filename, 1);
         seenLog.markLineSeen(filename, 3);
         seenLog.markLineSeen(filename, 5);
+
+        // Mark some choices as seen
+        seenLog.registerChoice(CHOICE_A, 3);
+        seenLog.markChoiceSelected(CHOICE_A, 2); // Note: index is 1-based
+        seenLog.registerChoice(CHOICE_B, 2);
+        seenLog.markChoiceSelected(CHOICE_B, 1);
 
         // Store current state
         SecureFileWriter sfw = new SecureFileWriter(env.getOutputFileSystem());
@@ -92,11 +102,17 @@ public class SeenLogTest {
             assertContains(true, pathX, type);
             assertContains(false, pathY, type);
         }
+
+        // Check script lines seen
         assertLineSeen(true, filename, 1);
         assertLineSeen(false, filename, 2);
         assertLineSeen(true, filename, 3);
         assertLineSeen(false, filename, 4);
         assertLineSeen(true, filename, 5);
+
+        // Check choices seen
+        assertChoicesSelected(CHOICE_A, false, true, false);
+        assertChoicesSelected(CHOICE_B, true, false);
     }
 
     @Test
@@ -127,6 +143,19 @@ public class SeenLogTest {
         assertLineSeen(false, filename, 3); // Lines seen was cleared
     }
 
+    @Test
+    public void choicesSeen() {
+        // Double-register choice
+        seenLog.registerChoice(CHOICE_A, 3);
+        seenLog.registerChoice(CHOICE_A, 3);
+
+        // Ask if an out-of-range choice was selected
+        Assert.assertFalse(seenLog.hasSelectedChoice(CHOICE_A, 4));
+
+        // Ask if an unregistered choice was selected
+        Assert.assertFalse(seenLog.hasSelectedChoice(CHOICE_B, 1));
+    }
+
     private void assertLineSeen(boolean expected, FilePath filename, int lineNum) {
         Assert.assertEquals(expected, seenLog.hasSeenLine(filename, lineNum));
     }
@@ -136,6 +165,13 @@ public class SeenLogTest {
     }
     private void assertContains(boolean expected, FilePath fn, MediaType mediaType) {
         Assert.assertEquals(expected, seenLog.hasSeen(new ResourceId(mediaType, fn)));
+    }
+
+    private void assertChoicesSelected(String choiceId, boolean... expected) {
+        for (int n = 0; n < expected.length; n++) {
+            Assert.assertEquals("Index " + n,
+                    expected[n], seenLog.hasSelectedChoice(choiceId, n + 1));
+        }
     }
 
     private boolean add(FilePath fn) {
