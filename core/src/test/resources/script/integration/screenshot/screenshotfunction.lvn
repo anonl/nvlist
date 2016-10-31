@@ -6,9 +6,10 @@ require("builtin/vn")
 destroyValues(Image.getDrawables(getRootLayer()))
 
 local imageA = img("a")
-imageA:setBounds(0, 0, 640, 720)
+imageA:setBounds(0, 0, 1280, 720)
 local imageB = img("b")
-imageB:setBounds(640, 0, 640, 720)
+imageB:setBounds(640, 0, 1280, 720)
+imageB:getRenderer():setUv(320, 0, 320, 240)
 
 local ss = screenshot()
 
