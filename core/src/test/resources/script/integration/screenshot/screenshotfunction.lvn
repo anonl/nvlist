@@ -1,0 +1,21 @@
+@@
+
+require("builtin/vn")
+
+--Remove all images
+destroyValues(Image.getDrawables(getRootLayer()))
+
+local imageA = img("a")
+imageA:setBounds(0, 0, 640, 720)
+local imageB = img("b")
+imageB:setBounds(640, 0, 640, 720)
+
+local ss = screenshot()
+
+--Remove all images
+destroyValues(Image.getDrawables(getRootLayer()))
+
+-- Draw the screenshot from earlier as a full-screen image
+img(ss)
+
+@@

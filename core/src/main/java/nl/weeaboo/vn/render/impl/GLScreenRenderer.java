@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.common.base.Stopwatch;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.gdx.graphics.GLBlendMode;
 import nl.weeaboo.gdx.graphics.GLMatrixStack;
@@ -243,7 +244,9 @@ public class GLScreenRenderer extends BaseScreenRenderer {
             PixmapUtil.flipVertical(pixels);
             texData = PixelTextureData.fromPremultipliedPixmap(pixels);
         }
-        ss.setPixels(texData, renderEnv.getScreenSize());
+
+        Rect glSize = renderEnv.getGLClip();
+        ss.setPixels(texData, Dim.of(glSize.w, glSize.h));
     }
 
     @Override
