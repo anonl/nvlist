@@ -1,0 +1,18 @@
+@@
+
+require("builtin/vn")
+
+linear = Interpolators.LINEAR
+luaAssert(linear ~= nil)
+-- Using Interpolators.get() on an interpolator should just return it
+luaAssertEquals(linear, Interpolators.get(linear))
+
+hermite = Interpolators.HERMITE
+luaAssert(hermite ~= nil)
+luaAssertEquals(hermite, Interpolators.get(hermite))
+
+smooth = Interpolators.SMOOTH
+luaAssert(smooth ~= nil)
+luaAssertEquals(smooth, Interpolators.get(smooth))
+
+@@

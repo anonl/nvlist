@@ -17,6 +17,8 @@ public class TextLibTest extends AbstractLibTest {
 
     @Override
     protected void addInitializers(LuaScriptEnv scriptEnv) {
+        super.addInitializers(scriptEnv);
+
         scriptEnv.addInitializer(new TextLib(env, scriptEnv));
     }
 

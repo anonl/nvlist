@@ -1,0 +1,18 @@
+@@
+
+require("builtin/vn")
+
+function linear(x)
+    return x
+end
+
+local interpolator = Interpolators.get(linear)
+
+for i=1,100 do
+    local frac = i / 100
+    local expected = linear(frac)
+    local actual = interpolator:remap(frac)
+    luaAssert(math.abs(expected - actual) <= 0.001)
+end
+
+@@

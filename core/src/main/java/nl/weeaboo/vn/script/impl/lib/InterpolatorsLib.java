@@ -46,12 +46,8 @@ public class InterpolatorsLib extends LuaLib {
     }
 
     public static IInterpolator getInterpolator(LuaValue lval, IInterpolator defaultValue) {
-        if (lval.isuserdata()) {
-            LuaUserdata udata = (LuaUserdata)lval;
-            Object jval = udata.touserdata();
-            if (jval instanceof IInterpolator) {
-                return (IInterpolator)jval;
-            }
+        if (lval.isuserdata(IInterpolator.class)) {
+            return lval.checkuserdata(IInterpolator.class);
         } else if (lval instanceof LuaFunction) {
             return getLuaInterpolator((LuaFunction)lval, 256);
         }
@@ -75,10 +71,10 @@ public class InterpolatorsLib extends LuaLib {
      * @return An interpolator based on the given interpolation function.
      */
     @ScriptFunction
-    public Varargs get(Varargs args) {
+    public Varargs get(Varargs args) throws ScriptException {
         IInterpolator interpolator = getInterpolator(args.arg1(), null);
         if (interpolator == null) {
-            return args.arg(2);
+            throw new ScriptException("Unable to resolve an interpolator from the given value: " + args.arg1());
         }
         return LuajavaLib.toUserdata(interpolator, IInterpolator.class);
     }
