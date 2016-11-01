@@ -2,13 +2,13 @@
 
 require("builtin/vn")
 
---Remove all images
+--Remove all imagess
 destroyValues(Image.getDrawables(getRootLayer()))
 
 local imageA = img("a")
-imageA:setBounds(0, 0, 1280, 720)
+imageA:setBounds(-2560 + 640, 0, 2560, 720)
 local imageB = img("b")
-imageB:setBounds(640, 0, 1280, 720)
+imageB:setBounds(640, 0, 2560, 720)
 
 local ss = screenshot()
 
