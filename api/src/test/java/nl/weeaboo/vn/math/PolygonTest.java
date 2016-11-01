@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.math;
 
 
+import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,4 +38,30 @@ public class PolygonTest {
         Assert.assertFalse(aligned.contains(2, 7)); //Outside bottom
     }
 
+
+    @Test
+    public void randomContainsTest() {
+        // Calculate length of sides to get a diagonal of length 2
+        double s = Math.sqrt(2*2 + 2*2);
+
+        Random random = new Random(12345);
+        for (int angle = 0; angle < 256; angle++) {
+            Rect2D rect = Rect2D.of(-s, -s, 2 * s, 2 * s);
+            Matrix transform = Matrix.rotationMatrix(angle);
+            Matrix inverseTransform = Matrix.rotationMatrix(-angle);
+            Polygon polygon = Polygon.transformedRect(transform, rect);
+
+            // Check using random points that the polygon and equivalent square return equal results for contains
+            for (int n = 0; n < 1000; n++) {
+                double x = -1 + 2 * random.nextDouble();
+                double y = -1 + 2 * random.nextDouble();
+
+                // Map point back to rectangle coordinates
+                Vec2 rv = inverseTransform.transform(x, y);
+
+                Assert.assertEquals("x=" + x + ", y=" + y,
+                        rect.contains(rv.x, rv.y), polygon.contains(x, y));
+            }
+        }
+    }
 }
