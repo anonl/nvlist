@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import com.google.common.collect.ImmutableList;
 
-import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.AbstractId;
 
 /** Virtual key code. Used by the key config for mapping logical actions to one or more inputs. */
-public final class VKey implements Serializable {
+public final class VKey extends AbstractId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,38 +29,12 @@ public final class VKey implements Serializable {
         MOUSE_LEFT
     );
 
-    private final String id;
-
     private VKey(String id) {
-        this.id = Checks.checkNotNull(id);
+        super(id);
     }
 
     public static VKey fromString(String id) {
         return new VKey(id);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof VKey)) {
-            return false;
-        }
-
-        VKey other = (VKey)obj;
-        return id.equals(other.id);
-    }
-
-    @Override
-    public String toString() {
-        return getId();
     }
 
     public static Iterable<VKey> getStandardKeys() {
