@@ -3,20 +3,9 @@ package nl.weeaboo.vn.core;
 import static nl.weeaboo.settings.Preference.newConstPreference;
 import static nl.weeaboo.settings.Preference.newPreference;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.Map;
-
-import nl.weeaboo.common.Checks;
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.settings.AbstractPreferenceStore;
 import nl.weeaboo.settings.Preference;
-import nl.weeaboo.settings.PropertiesUtil;
 
-public final class NovelPrefs extends AbstractPreferenceStore {
+public final class NovelPrefs {
 
     public static final Preference<Integer> WIDTH = newConstPreference("width",
             "Width",
@@ -73,45 +62,5 @@ public final class NovelPrefs extends AbstractPreferenceStore {
 //	public static final Preference<Integer> TIMER_IDLE_TIMEOUT = newPreference("vn.timerIdleTimeout", 30, "Timer Idle Timeout", "The number of seconds of user inactivity that are tolerated before the playtime timer is stopped.");
 //	public static final Preference<Boolean> ENABLE_PROOFREADER_TOOLS = newPreference("vn.enableProofreaderTools", false, "Enable Proofreader Tools", "Enables available bug reporting features for proofreaders/editors.");
 //	public static final Preference<Boolean> RTL = newPreference("vn.rtl", false, "Right-to-Left Text", "Sets the default text direction to RTL (right to left).");
-
-    private static final FilePath CONSTANTS_FILENAME = FilePath.of("config.ini");
-    private static final FilePath DEFAULTS_FILENAME = FilePath.of("prefs.default.ini");
-    private static final FilePath VARIABLES_FILENAME = FilePath.of("prefs.ini");
-
-    private final IWritableFileSystem fileSystem;
-
-    public NovelPrefs(IWritableFileSystem fs) {
-        this.fileSystem = Checks.checkNotNull(fs);
-	}
-
-    @Override
-    public void loadVariables() throws IOException {
-        initConsts(load(CONSTANTS_FILENAME));
-        setAll(load(DEFAULTS_FILENAME));
-        setAll(load(VARIABLES_FILENAME));
-    }
-
-    private Map<String, String> load(FilePath filename) throws IOException {
-        if (!fileSystem.getFileExists(filename)) {
-            return Collections.emptyMap();
-        }
-
-        InputStream in = fileSystem.openInputStream(filename);
-        try {
-            return PropertiesUtil.load(in);
-        } finally {
-            in.close();
-        }
-    }
-
-    @Override
-    public void saveVariables() throws IOException {
-        OutputStream out = fileSystem.openOutputStream(VARIABLES_FILENAME, false);
-        try {
-            PropertiesUtil.save(out, getVariables());
-        } finally {
-            out.close();
-        }
-    }
 
 }

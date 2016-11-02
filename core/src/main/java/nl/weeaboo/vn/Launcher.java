@@ -49,10 +49,10 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
-import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
+import nl.weeaboo.vn.core.impl.NovelPrefsStore;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
@@ -144,7 +144,7 @@ public class Launcher extends ApplicationAdapter {
 
         InitConfig.init();
 
-        NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
+        NovelPrefsStore prefs = new NovelPrefsStore(fileSystem.getWritableFileSystem());
         try {
             prefs.loadVariables();
             prefs.saveVariables();

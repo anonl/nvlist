@@ -12,7 +12,6 @@ import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.lua2.LuaRunState;
-import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.image.impl.ImageModule;
 import nl.weeaboo.vn.input.impl.Input;
@@ -45,7 +44,7 @@ public class TestEnvironment extends DefaultEnvironment {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
         GdxFileSystem gdxFileSystem = new GdxFileSystem("", true);
-        NovelPrefs prefs = new NovelPrefs(fileSystem.getWritableFileSystem());
+        NovelPrefsStore prefs = new NovelPrefsStore(fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();
         TestInputAdapter inputAdapter = new TestInputAdapter(nativeInput);
