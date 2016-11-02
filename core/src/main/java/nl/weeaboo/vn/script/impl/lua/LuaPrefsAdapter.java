@@ -23,6 +23,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.settings.IPreferenceStore;
 import nl.weeaboo.settings.Preference;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 
@@ -79,8 +80,8 @@ public class LuaPrefsAdapter {
             this.isSetter = isSetter;
             this.prefStoreRef = prefStoreRef;
 
-            // Search for preference definitions in the preference store
-            prefHolderClasses.add(prefStoreRef.get().getClass().getName());
+            // Add default preference holder
+            prefHolderClasses.add(NovelPrefs.class.getName());
         }
 
         private Preference<?> getCachedPref(String requestedKey) {

@@ -1,12 +1,11 @@
 package nl.weeaboo.vn.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Maps;
 
 import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.settings.Preference;
@@ -17,7 +16,11 @@ public class NovelPrefsTest {
 
     @Before
     public void before() throws IllegalAccessException {
-        prefs = Maps.newHashMap(ReflectUtil.getConstants(NovelPrefs.class, Preference.class));
+        // Get the declared preferences and map them by key
+        prefs = new HashMap<>();
+        for (Preference<?> pref : ReflectUtil.getConstants(NovelPrefs.class, Preference.class).values()) {
+            prefs.put(pref.getKey(), pref);
+        }
     }
 
     /** Check the default values of important prefs so they don't change accidentally between releases. */
