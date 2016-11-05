@@ -42,6 +42,7 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
 
     protected FileHandle resolveExisting(String path) throws FileNotFoundException {
         FileHandle file = resolve(path);
+        // TODO #32: exists() is very slow
         if (!file.exists()) {
             throw new FileNotFoundException(path);
         }
@@ -55,6 +56,7 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
 
     @Override
     protected boolean getFileExistsImpl(FilePath path) {
+        // TODO #32: exists() is very slow
         return resolve(path.toString()).exists();
     }
 
@@ -79,11 +81,15 @@ public class GdxFileSystem extends AbstractFileSystem implements FileHandleResol
     private void getFilesImpl(Collection<FilePath> out, FilePath path, FileCollectOptions opts,
             FileHandle file) {
 
+        // TODO #32: exists() is very slow
         if (!file.exists()) {
             return;
         }
 
+        // TODO #32: isDirectory() calls list() and is therefore very slow
         if (file.isDirectory()) {
+
+            // TODO #32: list() is very slow
             for (FileHandle child : file.list()) {
                 FilePath childPath;
                 if (child.isDirectory()) {

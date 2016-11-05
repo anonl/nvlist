@@ -28,6 +28,7 @@ public class Scene2dEnv implements Disposable {
 
     private Skin loadSkin(GdxFileSystem fileSystem) {
         FileHandle skinFile = fileSystem.resolve("skin/uiskin.json");
+        // TODO #32: exists() is very slow
         if (!skinFile.exists()) {
             LOG.warn("Skin file not found: {}", skinFile);
         } else {
