@@ -12,7 +12,10 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        // Android resources are in the root of the assets dir, not in a subfolder 'res/'
-        initialize(new Launcher(""), config);
+
+		// Android resources are in the root of the assets dir, not in a subfolder 'res/'
+		AndroidGdxFileSystem androidFileSystem = new AndroidGdxFileSystem();
+
+        initialize(new Launcher(androidFileSystem), config);
 	}
 }

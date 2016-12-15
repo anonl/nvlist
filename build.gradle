@@ -27,7 +27,7 @@ allprojects {
         appName = 'NVList'
         
         javaVersion = JavaVersion.VERSION_1_8
-        gdxVersion = '1.9.3'
+        gdxVersion = '1.9.5'
         gdxVideoVersion = '0.0.4-anonl'
         junitVersion = '4.12'
         slf4jVersion = '1.7.21'

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
@@ -27,6 +28,7 @@ final class GdxAppStub implements Application {
 
     private final ApplicationAdapter appListener;
 
+    private ApplicationLogger appLogger;
     private int logLevel = LOG_INFO;
 
     public GdxAppStub() {
@@ -158,6 +160,16 @@ final class GdxAppStub implements Application {
     @Override
     public void removeLifecycleListener(LifecycleListener listener) {
         // Doesn't have a lifecycle
+    }
+
+    @Override
+    public void setApplicationLogger(ApplicationLogger applicationLogger) {
+        this.appLogger = applicationLogger;
+    }
+
+    @Override
+    public ApplicationLogger getApplicationLogger() {
+        return appLogger;
     }
 
 }

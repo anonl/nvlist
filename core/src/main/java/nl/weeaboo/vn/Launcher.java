@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.google.common.collect.Iterables;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
@@ -78,8 +77,6 @@ public class Launcher extends ApplicationAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
-    private final String resourceFolder;
-
     private GdxFileSystem resourceFileSystem;
     private AssetManager assetManager;
 	private FrameBuffer frameBuffer;
@@ -99,16 +96,12 @@ public class Launcher extends ApplicationAdapter {
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
 
-    public Launcher() {
-        this("res/");
-    }
-    public Launcher(String resF) {
-        this.resourceFolder = Checks.checkNotNull(resF);
+    public Launcher(GdxFileSystem resourceFileSystem) {
+        this.resourceFileSystem = resourceFileSystem;
     }
 
 	@Override
 	public void create() {
-        resourceFileSystem = new GdxFileSystem(resourceFolder, true);
         assetManager = new AssetManager(resourceFileSystem);
         PremultTextureLoader.register(assetManager);
         JngTextureLoader.register(assetManager);

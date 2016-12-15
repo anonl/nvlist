@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.AssetManager;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.lua2.LuaRunState;
@@ -43,7 +44,7 @@ public class TestEnvironment extends DefaultEnvironment {
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
-        GdxFileSystem gdxFileSystem = new GdxFileSystem("", true);
+        GdxFileSystem gdxFileSystem = new DesktopGdxFileSystem("", true);
         NovelPrefsStore prefs = new NovelPrefsStore(fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();
