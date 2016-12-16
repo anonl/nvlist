@@ -26,3 +26,16 @@ eclipse {
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
     }
 }
+
+
+android {
+    // TODO: Use declared inputs/output
+    android.applicationVariants.all { variant ->
+        variant.mergeAssets.doLast {
+            def outputFile = new File(outputDir, "assets.list")
+            outputFile.text = "Hello World"
+            logger.info("Wrote assets list to {}", outputFile)
+        }
+    }
+}
+
