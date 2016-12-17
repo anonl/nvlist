@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.AbstractFileSystem;
@@ -39,90 +41,99 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
      * Overridable method so subclasses can avoid calling the (potentially very slow)
      * {@link FileHandle#exists()}.
      */
-    protected boolean exists(FileHandle file) {
-        return file.exists();
-    }
-
-    /**
-     * Overridable method so subclasses can avoid calling the (potentially very slow)
-     * {@link FileHandle#isDirectory()}.
-     */
-    protected boolean isDirectory(FileHandle file) {
-        return file.isDirectory();
+    protected boolean exists(FilePath path) {
+        FileHandle handle = resolve(path.toString());
+        return handle != null && handle.exists();
     }
 
     /**
      * Overridable method so subclasses can avoid calling the (potentially very slow)
      * {@link FileHandle#list()}.
      */
-    protected FileHandle[] list(FileHandle file) {
-        return file.list();
+    protected Iterable<FilePath> list(FilePath path, FileHandle handle) {
+        FileHandle[] childHandles = handle.list();
+        if (childHandles == null) {
+            return ImmutableList.of();
+        }
+
+        List<FilePath> result = Lists.newArrayList();
+        for (FileHandle childHandle : childHandles) {
+            FilePath childPath;
+            if (childHandle.isDirectory()) {
+                childPath = path.resolve(childHandle.name() + "/");
+            } else {
+                childPath = path.resolve(childHandle.name());
+            }
+            result.add(childPath);
+        }
+        return result;
     }
 
-    protected final FileHandle resolveExisting(String path) throws FileNotFoundException {
-        FileHandle file = resolve(path);
-        if (!exists(file)) {
-            throw new FileNotFoundException(path);
+    protected final FileHandle resolveExisting(FilePath path) throws FileNotFoundException {
+        if (!exists(path)) {
+            throw new FileNotFoundException(path.toString());
+        }
+        FileHandle file = resolve(path.toString());
+        if (file == null) {
+            throw new FileNotFoundException(path.toString());
         }
         return file;
     }
 
     @Override
     protected InputStream openInputStreamImpl(FilePath path) throws IOException {
-        return resolveExisting(path.toString()).read();
+        return resolveExisting(path).read();
     }
 
     @Override
     protected boolean getFileExistsImpl(FilePath path) {
-        return exists(resolve(path.toString()));
+        return exists(path);
     }
 
     @Override
     protected long getFileSizeImpl(FilePath path) throws IOException {
-        return resolveExisting(path.toString()).length();
+        return resolveExisting(path).length();
     }
 
     @Override
     protected long getFileModifiedTimeImpl(FilePath path) throws IOException {
-        return resolveExisting(path.toString()).lastModified();
+        return resolveExisting(path).lastModified();
     }
 
     @Override
     public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
         List<FilePath> result = new ArrayList<>();
-        getFilesImpl(result, opts.prefix, opts,
-                resolveExisting(opts.prefix.toString()));
+        getFilesImpl(result, opts.prefix, opts, resolveExisting(opts.prefix));
         return result;
     }
 
     private void getFilesImpl(Collection<FilePath> out, FilePath path, FileCollectOptions opts,
             FileHandle file) {
 
-        if (!exists(file)) {
+        if (!exists(path)) {
             return;
         }
 
-        if (isDirectory(file)) {
-            for (FileHandle child : list(file)) {
-                FilePath childPath;
-                if (isDirectory(child)) {
-                    childPath = path.resolve(child.name() + "/");
-                } else {
-                    childPath = path.resolve(child.name());
-                }
+        if (path.getName().isEmpty() || path.isFolder()) {
+            if (opts.collectFolders) {
+                out.add(path);
+            }
 
+            for (FilePath childPath : list(path, file)) {
                 if (childPath.isFolder() && opts.collectFolders) {
                     out.add(childPath);
 
                     if (opts.recursive) {
-                        getFilesImpl(out, childPath, opts, child);
+                        getFilesImpl(out, childPath, opts, resolve(childPath.toString()));
                     }
                 } else if (!childPath.isFolder() && opts.collectFiles) {
                     out.add(childPath);
                 }
             }
-        } else if (opts.collectFiles) {
-            out.add(path);
+        } else {
+            if (opts.collectFiles) {
+                out.add(path);
+            }
         }
     }
 

@@ -21,12 +21,12 @@ def loadProperties(String filename) {
 }
 
 // Standard folders
-def rootDir = new File(vnRoot).getCanonicalFile()
-def resDir = new File(rootDir, "/res")
-def buildResDir = new File(rootDir, "/build-res")
+def vnRootDir = new File(vnRoot).getCanonicalFile()
+def vnResDir = new File(vnRootDir, "/res")
+def buildResDir = new File(vnRootDir, "/build-res")
 
-logger.lifecycle("VN root folder: " + rootDir)
-logger.lifecycle("VN resource folder: " + resDir)
+logger.lifecycle("VN root folder: " + vnRootDir)
+logger.lifecycle("VN resource folder: " + vnResDir)
 logger.lifecycle("VN build-resource folder: " + buildResDir)
 
 // Load user-defined build.properties file
@@ -69,7 +69,7 @@ project(':desktop') {
         main = project.mainClassName
         classpath = sourceSets.main.runtimeClasspath
         standardInput = System.in
-        workingDir = rootDir
+        workingDir = vnRootDir
         ignoreExitValue = true
     }
 }
@@ -77,7 +77,7 @@ project(':desktop') {
 project(':android') {
     apply plugin: 'com.android.application'
 
-    configurations { natives }
+    apply from: 'common-android.gradle'
 
     dependencies {
         compile("nl.weeaboo.vn:nvlist-android:$nvlistVersion@aar") {
@@ -86,69 +86,25 @@ project(':android') {
     }
     
     android {
-        buildToolsVersion '24.0.3'
-        compileSdkVersion 'android-24'
-        
-        sourceSets {
-            main {
-                manifest.srcFile 'AndroidManifest.xml'
-                java.srcDirs = ['src']
-                aidl.srcDirs = ['src']
-                renderscript.srcDirs = ['src']
-                res.srcDirs = ['res']
-                assets.srcDirs = [resDir]
-                jniLibs.srcDirs = ['libs']
-            }
-    
-            instrumentTest.setRoot('tests')
-        }
         defaultConfig {
-            minSdkVersion 15
-            targetSdkVersion 24
-            versionCode = settings.androidVersionCode as int
-            versionName = project.version
+	        versionCode = settings.androidVersionCode as int
+	        versionName = project.version
             manifestPlaceholders = [
                 androidMain: settings.androidMain
             ]
         }
-        lintOptions {
-            textOutput 'stdout'
-            textReport true
-        }
     }
-    
-    // Called every time Gradle gets executed: extracts natives to libs/ so they get packed with the APK.
-    task copyAndroidNatives() { 
-        file('libs/armeabi/').mkdirs();
-        file('libs/armeabi-v7a/').mkdirs();
-        file('libs/x86/').mkdirs();
-    
-        configurations.natives.files.each { jar ->
-            def outputDir = null
-            if (jar.name.endsWith('natives-armeabi-v7a.jar')) outputDir = file('libs/armeabi-v7a')
-            if (jar.name.endsWith('natives-armeabi.jar')) outputDir = file('libs/armeabi')
-            if (jar.name.endsWith('natives-x86.jar')) outputDir = file('libs/x86')
-            if (outputDir != null) {
-                copy {
-                    from zipTree(jar)
-                    into outputDir
-                    include '*.so'
-                }
-            }
-        }
-    }
-    
-    // Run installed app through adb
-    task runInstalled(type: Exec) {
-        def adb = android.getAdbExe()
-        def target = settings.androidPackage + '/' + settings.androidMain
-        commandLine "$adb", 'shell', 'am', 'start', '-n', target
-    }
-    // Install, then run debug build
-    task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
-    }    
-    // Install, then run release build
-    task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
-    }    
 
+	// Run installed app through adb
+	task runInstalled(type: Exec) {
+	    def adb = android.getAdbExe()
+	    def target = settings.androidPackage + '/' + settings.androidMain
+	    commandLine "$adb", 'shell', 'am', 'start', '-n', target
+	}
+	// Install, then run debug build
+	task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
+	}    
+	// Install, then run release build
+	task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
+	}    
 }

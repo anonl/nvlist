@@ -137,7 +137,7 @@ project(':nvlist-android') {
     apply plugin: 'com.android.application'
     apply plugin: 'com.github.dcendents.android-maven'
 
-    configurations { natives }
+    apply from: "${templateDir}/build-tools/common-android.gradle"
 
     dependencies {
         compile project(":nvlist-api")
@@ -160,42 +160,18 @@ project(':nvlist-android') {
         
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"        
         compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
-    }
-    
-    android {
-        buildToolsVersion '24.0.3'
-        compileSdkVersion 'android-24'
-        
-        sourceSets {
-            main {
-                manifest.srcFile 'AndroidManifest.xml'
-                java.srcDirs = ['src']
-                aidl.srcDirs = ['src']
-                renderscript.srcDirs = ['src']
-                res.srcDirs = ['res']
-                assets.srcDirs = [vnResDir]
-                jniLibs.srcDirs = ['libs']
-            }
-    
-            instrumentTest.setRoot('tests')
-        }                
-        defaultConfig {
-            minSdkVersion 15
-            targetSdkVersion 24
-	        jackOptions {
-	           enabled true
-	        }            
-        }
-        compileOptions {
-            sourceCompatibility javaVersion
-            targetCompatibility javaVersion
-        }    
-        lintOptions {
-            textOutput 'stdout'
-            textReport true
-        }
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"        
     }
 }
 
