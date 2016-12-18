@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.common.base.Splitter;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -46,6 +47,8 @@ public class AndroidGdxFileSystem extends GdxFileSystem {
 
         FileHandle assetsFile = resolve("assets.list");
         if (assetsFile.exists()) {
+            Stopwatch sw = Stopwatch.createStarted();
+
             String assetsList = assetsFile.readString("UTF-8");
             List<String> pathStrings = Lists.newArrayList(Splitter.on('\n')
                     .trimResults()
@@ -75,6 +78,8 @@ public class AndroidGdxFileSystem extends GdxFileSystem {
                 }
                 parentEntry.addChild(path);
             }
+
+            LOG.debug("Processing assets.list took {}", sw);
         }
         return map;
     }
