@@ -44,7 +44,7 @@ public class TestEnvironment extends DefaultEnvironment {
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
         MultiFileSystem fileSystem = TestFileSystem.newInstance();
-        GdxFileSystem gdxFileSystem = new DesktopGdxFileSystem("", true);
+        GdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
         NovelPrefsStore prefs = new NovelPrefsStore(fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();

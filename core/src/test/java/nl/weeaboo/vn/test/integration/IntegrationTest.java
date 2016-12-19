@@ -35,7 +35,7 @@ public abstract class IntegrationTest {
 
     @Before
     public final void beforeIntegration() throws ScriptException {
-        launcher = new Launcher(new DesktopGdxFileSystem("", true));
+        launcher = new Launcher(new DesktopGdxFileSystem());
         launcher.create();
 
         novel = launcher.getNovel();

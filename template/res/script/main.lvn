@@ -18,7 +18,7 @@ function titlescreen()
     
     setTextModeADV()
     
-    local i = img("alphablend", 200, 200)
+    local i = img("ziponly", 200, 200)
     i:setAlign(0.5, 0.5)
 
     button("gui/button")

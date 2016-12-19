@@ -12,19 +12,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.AbstractFileSystem;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 
 public abstract class GdxFileSystem extends AbstractFileSystem implements FileHandleResolver {
 
-    protected final String prefix;
-
     private final boolean isReadOnly;
 
-    public GdxFileSystem(String prefix, boolean isReadOnly) {
-        this.prefix = Checks.checkNotNull(prefix);
+    public GdxFileSystem(boolean isReadOnly) {
         this.isReadOnly = isReadOnly;
     }
 

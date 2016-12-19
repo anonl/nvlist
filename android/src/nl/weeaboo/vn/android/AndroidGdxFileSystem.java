@@ -27,7 +27,7 @@ public class AndroidGdxFileSystem extends GdxFileSystem {
     private transient ImmutableMap<FilePath, FileIndexEntry> fileIndex;
 
     public AndroidGdxFileSystem() {
-        super("", true);
+        super(true);
     }
 
     private FileIndexEntry getIndexEntry(FilePath path) {

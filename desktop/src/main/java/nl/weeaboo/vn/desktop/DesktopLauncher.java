@@ -27,7 +27,7 @@ public class DesktopLauncher {
                 "res/icon32.png",
                 "res/icon16.png");
 
-        DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem("res/", true);
+        DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
 
         final Launcher launcher = new Launcher(gdxFileSystem);
         config.setWindowListener(new Lwjgl3WindowAdapter() {

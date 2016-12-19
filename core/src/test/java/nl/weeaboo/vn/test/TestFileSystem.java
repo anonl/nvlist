@@ -13,7 +13,7 @@ public final class TestFileSystem {
     }
 
     public static MultiFileSystem newInstance() {
-        IFileSystem readFileSystem = new DesktopGdxFileSystem("", true);
+        IFileSystem readFileSystem = new DesktopGdxFileSystem();
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         return new MultiFileSystem(readFileSystem, inMemoryFileSystem);
     }
