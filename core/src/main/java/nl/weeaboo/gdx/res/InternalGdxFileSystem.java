@@ -5,7 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 import nl.weeaboo.common.Checks;
 
-final class InternalGdxFileSystem extends GdxFileSystem {
+public final class InternalGdxFileSystem extends GdxFileSystem {
 
     private final String prefix;
 

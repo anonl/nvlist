@@ -11,7 +11,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
+import nl.weeaboo.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.gdx.test.junit.GdxLwjgl3TestRunner;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.Launcher;
@@ -35,7 +35,7 @@ public abstract class IntegrationTest {
 
     @Before
     public final void beforeIntegration() throws ScriptException {
-        launcher = new Launcher(new DesktopGdxFileSystem());
+        launcher = new Launcher(new InternalGdxFileSystem(""));
         launcher.create();
 
         novel = launcher.getNovel();

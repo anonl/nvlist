@@ -4,7 +4,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.HeadlessGdx;
-import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
+import nl.weeaboo.gdx.res.InternalGdxFileSystem;
 
 public final class TestFileSystem {
 
@@ -13,7 +13,7 @@ public final class TestFileSystem {
     }
 
     public static MultiFileSystem newInstance() {
-        IFileSystem readFileSystem = new DesktopGdxFileSystem();
+        IFileSystem readFileSystem = new InternalGdxFileSystem("");
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         return new MultiFileSystem(readFileSystem, inMemoryFileSystem);
     }

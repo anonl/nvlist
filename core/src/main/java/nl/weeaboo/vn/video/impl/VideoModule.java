@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.video.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -75,14 +76,14 @@ public class VideoModule implements IVideoModule {
         return fullscreenMovie;
     }
 
-    private IVideo createVideo(ResourceLoadInfo loadInfo) {
+    private IVideo createVideo(ResourceLoadInfo loadInfo) throws FileNotFoundException {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
         ResourceId resourceId = resourceLoader.resolveResource(path);
         if (resourceId == null) {
             LOG.warn("Unable to find video file: {}", path);
-            return null;
+            throw new FileNotFoundException(path.toString());
         }
 
         resourceLoader.logLoad(resourceId, loadInfo);
