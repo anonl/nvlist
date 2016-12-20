@@ -132,6 +132,7 @@ public class Launcher extends ApplicationAdapter {
     }
 
     private void initNovel() throws InitException {
+        // TODO #33: Init full filesystem in platform-specific launcher
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
         MultiFileSystem fileSystem = new MultiFileSystem(resourceFileSystem, inMemoryFileSystem);
 
