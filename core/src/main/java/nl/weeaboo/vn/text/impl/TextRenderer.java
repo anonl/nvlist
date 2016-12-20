@@ -221,7 +221,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void increaseVisibleText(double textSpeed) {
-        if (textSpeed == 0) {
+        if (textSpeed <= 0) {
             return; // Nothing to do
         }
 
