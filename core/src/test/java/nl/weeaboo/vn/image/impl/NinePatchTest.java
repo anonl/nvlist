@@ -4,19 +4,16 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Insets2D;
-import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.test.CoreTestUtil;
 
 public class NinePatchTest {
 
-    private static final double EPSILON = CoreTestUtil.EPSILON;
-
     /** Check state after using the default constructor */
     @Test
     public void emptyNinePatch() {
         NinePatch ninePatch = new NinePatch();
-        assertNativeSize(ninePatch, 0, 0);
+        NinePatchAssert.assertNativeSize(ninePatch, 0, 0);
         CoreTestUtil.assertEquals(Insets2D.EMPTY, ninePatch.getInsets());
         // All textures null
         for (EArea area : EArea.values()) {
@@ -50,20 +47,7 @@ public class NinePatchTest {
         // Test set() method
         NinePatch copy = new NinePatch();
         copy.set(ninePatch);
-        assertEquals(ninePatch, copy);
-    }
-
-    private void assertEquals(INinePatch expected, INinePatch actual) {
-        CoreTestUtil.assertEquals(expected.getInsets(), actual.getInsets());
-        assertNativeSize(actual, expected.getNativeWidth(), expected.getNativeHeight());
-        for (EArea area : EArea.values()) {
-            Assert.assertEquals(expected.getTexture(area), actual.getTexture(area));
-        }
-    }
-
-    private void assertNativeSize(INinePatch ninePatch, double expectedW, double expectedH) {
-        Assert.assertEquals(expectedW, ninePatch.getNativeWidth(), EPSILON);
-        Assert.assertEquals(expectedH, ninePatch.getNativeHeight(), EPSILON);
+        NinePatchAssert.assertEquals(ninePatch, copy);
     }
 
 }

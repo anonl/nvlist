@@ -12,13 +12,11 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.google.common.cache.CacheLoader;
-import com.google.common.collect.ImmutableMap;
 
 import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
@@ -31,7 +29,6 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
-import nl.weeaboo.vn.image.impl.desc.ImageDefinitionIO;
 import nl.weeaboo.vn.render.RenderUtil;
 
 /**
@@ -50,7 +47,7 @@ final class TextureManager implements Serializable {
     private Dim imageResolution;
 
     private transient TextureCache textureCache;
-    private transient ImmutableMap<FilePath, IImageDefinition> cachedImageDefs;
+    private transient ImageDefinitionCache cachedImageDefs;
 
     public TextureManager(FileResourceLoader resourceLoader, Dim virtualSize) {
         this.resourceLoader = resourceLoader;
@@ -70,15 +67,9 @@ final class TextureManager implements Serializable {
 
     private final IImageDefinition getImageDef(FilePath relPath) {
         if (cachedImageDefs == null) {
-            try {
-                FileSystemView fs = resourceLoader.getFileSystem();
-                cachedImageDefs = ImmutableMap.copyOf(ImageDefinitionIO.fromFileSystem(fs, FilePath.empty()));
-            } catch (IOException e) {
-                LOG.warn("Error loading image definitions", e);
-                return null;
-            }
+            cachedImageDefs = new ImageDefinitionCache(resourceLoader);
         }
-        return cachedImageDefs.get(relPath);
+        return cachedImageDefs.getImageDef(relPath);
     }
 
     public ITexture getTexture(ResourceId resourceId) {

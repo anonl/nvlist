@@ -40,7 +40,7 @@ public class Button extends Transformable implements IButton {
     public Button(IScriptEventDispatcher eventDispatcher) {
         this(eventDispatcher, new ButtonModel(), new ButtonRenderer());
     }
-    public Button(IScriptEventDispatcher eventDispatcher, ButtonModel model, ButtonRenderer renderer) {
+    public Button(IScriptEventDispatcher eventDispatcher, IButtonModel model, IButtonRenderer renderer) {
         this.eventDispatcher = Checks.checkNotNull(eventDispatcher);
         this.model = Checks.checkNotNull(model);
         this.renderer = Checks.checkNotNull(renderer);
