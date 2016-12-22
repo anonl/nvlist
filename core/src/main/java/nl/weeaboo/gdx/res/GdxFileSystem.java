@@ -106,29 +106,19 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
     private void getFilesImpl(Collection<FilePath> out, FilePath path, FileCollectOptions opts,
             FileHandle file) {
 
-        if (!exists(path)) {
-            return;
-        }
-
-        if (path.getName().isEmpty() || path.isFolder()) {
-            if (opts.collectFolders) {
-                out.add(path);
-            }
-
-            for (FilePath childPath : list(path, file)) {
-                if (childPath.isFolder() && opts.collectFolders) {
-                    out.add(childPath);
-
-                    if (opts.recursive) {
-                        getFilesImpl(out, childPath, opts, resolve(childPath.toString()));
-                    }
-                } else if (!childPath.isFolder() && opts.collectFiles) {
+        for (FilePath childPath : list(path, file)) {
+            if (childPath.isFolder()) {
+                if (opts.collectFolders) {
                     out.add(childPath);
                 }
-            }
-        } else {
-            if (opts.collectFiles) {
-                out.add(path);
+
+                if (opts.recursive) {
+                    getFilesImpl(out, childPath, opts, resolve(childPath.toString()));
+                }
+            } else {
+                if (opts.collectFiles) {
+                    out.add(childPath);
+                }
             }
         }
     }

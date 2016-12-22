@@ -50,6 +50,19 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
     }
 
     @Override
+    protected void closeImpl() {
+        super.closeImpl();
+
+        internalFileSystem.close();
+
+        if (cachedFileArchives != null) {
+            for (IFileSystem fileSystem : cachedFileArchives) {
+                fileSystem.close();
+            }
+        }
+    }
+
+    @Override
     public FileHandle resolve(String subPath) {
         return new DesktopFileHandle(FilePath.of(subPath));
     }
@@ -102,7 +115,14 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
     }
 
     private Set<FilePath> getChildren(FilePath path) {
-        FileCollectOptions collectOpts = FileCollectOptions.folders(path);
+        if (!path.isFolder()) {
+            // Normalize path
+            path = FilePath.of(path.toString() + "/");
+        }
+
+        FileCollectOptions collectOpts = new FileCollectOptions(path);
+        collectOpts.collectFolders = true;
+        collectOpts.collectFiles = true;
         collectOpts.recursive = false;
 
         Set<FilePath> result = Sets.newHashSet();
@@ -169,8 +189,7 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
         @Override
         public boolean isDirectory() {
-            // TODO: This isn't entirely correct -> paths without an ending slash may still be folders
-            return path.isFolder();
+            return path.isFolder() || list().length > 0;
         }
 
         @Override
