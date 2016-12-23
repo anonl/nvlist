@@ -69,11 +69,15 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
         if (!exists(path)) {
             throw new FileNotFoundException(path.toString());
         }
-        FileHandle file = resolve(path.toString());
+        FileHandle file = resolve(path);
         if (file == null) {
             throw new FileNotFoundException(path.toString());
         }
         return file;
+    }
+
+    protected final FileHandle resolve(FilePath path) {
+        return resolve(path.toString());
     }
 
     @Override
