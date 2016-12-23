@@ -10,7 +10,7 @@ public class EnumTester {
     /**
      * Creates a hash of the available enum constants.
      */
-    public static int hashEnum(Class<? extends Enum<?>> enumType) {
+    public static <T extends Enum<T>> int hashEnum(Class<T> enumType) {
         List<String> values = Lists.newArrayList();
         for (Enum<?> enumValue : enumType.getEnumConstants()) {
             values.add(enumValue.name());
