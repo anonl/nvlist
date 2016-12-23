@@ -176,15 +176,8 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
         }
 
         @Override
-        public FileHandle[] list() {
-            Set<FilePath> paths = getChildren(path);
-
-            FileHandle[] handles = new FileHandle[paths.size()];
-            int t = 0;
-            for (FilePath path : paths) {
-                handles[t++] = new DesktopFileHandle(path);
-            }
-            return handles;
+        public Iterable<FileHandle> listChildren() {
+            return Iterables.transform(getChildren(path), DesktopFileHandle::new);
         }
 
         @Override

@@ -9,6 +9,8 @@ import java.io.Writer;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * Base class for {@link FileHandle} subclasses that aren't based on a {@link java.io.File}.
@@ -36,22 +38,30 @@ public abstract class NonFileGdxFileHandle extends FileHandle {
     @Override
     public abstract boolean isDirectory();
 
+    protected abstract Iterable<FileHandle> listChildren();
+
     @Override
-    public abstract FileHandle[] list();
+    public final FileHandle[] list() {
+        return Iterables.toArray(listChildren(), FileHandle.class);
+    }
+
+    private FileHandle[] filteredChildren(Predicate<FileHandle> predicate) {
+        return Iterables.toArray(Iterables.filter(listChildren(), predicate), FileHandle.class);
+    }
 
     @Override
     public FileHandle[] list(FileFilter filter) {
-        return list();
+        return filteredChildren(handle -> filter.accept(handle.file()));
     }
 
     @Override
     public FileHandle[] list(FilenameFilter filter) {
-        return list();
+        return filteredChildren(handle -> filter.accept(handle.file().getParentFile(), handle.name()));
     }
 
     @Override
     public FileHandle[] list(String suffix) {
-        return list();
+        return filteredChildren(handle -> handle.name().endsWith(suffix));
     }
 
     @Override
