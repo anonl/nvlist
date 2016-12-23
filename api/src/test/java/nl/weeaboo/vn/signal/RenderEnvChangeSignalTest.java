@@ -1,13 +1,13 @@
-package nl.weeaboo.vn.scene.signal;
+package nl.weeaboo.vn.signal;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.gdx.test.ExceptionTester;
-import nl.weeaboo.vn.scene.VisualElementStub;
+import nl.weeaboo.vn.core.RenderEnvStub;
 
-public class VisualElementDestroySignalTest {
+public class RenderEnvChangeSignalTest {
 
     private ExceptionTester exTester;
 
@@ -20,19 +20,19 @@ public class VisualElementDestroySignalTest {
     @Test
     public void nullElem() {
         exTester.expect(IllegalArgumentException.class, () -> {
-            return new VisualElementDestroySignal(null);
+            return new RenderEnvChangeSignal(null);
         });
     }
 
     @Test
     public void validElem() {
-        VisualElementStub elem = new VisualElementStub();
+        RenderEnvStub renderEnv = new RenderEnvStub();
 
-        VisualElementDestroySignal signal = new VisualElementDestroySignal(elem);
-        Assert.assertSame(elem, signal.getDestroyedElement());
+        RenderEnvChangeSignal signal = new RenderEnvChangeSignal(renderEnv);
+        Assert.assertSame(renderEnv, signal.getRenderEnv());
 
         signal.setHandled();
-        Assert.assertSame(elem, signal.getDestroyedElement());
+        Assert.assertSame(renderEnv, signal.getRenderEnv());
     }
 
 }

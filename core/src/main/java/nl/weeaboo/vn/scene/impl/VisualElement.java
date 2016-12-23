@@ -157,7 +157,7 @@ public abstract class VisualElement implements IVisualElement {
                 self.onTick();
             }
             if (!signal.isHandled() && signal instanceof RenderEnvChangeSignal) {
-                self.onRenderEnvChanged(((RenderEnvChangeSignal)signal).renderEnv);
+                self.onRenderEnvChanged(((RenderEnvChangeSignal)signal).getRenderEnv());
             }
         }
 
