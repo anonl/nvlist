@@ -20,13 +20,10 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.google.common.collect.Iterables;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.IFileSystem;
-import nl.weeaboo.filesystem.InMemoryFileSystem;
-import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.graphics.JngTextureLoader;
 import nl.weeaboo.gdx.graphics.PremultTextureLoader;
@@ -56,20 +53,16 @@ import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
-import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.impl.Input;
 import nl.weeaboo.vn.input.impl.InputConfig;
-import nl.weeaboo.vn.layout.GridCellConstraints;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
-import nl.weeaboo.vn.scene.impl.GridPanel;
-import nl.weeaboo.vn.scene.impl.ImageDrawable;
 import nl.weeaboo.vn.sound.impl.GdxMusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -77,7 +70,9 @@ public class Launcher extends ApplicationAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
-    private GdxFileSystem resourceFileSystem;
+    private final GdxFileSystem resourceFileSystem;
+    private final IWritableFileSystem outputFileSystem;
+
     private AssetManager assetManager;
 	private FrameBuffer frameBuffer;
 	private Dim vsize = Dim.of(1280, 720);
@@ -96,8 +91,20 @@ public class Launcher extends ApplicationAdapter {
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
 
-    public Launcher(GdxFileSystem resourceFileSystem) {
-        this.resourceFileSystem = resourceFileSystem;
+    public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
+        this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
+        this.outputFileSystem = Checks.checkNotNull(outputFileSystem);
+    }
+
+    /** Note: This method may be called at any time, even before {@link #create()} */
+    public NovelPrefsStore loadPreferences() {
+        NovelPrefsStore prefs = new NovelPrefsStore(outputFileSystem);
+        try {
+            prefs.loadVariables();
+        } catch (IOException ioe) {
+            LOG.warn("Unable to load variables", ioe);
+        }
+        return prefs;
     }
 
 	@Override
@@ -132,19 +139,7 @@ public class Launcher extends ApplicationAdapter {
     }
 
     private void initNovel() throws InitException {
-        // TODO #33: Init full filesystem in platform-specific launcher
-        IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
-        MultiFileSystem fileSystem = new MultiFileSystem(resourceFileSystem, inMemoryFileSystem);
-
-        InitConfig.init();
-
-        NovelPrefsStore prefs = new NovelPrefsStore(fileSystem.getWritableFileSystem());
-        try {
-            prefs.loadVariables();
-            prefs.saveVariables();
-        } catch (IOException ioe) {
-            LOG.warn("Unable to load variables", ioe);
-        }
+        NovelPrefsStore prefs = loadPreferences();
 
         InputConfig inputConfig;
         try {
@@ -156,8 +151,8 @@ public class Launcher extends ApplicationAdapter {
         Input input = new Input(inputAdapter.getInput(), inputConfig);
 
         StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
-        StaticEnvironment.FILE_SYSTEM.set(fileSystem);
-        StaticEnvironment.OUTPUT_FILE_SYSTEM.set(fileSystem.getWritableFileSystem());
+        StaticEnvironment.FILE_SYSTEM.set(resourceFileSystem);
+        StaticEnvironment.OUTPUT_FILE_SYSTEM.set(outputFileSystem);
         StaticEnvironment.PREFS.set(prefs);
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
@@ -181,43 +176,7 @@ public class Launcher extends ApplicationAdapter {
                 onPrefsChanged();
             }
         });
-
-        // Create a test image
-        IEnvironment env = novel.getEnv();
-        IContext context = env.getContextManager().getPrimaryContext();
-        ILayer rootLayer = context.getScreen().getRootLayer();
-
-        IImageDrawable image = env.getImageModule().createImage(rootLayer);
-        image.setPos(640, 360);
-        image.setZ((short)-100);
-        image.setTexture(env.getImageModule().getTexture(FilePath.of("test")), 5);
-
-        createPanel(rootLayer, env.getImageModule());
 	}
-
-    private void createPanel(ILayer layer, IImageModule imageModule) {
-        GridPanel panel = new GridPanel();
-        panel.setLayoutBounds(Rect2D.of(320, 160, 640, 360));
-        layer.add(panel);
-
-        ImageDrawable image = new ImageDrawable();
-        image.setTexture(imageModule.createTexture(0xFFFF0000, 100, 100, 1, 1));
-        panel.add(image, new GridCellConstraints().grow());
-
-        image = new ImageDrawable();
-        image.setTexture(imageModule.createTexture(0xFFFFFF00, 50, 50, 1, 1));
-        panel.add(image, new GridCellConstraints().growX());
-
-        panel.endRow();
-
-        image = new ImageDrawable();
-        image.setTexture(imageModule.createTexture(0xFF0000FF, 100, 100, 1, 1));
-        panel.add(image, new GridCellConstraints().grow());
-
-        image = new ImageDrawable();
-        image.setTexture(imageModule.createTexture(0xFF00FF00, 50, 50, 1, 1));
-        panel.add(image, new GridCellConstraints().growY());
-    }
 
     private IFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();

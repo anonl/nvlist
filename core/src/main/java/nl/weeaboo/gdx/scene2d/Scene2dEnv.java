@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 
 public class Scene2dEnv implements Disposable {
@@ -27,11 +28,11 @@ public class Scene2dEnv implements Disposable {
     }
 
     private Skin loadSkin(GdxFileSystem fileSystem) {
-        FileHandle skinFile = fileSystem.resolve("skin/uiskin.json");
-        // TODO #32: exists() is very slow
-        if (!skinFile.exists()) {
-            LOG.warn("Skin file not found: {}", skinFile);
+        String skinPath = "skin/uiskin.json";
+        if (!fileSystem.getFileExists(FilePath.of(skinPath))) {
+            LOG.warn("Skin file not found: {}", skinPath);
         } else {
+            FileHandle skinFile = fileSystem.resolve(skinPath);
             try {
                 return new Skin(skinFile);
             } catch (SerializationException se) {

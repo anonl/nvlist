@@ -7,6 +7,11 @@ import nl.weeaboo.settings.Preference;
 
 public final class NovelPrefs {
 
+    public static final Preference<String> TITLE = newConstPreference("title",
+            "Tile",
+            "NVList",
+            "Human-readable display name of your VN.");
+
     public static final Preference<Integer> WIDTH = newConstPreference("width",
             "Width",
             1280,

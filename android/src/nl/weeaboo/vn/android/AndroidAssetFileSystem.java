@@ -20,13 +20,13 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 
-public class AndroidGdxFileSystem extends GdxFileSystem {
+public class AndroidAssetFileSystem extends GdxFileSystem {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AndroidGdxFileSystem.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AndroidAssetFileSystem.class);
 
     private transient ImmutableMap<FilePath, FileIndexEntry> fileIndex;
 
-    public AndroidGdxFileSystem() {
+    public AndroidAssetFileSystem() {
         super(true);
     }
 
