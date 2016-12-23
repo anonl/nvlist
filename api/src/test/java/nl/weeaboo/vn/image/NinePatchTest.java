@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core.image;
+package nl.weeaboo.vn.image;
 
 import java.util.Set;
 import java.util.function.Predicate;
