@@ -51,17 +51,32 @@ public abstract class NonFileGdxFileHandle extends FileHandle {
 
     @Override
     public FileHandle[] list(FileFilter filter) {
-        return filteredChildren(handle -> filter.accept(handle.file()));
+        return filteredChildren(new Predicate<FileHandle>() {
+            @Override
+            public boolean apply(FileHandle handle) {
+                return filter.accept(handle.file());
+            }
+        });
     }
 
     @Override
     public FileHandle[] list(FilenameFilter filter) {
-        return filteredChildren(handle -> filter.accept(handle.file().getParentFile(), handle.name()));
+        return filteredChildren(new Predicate<FileHandle>() {
+            @Override
+            public boolean apply(FileHandle handle) {
+                return filter.accept(handle.file().getParentFile(), handle.name());
+            }
+        });
     }
 
     @Override
     public FileHandle[] list(String suffix) {
-        return filteredChildren(handle -> handle.name().endsWith(suffix));
+        return filteredChildren(new Predicate<FileHandle>() {
+            @Override
+            public boolean apply(FileHandle handle) {
+                return handle.name().endsWith(suffix);
+            }
+        });
     }
 
     @Override

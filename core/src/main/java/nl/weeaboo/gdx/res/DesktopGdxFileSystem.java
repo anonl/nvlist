@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -177,7 +178,12 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
         @Override
         public Iterable<FileHandle> listChildren() {
-            return Iterables.transform(getChildren(path), DesktopFileHandle::new);
+            return Iterables.transform(getChildren(path), new Function<FilePath, DesktopFileHandle>() {
+                @Override
+                public DesktopFileHandle apply(FilePath childPath) {
+                    return new DesktopFileHandle(childPath);
+                }
+            });
         }
 
         @Override
