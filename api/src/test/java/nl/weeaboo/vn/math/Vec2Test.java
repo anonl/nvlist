@@ -19,9 +19,6 @@ public class Vec2Test {
 		Vec2 a = new Vec2(1, 2);
 		Vec2 b = new Vec2(4, 3);
 
-		// Equality
-        Assert.assertFalse(a.equals(null));
-
 		// Copy constructor
         ApiTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);
         Assert.assertEquals(a.hashCode(), new Vec2(a).hashCode());
@@ -39,6 +36,28 @@ public class Vec2Test {
 	}
 
 	@Test
+	public void testEquals() {
+        Vec2 a = new Vec2(1, 2);
+        Vec2 b = new Vec2(4, 3);
+
+        Assert.assertNotEquals(a, null);
+
+        // Equals
+        Assert.assertEquals(a, a);
+        Assert.assertNotEquals(a, new Vec2(1, 3));
+        Assert.assertNotEquals(a, new Vec2(3, 2));
+        Assert.assertNotEquals(a, b);
+
+        // Fuzzy equals
+        Assert.assertTrue(a.equals(a, E));
+        Assert.assertFalse(a.equals(new Vec2(1, 3), E));
+        Assert.assertTrue(a.equals(new Vec2(1, 3), 1.0));
+        Assert.assertFalse(a.equals(new Vec2(3, 2), E));
+        Assert.assertTrue(a.equals(new Vec2(3, 2), 2.0));
+        Assert.assertFalse(a.equals(b, E));
+	}
+
+	@Test
 	public void length() {
         Vec2 a = new Vec2(1, 2);
         Vec2 b = new Vec2(4, 3);
@@ -53,15 +72,39 @@ public class Vec2Test {
 	}
 
 	@Test
-	public void vectorSerializeTest() throws IOException, ClassNotFoundException {
-		Vec2 a = new Vec2(1, 2);
-        Assert.assertEquals(a, deserializeObject(serializeObject(a), Vec2.class));
-		a = new Vec2(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        Assert.assertEquals(a, deserializeObject(serializeObject(a), Vec2.class));
-		a = new Vec2(Double.MIN_VALUE, Double.MIN_NORMAL);
-        Assert.assertEquals(a, deserializeObject(serializeObject(a), Vec2.class));
-		a = new Vec2(Double.NaN, 0.0);
-        Assert.assertTrue(a.equals(deserializeObject(serializeObject(a), Vec2.class), E));
+	public void vectorSerializeTest() {
+		Vec2 vec = new Vec2(1, 2);
+        checkSerialize(vec);
+
+		vec = new Vec2(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        checkSerialize(vec);
+
+        vec = new Vec2(Double.MIN_VALUE, Double.MIN_NORMAL);
+        checkSerialize(vec);
+
+        // Since Double.NaN != Double.Nan, we need to use an epsilon here
+        vec = new Vec2(Double.NaN, 0.0);
+        checkSerialize(vec, E);
+        vec = new Vec2(0.0, Double.NaN);
+        checkSerialize(vec, E);
 	}
+
+	/** Check that serialialization doesn't discard any information (object is still equal to itself) */
+    private void checkSerialize(Vec2 vec) {
+        checkSerialize(vec, 0.0);
+    }
+    private void checkSerialize(Vec2 vec, double epsilon) {
+        String message = "Vec: " + vec;
+        try {
+            Vec2 serialized = deserializeObject(serializeObject(vec), Vec2.class);
+            if (epsilon == 0.0) {
+                Assert.assertEquals(message, vec, serialized);
+            } else {
+                Assert.assertTrue(message, vec.equals(serialized, epsilon));
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 
 }
