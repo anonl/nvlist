@@ -22,6 +22,14 @@ function setMainTextDrawable(textDrawable)
     getTextState():setTextDrawable(textDrawable)
 end
 
+function texton(...)
+    getTextBox():show(...)
+end
+
+function textoff(...)
+    getTextBox():hide(...)
+end
+
 ---Registry of textboxes
 -------------------------------------------------------------------------------------------------------------- @section registry
 

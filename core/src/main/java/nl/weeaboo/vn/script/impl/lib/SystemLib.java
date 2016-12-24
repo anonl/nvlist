@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import nl.weeaboo.common.VersionNumber;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -109,4 +110,27 @@ public class SystemLib extends LuaLib {
         return LuajavaLib.toUserdata(playTimer, IPlayTimer.class);
     }
 
+    /**
+     * Compares two version numbers.
+     *
+     * @param args
+     *        <ol>
+     *        <li>First version number
+     *        <li>Second version number
+     *        </ol>
+     * @return {@code -1} if first {@code <} second, {@code 0} if first {@code ==} second, {@code 1} if first
+     *         {@code >} second.
+     */
+    @ScriptFunction
+    public Varargs compareVersion(Varargs args) throws ScriptException {
+        String first = args.tojstring(1);
+        String second = args.tojstring(2);
+        try {
+            VersionNumber firstVersion = VersionNumber.parse(first);
+            VersionNumber secondVersion = VersionNumber.parse(second);
+            return LuaBoolean.valueOf(firstVersion.compareTo(secondVersion));
+        } catch (NumberFormatException nfe) {
+            throw new ScriptException("Error parsing version numbers: " + first + ", " + second, nfe);
+        }
+    }
 }

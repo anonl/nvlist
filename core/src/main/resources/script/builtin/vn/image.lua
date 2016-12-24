@@ -393,6 +393,13 @@ function getActiveLayer()
     return Image.getActiveLayer()
 end
 
+--- Use getActiveLayer() instead
+function getImageLayer()
+    deprecated("4.0")
+
+    return getActiveLayer()
+end
+
 ---Changes the current image layer. Functions that create Drawables such as <code>img</code> typically create
 -- them in the image layer.
 -- @tparam Layer layer The layer to use as image layer.
