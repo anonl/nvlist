@@ -11,6 +11,8 @@ final class SoundResourceLoader extends FileResourceLoader {
 
     public SoundResourceLoader(IEnvironment env) {
         super(env, MediaType.SOUND, FilePath.of("snd/"));
+
+        setAutoFileExts("ogg", "mp3");
     }
 
 }

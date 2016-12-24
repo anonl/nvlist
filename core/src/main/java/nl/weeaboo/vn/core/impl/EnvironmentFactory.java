@@ -22,6 +22,7 @@ import nl.weeaboo.vn.script.impl.lib.InterpolatorsLib;
 import nl.weeaboo.vn.script.impl.lib.LogLib;
 import nl.weeaboo.vn.script.impl.lib.SaveLib;
 import nl.weeaboo.vn.script.impl.lib.SeenLib;
+import nl.weeaboo.vn.script.impl.lib.SoundLib;
 import nl.weeaboo.vn.script.impl.lib.SystemLib;
 import nl.weeaboo.vn.script.impl.lib.TextLib;
 import nl.weeaboo.vn.script.impl.lib.VideoLib;
@@ -112,6 +113,7 @@ public class EnvironmentFactory {
         scriptEnv.addInitializer(new SeenLib(env));
         scriptEnv.addInitializer(new InterpolatorsLib());
         scriptEnv.addInitializer(new ImageLib(env));
+        scriptEnv.addInitializer(new SoundLib(env));
         scriptEnv.addInitializer(new InputLib());
         scriptEnv.addInitializer(new TextLib(env, scriptEnv));
         scriptEnv.addInitializer(new SaveLib(env));

@@ -2,6 +2,8 @@ package nl.weeaboo.vn.sound.impl;
 
 import java.io.IOException;
 
+import com.google.common.base.Preconditions;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISound;
@@ -18,6 +20,7 @@ public abstract class AbstractSound implements ISound {
 
     private double privateVolume = 1.0;
     private double masterVolume = 1.0;
+    private int preferredChannel = -1;
 
     public AbstractSound(ISoundController sctrl, SoundType soundType, FilePath filename) {
         this.soundController = Checks.checkNotNull(sctrl);
@@ -34,7 +37,10 @@ public abstract class AbstractSound implements ISound {
     public final void start(int loops) throws IOException {
         play(loops);
 
-        int channel = soundController.getFreeChannel();
+        int channel = preferredChannel;
+        if (channel < 0) {
+            channel = soundController.getFreeChannel();
+        }
         soundController.set(channel, this);
     }
 
@@ -94,6 +100,14 @@ public abstract class AbstractSound implements ISound {
 
             onVolumeChanged();
         }
+    }
+
+    @Override
+    public void setPreferredChannel(int ch) {
+        Preconditions.checkArgument(ch == -1
+                || (ch >= ISoundController.MIN_CHANNEL && ch <= ISoundController.MAX_CHANNEL));
+
+        preferredChannel = ch;
     }
 
 }

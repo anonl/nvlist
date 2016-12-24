@@ -52,6 +52,7 @@ local submodules = {
 	"context",
 	"gui",
 	"image",
+    "sound",
 	"system",
 	"text",
 	"textbox",

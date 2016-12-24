@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.image.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +47,8 @@ final class ImageDefinitionCache {
 
                 // Re-attempt to find an image def (may still fail)
                 imageDef = cache.get(path);
+            } catch (FileNotFoundException fnfe) {
+                // Ignore
             } catch (IOException e) {
                 LOG.warn("Error loading image definitions", e);
             }

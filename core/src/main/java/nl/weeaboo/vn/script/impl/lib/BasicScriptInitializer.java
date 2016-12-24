@@ -12,6 +12,7 @@ import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.impl.lua.ILuaScriptEnvInitializer;
 import nl.weeaboo.vn.script.impl.lua.LuaPrefsAdapter;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptEnv;
+import nl.weeaboo.vn.sound.SoundType;
 
 public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
 
@@ -29,7 +30,8 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
             KeyCode.class,
             MediaType.class,
             SkipMode.class,
-            VerticalAlign.class
+            VerticalAlign.class,
+            SoundType.class
         );
 
         LuaPrefsAdapter prefsAdapter = new LuaPrefsAdapter();

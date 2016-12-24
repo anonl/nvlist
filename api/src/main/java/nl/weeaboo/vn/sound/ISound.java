@@ -58,5 +58,6 @@ public interface ISound extends Serializable {
 
     void setPrivateVolume(double v);
     void setMasterVolume(double v);
+    void setPreferredChannel(int ch);
 
 }
