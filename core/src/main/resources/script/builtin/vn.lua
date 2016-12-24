@@ -48,6 +48,7 @@ module("vn", package.seeall)
 
 --Require submodules
 local submodules = {
+    "anim",
     "choice",
 	"context",
 	"gui",
