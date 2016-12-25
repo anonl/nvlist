@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -187,8 +185,6 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
             ITexture controlTexture = getControlTexture();
 
             LOG.trace("BitmapTween[start={}, end={}, control={}]", startTexture, endTexture, controlTexture);
-
-            Gdx.gl.glEnable(GL20.GL_BLEND);
 
             shader.begin();
             try {

@@ -12,6 +12,7 @@ import com.google.common.io.BaseEncoding;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.graphics.GdxBitmapTweenRenderer;
+import nl.weeaboo.gdx.graphics.GdxCrossFadeRenderer;
 import nl.weeaboo.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
@@ -30,6 +31,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
+import nl.weeaboo.vn.image.impl.CrossFadeConfig;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
@@ -136,6 +138,9 @@ public final class DebugControls {
         }
         if (screen != null && alt && input.consumePress(KeyCode.K)) {
             createBitmapTweenImage(screen.getRootLayer(), imageModule);
+        }
+        if (screen != null && alt && input.consumePress(KeyCode.L)) {
+            createCrossFadeImage(screen.getRootLayer(), imageModule);
         }
         if (screen != null && alt && input.consumePress(KeyCode.N)) {
             createNinePatchImage(screen.getRootLayer(), imageModule);
@@ -315,4 +320,14 @@ public final class DebugControls {
         image.setSize(256, 256);
     }
 
+    private static void createCrossFadeImage(ILayer layer, IImageModule imageModule) {
+        IImageDrawable image = imageModule.createImage(layer);
+
+        CrossFadeConfig config = new CrossFadeConfig(600);
+        config.setStartTexture(imageModule.getTexture(FilePath.of("alphablend")));
+        config.setEndTexture(null);
+
+        image.setRenderer(new GdxCrossFadeRenderer(imageModule, config));
+        image.setSize(256, 256);
+    }
 }

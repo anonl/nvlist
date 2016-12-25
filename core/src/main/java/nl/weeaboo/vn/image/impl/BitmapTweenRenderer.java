@@ -6,7 +6,6 @@ import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
-import nl.weeaboo.vn.image.impl.BitmapTweenConfig.InputTexture;
 import nl.weeaboo.vn.render.impl.TriangleGrid;
 import nl.weeaboo.vn.render.impl.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
@@ -52,11 +51,11 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
         ControlImage controlImage = config.getControlImage();
 
         // Create geometry
-        InputTexture tex0 = config.getStartTexture();
+        AlignedTexture tex0 = config.getStartTexture();
         Rect2D bounds0 = tex0.getBounds();
         TextureWrap wrap0 = TextureWrap.CLAMP;
 
-        InputTexture tex1 = config.getEndTexture();
+        AlignedTexture tex1 = config.getEndTexture();
         Rect2D bounds1 = tex1.getBounds();
         TextureWrap wrap1 = TextureWrap.CLAMP;
 
@@ -124,8 +123,8 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable {
     }
 
     private Rect2D getControlBounds() {
-        InputTexture start = config.getStartTexture();
-        InputTexture end = config.getEndTexture();
+        AlignedTexture start = config.getStartTexture();
+        AlignedTexture end = config.getEndTexture();
         return config.getControlImage().getBounds(start.getBounds(), end.getBounds());
     }
 

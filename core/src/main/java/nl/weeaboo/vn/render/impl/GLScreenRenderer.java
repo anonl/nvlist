@@ -151,6 +151,14 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
         spriteBatch.end();
 
+        // SpriteBatch.end() disables the blend settings -> re-apply the desired settings
+        if (spriteBatch.isBlendingEnabled()) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(spriteBatch.getBlendSrcFunc(), spriteBatch.getBlendDstFunc());
+        } else {
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+
         matrixStack.pushMatrix();
         matrixStack.multiply(cmd.transform);
 

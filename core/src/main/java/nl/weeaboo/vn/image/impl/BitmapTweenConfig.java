@@ -10,7 +10,7 @@ import nl.weeaboo.vn.core.Interpolators;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
 
-public class BitmapTweenConfig implements Serializable {
+public final class BitmapTweenConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,8 +20,8 @@ public class BitmapTweenConfig implements Serializable {
     private double range = 0.2;
     private IInterpolator interpolator = Interpolators.SMOOTH;
 
-    private InputTexture startTexture = new InputTexture();
-    private InputTexture endTexture = new InputTexture();
+    private AlignedTexture startTexture = new AlignedTexture();
+    private AlignedTexture endTexture = new AlignedTexture();
 
     public BitmapTweenConfig(double duration, ControlImage controlImage) {
         this.duration = Checks.checkRange(duration, "duration", 0);
@@ -52,7 +52,7 @@ public class BitmapTweenConfig implements Serializable {
         return controlImage;
     }
 
-    public InputTexture getStartTexture() {
+    public AlignedTexture getStartTexture() {
         return startTexture;
     }
 
@@ -60,10 +60,10 @@ public class BitmapTweenConfig implements Serializable {
         setStartTexture(texture, 0, 0);
     }
     public void setStartTexture(ITexture texture, double alignX, double alignY) {
-        this.startTexture = new InputTexture(texture, alignX, alignY);
+        this.startTexture = new AlignedTexture(texture, alignX, alignY);
     }
 
-    public InputTexture getEndTexture() {
+    public AlignedTexture getEndTexture() {
         return endTexture;
     }
 
@@ -71,7 +71,7 @@ public class BitmapTweenConfig implements Serializable {
         setEndTexture(texture, 0, 0);
     }
     public void setEndTexture(ITexture texture, double alignX, double alignY) {
-        this.endTexture = new InputTexture(texture, alignX, alignY);
+        this.endTexture = new AlignedTexture(texture, alignX, alignY);
     }
 
     /** Texture that controls the shape of the dissolve and related settings */
@@ -106,37 +106,6 @@ public class BitmapTweenConfig implements Serializable {
         public Area2D getUV() {
             // TODO: Should this be texture.getUV()?
             return ITexture.DEFAULT_UV;
-        }
-
-    }
-
-    public static class InputTexture implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        /** May be null */
-        private final ITexture texture;
-        private final double alignX, alignY;
-
-        public InputTexture() {
-            this(null, 0, 0);
-        }
-        public InputTexture(ITexture texture, double alignX, double alignY) {
-            this.texture = texture;
-            this.alignX = alignX;
-            this.alignY = alignY;
-        }
-
-        public ITexture getTexture() {
-            return texture;
-        }
-
-        public Rect2D getBounds() {
-            return AlignUtil.getAlignedBounds(texture, alignX, alignY);
-        }
-
-        public Area2D getUV() {
-            return (texture != null ? texture.getUV() : ITexture.DEFAULT_UV);
         }
 
     }
