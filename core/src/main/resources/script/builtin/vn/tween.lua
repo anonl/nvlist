@@ -117,4 +117,97 @@ function bitmapTweenOut(image, controlImage, duration, range, interpolator)
     return bitmapTween(image, nil, controlImage, duration, range, interpolator)
 end
 
--------------------------------------------------------------------------------- @section end
+---Shutter tween
+-------------------------------------------------------------------------------- @section Shutter tween
+
+---Changes an ImageDrawable's texture using a shutter transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @tparam Texture targetTexture The new texture for the image.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @int[opt=10] steps The number of shutter bars to use.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+function shutterTween(image, targetTexture, dir, steps, duration)
+    dir = dir or 6
+    steps = steps or 10
+
+    local controlImage = "fade/shutter-" .. dir .. "-" .. steps
+    return bitmapTween(image, targetTexture, controlImage, duration)
+end
+
+---Fades in an ImageDrawable's texture using a shutter transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @int[opt=10] steps The number of shutter bars to use.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+-- @see shutterTween
+function shutterTweenIn(image, dir, steps, duration)
+    local tex = image:getTexture()
+    image:setTexture(nil)
+    return shutterTween(image, tex, dir, steps, duration)
+end
+
+---Fades away an ImageDrawable's texture using a shutter transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @int[opt=10] steps The number of shutter bars to use.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+-- @see shutterTween
+function shutterTweenOut(image, dir, steps, duration)
+    return shutterTween(image, nil, dir, steps, duration)
+end
+
+---Wipe tween
+-------------------------------------------------------------------------------- @section Wipe tween
+
+---Changes an ImageDrawable's texture using a shutter transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @tparam Texture targetTexture The new texture for the image.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @number[opt=0.1] span The range (between <code>0.0</code> and
+--        <code>1.0</code>) of the partially transparent area of the wipe.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+function wipeTween(image, targetTexture, dir, span, duration)
+    dir = dir or 6
+    span = span or 0.2
+
+    local controlImage = "fade/wipe-" .. dir
+    return bitmapTween(image, targetTexture, controlImage, duration, span)
+end
+
+---Fades in an ImageDrawable's texture using a wipe transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @number[opt=0.1] span The range (between <code>0.0</code> and
+--        <code>1.0</code>) of the partially transparent area of the wipe.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+-- @see wipeTween
+function wipeTweenIn(image, dir, span, duration)
+    local tex = image:getTexture()
+    image:setTexture(nil)
+    return wipeTween(image, tex, dir, span, duration)
+end
+
+---Fades away an ImageDrawable's texture using a wipe transition.
+--
+-- @tparam ImageDrawable image The image to shutter-tween.
+-- @int[opt=6] dir The direction of the shutter, 4=left, 8=up, 6=right, 2=down.
+-- @number[opt=0.1] span The range (between <code>0.0</code> and
+--        <code>1.0</code>) of the partially transparent area of the wipe.
+-- @number[opt=60] duration The duration of the tween in frames (will be
+--        multiplied by <code>effectSpeed</code> internally).
+-- @see wipeTween
+function wipeTweenOut(image, dir, span, duration)
+    return wipeTween(image, nil, dir, span, duration)
+end
+
+--------------------------------------------------------------------------------
