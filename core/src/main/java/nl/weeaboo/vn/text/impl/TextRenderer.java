@@ -64,7 +64,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
         ITextLayout textLayout = getVisibleLayout();
         double dx = bounds.x;
-        double dy = bounds.y;
+        /*
+         * TODO: Workaround for what appears to be a bug. Internally in the text rendering code, the y-offset
+         * isn't flipped if ydir == 1.
+         */
+        double dy = bounds.y - 2 * textLayout.getOffsetY();
         buffer.drawText(d, dx, dy, textLayout, visibleText);
     }
 

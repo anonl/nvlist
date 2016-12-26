@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.scene.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
@@ -22,6 +25,7 @@ import nl.weeaboo.vn.text.ITextRenderer;
 public class Screen implements IScreen {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(Screen.class);
 
 	private final Rect2D bounds;
     private final IScreenTextState textState;
@@ -55,13 +59,18 @@ public class Screen implements IScreen {
         ITextDrawable td = textState.getTextDrawable();
         if (td != null) {
             int lineCount = td.getLineCount();
+            int startLine = td.getStartLine();
             int endLine = td.getEndLine();
             if (td.getVisibleText() < td.getMaxVisibleText() && input.consumePress(VKey.TEXT_CONTINUE)) {
                 // Make all glyphs in the current lines fully visible
                 td.setVisibleText(ITextRenderer.ALL_GLYPHS_VISIBLE);
+                LOG.debug("Make all text visible (startLine={})", startLine);
             } else if (endLine < lineCount && input.consumePress(VKey.TEXT_CONTINUE)) {
                 // Scroll to new visible lines
                 td.setVisibleText(endLine, 0f);
+                LOG.debug("Show new text lines: {} -> {} (lineCount={}, startGlyph={}, endGlyph={})",
+                        startLine, endLine, lineCount, td.getGlyphOffset(endLine),
+                        td.getGlyphOffset(td.getEndLine()));
             }
         }
     }
