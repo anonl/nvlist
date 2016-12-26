@@ -67,8 +67,9 @@ function setActiveTextBox(textMode)
     else
         textBox = textBoxConstr()
         textBox:install()
+        textBox:hide(1) -- Set alpha to 0.0 (starts at 1.0)
+
         if wasVisible then
-            textBox:hide(1) -- Set alpha to 0.0 (starts at 1.0)
             textBox:show() -- Gradually fade to visibility
         end
     end
