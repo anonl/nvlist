@@ -25,7 +25,7 @@ end
 -- @number[opt=1.0] volume Loudness of the music between <code>0.0</code> and <code>1.0</code>.
 -- @see sound
 function music(filename, volume)
-    return sound(filename, -1, 1.0, 9000, SoundType.MUSIC)
+    return sound(filename, -1, volume or 1.0, 9000, SoundType.MUSIC)
 end
 
 ---Stops background music started with the <code>music</code> function.
@@ -41,7 +41,7 @@ end
 
 ---Plays a voice clip.
 -- @string filename Path to a valid audio file, relative to <code>/snd</code>.
--- @int[opt=101] channel The audio channel to use. Each channel can only play one sound at a time.
+-- @int[opt=9200] channel The audio channel to use. Each channel can only play one sound at a time.
 -- @see sound
 function voice(filename, channel)
     return sound(filename, 1, 1.0, channel or 9200, SoundType.VOICE)

@@ -21,6 +21,7 @@ public class Sound extends AbstractSound {
 
     @Override
     protected void play(int loops) throws IOException {
+        nativeAudio.setVolume(getVolume());
         nativeAudio.play(loops);
     }
 
