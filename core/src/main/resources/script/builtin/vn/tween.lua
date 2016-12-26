@@ -5,8 +5,7 @@ module("vn.tween", package.seeall)
 -- Local functions shared between sections
 --------------------------------------------------------------------------------------------------------------
 
-local function doTween(image, tween, endTexture)
-    tween:setEndTexture(endTexture)
+local function doTween(image, tween, endTexture)    
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
         yield()
@@ -51,10 +50,17 @@ end
 -- @param interpolator A function or Interpolator object mapping an input in the range <code>(0, 1)</code> to
 --        an output in the range <code>(0, 1)</code>.
 function crossFadeTween(image, targetTexture, duration, interpolator)
-    duration = duration or 30
     targetTexture = tex(targetTexture)
+    duration = duration or 30
 
-    local tween = Tween.crossFade(duration, interpolator)
+    local config = Tween.crossFadeConfig(duration)
+    config:setStartTexture(image:getTexture())
+    config:setEndTexture(targetTexture)
+    if interpolator ~= nil then
+        config:setInterpolator(Interpolators.get(interpolator))
+    end
+    
+    local tween = Tween.crossFadeTween(config)
     return doTween(image, tween, targetTexture)
 end
 
@@ -75,11 +81,19 @@ end
 -- @param[opt=nil] interpolator A function or interpolator object mapping an input in the range
 --                 <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 function bitmapTween(image, targetTexture, controlImage, duration, range, interpolator)
+    targetTexture = tex(targetTexture)
     duration = duration or 60
     range = range or 0.5
-    targetTexture = tex(targetTexture)
 
-    local tween = Tween.bitmapTween(controlImage, duration, range, interpolator)
+    local config = Tween.bitmapTweenConfig(duration, controlImage, false)
+    config:setStartTexture(image:getTexture())
+    config:setEndTexture(targetTexture)
+    config:setRange(range)
+    if interpolator ~= nil then
+        config:setInterpolator(Interpolators.get(interpolator))
+    end
+
+    local tween = Tween.bitmapTween(config)
     return doTween(image, tween, targetTexture)
 end
 

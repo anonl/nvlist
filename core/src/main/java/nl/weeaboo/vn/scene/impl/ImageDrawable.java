@@ -9,6 +9,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.TextureRenderer;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -132,6 +133,15 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
             setAlign(alignX, alignY);
         }
+    }
+
+    @Override
+    public ITexture getTexture() {
+        if (!(renderer instanceof ITextureRenderer)) {
+            return null;
+        }
+        ITextureRenderer texRenderer = (ITextureRenderer)renderer;
+        return texRenderer.getTexture();
     }
 
     @Override

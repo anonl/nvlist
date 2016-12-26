@@ -8,9 +8,10 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.Interpolators;
 import nl.weeaboo.vn.core.impl.AlignUtil;
+import nl.weeaboo.vn.image.IBitmapTweenConfig;
 import nl.weeaboo.vn.image.ITexture;
 
-public final class BitmapTweenConfig implements Serializable {
+public final class BitmapTweenConfig implements IBitmapTweenConfig {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +33,7 @@ public final class BitmapTweenConfig implements Serializable {
         return range;
     }
 
+    @Override
     public void setRange(double range) {
         this.range = Checks.checkRange(range, "range", 0);
     }
@@ -40,6 +42,7 @@ public final class BitmapTweenConfig implements Serializable {
         return interpolator;
     }
 
+    @Override
     public void setInterpolator(IInterpolator interpolator) {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
@@ -56,9 +59,11 @@ public final class BitmapTweenConfig implements Serializable {
         return startTexture;
     }
 
+    @Override
     public void setStartTexture(ITexture texture) {
         setStartTexture(texture, 0, 0);
     }
+    @Override
     public void setStartTexture(ITexture texture, double alignX, double alignY) {
         this.startTexture = new AlignedTexture(texture, alignX, alignY);
     }
@@ -67,9 +72,11 @@ public final class BitmapTweenConfig implements Serializable {
         return endTexture;
     }
 
+    @Override
     public void setEndTexture(ITexture texture) {
         setEndTexture(texture, 0, 0);
     }
+    @Override
     public void setEndTexture(ITexture texture, double alignX, double alignY) {
         this.endTexture = new AlignedTexture(texture, alignX, alignY);
     }

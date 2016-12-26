@@ -333,7 +333,12 @@ function translateTo(i, x, y, durationFrames, interpolator)
     x = x or i:getX()
     y = y or i:getY()
     durationFrames = durationFrames or 60
-    interpolator = Interpolators.get(interpolator, Interpolators.SMOOTH)
+    
+    if interpolator == nil then
+        interpolator = Interpolators.SMOOTH
+    else
+        interpolator = Interpolators.get(interpolator)
+    end
 
     local startX = i:getX()
     local startY = i:getY()

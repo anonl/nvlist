@@ -17,11 +17,18 @@ public interface IImageDrawable extends ITransformable {
 
     /**
      * Changes the renderer and its relative alignment.
-     * 
+     *
      * @see #setRenderer(IRenderable)
      * @see #setAlign(double, double)
      */
     void setRenderer(IRenderable r, double alignX, double alignY);
+
+    /**
+     * If this image drawable uses a {@link ITextureRenderer}, returns the current texture of that renderer.
+     * Otherwise, {@code null} is returned.
+     * @see ITextureRenderer#getTexture()
+     */
+    ITexture getTexture();
 
     /**
      * Sets the renderer to a {@link ITextureRenderer} using the given texture

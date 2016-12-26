@@ -1,13 +1,16 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.gdx.graphics.GdxCrossFadeRenderer;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IInterpolator;
-import nl.weeaboo.vn.core.Interpolators;
+import nl.weeaboo.vn.image.IBitmapTweenConfig;
 import nl.weeaboo.vn.image.IBitmapTweenRenderer;
+import nl.weeaboo.vn.image.ICrossFadeConfig;
 import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
@@ -21,6 +24,7 @@ import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
 public class TweenLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = LoggerFactory.getLogger(TweenLib.class);
 
     private final IEnvironment env;
 
@@ -31,27 +35,62 @@ public class TweenLib extends LuaLib {
     }
 
     /**
+     * @param args
+     *        <ol>
+     *        <li>duration (in frames)
+     *        </ol>
+     * @return A new {@link ICrossFadeConfig} object.
+     */
+    @ScriptFunction
+    public Varargs crossFadeConfig(Varargs args) {
+        double duration = args.checkdouble(1);
+
+        ICrossFadeConfig config = new CrossFadeConfig(duration);
+        return LuajavaLib.toUserdata(config, ICrossFadeConfig.class);
+    }
+
+    /**
      * Creates a new {@link ICrossFadeRenderer} instance.
      *
      * @param args
      *        <ol>
-     *        <li>duration (in frames)
-     *        <li>(optional) interpolator
+     *        <li>config (see {@link #crossFadeConfig(Varargs)})
      *        </ol>
-     * @return A new sound object, or {@code nil} if the sound couldn't be loaded.
      */
     @ScriptFunction
     public Varargs crossFade(Varargs args) {
-        double duration = args.checkdouble(1);
-        IInterpolator interpolator = InterpolatorsLib.getInterpolator(args.arg(2), Interpolators.SMOOTH);
+        CrossFadeConfig config = args.checkuserdata(1, CrossFadeConfig.class);
 
         IImageModule imageModule = env.getImageModule();
 
-        CrossFadeConfig config = new CrossFadeConfig(duration);
-        config.setInterpolator(interpolator);
-
         ICrossFadeRenderer renderer = new GdxCrossFadeRenderer(imageModule, config);
         return LuajavaLib.toUserdata(renderer, ICrossFadeRenderer.class);
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>duration (in frames)
+     *        <li>control image (a texture)
+     *        <li>tile control image (boolean)
+     *        </ol>
+     * @return A new {@link IBitmapTweenConfig} object.
+     */
+    @ScriptFunction
+    public Varargs bitmapTweenConfig(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        double duration = args.checkdouble(1);
+        ITexture controlTex = LuaConvertUtil.getTextureArg(imageModule, args.arg(2));
+        if (controlTex == null) {
+            LOG.warn("Invalid control image: {}, replacing with dummy", args.arg(2));
+            controlTex = imageModule.createTexture(0xFF808080, 4, 4, 1, 1);
+        }
+        boolean tile = args.optboolean(3, false);
+
+        ControlImage controlImage = new ControlImage(controlTex, tile);
+        IBitmapTweenConfig config = new BitmapTweenConfig(duration, controlImage);
+        return LuajavaLib.toUserdata(config, IBitmapTweenConfig.class);
     }
 
     /**
@@ -59,30 +98,15 @@ public class TweenLib extends LuaLib {
      *
      * @param args
      *        <ol>
-     *        <li>controlImage
-     *        <li>duration (in frames)
-     *        <li>(optional) range
-     *        <li>(optional) interpolator
+     *        <li>config (see {@link #bitmapTweenConfig(Varargs)})
      *        </ol>
      * @return A new sound object, or {@code nil} if the sound couldn't be loaded.
      */
     @ScriptFunction
-    public Varargs bitmapTween(Varargs args) throws ScriptException {
+    public Varargs bitmapTween(Varargs args) {
         IImageModule imageModule = env.getImageModule();
 
-        ITexture controlTex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-        if (controlTex == null) {
-            throw new ScriptException("Invalid control image: " + args.arg(1));
-        }
-
-        double duration = args.checkdouble(2);
-        double range = args.checkdouble(3);
-        IInterpolator interpolator = InterpolatorsLib.getInterpolator(args.arg(4), Interpolators.SMOOTH);
-
-        ControlImage controlImage = new ControlImage(controlTex, false);
-        BitmapTweenConfig config = new BitmapTweenConfig(duration, controlImage);
-        config.setRange(range);
-        config.setInterpolator(interpolator);
+        BitmapTweenConfig config = args.checkuserdata(1, BitmapTweenConfig.class);
 
         IBitmapTweenRenderer renderer = new GdxBitmapTweenRenderer(imageModule, config);
         return LuajavaLib.toUserdata(renderer, IBitmapTweenRenderer.class);

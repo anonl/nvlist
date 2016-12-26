@@ -1,14 +1,13 @@
 package nl.weeaboo.vn.image.impl;
 
-import java.io.Serializable;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.Interpolators;
+import nl.weeaboo.vn.image.ICrossFadeConfig;
 import nl.weeaboo.vn.image.ITexture;
 
-public final class CrossFadeConfig implements Serializable {
+public final class CrossFadeConfig implements ICrossFadeConfig {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +26,7 @@ public final class CrossFadeConfig implements Serializable {
         return interpolator;
     }
 
+    @Override
     public void setInterpolator(IInterpolator interpolator) {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
@@ -39,9 +39,11 @@ public final class CrossFadeConfig implements Serializable {
         return startTexture;
     }
 
+    @Override
     public void setStartTexture(ITexture texture) {
         setStartTexture(texture, 0, 0);
     }
+    @Override
     public void setStartTexture(ITexture texture, double alignX, double alignY) {
         this.startTexture = new AlignedTexture(texture, alignX, alignY);
     }
@@ -50,9 +52,11 @@ public final class CrossFadeConfig implements Serializable {
         return endTexture;
     }
 
+    @Override
     public void setEndTexture(ITexture texture) {
         setEndTexture(texture, 0, 0);
     }
+    @Override
     public void setEndTexture(ITexture texture, double alignX, double alignY) {
         this.endTexture = new AlignedTexture(texture, alignX, alignY);
     }
