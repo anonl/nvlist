@@ -228,6 +228,18 @@ function isLineRead()
     return lineState.read
 end
 
+function createStyledText(text, style)
+    deprecated("4.0")
+
+    return Text.createStyledText(text or "", style)
+end
+
+function createStyle(style)
+    deprecated("4.0")
+
+    return Text.createStyle(style)
+end
+
 ---Stringifiers
 -------------------------------------------------------------------------------------------------------------- @section stringifiers
 
