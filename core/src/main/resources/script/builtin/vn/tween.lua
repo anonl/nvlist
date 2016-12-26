@@ -60,7 +60,7 @@ function crossFadeTween(image, targetTexture, duration, interpolator)
         config:setInterpolator(Interpolators.get(interpolator))
     end
     
-    local tween = Tween.crossFadeTween(config)
+    local tween = Tween.crossFade(config)
     return doTween(image, tween, targetTexture)
 end
 
