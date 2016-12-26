@@ -1,11 +1,12 @@
 package nl.weeaboo.vn.image.impl;
 
+import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.impl.TriangleGrid;
 import nl.weeaboo.vn.render.impl.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 
-public abstract class CrossFadeRenderer extends AnimatedRenderable {
+public abstract class CrossFadeRenderer extends AnimatedRenderable implements ICrossFadeRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 

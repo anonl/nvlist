@@ -12,13 +12,18 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
+    /** May be null */
     private ITexture texture;
+
     private Area2D uv = ITexture.DEFAULT_UV;
 
     public TextureRenderer() {
         this(null);
     }
 
+    /**
+     * @param tex May be null
+     */
     public TextureRenderer(ITexture tex) {
         this.texture = tex;
 

@@ -57,6 +57,7 @@ local submodules = {
 	"system",
 	"text",
 	"textbox",
+	"tween",
 	"video"
 }
 for _,module in ipairs(submodules) do

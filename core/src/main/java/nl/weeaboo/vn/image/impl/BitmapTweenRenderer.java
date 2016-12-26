@@ -3,6 +3,7 @@ package nl.weeaboo.vn.image.impl;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.impl.AlignUtil;
+import nl.weeaboo.vn.image.IBitmapTweenRenderer;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
@@ -10,7 +11,7 @@ import nl.weeaboo.vn.render.impl.TriangleGrid;
 import nl.weeaboo.vn.render.impl.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 
-public abstract class BitmapTweenRenderer extends AnimatedRenderable {
+public abstract class BitmapTweenRenderer extends AnimatedRenderable implements IBitmapTweenRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 

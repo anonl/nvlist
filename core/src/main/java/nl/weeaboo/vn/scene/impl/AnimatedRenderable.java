@@ -4,9 +4,10 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.scene.IAnimatedRenderable;
 import nl.weeaboo.vn.scene.IDrawable;
 
-public abstract class AnimatedRenderable extends AbstractRenderable {
+public abstract class AnimatedRenderable extends AbstractRenderable implements IAnimatedRenderable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
@@ -74,6 +75,7 @@ public abstract class AnimatedRenderable extends AbstractRenderable {
     protected void disposeResources() {
     }
 
+    @Override
     public boolean isFinished() {
         return getNormalizedTime() >= 1.0;
     }

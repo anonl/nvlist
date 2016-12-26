@@ -6,7 +6,7 @@ import nl.weeaboo.vn.scene.IRenderable;
 public interface ITextureRenderer extends IRenderable {
 
 	/**
-	 * Returns the texture used to render this image.
+	 * Returns the texture used to render this image, or {@code null} if no texture is currently set.
 	 */
     ITexture getTexture();
 
