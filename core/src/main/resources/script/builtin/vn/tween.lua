@@ -5,12 +5,14 @@ module("vn.tween", package.seeall)
 -- Local functions shared between sections
 --------------------------------------------------------------------------------------------------------------
 
-local function doTween(image, tween, endTexture)    
+local function doTween(image, tween, endTexture)
+    tween:setSize(image:getWidth(), image:getHeight())    
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
         yield()
     end
     image:setTexture(endTexture)
+    return true
 end
 
 ---Global declarations
@@ -146,8 +148,8 @@ function shutterTween(image, targetTexture, dir, steps, duration)
     dir = dir or 6
     steps = steps or 10
 
-    local controlImage = "fade/shutter-" .. dir .. "-" .. steps
-    return bitmapTween(image, targetTexture, controlImage, duration)
+    -- TODO: Implement proper shutter tween shader
+    return crossFadeTween(image, targetTexture, duration)
 end
 
 ---Fades in an ImageDrawable's texture using a shutter transition.
@@ -192,8 +194,8 @@ function wipeTween(image, targetTexture, dir, span, duration)
     dir = dir or 6
     span = span or 0.2
 
-    local controlImage = "fade/wipe-" .. dir
-    return bitmapTween(image, targetTexture, controlImage, duration, span)
+    -- TODO: Implement proper wipe tween shader
+    return crossFadeTween(image, targetTexture, duration)
 end
 
 ---Fades in an ImageDrawable's texture using a wipe transition.

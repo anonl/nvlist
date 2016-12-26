@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.image.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.impl.TriangleGrid;
@@ -9,6 +12,7 @@ import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 public abstract class CrossFadeRenderer extends AnimatedRenderable implements ICrossFadeRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(CrossFadeRenderer.class);
 
     protected final CrossFadeConfig config;
 
@@ -38,6 +42,9 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
         grid = TriangleGrid.layout2(
                 tex0.getBounds().toArea2D(), tex0.getUV(), TextureWrap.CLAMP,
                 tex1.getBounds().toArea2D(), tex1.getUV(), TextureWrap.CLAMP);
+
+        LOG.debug("Prepare crossFade: start={}, end={}",
+                getStartTexture(), getEndTexture());
     }
 
     @Override

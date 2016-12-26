@@ -419,7 +419,9 @@ end
 
 local ImageTweenAnimator = {
     image=nil,
-    tween=nil
+    tween=nil,
+    
+    oldRenderer=nil
 }
 
 
@@ -428,14 +430,17 @@ function ImageTweenAnimator.new(self)
 end
 
 function ImageTweenAnimator:start(loops)
-    self.image:setTween(self.tween)
+    self.oldRenderer = self.image:getRenderer()
+    self.image:setRenderer(self.tween)
 
     return Animator.start(self, loops)
 end
 
 function ImageTweenAnimator:onEnd()
     Animator.onEnd(self)
-    self.tween:finish()
+    if oldRenderer ~= nil then
+        self.image:setRenderer(self.oldRenderer)
+    end
 end
 
 ---Global animator functions
@@ -552,10 +557,11 @@ end
 function Anim.createImageTween(image, targetTexture, durationFrames)
     targetTexture = tex(targetTexture)
     durationFrames = durationFrames or 60
-    interpolator = nil
     
-    local tween = CrossFadeTween.new(durationFrames, interpolator)
-    tween:setEndImage(targetTexture)
+    local config = Tween.crossFadeConfig(durationFrames)
+    config:setStartTexture(image:getTexture())
+    config:setEndTexture(targetTexture)    
+    local tween = Tween.crossFade(config)
     
     return ImageTweenAnimator.new{
         image=image,

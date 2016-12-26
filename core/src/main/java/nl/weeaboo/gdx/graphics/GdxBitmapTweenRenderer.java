@@ -82,7 +82,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getStartTexture();
         if (tex != null) {
-            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, ITexture.DEFAULT_UV);
+            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getStartTextureUV());
         }
     }
 
@@ -101,7 +101,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     protected void renderEnd(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getEndTexture();
         if (tex != null) {
-            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, ITexture.DEFAULT_UV);
+            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getEndTextureUV());
         }
     }
 
@@ -138,7 +138,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
 
             Texture backingTexture = GdxTextureUtil.getTexture(remapTexture);
 
-            LOG.debug("Remap tex: {}->{} ({})", i0, i1, (backingTexture == null ? "alloc" : "update"));
+            LOG.trace("Remap tex: {}->{} ({})", i0, i1, (backingTexture == null ? "alloc" : "update"));
 
             if (backingTexture != null) {
                 // Update existing texture

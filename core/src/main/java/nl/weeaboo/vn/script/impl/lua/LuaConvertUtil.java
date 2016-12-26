@@ -56,10 +56,10 @@ public final class LuaConvertUtil {
                 }
                 return imageModule.createTexture(ss);
             } else {
-                throw new ScriptException("Invalid arguments");
+                throw new ScriptException("Invalid argument: " + obj);
             }
         } else if (!luaValue.isnil()) {
-            throw new ScriptException("Invalid arguments");
+            throw new ScriptException("Invalid argument: " + luaValue);
         }
         return null;
     }

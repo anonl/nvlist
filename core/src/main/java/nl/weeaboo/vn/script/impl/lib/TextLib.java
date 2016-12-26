@@ -9,6 +9,7 @@ import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.compiler.LoadState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
@@ -194,7 +195,11 @@ public class TextLib extends LuaLib {
                 Varargs ipair = oldTriggers.inext(oldTableIndex);
                 oldTableIndex = ipair.arg(1);
                 func = ipair.arg(2);
-                env = oldTriggers.getfenv();
+                try {
+                    env = oldTriggers.getfenv();
+                } catch (LuaError le) {
+                    // This value has no fenv (not an error)
+                }
             }
 
             if (func == null) {

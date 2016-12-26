@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.image.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.impl.AlignUtil;
@@ -14,6 +17,7 @@ import nl.weeaboo.vn.scene.impl.AnimatedRenderable;
 public abstract class BitmapTweenRenderer extends AnimatedRenderable implements IBitmapTweenRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(BitmapTweenRenderer.class);
 
     protected final IImageModule imageModule;
 
@@ -90,6 +94,9 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
                 controlBounds.toArea2D(), controlTexUV, controlWrap);
 
         remapTexture = updateRemapTexture(remapTexture); // Init remapTex
+
+        LOG.debug("Prepare bitmaptween: start={}, end={}, control={}",
+                getStartTexture(), getEndTexture(), controlTex);
     }
 
     @Override
