@@ -214,12 +214,12 @@ public class Button extends Transformable implements IButton {
 
     @Override
     protected double getUnscaledWidth() {
-        return renderer.getNativeWidth();
+        return renderer.getWidth();
     }
 
     @Override
     protected double getUnscaledHeight() {
-        return renderer.getNativeHeight();
+        return renderer.getHeight();
     }
 
     @Override
