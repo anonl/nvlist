@@ -37,19 +37,29 @@ end
 
 local function updateSpeaker()
     local textBox = getTextBox()
-    if textBox ~= nil then
-        local currentSpeaker = getSpeakerState()
-        if currentSpeaker.changed then
-            if textBox:setSpeaker(currentSpeaker.name) then
-                appendTextLog(Text.format("[{}]\n", currentSpeaker.name))
-            else
-                if isTextModeADV() then
-                    appendText(Text.format("[{}]", currentSpeaker.name))
-                else
-                    appendText(Text.format("[{}]\n", currentSpeaker.name))
-                end                
-            end
-        end
+    if textBox == nil then
+        return
+    end
+    
+    local currentSpeaker = getSpeakerState()
+    if not currentSpeaker.changed then
+        return
+    end
+    
+    local speakerShown = textBox:setSpeaker(currentSpeaker.name)
+    if currentSpeaker.name == nil or currentSpeaker.name == "" then
+        -- Omit name tags for nameless (narrator) speaker
+        return
+    end
+    
+    if speakerShown then
+        appendTextLog(Text.format("[{}]\n", currentSpeaker.name))
+    else
+        if isTextModeADV() then
+            appendText(Text.format("[{}]", currentSpeaker.name))
+        else
+            appendText(Text.format("[{}]\n", currentSpeaker.name))
+        end                
     end
 end
 
