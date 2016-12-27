@@ -81,6 +81,10 @@ public abstract class VisualElement implements IVisualElement {
 
     @Override
     public void handleInput(Matrix parentTransform, IInput input) {
+        // Default implementation for non-transformed elements/groups
+        for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
+            elem.handleInput(parentTransform, input);
+        }
     }
 
     /**

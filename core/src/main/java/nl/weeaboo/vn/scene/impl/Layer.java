@@ -85,7 +85,6 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
         return elem.getVisualBounds().intersects(0, 0, r.w, r.h);
     }
 
-
     @Override
     public void handleInput(Matrix parentTransform, IInput input) {
         // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
@@ -93,8 +92,6 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
         for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
             elem.handleInput(inputTransform, input);
         }
-
-        super.handleInput(parentTransform, input);
     }
 
     @Override
