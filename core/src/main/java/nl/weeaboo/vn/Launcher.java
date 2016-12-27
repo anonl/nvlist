@@ -45,6 +45,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
@@ -98,7 +99,7 @@ public class Launcher extends ApplicationAdapter {
 
     /** Note: This method may be called at any time, even before {@link #create()} */
     public NovelPrefsStore loadPreferences() {
-        NovelPrefsStore prefs = new NovelPrefsStore(outputFileSystem);
+        NovelPrefsStore prefs = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
         try {
             prefs.loadVariables();
         } catch (IOException ioe) {
@@ -114,6 +115,9 @@ public class Launcher extends ApplicationAdapter {
         JngTextureLoader.register(assetManager);
         Texture.setAssetManager(assetManager);
 
+        NovelPrefsStore prefs = loadPreferences();
+        vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
+
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 		scene2dViewport = new FitViewport(vsize.w, vsize.h);
@@ -124,7 +128,7 @@ public class Launcher extends ApplicationAdapter {
 		batch = new SpriteBatch();
 
         try {
-            initNovel();
+            initNovel(prefs);
         } catch (InitException e) {
             throw new RuntimeException("Fatal error during init", e);
         }
@@ -138,9 +142,7 @@ public class Launcher extends ApplicationAdapter {
         initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void initNovel() throws InitException {
-        NovelPrefsStore prefs = loadPreferences();
-
+    private void initNovel(NovelPrefsStore prefs) throws InitException {
         InputConfig inputConfig;
         try {
             inputConfig = InputConfig.readDefaultConfig();

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.settings.AbstractPreferenceStore;
 import nl.weeaboo.settings.PropertiesUtil;
@@ -18,20 +19,22 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
     private static final FilePath DEFAULTS_FILENAME = FilePath.of("prefs.default.ini");
     private static final FilePath VARIABLES_FILENAME = FilePath.of("prefs.ini");
 
-    private final IWritableFileSystem fileSystem;
+    private final IFileSystem resourceFileSystem;
+    private final IWritableFileSystem outputSystem;
 
-    public NovelPrefsStore(IWritableFileSystem fs) {
-        this.fileSystem = Checks.checkNotNull(fs);
+    public NovelPrefsStore(IFileSystem resFS, IWritableFileSystem outFS) {
+        this.resourceFileSystem = Checks.checkNotNull(resFS);
+        this.outputSystem = Checks.checkNotNull(outFS);
 	}
 
     @Override
     public void loadVariables() throws IOException {
-        initConsts(load(CONSTANTS_FILENAME));
-        setAll(load(DEFAULTS_FILENAME));
-        setAll(load(VARIABLES_FILENAME));
+        initConsts(load(resourceFileSystem, CONSTANTS_FILENAME));
+        setAll(load(resourceFileSystem, DEFAULTS_FILENAME));
+        setAll(load(outputSystem, VARIABLES_FILENAME));
     }
 
-    private Map<String, String> load(FilePath filename) throws IOException {
+    private Map<String, String> load(IFileSystem fileSystem, FilePath filename) throws IOException {
         if (!fileSystem.getFileExists(filename)) {
             return Collections.emptyMap();
         }
@@ -46,7 +49,7 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
 
     @Override
     public void saveVariables() throws IOException {
-        OutputStream out = fileSystem.openOutputStream(VARIABLES_FILENAME, false);
+        OutputStream out = outputSystem.openOutputStream(VARIABLES_FILENAME, false);
         try {
             PropertiesUtil.save(out, getVariables());
         } finally {
