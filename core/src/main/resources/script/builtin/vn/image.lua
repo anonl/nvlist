@@ -398,6 +398,15 @@ function getActiveLayer()
     return Image.getActiveLayer()
 end
 
+---Changes the current image layer. Functions that create Drawables such as <code>img</code> typically create
+-- them in the image layer.
+-- @tparam Layer layer The layer to use as image layer.
+-- @see getActiveLayer
+function setActiveLayer(layer)
+    Image.setActiveLayer(layer)
+end
+
+
 --- Use getActiveLayer() instead
 function getImageLayer()
     deprecated("4.0")
@@ -405,10 +414,9 @@ function getImageLayer()
     return getActiveLayer()
 end
 
----Changes the current image layer. Functions that create Drawables such as <code>img</code> typically create
--- them in the image layer.
--- @tparam Layer layer The layer to use as image layer.
--- @see getActiveLayer
-function setActiveLayer(layer)
-    Image.setActiveLayer(layer)
+--- Use setActiveLayer() instead
+function setImageLayer(layer)
+    deprecated("4.0")
+
+    return setActiveLayer(layer)
 end
