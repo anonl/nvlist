@@ -79,14 +79,6 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     }
 
     @Override
-    protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
-        ITexture tex = getStartTexture();
-        if (tex != null) {
-            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getStartTextureUV());
-        }
-    }
-
-    @Override
     protected void renderIntermediate(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         DrawTransform transform = new DrawTransform(parent);
         MutableMatrix matrix = transform.getTransform().mutableCopy();
@@ -97,6 +89,16 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         drawBuffer.drawCustom(transform, parent.getColorARGB(), new Logic());
     }
 
+    // TODO: Re-enable optimized versions of renderStart/renderEnd
+    /*
+    @Override
+    protected void renderStart(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        ITexture tex = getStartTexture();
+        if (tex != null) {
+            drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getStartTextureUV());
+        }
+    }
+
     @Override
     protected void renderEnd(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
         ITexture tex = getEndTexture();
@@ -104,6 +106,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
             drawBuffer.drawQuad(parent, parent.getColorARGB(), tex, bounds, getEndTextureUV());
         }
     }
+    */
 
     @Override
     protected ITexture updateRemapTexture(ITexture remapTexture) {

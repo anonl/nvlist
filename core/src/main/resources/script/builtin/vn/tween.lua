@@ -6,13 +6,18 @@ module("vn.tween", package.seeall)
 --------------------------------------------------------------------------------------------------------------
 
 local function doTween(image, tween, endTexture)
-    tween:setSize(image:getWidth(), image:getHeight())    
+    if endTexture == nil then
+        tween:setSize(image:getWidth(), image:getHeight())
+    else
+        tween:setSize(endTexture:getWidth(), endTexture:getHeight());
+    end
+        
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
         yield()
     end
     image:setTexture(endTexture)
-    return true
+    return true -- Causes various tween functions to return true for backwards compatibility
 end
 
 ---Global declarations
@@ -24,9 +29,7 @@ end
 -- @tparam ImageDrawable image The image to change the texture of.
 -- @param targetTexture A texture object or a path to a valid image file (relative to <code>/img</code>).
 function imgtween(image, targetTexture)
-    targetTexture = tex(targetTexture)
-    crossFadeTween(image, targetTexture, 30)
-    return image
+    return crossFadeTween(image, targetTexture, 30)
 end
 
 ---Convenience function for performing an <code>imgtween</code> on the current background image. In the case

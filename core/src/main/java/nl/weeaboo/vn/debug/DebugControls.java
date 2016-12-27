@@ -30,13 +30,11 @@ import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
+import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.CrossFadeConfig;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
-import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
-import nl.weeaboo.vn.math.Matrix;
-import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
@@ -210,14 +208,6 @@ public final class DebugControls {
             if (input.isPressed(KeyCode.DOWN, false)) transformable.translate(0, 5);
             if (input.isPressed(KeyCode.LEFT, false)) transformable.translate(-5, 0);
             if (input.isPressed(KeyCode.RIGHT, false)) transformable.translate(5, 0);
-        }
-
-        // Place image at mouse press location (useful for Android testing)
-        if (input.isPressed(KeyCode.MOUSE_LEFT, true)) {
-            Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());
-            if (transformable.contains(pointerPos.x, pointerPos.y)) {
-                transformable.setPos(pointerPos.x, pointerPos.y);
-            }
         }
     }
 

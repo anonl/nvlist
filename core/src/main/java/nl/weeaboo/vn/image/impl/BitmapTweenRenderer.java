@@ -95,8 +95,8 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
 
         remapTexture = updateRemapTexture(remapTexture); // Init remapTex
 
-        LOG.debug("Prepare bitmaptween: start={}, end={}, control={}",
-                getStartTexture(), getEndTexture(), controlTex);
+        LOG.debug("Prepare bitmaptween: start={}, end={}, control={}, bounds={}",
+                getStartTexture(), getEndTexture(), controlTex, controlBounds);
     }
 
     @Override
