@@ -12,7 +12,6 @@ final class SkipState implements ISkipState {
 
     private SkipMode skipMode = SkipMode.NONE;
 
-    // TODO: Implement an alt skip key that toggles between skip-read and skip-all
     private boolean skipUnread = false;
 
     @Override
@@ -33,6 +32,10 @@ final class SkipState implements ISkipState {
     @Override
     public void setSkipMode(SkipMode mode) {
         skipMode = Checks.checkNotNull(mode);
+
+        if (mode == SkipMode.NONE) {
+            skipUnread = false;
+        }
     }
 
     @Override
@@ -49,6 +52,11 @@ final class SkipState implements ISkipState {
         } else if (skipMode == SkipMode.NONE && isSkipKeyHeld(input)) {
             // Start skipping
             setSkipMode(SkipMode.PARAGRAPH);
+
+            // TODO: Implement a proper alt skip vkey that triggers skip-all instead of abusing textContinue
+            if (input.isPressed(VKey.TEXT_CONTINUE, true)) {
+                skipUnread = true;
+            }
         }
     }
 
