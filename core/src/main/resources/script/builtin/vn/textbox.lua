@@ -107,33 +107,31 @@ local ClickIndicatorSide = {
 
 local function initClickIndicator(textDrawable, texture, side)
     local d = Image.createImage(textDrawable:getLayer(), texture)
+    local scale = 1.0 -- 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
+    local dw = scale * d:getWidth()
+    local dh = scale * d:getHeight()
+    
     newThread(function()
         while not d:isDestroyed() do
-            if side == ClickIndicatorSide.TEXT_BOTTOM then
+            local tx = textDrawable:getX()
+            local ty = textDrawable:getY()
+            if side == ClickIndicatorSide.RIGHT then
+                d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
+            elseif side == ClickIndicatorSide.TEXT_BOTTOM then
                 local textBottomY = textDrawable:getY() + textDrawable:getTextHeight()
-                d:setY(textBottomY + d:getHeight() / 2)
+                d:setPos(tx + dw / 2, textBottomY + d:getHeight() / 2)
             end
-            d:rotate(1)
             yield()
         end
     end)
     
-    local scale = 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
-    local dw = scale * d:getWidth()
-    local dh = scale * d:getHeight()
     d:setSize(dw, dh)
     d:setAlign(0.5, 0.5)
     
-    local tx = textDrawable:getX()
-    local ty = textDrawable:getY()
-    if side == ClickIndicatorSide.RIGHT then
-        d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
-    
+    if side == ClickIndicatorSide.RIGHT then    
         -- Reserve some room for the continue indicator
         textDrawable:setWidth(textDrawable:getWidth() - dw)
     elseif side == ClickIndicatorSide.TEXT_BOTTOM then
-        d:setPos(tx + dw / 2, ty + textDrawable:getHeight() - dh / 2)
-
         -- Reserve some room for the continue indicator
         textDrawable:setHeight(textDrawable:getHeight() - dh)
     else
@@ -258,7 +256,7 @@ function NvlTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "test", ClickIndicatorSide.TEXT_BOTTOM)
+    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.TEXT_BOTTOM)
         
     self.layer = layer
     self.textArea = textArea
@@ -299,13 +297,14 @@ function AdvTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "test", ClickIndicatorSide.RIGHT)
+    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.RIGHT)
     
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "?")
     nameLabel:setZ(-100)
 
     local nameBox = createBgBox(layer, bgColor)    
+    nameBox:setZ(-99)
     local namePad = .01 * math.min(screenWidth, screenHeight)
     nameBox:setSize(textBox:getWidth(), nameLabel:getTextHeight() + namePad * 2)
     nameBox:setPos(textBox:getX(), textBox:getY() - nameBox:getHeight())    
