@@ -4,9 +4,7 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.impl.NinePatchRenderer;
-import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutGroup;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IPanel;
 import nl.weeaboo.vn.scene.IVisualElement;
@@ -127,15 +125,6 @@ public abstract class Panel extends Transformable implements IPanel {
         super.setLayoutBounds(rect);
 
         getLayout().setLayoutBounds(rect);
-    }
-
-    @Override
-    public void handleInput(Matrix parentTransform, IInput input) {
-        // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
-        Matrix inputTransform = getTransform().multiply(parentTransform);
-        for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
-            elem.handleInput(inputTransform, input);
-        }
     }
 
 }
