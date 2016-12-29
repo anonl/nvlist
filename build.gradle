@@ -6,12 +6,21 @@ buildscript {
         maven { url 'https://oss.sonatype.org/content/repositories/releases' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        // Plugin for making a 'fat' JAR
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+
+        // Plugins for Android
+        classpath 'com.android.tools.build:gradle:2.2.2'        
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+
+        // Plugin for creating runnable distributions (Win/Mac/Linux)
+        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
     }
 }
 
 plugins {
+    // Plugin for uploading to bintray
+    // Note: Causes a classpath conflict for org.apache.tools.zip
     id "com.jfrog.bintray" version "1.6"
 }
 
@@ -39,7 +48,8 @@ allprojects {
         tcommonVersion = '1.2.5'
         
         vnRootDir = templateDir
-        vnResDir = new File(vnRootDir, "res")
+        vnResDir = new File(vnRootDir, 'res')
+        buildToolsDir = new File(templateDir, 'build-tools')        
     }
 
     repositories {

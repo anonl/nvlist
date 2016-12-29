@@ -24,6 +24,7 @@ def loadProperties(String filename) {
 def vnRootDir = new File(vnRoot).getCanonicalFile()
 def vnResDir = new File(vnRootDir, "/res")
 def buildResDir = new File(vnRootDir, "/build-res")
+def buildToolsDir = projectDir
 
 logger.lifecycle("VN root folder: " + vnRootDir)
 logger.lifecycle("VN resource folder: " + vnResDir)
