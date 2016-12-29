@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -23,7 +24,6 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.InitConfig;
 import nl.weeaboo.vn.Launcher;
@@ -45,8 +45,10 @@ public class DesktopLauncher {
         Gdx.files = new Lwjgl3Files();
         // TODO #33: Use game ID as arcBaseName
         final DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
+
+        IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
         // TODO #33: Use in-memory filesystem for dev mode, real filesystem for production code
-        IWritableFileSystem outputFileSystem = new InMemoryFileSystem(false);
+        //IWritableFileSystem outputFileSystem = new InMemoryFileSystem(false);
 
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override

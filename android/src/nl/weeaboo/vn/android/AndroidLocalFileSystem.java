@@ -5,7 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 import nl.weeaboo.gdx.res.WritableGdxFileSystem;
 
-public class AndroidLocalFileSystem extends WritableGdxFileSystem {
+public final class AndroidLocalFileSystem extends WritableGdxFileSystem {
 
     @Override
     public FileHandle resolve(String fileName) {
