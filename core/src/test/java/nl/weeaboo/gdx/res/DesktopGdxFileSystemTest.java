@@ -65,7 +65,7 @@ public class DesktopGdxFileSystemTest {
         writeZipFile("res2.nvl", "c", "d");
 
         String rootPath = tempFolder.getRoot().getPath();
-        fileSystem = new DesktopGdxFileSystem(rootPath + "/", rootPath + "/res");
+        fileSystem = new DesktopGdxFileSystem(rootPath + "/");
     }
 
     @After

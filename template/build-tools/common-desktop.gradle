@@ -12,7 +12,9 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'application'
 
+def vnId = rootProject.name
 mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
+applicationName = vnId
 
 test {
     workingDir = vnRootDir
@@ -32,7 +34,7 @@ eclipse {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
-   baseName = rootProject.name
+   baseName = applicationName
    classifier = null
    version = null
 }
@@ -66,14 +68,15 @@ platforms.each{ platform ->
             config.classpath = [
                 "${projectDir}/build/libs/${rootProject.name}.jar".toString()
             ]
-            config.mainClass = mainClassName           
-            config.resources = [vnResDir]            
-            config.outDir = new File(buildDir, 'packr/' + platformId)    
+            config.mainClass = mainClassName
+            config.resources = [vnResDir]
+            config.outDir = new File(buildDir, 'packr/' + platformId)
             config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
             
             def vmArgs = []
+            vmArgs += applicationDefaultJvmArgs
             if (platform == PackrConfig.Platform.MacOS) {
-                vmArgs += ['-XstartOnFirstThread'] // Required for LWJGL3
+                vmArgs += ['XstartOnFirstThread'] // Required for LWJGL3
             }
             config.vmArgs = vmArgs
 

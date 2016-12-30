@@ -2,6 +2,7 @@ package nl.weeaboo.vn.desktop;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,21 +35,13 @@ public class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
-    public static void main(String[] arg) {
-//        TODO: Pass two pieces of information to the launcher:
-//            - gameId
-//            - virtual output toggle
-
+    public static void main(String[] args) {
         InitConfig.init();
 
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();
-        // TODO #33: Use game ID as arcBaseName
-        final DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
-
+        DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
-        // TODO #33: Use in-memory filesystem for dev mode, real filesystem for production code
-        //IWritableFileSystem outputFileSystem = new InMemoryFileSystem(false);
 
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override
@@ -58,6 +51,8 @@ public class DesktopLauncher {
                 super.create();
             }
         };
+
+        LOG.info("Commandline args: {}", Arrays.asList(args));
 
         Lwjgl3ApplicationConfiguration config = createConfig(launcher);
         Lwjgl3Application app = new Lwjgl3Application(launcher, config);
@@ -87,20 +82,17 @@ public class DesktopLauncher {
         // Try to load icons in various sizes
         List<Pixmap> pixmaps = Lists.newArrayList();
         try {
-            for (String sub : new String[] {"", "16", "32", "48", "64", "128", "256", "512"}) {
-                FilePath path = FilePath.of("icon" + sub + ".png");
-                try {
-                    byte[] bytes = FileSystemUtil.readBytes(fileSystem, path);
+            FilePath path = FilePath.of("icon.png");
+            try {
+                byte[] bytes = FileSystemUtil.readBytes(fileSystem, path);
 
-                    LOG.info("Loading icon: {}", path);
-                    pixmaps.add(new Pixmap(bytes, 0, bytes.length));
-                } catch (FileNotFoundException fnfe) {
-                    // File doesn't exist
-                } catch (IOException ioe) {
-                    LOG.warn("Error loading icon: {}", path, ioe);
-                }
+                LOG.info("Loading icon: {}", path);
+                pixmaps.add(new Pixmap(bytes, 0, bytes.length));
+            } catch (FileNotFoundException fnfe) {
+                // File doesn't exist
+            } catch (IOException ioe) {
+                LOG.warn("Error loading icon: {}", path, ioe);
             }
-
 
             window.setIcon(Iterables.toArray(pixmaps, Pixmap.class));
         } finally {

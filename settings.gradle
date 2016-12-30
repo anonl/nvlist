@@ -1,4 +1,6 @@
 
+rootProject.name = 'nvlist'
+
 include 'nvlist-api'
 project(':nvlist-api').projectDir=new File('api')
 

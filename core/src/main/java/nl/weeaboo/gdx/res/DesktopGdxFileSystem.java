@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -28,24 +29,17 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopGdxFileSystem.class);
 
-    private final String arcBaseName;
     private final InternalGdxFileSystem internalFileSystem;
 
     // Cached file archives. Archives are searched in order.
     private transient ImmutableList<ZipFileArchive> cachedFileArchives;
 
     public DesktopGdxFileSystem() {
-        this("res/", "res");
+        this("res/");
     }
 
-    /**
-     * @param arcBaseName Base name for file archives. The final archive file names are created from the
-     *        following pattern: {@code $(baseName).nvl}, {@code $(baseName)2.nvl}, ...
-     */
-    public DesktopGdxFileSystem(String internalFilePrefix, String arcBaseName) {
+    DesktopGdxFileSystem(String internalFilePrefix) {
         super(true);
-
-        this.arcBaseName = Checks.checkNotNull(arcBaseName);
 
         internalFileSystem = new InternalGdxFileSystem(internalFilePrefix);
     }
@@ -89,12 +83,11 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
         if (cachedFileArchives == null) {
             ImmutableList.Builder<ZipFileArchive> archives = ImmutableList.builder();
 
-            for (int index = 1; index < 99; index++) {
-                String name = arcBaseName + (index > 1 ? index : "") + ".nvl";
-                File file = Gdx.files.internal(name).file();
+            for (FileHandle arcFileHandle : getArchiveFiles()) {
+                File file = arcFileHandle.file();
                 if (!file.isFile()) {
                     // Abort at the first miss
-                    LOG.info("Stopped opening archives: {} (file={})", name, file);
+                    LOG.info("Stopped opening archives: {}", file);
                     break;
                 }
 
@@ -102,10 +95,10 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
                 try {
                     arc.open(file);
 
-                    LOG.info("Opened archive: {} (file={})", name, file);
+                    LOG.info("Opened archive: {}", file);
                     archives.add(arc);
                 } catch (IOException e) {
-                    LOG.warn("Error opening archive: {} (file={})", name, file);
+                    LOG.warn("Error opening archive: {}", file);
                     arc.close();
                 }
             }
@@ -113,6 +106,33 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
             cachedFileArchives = archives.build();
         }
         return cachedFileArchives;
+    }
+
+    /**
+     * @return A sorted list of all top-level archive files in the internal file system.
+     */
+    private Iterable<FileHandle> getArchiveFiles() {
+        Set<FileHandle> result = Sets.newTreeSet(new Comparator<FileHandle>() {
+            @Override
+            public int compare(FileHandle a, FileHandle b) {
+                // Sort by name
+                return a.name().compareTo(b.name());
+            }
+        });
+
+        // Search current working directory
+        for (FileHandle handle : Gdx.files.internal(".").list(".nvl")) {
+            result.add(handle);
+        }
+
+        // Search internal filesystem (classpath, etc.)
+        for (FileHandle handle : internalFileSystem.resolve(".").list(".nvl")) {
+            result.add(handle);
+        }
+
+        LOG.info("Found {} archive files: {}", result.size(), result);
+
+        return result;
     }
 
     private Set<FilePath> getChildren(FilePath path) {
