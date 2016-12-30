@@ -4,6 +4,9 @@ buildscript {
         jcenter()
     }
     dependencies {
+        // Plugin for making a 'fat' JAR
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+
         classpath 'com.android.tools.build:gradle:2.2.2'
    }
 }
@@ -21,10 +24,14 @@ def loadProperties(String filename) {
 }
 
 // Standard folders
-def vnRootDir = new File(vnRoot).getCanonicalFile()
-def vnResDir = new File(vnRootDir, "/res")
-def buildResDir = new File(vnRootDir, "/build-res")
-def buildToolsDir = projectDir
+allprojects {
+    ext {
+		vnRootDir = new File(vnRoot).getCanonicalFile()
+		vnResDir = new File(vnRootDir, "/res")
+		buildResDir = new File(vnRootDir, "/build-res")
+		buildToolsDir = rootProject.projectDir
+    }
+}
 
 logger.lifecycle("VN root folder: " + vnRootDir)
 logger.lifecycle("VN resource folder: " + vnResDir)
@@ -34,6 +41,8 @@ logger.lifecycle("VN build-resource folder: " + buildResDir)
 def settings = loadProperties("${buildResDir}/build.properties")
 
 allprojects {
+    apply plugin: 'eclipse'
+    
     version = settings.appVersion
 
     ext {
@@ -45,13 +54,13 @@ allprojects {
         jcenter()
         maven { url "https://dl.bintray.com/anonl/nvlist/" }
         maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-video/" }
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
     }
     
     plugins.withType(JavaPlugin) {
         sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
         compileJava.options.encoding = 'UTF-8'
         compileTestJava.options.encoding = 'UTF-8'
     }
@@ -70,7 +79,7 @@ project(':desktop') {
 project(':android') {
     apply plugin: 'com.android.application'
 
-    apply from: 'common-android.gradle'
+    apply from: "${buildToolsDir}/common-android.gradle"
 
     dependencies {
         compile("nl.weeaboo.vn:nvlist-android:$nvlistVersion@aar") {
