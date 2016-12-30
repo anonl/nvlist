@@ -1,55 +1,45 @@
 
-eclipse {
-    sourceSets {
-        main {
-            java.srcDirs 'src', 'gen'
-        }
-    }
+apply plugin: 'com.android.library' // Doesn't work yet when using Jack compiler
+// apply plugin: 'com.android.application'
 
-    jdt {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = javaVersion.VERSION_1_7
-    }
+apply from: "${buildToolsDir}/common-android.gradle"
 
-    project {
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/template/res'
-        natures 'com.android.ide.eclipse.adt.AndroidNature'
-        buildCommands.clear();
-        buildCommand "com.android.ide.eclipse.adt.ResourceManagerBuilder"
-        buildCommand "com.android.ide.eclipse.adt.PreCompilerBuilder"
-        buildCommand "org.eclipse.jdt.core.javabuilder"
-        buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
+
+dependencies {
+    compile project(":nvlist-api")
+    compile(project(":nvlist-core")) {
+        exclude group: "com.badlogicgames.gdx", module: "gdx-backend-headless"
+        exclude group: "com.badlogicgames.gdx", module: "gdx-platform"
     }
+    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
+    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+    compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:slf4j-android:$slf4jVersion"
+    compile "com.google.guava:guava:$guavaVersion"
+
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
+    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    compile "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
     
-    classpath {
-        plusConfigurations += [ project.configurations.compile ]        
-        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
-    }
-}
-
-
-android {
-    android.applicationVariants.all { variant ->
-        variant.mergeAssets.doLast {
-            // Generate an assets.list file containing all assets files in the APK
-            def fileTree = fileTree(dir: outputDir)
-            
-            def assetList = ""
-            fileTree.visit {
-                assetList <<= it.relativePath
-                if (it.isDirectory()) {
-                    // Add a trailing slash to distinguish folders from files
-                    assetList <<= "/"
-                }
-                assetList <<= "\n"
-            }
-        
-            def outputFile = new File(outputDir, "assets.list")
-            outputFile.text = assetList
-            
-            logger.info("Wrote assets list to {}", outputFile)
-        }
-    }
+    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"        
+    compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"        
 }
 
 // called every time gradle gets executed, takes the native dependencies of
@@ -78,4 +68,62 @@ task copyAndroidNatives() {
         }
     }
 }
+
+eclipse {
+    sourceSets {
+        main {
+            java.srcDirs 'src', 'gen'
+        }
+    }
+
+    jdt {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = javaVersion.VERSION_1_7
+    }
+
+    project {
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/template/res'
+        natures 'com.android.ide.eclipse.adt.AndroidNature'
+        buildCommands.clear();
+        buildCommand "com.android.ide.eclipse.adt.ResourceManagerBuilder"
+        buildCommand "com.android.ide.eclipse.adt.PreCompilerBuilder"
+        buildCommand "org.eclipse.jdt.core.javabuilder"
+        buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
+    }
     
+    classpath {
+        plusConfigurations += [ project.configurations.compile ]        
+        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
+    }
+}
+
+publishing {
+    publications {
+        android(MavenPublication) {        
+            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
+            artifact file("${buildDir}/outputs/aar/${project.name}-release.aar")
+            
+            pom.withXml {                
+	            // Gather dependencies
+	            def projectDeps = []
+	            projectDeps += configurations.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
+	            projectDeps += configurations.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
+
+                // Append dependencies to POM
+                def depsNode = asNode().appendNode('dependencies')
+                projectDeps.each {
+                    def depNode = depsNode.appendNode('dependency')
+                    depNode.appendNode('groupId', it.moduleGroup)
+                    depNode.appendNode('artifactId', it.moduleName)
+                    depNode.appendNode('version', it.moduleVersion)
+                }
+            }
+            
+            artifactId 'nvlist-android'
+        }
+    }
+}
+
+bintray {
+    publications = ['android']
+}

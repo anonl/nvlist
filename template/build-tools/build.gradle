@@ -58,21 +58,13 @@ allprojects {
 }
 
 project(':desktop') {
-    apply plugin: 'java'
+    apply from: "${buildToolsDir}/common-desktop.gradle"
 
     dependencies {
         compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"        
-    }
-    
-    project.ext.mainClassName = settings.desktopMain
+    }    
 
-    task run(dependsOn: classes, type: JavaExec) {
-        main = project.mainClassName
-        classpath = sourceSets.main.runtimeClasspath
-        standardInput = System.in
-        workingDir = vnRootDir
-        ignoreExitValue = true
-    }
+    mainClassName = settings.desktopMain
 }
 
 project(':android') {
@@ -93,6 +85,9 @@ project(':android') {
             manifestPlaceholders = [
                 androidMain: settings.androidMain
             ]
+	        jackOptions {
+	           enabled true
+	        }            
         }
     }
 

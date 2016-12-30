@@ -1,0 +1,84 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // Plugin for creating runnable distributions (Win/Mac/Linux)
+        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
+
+test {
+    workingDir = vnRootDir
+}
+
+run {
+    workingDir = vnRootDir
+    ignoreExitValue = true
+}
+
+eclipse {
+    project {
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/template'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+   baseName = rootProject.name
+   classifier = null
+   version = null
+}
+
+import com.badlogicgames.packr.*
+
+// Pack-all tasks that depends on each platform-specific pack task
+task packrAll() {    
+}
+assembleDist.dependsOn packrAll
+
+def platforms = [
+    PackrConfig.Platform.Windows64,
+    // PackrConfig.Platform.Windows32, // Should be obsolete
+    PackrConfig.Platform.Linux64,
+    // PackrConfig.Platform.Linux32, // Should be obsolete
+    PackrConfig.Platform.MacOS,
+]
+
+platforms.each{ platform ->
+    def packTask = tasks.create("packr${platform}") {
+        dependsOn shadowJar
+        
+        doLast {
+            def platformId = platform.toString().toLowerCase(Locale.ROOT)
+        
+            PackrConfig config = new PackrConfig()
+            config.platform = platform
+            config.jdk = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
+            config.executable = rootProject.name
+            config.classpath = [
+                "${projectDir}/build/libs/${rootProject.name}.jar".toString()
+            ]
+            config.mainClass = mainClassName           
+            config.resources = [vnResDir]            
+            config.outDir = new File(buildDir, 'packr/' + platformId)    
+            config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
+            
+            def vmArgs = []
+            if (platform == PackrConfig.Platform.MacOS) {
+                vmArgs += ['-XstartOnFirstThread'] // Required for LWJGL3
+            }
+            config.vmArgs = vmArgs
+
+            new Packr().pack(config);
+        }
+    }
+    packrAll.dependsOn packTask
+}

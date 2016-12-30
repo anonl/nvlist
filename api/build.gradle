@@ -1,0 +1,23 @@
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+dependencies {
+    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+    compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
+    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+    compile "com.google.guava:guava:$guavaVersion"
+}
+
+publishing {
+    publications {
+        api(MavenPublication) {
+            from components.java
+            artifactId 'nvlist-api'
+        }
+    }
+}
+
+bintray {
+    publications = ['api']
+}

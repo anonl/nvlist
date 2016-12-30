@@ -2,8 +2,6 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
-        maven { url 'https://oss.sonatype.org/content/repositories/releases' }
     }
     dependencies {
         // Plugin for making a 'fat' JAR
@@ -12,39 +10,35 @@ buildscript {
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:2.2.2'        
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-
-        // Plugin for creating runnable distributions (Win/Mac/Linux)
-        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
     }
 }
 
 plugins {
     // Plugin for uploading to bintray
     // Note: Causes a classpath conflict for org.apache.tools.zip
-    id "com.jfrog.bintray" version "1.6"
+    id 'com.jfrog.bintray' version '1.6'
 }
 
-def templateDir = project.file("template").getAbsoluteFile()
+def templateDir = file('template').getAbsoluteFile()
 
 allprojects {
-    apply plugin: "eclipse"
-    apply plugin: "jacoco"
+    apply plugin: 'eclipse'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.jfrog.bintray'
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha9'
+    version = '4.0.0-alpha10'
     ext {
-        appName = 'NVList'
-        
         javaVersion = JavaVersion.VERSION_1_8
+        
+        gdxTestVersion = '1.0.4'
         gdxVersion = '1.9.5'
         gdxVideoVersion = '0.0.4-anonl'
+        guavaVersion = '19.0'        
         junitVersion = '4.12'
-        slf4jVersion = '1.7.21'
-        guavaVersion = '19.0'
-        
-        styledTextVersion = '1.5.4'
-        gdxTestVersion = '1.0.4'
         luajpp2Version = '2.3.13'
+        slf4jVersion = '1.7.21'
+        styledTextVersion = '1.5.4'
         tcommonVersion = '1.2.5'
         
         vnRootDir = templateDir
@@ -54,22 +48,23 @@ allprojects {
 
     repositories {
         jcenter()
-        maven { url "https://dl.bintray.com/anonl/gdx/" }
-        maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
-        maven { url "https://dl.bintray.com/anonl/gdx-video/" }
-        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
-        maven { url "https://dl.bintray.com/anonl/tcommon/" }
+        maven { url 'https://dl.bintray.com/anonl/gdx/' }
+        maven { url 'https://dl.bintray.com/anonl/gdx-styledtext/' }
+        maven { url 'https://dl.bintray.com/anonl/gdx-video/' }
+        maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
+        maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
     
     plugins.withType(JavaPlugin) {
         sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
         compileJava.options.encoding = 'UTF-8'
         compileTestJava.options.encoding = 'UTF-8'
         
 	    dependencies {
 	        testCompile "junit:junit:$junitVersion"
             testCompile "com.google.guava:guava-testlib:$guavaVersion"
+            
+            // gdx-test is a required dependency since it contains the GdxUiTest test category
 	        testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
 	    }
         
@@ -89,162 +84,21 @@ allprojects {
 	            xml.enabled true
 	        }
 	    }    
-    }    
-}
-
-project(':nvlist-api') {
-    apply plugin: 'java'
+    }
     
-    dependencies {
-        compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-        compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
-        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-        compile "com.google.guava:guava:$guavaVersion"
-    }
-}
-
-project(':nvlist-core') {
-    apply plugin: 'java'
-
-    dependencies {
-        compile project(":nvlist-api")
-        compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
-        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
+    bintray {
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_KEY')
+        dryRun = true
         
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
-        compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion"
-    
-        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-        testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        testRuntime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    }
-}
-
-project(':nvlist-desktop') {
-    apply plugin: 'java'
-
-    dependencies {
-        compile project(":nvlist-core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
-        
-        runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-        runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        runtime "nl.weeaboo.gdx.video:gdx-video-desktop:$gdxVideoVersion"
-        runtime "nl.weeaboo.gdx.video:gdx-video-desktop-natives:$gdxVideoVersion"
-    }
-}
-
-project(':nvlist-android') {
-    // apply plugin: 'com.android.library'
-    apply plugin: 'com.android.application'
-    apply plugin: 'com.github.dcendents.android-maven'
-
-    apply from: "${templateDir}/build-tools/common-android.gradle"
-
-    dependencies {
-        compile project(":nvlist-api")
-        compile(project(":nvlist-core")) {
-            exclude group: "com.badlogicgames.gdx", module: "gdx-backend-headless"
-            exclude group: "com.badlogicgames.gdx", module: "gdx-platform"
-        }
-        compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-        compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
-        compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-        compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
-        compile "org.slf4j:slf4j-android:$slf4jVersion"
-        compile "com.google.guava:guava:$guavaVersion"
-    
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
-        
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"        
-        compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"        
-    }
-}
-
-apply plugin: 'maven-publish'
-
-publishing {
-    publications {
-        api(MavenPublication) {
-            from project(':nvlist-api').components.java
-            artifactId 'nvlist-api'
-        }
-        core(MavenPublication) {
-            from project(':nvlist-core').components.java
-            artifactId 'nvlist-core'
-        }
-        desktop(MavenPublication) {
-            from project(':nvlist-desktop').components.java
-            artifactId 'nvlist-desktop'
-        }
-        android(MavenPublication) {
-            def androidProj = project(':nvlist-android')
-            def configs = androidProj.configurations
-            
-            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
-            artifact "${androidProj.buildDir}/outputs/aar/${androidProj.name}-release.aar"            
-
-            // Gather dependencies
-            def projectDeps = []
-            projectDeps += configs.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
-            projectDeps += configs.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
-            
-            pom.withXml {
-                def depsNode = asNode().appendNode('dependencies')
-                projectDeps.each {
-                    def depNode = depsNode.appendNode('dependency')
-                    depNode.appendNode('groupId', it.moduleGroup)
-                    depNode.appendNode('artifactId', it.moduleName)
-                    depNode.appendNode('version', it.moduleVersion)
-                }
+        pkg {
+            repo = 'nvlist'
+            name = 'nvlist'
+            licenses = ['Apache-2.0']
+            vcsUrl = 'https://github.com/anonl/nvlist.git'
+            version {
+                name = project.version
             }
-            
-            artifactId 'nvlist-android'
-        }
-    }
-    repositories {
-        maven {
-            // Local repo for testing
-            url "$buildDir/repo"
         }
     }    
-}
-
-bintray {   
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['api', 'core', 'desktop', 'android']
-    pkg {
-        repo = 'nvlist'
-        name = 'nvlist'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/anonl/nvlist.git'
-        version {
-            name = project.version
-        }
-    }
 }

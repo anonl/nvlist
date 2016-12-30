@@ -25,14 +25,38 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
-        jackOptions {
-           enabled true
-        }            
+//        jackOptions {
+//           enabled true
+//        }            
     }
     lintOptions {
         textOutput 'stdout'
         textReport true
     }
+    
+    if (android.hasProperty("applicationVariants")) {
+        android.applicationVariants.all { variant ->
+            variant.mergeAssets.doLast {
+                // Generate an assets.list file containing all assets files in the APK
+                def fileTree = fileTree(dir: outputDir)
+                
+                def assetList = ""
+                fileTree.visit {
+                    assetList <<= it.relativePath
+                    if (it.isDirectory()) {
+                        // Add a trailing slash to distinguish folders from files
+                        assetList <<= "/"
+                    }
+                    assetList <<= "\n"
+                }
+            
+                def outputFile = new File(outputDir, "assets.list")
+                outputFile.text = assetList
+                
+                logger.info("Wrote assets list to {}", outputFile)
+            }
+        }
+    }    
 }
 
 /*
