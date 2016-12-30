@@ -89,8 +89,6 @@ allprojects {
     bintray {
         user = System.getenv('BINTRAY_USER')
         key = System.getenv('BINTRAY_KEY')
-        dryRun = true
-        
         pkg {
             repo = 'nvlist'
             name = 'nvlist'
