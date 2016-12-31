@@ -136,10 +136,9 @@ class PremultFileTextureData implements TextureData {
             int potWidth = MathUtils.nextPowerOfTwo(pixmapWidth);
             int potHeight = MathUtils.nextPowerOfTwo(pixmapHeight);
             if (pixmapWidth != potWidth || pixmapHeight != potHeight) {
-                Pixmap tmp = new Pixmap(potWidth, potHeight, pixmap.getFormat());
-                tmp.drawPixmap(pixmap, 0, 0, 0, 0, pixmapWidth, pixmapHeight);
+                Pixmap copy = PixmapUtil.resizedCopy(pixmap, potWidth, potHeight);
                 pixmap.dispose();
-                return tmp;
+                return copy;
             }
         }
         return pixmap;

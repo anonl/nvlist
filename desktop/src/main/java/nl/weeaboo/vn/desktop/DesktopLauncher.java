@@ -18,6 +18,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -25,6 +26,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.InitConfig;
 import nl.weeaboo.vn.Launcher;
@@ -87,7 +89,25 @@ public class DesktopLauncher {
                 byte[] bytes = FileSystemUtil.readBytes(fileSystem, path);
 
                 LOG.info("Loading icon: {}", path);
-                pixmaps.add(new Pixmap(bytes, 0, bytes.length));
+                Pixmap fullSize = new Pixmap(bytes, 0, bytes.length);
+                /*
+                 * Convert to RGBA8888 (libGDX will do this later anyway, doing it now makes resize behavior
+                 * more predictable)
+                 */
+                fullSize = PixmapUtil.convert(fullSize, Format.RGBA8888, true);
+                pixmaps.add(fullSize);
+
+                // Derive smaller-sized versions of the icon (if needed)
+                Pixmap previousLevel = fullSize;
+                while (previousLevel.getWidth() > 16) {
+                    int targetWidth = previousLevel.getWidth() / 2;
+                    int targetHeight = previousLevel.getHeight() / 2;
+
+                    LOG.debug("Creating resized icon: {}x{}", targetWidth, targetHeight);
+                    Pixmap pixmap = PixmapUtil.resizedCopy(previousLevel, targetWidth, targetHeight);
+                    pixmaps.add(0, pixmap);
+                    previousLevel = pixmap;
+                }
             } catch (FileNotFoundException fnfe) {
                 // File doesn't exist
             } catch (IOException ioe) {

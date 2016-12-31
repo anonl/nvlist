@@ -53,17 +53,21 @@ public final class PixmapUtil {
             return source; // Already the correct format
         }
 
-        Blending oldBlend = Pixmap.getBlending();
-        Pixmap result;
-        try {
-            result = new Pixmap(source.getWidth(), source.getHeight(), targetFormat);
-            Pixmap.setBlending(Blending.None);
-            result.drawPixmap(source, 0, 0, 0, 0, source.getWidth(), source.getHeight());
-        } finally {
-            Pixmap.setBlending(oldBlend);
-            if (disposeSource) {
-                source.dispose();
+        Pixmap result = new Pixmap(source.getWidth(), source.getHeight(), targetFormat);
+
+        // Since the blend mode is mutable global state, do a feeble attempt at synchronization
+        synchronized (Pixmap.class) {
+            Blending oldBlend = Pixmap.getBlending();
+            try {
+                Pixmap.setBlending(Blending.None);
+                result.drawPixmap(source, 0, 0, 0, 0, source.getWidth(), source.getHeight());
+            } finally {
+                Pixmap.setBlending(oldBlend);
             }
+        }
+
+        if (disposeSource) {
+            source.dispose();
         }
         return result;
     }
@@ -135,6 +139,14 @@ public final class PixmapUtil {
         default:
            throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
         }
+    }
+
+    public static Pixmap resizedCopy(Pixmap original, int targetWidth, int targetHeight) {
+        Pixmap copy = new Pixmap(targetWidth, targetHeight, original.getFormat());
+        copy.drawPixmap(original,
+            0, 0, original.getWidth(), original.getHeight(), // src rect
+            0, 0, targetWidth, targetHeight); // dst rect
+        return copy;
     }
 
 }
