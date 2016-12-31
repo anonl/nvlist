@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.debug;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -47,10 +45,12 @@ public final class PerformanceMetrics {
     public double getCpuLoad() {
         if (!cpuLoadError) {
             try {
-                OperatingSystemMXBean operatingSystem = ManagementFactory.getOperatingSystemMXBean();
-                Method method = operatingSystem.getClass().getMethod("getProcessCpuLoad");
+                // java.lang.management isn't supported on Android
+                Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
+                Object osBean = managementFactory.getMethod("getOperatingSystemMXBean").invoke(null);
+                Method method = osBean.getClass().getMethod("getProcessCpuLoad");
                 method.setAccessible(true);
-                return ((Number)method.invoke(operatingSystem)).doubleValue();
+                return ((Number)method.invoke(osBean)).doubleValue();
             } catch (Exception e) {
                 // Method not supported
                 LOG.info("Error obtaining CPU load (method not supported): " + e);
