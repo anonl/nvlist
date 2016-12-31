@@ -43,6 +43,7 @@ def settings = loadProperties("${buildResDir}/build.properties")
 allprojects {
     apply plugin: 'eclipse'
     
+    group = settings.appPackage
     version = settings.appVersion
 
     ext {
@@ -89,8 +90,9 @@ project(':android') {
     
     android {
         defaultConfig {
-	        versionCode = settings.androidVersionCode as int
-	        versionName = project.version
+            applicationId settings.appPackage
+	        versionCode settings.androidVersionCode as int
+	        versionName project.version
             manifestPlaceholders = [
                 androidMain: settings.androidMain
             ]

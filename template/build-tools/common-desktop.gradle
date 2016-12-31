@@ -59,27 +59,31 @@ platforms.each{ platform ->
         dependsOn shadowJar
         
         doLast {
-            def platformId = platform.toString().toLowerCase(Locale.ROOT)
-        
-            PackrConfig config = new PackrConfig()
-            config.platform = platform
-            config.jdk = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
-            config.executable = rootProject.name
-            config.classpath = [
-                "${projectDir}/build/libs/${rootProject.name}.jar".toString()
-            ]
-            config.mainClass = mainClassName
-            config.resources = [vnResDir]
-            config.outDir = new File(buildDir, 'packr/' + platformId)
-            config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
+            def platformId = platform.toString().toLowerCase(Locale.ROOT)                    
+            def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
+            def shadowJar = "${projectDir}/build/libs/${rootProject.name}.jar".toString()
             
             def vmArgs = []
-            vmArgs += applicationDefaultJvmArgs
+            vmArgs += applicationDefaultJvmArgs            
             if (platform == PackrConfig.Platform.MacOS) {
                 vmArgs += ['XstartOnFirstThread'] // Required for LWJGL3
             }
-            config.vmArgs = vmArgs
 
+            PackrConfig config = new PackrConfig()
+            config.executable = rootProject.name
+            config.classpath = [shadowJar]
+            config.mainClass = mainClassName
+            config.resources = [vnResDir]
+
+            config.platform = platform
+            config.outDir = new File(buildDir, 'packr/' + platformId)
+            config.bundleIdentifier = project.group // MacOS app bundle identifier
+            config.iconResource = new File(vnResDir, 'icon.icns') // icon attribute is only used by MacOS platform
+
+            config.jdk = jrePath
+            config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
+            config.vmArgs = vmArgs
+            
             new Packr().pack(config);
         }
     }
