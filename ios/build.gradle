@@ -1,0 +1,12 @@
+
+apply plugin: 'java'
+apply plugin: 'robovm'
+
+dependencies {
+    compile project(":nvlist-core")
+
+    compile "com.mobidevelop.robovm:robovm-rt:$roboVmVersion"
+    compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVmVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+}

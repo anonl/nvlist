@@ -10,12 +10,16 @@ buildscript {
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:2.2.2'        
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+
+        // Plugins for iOS
+        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0"
     }
 }
 
 plugins {
     // Plugin for uploading to bintray
     // Note: Causes a classpath conflict for org.apache.tools.zip
+    // Note: Causes a classpath conflict for org.apache.maven:maven-model
     id 'com.jfrog.bintray' version '1.6'
 }
 
@@ -37,6 +41,7 @@ allprojects {
         guavaVersion = '19.0'        
         junitVersion = '4.12'
         luajpp2Version = '2.3.13'
+        roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '1.5.4'
         tcommonVersion = '1.2.5'
@@ -86,7 +91,7 @@ allprojects {
 	    }    
     }
     
-    bintray {
+    bintray {    
         user = System.getenv('BINTRAY_USER')
         key = System.getenv('BINTRAY_KEY')
         pkg {
