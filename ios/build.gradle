@@ -15,11 +15,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
 }
 
-robovm {
-    os = "ios"
-    archs = "thumbv7:arm64:x86_64"
-}
-
 robovmArchive.dependsOn build
 launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
