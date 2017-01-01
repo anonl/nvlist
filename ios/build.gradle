@@ -2,6 +2,10 @@
 apply plugin: 'java'
 apply plugin: 'robovm'
 
+ext {
+    mainClassName = "nl.weeaboo.vn.ios.IosLauncher"
+}
+
 dependencies {
     compile project(":nvlist-core")
 
@@ -10,3 +14,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
 }
+
+launchIPhoneSimulator.dependsOn build
+launchIPadSimulator.dependsOn build
+launchIOSDevice.dependsOn build
+createIPA.dependsOn build
