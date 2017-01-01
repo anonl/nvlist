@@ -1,5 +1,14 @@
 
 language: android
+
+matrix:
+  include:
+    - os: linux
+    - os: osx
+      osx_image: xcode8.2
+  allow_failures:
+    - os: osx
+    
 android:
   components:
     - tools
@@ -10,7 +19,7 @@ android:
 
 jdk:
   - oraclejdk8
-  
+
 before_script:
   # Start virtual frame buffer, see: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-(e.g.-a-Web-browser)
   - "export DISPLAY=:99.0"
