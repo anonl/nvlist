@@ -1,23 +1,23 @@
 
-language: android
+sudo: true
 
 matrix:
   include:
     - os: linux
-      jdk:
-        - oraclejdk8
+      jdk: oraclejdk8
+      language: android    
+      android:
+        components:
+          - tools
+          - tools
+          - build-tools-24.0.3
+          - platform-tools
+          - android-24      
     - os: osx
+      language: java
       osx_image: xcode8.2
   allow_failures:
     - os: osx
-    
-android:
-  components:
-    - tools
-    - tools
-    - build-tools-24.0.3
-    - platform-tools
-    - android-24
 
 before_script:
   # Start virtual frame buffer, see: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-(e.g.-a-Web-browser)
