@@ -19,6 +19,7 @@ matrix:
       language: java
       osx_image: xcode8.2
       script:
+        brew install android-sdk
         ./gradlew robovmArchive -PuiTest --info
   allow_failures:
     - os: osx
