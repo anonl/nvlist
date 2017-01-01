@@ -13,8 +13,15 @@ matrix:
           - build-tools-24.0.3
           - platform-tools
           - android-24
+      before_script:
+        # Start virtual frame buffer, see: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-(e.g.-a-Web-browser)
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3 # give xvfb some time to start
       script:
         ./gradlew check jacocoTestReport -PuiTest --info
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
     - os: osx
       language: java
       osx_image: xcode8.2
@@ -26,15 +33,6 @@ matrix:
         - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-24.0.3,platform-tools,android-24
         - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
-        ./gradlew robovmArchive -PuiTest --info
+        ./gradlew robovmArchive --info
   allow_failures:
     - os: osx
-
-before_script:
-  # Start virtual frame buffer, see: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-(e.g.-a-Web-browser)
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
