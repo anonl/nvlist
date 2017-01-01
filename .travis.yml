@@ -22,7 +22,7 @@ matrix:
         # Download SDK
         - brew install android-sdk
         # Install the SDK
-        - android update sdk --no-ui
+        - echo y | android update sdk --no-ui
         - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
         ./gradlew robovmArchive -PuiTest --info
