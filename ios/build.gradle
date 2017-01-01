@@ -16,6 +16,7 @@ dependencies {
 }
 
 robovm {
+    os = "ios"
     archs = "thumbv7:arm64:x86_64"
 }
 
