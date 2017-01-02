@@ -5,6 +5,12 @@ package nl.weeaboo.vn.core;
  */
 public interface IUpdateable {
 
-    public void update();
+    IUpdateable EMPTY = new IUpdateable() {
+        @Override
+        public void update() {
+        }
+    };
+
+    void update();
 
 }

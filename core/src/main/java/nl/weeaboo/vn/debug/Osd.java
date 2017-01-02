@@ -14,6 +14,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.gdx.res.GdxFileSystem;
@@ -45,22 +46,23 @@ public final class Osd implements Disposable {
     private static final Logger LOG = LoggerFactory.getLogger(Osd.class);
 
     private final String fontPath = "font/RobotoSlab.ttf";
-    private final PerformanceMetrics performanceMetrics = new PerformanceMetrics();
+    private final PerformanceMetrics performanceMetrics;
 
     private GdxFontStore fontStore;
     private TextRenderer textRenderer;
     private TextStyle smallStyle;
 
-	private Osd() {
+	private Osd(PerformanceMetrics perfMetrics) {
+	    this.performanceMetrics = Checks.checkNotNull(perfMetrics);
 	}
 
-    public static Osd newInstance(GdxFileSystem fileSystem) {
-		Osd osd = new Osd();
+    public static Osd newInstance(GdxFileSystem fileSystem, PerformanceMetrics perfMetrics) {
+		Osd osd = new Osd(perfMetrics);
         osd.init(fileSystem);
 		return osd;
 	}
 
-    public void init(GdxFileSystem fileSystem) {
+    private void init(GdxFileSystem fileSystem) {
         FileHandle fontFile = fileSystem.resolve(fontPath);
 
         fontStore = new GdxFontStore();

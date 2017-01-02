@@ -16,6 +16,7 @@ public final class PerformanceMetrics {
 
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceMetrics.class);
 
+    private double logicFps;
     private boolean cpuLoadError;
 
     public PerformanceMetrics() {
@@ -23,7 +24,10 @@ public final class PerformanceMetrics {
 
     public String getPerformanceSummary() {
         List<String> lines = Lists.newArrayList();
-        lines.add(String.format("FPS: %d", Gdx.graphics.getFramesPerSecond()));
+        lines.add(StringUtil.formatRoot("FPS: %d (render)", Gdx.graphics.getFramesPerSecond()));
+        if (logicFps > 0) {
+            lines.add(StringUtil.formatRoot("FPS: %.2f (logic)", logicFps));
+        }
         lines.add(String.format("CPU: %s", getCpuLoadText()));
         lines.add(String.format("Memory use (heap): %s",
                 StringUtil.formatMemoryAmount(Gdx.app.getJavaHeap())));
@@ -61,6 +65,11 @@ public final class PerformanceMetrics {
             }
         }
         return -1;
+    }
+
+    /** Internal 'game logic' update rate */
+    public void setLogicFps(double logicFps) {
+        this.logicFps = logicFps;
     }
 
 }

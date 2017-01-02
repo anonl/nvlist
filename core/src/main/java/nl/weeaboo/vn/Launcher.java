@@ -50,10 +50,12 @@ import nl.weeaboo.vn.core.impl.EnvironmentFactory;
 import nl.weeaboo.vn.core.impl.LoggerNotifier;
 import nl.weeaboo.vn.core.impl.Novel;
 import nl.weeaboo.vn.core.impl.NovelPrefsStore;
+import nl.weeaboo.vn.core.impl.SimulationRateLimiter;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.SystemEnv;
 import nl.weeaboo.vn.debug.DebugControls;
 import nl.weeaboo.vn.debug.Osd;
+import nl.weeaboo.vn.debug.PerformanceMetrics;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.image.impl.ShaderStore;
 import nl.weeaboo.vn.input.INativeInput;
@@ -87,8 +89,10 @@ public class Launcher extends ApplicationAdapter {
     private DebugControls debugControls;
 	private SpriteBatch batch;
     private GdxInputAdapter inputAdapter;
+    private PerformanceMetrics performanceMetrics;
 
     private Novel novel;
+    private SimulationRateLimiter simulationRateLimiter;
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
     private boolean windowDirty;
@@ -119,6 +123,8 @@ public class Launcher extends ApplicationAdapter {
         NovelPrefsStore prefs = loadPreferences();
         vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
 
+        performanceMetrics = new PerformanceMetrics();
+
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
 		screenViewport = new FitViewport(vsize.w, vsize.h);
 		scene2dViewport = new FitViewport(vsize.w, vsize.h);
@@ -134,8 +140,11 @@ public class Launcher extends ApplicationAdapter {
             throw new RuntimeException("Fatal error during init", e);
         }
 
+        simulationRateLimiter = new SimulationRateLimiter();
+        simulationRateLimiter.setSimulation(this::update, 60);
+
         sceneEnv = new Scene2dEnv(resourceFileSystem, scene2dViewport);
-        osd = Osd.newInstance(resourceFileSystem);
+        osd = Osd.newInstance(resourceFileSystem, performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -249,8 +258,9 @@ public class Launcher extends ApplicationAdapter {
 	        applyVSync();
 	    }
 
+        int deltaMs = Math.round(Gdx.graphics.getDeltaTime() * 1000f);
         try {
-            update();
+            simulationRateLimiter.onRender(deltaMs);
         } catch (RuntimeException re) {
             onUncaughtException(re);
         }
@@ -277,12 +287,15 @@ public class Launcher extends ApplicationAdapter {
 
 		batch.begin();
         batch.disableBlending();
-		batch.draw(frameBuffer.getColorBufferTexture(), 0, 0, vsize.w, vsize.h);
-        batch.enableBlending();
-        batch.end();
+        try {
+            batch.draw(frameBuffer.getColorBufferTexture(), 0, 0, vsize.w, vsize.h);
+        } finally {
+            batch.enableBlending();
+            batch.end();
+        }
 	}
 
-    protected void update() {
+    private void update() {
         inputAdapter.update();
         INativeInput input = inputAdapter.getInput();
 
@@ -298,6 +311,8 @@ public class Launcher extends ApplicationAdapter {
                 debugControls.update(first, input);
             }
         }
+
+        performanceMetrics.setLogicFps(simulationRateLimiter.getSimulationUpdateRate());
 
         novel.update();
 	}
@@ -328,8 +343,11 @@ public class Launcher extends ApplicationAdapter {
         }
 
 		batch.begin();
-        osd.render(batch, env);
-		batch.end();
+		try {
+		    osd.render(batch, env);
+		} finally {
+		    batch.end();
+		}
 	}
 
 	@Override
@@ -357,7 +375,7 @@ public class Launcher extends ApplicationAdapter {
 
     private void applyVSync() {
         // On some drivers/platforms, settings vsync only works after the window is made visible.
-        Gdx.graphics.setVSync(true);
+        // Gdx.graphics.setVSync(true);
     }
 
     public Novel getNovel() {
