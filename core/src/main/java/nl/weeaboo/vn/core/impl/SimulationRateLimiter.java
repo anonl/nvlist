@@ -1,8 +1,5 @@
 package nl.weeaboo.vn.core.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.utils.TimeUtils;
 
 import nl.weeaboo.common.Checks;
@@ -11,45 +8,51 @@ import nl.weeaboo.vn.core.IUpdateable;
 /** Updates a fixed-rate simulation based on fixed-rate rendering */
 public final class SimulationRateLimiter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SimulationRateLimiter.class);
+    private static final double nanosToSeconds = 1e-9;
 
     private IUpdateable simulation = IUpdateable.EMPTY;
-    private int simulationStepMs = 1_000 / 60;
+    private double simulationStepS = 1.0 / 60.0;
 
-    private long accumMs;
+    private long lastRenderTime;
+    private double accumS;
 
     // Stats
     private long statsPeriodStart;
     private int statsCount;
     private double averageSimUpdateRate;
 
-    public void onRender(int deltaMs) {
-        accumMs += Math.min(1_000, deltaMs);
+    public void onRender() {
+        long now = timestampNanos();
 
-        LOG.trace("On render (accum: {}ms)", accumMs);
+        accumS += Math.min(1.0, (now - lastRenderTime) * nanosToSeconds);
 
-        while (accumMs >= simulationStepMs) {
-            accumMs -= simulationStepMs;
+        while (accumS >= simulationStepS) {
+            accumS -= simulationStepS;
 
             simulation.update();
             statsCount++;
         }
 
-        long now = TimeUtils.nanoTime();
-        if (now > statsPeriodStart + 1_000_000_000L) {
+        if (now >= statsPeriodStart + 1_000_000_000L) {
             double timeDiffS = (now - statsPeriodStart) / 1_000_000_000.0;
             averageSimUpdateRate = statsCount / timeDiffS;
 
             statsPeriodStart = now;
             statsCount = 0;
         }
+
+        lastRenderTime = now;
+    }
+
+    protected long timestampNanos() {
+        return TimeUtils.nanoTime();
     }
 
     public void setSimulation(IUpdateable simulation, int simulationFps) {
         Checks.checkArgument(simulationFps > 0, "simulationFps must be > 0");
 
         this.simulation = Checks.checkNotNull(simulation);
-        this.simulationStepMs = 1_000 / simulationFps;
+        this.simulationStepS = 1.0 / simulationFps;
     }
 
     /**

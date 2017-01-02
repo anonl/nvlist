@@ -258,9 +258,8 @@ public class Launcher extends ApplicationAdapter {
 	        applyVSync();
 	    }
 
-        int deltaMs = Math.round(Gdx.graphics.getDeltaTime() * 1000f);
         try {
-            simulationRateLimiter.onRender(deltaMs);
+            simulationRateLimiter.onRender();
         } catch (RuntimeException re) {
             onUncaughtException(re);
         }
@@ -375,7 +374,7 @@ public class Launcher extends ApplicationAdapter {
 
     private void applyVSync() {
         // On some drivers/platforms, settings vsync only works after the window is made visible.
-        // Gdx.graphics.setVSync(true);
+        Gdx.graphics.setVSync(true);
     }
 
     public Novel getNovel() {
