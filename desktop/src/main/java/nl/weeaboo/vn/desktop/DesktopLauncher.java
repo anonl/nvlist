@@ -126,6 +126,7 @@ public class DesktopLauncher {
         NovelPrefsStore prefs = launcher.loadPreferences();
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.useVsync(false);
         config.setTitle(prefs.get(NovelPrefs.TITLE));
         config.setWindowedMode(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
         config.setWindowListener(new Lwjgl3WindowAdapter() {

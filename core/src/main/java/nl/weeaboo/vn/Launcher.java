@@ -91,6 +91,7 @@ public class Launcher extends ApplicationAdapter {
     private Novel novel;
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
+    private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
         this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
@@ -244,6 +245,10 @@ public class Launcher extends ApplicationAdapter {
 
 	@Override
 	public final void render() {
+	    if (windowDirty) {
+	        applyVSync();
+	    }
+
         try {
             update();
         } catch (RuntimeException re) {
@@ -347,7 +352,13 @@ public class Launcher extends ApplicationAdapter {
 
         disposeRenderer();
         updateFrameBuffer();
+        windowDirty = true;
 	}
+
+    private void applyVSync() {
+        // On some drivers/platforms, settings vsync only works after the window is made visible.
+        Gdx.graphics.setVSync(true);
+    }
 
     public Novel getNovel() {
         return novel;
