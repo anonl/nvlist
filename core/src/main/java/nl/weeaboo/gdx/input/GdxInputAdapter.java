@@ -15,11 +15,11 @@ import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.impl.InputAccumulator;
-import nl.weeaboo.vn.input.impl.NativeInput;
 import nl.weeaboo.vn.input.impl.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.input.impl.InputAccumulator.PressState;
+import nl.weeaboo.vn.input.impl.NativeInput;
 
 public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
@@ -40,7 +40,7 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
     @Override
     public void update() {
-        input.update(timestamp(), accum);
+        input.update(timestampMs(), accum);
     }
 
     @Override
@@ -92,32 +92,32 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         return true;
     }
 
-    protected long timestamp() {
-        return TimeUtils.millis();
+    protected long timestampMs() {
+        return TimeUtils.nanoTime() / 1000_000L;
     }
 
     private void addKeyboardEvent(int keycode, PressState press) {
         LOG.trace("Key event: {} {}", keycode, press);
 
-        accum.addEvent(new ButtonEvent(timestamp(), convertKeyboard(keycode), press));
+        accum.addEvent(new ButtonEvent(timestampMs(), convertKeyboard(keycode), press));
     }
 
     private void addMouseButtonEvent(int button, PressState press) {
         LOG.trace("Mouse button event: {} {}", button, press);
 
-        accum.addEvent(new ButtonEvent(timestamp(), convertMouse(button), press));
+        accum.addEvent(new ButtonEvent(timestampMs(), convertMouse(button), press));
     }
 
     private void addMousePositionEvent(int screenX, int screenY) {
         Vector2 worldCoords = viewport.unproject(new Vector2(screenX, screenY));
 
         LOG.trace("Mouse position event: {}", worldCoords);
-        accum.addEvent(new PointerPositionEvent(timestamp(), worldCoords.x, worldCoords.y));
+        accum.addEvent(new PointerPositionEvent(timestampMs(), worldCoords.x, worldCoords.y));
     }
 
     private void addMouseScrollEvent(int scrollAmount) {
         LOG.trace("Mouse scroll event: {}", scrollAmount);
-        accum.addEvent(new PointerScrollEvent(timestamp(), scrollAmount));
+        accum.addEvent(new PointerScrollEvent(timestampMs(), scrollAmount));
     }
 
     @VisibleForTesting
