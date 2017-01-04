@@ -32,6 +32,8 @@ import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.ILayer;
@@ -51,6 +53,7 @@ public final class Osd implements Disposable {
     private GdxFontStore fontStore;
     private TextRenderer textRenderer;
     private TextStyle smallStyle;
+    private boolean visible = true;
 
 	private Osd(PerformanceMetrics perfMetrics) {
 	    this.performanceMetrics = Checks.checkNotNull(perfMetrics);
@@ -94,7 +97,17 @@ public final class Osd implements Disposable {
 	    fontStore = DisposeUtil.dispose(fontStore);
 	}
 
+    public void update(INativeInput input) {
+        if (input.consumePress(KeyCode.F7)) {
+            visible = !visible;
+        }
+    }
+
     public void render(Batch batch, IEnvironment env) {
+        if (!visible) {
+            return;
+        }
+
         IRenderEnv renderEnv = env.getRenderEnv();
         Dim vsize = renderEnv.getVirtualSize();
         int pad = Math.min(vsize.w, vsize.h) / 64;
@@ -133,7 +146,13 @@ public final class Osd implements Disposable {
 
         textRenderer.setMaxSize(wrapWidth, vsize.h - pad * 2);
         textRenderer.setText(text.immutableCopy());
-        GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, pad, -1);
+
+        batch.begin();
+        try {
+            GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, pad, -1);
+        } finally {
+            batch.end();
+        }
 	}
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {

@@ -312,6 +312,7 @@ public class Launcher extends ApplicationAdapter {
         }
 
         performanceMetrics.setLogicFps(simulationRateLimiter.getSimulationUpdateRate());
+        osd.update(input);
 
         novel.update();
 	}
@@ -341,12 +342,7 @@ public class Launcher extends ApplicationAdapter {
             movie.render();
         }
 
-		batch.begin();
-		try {
-		    osd.render(batch, env);
-		} finally {
-		    batch.end();
-		}
+	    osd.render(batch, env);
 	}
 
 	@Override
