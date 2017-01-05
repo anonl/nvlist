@@ -9,14 +9,17 @@ buildscript {
 
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:2.2.2'        
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'        
     }
 }
 
 plugins {
     // Plugin for uploading to bintray
     // Note: Causes a classpath conflict for org.apache.tools.zip
-    id 'com.jfrog.bintray' version '1.6'
+    id 'com.jfrog.bintray' version '1.7.3'
+    
+    id "net.ltgt.errorprone" version "0.0.8"
+    id "com.github.hierynomus.license" version "0.13.1"
 }
 
 def templateDir = file('template').getAbsoluteFile()
@@ -54,12 +57,14 @@ allprojects {
         maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
         maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
-    
-    plugins.withType(JavaPlugin) {
-        sourceCompatibility = javaVersion
-        compileJava.options.encoding = 'UTF-8'
-        compileTestJava.options.encoding = 'UTF-8'
         
+    plugins.withType(JavaPlugin) {    
+        sourceCompatibility = javaVersion
+        
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+        }
+                
 	    dependencies {
 	        testCompile "junit:junit:$junitVersion"
             testCompile "com.google.guava:guava-testlib:$guavaVersion"
@@ -99,4 +104,12 @@ allprojects {
             }
         }
     }    
+}
+
+def applyErrorPronePlugin(project) {
+    project.apply plugin: 'net.ltgt.errorprone'
+
+    project.configurations.errorprone {
+        resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.0.14'
+    }
 }

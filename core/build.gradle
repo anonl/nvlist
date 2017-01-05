@@ -2,6 +2,8 @@
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
+applyErrorPronePlugin(project)
+
 dependencies {
     compile project(":nvlist-api")
     compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"

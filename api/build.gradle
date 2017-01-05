@@ -2,6 +2,8 @@
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
+applyErrorPronePlugin(project)
+
 dependencies {
     compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
     compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
