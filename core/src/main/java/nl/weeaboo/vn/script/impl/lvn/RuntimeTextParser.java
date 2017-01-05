@@ -11,6 +11,8 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -148,7 +150,7 @@ public class RuntimeTextParser implements Serializable {
 	}
 
 	private static StyledText changeBaseStyle(StyledText stext, TextStyle style) {
-		if (style == TextStyle.defaultInstance()) {
+		if (Objects.equal(style, TextStyle.defaultInstance())) {
 			return stext;
 		}
 		MutableStyledText mts = stext.mutableCopy();

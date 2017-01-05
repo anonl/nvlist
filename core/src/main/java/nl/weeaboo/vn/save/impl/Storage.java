@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.SerializationException;
+import com.google.common.base.Objects;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
@@ -227,7 +228,7 @@ public class Storage implements IStorage, Json.Serializable {
 
         LOG.trace("{}: set(key={}) = {}", this, key, val);
 
-        if (oldval != val && (oldval == null || !oldval.equals(val))) {
+        if (!Objects.equal(oldval, val)) {
             onChanged();
         }
     }

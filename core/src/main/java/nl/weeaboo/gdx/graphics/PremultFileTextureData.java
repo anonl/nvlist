@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.google.common.base.Preconditions;
 
+import nl.weeaboo.common.Checks;
+
 /**
  * Variant of {@link FileTextureData} that generates texture data with premultiplied alpha.
  */
@@ -33,9 +35,9 @@ class PremultFileTextureData implements TextureData {
      *        texture data.
      */
     public PremultFileTextureData(FileHandle file, Format format, boolean mipmap) {
-        this.file = Preconditions.checkNotNull(file);
+        this.file = Checks.checkNotNull(file);
         this.format = format; // May be null
-        this.mipmap = Preconditions.checkNotNull(mipmap);
+        this.mipmap = mipmap;
     }
 
     @Override

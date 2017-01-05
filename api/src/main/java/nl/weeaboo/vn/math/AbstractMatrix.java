@@ -67,6 +67,7 @@ abstract class AbstractMatrix implements Serializable {
 		return false;
 	}
 
+	@SuppressWarnings("ReferenceEquality")
 	public final boolean equals(AbstractMatrix m, double epsilon) {
 		if (this == m) {
 			return true;

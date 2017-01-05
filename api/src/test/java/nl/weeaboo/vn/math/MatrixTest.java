@@ -10,6 +10,8 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.testing.EqualsTester;
+
 import nl.weeaboo.vn.ApiTestUtil;
 
 public class MatrixTest {
@@ -21,15 +23,12 @@ public class MatrixTest {
         Matrix alpha = new Matrix(0, 0, 0, 0, 0, 0);
         Matrix beta = new Matrix(0, 0, 0, 0, -0.01, 0);
 
-        Assert.assertFalse(alpha.equals(null));
+        new EqualsTester()
+            .addEqualityGroup(alpha, alpha.mutableCopy())
+            .addEqualityGroup(beta)
+            .testEquals();
 
-        Assert.assertTrue(alpha.equals(alpha));
         Assert.assertTrue(alpha.equals(alpha, 0));
-        Assert.assertTrue(alpha.equals(alpha.mutableCopy()));
-        Assert.assertEquals(alpha.hashCode(), alpha.mutableCopy().hashCode());
-
-        Assert.assertFalse(alpha.equals(beta));
-        Assert.assertNotEquals(alpha.hashCode(), beta.mutableCopy().hashCode());
         Assert.assertFalse(alpha.equals(beta, 0.001));
         Assert.assertTrue(alpha.equals(beta, 0.01));
     }
