@@ -23,7 +23,10 @@ public final class ButtonImageLoader {
     }
 
     public void loadImages(IButton button, ResourceLoadInfo basePath) {
-        loadImage(button, ButtonViewState.DEFAULT, basePath, "");
+        if (!loadImage(button, ButtonViewState.DEFAULT, basePath, "")) {
+            // Fallback if the previous image doesn't exist
+            loadImage(button, ButtonViewState.DEFAULT, basePath, "normal");
+        }
 
         // TODO: Support either different images, or putting all sub-rects in the same image with a subid prefix
         loadImage(button, ButtonViewState.DISABLED, basePath, "disabled");
@@ -31,10 +34,10 @@ public final class ButtonImageLoader {
         loadImage(button, ButtonViewState.ROLLOVER, basePath, "rollover");
     }
 
-    private void loadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo basePath, String suffix) {
+    private boolean loadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo basePath, String suffix) {
         // Attempt to load as a single image file with sub-rects for each view state
         if (tryLoadImage(button, viewState, basePath.withAppendedSubId(suffix))) {
-            return;
+            return true;
         }
 
         if (!Strings.isNullOrEmpty(suffix)) {
@@ -42,9 +45,11 @@ public final class ButtonImageLoader {
             ResourceLoadInfo path = basePath.withFileSuffix("-" + suffix);
             if (tryLoadImage(button, viewState, path)) {
                 LOG.debug("Loading button image: {}, {}", viewState, path);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     private boolean tryLoadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo path) {

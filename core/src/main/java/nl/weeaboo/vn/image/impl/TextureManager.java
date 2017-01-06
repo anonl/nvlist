@@ -65,7 +65,7 @@ final class TextureManager implements Serializable {
         }
     }
 
-    private final IImageDefinition getImageDef(FilePath relPath) {
+    final IImageDefinition getImageDef(FilePath relPath) {
         if (cachedImageDefs == null) {
             cachedImageDefs = new ImageDefinitionCache(resourceLoader);
         }

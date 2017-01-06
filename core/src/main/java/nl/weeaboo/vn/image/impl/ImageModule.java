@@ -19,6 +19,7 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
+import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -95,6 +96,17 @@ public class ImageModule implements IImageModule {
                 LOG.debug("Unable to find image file: " + path);
             }
             return null;
+        }
+
+        // Quick abort if we need an image def and it doesn't exist
+        if (resourceId.hasSubId()) {
+            IImageDefinition imageDef = texManager.getImageDef(resourceId.getFilePath());
+            if (imageDef == null || imageDef.findSubRect(resourceId.getSubId()) == null) {
+                if (!suppressErrors) {
+                    LOG.debug("Image definition not found: " + resourceId);
+                }
+                return null;
+            }
         }
 
         return getTextureNormalized(resourceId, loadInfo);

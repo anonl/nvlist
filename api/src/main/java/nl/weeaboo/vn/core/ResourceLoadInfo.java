@@ -2,10 +2,12 @@ package nl.weeaboo.vn.core;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.io.Filenames;
 
 /**
  * Contains information about a callsite of a resource load operation.
@@ -33,7 +35,14 @@ public final class ResourceLoadInfo {
 
     public ResourceLoadInfo withFileSuffix(String suffix) {
         FilePath filePath = ResourceId.getFilePath(path.toString());
-        return withPath(ResourceId.toResourcePath(FilePath.of(filePath + suffix), getSubId()));
+
+        String name = Filenames.stripExtension(filePath.toString()) + suffix;
+        String ext = filePath.getExt();
+        if (!Strings.isNullOrEmpty(ext)) {
+            name += ext;
+        }
+
+        return withPath(ResourceId.toResourcePath(FilePath.of(name), getSubId()));
     }
 
     public ResourceLoadInfo withSubId(String subId) {
@@ -45,6 +54,8 @@ public final class ResourceLoadInfo {
         String current = getSubId();
         if (current.length() == 0) {
             return withSubId(suffix);
+        } else if (current.endsWith("-")) {
+            return withSubId(current + suffix);
         } else {
             return withSubId(current + "-" + suffix);
         }

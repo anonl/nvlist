@@ -61,12 +61,12 @@ public final class ImageDefinitionIO {
 	            fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
 	}
 
-    public static String serialize(Collection<ImageDefinition> imageDefs) {
+    public static String serialize(Collection<? extends IImageDefinition> imageDefs) {
 	    ImageDefinitionFileJson fileJson = new ImageDefinitionFileJson();
 	    fileJson.version = VERSION;
 	    fileJson.images = new ImageDefinitionJson[imageDefs.size()];
 	    int t = 0;
-	    for (ImageDefinition imageDef : imageDefs) {
+	    for (IImageDefinition imageDef : imageDefs) {
 	        fileJson.images[t++] = encodeJson(imageDef);
 	    }
 	    return JsonUtil.toJson(fileJson);
@@ -89,7 +89,7 @@ public final class ImageDefinitionIO {
 	    return result;
 	}
 
-	private static ImageDefinitionJson encodeJson(ImageDefinition imageDef) {
+	private static ImageDefinitionJson encodeJson(IImageDefinition imageDef) {
 	    ImageDefinitionJson imageDefJson = new ImageDefinitionJson();
 	    imageDefJson.file = imageDef.getFilename();
         imageDefJson.width = imageDef.getSize().w;
