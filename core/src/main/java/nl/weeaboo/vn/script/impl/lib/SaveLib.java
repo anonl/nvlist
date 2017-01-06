@@ -22,7 +22,9 @@ import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.impl.SaveParams;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.script.impl.lua.ILuaStorage;
 import nl.weeaboo.vn.script.impl.lua.LuaConvertUtil;
+import nl.weeaboo.vn.script.impl.lua.LuaStorage;
 
 public class SaveLib extends LuaLib {
 
@@ -172,6 +174,18 @@ public class SaveLib extends LuaLib {
     protected Varargs getFreeSaveSlot(Varargs args) {
         return valueOf(saveHandler.getNextFreeSlot());
     }
+    */
 
- */
+    /**
+     * Returns an {@link IStorage} object that's shared between all save files.
+     *
+     * @param args Not used.
+     */
+    @ScriptFunction
+    public Varargs getSharedGlobals(Varargs args) {
+        ISaveModule saveModule = env.getSaveModule();
+
+        IStorage sharedGlobals = saveModule.getSharedGlobals();
+        return LuajavaLib.toUserdata(LuaStorage.from(sharedGlobals), ILuaStorage.class);
+    }
 }

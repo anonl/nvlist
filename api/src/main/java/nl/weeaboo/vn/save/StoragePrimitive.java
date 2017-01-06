@@ -89,6 +89,10 @@ public final class StoragePrimitive {
         return new StoragePrimitive(value);
     }
 
+    public boolean isBoolean() {
+        return value instanceof Boolean;
+    }
+
     public boolean toBoolean(boolean defaultValue) {
         if (value instanceof Boolean) {
             return ((Boolean) value).booleanValue();
@@ -104,6 +108,10 @@ public final class StoragePrimitive {
 
     public static StoragePrimitive fromDouble(double value) {
         return new StoragePrimitive(value);
+    }
+
+    public boolean isDouble() {
+        return value instanceof Number;
     }
 
     public double toDouble(double defaultValue) {
@@ -127,6 +135,10 @@ public final class StoragePrimitive {
     @Override
     public String toString() {
         return toString("null");
+    }
+
+    public boolean isString() {
+        return value instanceof String;
     }
 
     public String toString(String defaultValue) {
