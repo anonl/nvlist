@@ -98,12 +98,16 @@ end
 
 ---Waits until the text continue key is pressed. Skipping ignores the wait.
 function waitClick()
+    if shouldSkipLine() then
+        return
+    end
+
     local textBox = getTextBox()
     if textBox ~= nil then
         textBox:showClickIndicator()
     end
-    
-    while not shouldSkipLine() and not Input.consume(VKeys.textContinue) do    
+        
+    while not shouldSkipLine() and not Input.consume(VKeys.textContinue) do
         yield()
     end
     

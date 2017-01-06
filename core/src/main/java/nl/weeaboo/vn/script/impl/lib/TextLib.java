@@ -3,6 +3,9 @@ package nl.weeaboo.vn.script.impl.lib;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.LuaRunState;
@@ -32,6 +35,7 @@ import nl.weeaboo.vn.script.impl.lvn.RuntimeTextParser.ParseResult;
 
 public class TextLib extends LuaLib {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TextLib.class);
     private static final long serialVersionUID = 1L;
 
     private final IEnvironment env;
@@ -199,6 +203,7 @@ public class TextLib extends LuaLib {
                     env = oldTriggers.getfenv();
                 } catch (LuaError le) {
                     // This value has no fenv (not an error)
+                    LOG.debug("No fenv for function embedded in text: #{}", oldTableIndex);
                 }
             }
 

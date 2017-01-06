@@ -160,6 +160,21 @@ function waitForTextVisible(textDrawable, triggers)
 		
 		if textDrawable:isFinalLineFullyVisible() then
 			break
+	    elseif textDrawable:getVisibleText() >= textDrawable:getMaxVisibleText() then
+            -- Not all remaining lines could be displayed, click to continue to the next text page            
+            waitClick()
+
+            local startLine = textDrawable:getStartLine()
+            local endLine = textDrawable:getEndLine()
+            local lineCount = textDrawable:getLineCount()
+
+            textDrawable:setVisibleText(endLine, 0)
+            if isSkipping() then
+                textDrawable:setVisibleText(999999)
+            end
+
+            Log.debug("Show new text lines: {}-{} -> {}-{} (lineCount={})",
+                    startLine, endLine, endLine, textDrawable:getEndLine(), lineCount)
 		end
 		
 		yield()
