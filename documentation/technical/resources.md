@@ -25,6 +25,13 @@
 @@@ Support JNG or WEBP
 @@@ KTX is premultiplied, PNG isn't.
 
+## Texture loading
+
+@@@ Load textures from file, additional parameters customizable by using img.json in the same folder.
+@@@ Premultiplied alpha
+@@@ JNG texture loader
+@@@ Generates solid color textures via ColorTextureLoader, hacked into libGDX assetmanager. Filenames of the format "AARRGGBB.color" result in color images (folder is ignored). In the future a more general solution would be nice to allow for more cacheable texture kinds.
+
 #Audio
 
 @@@ Sound + music + voice go in /snd
