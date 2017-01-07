@@ -1,6 +1,16 @@
 
 apply plugin: 'com.android.library' // Doesn't work yet when using Jack compiler
-// apply plugin: 'com.android.application'
+
+/*
+apply plugin: 'com.android.application'
+android {
+    defaultConfig {
+        jackOptions {
+           enabled true
+        }
+    }
+}
+*/
 
 apply from: "${buildToolsDir}/common-android.gradle"
 

@@ -44,6 +44,7 @@ import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.impl.EnvironmentFactory;
@@ -69,7 +70,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.sound.impl.GdxMusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
-public class Launcher extends ApplicationAdapter {
+public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
@@ -141,7 +142,7 @@ public class Launcher extends ApplicationAdapter {
         }
 
         simulationRateLimiter = new SimulationRateLimiter();
-        simulationRateLimiter.setSimulation(this::update, 60);
+        simulationRateLimiter.setSimulation(this, 60);
 
         sceneEnv = new Scene2dEnv(resourceFileSystem, scene2dViewport);
         osd = Osd.newInstance(resourceFileSystem, performanceMetrics);
@@ -294,7 +295,8 @@ public class Launcher extends ApplicationAdapter {
         }
 	}
 
-    private void update() {
+    @Override
+    public void update() {
         inputAdapter.update();
         INativeInput input = inputAdapter.getInput();
 

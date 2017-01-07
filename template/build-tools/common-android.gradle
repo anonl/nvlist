@@ -4,7 +4,7 @@ configurations { natives }
 android {
     buildToolsVersion '24.0.3'
     compileSdkVersion 'android-24'
-    
+        
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -25,9 +25,6 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
-//        jackOptions {
-//           enabled true
-//        }            
     }
     lintOptions {
         textOutput 'stdout'
