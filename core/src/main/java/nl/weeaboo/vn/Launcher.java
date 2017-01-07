@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
@@ -42,7 +41,6 @@ import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontStore;
-import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IUpdateable;
@@ -66,8 +64,6 @@ import nl.weeaboo.vn.input.impl.InputConfig;
 import nl.weeaboo.vn.render.impl.DrawBuffer;
 import nl.weeaboo.vn.render.impl.GLScreenRenderer;
 import nl.weeaboo.vn.render.impl.RenderStats;
-import nl.weeaboo.vn.scene.IImageDrawable;
-import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.sound.impl.GdxMusicStore;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -269,7 +265,8 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
 		frameBuffer.begin();
         frameBufferViewport.apply();
-        Gdx.gl.glClearColor(.514f, .380f, .584f, 1);
+        // Gdx.gl.glClearColor(.514f, .380f, .584f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Camera camera = frameBufferViewport.getCamera();
         batch.setProjectionMatrix(camera.combined);
@@ -303,17 +300,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         INativeInput input = inputAdapter.getInput();
 
         debugControls.update(novel, input);
-
-        IEnvironment env = novel.getEnv();
-        IContext context = env.getContextManager().getPrimaryContext();
-        if (context != null) {
-            ILayer rootLayer = context.getScreen().getRootLayer();
-            IImageDrawable first = Iterables
-                    .getFirst(Iterables.filter(rootLayer.getChildren(), IImageDrawable.class), null);
-            if (first != null) {
-                debugControls.update(first, input);
-            }
-        }
 
         performanceMetrics.setLogicFps(simulationRateLimiter.getSimulationUpdateRate());
         osd.update(input);

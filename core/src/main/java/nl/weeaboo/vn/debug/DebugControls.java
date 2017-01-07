@@ -28,7 +28,6 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch.EArea;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig;
 import nl.weeaboo.vn.image.impl.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.image.impl.CrossFadeConfig;
@@ -43,10 +42,8 @@ import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
-import nl.weeaboo.vn.scene.IRenderable;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.ITextDrawable;
-import nl.weeaboo.vn.scene.ITransformable;
 import nl.weeaboo.vn.scene.impl.ComponentFactory;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.impl.lua.LuaConsole;
@@ -177,37 +174,6 @@ public final class DebugControls {
         if (input.consumePress(KeyCode.F1)) {
             // TODO: LuaConsole needs to intercept the F1 key in order to hide itself
             luaConsole.setVisible(!luaConsole.isVisible());
-        }
-    }
-
-    public void update(ITransformable transformable, INativeInput input) {
-        IRenderable renderer = null;
-        if (transformable instanceof IImageDrawable) {
-            IImageDrawable image = (IImageDrawable)transformable;
-            renderer = image.getRenderer();
-        }
-
-        if (input.isPressed(KeyCode.CONTROL_LEFT, true)) {
-            if (input.isPressed(KeyCode.LEFT, false)) transformable.rotate(-4);
-            if (input.isPressed(KeyCode.RIGHT, false)) transformable.rotate(4);
-        } else if (input.isPressed(KeyCode.SHIFT_LEFT, true)) {
-            if (input.isPressed(KeyCode.UP, false)) transformable.scale(1, 8 / 9.);
-            if (input.isPressed(KeyCode.DOWN, false)) transformable.scale(1, 1.125);
-            if (input.isPressed(KeyCode.LEFT, false)) transformable.scale(8 / 9., 1);
-            if (input.isPressed(KeyCode.RIGHT, false)) transformable.scale(1.125, 1);
-        } else if (input.isPressed(KeyCode.ALT_LEFT, true)) {
-            if (renderer instanceof ITextureRenderer) {
-                ITextureRenderer texRenderer = (ITextureRenderer)renderer;
-                if (input.isPressed(KeyCode.UP, false)) texRenderer.scrollUV(0, -.05);
-                if (input.isPressed(KeyCode.DOWN, false)) texRenderer.scrollUV(0, .05);
-                if (input.isPressed(KeyCode.LEFT, false)) texRenderer.scrollUV(.05, 0);
-                if (input.isPressed(KeyCode.RIGHT, false)) texRenderer.scrollUV(-.05, 0);
-            }
-        } else {
-            if (input.isPressed(KeyCode.UP, false)) transformable.translate(0, -5);
-            if (input.isPressed(KeyCode.DOWN, false)) transformable.translate(0, 5);
-            if (input.isPressed(KeyCode.LEFT, false)) transformable.translate(-5, 0);
-            if (input.isPressed(KeyCode.RIGHT, false)) transformable.translate(5, 0);
         }
     }
 
