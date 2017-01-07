@@ -15,6 +15,10 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
 }
 
+robovm {
+    iosSkipSigning = true
+}
+
 robovmArchive.dependsOn build
 launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
