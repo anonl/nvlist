@@ -18,7 +18,8 @@ public class ContextTest  {
 
     @Before
     public void init() {
-        TestContextFactory contextFactory = new TestContextFactory(null);
+        TestEnvironment env = TestEnvironment.newInstance();
+        TestContextFactory contextFactory = new TestContextFactory(env.getScriptEnv());
         contextManager = new ContextManager(contextFactory);
 
         alpha = contextManager.createContext();

@@ -19,6 +19,7 @@ public class TestContextFactory implements IContextFactory<Context> {
     @Override
     public Context newContext() {
         ContextArgs contextArgs = new ContextArgs();
+        contextArgs.skipState = new SkipState();
         contextArgs.screen = newScreen();
         contextArgs.scriptContext = newScriptContext();
 
@@ -30,9 +31,6 @@ public class TestContextFactory implements IContextFactory<Context> {
     }
 
     protected LuaScriptContext newScriptContext() {
-        if (scriptEnv == null) {
-            return null;
-        }
         return new LuaScriptContext(scriptEnv);
     }
 
