@@ -235,12 +235,10 @@ end
 ---Creates a texture object with the specified color.
 -- @param argb The ARGB color packed into a single int (<code>0xFFFF0000</code>
 --        is red, <code>0xFF0000FF</code> is blue, etc.)
--- @int w The width for the generated texture.
--- @int h The height for the generated texture.
 -- @treturn Texture A new texture (w,h) with all pixels colored
 --          <code>argb</code>.
-function colorTex(argb, w, h)
-    return Image.createColorTexture(argb, w, h)
+function colorTex(argb)
+    return Image.getColorTexture(argb)
 end
 
 ---Creates a new layer.

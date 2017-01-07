@@ -128,8 +128,8 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ITexture createTexture(int colorARGB, int width, int height, double sx, double sy) {
-        return texManager.generateTexture(colorARGB, Dim.of(width, height), sx, sy);
+    public ITexture getColorTexture(int argb) {
+        return texManager.getColorTexture(argb);
     }
 
     @Override

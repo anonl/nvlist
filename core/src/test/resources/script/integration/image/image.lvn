@@ -3,7 +3,7 @@
 
 require("builtin/vn")
 
-local testTex = colorTex(0xFFFF0000, 10, 10)
+local testTex = colorTex(0xFFFF0000)
 
 local i1 = img(testTex)
 
@@ -18,7 +18,8 @@ luaAssertEquals(true, i1:isDestroyed())
 --Check sprite slot positions
 function assertSlotPosition(slot, expectedCenterX, expectedY, expectedZ)
     local temp = img(testTex, slot)
-    luaAssertEquals(expectedCenterX, temp:getX() + testTex:getWidth() / 2)
+    
+    luaAssertEquals(expectedCenterX, temp:getX() + temp:getWidth() / 2)
     luaAssertEquals(expectedY, temp:getY())
     luaAssertEquals(expectedZ, temp:getZ())
     temp:destroy()

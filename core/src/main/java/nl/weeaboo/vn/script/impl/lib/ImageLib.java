@@ -5,7 +5,6 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
-import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
@@ -27,8 +26,6 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptUtil;
 public class ImageLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
-    private static final LuaString BLANK_TEX_PATH = LuaString.valueOf("blank");
-    private static final LuaString WHITE_TEX_PATH = LuaString.valueOf("white");
 
     private final IEnvironment env;
 
@@ -175,8 +172,8 @@ public class ImageLib extends LuaLib {
      * @return A 1x1 transparent texture object
      */
     @ScriptFunction
-    public Varargs getBlankTexture(Varargs args) throws ScriptException {
-        return getLuaTexture(BLANK_TEX_PATH, false);
+    public Varargs getBlankTexture(Varargs args) {
+        return getColorTexture(0x00000000);
     }
 
     /**
@@ -184,33 +181,32 @@ public class ImageLib extends LuaLib {
      * @return A 1x1 white texture object
      */
     @ScriptFunction
-    public Varargs getWhiteTexture(Varargs args) throws ScriptException {
-        return getLuaTexture(WHITE_TEX_PATH, false);
+    public Varargs getWhiteTexture(Varargs args) {
+        return getColorTexture(0xFFFFFFFF);
     }
 
     /**
-     * Creates a solid-color texture with the requested dimensions.
+     * Creates a solid-color texture.
      *
      * @param args
      *        <ol>
      *        <li>argb color
-     *        <li>texture width
-     *        <li>texture height
      *        </ol>
      * @return A texture.
      */
     @ScriptFunction
-    public Varargs createColorTexture(Varargs args) throws ScriptException {
+    public Varargs getColorTexture(Varargs args) {
+        int colorARGB = args.checkint(1);
+        return getColorTexture(colorARGB);
+    }
+
+    private Varargs getColorTexture(int argb) {
         IImageModule imageModule = env.getImageModule();
 
-        int colorARGB = args.checkint(1);
-        int w = args.toint(2);
-        int h = args.toint(3);
-        if (w < 1 || h < 1) {
-            throw new ScriptException("Invalid dimensions (must be greater than zero): w=" + w + ", h=" + h);
+        ITexture tex = imageModule.getColorTexture(argb);
+        if (tex == null) {
+            return LuaNil.NIL;
         }
-
-        ITexture tex = imageModule.createTexture(colorARGB, w, h, 1.0, 1.0);
         return LuajavaLib.toUserdata(tex, ITexture.class);
     }
 

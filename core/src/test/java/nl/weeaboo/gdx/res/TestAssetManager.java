@@ -1,10 +1,12 @@
 package nl.weeaboo.gdx.res;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 
 import nl.weeaboo.gdx.HeadlessGdx;
+import nl.weeaboo.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.gdx.graphics.JngTextureLoader;
 import nl.weeaboo.gdx.graphics.PremultTextureLoader;
 
@@ -15,10 +17,18 @@ public class TestAssetManager extends AssetManager {
     }
 
     public TestAssetManager() {
-        super(new ClasspathFileHandleResolver());
+        this(new ClasspathFileHandleResolver());
+    }
+    public TestAssetManager(FileHandleResolver resolver) {
+        super(resolver);
 
-        setLoader(Texture.class, new PremultTextureLoader(getFileHandleResolver()));
-        setLoader(Texture.class, ".jng", new JngTextureLoader(getFileHandleResolver()));
+        installDefaultLoaders(resolver);
+    }
+
+    private void installDefaultLoaders(FileHandleResolver resolver) {
+        setLoader(Texture.class, new PremultTextureLoader(resolver));
+        setLoader(Texture.class, ".color", new ColorTextureLoader(resolver));
+        setLoader(Texture.class, ".jng", new JngTextureLoader(resolver));
     }
 
 }

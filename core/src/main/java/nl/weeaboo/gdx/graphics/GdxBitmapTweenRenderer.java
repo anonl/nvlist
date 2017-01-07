@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
@@ -75,7 +74,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
     }
 
     private ITexture getBlankTexture() {
-        return imageModule.getTexture(FilePath.of("blank"));
+        return imageModule.getColorTexture(0x00000000);
     }
 
     @Override

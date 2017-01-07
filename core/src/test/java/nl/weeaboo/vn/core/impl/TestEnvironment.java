@@ -5,13 +5,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.assets.AssetManager;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.InternalGdxFileSystem;
+import nl.weeaboo.gdx.res.TestAssetManager;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.image.impl.GdxTextureStore;
 import nl.weeaboo.vn.image.impl.ImageModule;
@@ -65,7 +64,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.INPUT.set(input);
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
-        StaticEnvironment.ASSET_MANAGER.set(new AssetManager(gdxFileSystem));
+        StaticEnvironment.ASSET_MANAGER.set(new TestAssetManager(gdxFileSystem));
         StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new TestFontStore());

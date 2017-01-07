@@ -45,10 +45,9 @@ public interface IImageModule extends IModule, IResourceResolver {
     INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors);
 
     /**
-     * Creates a solid-color texture with the given color and dimensions. The {@code scaleX} and
-     * {@code scaleY} factors scale from pixel coordinates to the coordinates of image state.
+     * Creates a solid-color texture with the given color.
      */
-    ITexture createTexture(int colorARGB, int width, int height, double scaleX, double scaleY);
+    ITexture getColorTexture(int argb);
 
     /**
      * Creates a texture from the given image data. The {@code scaleX} and {@code scaleY} factors scale from

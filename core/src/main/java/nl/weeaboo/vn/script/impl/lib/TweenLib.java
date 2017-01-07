@@ -84,7 +84,7 @@ public class TweenLib extends LuaLib {
         ITexture controlTex = LuaConvertUtil.getTextureArg(imageModule, args.arg(2));
         if (controlTex == null) {
             LOG.warn("Invalid control image: {}, replacing with dummy", args.arg(2));
-            controlTex = imageModule.createTexture(0xFF808080, 4, 4, 1, 1);
+            controlTex = imageModule.getColorTexture(0xFF808080);
         }
         boolean tile = args.optboolean(3, false);
 

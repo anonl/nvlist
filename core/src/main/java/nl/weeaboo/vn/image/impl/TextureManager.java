@@ -7,8 +7,6 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.google.common.cache.CacheLoader;
@@ -17,10 +15,12 @@ import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.gdx.res.IResource;
 import nl.weeaboo.gdx.res.TransformedResource;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.impl.FileResourceLoader;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
@@ -29,7 +29,6 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
-import nl.weeaboo.vn.render.RenderUtil;
 
 /**
  * Does the heavy lifting related to texture loading and generation for {@link IImageModule}.
@@ -138,16 +137,12 @@ final class TextureManager implements Serializable {
     }
 
     /**
-     * @param colorARGB ARGB8888, unassociated alpha
+     * @param argb ARGB8888, unassociated alpha
      */
-    public ITexture generateTexture(int colorARGB, Dim size, double sx, double sy) {
-        // Create solid-colored pixmap texture data
-        Pixmap pixmap = new Pixmap(size.w, size.h, Format.RGBA8888);
-        pixmap.setColor(RenderUtil.argb2rgba(RenderUtil.premultiplyAlpha(colorARGB)));
-        pixmap.fill();
-        PixelTextureData texData = PixelTextureData.fromPremultipliedPixmap(pixmap);
-
-        return generateTexture(texData, sx, sy);
+    public ITexture getColorTexture(int argb) {
+        String filename = ColorTextureLoader.getFilename(argb);
+        ResourceId resourceId = new ResourceId(MediaType.IMAGE, FilePath.of(filename));
+        return getTexture(resourceId);
     }
 
     private static ITexture newTexture(IResource<TextureRegion> tr, double sx, double sy) {

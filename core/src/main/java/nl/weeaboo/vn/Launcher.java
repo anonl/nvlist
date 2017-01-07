@@ -24,6 +24,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.graphics.JngTextureLoader;
 import nl.weeaboo.gdx.graphics.PremultTextureLoader;
@@ -118,6 +119,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 	public void create() {
         assetManager = new AssetManager(resourceFileSystem);
         PremultTextureLoader.register(assetManager);
+        ColorTextureLoader.register(assetManager);
         JngTextureLoader.register(assetManager);
         Texture.setAssetManager(assetManager);
 
