@@ -20,6 +20,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.impl.RenderEnv;
+import nl.weeaboo.vn.core.impl.SkipState;
 import nl.weeaboo.vn.image.impl.TestTexture;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.IScreenTextState;
@@ -42,7 +43,8 @@ public final class CoreTestUtil {
     public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
         IScreenTextState textBoxState = new TestTextBoxState();
-        return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState);
+        SkipState skipState = new SkipState();
+        return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
 	}
 
 	public static IScriptContext newScriptContext() {

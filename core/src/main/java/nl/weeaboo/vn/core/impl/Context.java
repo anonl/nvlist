@@ -26,7 +26,7 @@ public class Context implements IContext {
 
     private final Screen screen;
     private final LuaScriptContext scriptContext;
-    private final ISkipState skipState = new SkipState();
+    private final ISkipState skipState;
 
 	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<>();
 
@@ -35,7 +35,8 @@ public class Context implements IContext {
 
     public Context(ContextArgs contextArgs) {
 		this.screen = Checks.checkNotNull(contextArgs.screen);
-		this.scriptContext = contextArgs.scriptContext;
+		this.scriptContext = Checks.checkNotNull(contextArgs.scriptContext);
+		this.skipState = Checks.checkNotNull(contextArgs.skipState);
 	}
 
 	@Override

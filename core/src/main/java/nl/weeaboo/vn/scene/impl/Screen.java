@@ -7,6 +7,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.VKey;
@@ -29,15 +30,17 @@ public class Screen implements IScreen {
 
 	private final Rect2D bounds;
     private final IScreenTextState textState;
+    private final ISkipState skipState;
 
 	private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
 	private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
 	private IRenderEnv renderEnv;
 
-    public Screen(Rect2D bounds, IRenderEnv env, IScreenTextState textState) {
-		this.bounds = Checks.checkNotNull(bounds);
+    public Screen(Rect2D bounds, IRenderEnv env, IScreenTextState textState, ISkipState skipState) {
+        this.bounds = Checks.checkNotNull(bounds);
 		this.renderEnv = Checks.checkNotNull(env);
         this.textState = Checks.checkNotNull(textState);
+        this.skipState = Checks.checkNotNull(skipState);
 	}
 
     @Override
@@ -47,11 +50,8 @@ public class Screen implements IScreen {
         sendSignal(new TickSignal());
 
         IInput input = StaticEnvironment.INPUT.get();
-        if (!input.isIdle()) {
-            getRootLayer().handleInput(Matrix.identityMatrix(), input);
-
-            handleInput(input);
-        }
+        getRootLayer().handleInput(Matrix.identityMatrix(), input);
+        handleInput(input);
     }
 
     private void handleInput(IInput input) {
@@ -59,7 +59,9 @@ public class Screen implements IScreen {
         ITextDrawable td = textState.getTextDrawable();
         if (td != null) {
             int startLine = td.getStartLine();
-            if (td.getVisibleText() < td.getMaxVisibleText() && input.consumePress(VKey.TEXT_CONTINUE)) {
+            if (td.getVisibleText() < td.getMaxVisibleText() &&
+                    (skipState.isSkipping() || input.consumePress(VKey.TEXT_CONTINUE))) {
+
                 // Make all glyphs in the current lines fully visible
                 td.setVisibleText(ITextRenderer.ALL_GLYPHS_VISIBLE);
                 LOG.debug("Make all text visible (startLine={})", startLine);

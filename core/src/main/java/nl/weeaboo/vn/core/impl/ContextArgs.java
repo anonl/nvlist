@@ -2,6 +2,7 @@ package nl.weeaboo.vn.core.impl;
 
 import java.io.Serializable;
 
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 
@@ -11,5 +12,6 @@ public final class ContextArgs implements Serializable {
 
     public Screen screen;
     public LuaScriptContext scriptContext;
+    public ISkipState skipState;
 
 }

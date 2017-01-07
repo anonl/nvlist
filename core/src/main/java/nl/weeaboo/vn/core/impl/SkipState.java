@@ -6,7 +6,7 @@ import nl.weeaboo.vn.core.SkipMode;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.VKey;
 
-final class SkipState implements ISkipState {
+public final class SkipState implements ISkipState {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 

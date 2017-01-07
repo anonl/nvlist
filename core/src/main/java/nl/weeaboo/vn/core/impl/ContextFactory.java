@@ -4,6 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.scene.impl.Screen;
 import nl.weeaboo.vn.scene.impl.ScreenTextState;
 import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
@@ -25,19 +26,22 @@ public class ContextFactory implements IContextFactory<Context> {
         this.renderEnv = renderEnv;
     }
 
-    protected Screen newScreen() {
-        Rect2D rect = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
-        ScreenTextState textBoxState = new ScreenTextState(textModule.getTextLog());
-        return new Screen(rect, renderEnv, textBoxState);
-    }
-
     @Override
     public Context newContext() {
+        SkipState skipState = new SkipState();
+
         ContextArgs contextArgs = new ContextArgs();
-        contextArgs.screen = newScreen();
+        contextArgs.skipState = skipState;
+        contextArgs.screen = newScreen(skipState);
         contextArgs.scriptContext = newScriptContext();
 
         return new Context(contextArgs);
+    }
+
+    protected Screen newScreen(ISkipState skipState) {
+        Rect2D rect = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
+        ScreenTextState textBoxState = new ScreenTextState(textModule.getTextLog());
+        return new Screen(rect, renderEnv, textBoxState, skipState);
     }
 
     protected LuaScriptContext newScriptContext() {
