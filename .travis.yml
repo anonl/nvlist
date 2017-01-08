@@ -20,7 +20,7 @@ matrix:
         - sleep 3 # give xvfb some time to start
       script:
         ./gradlew check jacocoTestReport -PuiTest --info
-      after_success:
+      after_success:      
         - bash <(curl -s https://codecov.io/bash)
     - os: osx
       language: java
@@ -33,6 +33,6 @@ matrix:
         - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-24.0.3,platform-tools,android-24
         - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
-        ./gradlew robovmArchive --info
+        ./gradlew robovmArchive
   allow_failures:
     - os: osx
