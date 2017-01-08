@@ -6,20 +6,15 @@ ext {
     mainClassName = "nl.weeaboo.vn.ios.IosLauncher"
 }
 
-configurations {
-    natives
-}
-
 dependencies {
     compile project(":nvlist-core")
 
     compile "com.mobidevelop.robovm:robovm-rt:$roboVmVersion"
     compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVmVersion"
     compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-    
-    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+
+    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
 }
 
 robovm {
@@ -31,19 +26,3 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
-
-task copyIosNatives() {
-    file("build/libs/ios/").mkdirs();
-  
-    configurations.natives.files.each { jar ->
-        def outputDir = null
-        if (jar.name.endsWith("natives-ios.jar")) outputDir = file("build/libs/ios")
-        if (outputDir != null) {
-            copy {
-                from zipTree(jar)
-                into outputDir
-                include "*.a"
-            }
-        }
-    }
-}
