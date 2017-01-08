@@ -26,20 +26,3 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
-
-task copyAndroidNatives() {
-    file("$buildDir/libs/ios/").mkdirs();
-
-    configurations.compile.files.each { jar ->
-        def outputDir = null
-        if (jar.name.endsWith("natives-ios.jar")) outputDir = file("$buildDir/libs/ios")
-
-        if (outputDir != null) {
-            copy {
-                from zipTree(jar)
-                into outputDir
-                include "*.so"
-            }
-        }
-    }
-}
