@@ -12,7 +12,9 @@ dependencies {
     compile "com.mobidevelop.robovm:robovm-rt:$roboVmVersion"
     compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVmVersion"
     compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
 }
 
 robovmArchive.dependsOn build
@@ -20,3 +22,20 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
+
+task copyAndroidNatives() {
+    file("$buildDir/libs/ios/").mkdirs();
+
+    configurations.compile.files.each { jar ->
+        def outputDir = null
+        if (jar.name.endsWith("natives-ios.jar")) outputDir = file("$buildDir/libs/ios")
+
+        if (outputDir != null) {
+            copy {
+                from zipTree(jar)
+                into outputDir
+                include "*.so"
+            }
+        }
+    }
+}
