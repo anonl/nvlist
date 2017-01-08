@@ -29,5 +29,7 @@ publishing {
 }
 
 bintray {
-    publications = ['desktop']
+    gradle.projectsEvaluated {
+        publications = ['desktop']
+    }
 }

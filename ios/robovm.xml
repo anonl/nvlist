@@ -1,0 +1,44 @@
+<config>
+    <executableName>${app.executable}</executableName>
+    <mainClass>${app.mainclass}</mainClass>
+    <os>ios</os>
+    <arch>thumbv7</arch>
+    <arch>arm64</arch>
+    <target>ios</target>
+    <iosInfoPList>Info.plist.xml</iosInfoPList>
+    <resources>
+        <resource>
+            <directory>../template/res</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <skipPngCrush>true</skipPngCrush>
+        </resource>
+    </resources>
+    <forceLinkClasses>
+        <pattern>com.badlogic.gdx.scenes.scene2d.ui.*</pattern>
+
+        <!-- 
+        <pattern>com.android.org.bouncycastle.jce.provider.BouncyCastleProvider</pattern>
+        <pattern>com.android.org.bouncycastle.jce.provider.JDKKeyStore</pattern>
+        <pattern>com.android.org.bouncycastle.jce.provider.PKIXCertPathValidatorSpi</pattern>
+        <pattern>org.apache.harmony.security.provider.cert.DRLCertFactory</pattern>
+        <pattern>org.apache.harmony.security.provider.cert.X509CertFactoryImpl</pattern>
+        <pattern>org.apache.harmony.security.provider.crypto.CryptoProvider</pattern>
+        <pattern>org.apache.harmony.xnet.provider.jsse.JSSEProvider</pattern>
+        <pattern>org.apache.harmony.xnet.provider.jsse.OpenSSLMessageDigestJDK$MD5</pattern>
+        <pattern>org.apache.harmony.xnet.provider.jsse.OpenSSLProvider</pattern>
+        -->
+    </forceLinkClasses>
+    <libs>
+    </libs>
+    <frameworks>
+        <framework>UIKit</framework>
+        <framework>OpenGLES</framework>
+        <framework>QuartzCore</framework>
+        <framework>CoreGraphics</framework>
+        <framework>OpenAL</framework>
+        <framework>AudioToolbox</framework>
+        <framework>AVFoundation</framework>
+    </frameworks>
+</config>

@@ -31,5 +31,7 @@ publishing {
 }
 
 bintray {
-    publications = ['core']
+    gradle.projectsEvaluated {
+        publications = ['core']
+    }
 }

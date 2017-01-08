@@ -1,0 +1,28 @@
+
+apply plugin: 'java'
+apply plugin: 'robovm'
+
+ext {
+    mainClassName = "nl.weeaboo.vn.ios.IosLauncher"
+}
+
+dependencies {
+    compile project(":nvlist-core")
+
+    compile "com.mobidevelop.robovm:robovm-rt:$roboVmVersion"
+    compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVmVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+}
+
+robovm {
+    iosSkipSigning = true
+}
+
+robovmArchive.dependsOn build
+launchIPhoneSimulator.dependsOn build
+launchIPadSimulator.dependsOn build
+launchIOSDevice.dependsOn build
+createIPA.dependsOn build

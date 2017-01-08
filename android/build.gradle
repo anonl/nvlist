@@ -135,5 +135,7 @@ publishing {
 }
 
 bintray {
-    publications = ['android']
+    gradle.projectsEvaluated {
+        publications = ['android']
+    }
 }
