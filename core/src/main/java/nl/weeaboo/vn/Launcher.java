@@ -113,6 +113,8 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
 	@Override
 	public void create() {
+	    LOG.info("Launcher.create() start");
+
         assetManager = new AssetManager(resourceFileSystem);
         PremultTextureLoader.register(assetManager);
         ColorTextureLoader.register(assetManager);
@@ -149,6 +151,8 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
 
         initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        LOG.info("Launcher.create() end");
     }
 
     private void initNovel(NovelPrefsStore prefs) throws InitException {
@@ -345,6 +349,8 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     }
 
     private void initWindow(int width, int height) {
+        LOG.info("Init window");
+
         GdxViewportUtil.setToOrtho(screenViewport, vsize, true);
         screenViewport.update(width, height, true);
 

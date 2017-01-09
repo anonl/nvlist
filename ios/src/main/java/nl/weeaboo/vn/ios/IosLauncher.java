@@ -1,7 +1,11 @@
 package nl.weeaboo.vn.ios;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
@@ -11,8 +15,17 @@ import nl.weeaboo.vn.Launcher;
 
 public final class IosLauncher extends IOSApplication.Delegate {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IosLauncher.class);
+    
     @Override
     protected IOSApplication createApplication() {
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                LOG.error("Uncaught exception from {}", t, e);
+            }
+        });
+
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
 
         InternalGdxFileSystem resourceFileSystem = new InternalGdxFileSystem("");
