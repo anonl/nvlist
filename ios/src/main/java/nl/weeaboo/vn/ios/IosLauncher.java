@@ -15,14 +15,17 @@ import nl.weeaboo.vn.Launcher;
 
 public final class IosLauncher extends IOSApplication.Delegate {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IosLauncher.class);
-    
     @Override
     protected IOSApplication createApplication() {
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
-                LOG.error("Uncaught exception from {}", t, e);
+                /*
+                 * Avoid instantiating LoggerFactory in a static context to work around a race condition
+                 * caused by IOSApplication changing System.out/System.err
+                 */
+                Logger logger = LoggerFactory.getLogger(IosLauncher.class);
+                logger.error("Uncaught exception from {}", t, e);
             }
         });
 

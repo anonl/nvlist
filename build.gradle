@@ -42,7 +42,7 @@ allprojects {
         gdxVideoVersion = '0.0.4-anonl'
         guavaVersion = '19.0'        
         junitVersion = '4.12'
-        luajpp2Version = '2.3.13'
+        luajpp2Version = '2.3.14'
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '1.5.4'
