@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.gdx.res.GdxFileSystem;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
@@ -50,9 +49,7 @@ public final class Osd implements Disposable {
     private final String fontPath = "font/RobotoSlab.ttf";
     private final PerformanceMetrics performanceMetrics;
 
-    private GdxFontStore fontStore;
     private TextRenderer textRenderer;
-    private TextStyle smallStyle;
     private boolean visible = true;
 
 	private Osd(PerformanceMetrics perfMetrics) {
@@ -68,33 +65,27 @@ public final class Osd implements Disposable {
     private void init(GdxFileSystem fileSystem) {
         FileHandle fontFile = fileSystem.resolve(fontPath);
 
-        fontStore = new GdxFontStore();
+        GdxFontStore fontStore = (GdxFontStore)StaticEnvironment.FONT_STORE.get();
         textRenderer = new TextRenderer();
 
         GdxFontGenerator fontGenerator = new GdxFontGenerator();
         fontGenerator.setYDir(YDir.DOWN);
         try {
-            TextStyle normal = new TextStyle("normal", EFontStyle.PLAIN, 16);
+            MutableTextStyle normalBuilder = new MutableTextStyle("normal", EFontStyle.PLAIN, 16);
+            normalBuilder.setShadowColor(0xFF000000);
+            normalBuilder.setShadowDx(.5f);
+            normalBuilder.setShadowDy(.5f);
+            TextStyle normal = normalBuilder.immutableCopy();
+
             fontStore.registerFont(fontGenerator.load(fontFile, normal));
             textRenderer.setDefaultStyle(normal);
         } catch (IOException ioe) {
             LOG.warn("Error loading 'normal' OSD font", ioe);
         }
-
-        try {
-            MutableTextStyle small = new MutableTextStyle("small", EFontStyle.PLAIN, 12);
-            small.setOutlineSize(.5f);
-            small.setOutlineColor(0xFFFFFFFF);
-            smallStyle = small.immutableCopy();
-            fontStore.registerFont(fontGenerator.load(fontFile, smallStyle));
-        } catch (IOException ioe) {
-            LOG.warn("Error loading 'small' OSD font", ioe);
-        }
 	}
 
 	@Override
 	public void dispose() {
-	    fontStore = DisposeUtil.dispose(fontStore);
 	}
 
     public void update(INativeInput input) {
@@ -114,7 +105,6 @@ public final class Osd implements Disposable {
         int wrapWidth = vsize.w - pad * 2;
 
         MutableStyledText text = new MutableStyledText();
-        text.setStyle(smallStyle);
         text.append(performanceMetrics.getPerformanceSummary());
 
         for (IContext active : env.getContextManager().getActiveContexts()) {
