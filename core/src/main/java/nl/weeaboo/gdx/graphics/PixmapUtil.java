@@ -7,8 +7,10 @@ import java.nio.ShortBuffer;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.utils.BufferUtils;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Rect;
 
 public final class PixmapUtil {
 
@@ -53,23 +55,29 @@ public final class PixmapUtil {
             return source; // Already the correct format
         }
 
-        Pixmap result = new Pixmap(source.getWidth(), source.getHeight(), targetFormat);
-
-        // Since the blend mode is mutable global state, do a feeble attempt at synchronization
-        synchronized (Pixmap.class) {
-            Blending oldBlend = Pixmap.getBlending();
-            try {
-                Pixmap.setBlending(Blending.None);
-                result.drawPixmap(source, 0, 0, 0, 0, source.getWidth(), source.getHeight());
-            } finally {
-                Pixmap.setBlending(oldBlend);
-            }
-        }
+        int iw = source.getWidth();
+        int ih = source.getHeight();
+        Pixmap result = new Pixmap(iw, ih, targetFormat);
+        copySubRect(source, Rect.of(0, 0, iw, ih), result, Rect.of(0, 0, iw, ih));
 
         if (disposeSource) {
             source.dispose();
         }
         return result;
+    }
+
+    public static void copySubRect(Pixmap src, Rect srcRect, Pixmap dst, Rect dstRect) {
+        // Since the blend mode is mutable global state, do a feeble attempt at synchronization
+        synchronized (Pixmap.class) {
+            Blending oldBlend = Pixmap.getBlending();
+            try {
+                Pixmap.setBlending(Blending.None);
+                dst.drawPixmap(src, srcRect.x, srcRect.y, srcRect.w, srcRect.h,
+                        dstRect.x, dstRect.y, dstRect.w, dstRect.h);
+            } finally {
+                Pixmap.setBlending(oldBlend);
+            }
+        }
     }
 
     /**
@@ -139,6 +147,12 @@ public final class PixmapUtil {
         default:
            throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
         }
+    }
+
+    public static Pixmap copy(Pixmap original) {
+        Pixmap copy = new Pixmap(original.getWidth(), original.getHeight(), original.getFormat());
+        BufferUtils.copy(original.getPixels(), copy.getPixels(), copy.getWidth() * copy.getHeight());
+        return copy;
     }
 
     public static Pixmap resizedCopy(Pixmap original, int targetWidth, int targetHeight) {
