@@ -22,6 +22,8 @@ public final class ImageBlur {
 
         // Box blur horizontal, then vertical (gives the same result as a 2D box blur)
         blurH(image, radius, divLut);
+
+        // TODO: Perform vertical blur
         // blurV(image, radius);
     }
 
