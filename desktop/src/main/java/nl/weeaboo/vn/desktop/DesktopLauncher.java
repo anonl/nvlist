@@ -18,10 +18,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
@@ -100,11 +102,10 @@ public class DesktopLauncher {
                 // Derive smaller-sized versions of the icon (if needed)
                 Pixmap previousLevel = fullSize;
                 while (previousLevel.getWidth() > 16) {
-                    int targetWidth = previousLevel.getWidth() / 2;
-                    int targetHeight = previousLevel.getHeight() / 2;
+                    Dim targetSize = Dim.of(previousLevel.getWidth() / 2, previousLevel.getHeight() / 2);
 
-                    LOG.debug("Creating resized icon: {}x{}", targetWidth, targetHeight);
-                    Pixmap pixmap = PixmapUtil.resizedCopy(previousLevel, targetWidth, targetHeight);
+                    LOG.debug("Creating resized icon: {}", targetSize);
+                    Pixmap pixmap = PixmapUtil.resizedCopy(previousLevel, targetSize, Filter.BiLinear);
                     pixmaps.add(0, pixmap);
                     previousLevel = pixmap;
                 }

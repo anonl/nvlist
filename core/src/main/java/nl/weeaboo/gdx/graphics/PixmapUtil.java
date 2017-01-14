@@ -6,10 +6,13 @@ import java.nio.ShortBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.utils.BufferUtils;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 
 public final class PixmapUtil {
@@ -57,8 +60,8 @@ public final class PixmapUtil {
 
         int iw = source.getWidth();
         int ih = source.getHeight();
-        Pixmap result = new Pixmap(iw, ih, targetFormat);
-        copySubRect(source, Rect.of(0, 0, iw, ih), result, Rect.of(0, 0, iw, ih));
+        Pixmap result = newUninitializedPixmap(iw, ih, targetFormat);
+        copySubRect(source, Rect.of(0, 0, iw, ih), result, Rect.of(0, 0, iw, ih), Filter.NearestNeighbour);
 
         if (disposeSource) {
             source.dispose();
@@ -66,16 +69,20 @@ public final class PixmapUtil {
         return result;
     }
 
-    public static void copySubRect(Pixmap src, Rect srcRect, Pixmap dst, Rect dstRect) {
+    public static void copySubRect(Pixmap src, Rect srcRect, Pixmap dst, Rect dstRect, Filter filter) {
         // Since the blend mode is mutable global state, do a feeble attempt at synchronization
         synchronized (Pixmap.class) {
             Blending oldBlend = Pixmap.getBlending();
+            Filter oldFilter = Filter.BiLinear;
             try {
                 Pixmap.setBlending(Blending.None);
+                Pixmap.setFilter(filter);
+
                 dst.drawPixmap(src, srcRect.x, srcRect.y, srcRect.w, srcRect.h,
                         dstRect.x, dstRect.y, dstRect.w, dstRect.h);
             } finally {
                 Pixmap.setBlending(oldBlend);
+                Pixmap.setFilter(oldFilter);
             }
         }
     }
@@ -155,11 +162,22 @@ public final class PixmapUtil {
         return copy;
     }
 
-    public static Pixmap resizedCopy(Pixmap original, int targetWidth, int targetHeight) {
-        Pixmap copy = new Pixmap(targetWidth, targetHeight, original.getFormat());
-        copySubRect(original, Rect.of(0, 0, original.getWidth(), original.getHeight()), // src rect
-            copy, Rect.of(0, 0, targetWidth, targetHeight)); // dst rect
+    public static Pixmap resizedCopy(Pixmap src, Dim dstSize, Filter filter) {
+        Pixmap copy = newUninitializedPixmap(dstSize.w, dstSize.h, src.getFormat());
+        copySubRect(src, Rect.of(0, 0, src.getWidth(), src.getHeight()), // src rect
+            copy, Rect.of(0, 0, dstSize.w, dstSize.h), // dst rect
+            filter);
         return copy;
+    }
+
+    /**
+     * Allocates a new {@link Pixmap} without zeroing its memory like the regular constructor
+     * ({@link Pixmap#Pixmap(int, int, Format)})
+     */
+    public static Pixmap newUninitializedPixmap(int width, int height, Format format) {
+        Gdx2DPixmap gdx2dPixmap = new Gdx2DPixmap(width, height,
+                Format.toGdx2DPixmapFormat(format));
+        return new Pixmap(gdx2dPixmap);
     }
 
 }

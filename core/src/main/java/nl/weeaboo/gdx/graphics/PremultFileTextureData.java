@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Dim;
 
 /**
  * Variant of {@link FileTextureData} that generates texture data with premultiplied alpha.
@@ -138,7 +140,7 @@ class PremultFileTextureData implements TextureData {
             int potWidth = MathUtils.nextPowerOfTwo(pixmapWidth);
             int potHeight = MathUtils.nextPowerOfTwo(pixmapHeight);
             if (pixmapWidth != potWidth || pixmapHeight != potHeight) {
-                Pixmap copy = PixmapUtil.resizedCopy(pixmap, potWidth, potHeight);
+                Pixmap copy = PixmapUtil.resizedCopy(pixmap, Dim.of(potWidth, potHeight), Filter.BiLinear);
                 pixmap.dispose();
                 return copy;
             }
