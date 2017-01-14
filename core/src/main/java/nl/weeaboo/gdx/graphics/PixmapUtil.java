@@ -157,9 +157,8 @@ public final class PixmapUtil {
 
     public static Pixmap resizedCopy(Pixmap original, int targetWidth, int targetHeight) {
         Pixmap copy = new Pixmap(targetWidth, targetHeight, original.getFormat());
-        copy.drawPixmap(original,
-            0, 0, original.getWidth(), original.getHeight(), // src rect
-            0, 0, targetWidth, targetHeight); // dst rect
+        copySubRect(original, Rect.of(0, 0, original.getWidth(), original.getHeight()), // src rect
+            copy, Rect.of(0, 0, targetWidth, targetHeight)); // dst rect
         return copy;
     }
 

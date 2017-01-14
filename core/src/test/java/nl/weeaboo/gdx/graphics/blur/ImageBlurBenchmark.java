@@ -21,11 +21,16 @@ public class ImageBlurBenchmark {
     public static void main(String[] args) throws IOException {
         HeadlessGdx.init();
 
-        Pixmap original = new Pixmap(Gdx.files.classpath("img/a.png"));
+        Pixmap original = new Pixmap(Gdx.files.classpath("img/arm01m.png"));
         original = PixmapUtil.convert(original, Format.RGBA8888, true);
+        // Resize to a large standard resolution
+        original = PixmapUtil.resizedCopy(original, 1920, 1080);
 
+        ImageBlur imageBlur = new ImageBlur();
         Pixmap blurred = PixmapUtil.copy(original);
-        for (int radius : new int[] {7, 8, 15, 32}) {
+        for (int radius : new int[] {7, 15, 32}) {
+            imageBlur.setRadius(radius);
+
             int repetitions = 100;
             Stopwatch kernelTime = Stopwatch.createStarted();
             for (int n = 0; n < repetitions; n++) {
@@ -36,7 +41,8 @@ public class ImageBlurBenchmark {
                         blurred, Rect.of(0, 0, original.getWidth(), original.getHeight()));
 
                 kernelTime.start();
-                ImageBlur.blur(blurred, radius);
+
+                imageBlur.applyBlur(blurred);
             }
             System.out.printf("Radius %d: %s (%dms per run)\n", radius, kernelTime,
                     kernelTime.elapsed(TimeUnit.MILLISECONDS) / repetitions);
@@ -50,5 +56,4 @@ public class ImageBlurBenchmark {
         blurred.dispose();
         original.dispose();
     }
-
 }

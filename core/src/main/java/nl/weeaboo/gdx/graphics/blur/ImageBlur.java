@@ -1,7 +1,6 @@
 package nl.weeaboo.gdx.graphics.blur;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,91 +9,118 @@ import com.google.common.base.Preconditions;
 
 public final class ImageBlur {
 
-    private ImageBlur() {
+    /** Division lookup table */
+    private byte[] divLut = {};
+
+    /** Blur radius */
+    private int radius;
+
+    public ImageBlur() {
     }
 
-    public static void blur(Pixmap image, int radius) {
-        Preconditions.checkArgument(image.getFormat() == Format.RGBA8888,
-                "Unsupported format: " + image.getFormat());
+    public void setRadius(int r) {
+        Preconditions.checkArgument(r >= 0);
 
-        /** Division lookup table */
-        int[] divLut = generateDivLut(radius);
+        if (radius != r) {
+            radius = r;
 
-        // Box blur horizontal, then vertical (gives the same result as a 2D box blur)
-        blurH(image, radius, divLut);
-
-        // TODO: Perform vertical blur
-        // blurV(image, radius);
-    }
-
-    private static void blurH(Pixmap pixmap, int radius, int[] divLut) {
-        final int w = pixmap.getWidth();
-        final int h = pixmap.getHeight();
-
-        ByteBuffer buffer = pixmap.getPixels();
-        buffer.order(ByteOrder.BIG_ENDIAN);
-        buffer.limit(4 * w * h);
-        IntBuffer pixels = buffer.asIntBuffer();
-
-        /** Line output buffer */
-        int[] out = new int[w];
-
-        int pos = 0;
-        for (int y = 0; y < h; y++) {
-            // Initialze accumulator
-            int accumA = 0, accumR = 0, accumG = 0, accumB = 0;
-            for (int d = -radius; d <= radius; d++) {
-                int rgba = pixels.get(pos + Math.max(0, Math.min(d, w-1)));
-
-                accumR += getRed(rgba);
-                accumG += getGreen(rgba);
-                accumB += getBlue(rgba);
-                accumA += getAlpha(rgba);
-            }
-
-            for (int x = 0; x < w; x++) {
-                out[x] = (divLut[accumR]<<24) | (divLut[accumG]<<16) | (divLut[accumB]<<8) | divLut[accumA];
-
-                int prev = pixels.get(pos + Math.max(0, x - radius));
-                int next = pixels.get(pos + Math.min(x + radius + 1, w-1));
-
-                accumR += getRed(next) - getRed(prev);
-                accumG += getGreen(next) - getGreen(prev);
-                accumB += getBlue(next) - getBlue(prev);
-                accumA += getAlpha(next) - getAlpha(prev);
-            }
-
-            // Copy line buffer into pixmap
-            for (int n = 0; n < out.length; n++) {
-                pixels.put(pos + n, out[n]);
-            }
-
-            pos += w;
+            divLut = generateDivLut(r);
         }
     }
 
-    private static int[] generateDivLut(int radius) {
-        int kernelSize = radius + radius + 1;
-        int[] lut = new int[256 * kernelSize];
+    public void applyBlur(Pixmap image) {
+        Preconditions.checkArgument(image.getFormat() == Format.RGBA8888,
+                "Unsupported format: " + image.getFormat());
+
+        final int w = image.getWidth();
+        final int h = image.getHeight();
+
+        // Get access to image pixels packed as RGB+alpha in a single int
+        ByteBuffer buffer = image.getPixels();
+        buffer.limit(4 * w * h);
+        IntBuffer pixels = buffer.asIntBuffer();
+
+        int[] tempBuffer = new int[Math.max(w, h)];
+
+        // Blur horizontal
+        for (int y = 0, pos = 0; y < h; y++, pos += w) {
+            blurLine(tempBuffer, w, pixels, pos, 1);
+        }
+
+        // Blur vertical (these two 1D blurs together give the same result as a 2D box blur)
+        for (int x = 0; x < w; x++) {
+            blurLine(tempBuffer, h, pixels, x, w);
+        }
+    }
+
+    private void blurLine(int[] lineBuffer, int lineLength, IntBuffer image, int srcOff, int srcStep) {
+        // a1-a4 are accumulator variables. These hold the sum of per-channel pixel values in the kernel.
+        // Initialize accumlator for the first pixel
+        int firstPixel = image.get(srcOff);
+        int a1 = (radius + 1) * getC1(firstPixel);
+        int a2 = (radius + 1) * getC2(firstPixel);
+        int a3 = (radius + 1) * getC3(firstPixel);
+        int a4 = (radius + 1) * getC4(firstPixel);
+        for (int d = 1; d <= radius; d++) {
+            int rgba = image.get(srcOff + srcStep * Math.min(d, lineLength - 1));
+
+            a1 += getC1(rgba);
+            a2 += getC2(rgba);
+            a3 += getC3(rgba);
+            a4 += getC4(rgba);
+        }
+
+        /*
+         * For each subsequent pixel, we can update the sum by subtracting the pixel that leaves our kernel
+         * and then adding the pixel that enters our kernel
+         */
+        for (int i = 0; i < lineLength; i++) {
+            lineBuffer[i] = ((divLut[a1] & 0xFF) << 24)
+                          | ((divLut[a2] & 0xFF) << 16)
+                          | ((divLut[a3] & 0xFF) << 8)
+                          |  (divLut[a4] & 0xFF);
+
+            int prev = image.get(srcOff + srcStep * Math.max(0, i - radius));
+            int next = image.get(srcOff + srcStep * Math.min(i + radius + 1, lineLength - 1));
+
+            a1 += getC1(next) - getC1(prev);
+            a2 += getC2(next) - getC2(prev);
+            a3 += getC3(next) - getC3(prev);
+            a4 += getC4(next) - getC4(prev);
+        }
+
+        // Copy line buffer into pixmap
+        for (int n = 0, p = srcOff; n < lineLength; n++, p += srcStep) {
+            image.put(p, lineBuffer[n]);
+        }
+    }
+
+    private static byte[] generateDivLut(int radius) {
+        int kernelSize = getKernelSize(radius);
+        byte[] lut = new byte[256 * kernelSize];
         for (int n = 0; n < lut.length; n += kernelSize) {
             int v = n / kernelSize;
             for (int x = 0; x < kernelSize; x++) {
-                lut[n + x] = v;
+                lut[n + x] = (byte)v;
             }
         }
         return lut;
     }
 
-    private static int getAlpha(int rgba) {
+    private static int getKernelSize(int radius) {
+        return radius + radius + 1;
+    }
+
+    private static int getC4(int rgba) {
         return rgba & 0xFF;
     }
-    private static int getBlue(int rgba) {
+    private static int getC3(int rgba) {
         return (rgba >> 8) & 0xFF;
     }
-    private static int getGreen(int rgba) {
+    private static int getC2(int rgba) {
         return (rgba >> 16) & 0xFF;
     }
-    private static int getRed(int rgba) {
+    private static int getC1(int rgba) {
         return (rgba >> 24) & 0xFF;
     }
 
