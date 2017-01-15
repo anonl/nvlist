@@ -21,33 +21,33 @@ import nl.weeaboo.vn.script.impl.lua.LuaScriptContext;
 
 public class Context implements IContext {
 
-	private static final long serialVersionUID = CoreImpl.serialVersionUID;
-	private static final Logger LOG = LoggerFactory.getLogger(Context.class);
+    private static final long serialVersionUID = CoreImpl.serialVersionUID;
+    private static final Logger LOG = LoggerFactory.getLogger(Context.class);
 
     private final Screen screen;
     private final LuaScriptContext scriptContext;
     private final ISkipState skipState;
 
-	private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<>();
+    private final List<IContextListener> contextListeners = new CopyOnWriteArrayList<>();
 
-	private boolean active;
-	private boolean destroyed;
+    private boolean active;
+    private boolean destroyed;
 
     public Context(ContextArgs contextArgs) {
-		this.screen = Checks.checkNotNull(contextArgs.screen);
-		this.scriptContext = Checks.checkNotNull(contextArgs.scriptContext);
-		this.skipState = Checks.checkNotNull(contextArgs.skipState);
-	}
+        this.screen = Checks.checkNotNull(contextArgs.screen);
+        this.scriptContext = Checks.checkNotNull(contextArgs.scriptContext);
+        this.skipState = Checks.checkNotNull(contextArgs.skipState);
+    }
 
-	@Override
-	public final void destroy() {
-		if (!destroyed) {
-			destroyed = true;
+    @Override
+    public final void destroy() {
+        if (!destroyed) {
+            destroyed = true;
 
             LOG.debug("Context destroyed: {}", this);
-			fireDestroyed();
-		}
-	}
+            fireDestroyed();
+        }
+    }
 
     @Override
     public void addContextListener(IContextListener contextListener) {
@@ -59,21 +59,21 @@ public class Context implements IContext {
         contextListeners.remove(contextListener);
     }
 
-	private void fireDestroyed() {
+    private void fireDestroyed() {
         for (IContextListener cl : contextListeners) {
             cl.onContextDestroyed(this);
         }
-	}
+    }
 
-	private void fireActiveStateChanged(final boolean activated) {
-	    for (IContextListener cl : contextListeners) {
-	        if (activated) {
-	            cl.onContextActivated(this);
-	        } else {
+    private void fireActiveStateChanged(final boolean activated) {
+        for (IContextListener cl : contextListeners) {
+            if (activated) {
+                cl.onContextActivated(this);
+            } else {
                 cl.onContextDeactivated(this);
-	        }
-	    }
-	}
+            }
+        }
+    }
 
     @Override
     public void onCurrent() {
@@ -81,56 +81,56 @@ public class Context implements IContext {
         globals.rawset("context", scriptContext.getContextGlobals());
     }
 
-	@Override
-	public void updateScreen() {
-	    screen.update();
+    @Override
+    public void updateScreen() {
+        screen.update();
 
         // Handle skip mode
         IInput input = StaticEnvironment.INPUT.get();
         getSkipState().handleInput(input);
-	}
+    }
 
     public void drawScreen(IDrawBuffer drawBuffer) {
         screen.draw(drawBuffer);
     }
 
-	@Override
-	public void updateScripts() {
-	    scriptContext.updateThreads(this, DummyScriptExceptionHandler.INSTANCE);
-	}
+    @Override
+    public void updateScripts() {
+        scriptContext.updateThreads(this, DummyScriptExceptionHandler.INSTANCE);
+    }
 
-	@Override
-	public boolean isDestroyed() {
-		return destroyed;
-	}
+    @Override
+    public boolean isDestroyed() {
+        return destroyed;
+    }
 
     @Override
     public boolean isActive() {
         return active;
     }
 
-	@Override
-	public IScreen getScreen() {
-		return screen;
-	}
+    @Override
+    public IScreen getScreen() {
+        return screen;
+    }
 
-	@Override
+    @Override
     public ISkipState getSkipState() {
         return skipState;
     }
 
     @Override
     public LuaScriptContext getScriptContext() {
-		return scriptContext;
-	}
+        return scriptContext;
+    }
 
-	void setActive(boolean a) {
-	    if (active != a) {
-	        active = a;
+    void setActive(boolean a) {
+        if (active != a) {
+            active = a;
 
-	        fireActiveStateChanged(a);
-	    }
-	}
+            fireActiveStateChanged(a);
+        }
+    }
 
     @Override
     public void setRenderEnv(IRenderEnv env) {

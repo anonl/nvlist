@@ -20,11 +20,11 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     IVisualGroup getParent();
     void setParent(IVisualGroup visualGroup);
 
-	short getZ();
+    short getZ();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	/**
+    /**
      * @return The axis-aligned bounding box for this visual element, relative to the origin of its parent.
      */
     Rect2D getVisualBounds();

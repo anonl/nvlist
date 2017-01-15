@@ -10,51 +10,51 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 
 public class ScreenshotBuffer implements IScreenshotBuffer {
 
-	private static final long serialVersionUID = RenderImpl.serialVersionUID;
+    private static final long serialVersionUID = RenderImpl.serialVersionUID;
 
-	private Collection<ScreenshotEntry> screenshots;
+    private Collection<ScreenshotEntry> screenshots;
 
-	public ScreenshotBuffer() {
-		screenshots = new ArrayList<>();
-	}
+    public ScreenshotBuffer() {
+        screenshots = new ArrayList<>();
+    }
 
-	@Override
-	public void add(IWritableScreenshot ss, boolean clip) {
-		screenshots.add(new ScreenshotEntry(ss, clip));
-	}
+    @Override
+    public void add(IWritableScreenshot ss, boolean clip) {
+        screenshots.add(new ScreenshotEntry(ss, clip));
+    }
 
-	@Override
-	public void clear() {
-		for (ScreenshotEntry entry : screenshots) {
-			entry.screenshot.cancel();
-		}
-		screenshots.clear();
-	}
+    @Override
+    public void clear() {
+        for (ScreenshotEntry entry : screenshots) {
+            entry.screenshot.cancel();
+        }
+        screenshots.clear();
+    }
 
-	public void flush(IDrawBuffer d) {
-		for (ScreenshotEntry entry : screenshots) {
-			d.screenshot(entry.screenshot, entry.clip);
-		}
-		screenshots.clear();
-	}
+    public void flush(IDrawBuffer d) {
+        for (ScreenshotEntry entry : screenshots) {
+            d.screenshot(entry.screenshot, entry.clip);
+        }
+        screenshots.clear();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return screenshots.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return screenshots.isEmpty();
+    }
 
-	private static class ScreenshotEntry implements Serializable {
+    private static class ScreenshotEntry implements Serializable {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		final IWritableScreenshot screenshot;
-		final boolean clip;
+        final IWritableScreenshot screenshot;
+        final boolean clip;
 
-		public ScreenshotEntry(IWritableScreenshot ss, boolean clip) {
-			this.screenshot = ss;
-			this.clip = clip;
-		}
+        public ScreenshotEntry(IWritableScreenshot ss, boolean clip) {
+            this.screenshot = ss;
+            this.clip = clip;
+        }
 
-	}
+    }
 
 }

@@ -52,15 +52,15 @@ public final class Osd implements Disposable {
     private TextRenderer textRenderer;
     private boolean visible = true;
 
-	private Osd(PerformanceMetrics perfMetrics) {
-	    this.performanceMetrics = Checks.checkNotNull(perfMetrics);
-	}
+    private Osd(PerformanceMetrics perfMetrics) {
+        this.performanceMetrics = Checks.checkNotNull(perfMetrics);
+    }
 
     public static Osd newInstance(GdxFileSystem fileSystem, PerformanceMetrics perfMetrics) {
-		Osd osd = new Osd(perfMetrics);
+        Osd osd = new Osd(perfMetrics);
         osd.init(fileSystem);
-		return osd;
-	}
+        return osd;
+    }
 
     private void init(GdxFileSystem fileSystem) {
         FileHandle fontFile = fileSystem.resolve(fontPath);
@@ -82,11 +82,11 @@ public final class Osd implements Disposable {
         } catch (IOException ioe) {
             LOG.warn("Error loading 'normal' OSD font", ioe);
         }
-	}
+    }
 
-	@Override
-	public void dispose() {
-	}
+    @Override
+    public void dispose() {
+    }
 
     public void update(INativeInput input) {
         if (input.consumePress(KeyCode.F7)) {
@@ -143,7 +143,7 @@ public final class Osd implements Disposable {
         } finally {
             batch.end();
         }
-	}
+    }
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {
         String str = "Layer(" + layer.getWidth() + ", " + layer.getHeight() + "): "

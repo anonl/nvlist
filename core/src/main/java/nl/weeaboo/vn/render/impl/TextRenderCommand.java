@@ -15,15 +15,15 @@ public final class TextRenderCommand extends BaseRenderCommand {
 
     protected TextRenderCommand(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
             double visibleGlyphs)
-	{
+    {
         super(ID, dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), 0xFFFFFFFF,
                 (byte)Double.doubleToRawLongBits(dt.getTransform().getTranslationY()));
 
         this.transform = dt.getTransform();
         this.dx = dx;
         this.dy = dy;
-		this.textLayout = textLayout;
+        this.textLayout = textLayout;
         this.visibleGlyphs = visibleGlyphs;
-	}
+    }
 
 }

@@ -1,13 +1,13 @@
 
 function main()
-	return titlescreen()
+    return titlescreen()
 end
 
 function titlescreen()
 end
 
 function onExit()
-	System.exit(true)
+    System.exit(true)
 end
 
 function onPrefsChanged()

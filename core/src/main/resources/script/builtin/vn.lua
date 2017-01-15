@@ -50,19 +50,19 @@ module("vn", package.seeall)
 local submodules = {
     "anim",
     "choice",
-	"context",
-	"gui",
-	"image",
+    "context",
+    "gui",
+    "image",
     "save",
     "sound",
-	"system",
-	"text",
-	"textbox",
-	"tween",
-	"video"
+    "system",
+    "text",
+    "textbox",
+    "tween",
+    "video"
 }
 for _,module in ipairs(submodules) do
-	require("builtin/vn/" .. module)
+    require("builtin/vn/" .. module)
 end
 
 -- ----------------------------------------------------------------------------
@@ -70,25 +70,25 @@ end
 -- ----------------------------------------------------------------------------
 
 local function flattenSingle(env, pkg)
-	if pkg == nil then
-		return
-	end
+    if pkg == nil then
+        return
+    end
 
-	for k,v in pairs(pkg) do
-		if k[0] ~= '_' then
-			env[k] = v
-		end
-	end
+    for k,v in pairs(pkg) do
+        if k[0] ~= '_' then
+            env[k] = v
+        end
+    end
 end
 
 -- Flattens this module and its submodules into <code>env</code>
 -- @param env The table (often <code>_G</code>) to flatten the module into.
-local function flattenModule(env)	
-	flattenSingle(env, package.loaded.vn)
-	for _,module in ipairs(submodules) do
-		flattenSingle(env, package.loaded.vn[module])
-	end
-	_G.vn = nil --Delete the now flattened table
+local function flattenModule(env)    
+    flattenSingle(env, package.loaded.vn)
+    for _,module in ipairs(submodules) do
+        flattenSingle(env, package.loaded.vn[module])
+    end
+    _G.vn = nil --Delete the now flattened table
 end
 
 -- Flatten submodules into main namespace

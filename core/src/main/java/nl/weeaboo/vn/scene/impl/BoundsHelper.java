@@ -6,36 +6,36 @@ import nl.weeaboo.vn.core.impl.TransientListenerSupport;
 
 public final class BoundsHelper extends TransientListenerSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private double x, y, w, h;
+    private double x, y, w, h;
     private transient Rect2D cachedBounds;
 
-	public double getX() { return x; }
-	public double getY() { return y; }
-	public double getWidth() { return w; }
-	public double getHeight() { return h; }
+    public double getX() { return x; }
+    public double getY() { return y; }
+    public double getWidth() { return w; }
+    public double getHeight() { return h; }
 
-	public Rect2D getBounds() {
+    public Rect2D getBounds() {
         if (cachedBounds == null) {
             double w = getWidth();
             double h = getHeight();
             cachedBounds = Rect2D.of(x, y, Double.isNaN(w) ? 0 : w, Double.isNaN(h) ? 0 : h);
         }
         return cachedBounds;
-	}
+    }
 
-	public boolean contains(double px, double py) {
-		return getBounds().contains(px, py);
-	}
+    public boolean contains(double px, double py) {
+        return getBounds().contains(px, py);
+    }
 
-	public void setPos(double x, double y) {
+    public void setPos(double x, double y) {
         setBounds(x, y, this.w, this.h);
-	}
+    }
 
-	public void setSize(double w, double h) {
+    public void setSize(double w, double h) {
         setBounds(this.x, this.y, w, h);
-	}
+    }
 
     public void setBounds(Rect2D rect) {
         setBounds(rect.x, rect.y, rect.w, rect.h);

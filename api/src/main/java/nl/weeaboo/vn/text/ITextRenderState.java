@@ -8,9 +8,9 @@ public interface ITextRenderState extends IMultiLineText, Serializable {
 
     final double ALL_GLYPHS_VISIBLE = 999999;
 
-	/**
-	 * Returns the tags of the TextStyle of the characters at the specified location or <code>null</code> if no hit.
-	 */
+    /**
+     * Returns the tags of the TextStyle of the characters at the specified location or <code>null</code> if no hit.
+     */
     int[] getHitTags(double cx, double cy);
 
     void increaseVisibleText(double textSpeed);

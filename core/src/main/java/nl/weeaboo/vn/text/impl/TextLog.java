@@ -18,14 +18,14 @@ public class TextLog implements ITextLog {
 
     private int pageLimit;
 
-	public TextLog() {
+    public TextLog() {
         pageLimit = Checks.checkRange(NovelPrefs.TEXTLOG_PAGE_LIMIT.getDefaultValue(), "pageLimit", 1);
-	}
+    }
 
-	@Override
-	public void clear() {
+    @Override
+    public void clear() {
         pages.clear();
-	}
+    }
 
     private void limitPages(int maxPages) {
         while (!pages.isEmpty() && pages.size() >= maxPages) {
@@ -33,36 +33,36 @@ public class TextLog implements ITextLog {
         }
     }
 
-	protected void addPage(StyledText stext) {
+    protected void addPage(StyledText stext) {
         limitPages(pageLimit);
         pages.add(stext);
-	}
+    }
 
-	protected void removePage() {
+    protected void removePage() {
         pages.remove();
-	}
+    }
 
-	@Override
+    @Override
     public StyledText getPage(int offset) {
         int pos = pages.size() - offset;
         if (pos < 0 || pos >= pages.size()) {
             return null; // Page doesn't exist
         }
         return Iterables.get(pages, pos);
-	}
+    }
 
-	@Override
-	public int getPageCount() {
+    @Override
+    public int getPageCount() {
         return pages.size();
-	}
+    }
 
     @Override
     public int getPageLimit() {
         return pageLimit;
     }
 
-	@Override
-	public void setPageLimit(int numPages) {
+    @Override
+    public void setPageLimit(int numPages) {
         Checks.checkRange(numPages, "maxPages", 1);
 
         if (pageLimit != numPages) {
@@ -70,35 +70,35 @@ public class TextLog implements ITextLog {
 
             limitPages(pageLimit);
         }
-	}
+    }
 
-	@Override
-	public void setText(StyledText text) {
+    @Override
+    public void setText(StyledText text) {
         if (getPageCount() == 0) {
             addPage(text);
         } else {
             StyledText current = getPage(0);
-			if (current == null || current.length() == 0) {
+            if (current == null || current.length() == 0) {
                 // Overwrite existing page if empty
                 pages.removeLast();
-			}
+            }
             addPage(text);
-		}
-	}
+        }
+    }
 
-	@Override
-	public void appendText(StyledText text) {
-		if (getPageCount() == 0) {
-			addPage(text);
-		} else {
+    @Override
+    public void appendText(StyledText text) {
+        if (getPageCount() == 0) {
+            addPage(text);
+        } else {
             StyledText current = pages.removeLast();
-			if (current != null && current.length() > 0) {
+            if (current != null && current.length() > 0) {
                 current = StyledText.concat(current, text);
-			} else {
+            } else {
                 current = text;
-			}
+            }
             addPage(current);
-		}
-	}
+        }
+    }
 
 }

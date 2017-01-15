@@ -3,6 +3,7 @@
 
 --Import built-in NVList functions
 require("builtin/vn")
+require("debugger")
 
 function main()
 	print("main")

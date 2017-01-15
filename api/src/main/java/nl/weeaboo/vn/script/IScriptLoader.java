@@ -10,7 +10,7 @@ import nl.weeaboo.vn.core.IResourceResolver;
 
 public interface IScriptLoader extends IResourceResolver {
 
-	/**
+    /**
      * Opens the given script file as an inputstream.
      *
      * @throws FileNotFoundException If the file could not be openend.
@@ -18,7 +18,7 @@ public interface IScriptLoader extends IResourceResolver {
      */
     public InputStream openScript(FilePath filename) throws FileNotFoundException, IOException;
 
-	/**
+    /**
      * Executes a script file.
      *
      * @param thread The thread to execute the script on.

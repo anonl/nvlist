@@ -11,44 +11,44 @@ public final class SoundDefinition implements ISoundDefinition {
 
     // --- Also update SoundDefinitionJson when changing attributes ---
     private final String filename;
-	private final String displayName; // May be null
+    private final String displayName; // May be null
     // --- Also update SoundDefinitionJson when changing attributes ---
 
-	/**
-	 * @param displayName (optional) Display name for this audio file.
-	 */
-	public SoundDefinition(String filename, String displayName) {
+    /**
+     * @param displayName (optional) Display name for this audio file.
+     */
+    public SoundDefinition(String filename, String displayName) {
         Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
                 "Filename may not be a path: " + filename);
         this.filename = filename;
 
-	    if (displayName != null) {
-	        Checks.checkArgument(displayName.length() > 0,
-	                "Display name may be null, but not an empty string");
-	    }
-	    this.displayName = displayName;
-	}
+        if (displayName != null) {
+            Checks.checkArgument(displayName.length() > 0,
+                    "Display name may be null, but not an empty string");
+        }
+        this.displayName = displayName;
+    }
 
-	@Override
-	public String toString() {
-		return StringUtil.formatRoot("SoundDesc(%s)", filename);
-	}
+    @Override
+    public String toString() {
+        return StringUtil.formatRoot("SoundDesc(%s)", filename);
+    }
 
-	@Override
+    @Override
     public String getFilename() {
         return filename;
     }
 
-	public boolean hasDisplayName() {
-	    return displayName != null;
-	}
+    public boolean hasDisplayName() {
+        return displayName != null;
+    }
 
-	/**
-	 * @return The display name for this audio file, or {@code null} if no display name was defined.
-	 */
-	@Override
-	public String getDisplayName() {
-	    return displayName;
-	}
+    /**
+     * @return The display name for this audio file, or {@code null} if no display name was defined.
+     */
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
 
 }

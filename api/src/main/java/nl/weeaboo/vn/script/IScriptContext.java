@@ -17,10 +17,10 @@ public interface IScriptContext extends Serializable {
 
     Collection<? extends IScriptThread> getThreads();
 
-	/** Runs every active thread once until they yield. */
+    /** Runs every active thread once until they yield. */
     void updateThreads(IContext context, IScriptExceptionHandler exceptionHandler);
 
-	/** Returns the event dispatcher which can be used to schedule tasks on the context's main thread */
+    /** Returns the event dispatcher which can be used to schedule tasks on the context's main thread */
     IScriptEventDispatcher getEventDispatcher();
 
 }

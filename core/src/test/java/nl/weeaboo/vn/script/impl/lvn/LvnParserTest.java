@@ -31,17 +31,17 @@ public class LvnParserTest {
     private static final Logger LOG = LoggerFactory.getLogger(LvnParserTest.class);
     private static final String scriptDir = "/script/syntax/";
 
-	@Test
-	public void syntaxTest3() throws LvnParseException, IOException {
-	    syntaxTest(3);
-	}
+    @Test
+    public void syntaxTest3() throws LvnParseException, IOException {
+        syntaxTest(3);
+    }
 
     @Test
     public void syntaxTest4() throws LvnParseException, IOException {
         syntaxTest(4);
     }
 
-	private static void syntaxTest(int version) throws IOException, LvnParseException {
+    private static void syntaxTest(int version) throws IOException, LvnParseException {
         FilePath filename = FilePath.of("test");
 
         final ICompiledLvnFile lvnFile;
@@ -66,40 +66,40 @@ public class LvnParserTest {
 
         Assert.assertEquals(7, lvnFile.countTextLines(false));
         Assert.assertEquals(7+8, lvnFile.countTextLines(true));
-	}
+    }
 
-	@Test
-	public void textParserTest() throws IOException, ClassNotFoundException {
-		String input = "Text with [embedded()] code and {tag a,b,c,d}embedded tags{/tag} and ${stringifiers} too.";
+    @Test
+    public void textParserTest() throws IOException, ClassNotFoundException {
+        String input = "Text with [embedded()] code and {tag a,b,c,d}embedded tags{/tag} and ${stringifiers} too.";
 
-		TextParser parser = new TextParser();
+        TextParser parser = new TextParser();
 
         LOG.debug("----------------------------------------");
-		for (Token token : parser.tokenize(input)) {
+        for (Token token : parser.tokenize(input)) {
             LOG.debug(token.toString());
-		}
+        }
         LOG.debug("----------------------------------------");
 
-		LuaTable debugTable = createDebugFunctions();
+        LuaTable debugTable = createDebugFunctions();
 
-		RuntimeTextParser runtimeParser = new RuntimeTextParser(debugTable);
+        RuntimeTextParser runtimeParser = new RuntimeTextParser(debugTable);
 
-		// Serialize->Deserialize to make sure that doesn't break anything
+        // Serialize->Deserialize to make sure that doesn't break anything
         runtimeParser = CoreTestUtil.reserialize(runtimeParser);
 
-		ParseResult parseResult = runtimeParser.parse(input);
-		IntMap<String> commandMap = parseResult.getCommands();
-		for (int n = 0; n < commandMap.size(); n++) {
+        ParseResult parseResult = runtimeParser.parse(input);
+        IntMap<String> commandMap = parseResult.getCommands();
+        for (int n = 0; n < commandMap.size(); n++) {
             LOG.debug(commandMap.keyAt(n) + ": " + commandMap.valueAt(n));
-		}
+        }
         LOG.debug("----------------------------------------");
 
-	}
+    }
 
     @SuppressWarnings("serial")
-	private static LuaTable createDebugFunctions() {
-	    LuaTable table = new LuaTable();
-	    table.set(RuntimeTextParser.F_STRINGIFY, new OneArgFunction() {
+    private static LuaTable createDebugFunctions() {
+        LuaTable table = new LuaTable();
+        table.set(RuntimeTextParser.F_STRINGIFY, new OneArgFunction() {
             @Override
             public LuaValue call(LuaValue arg) {
                 LOG.debug("stringify: " + arg);
@@ -121,6 +121,6 @@ public class LvnParserTest {
             }
         });
         return table;
-	}
+    }
 
 }

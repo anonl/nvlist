@@ -68,8 +68,8 @@ end
 
 ---Text modes. These determine the way the textbox looks.
 TextMode = {
-	ADV=1, --Adventure game style bottom-aligned text.
-	NVL=2, --Novel style full screen text.
+    ADV=1, --Adventure game style bottom-aligned text.
+    NVL=2, --Novel style full screen text.
 }
 
 ---Text functions
@@ -84,7 +84,7 @@ TextMode = {
 -- @tab[opt=nil] meta A table with metadata for this line of text (filename,
 --      line, etc.)
 function text(str, triggers, meta)
-	meta = meta or {}
+    meta = meta or {}
 
     local lineState = getLineState()
     local currentSpeaker = getSpeakerState()
@@ -94,51 +94,51 @@ function text(str, triggers, meta)
         lineState.read = Seen.hasSeenLine(meta.filename, meta.line)
     end
 
-	--Handle paragraph start differently based on text mode
-	if isTextModeADV() then
-		clearText()
-	elseif isTextModeNVL() then
-		local curText = getText()
-		if curText ~= nil and curText:length() > 0 then
-			local lastChar = curText:getChar(curText:length()-1)
-			if lastChar ~= 0x20 and lastChar ~= 0x0A then			
-				appendText("\n\n")
-			end
-		end	
-	end
-	
-	--Parse str and execute stringifiers, text tag handlers, etc.
-	if meta.parse == nil or meta.parse == true then
-		str, triggers = Text.parseText(str, triggers)
-	end
-	
-    updateSpeaker()	
-	lineState.style = currentSpeaker.textStyle
-	
-	appendText(str)
-	
-	--Now wait until all text has faded in and execute triggers at appropriate times
-	waitForTextVisible(getMainTextDrawable(), triggers)
+    --Handle paragraph start differently based on text mode
+    if isTextModeADV() then
+        clearText()
+    elseif isTextModeNVL() then
+        local curText = getText()
+        if curText ~= nil and curText:length() > 0 then
+            local lastChar = curText:getChar(curText:length()-1)
+            if lastChar ~= 0x20 and lastChar ~= 0x0A then            
+                appendText("\n\n")
+            end
+        end    
+    end
+    
+    --Parse str and execute stringifiers, text tag handlers, etc.
+    if meta.parse == nil or meta.parse == true then
+        str, triggers = Text.parseText(str, triggers)
+    end
+    
+    updateSpeaker()    
+    lineState.style = currentSpeaker.textStyle
+    
+    appendText(str)
+    
+    --Now wait until all text has faded in and execute triggers at appropriate times
+    waitForTextVisible(getMainTextDrawable(), triggers)
 
-	--Turn off skip mode if applicable
-	if getSkipMode() == SkipMode.PARAGRAPH then
-		stopSkipping()
-	end
-	
-	--Wait for click
-	waitClick()	
-	
-	--Reset speaker
-	lineState.style = nil
-	if currentSpeaker.resetEOL then
-		say()
-	end
-	
-	--Register line as read
-	if meta.filename ~= nil and meta.line >= 1 then
-		Seen.markLineSeen(meta.filename, meta.line)
-	end
-	lineState.read = true	
+    --Turn off skip mode if applicable
+    if getSkipMode() == SkipMode.PARAGRAPH then
+        stopSkipping()
+    end
+    
+    --Wait for click
+    waitClick()    
+    
+    --Reset speaker
+    lineState.style = nil
+    if currentSpeaker.resetEOL then
+        say()
+    end
+    
+    --Register line as read
+    if meta.filename ~= nil and meta.line >= 1 then
+        Seen.markLineSeen(meta.filename, meta.line)
+    end
+    lineState.read = true    
 end
 
 ---Waits until the text in the main textbox (or other TextDrawable) has finished
@@ -147,20 +147,20 @@ end
 -- @tab[opt=nil] triggers An optional table containing functions that should be
 --               called at specific text positions.
 function waitForTextVisible(textDrawable, triggers)
-	while textDrawable ~= nil and not textDrawable:isDestroyed() do
-		if triggers ~= nil then
+    while textDrawable ~= nil and not textDrawable:isDestroyed() do
+        if triggers ~= nil then
             local startGlyph = textDrawable:getGlyphOffset(textDrawable:getStartLine())
-			local endGlyph = startGlyph + math.floor(textDrawable:getVisibleText())
-			for i=startGlyph,endGlyph do
-				if triggers[i] ~= nil then
-					triggers[i]()
-				end
-			end
-		end
-		
-		if textDrawable:isFinalLineFullyVisible() then
-			break
-	    elseif textDrawable:getVisibleText() >= textDrawable:getMaxVisibleText() then
+            local endGlyph = startGlyph + math.floor(textDrawable:getVisibleText())
+            for i=startGlyph,endGlyph do
+                if triggers[i] ~= nil then
+                    triggers[i]()
+                end
+            end
+        end
+        
+        if textDrawable:isFinalLineFullyVisible() then
+            break
+        elseif textDrawable:getVisibleText() >= textDrawable:getMaxVisibleText() then
             -- Not all remaining lines could be displayed, click to continue to the next text page            
             waitClick()
 
@@ -175,10 +175,10 @@ function waitForTextVisible(textDrawable, triggers)
 
             Log.debug("Show new text lines: {}-{} -> {}-{} (lineCount={})",
                     startLine, endLine, endLine, textDrawable:getEndLine(), lineCount)
-		end
-		
-		yield()
-	end
+        end
+        
+        yield()
+    end
 end
 
 ---Clears the text of the main textbox (effectively sets it to <code>""</code>).
@@ -200,44 +200,44 @@ function appendText(str, meta)
 
     local lineState = getLineState()
     
-	local styled = Text.createStyledText(str, lineState.style)
-	local logStyled = styled
-	if lineState.read and prefs.textReadStyle ~= nil then
-		styled = Text.createStyledText(str, Text.extendStyle(prefs.textReadStyle, lineState.style))
-	end
+    local styled = Text.createStyledText(str, lineState.style)
+    local logStyled = styled
+    if lineState.read and prefs.textReadStyle ~= nil then
+        styled = Text.createStyledText(str, Text.extendStyle(prefs.textReadStyle, lineState.style))
+    end
 
-	local textDrawable = getMainTextDrawable()
-	local textState = getTextState()
-	if textDrawable == nil then
+    local textDrawable = getMainTextDrawable()
+    local textState = getTextState()
+    if textDrawable == nil then
         Log.info("No text drawable set, unable to display text")
-		textState:appendText(styled)
-	    appendTextLog(logStyled)
-		return
-	end
-	
-	local oldText = textDrawable:getText()
-	local oldLineCount = textDrawable:getLineCount()
-	if oldLineCount > 0 then
-		textState:appendText(styled)
-		if meta.autoPage and textDrawable:getLineCount() > textDrawable:getEndLine() then
-			textDrawable:setVisibleText(0)
-			local index = 0
-			while index < styled:length() and styled:charAt(index) == 0x0A do
-				index = index + 1
-			end
-			textState:setText(styled:substring(index))
-			appendTextLog(logStyled:substring(index), true)
-		else
-			appendTextLog(logStyled)
-		end
-	else
-		textState:appendText(styled)
-    	appendTextLog(logStyled)
-	end
+        textState:appendText(styled)
+        appendTextLog(logStyled)
+        return
+    end
+    
+    local oldText = textDrawable:getText()
+    local oldLineCount = textDrawable:getLineCount()
+    if oldLineCount > 0 then
+        textState:appendText(styled)
+        if meta.autoPage and textDrawable:getLineCount() > textDrawable:getEndLine() then
+            textDrawable:setVisibleText(0)
+            local index = 0
+            while index < styled:length() and styled:charAt(index) == 0x0A do
+                index = index + 1
+            end
+            textState:setText(styled:substring(index))
+            appendTextLog(logStyled:substring(index), true)
+        else
+            appendTextLog(logStyled)
+        end
+    else
+        textState:appendText(styled)
+        appendTextLog(logStyled)
+    end
 
-	if isSkipping() then
-		textDrawable:setVisibleText(999999)
-	end
+    if isSkipping() then
+        textDrawable:setVisibleText(999999)
+    end
 end
 
 ---Appends text to the textlog, but not the main textbox. Allows you to manually add lines to the textlog,
@@ -404,18 +404,18 @@ end
 
 ---Changes the text mode to full-screen textbox mode
 function setTextModeNVL()
-	setTextMode(TextMode.NVL)
+    setTextMode(TextMode.NVL)
 end
 
 ---Changes the text mode to bottom-aligned textbox mode
 function setTextModeADV()
-	setTextMode(TextMode.ADV)
+    setTextMode(TextMode.ADV)
 end
 
 ---Changes the current text mode
 function setTextMode(mode)
     if context.textMode ~= mode then
-    	context.textMode = mode
+        context.textMode = mode
 
         setActiveTextBox(mode)
     end
@@ -423,17 +423,17 @@ end
 
 ---Returns the current text mode.
 function getTextMode()
-	return context.textMode or TextMode.ADV
+    return context.textMode or TextMode.ADV
 end
 
 --- @return <code>true</code> if the text mode is NVL
 function isTextModeNVL()
-	return getTextMode() == TextMode.NVL
+    return getTextMode() == TextMode.NVL
 end
 
 --- @return <code>true</code> if the text mode is NVL
 function isTextModeADV()
-	return getTextMode() == TextMode.ADV
+    return getTextMode() == TextMode.ADV
 end
 
 -- -----------------------------------------------------------------------------------------------------------

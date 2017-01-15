@@ -28,20 +28,20 @@ public class Screen implements IScreen {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Screen.class);
 
-	private final Rect2D bounds;
+    private final Rect2D bounds;
     private final IScreenTextState textState;
     private final ISkipState skipState;
 
-	private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
-	private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
-	private IRenderEnv renderEnv;
+    private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
+    private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
+    private IRenderEnv renderEnv;
 
     public Screen(Rect2D bounds, IRenderEnv env, IScreenTextState textState, ISkipState skipState) {
         this.bounds = Checks.checkNotNull(bounds);
-		this.renderEnv = Checks.checkNotNull(env);
+        this.renderEnv = Checks.checkNotNull(env);
         this.textState = Checks.checkNotNull(textState);
         this.skipState = Checks.checkNotNull(skipState);
-	}
+    }
 
     @Override
     public void update() {
@@ -73,64 +73,64 @@ public class Screen implements IScreen {
         SceneUtil.sendSignal(getRootLayer(), signal);
     }
 
-	public void draw(IDrawBuffer buffer) {
+    public void draw(IDrawBuffer buffer) {
         Layer layer = (Layer)getRootLayer();
-		layer.draw(buffer);
-	}
+        layer.draw(buffer);
+    }
 
-	@Override
-	public ILayer createLayer(ILayer parentLayer) {
-		if (!containsLayer(parentLayer)) {
-			throw new IllegalArgumentException("Parent layer (" + parentLayer + ") isn't attached to this screen");
-		}
-		return doCreateLayer(parentLayer);
-	}
+    @Override
+    public ILayer createLayer(ILayer parentLayer) {
+        if (!containsLayer(parentLayer)) {
+            throw new IllegalArgumentException("Parent layer (" + parentLayer + ") isn't attached to this screen");
+        }
+        return doCreateLayer(parentLayer);
+    }
 
-	protected ILayer createRootLayer() {
-		return doCreateLayer(null);
-	}
+    protected ILayer createRootLayer() {
+        return doCreateLayer(null);
+    }
 
-	private ILayer doCreateLayer(ILayer parentLayer) {
-		ILayer layer = newLayer(parentLayer);
-		if (parentLayer != null) {
-			layer.setBounds(parentLayer.getX(), parentLayer.getY(), parentLayer.getWidth(), parentLayer.getHeight());
-		} else {
-			layer.setBounds(bounds.x, bounds.y, bounds.w, bounds.h);
-		}
-		return layer;
-	}
+    private ILayer doCreateLayer(ILayer parentLayer) {
+        ILayer layer = newLayer(parentLayer);
+        if (parentLayer != null) {
+            layer.setBounds(parentLayer.getX(), parentLayer.getY(), parentLayer.getWidth(), parentLayer.getHeight());
+        } else {
+            layer.setBounds(bounds.x, bounds.y, bounds.w, bounds.h);
+        }
+        return layer;
+    }
 
-	/**
-	 * Creates a new layer.
-	 * @param parentLayer If not {@code null}, creates the new layer as a sub-layer of {@code parentLayer}.
-	 */
-	protected ILayer newLayer(ILayer parentLayer) {
-		if (parentLayer == null) {
+    /**
+     * Creates a new layer.
+     * @param parentLayer If not {@code null}, creates the new layer as a sub-layer of {@code parentLayer}.
+     */
+    protected ILayer newLayer(ILayer parentLayer) {
+        if (parentLayer == null) {
             return new Layer(null);
-		}
-		return ((Layer)parentLayer).createSubLayer();
-	}
+        }
+        return ((Layer)parentLayer).createSubLayer();
+    }
 
-	@Override
-	public ILayer getRootLayer() {
+    @Override
+    public ILayer getRootLayer() {
         if (rootLayer == null || rootLayer.isDestroyed()) {
-			rootLayer = createRootLayer();
-		}
-		return rootLayer;
-	}
+            rootLayer = createRootLayer();
+        }
+        return rootLayer;
+    }
 
     @Override
     public IScreenTextState getTextState() {
         return textState;
     }
 
-	@Override
-	public ILayer getActiveLayer() {
-		if (activeLayer == null || activeLayer.isDestroyed()) {
-			activeLayer = getRootLayer();
-		}
-		return activeLayer;
-	}
+    @Override
+    public ILayer getActiveLayer() {
+        if (activeLayer == null || activeLayer.isDestroyed()) {
+            activeLayer = getRootLayer();
+        }
+        return activeLayer;
+    }
     @Override
     public void setActiveLayer(ILayer layer) {
         Checks.checkNotNull(layer, "layer");
@@ -140,20 +140,20 @@ public class Screen implements IScreen {
         activeLayer = layer;
     }
 
-	protected boolean containsLayer(ILayer layer) {
-		return rootLayer != null && (rootLayer == layer || rootLayer.containsLayer(layer));
-	}
+    protected boolean containsLayer(ILayer layer) {
+        return rootLayer != null && (rootLayer == layer || rootLayer.containsLayer(layer));
+    }
 
     @Override
     public IRenderEnv getRenderEnv() {
         return renderEnv;
     }
 
-	@Override
+    @Override
     public void setRenderEnv(IRenderEnv env) {
         renderEnv = Checks.checkNotNull(env);
 
         sendSignal(new RenderEnvChangeSignal(env));
-	}
+    }
 
 }

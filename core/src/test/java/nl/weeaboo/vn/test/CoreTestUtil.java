@@ -32,54 +32,54 @@ import nl.weeaboo.vn.text.impl.TestTextBoxState;
 public final class CoreTestUtil {
 
     public static final double EPSILON = 0.001;
-	public static final IRenderEnv BASIC_ENV = new RenderEnv(Dim.of(1280, 720), Rect.of(0, 75, 800, 450),
-	        Dim.of(800, 600), false);
+    public static final IRenderEnv BASIC_ENV = new RenderEnv(Dim.of(1280, 720), Rect.of(0, 75, 800, 450),
+            Dim.of(800, 600), false);
 
     private static final Logger LOG = LoggerFactory.getLogger(CoreTestUtil.class);
 
-	private CoreTestUtil() {
-	}
+    private CoreTestUtil() {
+    }
 
     public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
         IScreenTextState textBoxState = new TestTextBoxState();
         SkipState skipState = new SkipState();
         return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
-	}
+    }
 
-	public static IScriptContext newScriptContext() {
-	    return null;
-	}
+    public static IScriptContext newScriptContext() {
+        return null;
+    }
 
     public static ImageDrawable newImage() {
         ImageDrawable image = new ImageDrawable();
         image.setTexture(new TestTexture());
         return image;
-	}
+    }
 
-	public static void configureLogger() {
-		try {
+    public static void configureLogger() {
+        try {
             InputStream in = CoreTestUtil.class.getResourceAsStream("logging.debug.properties");
-			if (in == null) {
-				throw new FileNotFoundException();
-			}
-			try {
-				LogManager.getLogManager().readConfiguration(in);
-			} finally {
-				in.close();
-			}
-		} catch (IOException e) {
-			LOG.warn("Unable to read logging config", e);
-		}
-	}
+            if (in == null) {
+                throw new FileNotFoundException();
+            }
+            try {
+                LogManager.getLogManager().readConfiguration(in);
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            LOG.warn("Unable to read logging config", e);
+        }
+    }
 
-	public static void trySleep(long millis) {
-	    try {
+    public static void trySleep(long millis) {
+        try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             // Ignore
         }
-	}
+    }
 
     public static void assertEquals(Rect2D expected, Rect2D r) {
         assertEquals(expected.toArea2D(), r.toArea2D());

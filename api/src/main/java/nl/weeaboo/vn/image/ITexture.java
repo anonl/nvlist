@@ -6,17 +6,17 @@ import nl.weeaboo.common.Area2D;
 
 public interface ITexture extends Serializable {
 
-	public static Area2D DEFAULT_UV = Area2D.of(0, 0, 1, 1);
+    public static Area2D DEFAULT_UV = Area2D.of(0, 0, 1, 1);
 
-	/**
-	 * @return The texture width in image state coordinates.
-	 */
-	public double getWidth();
+    /**
+     * @return The texture width in image state coordinates.
+     */
+    public double getWidth();
 
-	/**
-	 * @return The texture height in image state coordinates.
-	 */
-	public double getHeight();
+    /**
+     * @return The texture height in image state coordinates.
+     */
+    public double getHeight();
 
     /**
      * @return The texture width in pixels.
@@ -28,19 +28,19 @@ public interface ITexture extends Serializable {
      */
     public int getPixelHeight();
 
-	/**
-	 * @return The scale factor from pixel size to virtual size.
-	 */
-	public double getScaleX();
+    /**
+     * @return The scale factor from pixel size to virtual size.
+     */
+    public double getScaleX();
 
-	/**
-	 * @return The scale factor from pixel size to virtual size.
-	 */
-	public double getScaleY();
+    /**
+     * @return The scale factor from pixel size to virtual size.
+     */
+    public double getScaleY();
 
-	/**
-	 * @return The texture mapping coordinates used by the underlying graphics system.
-	 */
-	public Area2D getUV();
+    /**
+     * @return The texture mapping coordinates used by the underlying graphics system.
+     */
+    public Area2D getUV();
 
 }

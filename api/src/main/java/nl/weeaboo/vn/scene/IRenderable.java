@@ -52,7 +52,7 @@ public interface IRenderable extends Serializable, IUpdateable {
      */
     void setSize(double w, double h);
 
-	/**
+    /**
      * @return The axis-aligned bounding box for this renderable element.
      */
     Rect2D getVisualBounds();

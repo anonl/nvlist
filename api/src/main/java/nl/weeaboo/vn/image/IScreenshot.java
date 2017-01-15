@@ -10,41 +10,41 @@ import nl.weeaboo.common.Dim;
  */
 public interface IScreenshot extends Serializable {
 
-	public void cancel();
+    public void cancel();
 
-	/**
-	 * Marks this screenshot object as transient; its pixels won't be serialized.
-	 */
-	public void markTransient();
+    /**
+     * Marks this screenshot object as transient; its pixels won't be serialized.
+     */
+    public void markTransient();
 
-	@Deprecated
-	public void makeTransient();
+    @Deprecated
+    public void makeTransient();
 
-	/** @return {@code true} when the screenshot operation has completed successfully. */
-	public boolean isAvailable();
+    /** @return {@code true} when the screenshot operation has completed successfully. */
+    public boolean isAvailable();
 
-	/**
+    /**
      * A volatile screenshot only stores its pixels on the GPU. As a consequence, it may lose its pixels at
      * any time.
      */
-	public boolean isVolatile();
+    public boolean isVolatile();
 
-	/** @see #markTransient() */
-	public boolean isTransient();
+    /** @see #markTransient() */
+    public boolean isTransient();
 
-	/** @see #cancel() */
-	public boolean isCancelled();
+    /** @see #cancel() */
+    public boolean isCancelled();
 
-	/**
-	 * Warning: May return {@code null} if the screenshot is not yet available or volatile.
-	 */
-	public ITextureData getPixels();
+    /**
+     * Warning: May return {@code null} if the screenshot is not yet available or volatile.
+     */
+    public ITextureData getPixels();
 
-	/**
-	 * @return The screen size in pixels when this screenshot was taken.
-	 */
-	public Dim getScreenSize();
+    /**
+     * @return The screen size in pixels when this screenshot was taken.
+     */
+    public Dim getScreenSize();
 
-	public short getZ();
+    public short getZ();
 
 }

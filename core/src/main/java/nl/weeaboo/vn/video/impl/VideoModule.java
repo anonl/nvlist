@@ -65,7 +65,7 @@ public class VideoModule implements IVideoModule {
     public IVideo movie(ResourceLoadInfo loadInfo) throws IOException {
         checkIfMovieFinished();
 
-    	Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
+        Preconditions.checkState(fullscreenMovie == null, "A different movie is still playing");
 
         LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getPath());
 
@@ -121,8 +121,8 @@ public class VideoModule implements IVideoModule {
 
     @Override
     public void setVideoFolder(FilePath folder, Dim size) {
-    	Preconditions.checkNotNull(folder);
-    	Preconditions.checkNotNull(size);
+        Preconditions.checkNotNull(folder);
+        Preconditions.checkNotNull(size);
 
         if (!videoFolder.equals(folder) || !videoResolution.equals(size)) {
             videoFolder = folder;

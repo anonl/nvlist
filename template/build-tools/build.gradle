@@ -26,10 +26,10 @@ def loadProperties(String filename) {
 // Standard folders
 allprojects {
     ext {
-		vnRootDir = new File(vnRoot).getCanonicalFile()
-		vnResDir = new File(vnRootDir, "/res")
-		buildResDir = new File(vnRootDir, "/build-res")
-		buildToolsDir = rootProject.projectDir
+        vnRootDir = new File(vnRoot).getCanonicalFile()
+        vnResDir = new File(vnRootDir, "/res")
+        buildResDir = new File(vnRootDir, "/build-res")
+        buildToolsDir = rootProject.projectDir
     }
 }
 
@@ -91,27 +91,27 @@ project(':android') {
     android {
         defaultConfig {
             applicationId settings.appPackage
-	        versionCode settings.androidVersionCode as int
-	        versionName project.version
+            versionCode settings.androidVersionCode as int
+            versionName project.version
             manifestPlaceholders = [
                 androidMain: settings.androidMain
             ]
-	        jackOptions {
-	           enabled true
-	        }            
+            jackOptions {
+               enabled true
+            }            
         }
     }
 
-	// Run installed app through adb
-	task runInstalled(type: Exec) {
-	    def adb = android.getAdbExe()
-	    def target = settings.androidPackage + '/' + settings.androidMain
-	    commandLine "$adb", 'shell', 'am', 'start', '-n', target
-	}
-	// Install, then run debug build
-	task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
-	}    
-	// Install, then run release build
-	task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
-	}    
+    // Run installed app through adb
+    task runInstalled(type: Exec) {
+        def adb = android.getAdbExe()
+        def target = settings.androidPackage + '/' + settings.androidMain
+        commandLine "$adb", 'shell', 'am', 'start', '-n', target
+    }
+    // Install, then run debug build
+    task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
+    }    
+    // Install, then run release build
+    task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
+    }    
 }

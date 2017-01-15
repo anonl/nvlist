@@ -9,31 +9,31 @@ import nl.weeaboo.vn.script.IScriptFunction;
 public interface IButton extends ITransformable {
 
     /** @see IButtonModel#consumePress() */
-	public boolean consumePress();
+    public boolean consumePress();
 
     /** @see IButtonModel#isRollover() */
-	public boolean isRollover();
+    public boolean isRollover();
 
     /** @see IButtonModel#isPressed() */
-	public boolean isPressed();
+    public boolean isPressed();
 
     /** @see IButtonModel#isEnabled() */
-	public boolean isEnabled();
+    public boolean isEnabled();
 
     /** @see IButtonModel#setEnabled(boolean) */
     public void setEnabled(boolean e);
 
     /** @see IButtonModel#isSelected() */
-	public boolean isSelected();
+    public boolean isSelected();
 
     /** @see IButtonModel#setSelected(boolean) */
-	public void setSelected(boolean s);
+    public void setSelected(boolean s);
 
     /** @see IButtonModel#isToggle() */
     public boolean isToggle();
 
     /** @see IButtonModel#setToggle(boolean) */
-	public void setToggle(boolean t);
+    public void setToggle(boolean t);
 
     /** @see #setClickHandler(IScriptFunction) */
     public IScriptFunction getClickHandler();

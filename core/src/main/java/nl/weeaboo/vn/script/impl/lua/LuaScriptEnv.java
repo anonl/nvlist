@@ -15,48 +15,48 @@ public class LuaScriptEnv implements IScriptEnv {
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
     private final LuaRunState runState;
-	private final LuaScriptLoader loader;
-	private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<>();
+    private final LuaScriptLoader loader;
+    private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<>();
 
-	private boolean initialized;
+    private boolean initialized;
 
-	public LuaScriptEnv(LuaRunState runState, LuaScriptLoader loader) {
-	    this.runState = runState;
-		this.loader = loader;
-	}
+    public LuaScriptEnv(LuaRunState runState, LuaScriptLoader loader) {
+        this.runState = runState;
+        this.loader = loader;
+    }
 
     public void initEnv() throws ScriptException {
-	    initialized = true;
+        initialized = true;
 
-	    registerOnThread();
+        registerOnThread();
         loader.initEnv();
 
-	    for (ILuaScriptEnvInitializer init : initializers) {
-	        init.initEnv(this);
-	    }
-	}
+        for (ILuaScriptEnvInitializer init : initializers) {
+            init.initEnv(this);
+        }
+    }
 
     public final void registerOnThread() {
-	    runState.registerOnThread();
-	}
+        runState.registerOnThread();
+    }
 
-	public void addInitializer(ILuaScriptEnvInitializer init) {
-	    Checks.checkState(!initialized, "Can't change initializers after initEnv() has been called.");
+    public void addInitializer(ILuaScriptEnvInitializer init) {
+        Checks.checkState(!initialized, "Can't change initializers after initEnv() has been called.");
 
-	    initializers.add(init);
-	}
+        initializers.add(init);
+    }
 
-	public LuaRunState getRunState() {
-	    return runState;
-	}
+    public LuaRunState getRunState() {
+        return runState;
+    }
 
-	public LuaTable getGlobals() {
-	    return runState.getGlobalEnvironment();
-	}
+    public LuaTable getGlobals() {
+        return runState.getGlobalEnvironment();
+    }
 
-	@Override
-	public IScriptLoader getScriptLoader() {
-		return loader;
-	}
+    @Override
+    public IScriptLoader getScriptLoader() {
+        return loader;
+    }
 
 }

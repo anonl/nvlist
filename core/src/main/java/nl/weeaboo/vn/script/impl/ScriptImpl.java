@@ -2,9 +2,9 @@ package nl.weeaboo.vn.script.impl;
 
 final class ScriptImpl {
 
-	static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
-	private ScriptImpl() {
-	}
+    private ScriptImpl() {
+    }
 
 }

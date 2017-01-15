@@ -6,20 +6,20 @@ import nl.weeaboo.common.Rect2D;
 
 public final class RenderUtil {
 
-	private RenderUtil() {
-	}
+    private RenderUtil() {
+    }
 
-	public static Rect roundClipRect(Rect2D clip2D) {
-		//Rounded to ints, resulting clip rect should be no bigger than the non-rounded version.
-		int x0 = (int)Math.ceil(clip2D.x);
-		int y0 = (int)Math.ceil(clip2D.y);
+    public static Rect roundClipRect(Rect2D clip2D) {
+        //Rounded to ints, resulting clip rect should be no bigger than the non-rounded version.
+        int x0 = (int)Math.ceil(clip2D.x);
+        int y0 = (int)Math.ceil(clip2D.y);
 
-		//We can't just floor() the w/h because the ceil() of the x/y would skew the result.
-		int x1 = (int)Math.floor(clip2D.x+clip2D.w);
-		int y1 = (int)Math.floor(clip2D.y+clip2D.h);
+        //We can't just floor() the w/h because the ceil() of the x/y would skew the result.
+        int x1 = (int)Math.floor(clip2D.x+clip2D.w);
+        int y1 = (int)Math.floor(clip2D.y+clip2D.h);
 
-		return Rect.of(x0, y0, Math.max(0, x1-x0), Math.max(0, y1-y0));
-	}
+        return Rect.of(x0, y0, Math.max(0, x1-x0), Math.max(0, y1-y0));
+    }
 
     /**
      * Returns a subrectangle of the given base UV area
@@ -41,7 +41,7 @@ public final class RenderUtil {
      * @param w Determines the relative weight of each color, where 0.0 returns {@code c0} and 1.0 returns
      *        {@code c1}.
      */
-	public static int interpolateColors(int c0, int c1, float w) {
+    public static int interpolateColors(int c0, int c1, float w) {
         if (w <= 0) return c0;
         if (w >= 1) return c1;
 

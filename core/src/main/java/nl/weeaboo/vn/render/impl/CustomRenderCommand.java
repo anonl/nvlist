@@ -24,6 +24,6 @@ final class CustomRenderCommand extends BaseRenderCommand {
 
         this.transform = transform;
         this.renderLogic = renderLogic;
-	}
+    }
 
 }

@@ -75,17 +75,17 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private final IWritableFileSystem outputFileSystem;
 
     private AssetManager assetManager;
-	private FrameBuffer frameBuffer;
-	private Dim vsize = Dim.of(1280, 720);
+    private FrameBuffer frameBuffer;
+    private Dim vsize = Dim.of(1280, 720);
 
-	private FitViewport frameBufferViewport;
+    private FitViewport frameBufferViewport;
     private FitViewport screenViewport;
     private FitViewport scene2dViewport;
 
     private Scene2dEnv sceneEnv;
-	private Osd osd;
+    private Osd osd;
     private DebugControls debugControls;
-	private SpriteBatch batch;
+    private SpriteBatch batch;
     private GdxInputAdapter inputAdapter;
     private PerformanceMetrics performanceMetrics;
 
@@ -111,9 +111,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         return prefs;
     }
 
-	@Override
-	public void create() {
-	    LOG.info("Launcher.create() start");
+    @Override
+    public void create() {
+        LOG.info("Launcher.create() start");
 
         assetManager = new AssetManager(resourceFileSystem);
         PremultTextureLoader.register(assetManager);
@@ -127,13 +127,13 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         performanceMetrics = new PerformanceMetrics();
 
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
-		screenViewport = new FitViewport(vsize.w, vsize.h);
-		scene2dViewport = new FitViewport(vsize.w, vsize.h);
+        screenViewport = new FitViewport(vsize.w, vsize.h);
+        scene2dViewport = new FitViewport(vsize.w, vsize.h);
 
-		// TODO: Input adapter wants a transform from screen to world (y-down)
+        // TODO: Input adapter wants a transform from screen to world (y-down)
         inputAdapter = new GdxInputAdapter(screenViewport);
 
-		batch = new SpriteBatch();
+        batch = new SpriteBatch();
 
         try {
             initNovel(prefs);
@@ -191,7 +191,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 onPrefsChanged();
             }
         });
-	}
+    }
 
     private IFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();
@@ -223,18 +223,18 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     }
 
     @Override
-	public void dispose() {
-	    if (novel != null) {
-	        novel.stop();
-	        novel = null;
-	    }
+    public void dispose() {
+        if (novel != null) {
+            novel.stop();
+            novel = null;
+        }
 
         disposeRenderer();
-		disposeFrameBuffer();
+        disposeFrameBuffer();
         osd = DisposeUtil.dispose(osd);
         batch = DisposeUtil.dispose(batch);
         assetManager = DisposeUtil.dispose(assetManager);
-	}
+    }
 
     private void disposeRenderer() {
         if (renderer != null) {
@@ -243,23 +243,23 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         }
     }
 
-	private void disposeFrameBuffer() {
+    private void disposeFrameBuffer() {
         frameBuffer = DisposeUtil.dispose(frameBuffer);
-	}
+    }
 
-	private void updateFrameBuffer() {
-		disposeFrameBuffer();
+    private void updateFrameBuffer() {
+        disposeFrameBuffer();
 
-		frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
-		GdxViewportUtil.setToOrtho(frameBufferViewport, vsize, true);
+        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
+        GdxViewportUtil.setToOrtho(frameBufferViewport, vsize, true);
         frameBufferViewport.update(vsize.w, vsize.h, true);
-	}
+    }
 
-	@Override
-	public final void render() {
-	    if (windowDirty) {
-	        applyVSync();
-	    }
+    @Override
+    public final void render() {
+        if (windowDirty) {
+            applyVSync();
+        }
 
         try {
             simulationRateLimiter.onRender();
@@ -267,7 +267,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             onUncaughtException(re);
         }
 
-		frameBuffer.begin();
+        frameBuffer.begin();
         frameBufferViewport.apply();
         // Gdx.gl.glClearColor(.514f, .380f, .584f, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -281,14 +281,14 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             onUncaughtException(re);
         }
 
-		frameBuffer.end();
+        frameBuffer.end();
 
         screenViewport.apply();
         Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(screenViewport.getCamera().combined);
 
-		batch.begin();
+        batch.begin();
         batch.disableBlending();
         try {
             batch.draw(frameBuffer.getColorBufferTexture(), 0, 0, vsize.w, vsize.h);
@@ -296,7 +296,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             batch.enableBlending();
             batch.end();
         }
-	}
+    }
 
     @Override
     public void update() {
@@ -309,9 +309,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         osd.update(input);
 
         novel.update();
-	}
+    }
 
-	protected void renderScreen(SpriteBatch batch) {
+    protected void renderScreen(SpriteBatch batch) {
         IEnvironment env = novel.getEnv();
 
         // Render novel
@@ -336,12 +336,12 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             movie.render();
         }
 
-	    osd.render(batch, env);
-	}
+        osd.render(batch, env);
+    }
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
 
         LOG.info("Viewport resized: ({}x{})", width, height);
 
@@ -362,7 +362,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         disposeRenderer();
         updateFrameBuffer();
         windowDirty = true;
-	}
+    }
 
     private void applyVSync() {
         // On some drivers/platforms, settings vsync only works after the window is made visible.

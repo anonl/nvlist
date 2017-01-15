@@ -25,7 +25,7 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
     public NovelPrefsStore(IFileSystem resFS, IWritableFileSystem outFS) {
         this.resourceFileSystem = Checks.checkNotNull(resFS);
         this.outputSystem = Checks.checkNotNull(outFS);
-	}
+    }
 
     @Override
     public void loadVariables() throws IOException {

@@ -5,16 +5,16 @@ import nl.weeaboo.vn.scene.ILayer;
 
 public final class LayerRenderCommand extends BaseRenderCommand {
 
-	public static final byte ID = ID_LAYER_RENDER_COMMAND;
+    public static final byte ID = ID_LAYER_RENDER_COMMAND;
 
-	public final int layerId;
-	public final Rect2D layerBounds;
+    public final int layerId;
+    public final Rect2D layerBounds;
 
-	protected LayerRenderCommand(int layerId, ILayer layer) {
-		super(ID, layer.getZ(), true, (byte)layerId);
+    protected LayerRenderCommand(int layerId, ILayer layer) {
+        super(ID, layer.getZ(), true, (byte)layerId);
 
-		this.layerId = layerId;
-		this.layerBounds = layer.getBounds();
-	}
+        this.layerId = layerId;
+        this.layerBounds = layer.getBounds();
+    }
 
 }

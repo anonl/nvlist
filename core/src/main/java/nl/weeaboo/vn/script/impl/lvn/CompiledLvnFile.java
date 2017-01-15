@@ -11,28 +11,28 @@ import nl.weeaboo.filesystem.FilePath;
 
 final class CompiledLvnFile implements ICompiledLvnFile {
 
-	private final FilePath filename;
+    private final FilePath filename;
     private final ImmutableList<LvnLine> lines;
 
     public CompiledLvnFile(FilePath filename, List<LvnLine> lines) {
         this.filename = Checks.checkNotNull(filename);
         this.lines = ImmutableList.copyOf(lines);
-	}
+    }
 
-	@Override
-	public int countTextLines(boolean countEmptyLines) {
-		int count = 0;
+    @Override
+    public int countTextLines(boolean countEmptyLines) {
+        int count = 0;
         for (LvnLine line : lines) {
             if (line.getType() == LvnMode.TEXT) {
                 if (countEmptyLines || !ParserUtil.isWhitespace(line.getSourceLine())) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 
-	@Override
+    @Override
     public int countTextWords() {
         return countTextWords(BreakIterator.getWordInstance(Locale.ROOT));
     }
@@ -62,10 +62,10 @@ final class CompiledLvnFile implements ICompiledLvnFile {
         return totalWords;
     }
 
-	@Override
-	public FilePath getFilename() {
-		return filename;
-	}
+    @Override
+    public FilePath getFilename() {
+        return filename;
+    }
 
     @Override
     public String getCompiledContents() {

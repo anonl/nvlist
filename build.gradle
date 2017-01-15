@@ -69,30 +69,30 @@ allprojects {
             options.encoding = 'UTF-8'
         }
                 
-	    dependencies {
-	        testCompile "junit:junit:$junitVersion"
+        dependencies {
+            testCompile "junit:junit:$junitVersion"
             testCompile "com.google.guava:guava-testlib:$guavaVersion"
             
             // gdx-test is a required dependency since it contains the GdxUiTest test category
-	        testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
-	    }
+            testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
+        }
         
         test {
-	        def uiTest = project.hasProperty('uiTest')
-	        inputs.property('uiTest', uiTest) // Re-execute task if uiTest property changes        
-	        useJUnit {
-	            if (!uiTest) {            
-	                // Exclude UI tests by default
-	                excludeCategories 'nl.weeaboo.gdx.test.junit.GdxUiTest'
-	            }
+            def uiTest = project.hasProperty('uiTest')
+            inputs.property('uiTest', uiTest) // Re-execute task if uiTest property changes        
+            useJUnit {
+                if (!uiTest) {            
+                    // Exclude UI tests by default
+                    excludeCategories 'nl.weeaboo.gdx.test.junit.GdxUiTest'
+                }
             }
         }          
 
-	    jacocoTestReport {
-	        reports {
-	            xml.enabled true
-	        }
-	    }    
+        jacocoTestReport {
+            reports {
+                xml.enabled true
+            }
+        }    
     }
     
     bintray {

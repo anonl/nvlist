@@ -27,7 +27,7 @@ public final class ImageDefinition implements IImageDefinition {
 
     // --- Also update ImageDefinitionJson when changing attributes ---
     private final String filename;
-	private final Dim size;
+    private final Dim size;
     private final GLScaleFilter minFilter;
     private final GLScaleFilter magFilter;
     private final GLTilingMode wrapX;
@@ -35,79 +35,79 @@ public final class ImageDefinition implements IImageDefinition {
     private final ImmutableList<ImageSubRect> subRects;
     // --- Also update ImageDefinitionJson when changing attributes ---
 
-	public ImageDefinition(String filename, int w, int h) {
-		this(filename, Dim.of(w, h),
-		        GLScaleFilter.DEFAULT, GLScaleFilter.DEFAULT,
-		        GLTilingMode.DEFAULT, GLTilingMode.DEFAULT,
-		        ImmutableList.<ImageSubRect>of());
-	}
-	public ImageDefinition(String filename, Dim size,
-	        GLScaleFilter minf, GLScaleFilter magf,
-	        GLTilingMode wrapX, GLTilingMode wrapY,
-	        Collection<ImageSubRect> subRects) {
+    public ImageDefinition(String filename, int w, int h) {
+        this(filename, Dim.of(w, h),
+                GLScaleFilter.DEFAULT, GLScaleFilter.DEFAULT,
+                GLTilingMode.DEFAULT, GLTilingMode.DEFAULT,
+                ImmutableList.<ImageSubRect>of());
+    }
+    public ImageDefinition(String filename, Dim size,
+            GLScaleFilter minf, GLScaleFilter magf,
+            GLTilingMode wrapX, GLTilingMode wrapY,
+            Collection<ImageSubRect> subRects) {
 
-	    Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
-	            "Filename may not be a path: " + filename);
-	    this.filename = filename;
+        Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
+                "Filename may not be a path: " + filename);
+        this.filename = filename;
 
-	    this.size = Checks.checkNotNull(size);
+        this.size = Checks.checkNotNull(size);
         this.minFilter = Checks.checkNotNull(minf);
         this.magFilter = Checks.checkNotNull(magf);
         this.wrapX = Checks.checkNotNull(wrapX);
         this.wrapY = Checks.checkNotNull(wrapY);
 
         // Validate extra constraints for tiling textures
-		if (wrapX == GLTilingMode.REPEAT || wrapY == GLTilingMode.REPEAT) {
-		    Checks.checkArgument(FastMath.isPowerOfTwo(size.w, size.h),
-		            "Tiling is only supported for textures with power-of-two dimensions");
-		    Checks.checkArgument(subRects.isEmpty(),
-		            "Tiling isn't supported for textures with sub-rects");
-		}
+        if (wrapX == GLTilingMode.REPEAT || wrapY == GLTilingMode.REPEAT) {
+            Checks.checkArgument(FastMath.isPowerOfTwo(size.w, size.h),
+                    "Tiling is only supported for textures with power-of-two dimensions");
+            Checks.checkArgument(subRects.isEmpty(),
+                    "Tiling isn't supported for textures with sub-rects");
+        }
 
-		// Validate sub-rects
-		Rect bounds = Rect.of(0, 0, size.w, size.h);
+        // Validate sub-rects
+        Rect bounds = Rect.of(0, 0, size.w, size.h);
         for (ImageSubRect subRect : subRects) {
             Area area = subRect.getArea();
             Checks.checkArgument(bounds.contains(area.x, area.y, area.w, area.h),
                     "Sub-rect " + subRect + " is invalid for image size " + size);
         }
         this.subRects = ImmutableList.copyOf(subRects);
-	}
+    }
 
-	@Override
-	public String toString() {
-		return StringUtil.formatRoot("ImageDesc(%s: %dx%d)", filename, size.w, size.h);
-	}
+    @Override
+    public String toString() {
+        return StringUtil.formatRoot("ImageDesc(%s: %dx%d)", filename, size.w, size.h);
+    }
 
-	@Override
+    @Override
     public String getFilename() {
         return filename;
     }
 
-	@Override
-	public Dim getSize() {
-	    return size;
-	}
+    @Override
+    public Dim getSize() {
+        return size;
+    }
 
     @Override
-	public GLScaleFilter getMinifyFilter() {
-		return minFilter;
-	}
+    public GLScaleFilter getMinifyFilter() {
+        return minFilter;
+    }
 
-	@Override
-	public GLScaleFilter getMagnifyFilter() {
-		return magFilter;
-	}
+    @Override
+    public GLScaleFilter getMagnifyFilter() {
+        return magFilter;
+    }
 
-	@Override
-	public GLTilingMode getTilingModeX() {
-		return wrapX;
-	}
+    @Override
+    public GLTilingMode getTilingModeX() {
+        return wrapX;
+    }
 
-	@Override
-	public GLTilingMode getTilingModeY() {
-		return wrapY;
-	}
+    @Override
+    public GLTilingMode getTilingModeY() {
+        return wrapY;
+    }
 
     @Override
     public ImmutableCollection<? extends IImageSubRect> getSubRects() {

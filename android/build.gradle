@@ -114,10 +114,10 @@ publishing {
             artifact file("${buildDir}/outputs/aar/${project.name}-release.aar")
             
             pom.withXml {                
-	            // Gather dependencies
-	            def projectDeps = []
-	            projectDeps += configurations.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
-	            projectDeps += configurations.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
+                // Gather dependencies
+                def projectDeps = []
+                projectDeps += configurations.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
+                projectDeps += configurations.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
 
                 // Append dependencies to POM
                 def depsNode = asNode().appendNode('dependencies')

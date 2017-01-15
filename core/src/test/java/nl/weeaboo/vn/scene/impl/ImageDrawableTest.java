@@ -13,7 +13,7 @@ public class ImageDrawableTest {
 
     private static final double E = CoreTestUtil.EPSILON;
 
-	@Test
+    @Test
     public void transform() {
         int x = -50;
         int y = -50;
@@ -23,7 +23,7 @@ public class ImageDrawableTest {
         ImageDrawable image = new ImageDrawable();
         image.setTexture(new TestTexture(w, h));
 
-		// Bounds
+        // Bounds
         image.setBounds(x, y, w, h);
         CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
 
@@ -41,24 +41,24 @@ public class ImageDrawableTest {
         image.setHeight(h);
         CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
 
-		// Rotated bounds
+        // Rotated bounds
         image.setRotation(64); // Rotate 1/8th circle clockwise around top-left
-		final double diagonal = Math.sqrt(w*w + h*h);
+        final double diagonal = Math.sqrt(w*w + h*h);
         CoreTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, image.getVisualBounds());
 
-		// Scaled
+        // Scaled
         image.setRotation(0);
         image.setScale(0.5, 2);
         CoreTestUtil.assertEquals(x, y, w * .5, h * 2, image.getVisualBounds());
 
-		// Align
+        // Align
         image.setPos(0, 0);
         image.setScale(1, 1);
         image.setAlign(0.5, 0.5);
         CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
-	}
+    }
 
-	@Test
+    @Test
     public void drawableColor() {
         ImageDrawable image = CoreTestUtil.newImage();
 
@@ -82,7 +82,7 @@ public class ImageDrawableTest {
         image.setColorARGB(0x20406080);
         Assert.assertEquals(0x406080, image.getColorRGB());
         Assert.assertEquals(0x20406080, image.getColorARGB());
-	}
+    }
 
     @Test
     public void drawableAttributes() {

@@ -76,7 +76,7 @@ public class DesktopLauncher {
                 LOG.info("App dispose");
             }
         });
-	}
+    }
 
     private static void setWindowIcon(IFileSystem fileSystem) {
         // Oddly, the only public way to get a reference to the main window is through the graphics object...

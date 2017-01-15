@@ -8,11 +8,11 @@ public class WritableScreenshot extends AbstractScreenshot implements IWritableS
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-	public WritableScreenshot(short z, boolean isVolatile) {
-		super(z, isVolatile);
-	}
+    public WritableScreenshot(short z, boolean isVolatile) {
+        super(z, isVolatile);
+    }
 
-	@Override
+    @Override
     public void setPixels(ITextureData texData, Dim screenSize) {
         super.setPixels(texData, screenSize);
     }

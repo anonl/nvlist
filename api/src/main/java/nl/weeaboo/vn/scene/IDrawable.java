@@ -9,10 +9,10 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform 
     /** @return The parent layer that contains this drawable, or {@code null} if not attached to any layer. */
     ILayer getLayer();
 
-	@Override
+    @Override
     BlendMode getBlendMode();
 
-	@Override
+    @Override
     boolean isClipEnabled();
 
     /**
@@ -23,15 +23,15 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform 
      */
     boolean isVisible(double minAlpha);
 
-	/**
-	 * Checks if the specified X/Y point lies 'inside' this renderable. What's considered inside may be
-	 * different depending on the type of renderable.
-	 *
-	 * @param cx The X-coordinate of the point to test.
-	 * @param cy The Y-coordinate of the point to test.
-	 * @return <code>true</code> if the point is contained within this renderable.
-	 */
-	boolean contains(double cx, double cy);
+    /**
+     * Checks if the specified X/Y point lies 'inside' this renderable. What's considered inside may be
+     * different depending on the type of renderable.
+     *
+     * @param cx The X-coordinate of the point to test.
+     * @param cy The Y-coordinate of the point to test.
+     * @return <code>true</code> if the point is contained within this renderable.
+     */
+    boolean contains(double cx, double cy);
 
     void setZ(short z);
 
@@ -43,22 +43,22 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform 
     @Override
     Matrix getTransform();
 
-	void setX(double x); //Calls setPos
-	void setY(double y); //Calls setPos
-	void setWidth(double w); //Calls setSize
-	void setHeight(double h); //Calls setSize
+    void setX(double x); //Calls setPos
+    void setY(double y); //Calls setPos
+    void setWidth(double w); //Calls setSize
+    void setHeight(double h); //Calls setSize
     void translate(double dx, double dy); //Calls setPos
-	void setPos(double x, double y);
-	void setSize(double w, double h);
+    void setPos(double x, double y);
+    void setSize(double w, double h);
 
-	/**
-	 * Moves and stretches this drawable to make it fit inside the specified bounding box.
-	 */
-	void setBounds(double x, double y, double w, double h);
+    /**
+     * Moves and stretches this drawable to make it fit inside the specified bounding box.
+     */
+    void setBounds(double x, double y, double w, double h);
 
-	void setVisible(boolean v);
+    void setVisible(boolean v);
 
-	void setBlendMode(BlendMode m);
-	void setClipEnabled(boolean clip);
+    void setBlendMode(BlendMode m);
+    void setClipEnabled(boolean clip);
 
 }

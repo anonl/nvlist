@@ -19,11 +19,11 @@ prefs = prefs or {}
 -- ----------------------------------------------------------------------------
 
 function getScreen()
-	return getCurrentContext():getScreen()
+    return getCurrentContext():getScreen()
 end
 
 function getTextState()
-	return getScreen():getTextState()
+    return getScreen():getTextState()
 end
 
 function getRenderEnv()
@@ -42,7 +42,7 @@ end
 -------------------------------------------------------------------------------------------------------------- @section skip functions
 
 function getSkipState()
-	return getCurrentContext():getSkipState()
+    return getCurrentContext():getSkipState()
 end
 
 function isSkipping()

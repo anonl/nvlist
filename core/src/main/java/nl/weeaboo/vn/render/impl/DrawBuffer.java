@@ -24,14 +24,14 @@ public final class DrawBuffer implements IDrawBuffer {
     private final IntArray layerStarts = new IntArray();
     private final Array<BaseRenderCommand> commands = Array.of(BaseRenderCommand.class);
 
-	@Override
-	public void reset() {
+    @Override
+    public void reset() {
         layers.clear();
         layerStarts.clear();
         commands.clear();
-	}
+    }
 
-	@Override
+    @Override
     public int reserveLayerIds(int count) {
         int firstId = layers.size;
         for (int n = 0; n < count; n++) {
@@ -42,36 +42,36 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     @Override
-	public void startLayer(int layerId, ILayer layer) {
+    public void startLayer(int layerId, ILayer layer) {
         if (layerId < 0 || layerId >= layers.size) {
-			throw new IllegalArgumentException("The given layerId hasn't been reserved yet: " + layerId);
+            throw new IllegalArgumentException("The given layerId hasn't been reserved yet: " + layerId);
         } else if (layers.get(layerId) == layer) {
-			throw new IllegalStateException("Layer has already been added");
-		}
+            throw new IllegalStateException("Layer has already been added");
+        }
 
         if (layerId == 0 && commands.size == 0) {
-			draw(new LayerRenderCommand(layerId, layer));
-		}
+            draw(new LayerRenderCommand(layerId, layer));
+        }
 
-		layers.set(layerId, layer);
+        layers.set(layerId, layer);
         layerStarts.set(layerId, commands.size);
-	}
+    }
 
-	@Override
+    @Override
     public void drawQuad(IDrawTransform dt, int argb, ITexture tex, Area2D bounds, Area2D uv) {
         draw(new QuadRenderCommand(dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb, tex,
                 dt.getTransform(), bounds, uv));
-	}
+    }
 
-	@Override
-	public void screenshot(IWritableScreenshot ss, boolean clip) {
-		draw(new ScreenshotRenderCommand(ss, clip));
-	}
+    @Override
+    public void screenshot(IWritableScreenshot ss, boolean clip) {
+        draw(new ScreenshotRenderCommand(ss, clip));
+    }
 
-	@Override
-	public void drawLayer(int layerId, ILayer layer) {
-		draw(new LayerRenderCommand(layerId, layer));
-	}
+    @Override
+    public void drawLayer(int layerId, ILayer layer) {
+        draw(new LayerRenderCommand(layerId, layer));
+    }
 
     @Override
     public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
@@ -85,20 +85,20 @@ public final class DrawBuffer implements IDrawBuffer {
                 dt.getTransform(), renderLogic));
     }
 
-	public void draw(BaseRenderCommand cmd) {
+    public void draw(BaseRenderCommand cmd) {
         commands.add(cmd);
-	}
+    }
 
-	public LayerRenderCommand getRootLayerCommand() {
+    public LayerRenderCommand getRootLayerCommand() {
         if (layers.size == 0) {
-			return null;
-		}
+            return null;
+        }
         return (LayerRenderCommand)commands.get(0);
-	}
+    }
 
     private int getLayerStart(int layerId) {
         return layerStarts.get(layerId);
-	}
+    }
 
     private int getLayerEnd(int layerId) {
         int nextId = layerId + 1;
@@ -107,7 +107,7 @@ public final class DrawBuffer implements IDrawBuffer {
         } else {
             return commands.size;
         }
-	}
+    }
 
     public List<? extends BaseRenderCommand> getLayerCommands(int layerId) {
         int start = getLayerStart(layerId);

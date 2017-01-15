@@ -11,22 +11,22 @@ import java.util.List;
 
 final class TextParser {
 
-	private List<Token> tokens;
-	private CharacterIterator input;
+    private List<Token> tokens;
+    private CharacterIterator input;
 
-	public TextParser() {
-	    reset();
-	}
+    public TextParser() {
+        reset();
+    }
 
-	private void init(CharacterIterator itr) {
+    private void init(CharacterIterator itr) {
         input = itr;
         tokens = new ArrayList<>();
-	}
+    }
 
-	private void reset() {
-	    input = null;
-	    tokens = null;
-	}
+    private void reset() {
+        input = null;
+        tokens = null;
+    }
 
     public Collection<Token> tokenize(String str) {
         return tokenize(new StringCharacterIterator(str));
@@ -36,11 +36,11 @@ final class TextParser {
 
         doTokenize();
 
-		// Return result and clear internal state
-		Collection<Token> result = Collections.unmodifiableCollection(tokens);
-		reset();
-		return result;
-	}
+        // Return result and clear internal state
+        Collection<Token> result = Collections.unmodifiableCollection(tokens);
+        reset();
+        return result;
+    }
 
     private void doTokenize() {
         StringBuilder sb = new StringBuilder(input.getEndIndex() - input.getIndex());
@@ -84,44 +84,44 @@ final class TextParser {
         flushBuffered(tokens, sb);
     }
 
-	private void tokenizeBlock(ETokenType tokenType, char endChar) {
-		StringBuilder sb = new StringBuilder();
-		ParserUtil.findBlockEnd(input, endChar, sb);
-		tokens.add(newToken(tokenType, sb));
-	}
+    private void tokenizeBlock(ETokenType tokenType, char endChar) {
+        StringBuilder sb = new StringBuilder();
+        ParserUtil.findBlockEnd(input, endChar, sb);
+        tokens.add(newToken(tokenType, sb));
+    }
 
-	/**
-	 * Adds the contents of the buffered text as a text token, then clears the string buffer.
-	 */
-	private static void flushBuffered(List<? super Token> out, StringBuilder sb) {
-		if (sb.length() == 0) {
-			return; //Don't add empty tokens
-		}
-		Token token = newToken(ETokenType.TEXT, sb);
-		sb.delete(0, sb.length());
-		out.add(token);
-	}
+    /**
+     * Adds the contents of the buffered text as a text token, then clears the string buffer.
+     */
+    private static void flushBuffered(List<? super Token> out, StringBuilder sb) {
+        if (sb.length() == 0) {
+            return; //Don't add empty tokens
+        }
+        Token token = newToken(ETokenType.TEXT, sb);
+        sb.delete(0, sb.length());
+        out.add(token);
+    }
 
-	private static Token newToken(ETokenType tokenType, CharSequence cs) {
-	    return new Token(tokenType, cs.toString());
-	}
+    private static Token newToken(ETokenType tokenType, CharSequence cs) {
+        return new Token(tokenType, cs.toString());
+    }
 
-	public enum ETokenType {
-	    TEXT,
-	    STRINGIFIER,
-	    TAG,
-	    COMMAND;
-	}
+    public enum ETokenType {
+        TEXT,
+        STRINGIFIER,
+        TAG,
+        COMMAND;
+    }
 
-	public static class Token {
+    public static class Token {
 
-		private final ETokenType type;
-		private final String text;
+        private final ETokenType type;
+        private final String text;
 
-		public Token(ETokenType type, String text) {
-			this.type = type;
-			this.text = text;
-		}
+        public Token(ETokenType type, String text) {
+            this.type = type;
+            this.text = text;
+        }
 
         public ETokenType getType() {
             return type;
@@ -131,10 +131,10 @@ final class TextParser {
             return text;
         }
 
-		@Override
-		public String toString() {
-			return String.format("TK(%s:%s)", type, text);
-		}
-	}
+        @Override
+        public String toString() {
+            return String.format("TK(%s:%s)", type, text);
+        }
+    }
 
 }

@@ -35,63 +35,63 @@ public final class ImageDefinitionIO {
     private static final Logger LOG = LoggerFactory.getLogger(ImageDefinitionIO.class);
     private static final String VERSION = "1.0";
 
-	private ImageDefinitionIO() {
-	}
+    private ImageDefinitionIO() {
+    }
 
-	public static Map<FilePath, IImageDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
-			throws IOException, SaveFormatException
-	{
-	    Map<FilePath, IImageDefinition> result = Maps.newHashMap();
-		for (FilePath folder : getFolders(fileSystem, rootFolder)) {
-			FilePath path = folder.resolve("img.json");
-			if (!fileSystem.getFileExists(path)) {
-			    continue;
-			}
+    public static Map<FilePath, IImageDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
+            throws IOException, SaveFormatException
+    {
+        Map<FilePath, IImageDefinition> result = Maps.newHashMap();
+        for (FilePath folder : getFolders(fileSystem, rootFolder)) {
+            FilePath path = folder.resolve("img.json");
+            if (!fileSystem.getFileExists(path)) {
+                continue;
+            }
 
-			for (ImageDefinition imageDef : deserialize(FileSystemUtil.readString(fileSystem, path))) {
-			    FilePath relPath = folder.resolve(imageDef.getFilename());
-			    result.put(relPath, imageDef);
-			}
-		}
-	    return result;
-	}
+            for (ImageDefinition imageDef : deserialize(FileSystemUtil.readString(fileSystem, path))) {
+                FilePath relPath = folder.resolve(imageDef.getFilename());
+                result.put(relPath, imageDef);
+            }
+        }
+        return result;
+    }
 
-	private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) throws IOException {
-	    return Iterables.concat(ImmutableList.of(rootFolder),
-	            fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
-	}
+    private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) throws IOException {
+        return Iterables.concat(ImmutableList.of(rootFolder),
+                fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
+    }
 
     public static String serialize(Collection<? extends IImageDefinition> imageDefs) {
-	    ImageDefinitionFileJson fileJson = new ImageDefinitionFileJson();
-	    fileJson.version = VERSION;
-	    fileJson.images = new ImageDefinitionJson[imageDefs.size()];
-	    int t = 0;
-	    for (IImageDefinition imageDef : imageDefs) {
-	        fileJson.images[t++] = encodeJson(imageDef);
-	    }
-	    return JsonUtil.toJson(fileJson);
-	}
+        ImageDefinitionFileJson fileJson = new ImageDefinitionFileJson();
+        fileJson.version = VERSION;
+        fileJson.images = new ImageDefinitionJson[imageDefs.size()];
+        int t = 0;
+        for (IImageDefinition imageDef : imageDefs) {
+            fileJson.images[t++] = encodeJson(imageDef);
+        }
+        return JsonUtil.toJson(fileJson);
+    }
 
-	public static Collection<ImageDefinition> deserialize(String string) throws SaveFormatException {
-	    ImageDefinitionFileJson fileJson = JsonUtil.fromJson(ImageDefinitionFileJson.class, string);
-	    if (!VERSION.equals(fileJson.version)) {
-	        throw new SaveFormatException("Expected " + VERSION + ", was " + fileJson.version);
-	    }
+    public static Collection<ImageDefinition> deserialize(String string) throws SaveFormatException {
+        ImageDefinitionFileJson fileJson = JsonUtil.fromJson(ImageDefinitionFileJson.class, string);
+        if (!VERSION.equals(fileJson.version)) {
+            throw new SaveFormatException("Expected " + VERSION + ", was " + fileJson.version);
+        }
 
-	    List<ImageDefinition> result = Lists.newArrayList();
-	    for (ImageDefinitionJson imageDefJson : fileJson.images) {
-	        try {
-	            result.add(decodeJson(imageDefJson));
-	        } catch (RuntimeException re) {
-	            LOG.error("Invalid image definition: {}", imageDefJson.file, re);
-	        }
-	    }
-	    return result;
-	}
+        List<ImageDefinition> result = Lists.newArrayList();
+        for (ImageDefinitionJson imageDefJson : fileJson.images) {
+            try {
+                result.add(decodeJson(imageDefJson));
+            } catch (RuntimeException re) {
+                LOG.error("Invalid image definition: {}", imageDefJson.file, re);
+            }
+        }
+        return result;
+    }
 
-	private static ImageDefinitionJson encodeJson(IImageDefinition imageDef) {
-	    ImageDefinitionJson imageDefJson = new ImageDefinitionJson();
-	    imageDefJson.file = imageDef.getFilename();
+    private static ImageDefinitionJson encodeJson(IImageDefinition imageDef) {
+        ImageDefinitionJson imageDefJson = new ImageDefinitionJson();
+        imageDefJson.file = imageDef.getFilename();
         imageDefJson.width = imageDef.getSize().w;
         imageDefJson.height = imageDef.getSize().h;
         imageDefJson.minFilter = imageDef.getMinifyFilter().toString();
@@ -106,7 +106,7 @@ public final class ImageDefinitionIO {
         imageDefJson.subRects = subRects.toArray(new ImageSubRectJson[0]);
 
         return imageDefJson;
-	}
+    }
 
     private static ImageSubRectJson encodeJson(IImageSubRect subRect) {
         ImageSubRectJson subRectJson = new ImageSubRectJson();

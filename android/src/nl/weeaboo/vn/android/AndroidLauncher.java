@@ -11,17 +11,17 @@ import nl.weeaboo.vn.Launcher;
 public class AndroidLauncher extends AndroidApplication {
 
     @Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    protected void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         InitConfig.init();
 
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		// Android resources are in the root of the assets dir, not in a subfolder 'res/'
-		AndroidAssetFileSystem resourceFileSystem = new AndroidAssetFileSystem();
-		IWritableFileSystem outputFileSystem = new AndroidLocalFileSystem();
+        // Android resources are in the root of the assets dir, not in a subfolder 'res/'
+        AndroidAssetFileSystem resourceFileSystem = new AndroidAssetFileSystem();
+        IWritableFileSystem outputFileSystem = new AndroidLocalFileSystem();
 
         initialize(new Launcher(resourceFileSystem, outputFileSystem), config);
-	}
+    }
 }

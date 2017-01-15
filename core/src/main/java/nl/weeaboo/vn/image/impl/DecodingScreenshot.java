@@ -10,59 +10,59 @@ import nl.weeaboo.vn.image.ITextureData;
 @CustomSerializable
 public abstract class DecodingScreenshot extends AbstractScreenshot {
 
-	private static final long serialVersionUID = ImageImpl.serialVersionUID;
+    private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-	private transient byte[] data;
-	private transient boolean isLoaded;
+    private transient byte[] data;
+    private transient boolean isLoaded;
 
-	public DecodingScreenshot(byte[] bytes) {
-		super((short)0, false);
+    public DecodingScreenshot(byte[] bytes) {
+        super((short)0, false);
 
-		if (bytes == null) {
-			cancel();
-		} else {
-			isAvailable = true;
-			data = bytes.clone();
-		}
-	}
+        if (bytes == null) {
+            cancel();
+        } else {
+            isAvailable = true;
+            data = bytes.clone();
+        }
+    }
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.defaultWriteObject();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
 
-		if (data != null && !isTransient()) {
-			out.writeInt(data.length);
-			out.write(data);
-		} else {
-			out.writeInt(-1);
-		}
-	}
+        if (data != null && !isTransient()) {
+            out.writeInt(data.length);
+            out.write(data);
+        } else {
+            out.writeInt(-1);
+        }
+    }
 
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
 
-		int len = in.readInt();
-		if (len >= 0) {
-			data = new byte[len];
-			in.readFully(data);
-		}
-	}
+        int len = in.readInt();
+        if (len >= 0) {
+            data = new byte[len];
+            in.readFully(data);
+        }
+    }
 
-	protected abstract void tryLoad(byte[] data);
+    protected abstract void tryLoad(byte[] data);
 
-	@Override
-	public void cancel() {
-		data = null; //Allows garbage collection of data and makes isAvailable() return false
+    @Override
+    public void cancel() {
+        data = null; //Allows garbage collection of data and makes isAvailable() return false
 
-		super.cancel();
-	}
+        super.cancel();
+    }
 
-	@Override
-	public ITextureData getPixels() {
-		if (!isLoaded) {
-			tryLoad(data);
-			isLoaded = true;
-		}
-		return super.getPixels();
-	}
+    @Override
+    public ITextureData getPixels() {
+        if (!isLoaded) {
+            tryLoad(data);
+            isLoaded = true;
+        }
+        return super.getPixels();
+    }
 
 }

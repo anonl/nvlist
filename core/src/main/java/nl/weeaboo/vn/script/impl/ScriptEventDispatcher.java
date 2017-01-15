@@ -12,96 +12,96 @@ import nl.weeaboo.vn.script.IScriptFunction;
 
 public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
-	private static final long serialVersionUID = ScriptImpl.serialVersionUID;
+    private static final long serialVersionUID = ScriptImpl.serialVersionUID;
 
-	private static final Comparator<Task> TASK_SORTER = new TaskSorter();
+    private static final Comparator<Task> TASK_SORTER = new TaskSorter();
 
-	private final List<IScriptFunction> events = new ArrayList<>();
-	private final List<Task> tasks = new ArrayList<>();
+    private final List<IScriptFunction> events = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
 
-	private transient boolean tasksSorted = false;
+    private transient boolean tasksSorted = false;
 
-	public ScriptEventDispatcher() {
-	}
+    public ScriptEventDispatcher() {
+    }
 
-	@Override
-	public void addEvent(IScriptFunction func) {
-		events.add(func);
-	}
+    @Override
+    public void addEvent(IScriptFunction func) {
+        events.add(func);
+    }
 
-	@Override
-	public void addTask(IScriptFunction func, double priority) {
-		tasks.add(new Task(func, priority));
-		tasksSorted = false;
-	}
+    @Override
+    public void addTask(IScriptFunction func, double priority) {
+        tasks.add(new Task(func, priority));
+        tasksSorted = false;
+    }
 
-	@Override
-	public boolean removeTask(IScriptFunction func) {
+    @Override
+    public boolean removeTask(IScriptFunction func) {
         boolean removed = false;
-		for (Iterator<Task> itr = tasks.iterator(); itr.hasNext(); ) {
-			Task task = itr.next();
-			if (task.matches(func)) {
-				itr.remove();
+        for (Iterator<Task> itr = tasks.iterator(); itr.hasNext(); ) {
+            Task task = itr.next();
+            if (task.matches(func)) {
+                itr.remove();
                 removed = true;
-			}
-		}
+            }
+        }
         return removed;
-	}
+    }
 
-	private void sortTasks() {
-		if (tasksSorted) {
-			return;
-		}
-		Collections.sort(tasks, TASK_SORTER);
-		tasksSorted = true;
-	}
+    private void sortTasks() {
+        if (tasksSorted) {
+            return;
+        }
+        Collections.sort(tasks, TASK_SORTER);
+        tasksSorted = true;
+    }
 
-	@Override
-	public List<IScriptFunction> retrieveWork() {
-		List<IScriptFunction> result = new ArrayList<>(tasks.size() + events.size());
+    @Override
+    public List<IScriptFunction> retrieveWork() {
+        List<IScriptFunction> result = new ArrayList<>(tasks.size() + events.size());
 
-		// Tasks (sorted by descending priority)
-		sortTasks();
-		for (Task task : tasks) {
-			result.add(task.function);
-		}
+        // Tasks (sorted by descending priority)
+        sortTasks();
+        for (Task task : tasks) {
+            result.add(task.function);
+        }
 
-		// Events
-		for (IScriptFunction func : events) {
-			result.add(func);
-		}
-		events.clear();
+        // Events
+        for (IScriptFunction func : events) {
+            result.add(func);
+        }
+        events.clear();
 
-		return result;
-	}
+        return result;
+    }
 
-	private static class Task implements Serializable {
+    private static class Task implements Serializable {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		private final IScriptFunction function;
-		private final double priority;
+        private final IScriptFunction function;
+        private final double priority;
 
-		public Task(IScriptFunction function, double priority) {
-			this.function = function;
-			this.priority = priority;
-		}
+        public Task(IScriptFunction function, double priority) {
+            this.function = function;
+            this.priority = priority;
+        }
 
-		public boolean matches(IScriptFunction func) {
-			return function.equals(func);
-		}
+        public boolean matches(IScriptFunction func) {
+            return function.equals(func);
+        }
 
-	}
+    }
 
     private static class TaskSorter implements Comparator<Task>, Serializable {
 
         private static final long serialVersionUID = 1L;
 
         @Override
-		public int compare(Task a, Task b) {
-			return Double.compare(b.priority, a.priority); // Descending (reverse) order
-		}
+        public int compare(Task a, Task b) {
+            return Double.compare(b.priority, a.priority); // Descending (reverse) order
+        }
 
-	}
+    }
 
 }

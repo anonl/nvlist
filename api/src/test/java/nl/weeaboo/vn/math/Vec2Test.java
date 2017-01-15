@@ -12,31 +12,31 @@ import nl.weeaboo.vn.ApiTestUtil;
 
 public class Vec2Test {
 
-	private static final double E = ApiTestUtil.EPSILON;
+    private static final double E = ApiTestUtil.EPSILON;
 
-	@Test
-	public void vectorTest() {
-		Vec2 a = new Vec2(1, 2);
-		Vec2 b = new Vec2(4, 3);
+    @Test
+    public void vectorTest() {
+        Vec2 a = new Vec2(1, 2);
+        Vec2 b = new Vec2(4, 3);
 
-		// Copy constructor
+        // Copy constructor
         ApiTestUtil.assertEquals(a.x, a.y, new Vec2(a), 0);
         Assert.assertEquals(a.hashCode(), new Vec2(a).hashCode());
 
-		// Dot product
-		Assert.assertEquals(10, a.dot(b), E);
+        // Dot product
+        Assert.assertEquals(10, a.dot(b), E);
 
-		// Add, sub, scale
-		a.add(b);
-		ApiTestUtil.assertEquals(5, 5, a, E);
-		a.sub(b);
-		ApiTestUtil.assertEquals(1, 2, a, E);
-		a.scale(-.5);
-		ApiTestUtil.assertEquals(-.5, -1, a, E);
-	}
+        // Add, sub, scale
+        a.add(b);
+        ApiTestUtil.assertEquals(5, 5, a, E);
+        a.sub(b);
+        ApiTestUtil.assertEquals(1, 2, a, E);
+        a.scale(-.5);
+        ApiTestUtil.assertEquals(-.5, -1, a, E);
+    }
 
-	@Test
-	public void testEquals() {
+    @Test
+    public void testEquals() {
         Vec2 a = new Vec2(1, 2);
         Vec2 b = new Vec2(4, 3);
 
@@ -55,10 +55,10 @@ public class Vec2Test {
         Assert.assertFalse(a.equals(new Vec2(3, 2), E));
         Assert.assertTrue(a.equals(new Vec2(3, 2), 2.0));
         Assert.assertFalse(a.equals(b, E));
-	}
+    }
 
-	@Test
-	public void length() {
+    @Test
+    public void length() {
         Vec2 a = new Vec2(1, 2);
         Vec2 b = new Vec2(4, 3);
 
@@ -69,14 +69,14 @@ public class Vec2Test {
 
         b.normalize();
         ApiTestUtil.assertEquals(4.0/5.0, 3.0/5.0, b, E);
-	}
+    }
 
-	@Test
-	public void vectorSerializeTest() {
-		Vec2 vec = new Vec2(1, 2);
+    @Test
+    public void vectorSerializeTest() {
+        Vec2 vec = new Vec2(1, 2);
         checkSerialize(vec);
 
-		vec = new Vec2(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        vec = new Vec2(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         checkSerialize(vec);
 
         vec = new Vec2(Double.MIN_VALUE, Double.MIN_NORMAL);
@@ -87,9 +87,9 @@ public class Vec2Test {
         checkSerialize(vec, E);
         vec = new Vec2(0.0, Double.NaN);
         checkSerialize(vec, E);
-	}
+    }
 
-	/** Check that serialialization doesn't discard any information (object is still equal to itself) */
+    /** Check that serialialization doesn't discard any information (object is still equal to itself) */
     private void checkSerialize(Vec2 vec) {
         checkSerialize(vec, 0.0);
     }

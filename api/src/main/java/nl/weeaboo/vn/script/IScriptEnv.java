@@ -7,6 +7,6 @@ import java.io.Serializable;
  */
 public interface IScriptEnv extends Serializable {
 
-	public IScriptLoader getScriptLoader();
+    public IScriptLoader getScriptLoader();
 
 }

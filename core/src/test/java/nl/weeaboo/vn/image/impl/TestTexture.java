@@ -16,16 +16,16 @@ import nl.weeaboo.vn.image.ITextureData;
 @CustomSerializable
 public class TestTexture implements ITexture {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     static {
         HeadlessGdx.init();
     }
 
-	private final int w, h;
-	private final int[] argb;
+    private final int w, h;
+    private final int[] argb;
 
-	private transient Pixmap image;
+    private transient Pixmap image;
 
     public TestTexture() {
         this(2, 2);
@@ -35,29 +35,29 @@ public class TestTexture implements ITexture {
         this(pixels.getWidth(), pixels.getHeight());
     }
 
-	public TestTexture(int w, int h) {
+    public TestTexture(int w, int h) {
         Checks.checkRange(w, "w", 1);
         Checks.checkRange(h, "h", 1);
 
-	    this.w = w;
-	    this.h = h;
-		this.argb = new int[w * h];
+        this.w = w;
+        this.h = h;
+        this.argb = new int[w * h];
 
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
                 int r = 64 + 127 * x / Math.max(1, w - 1);
                 int g = 64 + 127 * y / Math.max(1, h - 1);
-				argb[y * w + x] = 0xFF000000|(r<<16)|(g<<8);
-			}
-		}
+                argb[y * w + x] = 0xFF000000|(r<<16)|(g<<8);
+            }
+        }
 
-		initTransients();
-	}
+        initTransients();
+    }
 
     private void initTransients() {
         image = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         GdxGraphicsTestUtil.setPixmapPixels(image, argb);
-	}
+    }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
@@ -65,15 +65,15 @@ public class TestTexture implements ITexture {
         initTransients();
     }
 
-	@Override
-	public double getWidth() {
+    @Override
+    public double getWidth() {
         return getScaleY() * getPixelWidth();
-	}
+    }
 
-	@Override
-	public double getHeight() {
+    @Override
+    public double getHeight() {
         return getScaleX() * getPixelHeight();
-	}
+    }
 
     @Override
     public int getPixelWidth() {
@@ -85,27 +85,27 @@ public class TestTexture implements ITexture {
         return image.getHeight();
     }
 
-	@Override
-	public double getScaleX() {
-		return 1;
-	}
+    @Override
+    public double getScaleX() {
+        return 1;
+    }
 
-	@Override
-	public double getScaleY() {
-		return 1;
-	}
+    @Override
+    public double getScaleY() {
+        return 1;
+    }
 
-	@Override
-	public Area2D getUV() {
-		return DEFAULT_UV;
-	}
+    @Override
+    public Area2D getUV() {
+        return DEFAULT_UV;
+    }
 
-	public Pixmap getImage() {
-		return image;
-	}
+    public Pixmap getImage() {
+        return image;
+    }
 
-	public int[] getARGB() {
-	    return argb;
-	}
+    public int[] getARGB() {
+        return argb;
+    }
 
 }
