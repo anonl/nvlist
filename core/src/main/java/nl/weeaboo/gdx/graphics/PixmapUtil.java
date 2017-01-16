@@ -1,8 +1,6 @@
 package nl.weeaboo.gdx.graphics;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
@@ -87,79 +85,35 @@ public final class PixmapUtil {
         }
     }
 
-    /**
-     * Converts an RGBA8888 pixmap with unassociated alpha to premultiplied alpha.
-     */
-    public static void premultiplyAlpha(Pixmap pixmap) {
-        Format format = pixmap.getFormat();
-        switch (format) {
-        case RGB565:
-        case RGB888:
-            break; // Format doesn't have alpha, so nothing to do
-        case Intensity:
-            break; // GDX treats incorrectly treats INTENSITY as ALPHA
-        case Alpha:
-            break; // Format only has alpha, so nothing to do
-        case LuminanceAlpha: {
-            final ByteBuffer pixels = pixmap.getPixels();
-            final int limit = pixmap.getWidth() * pixmap.getHeight() * 2;
-            for (int n = 0; n < limit; n += 2) {
-                int i = pixels.get(n    ) & 0xFF;
-                int a = pixels.get(n + 1) & 0xFF;
-
-                i = (a * i + 127) / 255;
-
-                pixels.put(n, (byte)i);
-            }
-        } break;
-        case RGBA4444: {
-            final ByteBuffer byteBuffer = pixmap.getPixels();
-            byteBuffer.order(ByteOrder.nativeOrder());
-            ShortBuffer pixels = byteBuffer.asShortBuffer();
-
-            final int limit = pixmap.getWidth() * pixmap.getHeight();
-            for (int n = 0; n < limit; n++) {
-                int rgba16 = pixels.get(n);
-
-                int r = (rgba16 >> 12) & 0xF;
-                int g = (rgba16 >> 8 ) & 0xF;
-                int b = (rgba16 >> 4 ) & 0xF;
-                int a = (rgba16      ) & 0xF;
-
-                r = (a * r + 7) / 15;
-                g = (a * g + 7) / 15;
-                b = (a * b + 7) / 15;
-
-                pixels.put(n, (short)((r<<12) | (g<<8) | (b<<4) | a));
-            }
-        } break;
-        case RGBA8888: {
-            final ByteBuffer pixels = pixmap.getPixels();
-            final int limit = pixmap.getWidth() * pixmap.getHeight() * 4;
-            for (int n = 0; n < limit; n += 4) {
-                int r = pixels.get(n    ) & 0xFF;
-                int g = pixels.get(n + 1) & 0xFF;
-                int b = pixels.get(n + 2) & 0xFF;
-                int a = pixels.get(n + 3) & 0xFF;
-
-                r = (a * r + 127) / 255;
-                g = (a * g + 127) / 255;
-                b = (a * b + 127) / 255;
-
-                pixels.put(n    , (byte)r);
-                pixels.put(n + 1, (byte)g);
-                pixels.put(n + 2, (byte)b);
-            }
-        } break;
-        default:
-           throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
-        }
+    public static Pixmap copy(Pixmap original) {
+        Pixmap copy = newUninitializedPixmap(original.getWidth(), original.getHeight(), original.getFormat());
+        copy(original, copy);
+        return copy;
     }
 
-    public static Pixmap copy(Pixmap original) {
-        Pixmap copy = new Pixmap(original.getWidth(), original.getHeight(), original.getFormat());
-        BufferUtils.copy(original.getPixels(), copy.getPixels(), copy.getWidth() * copy.getHeight());
-        return copy;
+    /**
+     * Copies the contents of {@code src} to {@code dst}.
+     *
+     * @throws IllegalArgumentException If the pixmaps are different sizes or different formats.
+     */
+    public static void copy(Pixmap src, Pixmap dst) {
+        Format srcFmt = src.getFormat();
+        Format dstFmt = dst.getFormat();
+        Checks.checkArgument(srcFmt == dstFmt, "Formats not equal: src=" + srcFmt + ", dst=" + dstFmt);
+
+        int srcW = src.getWidth();
+        int dstW = dst.getWidth();
+        Checks.checkArgument(srcW == dstW, "Widths not equal: src.w=" + srcW + ", dst.w=" + dstW);
+
+        int srcH = src.getHeight();
+        int dstH = src.getHeight();
+        Checks.checkArgument(srcH == dstH, "Heights not equal: src.h=" + srcH + ", dst.h=" + dstH);
+
+        ByteBuffer srcPixels = src.getPixels();
+        ByteBuffer dstPixels = dst.getPixels();
+        BufferUtils.copy(srcPixels, dstPixels, srcPixels.limit());
+        srcPixels.clear();
+        dstPixels.clear();
     }
 
     public static Pixmap resizedCopy(Pixmap src, Dim dstSize, Filter filter) {

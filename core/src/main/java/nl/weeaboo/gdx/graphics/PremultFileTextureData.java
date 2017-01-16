@@ -80,7 +80,7 @@ class PremultFileTextureData implements TextureData {
         } catch (GdxRuntimeException e) {
             throw new IOException("Error loading texture: " + file);
         }
-        PixmapUtil.premultiplyAlpha(pixmap);
+        PremultUtil.premultiplyAlpha(pixmap);
         return pixmap;
     }
 

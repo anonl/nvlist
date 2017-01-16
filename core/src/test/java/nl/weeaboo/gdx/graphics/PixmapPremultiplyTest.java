@@ -36,7 +36,7 @@ public class PixmapPremultiplyTest {
         Pixmap pixmap = new Pixmap(1, 1, format);
         pixmap.setColor(ORIGINAL_RGBA);
         pixmap.fill();
-        PixmapUtil.premultiplyAlpha(pixmap);
+        PremultUtil.premultiplyAlpha(pixmap);
         int actual = pixmap.getPixel(0, 0);
 
         // Check that PixmapUtil.premultiplyAlpha() is equivalent to premultiplying every pixel

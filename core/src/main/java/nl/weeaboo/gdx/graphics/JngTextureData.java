@@ -28,7 +28,7 @@ public final class JngTextureData extends PremultFileTextureData {
             StreamUtils.closeQuietly(in);
         }
 
-        PixmapUtil.premultiplyAlpha(pixmap);
+        PremultUtil.premultiplyAlpha(pixmap);
         return pixmap;
     }
 

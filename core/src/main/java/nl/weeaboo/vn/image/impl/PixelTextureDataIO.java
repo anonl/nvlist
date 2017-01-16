@@ -10,12 +10,12 @@ import java.io.OutputStream;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 
-final class PngUtil {
+final class PixelTextureDataIO {
 
-    private PngUtil() {
+    private PixelTextureDataIO() {
     }
 
-    public static void writePng(Pixmap pixmap, OutputStream out) throws IOException {
+    public static void serialize(Pixmap pixmap, OutputStream out) throws IOException {
         PixmapIO.PNG encoder = new PixmapIO.PNG();
         encoder.setFlipY(false);
 
@@ -31,7 +31,7 @@ final class PngUtil {
         bout.writeTo(out);
     }
 
-    public static Pixmap readPng(InputStream in) throws IOException {
+    public static Pixmap deserialize(InputStream in) throws IOException {
         DataInputStream din = new DataInputStream(in);
         int len = din.readInt();
         byte[] bytes = new byte[len];

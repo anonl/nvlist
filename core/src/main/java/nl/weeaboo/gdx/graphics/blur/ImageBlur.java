@@ -19,6 +19,10 @@ public final class ImageBlur {
     public ImageBlur() {
     }
 
+    public int getRadius() {
+        return radius;
+    }
+
     public void setRadius(int r) {
         Preconditions.checkArgument(r >= 0);
 
@@ -29,9 +33,17 @@ public final class ImageBlur {
         }
     }
 
+    /**
+     * @param image Pixmap with premultiplied alpha.
+     */
     public void applyBlur(Pixmap image) {
         Preconditions.checkArgument(image.getFormat() == Format.RGBA8888,
                 "Unsupported format: " + image.getFormat());
+
+        if (radius == 0) {
+            // Blurring with a radius of 0 is a no-op
+            return;
+        }
 
         final int w = image.getWidth();
         final int h = image.getHeight();

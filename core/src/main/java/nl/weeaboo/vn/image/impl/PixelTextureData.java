@@ -31,13 +31,13 @@ public final class PixelTextureData implements IGdxTextureData {
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
 
-        PngUtil.writePng(pixels, out);
+        PixelTextureDataIO.serialize(pixels, out);
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
 
-        pixels = PngUtil.readPng(in);
+        pixels = PixelTextureDataIO.deserialize(in);
     }
 
     /**
