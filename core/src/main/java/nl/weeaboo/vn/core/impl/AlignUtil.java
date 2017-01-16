@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.core.impl;
 
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Vec2;
 
@@ -26,26 +27,38 @@ public final class AlignUtil {
         return Rect2D.of(getAlignOffset(w, alignX), getAlignOffset(h, alignY), w, h);
     }
 
-    public static double alignAnchorX(double outer, double inner, int anchor) {
-        if (anchor == 2 || anchor == 5 || anchor == 8) {
+    public static double alignAnchorX(double outer, double inner, Direction anchor) {
+        switch (anchor) {
+        case TOP:
+        case CENTER:
+        case BOTTOM:
             return (outer-inner) / 2;
-        } else if (anchor == 3 || anchor == 6 || anchor == 9) {
+        case TOP_RIGHT:
+        case RIGHT:
+        case BOTTOM_RIGHT:
             return (outer-inner);
+        default:
+            return 0;
         }
-        return 0;
     }
 
-    public static double alignAnchorY(double outer, double inner, int anchor) {
-        if (anchor >= 4 && anchor <= 6) {
+    public static double alignAnchorY(double outer, double inner, Direction anchor) {
+        switch (anchor) {
+        case LEFT:
+        case CENTER:
+        case RIGHT:
             return (outer-inner) / 2;
-        } else if (anchor >= 1 && anchor <= 3) {
+        case BOTTOM_LEFT:
+        case BOTTOM:
+        case BOTTOM_RIGHT:
             return (outer-inner);
+        default:
+            return 0;
         }
-        return 0;
     }
 
     /** Calculates the X/Y alignment values required to move the given sub-rect to the desired position */
-    public static Vec2 alignSubRect(Rect2D subRect, double outerW, double outerH, int anchor) {
+    public static Vec2 alignSubRect(Rect2D subRect, double outerW, double outerH, Direction anchor) {
         Vec2 p = new Vec2(alignAnchorX(subRect.w, 0, anchor), alignAnchorY(subRect.h, 0, anchor));
         Vec2 offset = new Vec2(alignAnchorX(outerW, 0, anchor), alignAnchorY(outerH, 0, anchor));
 

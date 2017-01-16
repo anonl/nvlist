@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.BlendMode;
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.TestTexture;
 import nl.weeaboo.vn.image.impl.TextureStub;
@@ -125,7 +126,7 @@ public class ImageDrawableTest {
         Assert.assertEquals(0, image.getX(), E);
         Assert.assertEquals(0, image.getY(), E);
 
-        image.setTexture(alpha, 5);
+        image.setTexture(alpha, Direction.CENTER);
         CoreTestUtil.assertEquals(25, 25, 50, 50, image.getVisualBounds());
     }
 

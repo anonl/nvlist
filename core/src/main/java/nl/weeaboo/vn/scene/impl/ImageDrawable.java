@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.impl.AlignUtil;
 import nl.weeaboo.vn.image.ITexture;
@@ -98,11 +99,11 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
 
     @Override
     public void setRenderer(IRenderable r) {
-        setRenderer(r, 7);
+        setRenderer(r, Direction.TOP_LEFT);
     }
 
     @Override
-    public void setRenderer(IRenderable r, int anchor) {
+    public void setRenderer(IRenderable r, Direction anchor) {
         Checks.checkNotNull(r);
 
         double alignX = getAlignX();
@@ -150,7 +151,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
     }
 
     @Override
-    public void setTexture(ITexture texture, int anchor) {
+    public void setTexture(ITexture texture, Direction anchor) {
         setRenderer(new TextureRenderer(texture), anchor);
     }
 

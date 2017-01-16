@@ -18,6 +18,7 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
@@ -201,7 +202,7 @@ public final class DebugControls {
             renderer.setTexture(area, texture);
         }
         renderer.setSize(400, 400);
-        image.setRenderer(renderer, 5);
+        image.setRenderer(renderer, Direction.CENTER);
     }
 
     private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext) {
