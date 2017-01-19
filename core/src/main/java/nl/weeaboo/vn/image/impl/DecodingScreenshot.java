@@ -21,9 +21,13 @@ public abstract class DecodingScreenshot extends AbstractScreenshot {
         if (bytes == null) {
             cancel();
         } else {
-            isAvailable = true;
             data = bytes.clone();
         }
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return !isFailed() && data != null;
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

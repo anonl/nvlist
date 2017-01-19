@@ -1,8 +1,9 @@
 package nl.weeaboo.vn.render.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
+
+import com.google.common.collect.Lists;
 
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.IWritableScreenshot;
@@ -12,23 +13,11 @@ public class ScreenshotBuffer implements IScreenshotBuffer {
 
     private static final long serialVersionUID = RenderImpl.serialVersionUID;
 
-    private Collection<ScreenshotEntry> screenshots;
-
-    public ScreenshotBuffer() {
-        screenshots = new ArrayList<>();
-    }
+    private final Collection<ScreenshotEntry> screenshots = Lists.newArrayList();
 
     @Override
     public void add(IWritableScreenshot ss, boolean clip) {
         screenshots.add(new ScreenshotEntry(ss, clip));
-    }
-
-    @Override
-    public void clear() {
-        for (ScreenshotEntry entry : screenshots) {
-            entry.screenshot.cancel();
-        }
-        screenshots.clear();
     }
 
     public void flush(IDrawBuffer d) {

@@ -23,8 +23,8 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.gdx.graphics.GLBlendMode;
 import nl.weeaboo.gdx.graphics.GLMatrixStack;
+import nl.weeaboo.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
-import nl.weeaboo.gdx.graphics.PixmapUtil;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IRenderEnv;
@@ -248,8 +248,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
             textureRegion.flip(false, true);
             texData = VolatileTextureData.fromRegion(textureRegion, false);
         } else {
-            Pixmap pixels = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
-            PixmapUtil.flipVertical(pixels);
+            Pixmap pixels = GdxScreenshotUtil.screenshot(glRect);
             texData = PixelTextureData.fromPremultipliedPixmap(pixels);
         }
 

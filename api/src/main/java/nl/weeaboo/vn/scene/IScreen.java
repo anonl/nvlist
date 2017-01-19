@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IUpdateable;
+import nl.weeaboo.vn.render.IOffscreenRenderTaskBuffer;
 
 public interface IScreen extends Serializable, IUpdateable {
 
@@ -33,6 +34,11 @@ public interface IScreen extends Serializable, IUpdateable {
      * @return Information about the current text box.
      */
     IScreenTextState getTextState();
+
+    /**
+     * @return An object for starting and monitoring offscreen render tasks.
+     */
+    IOffscreenRenderTaskBuffer getOffscreenRenderTaskBuffer();
 
     /**
      * Returns information about the rendering environment.

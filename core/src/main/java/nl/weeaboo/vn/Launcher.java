@@ -283,6 +283,12 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         frameBuffer.end();
 
+        try {
+            novel.updateInRenderThread();
+        } catch (RuntimeException re) {
+            onUncaughtException(re);
+        }
+
         screenViewport.apply();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

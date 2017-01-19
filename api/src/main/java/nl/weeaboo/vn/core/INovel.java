@@ -18,4 +18,7 @@ public interface INovel extends IUpdateable {
     IEnvironment getEnv();
     void draw(IDrawBuffer drawbuffer);
 
+    /** This method is called from the render thread, allowing you to access the OpenGL context. */
+    void updateInRenderThread();
+
 }

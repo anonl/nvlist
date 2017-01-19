@@ -13,11 +13,6 @@ public interface IScreenshotBuffer extends Serializable {
     public void add(IWritableScreenshot ss, boolean clip);
 
     /**
-     * Remove all buffered data.
-     */
-    public void clear();
-
-    /**
      * @return {@code true} if no screenshots are currently buffered.
      */
     public boolean isEmpty();

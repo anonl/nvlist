@@ -53,6 +53,7 @@ local submodules = {
     "context",
     "gui",
     "image",
+    "imagefx",
     "save",
     "sound",
     "system",

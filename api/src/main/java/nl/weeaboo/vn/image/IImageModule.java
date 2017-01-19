@@ -73,7 +73,7 @@ public interface IImageModule extends IModule, IResourceResolver {
 
     /**
      * Schedules a screenshot of the given layer. Use {@link IScreenshot#isAvailable()} and/or
-     * {@link IScreenshot#isCancelled()} to find out the state of the returned screenshot object.
+     * {@link IScreenshot#isFailed()} to find out the state of the returned screenshot object.
      *
      * @param layer The layer to take the screenshot in. Any layers beneath this layer will also be visible.
      * @param z The z-index at which to take the screenshot. Any objects in front of this z index will not be

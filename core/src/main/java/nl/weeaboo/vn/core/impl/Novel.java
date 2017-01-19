@@ -84,6 +84,13 @@ public class Novel extends AbstractNovel {
         getContextManager().draw(drawBuffer);
     }
 
+    @Override
+    public void updateInRenderThread() {
+        for (Context context : getContextManager().getContexts()) {
+            context.updateInRenderThread();
+        }
+    }
+
     protected LuaScriptEnv getScriptEnv() {
         return (LuaScriptEnv)getEnv().getScriptEnv();
     }

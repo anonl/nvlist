@@ -13,6 +13,8 @@ import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IOffscreenRenderTaskBuffer;
+import nl.weeaboo.vn.render.impl.OffscreenRenderTaskBuffer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.IScreenTextState;
@@ -32,6 +34,8 @@ public class Screen implements IScreen {
     private final IScreenTextState textState;
     private final ISkipState skipState;
 
+    private final IOffscreenRenderTaskBuffer offscreenRenderTaskBuffer;
+
     private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
     private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
     private IRenderEnv renderEnv;
@@ -41,6 +45,8 @@ public class Screen implements IScreen {
         this.renderEnv = Checks.checkNotNull(env);
         this.textState = Checks.checkNotNull(textState);
         this.skipState = Checks.checkNotNull(skipState);
+
+        offscreenRenderTaskBuffer = new OffscreenRenderTaskBuffer();
     }
 
     @Override
@@ -142,6 +148,11 @@ public class Screen implements IScreen {
 
     protected boolean containsLayer(ILayer layer) {
         return rootLayer != null && (rootLayer == layer || rootLayer.containsLayer(layer));
+    }
+
+    @Override
+    public IOffscreenRenderTaskBuffer getOffscreenRenderTaskBuffer() {
+        return offscreenRenderTaskBuffer;
     }
 
     @Override

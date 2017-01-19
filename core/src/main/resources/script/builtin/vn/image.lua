@@ -265,7 +265,7 @@ function screenshot(layer, z, clip, volatile)
     local ss = nil
     while ss == nil do
         ss = Image.screenshot(layer, z, clip, volatile)
-        while not ss:isAvailable() and not ss:isCancelled() do
+        while not ss:isAvailable() and not ss:isFailed() do
             Log.debug("Waiting for screenshot to become available: {}", ss)
             yield()
         end

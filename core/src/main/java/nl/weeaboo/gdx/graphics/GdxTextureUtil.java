@@ -23,6 +23,10 @@ public final class GdxTextureUtil {
         }
     }
 
+    public static TextureRegion getTextureRegion(ITexture tex) {
+        return getTextureRegion(tex, ITexture.DEFAULT_UV);
+    }
+
     public static TextureRegion getTextureRegion(ITexture tex, Area2D uv) {
         if (tex instanceof TextureAdapter) {
             return ((TextureAdapter)tex).getTextureRegion(uv);

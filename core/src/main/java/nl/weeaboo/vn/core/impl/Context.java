@@ -94,6 +94,10 @@ public class Context implements IContext {
         screen.draw(drawBuffer);
     }
 
+    public void updateInRenderThread() {
+        screen.getOffscreenRenderTaskBuffer().update();
+    }
+
     @Override
     public void updateScripts() {
         scriptContext.updateThreads(this, DummyScriptExceptionHandler.INSTANCE);

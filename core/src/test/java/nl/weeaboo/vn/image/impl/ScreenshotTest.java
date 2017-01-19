@@ -24,7 +24,7 @@ public class ScreenshotTest {
     public void stateTransitions() {
         WritableScreenshot s = new WritableScreenshot((short)0, false);
         Assert.assertFalse(s.isAvailable());
-        Assert.assertFalse(s.isCancelled());
+        Assert.assertFalse(s.isFailed());
         Assert.assertFalse(s.isTransient());
         Assert.assertFalse(s.isVolatile());
 
