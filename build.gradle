@@ -23,6 +23,9 @@ plugins {
     
     id "net.ltgt.errorprone" version "0.0.8"
     id "com.github.hierynomus.license" version "0.13.1"
+    
+    // Java Microbenchmark Harness plugin
+    id "me.champeau.gradle.jmh" version "0.3.1" apply false
 }
 
 def templateDir = file('template').getAbsoluteFile()
@@ -61,8 +64,8 @@ allprojects {
         maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
         maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
-        
-    plugins.withType(JavaPlugin) {    
+                
+    plugins.withType(JavaPlugin) {            
         sourceCompatibility = javaVersion
         
         tasks.withType(JavaCompile) {
@@ -92,7 +95,16 @@ allprojects {
             reports {
                 xml.enabled true
             }
-        }    
+        }
+        
+        if (file('src/jmh/java').exists()) {
+            // Only apply JMH if there are any tests (otherwise the task fails)
+            project.apply plugin: "me.champeau.gradle.jmh"
+                
+	        jmh {
+	            fork = 1
+	        }
+        }        
     }
     
     bintray {
