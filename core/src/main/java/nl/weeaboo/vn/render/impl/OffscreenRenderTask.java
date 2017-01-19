@@ -1,18 +1,19 @@
 package nl.weeaboo.vn.render.impl;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.common.Rect;
-import nl.weeaboo.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.image.IImageModule;
@@ -30,7 +31,7 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     private static final Logger LOG = LoggerFactory.getLogger(OffscreenRenderTask.class);
 
     private final IImageModule imageModule;
-    private final Dim size;
+    private Dim size;
 
     private transient PixelTextureData resultPixels;
     private Vec2 resultScale = new Vec2();
@@ -75,18 +76,13 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
 
         RenderContext renderContext = new RenderContext(size);
         try {
-            Pixmap pixels;
-            renderContext.begin();
-            try {
-                renderToFbo(renderContext);
+            renderContext.prepare();
 
-                // Read back results (slow and blocking)
-                pixels = GdxScreenshotUtil.screenshot(Rect.of(0, 0, size.w, size.h));
-            } finally {
-                renderContext.end();
-            }
+            Pixmap pixels = render(renderContext);
 
             resultPixels = PixelTextureData.fromPremultipliedPixmap(pixels);
+        } catch (Exception e) {
+            LOG.error("Error in offscreen render task: {}", this, e);
         } finally {
             renderContext.dispose();
         }
@@ -94,7 +90,11 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
         LOG.debug("Offscreen render task {} took {}", this, sw);
     }
 
-    protected abstract void renderToFbo(RenderContext context);
+    protected abstract Pixmap render(RenderContext context) throws IOException;
+
+    protected void setSize(Dim size) {
+        this.size = size;
+    }
 
     protected void setResultScale(double sx, double sy) {
         resultScale.x = sx;
@@ -104,34 +104,32 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     protected static final class RenderContext implements Disposable {
 
         public final Dim size;
-        public final FrameBuffer fbo;
         public final SpriteBatch batch;
 
         protected RenderContext(Dim size) {
             this.size = size;
 
             batch = new SpriteBatch();
-            fbo = new FrameBuffer(Pixmap.Format.RGBA8888, size.w, size.h, false);
         }
 
-        public void begin() {
+        public void prepare() {
             ScreenViewport viewport = new ScreenViewport();
             GdxViewportUtil.setToOrtho(viewport, size, true);
             viewport.update(size.w, size.h, false);
 
             batch.setProjectionMatrix(viewport.getCamera().combined);
-
-            fbo.begin();
-        }
-
-        public void end() {
-            fbo.end();
         }
 
         @Override
         public void dispose() {
-            DisposeUtil.dispose(fbo);
             DisposeUtil.dispose(batch);
+        }
+
+        public void draw(TextureRegion region, ShaderProgram shader) {
+            batch.setShader(shader);
+            batch.begin();
+            batch.draw(region, 0, 0, size.w, size.h);
+            batch.end();
         }
 
     }

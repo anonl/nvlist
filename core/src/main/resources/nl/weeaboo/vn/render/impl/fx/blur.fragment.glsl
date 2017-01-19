@@ -13,19 +13,11 @@ uniform vec2 radius;
 void main() {
     vec4 c;
     
-    const float f = 1.0 / 9.0;
+    const float f = 1.0 / 11.0;
+
+    for (int n = -5; n <= 5; n++) {    
+        c += f * texture2D(u_texture, v_texCoord0 + n * radius);
+    }
     
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(-radius.x, -radius.y));
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(      0.0, -radius.y));
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(+radius.x, -radius.y));
-
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(-radius.x,       0.0));
-    c += f * texture2D(u_texture, v_texCoord0);
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(+radius.x,       0.0));
-
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(-radius.x, +radius.y));
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(      0.0, +radius.y));
-    c += f * texture2D(u_texture, v_texCoord0 + vec2(+radius.x, +radius.y));
-
     gl_FragColor = c;
 }

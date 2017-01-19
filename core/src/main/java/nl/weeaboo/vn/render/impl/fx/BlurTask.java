@@ -1,14 +1,13 @@
 package nl.weeaboo.vn.render.impl.fx;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.IImageModule;
@@ -21,7 +20,6 @@ public final class BlurTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BlurTask.class);
     private final StaticRef<ShaderStore> shaderStore = StaticEnvironment.SHADER_STORE;
 
     private final ITexture tex;
@@ -32,30 +30,43 @@ public final class BlurTask extends OffscreenRenderTask {
 
         this.tex = tex;
         this.radius = radius;
+
+        setSize(Dim.of(tex.getPixelWidth() / 2, tex.getPixelHeight() / 2));
+        // TODO: Scale relative to current scale, don't set absolute values
+        setResultScale(2.0, 2.0);
     }
 
     @Override
-    protected void renderToFbo(RenderContext context) {
+    protected Pixmap render(RenderContext context) throws IOException {
         Dim size = context.size;
-        SpriteBatch batch = context.batch;
 
         Vec2 rad = toTextureCoords(radius);
 
         // TODO: You really want a multi-pass separable blur
+        ShaderProgram shader = null;
+        PingPongFbo fbos = null;
         try {
-            ShaderProgram shader = shaderStore.get().createShaderFromClasspath(getClass(), "blur");
-            batch.setShader(shader);
-            shader.setUniformf("radius", (float)rad.x, (float)rad.y);
+            fbos = new PingPongFbo(size);
+            fbos.start();
 
-            TextureRegion region = GdxTextureUtil.getTextureRegion(tex);
+            context.draw(GdxTextureUtil.getTextureRegion(tex), null);
 
-            batch.begin();
-            batch.draw(region, 0, 0, size.w, size.h);
-            batch.end();
-        } catch (Exception e) {
-            LOG.error("Error performing blur", e);
-            cancel();
-            return;
+            shader = shaderStore.get().createShaderFromClasspath(getClass(), "blur");
+            shader.begin();
+
+            // Horizontal
+            shader.setUniformf("radius", (float)rad.x, 0);
+            context.draw(fbos.nextBlank(), shader);
+
+            // Vertical
+            shader.begin();
+            shader.setUniformf("radius", 0, (float)rad.y);
+            context.draw(fbos.nextBlank(), shader);
+
+            return fbos.stop();
+        } finally {
+            DisposeUtil.dispose(shader);
+            DisposeUtil.dispose(fbos);
         }
     }
 
