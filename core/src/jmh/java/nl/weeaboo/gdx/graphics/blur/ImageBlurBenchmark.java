@@ -48,21 +48,21 @@ public class ImageBlurBenchmark {
     }
 
     @Benchmark
-    public void blur7(Input input) {
-        doBlur(input.pixmap, 7);
+    public Pixmap blur7(Input input) {
+        return doBlur(input.pixmap, 7);
     }
 
     @Benchmark
-    public void blur15(Input input) {
-        doBlur(input.pixmap, 15);
+    public Pixmap blur15(Input input) {
+        return doBlur(input.pixmap, 15);
     }
 
     @Benchmark
-    public void blur32(Input input) {
-        doBlur(input.pixmap, 32);
+    public Pixmap blur32(Input input) {
+        return doBlur(input.pixmap, 32);
     }
 
-    private void doBlur(Pixmap original, int radius) {
+    private Pixmap doBlur(Pixmap original, int radius) {
         int scale = 2;
         Dim scaledSize = Dim.of(original.getWidth() / scale, original.getHeight() / scale);
 
@@ -73,6 +73,7 @@ public class ImageBlurBenchmark {
         imageBlur.applyBlur(blurred);
 
         blurred.dispose();
+        return blurred;
     }
 
 }
