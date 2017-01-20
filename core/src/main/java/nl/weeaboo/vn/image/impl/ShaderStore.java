@@ -38,13 +38,13 @@ public class ShaderStore {
     }
 
     public ShaderProgram createShaderFromClasspath(Class<?> context, String baseResourcePath) throws IOException {
-        String vertexPath = baseResourcePath + ".vertex.glsl";
+        String vertexPath = baseResourcePath + ".vert";
         URL vertexUrl = context.getResource(vertexPath);
         if (vertexUrl == null) {
             throw new FileNotFoundException("Resource: " + context + ", " + vertexPath);
         }
 
-        String fragmentPath = baseResourcePath + ".fragment.glsl";
+        String fragmentPath = baseResourcePath + ".frag";
         URL fragmentUrl = context.getResource(fragmentPath);
         if (fragmentUrl == null) {
             throw new FileNotFoundException("Resource: " + context + ", " + fragmentUrl);

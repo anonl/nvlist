@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.gdx.graphics.GLBlendMode;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.image.IImageModule;
@@ -118,6 +119,8 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
             viewport.update(size.w, size.h, false);
 
             batch.setProjectionMatrix(viewport.getCamera().combined);
+
+            GLBlendMode.DEFAULT_PREMULT.apply(batch);
         }
 
         @Override

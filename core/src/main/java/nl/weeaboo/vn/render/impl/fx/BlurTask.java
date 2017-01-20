@@ -42,7 +42,6 @@ public final class BlurTask extends OffscreenRenderTask {
 
         Vec2 rad = toTextureCoords(radius);
 
-        // TODO: You really want a multi-pass separable blur
         ShaderProgram shader = null;
         PingPongFbo fbos = null;
         try {

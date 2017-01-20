@@ -29,6 +29,12 @@ final class PingPongFbo implements Disposable {
         currentIndex = 0;
 
         currentFbo().begin();
+        glClear();
+    }
+
+    private void glClear() {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     public TextureRegion next() {
@@ -48,8 +54,7 @@ final class PingPongFbo implements Disposable {
     public TextureRegion nextBlank() {
         TextureRegion result = next();
 
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        glClear();
 
         return result;
     }
