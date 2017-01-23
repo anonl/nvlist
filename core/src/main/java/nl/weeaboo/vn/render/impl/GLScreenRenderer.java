@@ -245,6 +245,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         final ITextureData texData;
         if (ss.isVolatile()) {
             TextureRegion textureRegion = ScreenUtils.getFrameBufferTexture(glRect.x, glRect.y, glRect.w, glRect.h);
+            GdxTextureUtil.setDefaultTextureParams(textureRegion.getTexture());
             textureRegion.flip(false, true);
             texData = VolatileTextureData.fromRegion(textureRegion, false);
         } else {

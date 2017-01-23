@@ -33,23 +33,15 @@ end
 -- @tparam Texture t The texture to create a blurred copy of, or a filename
 --         pointing to a valid image file.
 -- @int kernelSize Determines the size of the blur kernel.
--- @bool borderExtend Use <code>true</code> to pad the expanded image area
---       with the image's border pixels, or <code>false</code> to pad with
---       transparent pixels.<br/>
---       You can also use an integer to only extend in certain directions,
---       each digit corresponds to a numpad direction (example: 268 is
---       bottom-right-top).
--- @bool cropResult Use <code>true</code> to crop the result texture to the
---       same size as <code>tex</code>, otherwise the result texture will be
---       padded on each side equal to half the size of the blur kernel.
---       You can also use an integer to only crop in certain directions,
---       each digit corresponds to a numpad direction (example: 486 is
---       left-top-right).
+-- @int[default=2468] expandDirs Pad the image with extra whitespace in certain directions. This extra space
+--                    is needed to avoid cropping the blur.
+--                    <p>
+--                    Each digit corresponds to a numpad direction (example: 268 is bottom+right+top).
 -- @treturn Texture A blurred copy of the input texture.
-function blur(t, kernelSize, borderExtend, cropResult)
+function blur(t, kernelSize, borderExtend)
     t = tex(t)
     
-    local task = ImageFx.blur(t, kernelSize, borderExtend, cropResult)
+    local task = ImageFx.blur(t, kernelSize, borderExtend)
     local blurred = waitForTask(task)
     return img(blurred)
 end

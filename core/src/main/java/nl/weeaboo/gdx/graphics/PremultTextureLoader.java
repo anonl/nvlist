@@ -74,7 +74,10 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
         } else {
             texture = new Texture(info.data);
         }
-        if (parameter != null) {
+
+        if (parameter == null) {
+            GdxTextureUtil.setDefaultTextureParams(texture);
+        } else {
             texture.setFilter(parameter.minFilter, parameter.magFilter);
             texture.setWrap(parameter.wrapU, parameter.wrapV);
         }

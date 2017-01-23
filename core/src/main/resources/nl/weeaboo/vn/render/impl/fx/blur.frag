@@ -13,17 +13,14 @@ uniform vec2 radius;
 void main() {
     vec4 c = vec4(0.0);
 
-    const float f = 1.0 / 11.0;
-    for (float n = -5.0; n <= 5.0; n++) {
+    const float f = 1.0 / 6.0;
+    // Sample at 0.5, 2.5, 4.5
+    // This takes advantage of the GPU's hardware for linear interpolation.
+    // Doesn't work when the texture uses GL_NEAREST
+    for (float n = 0.5; n <= 5.0; n += 2.0) {
+        c += f * texture2D(u_texture, v_texCoord0 - n * radius);
         c += f * texture2D(u_texture, v_texCoord0 + n * radius);
     }
-
-    /*
-    const float f = 1.0 / 3.0;
-    c += f * texture2D(u_texture, v_texCoord0 - radius);
-    c += f * texture2D(u_texture, v_texCoord0);
-    c += f * texture2D(u_texture, v_texCoord0 + radius);
-    */
 
     gl_FragColor = c;
 }

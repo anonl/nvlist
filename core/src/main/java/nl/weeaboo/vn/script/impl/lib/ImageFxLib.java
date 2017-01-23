@@ -104,10 +104,10 @@ public class ImageFxLib extends LuaLib {
             return LuaNil.NIL;
         }
         int k = args.optint(2, 8);
-        Set<Direction> extendDirs = getDirectionsSet(args, 3, 0);
-        Set<Direction> cropDirs = getDirectionsSet(args, 4, 0);
+        Set<Direction> expandDirs = getDirectionsSet(args, 3, 2468);
 
         BlurTask task = new BlurTask(imageModule, tex, k);
+        task.setExpandDirs(expandDirs);
         addOffscreenRenderTask(task);
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
     }

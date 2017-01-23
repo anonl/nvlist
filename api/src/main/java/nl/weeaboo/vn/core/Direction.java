@@ -3,6 +3,8 @@ package nl.weeaboo.vn.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Iterables;
+
 public enum Direction {
 
     NONE(0),
@@ -37,6 +39,38 @@ public enum Direction {
 
         LOG.warn("Invalid direction: {}", val);
         return NONE;
+    }
+
+    public boolean isTop() {
+        return this == TOP_LEFT || this == TOP || this == TOP_RIGHT;
+    }
+
+    public static boolean containsTop(Iterable<Direction> dirs) {
+        return Iterables.any(dirs, Direction::isTop);
+    }
+
+    public boolean isRight() {
+        return this == TOP_RIGHT || this == RIGHT || this == BOTTOM_RIGHT;
+    }
+
+    public static boolean containsRight(Iterable<Direction> dirs) {
+        return Iterables.any(dirs, Direction::isRight);
+    }
+
+    public boolean isBottom() {
+        return this == BOTTOM_LEFT || this == BOTTOM || this == BOTTOM_RIGHT;
+    }
+
+    public static boolean containsBottom(Iterable<Direction> dirs) {
+        return Iterables.any(dirs, Direction::isBottom);
+    }
+
+    public boolean isLeft() {
+        return this == TOP_LEFT || this == LEFT || this == BOTTOM_LEFT;
+    }
+
+    public static boolean containsLeft(Iterable<Direction> dirs) {
+        return Iterables.any(dirs, Direction::isLeft);
     }
 
 }

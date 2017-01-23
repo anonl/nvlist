@@ -49,7 +49,7 @@ allprojects {
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '1.5.4'
-        tcommonVersion = '1.2.5'
+        tcommonVersion = '1.2.6'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')

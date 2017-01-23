@@ -50,6 +50,7 @@ public final class PixelTextureData implements IGdxTextureData {
     @Override
     public TextureRegion toTextureRegion() {
         Texture texture = new Texture(getPixels());
+        GdxTextureUtil.setDefaultTextureParams(texture);
         return GdxTextureUtil.newGdxTextureRegion(texture);
     }
 

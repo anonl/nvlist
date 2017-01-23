@@ -1,13 +1,15 @@
 package nl.weeaboo.vn.render.impl.fx;
 
 import java.io.IOException;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
-import nl.weeaboo.common.Dim;
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.DisposeUtil;
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.core.impl.StaticEnvironment;
 import nl.weeaboo.vn.core.impl.StaticRef;
 import nl.weeaboo.vn.image.IImageModule;
@@ -29,37 +31,40 @@ public final class BlurTask extends OffscreenRenderTask {
         super(imageModule, tex);
 
         this.tex = tex;
-        this.radius = radius;
 
-        setSize(Dim.of(tex.getPixelWidth() / 2, tex.getPixelHeight() / 2));
-        // TODO: Scale relative to current scale, don't set absolute values
-        setResultScale(2.0, 2.0);
+        double r = radius;
+        while (r > 5) {
+            r *= 0.5;
+            scale(0.5);
+        }
+
+        // TODO: Blur shader had a fixed radius. Create a few different kernel sizes.
+        // Current blur impl has a fixed radius of 5.0
+        this.radius = Math.max(5, (int)Math.round(r));
     }
 
     @Override
     protected Pixmap render(RenderContext context) throws IOException {
-        Dim size = context.size;
-
-        Vec2 rad = toTextureCoords(radius);
+        Vec2 pixelSize = toUV(1f);
 
         ShaderProgram shader = null;
         PingPongFbo fbos = null;
         try {
-            fbos = new PingPongFbo(size);
+            fbos = new PingPongFbo(context.outerSize);
             fbos.start();
 
-            context.draw(GdxTextureUtil.getTextureRegion(tex), null);
+            context.drawInitial(GdxTextureUtil.getTextureRegion(tex));
 
             shader = shaderStore.get().createShaderFromClasspath(getClass(), "blur");
             shader.begin();
 
             // Horizontal
-            shader.setUniformf("radius", (float)rad.x, 0);
+            shader.setUniformf("radius", (float)pixelSize.x, 0);
             context.draw(fbos.nextBlank(), shader);
 
             // Vertical
             shader.begin();
-            shader.setUniformf("radius", 0, (float)rad.y);
+            shader.setUniformf("radius", 0, (float)pixelSize.y);
             context.draw(fbos.nextBlank(), shader);
 
             return fbos.stop();
@@ -69,8 +74,17 @@ public final class BlurTask extends OffscreenRenderTask {
         }
     }
 
-    private Vec2 toTextureCoords(double distance) {
-        return new Vec2(distance / tex.getWidth(), distance / tex.getHeight());
+    private Vec2 toUV(double pixels) {
+        return new Vec2(pixels / tex.getWidth(), pixels / tex.getHeight());
+    }
+
+    public void setExpandDirs(Set<Direction> expandDirs) {
+        int top = (Direction.containsTop(expandDirs) ? radius : 0);
+        int right = (Direction.containsRight(expandDirs) ? radius : 0);
+        int bottom = (Direction.containsBottom(expandDirs) ? radius : 0);
+        int left = (Direction.containsLeft(expandDirs) ? radius : 0);
+
+        setPadding(Insets2D.of(top, right, bottom, left), true);
     }
 
 }
