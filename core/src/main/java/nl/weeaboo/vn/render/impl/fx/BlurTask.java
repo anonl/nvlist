@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.core.Direction;
@@ -22,25 +23,30 @@ public final class BlurTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;
 
+    private static final int[] INTRINSIC_KERNELS = {10, 50};
+
     private final StaticRef<ShaderStore> shaderStore = StaticEnvironment.SHADER_STORE;
 
     private final ITexture tex;
-    private final int radius;
+    private final double inputRadius;
+    private final double scaledRadius;
 
-    public BlurTask(IImageModule imageModule, ITexture tex, int radius) {
+    public BlurTask(IImageModule imageModule, ITexture tex, double r) {
         super(imageModule, tex);
 
         this.tex = tex;
+        this.inputRadius = r;
 
-        double r = radius;
-        while (r > 5) {
+        if (r >= 32) {
+            // With these values the blur appears to be approximately seamless
+            r *= 0.45;
+            scale(0.25);
+        } else if (r >= 2) {
             r *= 0.5;
             scale(0.5);
         }
 
-        // TODO: Blur shader had a fixed radius. Create a few different kernel sizes.
-        // Current blur impl has a fixed radius of 5.0
-        this.radius = Math.max(5, (int)Math.round(r));
+        this.scaledRadius = r;
     }
 
     @Override
@@ -55,16 +61,16 @@ public final class BlurTask extends OffscreenRenderTask {
 
             context.drawInitial(GdxTextureUtil.getTextureRegion(tex));
 
-            shader = shaderStore.get().createShaderFromClasspath(getClass(), "blur");
-            shader.begin();
+            shader = shaderStore.get().createShaderFromClasspath(getClass(), findBestShader(scaledRadius));
 
             // Horizontal
-            shader.setUniformf("radius", (float)pixelSize.x, 0);
+            shader.begin();
+            shader.setUniformf("radius", (float)(scaledRadius * pixelSize.x), 0);
             context.draw(fbos.nextBlank(), shader);
 
             // Vertical
             shader.begin();
-            shader.setUniformf("radius", 0, (float)pixelSize.y);
+            shader.setUniformf("radius", 0, (float)(scaledRadius * pixelSize.y));
             context.draw(fbos.nextBlank(), shader);
 
             return fbos.stop();
@@ -74,17 +80,34 @@ public final class BlurTask extends OffscreenRenderTask {
         }
     }
 
+    private static String findBestShader(double radius) {
+        int best = INTRINSIC_KERNELS[INTRINSIC_KERNELS.length - 1];
+        for (int numSamples : INTRINSIC_KERNELS) {
+            if (numSamples >= 2 * radius) {
+                best = numSamples;
+                break;
+            }
+        }
+        return "blur" + best;
+    }
+
     private Vec2 toUV(double pixels) {
         return new Vec2(pixels / tex.getWidth(), pixels / tex.getHeight());
     }
 
     public void setExpandDirs(Set<Direction> expandDirs) {
-        int top = (Direction.containsTop(expandDirs) ? radius : 0);
-        int right = (Direction.containsRight(expandDirs) ? radius : 0);
-        int bottom = (Direction.containsBottom(expandDirs) ? radius : 0);
-        int left = (Direction.containsLeft(expandDirs) ? radius : 0);
+        double top = (Direction.containsTop(expandDirs) ? scaledRadius : 0);
+        double right = (Direction.containsRight(expandDirs) ? scaledRadius : 0);
+        double bottom = (Direction.containsBottom(expandDirs) ? scaledRadius : 0);
+        double left = (Direction.containsLeft(expandDirs) ? scaledRadius : 0);
 
         setPadding(Insets2D.of(top, right, bottom, left), true);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtil.formatRoot("%s[radius=%.1f]",
+                getClass().getSimpleName(), inputRadius);
     }
 
 }

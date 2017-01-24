@@ -18,7 +18,6 @@ import com.google.common.math.DoubleMath;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect;
-import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.graphics.GLBlendMode;
 import nl.weeaboo.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.gdx.res.DisposeUtil;
@@ -27,7 +26,6 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.impl.PixelTextureData;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IOffscreenRenderTask;
-import nl.weeaboo.vn.render.RenderUtil;
 
 /**
  * Renders to an offscreen buffer (FBO) and reads the result back to a texture.
@@ -70,6 +68,10 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
         return DoubleMath.roundToInt(s, RoundingMode.HALF_EVEN);
     }
 
+    private static int ceil(double s) {
+        return DoubleMath.roundToInt(s, RoundingMode.CEILING);
+    }
+
     @Override
     public void cancel() {
         super.cancel();
@@ -94,8 +96,11 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     public final void render() {
         Stopwatch sw = Stopwatch.createStarted();
 
-        Rect innerRect = RenderUtil.roundClipRect(Rect2D.of(padding.left, padding.top,
-                size.w - padding.getHorizontal(), size.h - padding.getVertical()));
+        Rect innerRect = Rect.of(
+                ceil(padding.left),
+                ceil(padding.top),
+                size.w - ceil(padding.left) - ceil(padding.right),
+                size.h - ceil(padding.top) - ceil(padding.bottom));
 
         RenderContext renderContext = new RenderContext(size, innerRect);
         try {
@@ -130,8 +135,8 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
         padding = newPadding;
 
         if (adjustSize) {
-            int dw = roundToInt(newPadding.getHorizontal() - oldPadding.getHorizontal());
-            int dh = roundToInt(newPadding.getVertical() - oldPadding.getVertical());
+            int dw = ceil(newPadding.left) + ceil(newPadding.right) - ceil(oldPadding.left) - ceil(oldPadding.right);
+            int dh = ceil(newPadding.top) + ceil(newPadding.bottom) - ceil(oldPadding.top) - ceil(oldPadding.bottom);
             size = Dim.of(size.w + dw, size.h + dh);
         }
     }

@@ -22,14 +22,18 @@ function titlescreen()
     local i = img("ziponly", 200, 200)
     i:setAlign(0.5, 0.5)
 
-    for n=2,20,2 do
-        local blurred = blur("testjng", n + 0.5)
+    local prevBlurred = nil
+    for n=1,100,0.5 do
+        local blurred = blur("testjng", n)
+        
+        if prevBlurred ~= nil then
+            prevBlurred:destroy()
+        end
+        prevBlurred = blurred        
+        
         blurred:setPos(screenWidth/2, screenHeight/2)
-        blurred:setAlign(0.5, 0.5)    
-        
-        text("blur " .. n)
-        
-        blurred:destroy()
+        blurred:setAlign(0.5, 0.5)
+        yield(3)
     end
 
     -- button("gui/button")

@@ -97,16 +97,15 @@ public class ImageFxLib extends LuaLib {
     @ScriptFunction
     public Varargs blur(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
-        ContextUtil.getCurrentScreen();
 
         ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
         if (tex == null) {
             return LuaNil.NIL;
         }
-        int k = args.optint(2, 8);
+        double radius = args.optdouble(2, 8.0);
         Set<Direction> expandDirs = getDirectionsSet(args, 3, 2468);
 
-        BlurTask task = new BlurTask(imageModule, tex, k);
+        BlurTask task = new BlurTask(imageModule, tex, radius);
         task.setExpandDirs(expandDirs);
         addOffscreenRenderTask(task);
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
