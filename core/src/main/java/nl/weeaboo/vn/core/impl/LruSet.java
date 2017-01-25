@@ -37,8 +37,9 @@ public final class LruSet<T> implements Serializable {
         int toRemove = (backing.size() + freeSlots) - maxSize;
 
         Iterator<T> itr = backing.iterator();
-        for (int n = 0; n < toRemove; n++) {
+        while (toRemove > 0 && !backing.isEmpty()) {
             itr.remove();
+            toRemove--;
         }
     }
 
