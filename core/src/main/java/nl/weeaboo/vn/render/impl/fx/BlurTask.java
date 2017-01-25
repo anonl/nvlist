@@ -59,7 +59,7 @@ public final class BlurTask extends OffscreenRenderTask {
             fbos = new PingPongFbo(context.outerSize);
             fbos.start();
 
-            context.drawInitial(GdxTextureUtil.getTextureRegion(tex));
+            context.drawInitial(GdxTextureUtil.getTextureRegion(tex), null);
 
             shader = shaderStore.get().createShaderFromClasspath(getClass(), findBestShader(scaledRadius));
 

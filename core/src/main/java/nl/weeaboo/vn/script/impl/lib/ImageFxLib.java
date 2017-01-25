@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.script.impl.lib;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaString;
@@ -19,6 +21,8 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.IOffscreenRenderTask;
 import nl.weeaboo.vn.render.impl.fx.BlurTask;
+import nl.weeaboo.vn.render.impl.fx.ColorMatrix;
+import nl.weeaboo.vn.render.impl.fx.ColorMatrixTask;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -132,22 +136,25 @@ public class ImageFxLib extends LuaLib {
 //        }
 //        return table;
 //    }
-//
-//    @ScriptFunction
-//    public Varargs brighten(Varargs args) {
-//        IImageModule imageModule = env.getImageModule();
-//
-//        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-//        if (tex == null) {
-//            return LuaNil.NIL;
-//        }
-//        double add = args.optdouble(2, 0.5);
-//
-//        IImageFxModule imageFxModule = env.getImageFxModule();
-//        ITexture newTex = imageFxModule.brighten(tex, add);
-//        return LuajavaLib.toUserdata(newTex, ITexture.class);
-//    }
-//
+
+    @ScriptFunction
+    public Varargs brighten(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
+        if (tex == null) {
+            return LuaNil.NIL;
+        }
+        double add = args.optdouble(2, 0.5);
+
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setOffsets(new double[] {add, add, add, 0.0});
+
+        ColorMatrixTask task = new ColorMatrixTask(imageModule, tex, matrix);
+        addOffscreenRenderTask(task);
+        return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
+    }
+
 //    @ScriptFunction
 //    public Varargs mipmap(Varargs args) {
 //        IImageModule imageModule = env.getImageModule();
@@ -163,43 +170,50 @@ public class ImageFxLib extends LuaLib {
 //        ITexture newTex = imageFxModule.mipmap(tex, level);
 //        return LuajavaLib.toUserdata(newTex, ITexture.class);
 //    }
-//
-//    @ScriptFunction
-//    public Varargs applyColorMatrix(Varargs args) throws ScriptException {
-//        IImageModule imageModule = env.getImageModule();
-//
-//        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-//        if (tex == null) {
-//            return LuaNil.NIL;
-//        }
-//
-//        final int arrayCount = args.narg() - 1;
-//        IImageFxModule imageFxModule = env.getImageFxModule();
-//
-//        ITexture newTex;
-//        if (arrayCount == 1) {
-//            double[] mulRGBA = toDoubleArray(args.arg(2));
-//            newTex = imageFxModule.applyColorMatrix(tex, mulRGBA);
-//        } else if (arrayCount == 3 || arrayCount == 4) {
-//            double[][] arrays = new double[Math.max(4, arrayCount)][];
-//            arrays[0] = toDoubleArray(args.arg(2));
-//            arrays[1] = toDoubleArray(args.arg(3));
-//            arrays[2] = toDoubleArray(args.arg(4));
-//            if (arrayCount >= 4) {
-//                arrays[3] = toDoubleArray(args.arg(5));
-//            }
-//            newTex = imageFxModule.applyColorMatrix(tex, arrays[0], arrays[1], arrays[2], arrays[3]);
-//        } else {
-//            throw new ScriptException("Invalid number of array arguments: " + arrayCount);
-//        }
-//
-//        return LuajavaLib.toUserdata(newTex, ITexture.class);
-//    }
-//
-//    private static double[] toDoubleArray(LuaValue val) {
-//        return CoerceLuaToJava.coerceArg(val, double[].class);
-//    }
-//
+
+    @ScriptFunction
+    public Varargs colorMatrix(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
+        if (tex == null) {
+            return LuaNil.NIL;
+        }
+
+        ColorMatrix matrix = new ColorMatrix();
+        double[] offsets = new double[4];
+        if (args.arg(2).istable()) {
+            double[] arr = toDoubleArray(args.arg(2), 5);
+            matrix.setRedFactors(arr);
+            offsets[0] = arr[0];
+        }
+        if (args.arg(3).istable()) {
+            double[] arr = toDoubleArray(args.arg(3), 5);
+            matrix.setGreenFactors(arr);
+            offsets[1] = arr[1];
+        }
+        if (args.arg(4).istable()) {
+            double[] arr = toDoubleArray(args.arg(4), 5);
+            matrix.setBlueFactors(arr);
+            offsets[2] = arr[2];
+        }
+        if (args.arg(5).istable()) {
+            double[] arr = toDoubleArray(args.arg(5), 5);
+            matrix.setAlphaFactors(arr);
+            offsets[3] = arr[3];
+        }
+        matrix.setOffsets(offsets);
+
+        ColorMatrixTask task = new ColorMatrixTask(imageModule, tex, matrix);
+        addOffscreenRenderTask(task);
+        return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
+    }
+
+    private static double[] toDoubleArray(LuaValue val, int length) {
+        double[] values = CoerceLuaToJava.coerceArg(val, double[].class);
+        return Arrays.copyOf(values, length);
+    }
+
 //    /**
 //     * Expects a single argument of the form:
 //     *

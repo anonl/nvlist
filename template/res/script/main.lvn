@@ -22,9 +22,14 @@ function titlescreen()
     local i = img("ziponly", 200, 200)
     i:setAlign(0.5, 0.5)
 
+    local colorized = img(brighten("ziponly", 0.25))
+    colorized:setAlign(0.5, 0.5)
+    colorized:setPos(screenWidth/2, screenHeight/2)
+    waitClick()
+
     local prevBlurred = nil
     for n=1,100,0.5 do
-        local blurred = blur("testjng", n)
+        local blurred = img(blur("testjng", n))
         
         if prevBlurred ~= nil then
             prevBlurred:destroy()

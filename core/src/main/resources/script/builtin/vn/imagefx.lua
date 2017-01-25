@@ -42,8 +42,39 @@ function blur(t, kernelSize, borderExtend)
     t = tex(t)
     
     local task = ImageFx.blur(t, kernelSize, borderExtend)
-    local blurred = waitForTask(task)
-    return img(blurred)
+    return waitForTask(task)
+end
+
+
+---Creates a brightened copy of a texture.
+-- @tparam Texture t The texture to create a brightened copy of, or a filename
+--         pointing to a valid image file.
+-- @number add A fraction between <code>-1.0</code> and <code>1.0</code> that
+--         will be added to the color components <code>(r,g,b)</code> of the
+--         input texture.
+-- @treturn Texture A brightened copy of the input texture.
+-- @see #applyColorMatrix
+function brighten(t, add)
+    t = tex(t)
+    local task = ImageFx.brighten(t, add)
+    return waitForTask(task)
+end
+
+
+---Creates a copy of the given texture with a color matrix applied. Pseudocode:<br/>
+-- <code>r' = rf[1]*r + rf[2]*g + rf[3]*b + rf[4]*a + rf[5]</code><br/>
+-- This assumes unassociated alpha (non-premultiplied) and color values ranging between
+-- <code>0.0</code> and <code>1.0</code>.
+-- @tparam Texture t The input texture.
+-- @tparam {number} rf A table containing the multiplication factors for the red channel.
+-- @tparam {number} gf A table containing the multiplication factors for the green channel.
+-- @tparam {number} bf A table containing the multiplication factors for the blue channel.
+-- @tparam {number} af A table containing the multiplication factors for the alpha channel.
+-- @treturn Texture A new texture with the color matrix applied.
+function applyColorMatrix(t, rf, gf, bf, af)
+    t = tex(t)
+    local task = ImageFx.colorMatrix(t, rf, gf, bf, af)
+    return waitForTask(task)
 end
 
 --[[
@@ -82,34 +113,6 @@ function mipmap(t, level)
     t = tex(t)
     return ImageFx.mipmap(t, level)
 end
-
----Creates a brightened copy of a texture.
--- @tparam Texture t The texture to create a brightened copy of, or a filename
---         pointing to a valid image file.
--- @number add A fraction between <code>-1.0</code> and <code>1.0</code> that
---         will be added to the color components <code>(r,g,b,a)</code> of the
---         input texture.
--- @treturn Texture A brightened copy of the input texture.
-function brighten(t, add)
-    t = tex(t)
-    return ImageFx.brighten(t, add)
-end
-
----Creates a copy of the given texture with a color matrix applied. Pseudocode:<br/>
--- <code>r' = rf[1]*r + rf[2]*g + rf[3]*b + rf[4]*a + rf[5]</code><br/>
--- This assumes non-permultiplied color and color values ranging between
--- <code>0.0</code> and <code>1.0</code>.
--- @tparam Texture t The input texture.
--- @tparam {number} rf A table containing the multiplication factors for the red channel.
--- @tparam {number} gf A table containing the multiplication factors for the green channel.
--- @tparam {number} bf A table containing the multiplication factors for the blue channel.
--- @tparam {number} af A table containing the multiplication factors for the alpha channel.
--- @treturn Texture A new texture with the color matrix applied.
-function applyColorMatrix(t, rf, gf, bf, af)
-    t = tex(t)
-    return ImageFx.applyColorMatrix(t, rf, gf, bf, af)
-end
-
 
 ---Creates a new texture by blending together multiple input textures.
 -- @param args A table of the form:<br/>

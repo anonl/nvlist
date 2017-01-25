@@ -176,8 +176,8 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
             batch.end();
         }
 
-        public void drawInitial(TextureRegion region) {
-            batch.setShader(null);
+        public void drawInitial(TextureRegion region, ShaderProgram shader) {
+            batch.setShader(shader);
             batch.begin();
             batch.draw(region, innerRect.x, innerRect.y, innerRect.w, innerRect.h);
             batch.end();
