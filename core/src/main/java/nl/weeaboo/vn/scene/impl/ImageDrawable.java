@@ -151,6 +151,11 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
     }
 
     @Override
+    public void setTexture(ITexture texture, int anchor) {
+        setTexture(texture, Direction.fromInt(anchor));
+    }
+
+    @Override
     public void setTexture(ITexture texture, Direction anchor) {
         setRenderer(new TextureRenderer(texture), anchor);
     }

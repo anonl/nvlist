@@ -37,6 +37,11 @@ public interface IImageDrawable extends ITransformable {
     void setTexture(ITexture texture);
 
     /**
+     * @see #setTexture(ITexture, Direction)
+     */
+    void setTexture(ITexture texture, int anchor);
+
+    /**
      * @see #setTexture(ITexture)
      * @see #setRenderer(IRenderable, Direction)
      */
