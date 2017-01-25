@@ -2,6 +2,8 @@ package nl.weeaboo.vn.script.impl.lua;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.link.LuaLink;
@@ -90,6 +92,9 @@ public class LuaScriptThread implements IScriptThread {
     @Override
     public String toString() {
         LuaLink link = luaLink.get();
+        if (link == null) {
+            return "<no-thread-active>";
+        }
 
         return String.valueOf(link.getThread());
     }
@@ -97,6 +102,9 @@ public class LuaScriptThread implements IScriptThread {
     @Override
     public List<String> getStackTrace() {
         LuaLink link = luaLink.get();
+        if (link == null) {
+            return ImmutableList.of();
+        }
 
         return LuaUtil.getLuaStack(link.getThread());
     }
