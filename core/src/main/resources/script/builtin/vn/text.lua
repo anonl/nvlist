@@ -344,7 +344,7 @@ function textTagOpen(tag, values, level)
     for k,v in pairs(values) do
         v = getDeepField(getLocalVars(level + 1), v)
           or getDeepField(getfenv(level), v)
-          or Text.resolveConstant(v)
+          or Text.parseLuaLiteral(v)
         newValues[k] = v
     end
 
