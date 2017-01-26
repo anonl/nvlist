@@ -40,7 +40,7 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     private Insets2D padding = Insets2D.EMPTY;
 
     private transient PixelTextureData resultPixels;
-    private Vec2 resultScale = new Vec2();
+    private Vec2 resultScale = new Vec2(1.0, 1.0);
 
     public OffscreenRenderTask(IImageModule imageModule, Dim size) {
         this.imageModule = imageModule;

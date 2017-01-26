@@ -22,11 +22,20 @@ function titlescreen()
     local i = img("ziponly", 200, 200)
     i:setAlign(0.5, 0.5)
 
-    local colorized = img(brighten("ziponly", 0.25))
-    colorized:setAlign(0.5, 0.5)
-    colorized:setPos(screenWidth/2, screenHeight/2)
-    waitClick()
-
+    local mergedTex = composite({
+        {tex="ziponly"},
+        {tex="ziponly", pos={100, 100}},
+    })
+    i = img(mergedTex, 400, 0)
+    
+    --[[
+    for level,t in ipairs(blurMultiple("testjng", 4, 8)) do
+        local i = img(t)
+        i:setPos(100 * level, 0)
+    end
+    ]]
+    
+    --[[
     local prevBlurred = nil
     for n=1,100,0.5 do
         local blurred = img(blur("testjng", n))
@@ -40,6 +49,7 @@ function titlescreen()
         blurred:setAlign(0.5, 0.5)
         yield(3)
     end
+    ]]
 
     -- button("gui/button")
     

@@ -292,17 +292,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
 
     @Override
     protected void applyBlendMode(BlendMode bm) {
-        switch (bm) {
-        case DEFAULT:
-            GLBlendMode.DEFAULT_PREMULT.apply(spriteBatch);
-            break;
-        case ADD:
-            GLBlendMode.ADD.apply(spriteBatch);
-            break;
-        default:
-            GLBlendMode.DISABLED.apply(spriteBatch);
-            break;
-        }
+        GLBlendMode.from(bm).apply(spriteBatch);
     }
 
     @Override

@@ -3,6 +3,8 @@ package nl.weeaboo.gdx.graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import nl.weeaboo.vn.core.BlendMode;
+
 public enum GLBlendMode {
 
     DEFAULT(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA), // libGDX doesn't use premultiplied alpha!
@@ -24,6 +26,17 @@ public enum GLBlendMode {
         } else {
             batch.enableBlending();
             batch.setBlendFunction(srcFunc, dstFunc);
+        }
+    }
+
+    public static GLBlendMode from(BlendMode blendMode) {
+        switch (blendMode) {
+        case DEFAULT:
+            return GLBlendMode.DEFAULT_PREMULT;
+        case ADD:
+            return GLBlendMode.ADD;
+        default:
+            return GLBlendMode.DISABLED;
         }
     }
 

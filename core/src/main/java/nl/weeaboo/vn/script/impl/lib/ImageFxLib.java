@@ -12,6 +12,7 @@ import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaString;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.Direction;
@@ -23,6 +24,9 @@ import nl.weeaboo.vn.render.IOffscreenRenderTask;
 import nl.weeaboo.vn.render.impl.fx.BlurTask;
 import nl.weeaboo.vn.render.impl.fx.ColorMatrix;
 import nl.weeaboo.vn.render.impl.fx.ColorMatrixTask;
+import nl.weeaboo.vn.render.impl.fx.ImageCompositeConfig;
+import nl.weeaboo.vn.render.impl.fx.ImageCompositeConfig.TextureEntry;
+import nl.weeaboo.vn.render.impl.fx.ImageCompositeTask;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -35,7 +39,6 @@ public class ImageFxLib extends LuaLib {
     // Precomputed constants for LuaString instances we sometimes need.
     private static final LuaValue S_TEX = LuaString.valueOf("tex");
     private static final LuaValue S_POS = LuaString.valueOf("pos");
-    private static final LuaValue S_OVERWRITE = LuaString.valueOf("overwrite");
 
     private final IEnvironment env;
 
@@ -115,28 +118,6 @@ public class ImageFxLib extends LuaLib {
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
     }
 
-//    @ScriptFunction
-//    public Varargs blurMultiple(Varargs args) {
-//        IImageModule imageModule = env.getImageModule();
-//
-//        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-//        if (tex == null) {
-//            return LuaNil.NIL;
-//        }
-//        int levels = args.optint(2, 1);
-//        int k = args.optint(3, 8);
-//        Set<Direction> extendDirs = getDirectionsSet(args, 4, 0);
-//
-//        IImageFxModule imageFxModule = env.getImageFxModule();
-//        ITexture[] blurTexs = imageFxModule.blurMultiple(tex, 0, levels, k, extendDirs);
-//
-//        LuaTable table = new LuaTable(blurTexs.length, 0);
-//        for (int n = 0; n < blurTexs.length; n++) {
-//            table.rawset(1 + n, LuajavaLib.toUserdata(blurTexs[n], ITexture.class));
-//        }
-//        return table;
-//    }
-
     @ScriptFunction
     public Varargs brighten(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
@@ -154,22 +135,6 @@ public class ImageFxLib extends LuaLib {
         addOffscreenRenderTask(task);
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
     }
-
-//    @ScriptFunction
-//    public Varargs mipmap(Varargs args) {
-//        IImageModule imageModule = env.getImageModule();
-//
-//        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-//        if (tex == null) {
-//            return LuaNil.NIL;
-//        }
-//
-//        int level = args.optint(2, 1);
-//
-//        IImageFxModule imageFxModule = env.getImageFxModule();
-//        ITexture newTex = imageFxModule.mipmap(tex, level);
-//        return LuajavaLib.toUserdata(newTex, ITexture.class);
-//    }
 
     @ScriptFunction
     public Varargs colorMatrix(Varargs args) throws ScriptException {
@@ -214,56 +179,54 @@ public class ImageFxLib extends LuaLib {
         return Arrays.copyOf(values, length);
     }
 
-//    /**
-//     * Expects a single argument of the form:
-//     *
-//     * <pre>
-//     * {
-//     *     {tex=myTexture1},
-//     *     {tex=myTexture2, pos={10, 10}, overwrite=true},
-//     *     {tex=myTexture3}
-//     * }
-//     * </pre>
-//     *
-//     * <p>
-//     * The {@code pos} field is optional and assumed <code>{0, 0}</code> when omitted.
-//     * <p>
-//     * The {@code overwrite} field is also optional. Setting it to {@code true} makes the texture overwrite
-//     * whatever's underneath it rather than doing proper (and much slower) alpha blending.
-//     */
-//    @ScriptFunction
-//    public Varargs composite(Varargs args) {
-//        IImageModule imageModule = env.getImageModule();
-//
-//        LuaTable table = args.opttable(1, new LuaTable());
-//        double w = args.optdouble(2, -1);
-//        double h = args.optdouble(3, -1);
-//
-//        ImageCompositor compositor = new ImageCompositor(w, h);
-//
-//        LuaValue v;
-//        for (int n = 1; (v = table.get(n)) != LuaNil.NIL; n++) {
-//            // tex
-//            ITexture tex = LuaConvertUtil.getTextureArg(imageModule, v.get(S_TEX));
-//            TextureCompositeInfo tci = new TextureCompositeInfo(tex);
-//
-//            // pos
-//            LuaTable posT = v.get(S_POS).opttable(null);
-//            if (posT != null) {
-//                tci.setOffset(posT.todouble(1), posT.todouble(2));
-//            }
-//
-//            // overwrite
-//            tci.setOverwrite(v.get(S_OVERWRITE).toboolean());
-//
-//            // Add to list
-//            infos.add(tci);
-//        }
-//
-//        IImageFxModule imageFxModule = env.getImageFxModule();
-//        ITexture newTex = imageFxModule.composite(w, h, infos);
-//
-//        return LuajavaLib.toUserdata(newTex, ITexture.class);
-//    }
+    /**
+     * Expects a single argument of the form:
+     *
+     * <pre>
+     * {
+     *     {tex=myTexture1},
+     *     {tex=myTexture2, pos={10, 10}},
+     *     {tex=myTexture3}
+     * }
+     * </pre>
+     *
+     * <p>
+     * The {@code pos} field is optional and assumed <code>{0, 0}</code> when omitted.
+     */
+    @ScriptFunction
+    public Varargs composite(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        ImageCompositeConfig config = new ImageCompositeConfig();
+
+        // Handle main table containing the compositing configuration
+        LuaTable table = args.opttable(1, new LuaTable());
+        LuaValue v;
+        for (int n = 1; (v = table.get(n)) != LuaNil.NIL; n++) {
+            // texture
+            ITexture tex = LuaConvertUtil.getTextureArg(imageModule, v.get(S_TEX));
+            TextureEntry entry = new TextureEntry(tex);
+
+            // (optional) posistion
+            LuaTable posT = v.get(S_POS).opttable(null);
+            if (posT != null) {
+                entry.setPos(posT.get(1).checkdouble(), posT.get(2).checkdouble());
+            }
+
+            // Add to config
+            config.add(entry);
+        }
+
+        // (optional) explicit size
+        final int w = args.toint(2);
+        final int h = args.toint(3);
+        if (w > 0 && h > 0) {
+            config.setSize(w, h);
+        }
+
+        ImageCompositeTask task = new ImageCompositeTask(imageModule, config);
+        addOffscreenRenderTask(task);
+        return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
+    }
 
 }
