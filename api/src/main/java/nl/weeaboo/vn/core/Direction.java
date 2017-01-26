@@ -46,7 +46,8 @@ public enum Direction {
     }
 
     public static boolean containsTop(Iterable<Direction> dirs) {
-        return Iterables.any(dirs, Direction::isTop);
+        // Don't use a method reference, it crashes RoboVM (ArrayIndexOutOfBounds: -1, LambdaClassGenerator.java:203)
+        return Iterables.any(dirs, d -> d.isTop());
     }
 
     public boolean isRight() {
@@ -54,7 +55,8 @@ public enum Direction {
     }
 
     public static boolean containsRight(Iterable<Direction> dirs) {
-        return Iterables.any(dirs, Direction::isRight);
+        // Don't use a method reference, see #containsTop()
+        return Iterables.any(dirs, d -> d.isRight());
     }
 
     public boolean isBottom() {
@@ -62,7 +64,8 @@ public enum Direction {
     }
 
     public static boolean containsBottom(Iterable<Direction> dirs) {
-        return Iterables.any(dirs, Direction::isBottom);
+        // Don't use a method reference, see #containsTop()
+        return Iterables.any(dirs, d -> d.isBottom());
     }
 
     public boolean isLeft() {
@@ -70,7 +73,8 @@ public enum Direction {
     }
 
     public static boolean containsLeft(Iterable<Direction> dirs) {
-        return Iterables.any(dirs, Direction::isLeft);
+        // Don't use a method reference, see #containsTop()
+        return Iterables.any(dirs, d -> d.isLeft());
     }
 
 }
