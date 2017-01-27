@@ -101,15 +101,15 @@ function ClickIndicator:hide()
 end
 
 local ClickIndicatorSide = {
-    RIGHT = 0,      -- Fixed position on the bottom-right
-    TEXT_BOTTOM = 1 -- Dynamic position directly underneath the current text, aligned on the left side
+    RIGHT = 0,       -- Fixed position on the bottom-right
+    TEXT_BOTTOM = 1, -- Dynamic position directly underneath the current text, aligned on the left side
+    TEXT_INLINE = 2, -- Dynamic position immediately to the right of the text on the bottom-most visible line
 }
 
 local function initClickIndicator(textDrawable, texture, side)
     local d = Image.createImage(textDrawable:getLayer(), texture)
-    local scale = 1.0 -- 1.2 * textDrawable:getDefaultStyle():getFontSize() / d:getHeight()
-    local dw = scale * d:getWidth()
-    local dh = scale * d:getHeight()
+    local dw = d:getWidth()
+    local dh = d:getHeight()
     
     newThread(function()
         while not d:isDestroyed() do
@@ -118,8 +118,19 @@ local function initClickIndicator(textDrawable, texture, side)
             if side == ClickIndicatorSide.RIGHT then
                 d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
             elseif side == ClickIndicatorSide.TEXT_BOTTOM then
-                local textBottomY = textDrawable:getY() + textDrawable:getTextHeight()
-                d:setPos(tx + dw / 2, textBottomY + d:getHeight() / 2)
+                ty = ty + textDrawable:getTextHeight()
+                d:setPos(tx + dw / 2, ty + dh / 2)
+            elseif side == ClickIndicatorSide.TEXT_INLINE then
+                local lineIndex = textDrawable:getEndLine() - 1
+                if lineIndex >= 0 then
+                    local lineBounds = textDrawable:getLineBounds(lineIndex)
+                    tx = tx + lineBounds.x + lineBounds.w
+                    ty = ty + textDrawable:getTextHeight() - lineBounds.h / 2
+                    d:setPos(tx + dw, ty)
+                else
+                    -- Panic
+                    d:setVisible(false)
+                end
             end
             yield()
         end
@@ -128,7 +139,7 @@ local function initClickIndicator(textDrawable, texture, side)
     d:setSize(dw, dh)
     d:setAlign(0.5, 0.5)
     
-    if side == ClickIndicatorSide.RIGHT then    
+    if side == ClickIndicatorSide.RIGHT or side == ClickIndicatorSide.TEXT_INLINE then    
         -- Reserve some room for the continue indicator
         textDrawable:setWidth(textDrawable:getWidth() - dw)
     elseif side == ClickIndicatorSide.TEXT_BOTTOM then
@@ -256,7 +267,7 @@ function NvlTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.TEXT_BOTTOM)
+    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.TEXT_INLINE)
         
     self.layer = layer
     self.textArea = textArea

@@ -9,10 +9,12 @@ import com.google.common.base.Objects;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.IFontStore;
+import nl.weeaboo.styledtext.layout.ITextElement;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
@@ -162,6 +164,44 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     @Override
     public final float getTextWidth() {
         return getVisibleLayout().getTextWidth();
+    }
+
+    @Override
+    public Rect2D getLineBounds(int lineIndex) {
+        ITextLayout tl = getLayout();
+        if (lineIndex < 0 || lineIndex >= tl.getLineCount()) {
+            return Rect2D.EMPTY;
+        }
+        return calculateLineBounds(tl, lineIndex);
+    }
+
+    // TODO: Move to styledtext library
+    private static Rect2D calculateLineBounds(ITextLayout layout, int lineIndex) {
+        ITextLayout lineLayout = layout.getLineRange(lineIndex, lineIndex + 1);
+
+        float minX = Float.POSITIVE_INFINITY, minY = Float.POSITIVE_INFINITY;
+        float maxX = Float.NEGATIVE_INFINITY, maxY = Float.NEGATIVE_INFINITY;
+        for (ITextElement elem : lineLayout.getElements()) {
+            float x0 = elem.getX();
+            float x1 = elem.getX() + elem.getLayoutWidth();
+            float y0 = elem.getY();
+            float y1 = elem.getY() + elem.getLayoutHeight();
+
+            minX = Math.min(minX, x0);
+            minX = Math.min(minX, x1);
+            maxX = Math.max(maxX, x0);
+            maxX = Math.max(maxX, x1);
+
+            minY = Math.min(minY, y0);
+            minY = Math.min(minY, y1);
+            maxY = Math.max(maxY, y0);
+            maxY = Math.max(maxY, y1);
+        }
+
+        if (Float.isInfinite(minX) || Float.isInfinite(maxX) || Float.isInfinite(minY) || Float.isInfinite(maxY)) {
+            return Rect2D.EMPTY;
+        }
+        return Rect2D.of(minX, minY, maxX - minX, maxY - minY);
     }
 
     @Override

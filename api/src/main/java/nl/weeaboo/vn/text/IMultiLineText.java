@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.text;
 
+import nl.weeaboo.common.Rect2D;
+
 public interface IMultiLineText extends IText {
 
     /** @return The index of the first visible line. */
@@ -47,5 +49,11 @@ public interface IMultiLineText extends IText {
 
     /** Returns the minimum bounding text height for the requested line range. */
     float getTextHeight(int startLine, int endLine);
+
+    /**
+     * @return The bounding box of the text in the requested line, relative to the origin of the entire text layout (not
+     *         just the visible part).
+     */
+    Rect2D getLineBounds(int lineIndex);
 
 }

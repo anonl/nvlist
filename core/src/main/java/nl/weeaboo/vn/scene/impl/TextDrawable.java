@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.scene.impl;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
@@ -191,6 +192,11 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public int getMaxVisibleText() {
         return textRenderer.getMaxVisibleText();
+    }
+
+    @Override
+    public Rect2D getLineBounds(int lineIndex) {
+        return textRenderer.getLineBounds(lineIndex);
     }
 
 }

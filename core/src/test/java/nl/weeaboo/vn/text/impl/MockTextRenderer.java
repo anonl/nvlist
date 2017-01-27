@@ -198,6 +198,11 @@ public class MockTextRenderer implements ITextRenderer {
     }
 
     @Override
+    public Rect2D getLineBounds(int lineIndex) {
+        return Rect2D.EMPTY;
+    }
+
+    @Override
     public void render(IDrawBuffer drawBuffer, IDrawable parentComponent, double dx, double dy) {
     }
 
