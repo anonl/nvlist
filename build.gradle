@@ -71,7 +71,22 @@ allprojects {
         tasks.withType(JavaCompile) {
             options.encoding = 'UTF-8'
         }
-                
+
+        sourceSets {
+            main {
+                resources {
+                    // Add additional resource dir for .lua/.lvn scripts
+                    srcDirs 'src/main/lua'
+                }
+            }
+            test {
+                resources {
+                    // Add additional resource dir for .lua/.lvn scripts
+                    srcDirs 'src/test/lua'
+                }
+            }
+        }
+
         dependencies {
             testCompile "junit:junit:$junitVersion"
             testCompile "com.google.guava:guava-testlib:$guavaVersion"
