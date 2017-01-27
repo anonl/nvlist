@@ -29,10 +29,17 @@ public class Scene2dEnv implements Disposable {
 
     private Skin loadSkin(GdxFileSystem fileSystem) {
         String skinPath = "skin/uiskin.json";
-        if (!fileSystem.getFileExists(FilePath.of(skinPath))) {
-            LOG.warn("Skin file not found: {}", skinPath);
+
+        FileHandle skinFile = null;
+        if (fileSystem.getFileExists(FilePath.of(skinPath))) {
+            skinFile = fileSystem.resolve(skinPath);
         } else {
-            FileHandle skinFile = fileSystem.resolve(skinPath);
+            // Fallback: use the internal skin stored in the classpath
+            skinFile = Gdx.files.classpath("builtin/" + skinPath);
+        }
+
+        // Load skin
+        if (skinFile != null) {
             try {
                 return new Skin(skinFile);
             } catch (SerializationException se) {
