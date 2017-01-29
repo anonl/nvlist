@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.settings.IPreferenceStore;
-import nl.weeaboo.settings.Preference;
+import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INotifier;

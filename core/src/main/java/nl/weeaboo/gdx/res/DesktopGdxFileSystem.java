@@ -141,7 +141,8 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
             path = FilePath.of(path.toString() + "/");
         }
 
-        FileCollectOptions collectOpts = new FileCollectOptions(path);
+        FileCollectOptions collectOpts = new FileCollectOptions();
+        collectOpts.setPrefix(path);
         collectOpts.collectFolders = true;
         collectOpts.collectFiles = true;
         collectOpts.recursive = false;

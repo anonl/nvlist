@@ -49,7 +49,7 @@ allprojects {
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '1.5.4'
-        tcommonVersion = '1.2.6'
+        tcommonVersion = '2.0.0'
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')
@@ -64,8 +64,8 @@ allprojects {
         maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
         maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
-                
-    plugins.withType(JavaPlugin) {            
+
+    plugins.withType(JavaPlugin) {
         sourceCompatibility = javaVersion
         
         tasks.withType(JavaCompile) {
@@ -119,7 +119,7 @@ allprojects {
 	        jmh {
 	            fork = 1
 	        }
-        }        
+        }
     }
     
     bintray {

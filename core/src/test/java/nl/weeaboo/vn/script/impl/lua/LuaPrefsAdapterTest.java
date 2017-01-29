@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.script.impl.lua;
 
-import static nl.weeaboo.settings.Preference.newPreference;
+import static nl.weeaboo.prefsstore.Preference.newPreference;
 
 import java.util.List;
 import java.util.Set;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-import nl.weeaboo.settings.Preference;
+import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.test.integration.lua.LuaIntegrationTest;
 

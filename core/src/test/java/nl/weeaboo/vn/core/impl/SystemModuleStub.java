@@ -2,7 +2,7 @@ package nl.weeaboo.vn.core.impl;
 
 import com.badlogic.gdx.Application.ApplicationType;
 
-import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 

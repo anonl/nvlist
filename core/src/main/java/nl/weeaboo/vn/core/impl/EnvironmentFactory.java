@@ -5,8 +5,8 @@ import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.lua2.LuaRunState;
-import nl.weeaboo.settings.IPreferenceStore;
-import nl.weeaboo.settings.Preference;
+import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.image.impl.ImageModule;

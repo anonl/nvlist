@@ -103,7 +103,8 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
     @Override
     public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
         List<FilePath> result = new ArrayList<>();
-        getFilesImpl(result, opts.prefix, opts, resolveExisting(opts.prefix));
+        FilePath prefix = opts.getPrefix();
+        getFilesImpl(result, prefix, opts, resolveExisting(prefix));
         return result;
     }
 

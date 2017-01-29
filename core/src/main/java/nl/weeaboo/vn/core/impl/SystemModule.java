@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;

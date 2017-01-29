@@ -50,7 +50,7 @@ public class FileResourceLoader extends ResourceLoader {
 
     @Override
     protected List<FilePath> getFiles(FilePath folder) throws IOException {
-        FileCollectOptions opts = new FileCollectOptions(folder);
+        FileCollectOptions opts = FileCollectOptions.files(folder);
         return ImmutableList.copyOf(getFileSystem().getFiles(opts));
     }
 

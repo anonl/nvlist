@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.core;
 
-import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 
 /** Interface for interacting with hardware and external applications. */
 public interface ISystemModule extends IModule {

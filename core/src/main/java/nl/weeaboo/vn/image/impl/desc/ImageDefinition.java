@@ -58,7 +58,7 @@ public final class ImageDefinition implements IImageDefinition {
 
         // Validate extra constraints for tiling textures
         if (wrapX == GLTilingMode.REPEAT || wrapY == GLTilingMode.REPEAT) {
-            Checks.checkArgument(FastMath.isPowerOfTwo(size.w, size.h),
+            Checks.checkArgument(FastMath.isPowerOfTwo(size.w) && FastMath.isPowerOfTwo(size.h),
                     "Tiling is only supported for textures with power-of-two dimensions");
             Checks.checkArgument(subRects.isEmpty(),
                     "Tiling isn't supported for textures with sub-rects");

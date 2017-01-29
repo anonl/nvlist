@@ -1,9 +1,9 @@
 package nl.weeaboo.vn.core;
 
-import static nl.weeaboo.settings.Preference.newConstPreference;
-import static nl.weeaboo.settings.Preference.newPreference;
+import static nl.weeaboo.prefsstore.Preference.newConstPreference;
+import static nl.weeaboo.prefsstore.Preference.newPreference;
 
-import nl.weeaboo.settings.Preference;
+import nl.weeaboo.prefsstore.Preference;
 
 public final class NovelPrefs {
 

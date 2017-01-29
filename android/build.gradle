@@ -23,7 +23,7 @@ dependencies {
         exclude group: "com.badlogicgames.gdx", module: "gdx-backend-headless"
         exclude group: "com.badlogicgames.gdx", module: "gdx-platform"
     }
-    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+    compile "nl.weeaboo.common:core:$tcommonVersion"
     compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"

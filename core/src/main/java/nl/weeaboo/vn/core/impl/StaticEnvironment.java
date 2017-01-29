@@ -8,7 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.gdx.res.GeneratedResourceStore;
-import nl.weeaboo.settings.IPreferenceStore;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;

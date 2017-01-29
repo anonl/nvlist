@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.reflect.ReflectUtil;
-import nl.weeaboo.settings.Preference;
+import nl.weeaboo.prefsstore.Preference;
 
 public class NovelPrefsTest {
 

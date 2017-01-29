@@ -10,7 +10,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.settings.AbstractPreferenceStore;
+import nl.weeaboo.prefsstore.AbstractPreferenceStore;
 import nl.weeaboo.settings.PropertiesUtil;
 
 public final class NovelPrefsStore extends AbstractPreferenceStore {
