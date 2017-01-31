@@ -83,6 +83,9 @@ end
 ClickIndicator = {
 }
 
+function ClickIndicator:destroy()
+end
+
 function ClickIndicator:show()
 end
 
@@ -148,6 +151,17 @@ function DefaultClickIndicator.new(self)
     return self
 end
 
+function DefaultClickIndicator:destroy()
+    self:destroyThread()
+end
+
+function DefaultClickIndicator:destroyThread()
+    if self.thread ~= nil then
+        self.thread:destroy()
+        self.thread = nil
+    end
+end
+
 function DefaultClickIndicator:show()
 	if self.thread == nil then
         self.thread = newThread(function()
@@ -156,17 +170,16 @@ function DefaultClickIndicator:show()
                 yield()
             end
         end)
+        -- Make sure the position is updated before the drawable is made visible
+        self.thread:update()
 	end
 
     self.drawable:setVisible(true)
 end
 
 function DefaultClickIndicator:hide()
-	if self.thread ~= nil then
-	    self.thread:destroy()
-	    self.thread = nil
-	end
-
+	self:destroyThread()
+	
     self.drawable:setVisible(false)
 end
 
