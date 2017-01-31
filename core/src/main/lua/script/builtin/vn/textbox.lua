@@ -79,77 +79,95 @@ end
 ---Click indicator functions
 -------------------------------------------------------------------------------------------------------------- @section click indicator
 
-local ClickIndicator = {
-    drawable = nil
+-- Prototype for ClickIndicator implementations
+ClickIndicator = {
 }
 
-function ClickIndicator.new(self)
-    self = extend(ClickIndicator, self)
-    
-    -- Initially invisible
-    self.drawable:setVisible(false)
-    
-    return self
-end
-
 function ClickIndicator:show()
-    self.drawable:setVisible(true)
 end
 
 function ClickIndicator:hide()
-    self.drawable:setVisible(false)
 end
 
-local ClickIndicatorSide = {
+---Default click indicator
+-------------------------------------------------------------------------------------------------------------- @section Default click indicator
+
+--- Click indicator positions
+ClickIndicatorPos = {
     RIGHT = 0,       -- Fixed position on the bottom-right
     TEXT_BOTTOM = 1, -- Dynamic position directly underneath the current text, aligned on the left side
     TEXT_INLINE = 2, -- Dynamic position immediately to the right of the text on the bottom-most visible line
 }
 
-local function initClickIndicator(textDrawable, texture, side)
-    local d = Image.createImage(textDrawable:getLayer(), texture)
+---Aligns a click indicator drawable according to the specified positioning type
+-- @param d Click indicator drawable.
+-- @tparam ClickIndicatorPos clickIndicatorPos Click indicator positioning type.
+-- @tparam TextDrawable textDrawable Main textbox drawable.
+function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable)
     local dw = d:getWidth()
     local dh = d:getHeight()
     
-    newThread(function()
-        while not d:isDestroyed() do
-            local tx = textDrawable:getX()
-            local ty = textDrawable:getY()
-            if side == ClickIndicatorSide.RIGHT then
-                d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
-            elseif side == ClickIndicatorSide.TEXT_BOTTOM then
-                ty = ty + textDrawable:getTextHeight()
-                d:setPos(tx + dw / 2, ty + dh / 2)
-            elseif side == ClickIndicatorSide.TEXT_INLINE then
-                local lineIndex = textDrawable:getEndLine() - 1
-                if lineIndex >= 0 then
-                    local lineBounds = textDrawable:getLineBounds(lineIndex)
-                    tx = tx + lineBounds.x + lineBounds.w
-                    ty = ty + textDrawable:getTextHeight() - lineBounds.h / 2
-                    d:setPos(tx + dw, ty)
-                else
-                    -- Panic
-                    d:setVisible(false)
-                end
-            end
-            yield()
-        end
-    end)
-    
-    d:setSize(dw, dh)
+    local tx = textDrawable:getX()
+    local ty = textDrawable:getY()
+
     d:setAlign(0.5, 0.5)
-    
-    if side == ClickIndicatorSide.RIGHT or side == ClickIndicatorSide.TEXT_INLINE then    
-        -- Reserve some room for the continue indicator
-        textDrawable:setWidth(textDrawable:getWidth() - dw)
-    elseif side == ClickIndicatorSide.TEXT_BOTTOM then
-        -- Reserve some room for the continue indicator
-        textDrawable:setHeight(textDrawable:getHeight() - dh)
-    else
-        Log.warn("Unknown click indicator side: {}", side)
+    if clickIndicatorPos == ClickIndicatorPos.RIGHT then
+        d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
+    elseif clickIndicatorPos == ClickIndicatorPos.TEXT_BOTTOM then
+        ty = ty + textDrawable:getTextHeight()
+        d:setPos(tx + dw / 2, ty + dh / 2)
+    elseif clickIndicatorPos == ClickIndicatorPos.TEXT_INLINE then
+        local lineIndex = textDrawable:getEndLine() - 1
+        if lineIndex >= 0 then
+            local lineBounds = textDrawable:getLineBounds(lineIndex)
+            tx = tx + lineBounds.x + lineBounds.w
+            ty = ty + textDrawable:getTextHeight() - lineBounds.h / 2
+            d:setPos(tx + dw, ty)
+        else
+            -- Panic
+            d:setVisible(false)
+        end
     end
+end
+
+DefaultClickIndicator = extend(ClickIndicator, {
+    drawable = nil, -- Click indicator drawable
+    textDrawable = nil, -- Text drawable that this click indicator belongs to
+    pos = ClickIndicatorPos.TEXT_INLINE,
+})
+
+function DefaultClickIndicator.new(self)
+    self = extend(DefaultClickIndicator, self)
     
-    return ClickIndicator.new{drawable = d}
+    if self.drawable == nil then    
+        local d = Image.createImage(self.textDrawable:getLayer(), self.texture)        
+        d:setVisible(false) -- Initially invisible
+        self.drawable = d
+    end
+       
+    return self
+end
+
+function DefaultClickIndicator:show()
+	if self.thread == nil then
+        self.thread = newThread(function()
+            while not self.drawable:isDestroyed() do
+                applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable)
+                yield()
+            end
+        end)
+	end
+
+    self.drawable:setVisible(true)
+end
+
+function DefaultClickIndicator:hide()
+	if self.thread ~= nil then
+	    self.thread:destroy()
+	    self.thread = nil
+	end
+
+    self.drawable:setVisible(false)
 end
 
 ---Textbox functions
@@ -174,7 +192,7 @@ function TextBox:install()
 end
 
 function TextBox:destroy()
-    self.layer:destroy()
+    destroyValues{self.layer, self.clickIndicator}
 end
 
 function TextBox:setSpeaker(speaker)
@@ -267,7 +285,11 @@ function NvlTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.TEXT_INLINE)
+    self.clickIndicator = DefaultClickIndicator.new{
+        texture="gui/cursor",
+        textDrawable=textArea,
+        pos=ClickIndicatorPos.TEXT_INLINE,
+    }
         
     self.layer = layer
     self.textArea = textArea
@@ -308,7 +330,11 @@ function AdvTextBox.new(self)
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.75))
     
     -- Add continue indicator
-    self.clickIndicator = initClickIndicator(textArea, "gui/cursor", ClickIndicatorSide.RIGHT)
+    self.clickIndicator = DefaultClickIndicator.new{
+        texture="gui/cursor",
+        textDrawable=textArea,
+        pos=ClickIndicatorPos.TEXT_INLINE,
+    }
     
     -- Create a box for the speaker's name
     local nameLabel = Text.createTextDrawable(layer, "?")
