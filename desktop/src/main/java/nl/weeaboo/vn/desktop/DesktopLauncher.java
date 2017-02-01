@@ -28,12 +28,12 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.gdx.graphics.PixmapUtil;
-import nl.weeaboo.gdx.res.DesktopGdxFileSystem;
-import nl.weeaboo.vn.InitConfig;
-import nl.weeaboo.vn.Launcher;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.core.impl.NovelPrefsStore;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
+import nl.weeaboo.vn.impl.InitConfig;
+import nl.weeaboo.vn.impl.Launcher;
+import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 
 public class DesktopLauncher {
 

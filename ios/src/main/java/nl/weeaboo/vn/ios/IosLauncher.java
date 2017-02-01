@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 
-import nl.weeaboo.gdx.res.InternalGdxFileSystem;
-import nl.weeaboo.vn.Launcher;
+import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
+import nl.weeaboo.vn.impl.Launcher;
 
 public final class IosLauncher extends IOSApplication.Delegate {
 

@@ -5,8 +5,8 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import android.os.Bundle;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.vn.InitConfig;
-import nl.weeaboo.vn.Launcher;
+import nl.weeaboo.vn.impl.InitConfig;
+import nl.weeaboo.vn.impl.Launcher;
 
 public class AndroidLauncher extends AndroidApplication {
 

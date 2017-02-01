@@ -18,8 +18,9 @@ import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.gdx.HeadlessGdx;
-import nl.weeaboo.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.graphics.blur.ImageBlur;
 
 @BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)

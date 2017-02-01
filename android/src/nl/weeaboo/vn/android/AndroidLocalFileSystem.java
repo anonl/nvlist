@@ -3,7 +3,7 @@ package nl.weeaboo.vn.android;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-import nl.weeaboo.gdx.res.WritableGdxFileSystem;
+import nl.weeaboo.vn.gdx.res.WritableGdxFileSystem;
 
 public final class AndroidLocalFileSystem extends WritableGdxFileSystem {
 

@@ -18,7 +18,7 @@ import com.google.common.collect.Maps;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.gdx.res.GdxFileSystem;
+import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 
 public class AndroidAssetFileSystem extends GdxFileSystem {
 
