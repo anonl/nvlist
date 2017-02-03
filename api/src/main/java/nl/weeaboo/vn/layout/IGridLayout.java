@@ -6,7 +6,7 @@ public interface IGridLayout extends Serializable {
 
     void add(ILayoutElem elem, GridCellConstraints constraints);
 
-    /** Ends the current row and starts a new one */
+    /** Ends the current row and starts a new one. */
     void endRow();
 
     int getRowCount();

@@ -10,7 +10,6 @@ import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INotifier;
-import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.script.IScriptLoader;
 
 abstract class AbstractEnvironment implements IEnvironment {
@@ -38,11 +37,6 @@ abstract class AbstractEnvironment implements IEnvironment {
     @Override
     public <T> T getPref(Preference<T> pref) {
         return getPrefStore().get(pref);
-    }
-
-    @Override
-    public boolean isDebug() {
-        return getPref(NovelPrefs.SCRIPT_DEBUG);
     }
 
     @Override

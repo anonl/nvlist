@@ -75,9 +75,11 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
             controlTexUV = Area2D.of(uv.x, uv.y, uv.w * width / b.w, uv.h * height / b.h);
             controlWrap = TextureWrap.REPEAT_BOTH;
         } else {
-            double w, h;
+            final double w;
+            final double h;
             if (width > 0 && b.w > 0 && height > 0 && b.h > 0) {
-                double sx = width / b.w, sy = height / b.h;
+                double sx = width / b.w;
+                double sy = height / b.h;
                 if (sx >= sy) {
                     w = uv.w;
                     h = sy / sx * uv.h;

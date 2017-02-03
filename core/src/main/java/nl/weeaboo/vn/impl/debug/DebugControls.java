@@ -28,14 +28,14 @@ import nl.weeaboo.vn.gdx.graphics.GdxCrossFadeRenderer;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
+import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.impl.image.CrossFadeConfig;
 import nl.weeaboo.vn.impl.image.NinePatchRenderer;
-import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.impl.save.SaveParams;
 import nl.weeaboo.vn.impl.scene.ComponentFactory;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
-import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.RenderUtil;
@@ -220,7 +220,10 @@ public final class DebugControls {
 
         text.setBounds(200, 200, 800, 200);
         text.setZ((short)-1000);
+
+        // CHECKSTYLE:OFF
         text.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        // CHECKSTYLE:ON
     }
 
     private static void createLongText(ILayer layer) {

@@ -20,7 +20,7 @@ final class ParserUtil {
     }
 
     public static List<String> readLinesUtf8(InputStream in) throws IOException {
-        byte bytes[] = ByteStreams.toByteArray(in);
+        byte[] bytes = ByteStreams.toByteArray(in);
         int off = StreamUtil.skipBOM(bytes, 0, bytes.length);
 
         ImmutableList.Builder<String> lines = ImmutableList.builder();
@@ -31,10 +31,10 @@ final class ParserUtil {
             }
 
             int lineEnd = off;
-            if (lineEnd > lineStart && bytes[lineEnd-1] == '\r') { // CRLF
-                lines.add(StringUtil.fromUTF8(bytes, lineStart, Math.max(0, lineEnd-lineStart-1)));
+            if (lineEnd > lineStart && bytes[lineEnd - 1] == '\r') { // CRLF
+                lines.add(StringUtil.fromUTF8(bytes, lineStart, Math.max(0, lineEnd - lineStart - 1)));
             } else { // LF
-                lines.add(StringUtil.fromUTF8(bytes, lineStart, lineEnd-lineStart));
+                lines.add(StringUtil.fromUTF8(bytes, lineStart, lineEnd - lineStart));
             }
 
             off = lineEnd + 1;
@@ -47,7 +47,7 @@ final class ParserUtil {
     }
 
     public static String collapseWhitespace(String s, boolean trim) {
-        char chars[] = new char[s.length()];
+        char[] chars = new char[s.length()];
         s.getChars(0, chars.length, chars, 0);
 
         int r = 0;
@@ -88,6 +88,7 @@ final class ParserUtil {
     public static boolean isWhitespace(String string) {
         return isWhitespace(string, 0, string.length());
     }
+
     public static boolean isWhitespace(String string, int from, int to) {
         int n = from;
         while (n < to) {
@@ -126,15 +127,20 @@ final class ParserUtil {
 
         for (char c = itr.current(); c != CharacterIterator.DONE; c = itr.next()) {
             if (c == '\\') {
-                if (out != null) out.append(c);
+                if (out != null) {
+                    out.append(c);
+                }
                 c = itr.next();
             } else if (c == '\"') {
                 inQuotes = !inQuotes;
             } else if (!inQuotes) {
                 if (brackets <= 0 && c == endChar) {
                     break;
-                } else if (c == '[') brackets++;
-                else if (c == ']') brackets--;
+                } else if (c == '[') {
+                    brackets++;
+                } else if (c == ']') {
+                    brackets--;
+                }
             }
 
             if (out != null && c != CharacterIterator.DONE) {

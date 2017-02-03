@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptFunctionStub;
 import nl.weeaboo.vn.script.IScriptFunction;
 
@@ -43,8 +42,8 @@ public class ScriptEventDispatcherTest {
     /** Test basic behavior of events */
     @Test
     public void events() {
-        LuaScriptFunctionStub alpha = new LuaScriptFunctionStub();
-        LuaScriptFunctionStub beta = new LuaScriptFunctionStub();
+        final LuaScriptFunctionStub alpha = new LuaScriptFunctionStub();
+        final LuaScriptFunctionStub beta = new LuaScriptFunctionStub();
 
         // Events are only executed once
         eventDispatcher.addEvent(alpha);

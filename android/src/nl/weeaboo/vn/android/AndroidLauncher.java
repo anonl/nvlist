@@ -11,7 +11,7 @@ import nl.weeaboo.vn.impl.Launcher;
 public class AndroidLauncher extends AndroidApplication {
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         InitConfig.init();

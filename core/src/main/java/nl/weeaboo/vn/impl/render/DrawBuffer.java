@@ -120,7 +120,7 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     public ImmutableList<RenderCommand> getCommands() {
-        return ImmutableList.<RenderCommand> copyOf(commands);
+        return ImmutableList.<RenderCommand>copyOf(commands);
     }
 
 }

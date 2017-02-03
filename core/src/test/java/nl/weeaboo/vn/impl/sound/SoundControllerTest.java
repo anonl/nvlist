@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.gdx.test.ExceptionTester;
-import nl.weeaboo.vn.impl.sound.SoundController;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
@@ -58,9 +57,9 @@ public class SoundControllerTest {
 
     @Test
     public void stopAll() {
-        MockSound alpha = testHelper.start();
+        final MockSound alpha = testHelper.start();
 
-        MockSound beta = testHelper.start();
+        final MockSound beta = testHelper.start();
         beta.pause();
 
         sc.setPaused(true); // Pauses alpha
@@ -81,9 +80,9 @@ public class SoundControllerTest {
      */
     @Test
     public void masterVolume() {
-        MockSound sound = testHelper.start(SoundType.SOUND);
-        MockSound music = testHelper.start(SoundType.MUSIC);
-        MockSound voice = testHelper.start(SoundType.VOICE);
+        final MockSound sound = testHelper.start(SoundType.SOUND);
+        final MockSound music = testHelper.start(SoundType.MUSIC);
+        final MockSound voice = testHelper.start(SoundType.VOICE);
 
         sc.setMasterVolume(SoundType.SOUND, 0.125);
         sc.setMasterVolume(SoundType.MUSIC, 0.250);

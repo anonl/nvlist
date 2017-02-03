@@ -20,18 +20,21 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     private final ColorHelper color = new ColorHelper();
 
-    private double x, y;
+    private double x;
+    private double y;
     private boolean clipEnabled = true;
     private BlendMode blendMode = BlendMode.DEFAULT;
 
     private double rotation;
-    private double scaleX = 1, scaleY = 1;
-    private double imageAlignX, imageAlignY;
+    private double scaleX = 1;
+    private double scaleY = 1;
+    private double imageAlignX;
+    private double imageAlignY;
     private Matrix baseTransform = Matrix.identityMatrix();
 
-    private transient IShape _collisionShape;
-    private transient Rect2D _visualBounds;
-    private transient Matrix _transform;
+    private transient IShape cachedCollisionShape;
+    private transient Rect2D cachedVisualBounds;
+    private transient Matrix cachedTransform;
 
     public Transformable() {
     }
@@ -61,19 +64,19 @@ public abstract class Transformable extends VisualElement implements ITransforma
     }
 
     protected void invalidateTransform() {
-        _transform = null;
+        cachedTransform = null;
 
         invalidateBounds();
     }
 
     protected void invalidateBounds() {
-        _visualBounds = null;
+        cachedVisualBounds = null;
 
         invalidateCollisionShape();
     }
 
     protected void invalidateCollisionShape() {
-        _collisionShape = null;
+        cachedCollisionShape = null;
     }
 
     @Override
@@ -113,10 +116,10 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     @Override
     public final Rect2D getVisualBounds() {
-        if (_visualBounds == null) {
-            _visualBounds = createVisualBounds();
+        if (cachedVisualBounds == null) {
+            cachedVisualBounds = createVisualBounds();
         }
-        return _visualBounds;
+        return cachedVisualBounds;
     }
 
     protected abstract double getUnscaledWidth();
@@ -137,17 +140,17 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     @Override
     public final Matrix getTransform() {
-        if (_transform == null) {
-            _transform = createTransform();
+        if (cachedTransform == null) {
+            cachedTransform = createTransform();
         }
-        return _transform;
+        return cachedTransform;
     }
 
     protected final IShape getCollisionShape() {
-        if (_collisionShape == null) {
-            _collisionShape = createCollisionShape();
+        if (cachedCollisionShape == null) {
+            cachedCollisionShape = createCollisionShape();
         }
-        return _collisionShape;
+        return cachedCollisionShape;
     }
 
     @Override
@@ -231,16 +234,24 @@ public abstract class Transformable extends VisualElement implements ITransforma
     }
 
     @Override
-    public final void setX(double x) { setPos(x, getY()); }
+    public final void setX(double x) {
+        setPos(x, getY());
+    }
 
     @Override
-    public final void setY(double y) { setPos(getX(), y); }
+    public final void setY(double y) {
+        setPos(getX(), y);
+    }
 
     @Override
-    public final void setWidth(double w) { setSize(w, getHeight()); }
+    public final void setWidth(double w) {
+        setSize(w, getHeight());
+    }
 
     @Override
-    public final void setHeight(double h) { setSize(getWidth(), h); }
+    public final void setHeight(double h) {
+        setSize(getWidth(), h);
+    }
 
     @Override
     public final void translate(double dx, double dy) {

@@ -12,7 +12,7 @@ final class ColorHelper extends TransientListenerSupport {
 
     private static final long serialVersionUID = 1L;
 
-    private final double rgba[] = { 1.0, 1.0, 1.0, 1.0 };
+    private final double[] rgba = { 1.0, 1.0, 1.0, 1.0 };
 
     private transient int colorARGBInt;
 
@@ -81,6 +81,7 @@ final class ColorHelper extends TransientListenerSupport {
             rgba[1] = g;
             rgba[2] = b;
             rgba[3] = a;
+
             colorARGBInt = RenderUtil.packRGBAtoARGB(rgba[0], rgba[1], rgba[2], rgba[3]);
         }
     }

@@ -16,8 +16,8 @@ public final class QuadRenderCommand extends BaseRenderCommand {
     public final Area2D uv;
 
     public QuadRenderCommand(short z, boolean clipEnabled, BlendMode blendMode,
-            int argb, ITexture tex, Matrix transform, Area2D bounds, Area2D uv)
-    {
+            int argb, ITexture tex, Matrix transform, Area2D bounds, Area2D uv) {
+
         super(ID, z, clipEnabled, blendMode, argb, (byte)tex.hashCode());
 
         this.tex = Checks.checkNotNull(tex);

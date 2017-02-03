@@ -10,7 +10,6 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
-import nl.weeaboo.vn.impl.core.SeenLog;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 
 public class SeenLogTest {
@@ -30,10 +29,10 @@ public class SeenLogTest {
     /** Test behavior when adding only a few items */
     @Test
     public void addSeveral() {
-        FilePath pathA = FilePath.of("a");
-        FilePath pathB = FilePath.of("b");
-        FilePath pathC = FilePath.of("c");
-        FilePath pathD = FilePath.of("d");
+        final FilePath pathA = FilePath.of("a");
+        final FilePath pathB = FilePath.of("b");
+        final FilePath pathC = FilePath.of("c");
+        final FilePath pathD = FilePath.of("d");
 
         add(pathA);
         add(pathB);

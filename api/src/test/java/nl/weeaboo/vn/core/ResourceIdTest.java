@@ -61,8 +61,8 @@ public class ResourceIdTest {
         Assert.assertEquals(FilePath.of(expectedOutput), joined);
 
         // Check if the splitter functions can split the joined path back to its parts
-        Assert.assertEquals(path, ResourceId.getFilePath(joined.toString()).toString());
-        Assert.assertEquals(subId, ResourceId.getSubId(joined.toString()));
+        Assert.assertEquals(path, ResourceId.extractFilePath(joined.toString()).toString());
+        Assert.assertEquals(subId, ResourceId.extractSubId(joined.toString()));
     }
 
     private void assertJoinedPathInvalid(String path, String subId) {

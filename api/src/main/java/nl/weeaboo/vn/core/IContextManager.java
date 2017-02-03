@@ -5,12 +5,16 @@ import java.util.Collection;
 
 import nl.weeaboo.vn.script.IScriptFunction;
 
-/** Manages the active {@link IContext} and context lifetimes. */
+/**
+ * Manages the active {@link IContext} and context lifetimes.
+ */
 public interface IContextManager extends Serializable, IUpdateable {
 
     IContext createContext();
 
-    /** @see #createContext() */
+    /**
+     * @see #createContext()
+     */
     IContext createContext(IScriptFunction func);
 
     Collection<? extends IContext> getContexts();
@@ -20,7 +24,9 @@ public interface IContextManager extends Serializable, IUpdateable {
      */
     Collection<? extends IContext> getActiveContexts();
 
-    /** @return An 'most important' active context, or {@code null} if no context is active. */
+    /**
+     * Returns the 'most important' active context, or {@code null} if no context is active.
+     */
     IContext getPrimaryContext();
 
     boolean isContextActive(IContext context);

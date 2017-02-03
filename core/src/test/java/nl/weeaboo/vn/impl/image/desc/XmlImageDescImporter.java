@@ -25,9 +25,6 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
-import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
-import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
-import nl.weeaboo.vn.impl.image.desc.ImageSubRect;
 
 /**
  * Imports NVList3 img.xml
@@ -58,9 +55,12 @@ public class XmlImageDescImporter {
         for (int a = 0; a < imageEList.getLength(); a++) {
             Element imageE = (Element)imageEList.item(a);
 
-            FilePath filePath = FilePath.of(imageE.getAttribute("filename"));
+            final FilePath filePath = FilePath.of(imageE.getAttribute("filename"));
+
+            // Image dimensions
             int width = Integer.parseInt(imageE.getAttribute("width"));
             int height = Integer.parseInt(imageE.getAttribute("height"));
+            final Dim size = Dim.of(width, height);
 
             // Get scale filters
             List<String> scaleFilters = Splitter.on(',')
@@ -112,7 +112,7 @@ public class XmlImageDescImporter {
                 subRects.add(new ImageSubRect(id, Area.of(x, y, w, h)));
             }
 
-            ImageDefinition imageDef = new ImageDefinition(filePath.toString(), Dim.of(width, height),
+            ImageDefinition imageDef = new ImageDefinition(filePath.toString(), size,
                     minf, magf, wrapS, wrapT, subRects);
             result.put(filePath, imageDef);
         }

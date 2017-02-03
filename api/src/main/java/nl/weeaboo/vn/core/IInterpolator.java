@@ -5,9 +5,8 @@ import java.io.Serializable;
 public interface IInterpolator extends Serializable {
 
     /**
-     * Remaps an input value in the range <code>(0, 1)</code> to an output value
-     * in the range <code>(0, 1)</code>
+     * Remaps an input value in the range {@code (0, 1)} to an output value in the range {@code (0, 1)}.
      */
-    public float remap(float x);
-    
+    float remap(float x);
+
 }

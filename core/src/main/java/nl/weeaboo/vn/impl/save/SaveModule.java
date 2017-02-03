@@ -115,10 +115,10 @@ public class SaveModule implements ISaveModule {
 
     private void tryLoadSharedGlobals() {
         try {
-// TODO LVN-017
-//            if (isVNDS()) {
-//                sharedGlobals.set(VndsUtil.readVndsGlobalSav(fs));
-//            }
+            // TODO LVN-017
+            // if (isVNDS()) {
+            //    sharedGlobals.set(VndsUtil.readVndsGlobalSav(fs));
+            // }
             loadSharedGlobals();
         } catch (FileNotFoundException fnfe) {
             // Shared globals don't exist yet, not an error
@@ -160,16 +160,16 @@ public class SaveModule implements ISaveModule {
     }
 
     protected void generatePreloaderData() {
-// TODO LVN-011 Re-enable analytics
-//      IAnalytics an = novel.getAnalytics();
-//      if (an instanceof BaseLoggingAnalytics) {
-//          BaseLoggingAnalytics ba = (BaseLoggingAnalytics)an;
-//          try {
-//              ba.optimizeLog(true);
-//          } catch (IOException ioe) {
-//              GameLog.w("Error dumping analytics", ioe);
-//          }
-//      }
+        // TODO LVN-011 Re-enable analytics
+        //      IAnalytics an = novel.getAnalytics();
+        //      if (an instanceof BaseLoggingAnalytics) {
+        //          BaseLoggingAnalytics ba = (BaseLoggingAnalytics)an;
+        //          try {
+        //              ba.optimizeLog(true);
+        //          } catch (IOException ioe) {
+        //              GameLog.w("Error dumping analytics", ioe);
+        //          }
+        //      }
     }
 
     @Override
@@ -378,7 +378,9 @@ public class SaveModule implements ISaveModule {
     @Override
     public int getAutoSaveSlot(int slot) {
         int s = AUTO_SAVE_OFFSET + slot;
-        if (!isAutoSaveSlot(s)) throw new IllegalArgumentException("Slot outside valid range: " + slot);
+        if (!isAutoSaveSlot(s)) {
+            throw new IllegalArgumentException("Slot outside valid range: " + slot);
+        }
         return s;
     }
 

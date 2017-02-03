@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.utils.Disposable;
 
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
-import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
@@ -19,12 +17,12 @@ public class GeneratedResourceStoreTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeneratedResourceStoreTest.class);
 
-    private StaticRef<GeneratedResourceStore> TEST_ID = StaticRef.from("test", GeneratedResourceStore.class);
+    private StaticRef<GeneratedResourceStore> testId = StaticRef.from("test", GeneratedResourceStore.class);
     private GeneratedResourceStore store;
 
     @Before
     public void init() {
-        TEST_ID.set(store = new GeneratedResourceStore(TEST_ID));
+        testId.set(store = new GeneratedResourceStore(testId));
     }
 
     @Test

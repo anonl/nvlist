@@ -15,7 +15,8 @@ public class TextureAdapter implements ITexture {
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
     private IResource<TextureRegion> res;
-    private double scaleX, scaleY;
+    private double scaleX;
+    private double scaleY;
 
     public TextureAdapter(IResource<TextureRegion> region, double scaleX, double scaleY) {
         this.res = Checks.checkNotNull(region);
@@ -73,7 +74,7 @@ public class TextureAdapter implements ITexture {
         float u2 = tr.getU2();
         float v1 = tr.getV();
         float v2 = tr.getV2();
-        return Area2D.of(u1, v1, u2-u1, v2-v1);
+        return Area2D.of(u1, v1, u2 - u1, v2 - v1);
     }
 
     @Override
@@ -111,6 +112,7 @@ public class TextureAdapter implements ITexture {
     public void setTextureRegion(IResource<TextureRegion> tr, double scale) {
         setTextureRegion(tr, scale, scale);
     }
+
     public void setTextureRegion(IResource<TextureRegion> tr, double sx, double sy) {
         this.res = Checks.checkNotNull(tr);
         this.scaleX = sx;

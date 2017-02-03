@@ -22,7 +22,7 @@ public interface IImageModule extends IModule, IResourceResolver {
     IButton createButton(ILayer layer, IScriptContext scriptContext);
 
     /**
-     * Convenience method for {@link #getTexture(ResourceLoadInfo, boolean)}
+     * Convenience method for {@link #getTexture(ResourceLoadInfo, boolean)}.
      */
     ITexture getTexture(FilePath filename);
 

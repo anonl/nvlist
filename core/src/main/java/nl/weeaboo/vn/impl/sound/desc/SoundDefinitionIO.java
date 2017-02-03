@@ -32,8 +32,8 @@ public final class SoundDefinitionIO {
     }
 
     public static Map<FilePath, ISoundDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
-            throws IOException, SaveFormatException
-    {
+            throws IOException, SaveFormatException {
+
         Map<FilePath, ISoundDefinition> result = Maps.newHashMap();
         for (FilePath folder : getFolders(fileSystem, rootFolder)) {
             FilePath path = folder.resolve("snd.json");

@@ -106,8 +106,8 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                     return LuaConstants.NONE;
                 } else {
                     // This may happen if the methods return type changed (can happen due to serialization)
-                    throw new LuaError("Java method (" + method + ") returned non-varargs: " +
-                            (result != null ? result.getClass().getName() : "null"));
+                    throw new LuaError("Java method (" + method + ") returned non-varargs: "
+                            + (result != null ? result.getClass().getName() : "null"));
                 }
             } catch (InvocationTargetException ite) {
                 Throwable cause = ite.getCause();

@@ -10,7 +10,8 @@ public final class VolatileTextureData implements IGdxTextureData {
 
     private final transient TextureRegion textureRegion;
     private final boolean isShared;
-    private final int width, height;
+    private final int width;
+    private final int height;
 
     private boolean destroyed;
 

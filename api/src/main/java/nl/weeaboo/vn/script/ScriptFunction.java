@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /** Annotation to mark methods that should be made available to the scripting environment. */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value=ElementType.METHOD)
+@Target(value = ElementType.METHOD)
 public @interface ScriptFunction {
 
 }

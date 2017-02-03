@@ -100,9 +100,9 @@ public final class Osd implements Disposable {
         }
 
         IRenderEnv renderEnv = env.getRenderEnv();
-        Dim vsize = renderEnv.getVirtualSize();
-        int pad = Math.min(vsize.w, vsize.h) / 64;
-        int wrapWidth = vsize.w - pad * 2;
+        final Dim vsize = renderEnv.getVirtualSize();
+        final int pad = Math.min(vsize.w, vsize.h) / 64;
+        final int wrapWidth = vsize.w - pad * 2;
 
         MutableStyledText text = new MutableStyledText();
         text.append(performanceMetrics.getPerformanceSummary());

@@ -44,6 +44,7 @@ public interface IStorage extends Serializable {
     void addAll(String prefix, IStorage val);
 
     /**
+     * @return All stored keys.
      * @see #getKeys(String)
      */
     Collection<String> getKeys();

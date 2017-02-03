@@ -22,9 +22,9 @@ public final class VKey extends AbstractId {
     public static final VKey MOUSE_LEFT = new VKey("mouseLeft");
 
     private static final ImmutableList<VKey> STANDARD_KEYS = ImmutableList.of(
-        UP, DOWN, LEFT, RIGHT,
-        CONFIRM, CANCEL, TEXT_CONTINUE, SKIP,
-        MOUSE_LEFT
+            UP, DOWN, LEFT, RIGHT,
+            CONFIRM, CANCEL, TEXT_CONTINUE, SKIP,
+            MOUSE_LEFT
     );
 
     private VKey(String id) {

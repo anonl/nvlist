@@ -163,7 +163,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             inputConfig = new InputConfig();
             LOG.warn("Error reading input config", ioe);
         }
-        Input input = new Input(inputAdapter.getInput(), inputConfig);
+        final Input input = new Input(inputAdapter.getInput(), inputConfig);
 
         StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
         StaticEnvironment.FILE_SYSTEM.set(resourceFileSystem);
@@ -200,14 +200,19 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             int[] sizes = { 16, 32 };
             for (EFontStyle style : EnumSet.of(EFontStyle.PLAIN, EFontStyle.BOLD, EFontStyle.ITALIC)) {
                 String name = fontFamily;
-                if (style.isBold()) name += "Bold";
-                if (style.isItalic()) name += "Oblique";
+                if (style.isBold()) {
+                    name += "Bold";
+                }
+                if (style.isItalic()) {
+                    name += "Oblique";
+                }
 
-                FileHandle fileHandle = resourceFileSystem.resolve("font/" + name + ".ttf");
 
                 MutableTextStyle ts = new MutableTextStyle();
                 ts.setFontName(name);
                 ts.setFontStyle(style);
+
+                FileHandle fileHandle = resourceFileSystem.resolve("font/" + name + ".ttf");
 
                 GdxFontGenerator fontGenerator = new GdxFontGenerator();
                 fontGenerator.setYDir(YDir.DOWN);

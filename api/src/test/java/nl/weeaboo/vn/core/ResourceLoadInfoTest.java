@@ -20,7 +20,7 @@ public class ResourceLoadInfoTest {
         Assert.assertEquals(PATH, info.getPath());
         Assert.assertEquals(STACK_TRACE, info.getCallStackTrace());
 
-        info = new ResourceLoadInfo(PATH, Collections.<String> emptyList());
+        info = new ResourceLoadInfo(PATH, Collections.<String>emptyList());
         Assert.assertEquals(Arrays.asList(), info.getCallStackTrace());
     }
 

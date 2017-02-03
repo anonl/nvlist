@@ -101,8 +101,8 @@ final class TextureManager implements Serializable {
         if (imageDef == null) {
             if (resourceId.hasSubId()) {
                 LOG.warn("Image definition not found: {}", relPath);
-                throw new FileNotFoundException("Texture sub-rect not found (missing image definition): " +
-                        resourceId);
+                throw new FileNotFoundException("Texture sub-rect not found (missing image definition): "
+                        + resourceId);
             }
 
             LOG.trace("Image definition not found: {}", relPath);
@@ -161,6 +161,7 @@ final class TextureManager implements Serializable {
 
             this.subRect = null;
         }
+
         public RegionResource(IResource<Texture> inner, Area subRect) {
             super(inner);
 

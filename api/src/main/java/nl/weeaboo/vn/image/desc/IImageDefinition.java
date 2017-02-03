@@ -11,7 +11,7 @@ public interface IImageDefinition {
 
     Collection<? extends IImageSubRect> getSubRects();
 
-    /** @return The sub-rect with the given ID, or {@code null} if not found. */
+    /** Returns the sub-rect with the given ID, or {@code null} if not found. */
     IImageSubRect findSubRect(String id);
 
     GLScaleFilter getMinifyFilter();

@@ -22,7 +22,6 @@ public interface IEnvironment extends IDestructible {
     IFileSystem getFileSystem();
     IWritableFileSystem getOutputFileSystem();
     INotifier getNotifier();
-    boolean isDebug();
     IPreferenceStore getPrefStore();
     <T> T getPref(Preference<T> pref);
 

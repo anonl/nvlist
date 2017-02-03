@@ -30,7 +30,8 @@ class PremultFileTextureData implements TextureData {
     // Store some data we still need after consumePixmap() is called by the framework
     private boolean initialized;
     private Format format;
-    private int width, height;
+    private int width;
+    private int height;
 
     /**
      * @param format (optional) If not {@code null}, convert the pixmap to this format before uploading it as
@@ -133,7 +134,7 @@ class PremultFileTextureData implements TextureData {
         return true;
     }
 
-    protected Pixmap ensurePot (Pixmap pixmap) {
+    protected Pixmap ensurePot(Pixmap pixmap) {
         if (Gdx.gl20 == null && FileTextureData.copyToPOT) {
             int pixmapWidth = pixmap.getWidth();
             int pixmapHeight = pixmap.getHeight();

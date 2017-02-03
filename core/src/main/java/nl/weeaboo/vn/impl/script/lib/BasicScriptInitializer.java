@@ -26,12 +26,12 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
 
         // Enums
         registerTypes(globals,
-            BlendMode.class,
-            KeyCode.class,
-            MediaType.class,
-            SkipMode.class,
-            VerticalAlign.class,
-            SoundType.class
+                BlendMode.class,
+                KeyCode.class,
+                MediaType.class,
+                SkipMode.class,
+                VerticalAlign.class,
+                SoundType.class
         );
 
         LuaPrefsAdapter prefsAdapter = new LuaPrefsAdapter();

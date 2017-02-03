@@ -19,6 +19,7 @@ public class TestAssetManager extends AssetManager {
     public TestAssetManager() {
         this(new ClasspathFileHandleResolver());
     }
+
     public TestAssetManager(FileHandleResolver resolver) {
         super(resolver);
 

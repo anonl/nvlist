@@ -9,10 +9,11 @@ public class TextModule implements ITextModule {
     private static final long serialVersionUID = TextImpl.serialVersionUID;
 
     private final ITextLog textLog;
-    
+
     public TextModule() {
         this(new TextLog());
     }
+
     public TextModule(TextLog textLog) {
         this.textLog = Checks.checkNotNull(textLog);
     }

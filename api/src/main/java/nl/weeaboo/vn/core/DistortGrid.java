@@ -9,7 +9,8 @@ public final class DistortGrid implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int width, height;
+    private final int width;
+    private final int height;
     private final int scansize;
 
     private boolean sharedBuffer;
@@ -17,12 +18,12 @@ public final class DistortGrid implements Serializable {
 
     public DistortGrid(int w, int h) {
         if (w < 1 || h < 1) {
-            throw new IllegalArgumentException("Invalid size ("+w+"x"+h+"), must be at least 2x2");
+            throw new IllegalArgumentException("Invalid size (" + w + "x" + h + "), must be at least 2x2");
         }
 
         width = w;
         height = h;
-        scansize = (w+1) * 2;
+        scansize = (w + 1) * 2;
         data = new float[getRequiredElements(w, h)];
     }
 
@@ -35,16 +36,14 @@ public final class DistortGrid implements Serializable {
         scansize = other.scansize;
     }
 
-    //Functions
     public DistortGrid copy() {
         return new DistortGrid(this);
     }
 
     private static int getRequiredElements(int w, int h) {
-        return (w+1) * (h+1) * 2;
+        return (w + 1) * (h + 1) * 2;
     }
 
-    //Getters
     /**
      * @return The stored X-offset, or {@code 0} if the given {@code (x, y)} coordinate is out of bounds.
      */
@@ -73,7 +72,6 @@ public final class DistortGrid implements Serializable {
         return height;
     }
 
-    //Setters
     /**
      * Sets the XY-offset for the given grid position.
      *

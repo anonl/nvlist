@@ -40,7 +40,7 @@ public interface ILayer extends IVisualGroup {
     void setPos(double x, double y);
     void setSize(double w, double h);
 
-    /** Simultaneously sets the size and pos of this layer */
+    /** Simultaneously sets the size and pos of this layer. */
     void setBounds(double x, double y, double w, double h);
 
     void setVisible(boolean v);

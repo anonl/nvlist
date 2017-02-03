@@ -7,10 +7,12 @@ import nl.weeaboo.common.Rect2D;
  */
 public interface ILayoutGroup extends ILayoutElem {
 
-    /** Removes a child element from this layout group */
+    /** Removes a child element from this layout group. */
     void remove(ILayoutElem elem);
 
-    /** @return {@code true} if the layout is valid. Use {@link #layout()} to re-layout when invalid. */
+    /**
+     * @return {@code true} if the layout is valid. Use {@link #layout()} to re-layout when invalid.
+     */
     boolean isLayoutValid();
 
     /**
@@ -24,7 +26,9 @@ public interface ILayoutGroup extends ILayoutElem {
     /** Applies the layout algorithm to this group and its sub-elements. */
     void layout();
 
-    /** @return The bounding rectangle within which child elements should be laid out. */
+    /**
+     * @return The bounding rectangle within which child elements should be laid out.
+     */
     Rect2D getChildLayoutBounds();
 
 }

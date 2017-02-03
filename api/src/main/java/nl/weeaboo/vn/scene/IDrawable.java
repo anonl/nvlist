@@ -6,7 +6,9 @@ import nl.weeaboo.vn.render.IDrawTransform;
 
 public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform {
 
-    /** @return The parent layer that contains this drawable, or {@code null} if not attached to any layer. */
+    /**
+     * @return The parent layer that contains this drawable, or {@code null} if not attached to any layer.
+     */
     ILayer getLayer();
 
     @Override

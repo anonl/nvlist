@@ -38,25 +38,25 @@ public final class ProgressOutputStream extends FilterOutputStream {
     }
 
     @Override
-    public void write(byte b[], int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
 
         pos += len;
-           if (pos - lastReportedPos >= updateBytes) {
+        if (pos - lastReportedPos >= updateBytes) {
             lastReportedPos = (pos / updateBytes) * updateBytes;
-               pl.onProgressChanged(lastReportedPos);
-           }
+            pl.onProgressChanged(lastReportedPos);
+        }
     }
 
     @Override
     public void write(int b) throws IOException {
         out.write(b);
 
-           pos++;
-           if (pos - lastReportedPos >= updateBytes) {
+        pos++;
+        if (pos - lastReportedPos >= updateBytes) {
             lastReportedPos = (pos / updateBytes) * updateBytes;
-               pl.onProgressChanged(lastReportedPos);
-           }
+            pl.onProgressChanged(lastReportedPos);
+        }
     }
 
 }

@@ -254,19 +254,20 @@ final class JngReader {
                 throw new IOException(String.format("Invalid JHDR magic: 0x%08x", jhdrMagic));
             }
 
-            int w = din.readInt();
-            int h = din.readInt();
+            final int w = din.readInt();
+            final int h = din.readInt();
             /*int colorType = */din.readUnsignedByte();
             /*int imageSampleDepth = */din.readUnsignedByte();
             /*int imageCompressionMethod = */din.readUnsignedByte();
             /*int imageInterlaceMethod = */din.readUnsignedByte();
-            int alphaSampleDepth = din.readUnsignedByte();
-            int alphaCompressionMethod = din.readUnsignedByte();
-            int alphaFilterMethod = din.readUnsignedByte();
-            int alphaInterlaceMethod = din.readUnsignedByte();
+            final int alphaSampleDepth = din.readUnsignedByte();
+            final int alphaCompressionMethod = din.readUnsignedByte();
+            final int alphaFilterMethod = din.readUnsignedByte();
+            final int alphaInterlaceMethod = din.readUnsignedByte();
             /*int crc = */din.readInt();
 
-            return new JNGHeader(w, h, alphaSampleDepth, alphaCompressionMethod, alphaFilterMethod, alphaInterlaceMethod);
+            return new JNGHeader(w, h, alphaSampleDepth, alphaCompressionMethod, alphaFilterMethod,
+                    alphaInterlaceMethod);
         }
 
     }

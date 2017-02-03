@@ -22,18 +22,7 @@ public class MockGL extends GL20Profiler {
         final MockGL mockGL = new MockGL();
         return (GL20)Proxy.newProxyInstance(MockGL.class.getClassLoader(),
             new Class<?>[] { GL20.class },
-            new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
-                    try {
-                        // Call equivalent method in MockGL if it exists
-                        Method mockMethod = MockGL.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
-                        return mockMethod.invoke(mockGL, args);
-                    } catch (NoSuchMethodException nsme) {
-                        return null;
-                    }
-                }
-            });
+            new MockGLInvocationHandler(mockGL));
     }
 
     @Override
@@ -57,9 +46,9 @@ public class MockGL extends GL20Profiler {
         case GL_COMPILE_STATUS:
             params.put(0, 1);
             return;
+        default:
+            super.glGetShaderiv(shader, pname, params);
         }
-
-        super.glGetShaderiv(shader, pname, params);
     }
 
     @Override
@@ -72,9 +61,9 @@ public class MockGL extends GL20Profiler {
         case GL_ACTIVE_ATTRIBUTES:
             params.put(0, 0);
             return;
+        default:
+            super.glGetProgramiv(program, pname, params);
         }
-
-        super.glGetProgramiv(program, pname, params);
     }
 
     @Override
@@ -88,4 +77,22 @@ public class MockGL extends GL20Profiler {
         return GL20.GL_NO_ERROR;
     }
 
+    private static final class MockGLInvocationHandler implements InvocationHandler {
+        private final MockGL mockGL;
+
+        private MockGLInvocationHandler(MockGL mockGL) {
+            this.mockGL = mockGL;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
+            try {
+                // Call equivalent method in MockGL if it exists
+                Method mockMethod = MockGL.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                return mockMethod.invoke(mockGL, args);
+            } catch (NoSuchMethodException nsme) {
+                return null;
+            }
+        }
+    }
 }

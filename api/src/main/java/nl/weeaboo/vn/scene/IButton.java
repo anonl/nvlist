@@ -8,34 +8,54 @@ import nl.weeaboo.vn.script.IScriptFunction;
 
 public interface IButton extends ITransformable {
 
-    /** @see IButtonModel#consumePress() */
+    /**
+     * @see IButtonModel#consumePress()
+     */
     public boolean consumePress();
 
-    /** @see IButtonModel#isRollover() */
+    /**
+     * @see IButtonModel#isRollover()
+     */
     public boolean isRollover();
 
-    /** @see IButtonModel#isPressed() */
+    /**
+     * @see IButtonModel#isPressed()
+     */
     public boolean isPressed();
 
-    /** @see IButtonModel#isEnabled() */
+    /**
+     * @see IButtonModel#isEnabled()
+     */
     public boolean isEnabled();
 
-    /** @see IButtonModel#setEnabled(boolean) */
+    /**
+     * @see IButtonModel#setEnabled(boolean)
+     */
     public void setEnabled(boolean e);
 
-    /** @see IButtonModel#isSelected() */
+    /**
+     * @see IButtonModel#isSelected()
+     */
     public boolean isSelected();
 
-    /** @see IButtonModel#setSelected(boolean) */
+    /**
+     * @see IButtonModel#setSelected(boolean)
+     */
     public void setSelected(boolean s);
 
-    /** @see IButtonModel#isToggle() */
+    /**
+     * @see IButtonModel#isToggle()
+     */
     public boolean isToggle();
 
-    /** @see IButtonModel#setToggle(boolean) */
+    /**
+     * @see IButtonModel#setToggle(boolean)
+     */
     public void setToggle(boolean t);
 
-    /** @see #setClickHandler(IScriptFunction) */
+    /**
+     * @see #setClickHandler(IScriptFunction)
+     */
     public IScriptFunction getClickHandler();
 
     /**
@@ -74,16 +94,24 @@ public interface IButton extends ITransformable {
      */
     public void setText(StyledText stext);
 
-    /** @see IButtonRenderer#setTexture(ButtonViewState, ITexture) */
+    /**
+     * @see IButtonRenderer#setTexture(ButtonViewState, ITexture)
+     */
     public void setTexture(ButtonViewState viewState, ITexture tex);
 
-    /** @see IButtonRenderer#setTexture(ButtonViewState, ITexture) */
+    /**
+     * @see IButtonRenderer#setTexture(ButtonViewState, ITexture)
+     */
     public void setTexture(ButtonViewState viewState, INinePatch patch);
 
-    /** @see IButtonRenderer#getVerticalAlign() */
+    /**
+     * @see IButtonRenderer#getVerticalAlign()
+     */
     VerticalAlign getVerticalAlign();
 
-    /** @see IButtonRenderer#setVerticalAlign(VerticalAlign) */
+    /**
+     * @see IButtonRenderer#setVerticalAlign(VerticalAlign)
+     */
     void setVerticalAlign(VerticalAlign align);
 
 }

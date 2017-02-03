@@ -8,13 +8,27 @@ public final class BoundsHelper extends TransientListenerSupport {
 
     private static final long serialVersionUID = 1L;
 
-    private double x, y, w, h;
+    private double x;
+    private double y;
+    private double w;
+    private double h;
     private transient Rect2D cachedBounds;
 
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public double getWidth() { return w; }
-    public double getHeight() { return h; }
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getWidth() {
+        return w;
+    }
+
+    public double getHeight() {
+        return h;
+    }
 
     public Rect2D getBounds() {
         if (cachedBounds == null) {

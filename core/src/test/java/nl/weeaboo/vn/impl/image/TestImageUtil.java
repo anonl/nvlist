@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.ITextureData;
-import nl.weeaboo.vn.impl.image.PixelTextureData;
 import nl.weeaboo.vn.render.RenderUtil;
 
 public final class TestImageUtil {
@@ -45,10 +44,10 @@ public final class TestImageUtil {
     }
 
     public static int toFormat(Format format, int argb) {
-        int a = (argb>>24) & 0xFF;
-        int r = (argb>>16) & 0xFF;
-        int g = (argb>>8 ) & 0xFF;
-        int b = (argb    ) & 0xFF;
+        int a = (argb >> 24) & 0xFF;
+        int r = (argb >> 16) & 0xFF;
+        int g = (argb >> 8 ) & 0xFF;
+        int b = (argb      ) & 0xFF;
 
         switch (format) {
         case Alpha:
@@ -59,13 +58,15 @@ public final class TestImageUtil {
         case RGBA4444:
         case RGB888:
         case RGBA8888:
-        default: throw new IllegalArgumentException("Unsupported format: " + format);
+        default:
+            throw new IllegalArgumentException("Unsupported format: " + format);
         }
     }
 
     public static void assertEquals(ITextureData a, ITextureData b) {
         assertEquals(((PixelTextureData)a).getPixels(), ((PixelTextureData)b).getPixels());
     }
+
     public static void assertEquals(Pixmap a, Pixmap b) {
         Assert.assertEquals(a.getWidth(), b.getWidth());
         Assert.assertEquals(a.getHeight(), b.getHeight());

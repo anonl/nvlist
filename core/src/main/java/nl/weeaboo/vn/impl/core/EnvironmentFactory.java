@@ -92,10 +92,10 @@ public class EnvironmentFactory {
         // Register script libs
         registerLuaLibs(env, scriptEnv);
 
-     // TODO LVN-017
-//      if (isVNDS()) {
-//          novel.setBootstrapScripts("builtin/vnds/main.lua");
-//      }
+        // TODO LVN-017
+        // if (isVNDS()) {
+        //     novel.setBootstrapScripts("builtin/vnds/main.lua");
+        // }
 
         ISaveModule saveModule = env.getSaveModule();
         saveModule.loadPersistent();

@@ -10,7 +10,6 @@ public final class Interpolators {
     private Interpolators() {
     }
 
-    //Inner Classes
     private static class LinearInterpolator implements IInterpolator {
 
         private static final long serialVersionUID = 1L;

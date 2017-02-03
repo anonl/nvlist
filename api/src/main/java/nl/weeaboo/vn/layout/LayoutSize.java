@@ -50,7 +50,9 @@ public final class LayoutSize implements Serializable {
         return value;
     }
 
-    /** @return The size value, or {@code defaultValue} if infinite or unknown. */
+    /**
+     * @return The size value, or {@code defaultValue} if infinite or unknown.
+     */
     public double value(double defaultValue) {
         if (!Doubles.isFinite(value)) {
             return defaultValue;

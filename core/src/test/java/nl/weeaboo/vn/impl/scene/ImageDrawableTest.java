@@ -8,7 +8,6 @@ import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.TestTexture;
 import nl.weeaboo.vn.impl.image.TextureStub;
-import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class ImageDrawableTest {
@@ -120,8 +119,8 @@ public class ImageDrawableTest {
     public void imageAttributes() {
         ImageDrawable image = CoreTestUtil.newImage();
 
-        ITexture alpha = new TextureStub(50, 50);
-        ITexture beta = new TextureStub(100, 100);
+        final ITexture alpha = new TextureStub(50, 50);
+        final ITexture beta = new TextureStub(100, 100);
 
         image.setTexture(beta);
         Assert.assertEquals(0, image.getX(), E);

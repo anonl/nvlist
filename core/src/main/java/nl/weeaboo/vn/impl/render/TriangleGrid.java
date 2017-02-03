@@ -25,7 +25,8 @@ public final class TriangleGrid implements Serializable {
     }
 
     private final int verticesPerRow;
-    private final int rows, cols;
+    private final int rows;
+    private final int cols;
     private final float[] pos;
     private final float[][] tex;
 
@@ -41,15 +42,17 @@ public final class TriangleGrid implements Serializable {
     public static TriangleGrid layout1(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0) {
         return layout(new InputQuad(bounds0, texBounds0, wrap0));
     }
+
     public static TriangleGrid layout2(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
-            Area2D bounds1, Area2D texBounds1, TextureWrap wrap1)
-    {
+            Area2D bounds1, Area2D texBounds1, TextureWrap wrap1) {
+
         return layout(new InputQuad(bounds0, texBounds0, wrap0), new InputQuad(bounds1, texBounds1, wrap1));
     }
+
     public static TriangleGrid layout3(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
             Area2D bounds1, Area2D texBounds1, TextureWrap wrap1,
-            Area2D bounds2, Area2D texBounds2, TextureWrap wrap2)
-    {
+            Area2D bounds2, Area2D texBounds2, TextureWrap wrap2) {
+
         return layout(
                 new InputQuad(bounds0, texBounds0, wrap0),
                 new InputQuad(bounds1, texBounds1, wrap1),
@@ -84,7 +87,7 @@ public final class TriangleGrid implements Serializable {
 
         for (int yi = 0; yi < rows; yi++) {
             double y0 = ysplits[yi];
-            double y1 = ysplits[yi+1];
+            double y1 = ysplits[yi + 1];
 
             for (int xi = 0; xi < cols; xi++) {
                 double x = xsplits[xi];
@@ -110,7 +113,8 @@ public final class TriangleGrid implements Serializable {
     }
 
     private static void glDrawArrayVertex(FloatBuffer coords, double x, double y) {
-        coords.put((float)x); coords.put((float)y);
+        coords.put((float)x);
+        coords.put((float)y);
     }
 
     private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y, InputQuad input) {
@@ -162,12 +166,15 @@ public final class TriangleGrid implements Serializable {
             dst += outStride;
         }
     }
+
     public int getRows() {
         return rows;
     }
+
     public int getCols() {
         return cols;
     }
+
     public int getTextures() {
         return tex.length;
     }

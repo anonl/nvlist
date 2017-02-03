@@ -22,7 +22,8 @@ public class TestTexture implements ITexture {
         HeadlessGdx.init();
     }
 
-    private final int w, h;
+    private final int w;
+    private final int h;
     private final int[] argb;
 
     private transient Pixmap image;
@@ -47,7 +48,7 @@ public class TestTexture implements ITexture {
             for (int x = 0; x < w; x++) {
                 int r = 64 + 127 * x / Math.max(1, w - 1);
                 int g = 64 + 127 * y / Math.max(1, h - 1);
-                argb[y * w + x] = 0xFF000000|(r<<16)|(g<<8);
+                argb[y * w + x] = 0xFF000000 | (r << 16) | (g << 8);
             }
         }
 

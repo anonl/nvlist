@@ -84,8 +84,8 @@ public class DistortGridTest {
         int w = 2;
         int h = 2;
 
-        DistortGrid alpha = new DistortGrid(w, h);
-        DistortGrid beta = alpha.copy();
+        final DistortGrid alpha = new DistortGrid(w, h);
+        final DistortGrid beta = alpha.copy();
 
         // Writing to alpha doesn't affect the copy
         alpha.setDistort(0, 0, 1f, 2f);
@@ -94,13 +94,13 @@ public class DistortGridTest {
         Assert.assertEquals(0f, beta.getDistortX(0, 0), 0f);
         Assert.assertEquals(0f, beta.getDistortY(0, 0), 0f);
 
-        // Writing to beta doesn't affect the original
-        beta = alpha.copy();
-        beta.setDistort(0, 0, 3f, 4f);
+        // Writing to the copy doesn't affect the original
+        DistortGrid copy = alpha.copy();
+        copy.setDistort(0, 0, 3f, 4f);
         Assert.assertEquals(1f, alpha.getDistortX(0, 0), 0f);
         Assert.assertEquals(2f, alpha.getDistortY(0, 0), 0f);
-        Assert.assertEquals(3f, beta.getDistortX(0, 0), 0f);
-        Assert.assertEquals(4f, beta.getDistortY(0, 0), 0f);
+        Assert.assertEquals(3f, copy.getDistortX(0, 0), 0f);
+        Assert.assertEquals(4f, copy.getDistortY(0, 0), 0f);
     }
 
     private static void fill(DistortGrid grid, float dx, float dy) {

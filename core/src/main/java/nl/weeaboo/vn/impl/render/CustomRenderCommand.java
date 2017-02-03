@@ -18,8 +18,8 @@ final class CustomRenderCommand extends BaseRenderCommand {
     }
 
     public CustomRenderCommand(short z, boolean clipEnabled, BlendMode blendMode, int argb, Matrix transform,
-            IRenderLogic renderLogic, byte privateField)
-    {
+            IRenderLogic renderLogic, byte privateField) {
+
         super(ID, z, clipEnabled, blendMode, argb, privateField);
 
         this.transform = transform;

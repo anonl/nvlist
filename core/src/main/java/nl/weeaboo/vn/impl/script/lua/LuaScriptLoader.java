@@ -151,12 +151,12 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
         ICompiledLvnFile file = lvnParser.parseFile(resourceId.getFilePath(), in);
 
-//TODO Re-enable analytics
-//        IAnalytics analytics = getAnalytics();
-//        if (analytics != null) {
-//            long modTime = getScriptModificationTime(normalizedFilename);
-//            analytics.logScriptCompile(filename, modificationTime);
-//        }
+        //TODO Re-enable analytics
+        //        IAnalytics analytics = getAnalytics();
+        //        if (analytics != null) {
+        //            long modTime = getScriptModificationTime(normalizedFilename);
+        //            analytics.logScriptCompile(filename, modificationTime);
+        //        }
 
         seenLog.registerScriptFile(resourceId, file.countTextLines(false));
 

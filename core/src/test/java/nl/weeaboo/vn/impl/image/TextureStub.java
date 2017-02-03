@@ -7,8 +7,10 @@ public class TextureStub implements ITexture {
 
     private static final long serialVersionUID = 1L;
 
-    private final int width, height;
-    private final double scaleX, scaleY;
+    private final int width;
+    private final int height;
+    private final double scaleX;
+    private final double scaleY;
     private final Area2D uv;
 
     public TextureStub(int w, int h) {

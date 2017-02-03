@@ -39,8 +39,8 @@ public final class ImageDefinitionIO {
     }
 
     public static Map<FilePath, IImageDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
-            throws IOException, SaveFormatException
-    {
+            throws IOException, SaveFormatException {
+
         Map<FilePath, IImageDefinition> result = Maps.newHashMap();
         for (FilePath folder : getFolders(fileSystem, rootFolder)) {
             FilePath path = folder.resolve("img.json");

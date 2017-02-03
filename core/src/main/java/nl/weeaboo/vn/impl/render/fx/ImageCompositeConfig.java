@@ -40,7 +40,8 @@ public final class ImageCompositeConfig implements Serializable {
     }
 
     private Dim getAutoSize() {
-        double w = 0, h = 0;
+        double w = 0;
+        double h = 0;
         for (TextureEntry entry : entries) {
             w = Math.max(w, entry.bounds.x + entry.bounds.w);
             h = Math.max(h, entry.bounds.y + entry.bounds.h);

@@ -14,16 +14,19 @@ public final class AlignedTexture implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** May be null */
+    /** May be null. */
     private final ITexture texture;
 
-    private final double alignX, alignY;
+    private final double alignX;
+    private final double alignY;
 
     public AlignedTexture() {
         this(null, 0, 0);
     }
 
-    /** @param texture May be null */
+    /**
+     * @param texture May be null
+     */
     public AlignedTexture(ITexture texture, double alignX, double alignY) {
         this.texture = texture;
         this.alignX = alignX;

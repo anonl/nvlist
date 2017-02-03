@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.reflect.ReflectUtil;
-import nl.weeaboo.vn.gdx.input.GdxInputAdapter;
 import nl.weeaboo.vn.input.KeyCode;
 
 public class GdxInputAdapterTest {
@@ -32,9 +31,9 @@ public class GdxInputAdapterTest {
         }
 
         Set<Integer> expectedUnsupported = ImmutableSet.of(
-            Keys.UNKNOWN, // Unknown should map to unknown
-            Keys.ANY_KEY, // There is no 'any' key
-            Keys.META_SHIFT_RIGHT_ON // These 'META' constants are not keys
+                Keys.UNKNOWN, // Unknown should map to unknown
+                Keys.ANY_KEY, // There is no 'any' key
+                Keys.META_SHIFT_RIGHT_ON // These 'META' constants are not keys
         );
         Assert.assertEquals(expectedUnsupported, unmapped);
     }

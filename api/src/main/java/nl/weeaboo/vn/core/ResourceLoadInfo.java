@@ -34,7 +34,7 @@ public final class ResourceLoadInfo {
     }
 
     public ResourceLoadInfo withFileSuffix(String suffix) {
-        FilePath filePath = ResourceId.getFilePath(path.toString());
+        FilePath filePath = ResourceId.extractFilePath(path.toString());
 
         String name = Filenames.stripExtension(filePath.toString()) + suffix;
         String ext = filePath.getExt();
@@ -46,7 +46,7 @@ public final class ResourceLoadInfo {
     }
 
     public ResourceLoadInfo withSubId(String subId) {
-        FilePath filePath = ResourceId.getFilePath(path.toString());
+        FilePath filePath = ResourceId.extractFilePath(path.toString());
         return withPath(ResourceId.toResourcePath(filePath, subId));
     }
 
@@ -66,7 +66,7 @@ public final class ResourceLoadInfo {
     }
 
     public String getSubId() {
-        return ResourceId.getSubId(path.getName());
+        return ResourceId.extractSubId(path.getName());
     }
 
     public List<String> getCallStackTrace() {

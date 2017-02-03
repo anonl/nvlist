@@ -20,8 +20,8 @@ public final class DistortQuadCommand extends BaseRenderCommand {
 
     public DistortQuadCommand(short z, boolean clipEnabled, BlendMode blendMode, int argb,
             ITexture tex, Matrix trans, Area2D bounds, Area2D uv,
-            DistortGrid grid, Rect2D clampBounds)
-    {
+            DistortGrid grid, Rect2D clampBounds) {
+
         super(ID, z, clipEnabled, blendMode, argb, tex != null ? (byte)tex.hashCode() : 0);
 
         this.tex = tex;

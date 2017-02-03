@@ -14,7 +14,7 @@ import nl.weeaboo.gdx.test.ExceptionTester;
 public class DurationTest {
 
     private static final Set<TimeUnit> ACCEPTABLE_UNITS = ImmutableSet.of(
-        TimeUnit.DAYS, TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS, TimeUnit.MILLISECONDS
+            TimeUnit.DAYS, TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS, TimeUnit.MILLISECONDS
     );
 
     private ExceptionTester exTester;

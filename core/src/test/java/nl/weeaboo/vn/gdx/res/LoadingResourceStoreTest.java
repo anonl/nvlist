@@ -7,21 +7,19 @@ import org.junit.Test;
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.gdx.res.IResource;
-import nl.weeaboo.vn.gdx.res.LoadingResourceStore;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 public class LoadingResourceStoreTest {
 
     private static final FilePath TEST_FILENAME = FilePath.of("img/test.png");
-    private StaticRef<PixmapResourceStore> TEST_ID = StaticRef.from("test", PixmapResourceStore.class);
+    private StaticRef<PixmapResourceStore> testId = StaticRef.from("test", PixmapResourceStore.class);
     private PixmapResourceStore cam;
 
     @Before
     public void init() {
         StaticEnvironment.ASSET_MANAGER.set(new TestAssetManager());
-        TEST_ID.set(cam = new PixmapResourceStore(TEST_ID));
+        testId.set(cam = new PixmapResourceStore(testId));
     }
 
     @Test

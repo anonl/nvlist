@@ -4,13 +4,13 @@ import com.google.common.collect.Ordering;
 
 public enum SkipMode {
 
-    /** Not skipping */
+    /** Not skipping. */
     NONE,
 
-    /** Skip until the end of the paragraph */
+    /** Skip until the end of the paragraph. */
     PARAGRAPH,
 
-    /** Skip until the end of the scene, or until a choice appears */
+    /** Skip until the end of the scene, or until a choice appears. */
     SCENE;
 
     private static final Ordering<SkipMode> ORDER = Ordering

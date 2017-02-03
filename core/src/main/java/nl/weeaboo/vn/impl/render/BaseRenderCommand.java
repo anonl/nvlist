@@ -12,9 +12,9 @@ class BaseRenderCommand extends RenderCommand {
     public final int argb;
 
     protected BaseRenderCommand(byte id, short z, boolean clipEnabled,
-            BlendMode blendMode, int argb, byte privateField)
-    {
-        super(id, ((-(1+z))             << 16) //We have to be careful, -Short.MIN_VALUE == Short.MIN_VALUE!!!
+            BlendMode blendMode, int argb, byte privateField) {
+
+        super(id, ((-(1 + z))                << 16) //We have to be careful, -Short.MIN_VALUE == Short.MIN_VALUE!!!
                 | ((clipEnabled ? 1 : 0)     << 15)
                 | ((blendMode.ordinal() & 7) << 12)
                 | ((id & 15)                 << 8 )

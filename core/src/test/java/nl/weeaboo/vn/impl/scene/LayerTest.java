@@ -18,7 +18,6 @@ import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.LayerRenderCommand;
 import nl.weeaboo.vn.impl.render.QuadRenderCommand;
 import nl.weeaboo.vn.impl.render.RenderCommand;
-import nl.weeaboo.vn.impl.scene.Layer;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -31,7 +30,7 @@ public class LayerTest {
     @Test
     public void subLayers() {
         Layer rootLayer = new RootLayerStub();
-        assertSubLayers(Collections.<ILayer> emptyList(), rootLayer);
+        assertSubLayers(Collections.<ILayer>emptyList(), rootLayer);
         Assert.assertFalse(rootLayer.containsLayer(null)); // Contains is null-safe
 
         // root -> sub
@@ -51,7 +50,7 @@ public class LayerTest {
         subLayer.destroy();
         Assert.assertTrue(subLayer.isDestroyed());
         Assert.assertTrue(subSubLayer.isDestroyed());
-        assertSubLayers(Collections.<ILayer> emptyList(), rootLayer);
+        assertSubLayers(Collections.<ILayer>emptyList(), rootLayer);
     }
 
     @Test

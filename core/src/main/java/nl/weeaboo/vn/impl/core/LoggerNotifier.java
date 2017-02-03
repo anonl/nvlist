@@ -7,7 +7,7 @@ import nl.weeaboo.vn.core.INotifier;
 
 public final class LoggerNotifier implements INotifier {
 
-    private final Logger LOG = LoggerFactory.getLogger(LoggerNotifier.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoggerNotifier.class);
 
     @Override
     public void message(String message) {

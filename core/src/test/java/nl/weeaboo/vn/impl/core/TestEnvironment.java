@@ -12,12 +12,6 @@ import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.vn.gdx.res.TestAssetManager;
-import nl.weeaboo.vn.impl.core.ContextManager;
-import nl.weeaboo.vn.impl.core.DefaultEnvironment;
-import nl.weeaboo.vn.impl.core.LoggerNotifier;
-import nl.weeaboo.vn.impl.core.NovelPrefsStore;
-import nl.weeaboo.vn.impl.core.SeenLog;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ImageModule;
 import nl.weeaboo.vn.impl.input.Input;
@@ -48,12 +42,13 @@ public class TestEnvironment extends DefaultEnvironment {
 
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
-        MultiFileSystem fileSystem = TestFileSystem.newInstance();
-        GdxFileSystem gdxFileSystem = new InternalGdxFileSystem("");
-        NovelPrefsStore prefs = new NovelPrefsStore(fileSystem, fileSystem.getWritableFileSystem());
+
+        final MultiFileSystem fileSystem = TestFileSystem.newInstance();
+        final GdxFileSystem gdxFileSystem = new InternalGdxFileSystem("");
+        final NovelPrefsStore prefs = new NovelPrefsStore(fileSystem, fileSystem.getWritableFileSystem());
 
         NativeInput nativeInput = new NativeInput();
-        TestInputAdapter inputAdapter = new TestInputAdapter(nativeInput);
+        final TestInputAdapter inputAdapter = new TestInputAdapter(nativeInput);
         InputConfig inputConfig;
         try {
             inputConfig = InputConfig.readDefaultConfig();
@@ -61,7 +56,7 @@ public class TestEnvironment extends DefaultEnvironment {
             inputConfig = new InputConfig();
             LOG.warn("Error reading input config", ioe);
         }
-        Input input = new Input(nativeInput, inputConfig);
+        final Input input = new Input(nativeInput, inputConfig);
 
         StaticEnvironment.NOTIFIER.set(notifier);
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);

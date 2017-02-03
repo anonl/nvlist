@@ -22,6 +22,8 @@ public interface ISystemModule extends IModule {
 
     /**
      * Clear all internal state and return to the titlescreen.
+     *
+     * @throws InitException If a fatal error occurs during initialization.
      */
     void restart() throws InitException;
 

@@ -47,7 +47,7 @@ public class AndroidAssetFileSystem extends GdxFileSystem {
 
         FileHandle assetsFile = resolve("assets.list");
         if (assetsFile.exists()) {
-            Stopwatch sw = Stopwatch.createStarted();
+            final Stopwatch sw = Stopwatch.createStarted();
 
             String assetsList = assetsFile.readString("UTF-8");
             List<String> pathStrings = Lists.newArrayList(Splitter.on('\n')
@@ -66,7 +66,7 @@ public class AndroidAssetFileSystem extends GdxFileSystem {
                 map.put(path, entry);
                 if (pathString.endsWith("/")) {
                     // Also register folders under without their ending '/'.
-                    FilePath stripped = FilePath.of(pathString.substring(0, pathString.length()-1));
+                    FilePath stripped = FilePath.of(pathString.substring(0, pathString.length() - 1));
                     map.put(stripped, entry);
                 }
 

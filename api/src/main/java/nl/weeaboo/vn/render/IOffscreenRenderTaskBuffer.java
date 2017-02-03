@@ -7,7 +7,7 @@ import nl.weeaboo.vn.core.IUpdateable;
 public interface IOffscreenRenderTaskBuffer extends Serializable, IUpdateable {
 
     /**
-     * Adds a task to the buffer;
+     * Adds a task to the buffer.
      */
     public void add(IOffscreenRenderTask task);
 

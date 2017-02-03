@@ -19,6 +19,7 @@ public final class ResourceId implements Serializable {
     public ResourceId(MediaType type, FilePath filePath) {
         this(type, filePath, "");
     }
+
     public ResourceId(MediaType type, FilePath filePath, String subResourceId) {
         this.type = Checks.checkNotNull(type);
 
@@ -91,8 +92,8 @@ public final class ResourceId implements Serializable {
     /**
      * Combines a file path and a sub-resource id into a single string.
      *
-     * @see #getFilePath(String)
-     * @see #getSubId(String)
+     * @see #extractFilePath(String)
+     * @see #extractSubId(String)
      */
     public static FilePath toResourcePath(FilePath filePath, String subId) {
         checkFilePath(filePath);
@@ -109,7 +110,7 @@ public final class ResourceId implements Serializable {
      * <p>
      * Example: {@code "a/b.png#sub" -> "a/b.png"}
      */
-    public static FilePath getFilePath(String path) {
+    public static FilePath extractFilePath(String path) {
         int index = path.indexOf(SEPARATOR);
         return FilePath.of(index < 0 ? path : path.substring(0, index));
     }
@@ -119,7 +120,7 @@ public final class ResourceId implements Serializable {
      * <p>
      * Example: {@code "a/b.png#sub" -> "sub"}
      */
-    public static String getSubId(String path) {
+    public static String extractSubId(String path) {
         int index = path.indexOf(SEPARATOR);
         return (index < 0 ? "" : path.substring(index + 1));
     }

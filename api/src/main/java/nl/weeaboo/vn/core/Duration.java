@@ -12,7 +12,7 @@ public final class Duration implements Serializable {
 
     public static final Duration ZERO = new Duration(0L);
 
-    /** Store millisecond precision internally */
+    /** Store millisecond precision internally. */
     private final long millis;
 
     private Duration(long millis) {
@@ -24,6 +24,7 @@ public final class Duration implements Serializable {
     public static Duration fromSeconds(long seconds) {
         return fromDuration(seconds, TimeUnit.SECONDS);
     }
+
     public static Duration fromDuration(long duration, TimeUnit unit) {
         if (unit == TimeUnit.MICROSECONDS || unit == TimeUnit.NANOSECONDS) {
             throw new IllegalArgumentException("Duration isn't precise enough to store " + unit);

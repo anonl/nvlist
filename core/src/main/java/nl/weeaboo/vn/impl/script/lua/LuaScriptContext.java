@@ -106,7 +106,7 @@ public class LuaScriptContext implements IScriptContext {
         List<IScriptFunction> eventWork = eventDispatcher.retrieveWork();
         for (IScriptFunction func : eventWork) {
             try {
-               eventThread.call((LuaScriptFunction)func);
+                eventThread.call((LuaScriptFunction)func);
             } catch (ScriptException e) {
                 LOG.warn("Exception while executing event: {}", func, e);
                 exceptionHandler.onScriptException(eventThread, e);

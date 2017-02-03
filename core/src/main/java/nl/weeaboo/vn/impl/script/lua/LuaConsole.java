@@ -62,8 +62,8 @@ public class LuaConsole {
     }
 
     private void show() {
-        Stage stage = sceneEnv.getStage();
-        Skin skin = sceneEnv.getSkin();
+        final Stage stage = sceneEnv.getStage();
+        final Skin skin = sceneEnv.getSkin();
 
         console = new TextArea(log.toString(), skin);
         console.setDisabled(true);

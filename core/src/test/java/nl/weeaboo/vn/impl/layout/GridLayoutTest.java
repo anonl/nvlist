@@ -3,9 +3,6 @@ package nl.weeaboo.vn.impl.layout;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.layout.DummyLayoutElem;
-import nl.weeaboo.vn.impl.layout.DummyLayoutElemPeer;
-import nl.weeaboo.vn.impl.layout.GridLayout;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 
 public class GridLayoutTest {
@@ -52,11 +49,11 @@ public class GridLayoutTest {
          * -----
          * C | D
          */
-        DummyLayoutElem alpha = addDummy(new GridCellConstraints().growX());
-        DummyLayoutElem beta = addDummy(new GridCellConstraints().growY());
+        final DummyLayoutElem alpha = addDummy(new GridCellConstraints().growX());
+        final DummyLayoutElem beta = addDummy(new GridCellConstraints().growY());
         layout.endRow();
-        DummyLayoutElem gamma = addDummy(new GridCellConstraints().growY());
-        DummyLayoutElem delta = addDummy(new GridCellConstraints().growX());
+        final DummyLayoutElem gamma = addDummy(new GridCellConstraints().growY());
+        final DummyLayoutElem delta = addDummy(new GridCellConstraints().growX());
 
         alpha.setLayoutWidths(0.0, 50.0, 100.0);
         beta.setLayoutWidths(20.0, 25.0, 200.0);

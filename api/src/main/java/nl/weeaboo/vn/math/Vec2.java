@@ -12,15 +12,18 @@ import nl.weeaboo.common.StringUtil;
 
 public final class Vec2 implements Externalizable {
 
-    public double x, y;
+    public double x;
+    public double y;
 
     public Vec2() {
         this(0, 0);
     }
+
     public Vec2(double x, double y) {
         this.x = x;
         this.y = y;
     }
+
     public Vec2(Vec2 v) {
         this.x = v.x;
         this.y = v.y;
@@ -71,14 +74,17 @@ public final class Vec2 implements Externalizable {
         x += v.x;
         y += v.y;
     }
+
     public void sub(Vec2 v) {
         x -= v.x;
         y -= v.y;
     }
+
     public void scale(double s) {
         x *= s;
         y *= s;
     }
+
     public void normalize() {
         scale(1.0 / length());
     }
@@ -86,15 +92,17 @@ public final class Vec2 implements Externalizable {
     public Vec2 cross(Vec2 v) {
         return new Vec2(y - v.y, v.x - x);
     }
+
     public double dot(Vec2 v) {
-        return x*v.x + y*v.y;
+        return x * v.x + y * v.y;
     }
 
     public double lengthSquared() {
-        return x*x + y*y;
+        return x * x + y * y;
     }
+
     public double length() {
-        return Math.sqrt(x*x + y*y);
+        return Math.sqrt(x * x + y * y);
     }
 
 }

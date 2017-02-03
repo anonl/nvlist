@@ -14,7 +14,6 @@ public final class Matrix extends AbstractMatrix {
         super(m00, m01, m02, m10, m11, m12);
     }
 
-    //Functions
     public MutableMatrix mutableCopy() {
         return new MutableMatrix(m00, m01, m02, m10, m11, m12);
     }
@@ -24,16 +23,19 @@ public final class Matrix extends AbstractMatrix {
             m00 + m.m00, m01 + m.m01, m02 + m.m02,
             m10 + m.m10, m11 + m.m11, m12 + m.m12);
     }
+
     public Matrix minus(AbstractMatrix m) {
         return new Matrix(
             m00 - m.m00, m01 - m.m01, m02 - m.m02,
             m10 - m.m10, m11 - m.m11, m12 - m.m12);
     }
+
     public Matrix multiply(double s) {
         return new Matrix(
             m00 * s, m01 * s, m02 * s,
             m10 * s, m11 * s, m12 * s);
     }
+
     public Matrix multiply(AbstractMatrix m) {
         return new Matrix(
             m00 * m.m00 + m01 * m.m10,
@@ -46,7 +48,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#translationMatrix(double, double)}
+     * @return {@code this} * {@link Matrix#translationMatrix(double, double)}.
      */
     public Matrix translatedCopy(double x, double y) {
         return new Matrix(
@@ -55,7 +57,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#rotationMatrix(double)}
+     * @return {@code this} * {@link Matrix#rotationMatrix(double)}.
      */
     public Matrix rotatedCopy(double angle) {
         double cos = FastMath.fastCos((float)angle);
@@ -67,7 +69,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#scaledCopy(double, double)}
+     * @return {@code this} * {@link Matrix#scaledCopy(double, double)}.
      */
     public Matrix scaledCopy(double sx, double sy) {
         return new Matrix(
@@ -83,22 +85,24 @@ public final class Matrix extends AbstractMatrix {
         return glMatrix;
     }
 
-    //Getters
     public static Matrix identityMatrix() {
         return IDENTITY_MATRIX;
     }
+
     public static Matrix translationMatrix(double x, double y) {
         if (x == 0 && y == 0) {
             return IDENTITY_MATRIX;
         }
         return new Matrix(1, 0, x, 0, 1, y);
     }
+
     public static Matrix scaleMatrix(double x, double y) {
         if (x == 1 && y == 1) {
             return IDENTITY_MATRIX;
         }
         return new Matrix(x, 0, 0, 0, y, 0);
     }
+
     public static Matrix rotationMatrix(double angle) {
         if (angle == 0) {
             return IDENTITY_MATRIX;
@@ -109,7 +113,5 @@ public final class Matrix extends AbstractMatrix {
 
         return new Matrix(cos, -sin, 0, sin, cos, 0);
     }
-
-    //Setters
 
 }

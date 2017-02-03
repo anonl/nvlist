@@ -42,19 +42,18 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private double maxWidth = -1;
     private double maxHeight = -1;
 
-    private transient ITextLayout _layout;
-    private transient ITextLayout _visibleLayout;
+    private transient ITextLayout cachedLayout;
+    private transient ITextLayout cachedVisibleLayout;
 
     protected ITextLayout createLayout(int wrapWidth) {
         MutableStyledText newText = getText().mutableCopy();
         newText.setBaseStyle(getDefaultStyle());
-        StyledText stext = newText.immutableCopy();
 
         LayoutParameters layoutParams = new LayoutParameters();
         layoutParams.ydir = 1;
         layoutParams.wrapWidth = wrapWidth;
         layoutParams.isRightToLeft = isRightToLeft();
-        return LayoutUtil.layout(fontStore.get(), stext, layoutParams);
+        return LayoutUtil.layout(fontStore.get(), newText.immutableCopy(), layoutParams);
     }
 
     @Override
@@ -75,29 +74,29 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     protected final ITextLayout getLayout() {
-        if (_layout == null) {
-            _layout = createLayout(getLayoutMaxWidth());
+        if (cachedLayout == null) {
+            cachedLayout = createLayout(getLayoutMaxWidth());
         }
-        return _layout;
+        return cachedLayout;
     }
 
     protected void invalidateLayout() {
-        _layout = null;
-        _visibleLayout = null;
+        cachedLayout = null;
+        cachedVisibleLayout = null;
     }
 
     @Override
     public final ITextLayout getVisibleLayout() {
-        if (_visibleLayout == null) {
+        if (cachedVisibleLayout == null) {
             ITextLayout layout = getLayout();
             int count = LayoutUtil.getVisibleLines(layout, startLine, getLayoutMaxHeight());
             int endLine = Math.min(layout.getLineCount(), startLine + count);
-            _visibleLayout = layout.getLineRange(startLine, endLine);
+            cachedVisibleLayout = layout.getLineRange(startLine, endLine);
 
             LOG.trace("Text layout created: startLine={}, endLine={}, height={}/{}",
-                    startLine, endLine, _visibleLayout.getTextHeight(), getLayoutMaxHeight());
+                    startLine, endLine, cachedVisibleLayout.getTextHeight(), getLayoutMaxHeight());
         }
-        return _visibleLayout;
+        return cachedVisibleLayout;
     }
 
     protected void onVisibleTextChanged() {
@@ -179,19 +178,20 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private static Rect2D calculateLineBounds(ITextLayout layout, int lineIndex) {
         ITextLayout lineLayout = layout.getLineRange(lineIndex, lineIndex + 1);
 
-        float minX = Float.POSITIVE_INFINITY, minY = Float.POSITIVE_INFINITY;
-        float maxX = Float.NEGATIVE_INFINITY, maxY = Float.NEGATIVE_INFINITY;
+        float minX = Float.POSITIVE_INFINITY;
+        float minY = Float.POSITIVE_INFINITY;
+        float maxX = Float.NEGATIVE_INFINITY;
+        float maxY = Float.NEGATIVE_INFINITY;
         for (ITextElement elem : lineLayout.getElements()) {
             float x0 = elem.getX();
             float x1 = elem.getX() + elem.getLayoutWidth();
-            float y0 = elem.getY();
-            float y1 = elem.getY() + elem.getLayoutHeight();
-
             minX = Math.min(minX, x0);
             minX = Math.min(minX, x1);
             maxX = Math.max(maxX, x0);
             maxX = Math.max(maxX, x1);
 
+            float y0 = elem.getY();
+            float y1 = elem.getY() + elem.getLayoutHeight();
             minY = Math.min(minY, y0);
             minY = Math.min(minY, y1);
             maxY = Math.max(maxY, y0);

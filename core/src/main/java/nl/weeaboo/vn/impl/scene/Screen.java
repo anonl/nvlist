@@ -65,8 +65,8 @@ public class Screen implements IScreen {
         ITextDrawable td = textState.getTextDrawable();
         if (td != null) {
             int startLine = td.getStartLine();
-            if (td.getVisibleText() < td.getMaxVisibleText() &&
-                    (skipState.isSkipping() || input.consumePress(VKey.TEXT_CONTINUE))) {
+            if (td.getVisibleText() < td.getMaxVisibleText()
+                    && (skipState.isSkipping() || input.consumePress(VKey.TEXT_CONTINUE))) {
 
                 // Make all glyphs in the current lines fully visible
                 td.setVisibleText(ITextRenderer.ALL_GLYPHS_VISIBLE);
@@ -137,6 +137,7 @@ public class Screen implements IScreen {
         }
         return activeLayer;
     }
+
     @Override
     public void setActiveLayer(ILayer layer) {
         Checks.checkNotNull(layer, "layer");

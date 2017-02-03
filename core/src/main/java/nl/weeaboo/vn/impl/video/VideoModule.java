@@ -37,6 +37,7 @@ public class VideoModule implements IVideoModule {
     public VideoModule(DefaultEnvironment env) {
         this(env, new VideoResourceLoader(env), new NativeVideoFactory());
     }
+
     public VideoModule(DefaultEnvironment env, VideoResourceLoader resourceLoader,
             INativeVideoFactory nativeVideoFactory) {
 

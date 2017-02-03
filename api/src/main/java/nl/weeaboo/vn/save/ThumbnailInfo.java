@@ -14,6 +14,7 @@ public final class ThumbnailInfo {
     public ThumbnailInfo(Dim imageSize) {
         this(DEFAULT_THUMBNAIL_PATH, imageSize);
     }
+
     public ThumbnailInfo(FilePath path, Dim imageSize) {
         this.path = Checks.checkNotNull(path);
 

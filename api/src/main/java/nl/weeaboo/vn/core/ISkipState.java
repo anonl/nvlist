@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.input.IInput;
 
-/** Skip, pause, auto read state */
+/** Skip, pause, auto read state. */
 public interface ISkipState extends Serializable {
 
-    /** @return {@code true} if currently skipping. */
+    /** {@code true} if currently skipping. */
     boolean isSkipping();
 
-    /** @return {@code true} if the text line should be skipped according to the current skip mode. */
+    /** {@code true} if the text line should be skipped according to the current skip mode. */
     boolean shouldSkipLine(boolean lineRead);
 
-    /** @return The current skip mode */
+    /** The current skip mode. */
     SkipMode getSkipMode();
 
-    /** Changes the current skip mode */
+    /** Changes the current skip mode. */
     void setSkipMode(SkipMode mode);
 
     /**
@@ -32,7 +32,7 @@ public interface ISkipState extends Serializable {
      */
     void stopSkipping();
 
-    /** Process user input */
+    /** Process user input. */
     void handleInput(IInput input);
 
 }

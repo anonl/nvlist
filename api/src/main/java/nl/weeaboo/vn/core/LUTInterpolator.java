@@ -11,18 +11,18 @@ public final class LUTInterpolator implements IInterpolator {
     public LUTInterpolator(float[] values) {
         this(values, 0, values.length);
     }
+
     public LUTInterpolator(float[] arr, int off, int len) {
         values = new float[len];
         System.arraycopy(arr, off, values, 0, len);
     }
 
-    //Functions
     public static LUTInterpolator fromInterpolator(IInterpolator i, int len) {
         Checks.checkRange(len, "len", 1);
 
         float[] lut = new float[len];
         for (int n = 0; n < len; n++) {
-            lut[n] = i.remap(n / (float)(len-1));
+            lut[n] = i.remap(n / (float)(len - 1));
         }
         return new LUTInterpolator(lut);
     }
@@ -43,9 +43,5 @@ public final class LUTInterpolator implements IInterpolator {
 
         return prev + (next - prev) * (x - prevIndex);
     }
-
-    //Getters
-
-    //Setters
 
 }

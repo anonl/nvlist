@@ -119,8 +119,8 @@ public final class PixmapUtil {
     public static Pixmap resizedCopy(Pixmap src, Dim dstSize, Filter filter) {
         Pixmap copy = newUninitializedPixmap(dstSize.w, dstSize.h, src.getFormat());
         copySubRect(src, Rect.of(0, 0, src.getWidth(), src.getHeight()), // src rect
-            copy, Rect.of(0, 0, dstSize.w, dstSize.h), // dst rect
-            filter);
+                copy, Rect.of(0, 0, dstSize.w, dstSize.h), // dst rect
+                filter);
         return copy;
     }
 

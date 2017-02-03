@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.vn.impl.render.TriangleGrid;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.render.TriangleGridTestUtil.DataType;
 
@@ -16,7 +15,7 @@ public class TriangleGridTest {
     @Test
     public void simpleLayout1() {
         TriangleGrid grid = TriangleGrid.layout1(
-            Area2D.of(1, 2, 3, 4), Area2D.of(0, 0, 1, 1), TextureWrap.CLAMP);
+                Area2D.of(1, 2, 3, 4), Area2D.of(0, 0, 1, 1), TextureWrap.CLAMP);
 
         // Check general properties
         Assert.assertEquals(1, grid.getTextures());
@@ -30,8 +29,8 @@ public class TriangleGridTest {
     @Test
     public void simpleLayout2() {
         TriangleGrid grid = TriangleGrid.layout2(
-            Area2D.of(0, 0, 4, 2), Area2D.of(0, 0, 1, 1), TextureWrap.REPEAT_X,
-            Area2D.of(2, 1, 4, 2), Area2D.of(0, 0, 1, 1), TextureWrap.REPEAT_Y);
+                Area2D.of(0, 0, 4, 2), Area2D.of(0, 0, 1, 1), TextureWrap.REPEAT_X,
+                Area2D.of(2, 1, 4, 2), Area2D.of(0, 0, 1, 1), TextureWrap.REPEAT_Y);
 
         // Check general properties
         Assert.assertEquals(2, grid.getTextures());

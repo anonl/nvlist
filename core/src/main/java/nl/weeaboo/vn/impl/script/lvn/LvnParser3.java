@@ -163,15 +163,20 @@ class LvnParser3 implements ILvnParser {
 
         //Merge out lines into a String
         for (String outLine : out) {
-            if (sb.length() > 0) sb.append("; ");
+            if (sb.length() > 0) {
+                sb.append("; ");
+            }
             sb.append(outLine);
         }
         return sb.toString();
     }
+
     protected void parseTextLine_flush(Collection<String> out, StringBuilder sb) {
         if (sb.length() > 0) { //Flush buffered chars
             String ln = appendTextCommand(sb.toString());
-            if (ln.length() > 0) out.add(ln);
+            if (ln.length() > 0) {
+                out.add(ln);
+            }
             sb.delete(0, sb.length());
         }
     }
@@ -187,12 +192,20 @@ class LvnParser3 implements ILvnParser {
     protected String beginParagraphCommand(FilePath filename, int textLineNum) {
         return "paragraph.start(\"" + escape(filename.toString()) + "\", " + textLineNum + ")";
     }
+
     protected String appendTextCommand(String line) {
-        if (line.length() == 0) return "";
+        if (line.length() == 0) {
+            return "";
+        }
+
         line = ParserUtil.collapseWhitespace(escape(line), false);
-        if (line.length() == 0) return "";
+
+        if (line.length() == 0) {
+            return "";
+        }
         return "paragraph.append(\"" + line + "\")";
     }
+
     protected String endParagraphCommand() {
         return "paragraph.finish()";
     }

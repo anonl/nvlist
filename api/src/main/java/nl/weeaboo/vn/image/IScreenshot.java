@@ -14,6 +14,9 @@ public interface IScreenshot extends IAsyncRenderTask {
      */
     void markTransient();
 
+    /**
+     * @deprecated Deprecated since NVList 4.0
+     */
     @Deprecated
     void makeTransient();
 
@@ -23,7 +26,11 @@ public interface IScreenshot extends IAsyncRenderTask {
      */
     boolean isVolatile();
 
-    /** @see #markTransient() */
+    /**
+     * Returns whether this screenshot is transient.
+     *
+     * @see #markTransient()
+     */
     @Override
     boolean isTransient();
 

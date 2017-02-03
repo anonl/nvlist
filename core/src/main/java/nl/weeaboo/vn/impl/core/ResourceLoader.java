@@ -42,8 +42,8 @@ public abstract class ResourceLoader implements IResourceResolver {
             return null;
         }
 
-        FilePath filePath = ResourceId.getFilePath(path.toString());
-        String subId = ResourceId.getSubId(path.getName());
+        FilePath filePath = ResourceId.extractFilePath(path.toString());
+        String subId = ResourceId.extractSubId(path.getName());
         if (isValidFilename(filePath)) {
             // The given extension works
             return new ResourceId(mediaType, filePath, subId);
@@ -60,7 +60,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     }
 
     public void checkRedundantFileExt(FilePath resourcePath) {
-        FilePath filePath = ResourceId.getFilePath(resourcePath.toString());
+        FilePath filePath = ResourceId.extractFilePath(resourcePath.toString());
         if (filePath == null || !checkFileExt) {
             return;
         }

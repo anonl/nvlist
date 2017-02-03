@@ -12,7 +12,6 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -54,7 +53,7 @@ public class LuaScriptUtilTest {
     /** Test for loadScript/callFunction/eval functions */
     @Test
     public void loadCallEval() throws IOException, ScriptException {
-        IScriptThread mainThread = mainContext.getScriptContext().getMainThread();
+        final IScriptThread mainThread = mainContext.getScriptContext().getMainThread();
 
         // Load script with some test functions
         LuaScriptUtil.loadScript(mainContext, env.getScriptLoader(), FilePath.of("script-util-test"));

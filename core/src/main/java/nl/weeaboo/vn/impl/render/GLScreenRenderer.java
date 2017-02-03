@@ -130,8 +130,8 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     public void renderText(TextRenderCommand trc) {
         flushQuadBatch();
 
-        int dx = (int)Math.round(trc.dx);
-        int dy = (int)Math.round(trc.dy);
+        final int dx = (int)Math.round(trc.dx);
+        final int dy = (int)Math.round(trc.dy);
 
         // Temporarily change the blend mode for non-premultiplied alpha
         GLBlendMode.DEFAULT.apply(spriteBatch);
@@ -189,8 +189,8 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         int requiredFloats = floatsPerVertex * verticesPerRow;
 
         if (triangleMesh == null || triangleMesh.getMaxVertices() < cols * 4
-                || !triangleMesh.getVertexAttributes().equals(attrs))
-        {
+                || !triangleMesh.getVertexAttributes().equals(attrs)) {
+
             if (triangleMesh != null) {
                 triangleMesh.dispose();
             }
@@ -268,7 +268,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
             return;
         }
 
-        Stopwatch sw = Stopwatch.createStarted();
+        final Stopwatch sw = Stopwatch.createStarted();
 
         spriteBatch.flush();
         renderStats.onRenderQuadBatch(buffered);

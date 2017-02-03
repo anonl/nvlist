@@ -41,6 +41,7 @@ public final class ImageDefinition implements IImageDefinition {
                 GLTilingMode.DEFAULT, GLTilingMode.DEFAULT,
                 ImmutableList.<ImageSubRect>of());
     }
+
     public ImageDefinition(String filename, Dim size,
             GLScaleFilter minf, GLScaleFilter magf,
             GLTilingMode wrapX, GLTilingMode wrapY,

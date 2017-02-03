@@ -80,7 +80,7 @@ public final class PremultUtil {
             }
         } break;
         default:
-           throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
+            throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
         }
     }
 
@@ -169,7 +169,7 @@ public final class PremultUtil {
             }
         } break;
         default:
-           throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
+            throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
         }
     }
 

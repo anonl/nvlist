@@ -24,7 +24,7 @@ public interface ILayoutElem extends Serializable {
      */
     LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint);
 
-    /** @return The current position and size of this element within its parent layout. */
+    /** Returns the current position and size of this element within its parent layout. */
     Rect2D getLayoutBounds();
 
     /**
