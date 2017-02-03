@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.BitSet;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,7 +34,7 @@ final class SeenLog implements ISeenLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     private final IEnvironment env;
 
@@ -49,13 +50,18 @@ final class SeenLog implements ISeenLog {
     }
 
     private void initTransients() {
-        mediaSeen = Maps.newEnumMap(MediaType.class);
-        for (MediaType type : MediaType.values()) {
-            mediaSeen.put(type, new MediaSeen());
-        }
+        mediaSeen = newMediaSeen();
 
         scriptSeen = Maps.newHashMap();
         choiceSeen = Maps.newHashMap();
+    }
+
+    private static Map<MediaType, MediaSeen> newMediaSeen() {
+        EnumMap<MediaType, MediaSeen> mediaSeen = Maps.newEnumMap(MediaType.class);
+        for (MediaType type : MediaType.values()) {
+            mediaSeen.put(type, new MediaSeen());
+        }
+        return mediaSeen;
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -213,7 +219,7 @@ final class SeenLog implements ISeenLog {
                         version, VERSION));
             }
 
-            mediaSeen.clear();
+            mediaSeen = newMediaSeen();
             scriptSeen.clear();
             choiceSeen.clear();
 

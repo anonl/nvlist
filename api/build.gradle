@@ -5,9 +5,9 @@ apply plugin: 'maven-publish'
 applyErrorPronePlugin(project)
 
 dependencies {
-    compile "nl.weeaboo.common:core:$tcommonVersion"
-    compile "nl.weeaboo.common:logging:$tcommonVersion"
-    compile "nl.weeaboo.common:prefsstore:$tcommonVersion"
+    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
+    compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
+    compile "nl.weeaboo.common:tcommon-prefsstore:$tcommonVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "com.google.guava:guava:$guavaVersion"
 }
