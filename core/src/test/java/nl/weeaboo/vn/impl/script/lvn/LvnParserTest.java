@@ -22,12 +22,6 @@ import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.impl.script.lvn.ICompiledLvnFile;
-import nl.weeaboo.vn.impl.script.lvn.ILvnParser;
-import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
-import nl.weeaboo.vn.impl.script.lvn.LvnParserFactory;
-import nl.weeaboo.vn.impl.script.lvn.RuntimeTextParser;
-import nl.weeaboo.vn.impl.script.lvn.TextParser;
 import nl.weeaboo.vn.impl.script.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
@@ -71,7 +65,7 @@ public class LvnParserTest {
         Assert.assertArrayEquals(checkBytes, StringUtil.toUTF8(contents));
 
         Assert.assertEquals(7, lvnFile.countTextLines(false));
-        Assert.assertEquals(7+8, lvnFile.countTextLines(true));
+        Assert.assertEquals(7 + 8, lvnFile.countTextLines(true));
     }
 
     @Test

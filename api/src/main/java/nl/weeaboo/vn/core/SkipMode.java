@@ -17,6 +17,9 @@ public enum SkipMode {
             .explicit(NONE, PARAGRAPH, SCENE)
             .nullsFirst();
 
+    /**
+     * Returns the highest priority skip mode.
+     */
     public static SkipMode max(SkipMode a, SkipMode b) {
         return ORDER.max(a, b);
     }

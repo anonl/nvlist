@@ -12,11 +12,6 @@ import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.gdx.graphics.GdxShaderUtil;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.impl.render.DrawBuffer;
-import nl.weeaboo.vn.impl.render.DrawTransform;
-import nl.weeaboo.vn.impl.render.GLScreenRenderer;
-import nl.weeaboo.vn.impl.render.RenderStats;
-import nl.weeaboo.vn.impl.render.TriangleGrid;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.scene.Layer;
 import nl.weeaboo.vn.render.IRenderLogic;
@@ -79,6 +74,7 @@ public class RenderTestHelper implements IDestructible {
     public void drawQuad(ITexture tex, Area2D bounds) {
         drawQuad(tex, new DrawTransform(), bounds);
     }
+
     public void drawQuad(ITexture tex, DrawTransform transform, Area2D bounds) {
         drawBuffer.drawQuad(transform, 0xFFFFFFFF, tex, bounds, ITexture.DEFAULT_UV);
     }
@@ -91,6 +87,7 @@ public class RenderTestHelper implements IDestructible {
         TriangleGrid grid = TriangleGrid.layout1(bounds, tex.getUV(), TextureWrap.CLAMP);
         drawTriangleGrid(grid, tex);
     }
+
     public void drawTriangleGrid(TriangleGrid grid, ITexture tex) {
         drawBuffer.drawCustom(new DrawTransform(), 0xFFFFFFFF, new IRenderLogic() {
             @Override

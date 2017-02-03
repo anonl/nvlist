@@ -50,15 +50,12 @@ public class SaveModule implements ISaveModule {
     private static final int AUTO_SAVE_OFFSET = 900;
 
     private final IEnvironment env;
-    private final IStorage globals;
 
     private transient IStorage sharedGlobals;
     private transient LuaSerializer luaSerializer;
 
     public SaveModule(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
-
-        globals = new Storage();
 
         initTransients();
     }
@@ -173,11 +170,6 @@ public class SaveModule implements ISaveModule {
     }
 
     @Override
-    public IStorage getGlobals() {
-        return globals;
-    }
-
-    @Override
     public IStorage getSharedGlobals() {
         return sharedGlobals;
     }
@@ -210,16 +202,10 @@ public class SaveModule implements ISaveModule {
         return SaveFileIO.openArchive(getFileSystem(), getSavePath(slot));
     }
 
-    private static SaveFileHeader readSaveHeader(IFileSystem arc) throws SaveFormatException, IOException {
-        SaveFileHeaderJson headerJson = SaveFileIO.readJson(arc, SaveFileConstants.HEADER_PATH,
-                SaveFileHeaderJson.class);
-        return SaveFileHeaderJson.decode(headerJson);
-    }
-
     @Override
-    public Collection<ISaveFile> getSaves(int fromSlot, int count) {
+    public Collection<ISaveFile> getSaves(int fromSlot, int numSlots) {
         List<ISaveFile> result = Lists.newArrayList();
-        for (int slot = fromSlot; slot < fromSlot + count; slot++) {
+        for (int slot = fromSlot; slot < fromSlot + numSlots; slot++) {
             if (getSaveExists(slot)) {
                 try {
                     result.add(readSave(slot));
@@ -256,6 +242,12 @@ public class SaveModule implements ISaveModule {
         } finally {
             arc.close();
         }
+    }
+
+    private static SaveFileHeader readSaveHeader(IFileSystem arc) throws SaveFormatException, IOException {
+        SaveFileHeaderJson headerJson = SaveFileIO.readJson(arc, SaveFileConstants.HEADER_PATH,
+                SaveFileHeaderJson.class);
+        return SaveFileHeaderJson.decode(headerJson);
     }
 
     private static IScreenshot readSaveThumbnail(IFileSystem arc, ThumbnailInfo thumbnail) throws IOException {

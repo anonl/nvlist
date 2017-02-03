@@ -121,6 +121,9 @@ public abstract class VisualElement implements IVisualElement {
         return visible;
     }
 
+    /**
+     * Sets the visibility flag.
+     */
     public void setVisible(boolean v) {
         visible = v;
     }

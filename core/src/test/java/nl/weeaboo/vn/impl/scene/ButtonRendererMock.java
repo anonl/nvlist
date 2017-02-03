@@ -9,7 +9,6 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.impl.scene.AbstractRenderable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButtonRenderer;
@@ -70,6 +69,7 @@ public class ButtonRendererMock extends AbstractRenderable implements IButtonRen
     public ITexture getRegularTexture(ButtonViewState viewState) {
         return regularTextures.get(viewState);
     }
+
     public INinePatch getNinePatchTexture(ButtonViewState viewState) {
         return ninePatchTextures.get(viewState);
     }

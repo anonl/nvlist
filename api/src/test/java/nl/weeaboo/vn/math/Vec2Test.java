@@ -62,13 +62,13 @@ public class Vec2Test {
         Vec2 a = new Vec2(1, 2);
         Vec2 b = new Vec2(4, 3);
 
-        ApiTestUtil.assertEquals(a.y-b.y, b.x-a.x, a.cross(b), 0);
+        ApiTestUtil.assertEquals(a.y - b.y, b.x - a.x, a.cross(b), 0);
 
         Assert.assertEquals(25, b.lengthSquared(), E);
         Assert.assertEquals(5, b.length(), E);
 
         b.normalize();
-        ApiTestUtil.assertEquals(4.0/5.0, 3.0/5.0, b, E);
+        ApiTestUtil.assertEquals(4.0 / 5.0, 3.0 / 5.0, b, E);
     }
 
     @Test

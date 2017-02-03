@@ -15,10 +15,19 @@ import nl.weeaboo.vn.script.IScriptContext;
 
 public interface IImageModule extends IModule, IResourceResolver {
 
+    /**
+     * Creates a new image drawable and adds it to the specified layer.
+     */
     IImageDrawable createImage(ILayer layer);
 
+    /**
+     * Creates a new text drawable and adds it to the specified layer.
+     */
     ITextDrawable createTextDrawable(ILayer layer);
 
+    /**
+     * Creates a new button drawable and adds it to the specified layer.
+     */
     IButton createButton(ILayer layer, IScriptContext scriptContext);
 
     /**

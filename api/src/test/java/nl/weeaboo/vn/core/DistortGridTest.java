@@ -39,9 +39,9 @@ public class DistortGridTest {
             Integer.MIN_VALUE, 1
         };
 
-        for (int n = 0; n < indices.length; n+=2) {
+        for (int n = 0; n < indices.length; n += 2) {
             int x = indices[n];
-            int y = indices[n+1];
+            int y = indices[n + 1];
             try {
                 grid.setDistort(x, y, 0f, 0f);
                 Assert.fail("Writing to an invalid cell somehow worked: " + x + "x" + y);
@@ -65,9 +65,9 @@ public class DistortGridTest {
             Integer.MIN_VALUE, 1
         };
 
-        for (int n = 0; n < dims.length; n+=2) {
+        for (int n = 0; n < dims.length; n += 2) {
             int w = dims[n];
-            int h = dims[n+1];
+            int h = dims[n + 1];
             try {
                 DistortGrid grid = new DistortGrid(w, h);
                 Assert.assertEquals(w, grid.getWidth());

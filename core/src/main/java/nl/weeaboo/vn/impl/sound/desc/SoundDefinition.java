@@ -39,13 +39,6 @@ public final class SoundDefinition implements ISoundDefinition {
         return filename;
     }
 
-    public boolean hasDisplayName() {
-        return displayName != null;
-    }
-
-    /**
-     * @return The display name for this audio file, or {@code null} if no display name was defined.
-     */
     @Override
     public String getDisplayName() {
         return displayName;

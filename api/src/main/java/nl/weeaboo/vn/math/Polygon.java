@@ -30,25 +30,25 @@ public class Polygon implements IShape, Serializable {
     }
 
     public static Polygon transformedRect(Matrix transform, Rect2D r) {
-        Vec2 p0 = transform.transform(r.x,     r.y  );
-        Vec2 p1 = transform.transform(r.x+r.w, r.y  );
-        Vec2 p2 = transform.transform(r.x+r.w, r.y+r.h);
-        Vec2 p3 = transform.transform(r.x,     r.y+r.h);
+        Vec2 p0 = transform.transform(r.x,       r.y      );
+        Vec2 p1 = transform.transform(r.x + r.w, r.y      );
+        Vec2 p2 = transform.transform(r.x + r.w, r.y + r.h);
+        Vec2 p3 = transform.transform(r.x,       r.y + r.h);
 
         return new Polygon(new double[] { p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y });
     }
 
     private static double[] xcoords(double[] coords) {
-        double[] result = new double[coords.length/2];
-        for (int d = 0, s = 0; d < result.length; d++, s+=2) {
+        double[] result = new double[coords.length / 2];
+        for (int d = 0, s = 0; d < result.length; d++, s += 2) {
             result[d] = coords[s];
         }
         return result;
     }
 
     private static double[] ycoords(double[] coords) {
-        double[] result = new double[coords.length/2];
-        for (int d = 0, s = 1; d < result.length; d++, s+=2) {
+        double[] result = new double[coords.length / 2];
+        for (int d = 0, s = 1; d < result.length; d++, s += 2) {
             result[d] = coords[s];
         }
         return result;

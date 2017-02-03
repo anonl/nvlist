@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.impl.core.TestInputAdapter;
-import nl.weeaboo.vn.impl.input.Input;
-import nl.weeaboo.vn.impl.input.InputConfig;
-import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;
@@ -32,7 +29,7 @@ public class InputTest {
     }
 
     @Test
-    public void consumePress() {
+    public void testConsumePress() {
         consumePress(false, VKey.TEXT_CONTINUE);
 
         // Single key
@@ -57,7 +54,7 @@ public class InputTest {
     }
 
     @Test
-    public void isPressed() {
+    public void testIsPressed() {
         assertPressed(false, VKey.TEXT_CONTINUE);
 
         // Single key pressed
@@ -84,7 +81,7 @@ public class InputTest {
     }
 
     @Test
-    public void isJustPressed() {
+    public void testIsJustPressed() {
         assertJustPressed(false, VKey.TEXT_CONTINUE);
 
         // Single key pressed
@@ -103,7 +100,7 @@ public class InputTest {
     }
 
     @Test
-    public void pressedTime() {
+    public void testPressedTime() {
         inputAdapter.buttonPressed(KeyCode.ENTER);
         inputAdapter.updateInput(10);
         assertPressTime(10, VKey.TEXT_CONTINUE);
@@ -121,7 +118,7 @@ public class InputTest {
 
     /** Pointer-related methods just delegate to the wrapped nativeInput */
     @Test
-    public void pointerDelegate() {
+    public void testPointerDelegate() {
         inputAdapter.pointerMoved(1, 2);
         inputAdapter.pointerScrolled(3);
 
@@ -140,11 +137,12 @@ public class InputTest {
         Assert.assertEquals(expected, input.isPressed(key, false));
     }
 
-    private void assertJustPressed(boolean expected, VKey key) {
-        Assert.assertEquals(expected, input.isJustPressed(key));
-    }
     private void assertPressed(boolean expected, KeyCode button) {
         Assert.assertEquals(expected, nativeInput.isPressed(button, false));
+    }
+
+    private void assertJustPressed(boolean expected, VKey key) {
+        Assert.assertEquals(expected, input.isJustPressed(key));
     }
 
     private void assertPressTime(int expectedTime, VKey vkey) {

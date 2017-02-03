@@ -4,7 +4,6 @@ import java.nio.FloatBuffer;
 
 import org.junit.Assert;
 
-import nl.weeaboo.vn.impl.render.TriangleGrid;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public final class TriangleGridTestUtil {
@@ -55,6 +54,8 @@ public final class TriangleGridTestUtil {
         case TEX3:
             grid.getTexCoords(2, row, out, 0);
             break;
+        default:
+            throw new IllegalArgumentException("Unsupported type: " + type);
         }
     }
 

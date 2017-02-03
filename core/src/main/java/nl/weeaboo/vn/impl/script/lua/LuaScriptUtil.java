@@ -41,7 +41,7 @@ public final class LuaScriptUtil {
         if (args.isnil(offset)) {
             return null;
         }
-        return new LuaScriptFunction(args.checkclosure(offset), args.subargs(offset+1));
+        return new LuaScriptFunction(args.checkclosure(offset), args.subargs(offset + 1));
     }
 
     /** Converts a {@link LuaException} to a {@link ScriptException} */

@@ -42,7 +42,7 @@ public class PolygonTest {
     @Test
     public void randomContainsTest() {
         // Calculate length of sides to get a diagonal of length 2
-        double s = Math.sqrt(2*2 + 2*2);
+        double s = Math.sqrt(2 * 2 + 2 * 2);
 
         Random random = new Random(12345);
         for (int angle = 0; angle < 256; angle++) {

@@ -123,6 +123,7 @@ public abstract class Transformable extends VisualElement implements ITransforma
     }
 
     protected abstract double getUnscaledWidth();
+
     protected abstract double getUnscaledHeight();
 
     public Rect2D getUntransformedVisualBounds() {

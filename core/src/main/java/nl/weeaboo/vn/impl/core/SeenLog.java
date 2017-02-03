@@ -24,13 +24,16 @@ import nl.weeaboo.lua2.io.LuaSerializable;
 import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
+import nl.weeaboo.vn.core.IChoiceSeenLog;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ISeenLog;
+import nl.weeaboo.vn.core.IResourceSeenLog;
+import nl.weeaboo.vn.core.IScriptSeenLog;
+import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 
 @CustomSerializable
-final class SeenLog implements ISeenLog {
+final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog, IChoiceSeenLog {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);
@@ -86,6 +89,21 @@ final class SeenLog implements ISeenLog {
             LOG.warn("Unsupported resource type: {}", type);
             return null;
         }
+    }
+
+    @Override
+    public IResourceSeenLog getResourceLog() {
+        return this;
+    }
+
+    @Override
+    public IChoiceSeenLog getChoiceLog() {
+        return this;
+    }
+
+    @Override
+    public IScriptSeenLog getScriptLog() {
+        return this;
     }
 
     @Override

@@ -91,9 +91,9 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
 
         layerClip2D = Rect2D.of(
             parentClip2D.x + Math.max(0, Math.min(parentClip2D.w, bx0)),
-            parentClip2D.y + Math.max(0, Math.min(parentClip2D.h, parentClip2D.h-by1)),
-            Math.max(0, Math.min(parentClip2D.w-bx0, bx1-bx0)),
-            Math.max(0, Math.min(parentClip2D.h-by0, by1-by0))
+            parentClip2D.y + Math.max(0, Math.min(parentClip2D.h, parentClip2D.h - by1)),
+            Math.max(0, Math.min(parentClip2D.w - bx0, bx1 - bx0)),
+            Math.max(0, Math.min(parentClip2D.h - by0, by1 - by0))
         );
         final Rect layerClip = RenderUtil.roundClipRect(layerClip2D);
 

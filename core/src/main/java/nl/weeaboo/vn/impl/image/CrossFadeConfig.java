@@ -43,6 +43,7 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
     public void setStartTexture(ITexture texture) {
         setStartTexture(texture, 0, 0);
     }
+
     @Override
     public void setStartTexture(ITexture texture, double alignX, double alignY) {
         this.startTexture = new AlignedTexture(texture, alignX, alignY);
@@ -56,6 +57,7 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
     public void setEndTexture(ITexture texture) {
         setEndTexture(texture, 0, 0);
     }
+
     @Override
     public void setEndTexture(ITexture texture, double alignX, double alignY) {
         this.endTexture = new AlignedTexture(texture, alignX, alignY);

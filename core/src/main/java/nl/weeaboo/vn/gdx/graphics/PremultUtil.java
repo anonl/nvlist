@@ -58,7 +58,7 @@ public final class PremultUtil {
                 g = (a * g + 7) / 15;
                 b = (a * b + 7) / 15;
 
-                pixels.put(n, (short)((r<<12) | (g<<8) | (b<<4) | a));
+                pixels.put(n, (short)((r << 12) | (g << 8) | (b << 4) | a));
             }
         } break;
         case RGBA8888: {
@@ -140,7 +140,7 @@ public final class PremultUtil {
                     b = (15 * b + halfA) / a;
                 }
 
-                pixels.put(n, (short)((r<<12) | (g<<8) | (b<<4) | a));
+                pixels.put(n, (short)((r << 12) | (g << 8) | (b << 4) | a));
             }
         } break;
         case RGBA8888: {

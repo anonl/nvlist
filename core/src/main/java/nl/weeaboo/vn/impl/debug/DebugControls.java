@@ -27,7 +27,7 @@ import nl.weeaboo.vn.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.vn.gdx.graphics.GdxCrossFadeRenderer;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
@@ -198,7 +198,7 @@ public final class DebugControls {
         ITexture texture = getTestTexture(imageModule);
         NinePatchRenderer renderer = new NinePatchRenderer();
         renderer.setInsets(Insets2D.of(50));
-        for (EArea area : EArea.values()) {
+        for (AreaId area : AreaId.values()) {
             renderer.setTexture(area, texture);
         }
         renderer.setSize(400, 400);

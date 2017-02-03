@@ -327,7 +327,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         super.setSize(w, h);
     }
 
-    /** @return The vertical offset for aligning content within its parent bounds */
+    /**
+     * @return The vertical offset for aligning content within its parent bounds.
+     */
     public static double getOffsetY(ITextRenderer textRenderer, VerticalAlign verticalAlign) {
         double boundingHeight = textRenderer.getHeight();
         double contentHeight = textRenderer.getTextHeight();

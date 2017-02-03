@@ -27,7 +27,7 @@ import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ISeenLog;
+import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceId;
@@ -47,13 +47,13 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
     private static final LuaString PATH = LuaString.valueOf("path");
 
-    private final ISeenLog seenLog;
+    private final ISeenLogHolder seenLog;
     private final LuaScriptResourceLoader resourceLoader;
     private final String engineTargetVersion;
 
     private transient ILvnParser lvnParser;
 
-    private LuaScriptLoader(ISeenLog seenLog, LuaScriptResourceLoader resourceLoader,
+    private LuaScriptLoader(ISeenLogHolder seenLog, LuaScriptResourceLoader resourceLoader,
             String engineTargetVersion) {
         this.seenLog = Checks.checkNotNull(seenLog);
         this.resourceLoader = Checks.checkNotNull(resourceLoader);
@@ -158,7 +158,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         //            analytics.logScriptCompile(filename, modificationTime);
         //        }
 
-        seenLog.registerScriptFile(resourceId, file.countTextLines(false));
+        seenLog.getScriptLog().registerScriptFile(resourceId, file.countTextLines(false));
 
         return file;
     }

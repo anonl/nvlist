@@ -32,11 +32,11 @@ public final class AlignUtil {
         case TOP:
         case CENTER:
         case BOTTOM:
-            return (outer-inner) / 2;
+            return (outer - inner) / 2;
         case TOP_RIGHT:
         case RIGHT:
         case BOTTOM_RIGHT:
-            return (outer-inner);
+            return (outer - inner);
         default:
             return 0;
         }
@@ -47,11 +47,11 @@ public final class AlignUtil {
         case LEFT:
         case CENTER:
         case RIGHT:
-            return (outer-inner) / 2;
+            return (outer - inner) / 2;
         case BOTTOM_LEFT:
         case BOTTOM:
         case BOTTOM_RIGHT:
-            return (outer-inner);
+            return (outer - inner);
         default:
             return 0;
         }

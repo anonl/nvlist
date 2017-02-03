@@ -17,6 +17,9 @@ public enum GLTilingMode {
         this.glIdentifier = glIdentifier;
     }
 
+    /**
+     * Converts a string representation to its corresponding enum value.
+     */
     public static GLTilingMode fromString(String s) {
         for (GLTilingMode mode : VALUES) {
             if (s.equalsIgnoreCase(mode.name)) {
@@ -27,6 +30,9 @@ public enum GLTilingMode {
         return Boolean.parseBoolean(s) ? GLTilingMode.REPEAT : GLTilingMode.DEFAULT;
     }
 
+    /**
+     * @return The OpenGL enum constant for this tiling mode.
+     */
     public int getGLIdentifier() {
         return glIdentifier;
     }

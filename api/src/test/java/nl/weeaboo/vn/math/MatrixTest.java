@@ -144,7 +144,7 @@ public class MatrixTest {
             float x = random.nextFloat();
             float y = random.nextFloat();
 
-            Vec2 expected = new Vec2(33*x+22*y+11, 44*x+55*y+66);
+            Vec2 expected = new Vec2(33 * x + 22 * y + 11, 44 * x + 55 * y + 66);
             ApiTestUtil.assertEquals(expected.x, expected.y, transform.transform(x, y), EPSILON);
 
             Vec2 v = new Vec2(x, y);

@@ -9,19 +9,39 @@ import nl.weeaboo.vn.core.IProgressListener;
 
 public interface ISaveModule extends IModule {
 
+    /** Load persistent storage. */
     void loadPersistent();
 
+    /** Save persistent storage. */
     void savePersistent();
 
+    /**
+     * Delete a save slot.
+     *
+     * @throws IOException If deletion fails.
+     */
     void delete(int slot) throws IOException;
 
+    /**
+     * Load a save slot. Resumes script execution from the saved state.
+     *
+     * @throws SaveFormatException If the stored save data is in an incompatible format.
+     */
     void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException;
 
-    void save(INovel novel, int slot, ISaveParams params, IProgressListener pl)
-            throws SaveFormatException, IOException;
+    /**
+     * Saves the current state to the specified save slot.
+     */
+    void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException;
 
+    /**
+     * Returns the index of a currently unused save slot.
+     */
     int getNextFreeSlot();
 
+    /**
+     * @return {@code true} if the specified save slot contains saved data.
+     */
     boolean getSaveExists(int slot);
 
     /**
@@ -56,10 +76,17 @@ public interface ISaveModule extends IModule {
      */
     int getAutoSaveSlot(int slot);
 
-    IStorage getGlobals();
-
+    /**
+     * Returns the shared globals. These values are <em>shared</em> between all save slots.
+     * <p>
+     * A common use for shared globals is to store global unlock data such as route clear flags.
+     */
     IStorage getSharedGlobals();
 
-    Collection<ISaveFile> getSaves(int offset, int maxResults);
+    /**
+     * Fetches save file metadata for the save slots in the range {@code [fromSlot, fromSlot+numSlots)}. For empty save
+     * slots, no information will be returned.
+     */
+    Collection<ISaveFile> getSaves(int fromSlot, int numSlots);
 
 }

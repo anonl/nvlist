@@ -44,7 +44,7 @@ public class ImageDrawableTest {
 
         // Rotated bounds
         image.setRotation(64); // Rotate 1/8th circle clockwise around top-left
-        final double diagonal = Math.sqrt(w*w + h*h);
+        final double diagonal = Math.sqrt(w * w + h * h);
         CoreTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, image.getVisualBounds());
 
         // Scaled

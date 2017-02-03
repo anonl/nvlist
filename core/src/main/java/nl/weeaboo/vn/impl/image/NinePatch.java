@@ -15,7 +15,7 @@ public final class NinePatch implements INinePatch {
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
     // --- Don't forget to update set() after adding fields ---
-    private final Map<EArea, ITexture> textures = Maps.newEnumMap(EArea.class);
+    private final Map<AreaId, ITexture> textures = Maps.newEnumMap(AreaId.class);
     private Insets2D insets = Insets2D.EMPTY;
     // ------
 
@@ -26,13 +26,13 @@ public final class NinePatch implements INinePatch {
         this();
 
         Preconditions.checkNotNull(tex);
-        textures.put(EArea.CENTER, tex);
+        textures.put(AreaId.CENTER, tex);
     }
 
     @Override
     public void set(INinePatch other) {
         textures.clear();
-        for (EArea area : EArea.values()) {
+        for (AreaId area : AreaId.values()) {
             ITexture tex = other.getTexture(area);
             if (tex != null) {
                 textures.put(area, tex);
@@ -45,7 +45,7 @@ public final class NinePatch implements INinePatch {
     @Override
     public double getNativeWidth() {
         double width = insets.left + insets.right;
-        ITexture center = getTexture(EArea.CENTER);
+        ITexture center = getTexture(AreaId.CENTER);
         if (center != null) {
             width += center.getWidth();
         }
@@ -55,7 +55,7 @@ public final class NinePatch implements INinePatch {
     @Override
     public double getNativeHeight() {
         double height = insets.top + insets.bottom;
-        ITexture center = getTexture(EArea.CENTER);
+        ITexture center = getTexture(AreaId.CENTER);
         if (center != null) {
             height += center.getHeight();
         }
@@ -63,12 +63,12 @@ public final class NinePatch implements INinePatch {
     }
 
     @Override
-    public ITexture getTexture(EArea area) {
+    public ITexture getTexture(AreaId area) {
         return textures.get(area);
     }
 
     @Override
-    public void setTexture(EArea area, ITexture texture) {
+    public void setTexture(AreaId area, ITexture texture) {
         if (texture != null) {
             textures.put(area, texture);
         } else {
@@ -86,12 +86,15 @@ public final class NinePatch implements INinePatch {
         this.insets = Checks.checkNotNull(i);
     }
 
+    /**
+     * Calculates the insets based on the native sizes of the textures in the nine-patch.
+     */
     public static Insets2D calculateNativeInsets(INinePatch ninePatch) {
         double top = 0;
         double right = 0;
         double bottom = 0;
         double left = 0;
-        for (EArea area : EArea.values()) {
+        for (AreaId area : AreaId.values()) {
             ITexture tex = ninePatch.getTexture(area);
             if (tex == null) {
                 continue;

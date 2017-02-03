@@ -12,6 +12,9 @@ import nl.weeaboo.vn.gdx.graphics.MockGL;
 
 public class HeadlessGdx {
 
+    /**
+     * Initializes a headless GDX platform for testing.
+     */
     public static synchronized void init() {
         if (Gdx.gl instanceof MockGL) {
             // Already initialized

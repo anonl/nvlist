@@ -24,8 +24,8 @@ import nl.weeaboo.vn.impl.render.fx.BlurTask;
 import nl.weeaboo.vn.impl.render.fx.ColorMatrix;
 import nl.weeaboo.vn.impl.render.fx.ColorMatrixTask;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig;
-import nl.weeaboo.vn.impl.render.fx.ImageCompositeTask;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig.TextureEntry;
+import nl.weeaboo.vn.impl.render.fx.ImageCompositeTask;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.render.IOffscreenRenderTask;
 import nl.weeaboo.vn.scene.IScreen;
@@ -192,6 +192,8 @@ public class ImageFxLib extends LuaLib {
      *
      * <p>
      * The {@code pos} field is optional and assumed <code>{0, 0}</code> when omitted.
+     *
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs composite(Varargs args) throws ScriptException {

@@ -4,6 +4,9 @@ import nl.weeaboo.vn.image.ITexture;
 
 public interface IOffscreenRenderTask extends IAsyncRenderTask {
 
+    /**
+     * Execute the task.
+     */
     void render();
 
     /**

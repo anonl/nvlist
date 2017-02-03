@@ -54,6 +54,11 @@ public class TextLayoutStub implements ITextLayout {
     }
 
     @Override
+    public float getTextHeight(int startLine, int endLine) {
+        return 0;
+    }
+
+    @Override
     public int getGlyphOffset(int line) {
         return 0;
     }
@@ -66,11 +71,6 @@ public class TextLayoutStub implements ITextLayout {
     @Override
     public ITextLayout getLineRange(int startLine, int endLine) {
         return this;
-    }
-
-    @Override
-    public float getTextHeight(int startLine, int endLine) {
-        return 0;
     }
 
 }

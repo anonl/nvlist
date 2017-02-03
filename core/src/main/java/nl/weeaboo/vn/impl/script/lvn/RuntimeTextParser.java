@@ -176,7 +176,7 @@ public class RuntimeTextParser implements Serializable {
 
         LuaTable argsTable = new LuaTable();
         for (int n = 0; n < args.length; n++) {
-            argsTable.rawset(n+1, args[n]);
+            argsTable.rawset(n + 1, args[n]);
         }
 
         Varargs result = func.invoke(valueOf(tag), argsTable);

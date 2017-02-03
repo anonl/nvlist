@@ -40,13 +40,13 @@ public abstract class NonFileGdxFileHandle extends FileHandle {
 
     protected abstract Iterable<FileHandle> listChildren();
 
+    private FileHandle[] filteredChildren(Predicate<FileHandle> predicate) {
+        return Iterables.toArray(Iterables.filter(listChildren(), predicate), FileHandle.class);
+    }
+
     @Override
     public final FileHandle[] list() {
         return Iterables.toArray(listChildren(), FileHandle.class);
-    }
-
-    private FileHandle[] filteredChildren(Predicate<FileHandle> predicate) {
-        return Iterables.toArray(Iterables.filter(listChildren(), predicate), FileHandle.class);
     }
 
     @Override

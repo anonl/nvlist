@@ -45,7 +45,7 @@ public class InterpolatorsLib extends LuaLib {
         super.initTable(table, env);
     }
 
-    public static IInterpolator getInterpolator(LuaValue lval, IInterpolator defaultValue) {
+    private static IInterpolator getInterpolator(LuaValue lval, IInterpolator defaultValue) {
         if (lval.isuserdata(IInterpolator.class)) {
             return lval.checkuserdata(IInterpolator.class);
         } else if (lval instanceof LuaFunction) {
@@ -54,7 +54,7 @@ public class InterpolatorsLib extends LuaLib {
         return defaultValue;
     }
 
-    public static IInterpolator getLuaInterpolator(LuaFunction func, int lutSize) {
+    private static IInterpolator getLuaInterpolator(LuaFunction func, int lutSize) {
         float[] lut = new float[lutSize];
         float scale = 1f / (lutSize - 1);
         for (int n = 0; n < lutSize; n++) {
@@ -69,6 +69,7 @@ public class InterpolatorsLib extends LuaLib {
      *        <li>interpolation function
      *        </ol>
      * @return An interpolator based on the given interpolation function.
+     * @throws ScriptException If the input values are invalid.
      */
     @ScriptFunction
     public Varargs get(Varargs args) throws ScriptException {

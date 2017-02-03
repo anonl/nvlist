@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.INinePatch;
-import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.image.ITexture;
 
 public final class NinePatchLoader {
@@ -21,7 +21,7 @@ public final class NinePatchLoader {
 
     public INinePatch loadNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         NinePatch ninePatch = new NinePatch();
-        for (EArea area : EArea.values()) {
+        for (AreaId area : AreaId.values()) {
             String subId = getSubId(area);
             ResourceLoadInfo subPath = loadInfo.withAppendedSubId(subId);
             ITexture tex = imageModule.getTexture(subPath, suppressErrors);
@@ -38,7 +38,7 @@ public final class NinePatchLoader {
         return ninePatch;
     }
 
-    private String getSubId(EArea area) {
+    private String getSubId(AreaId area) {
         switch (area) {
         case TOP_LEFT: return "topleft";
         case TOP: return "top";

@@ -28,12 +28,12 @@ public final class SaveFile implements ISaveFile {
     }
 
     @Override
-    public IScreenshot getScreenshot() {
+    public IScreenshot getThumbnail() {
         return screenshot;
     }
 
     @Override
-    public IScreenshot getScreenshot(int maxW, int maxH) {
+    public IScreenshot getThumbnail(int maxW, int maxH) {
         // TODO: Implement this
         return screenshot;
     }

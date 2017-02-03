@@ -39,6 +39,7 @@ final class JngReader {
         DataInput din = new DataInputStream(in);
         return read(din);
     }
+
     public static Pixmap read(DataInput din) throws IOException {
         List<byte[]> colorBytes = new ArrayList<>(); // Forms a valid JPEG file
 
@@ -59,7 +60,7 @@ final class JngReader {
                     readChunks(colorBytes, din, chunkLength);
                     din.readInt();
                 } else {
-                    forceSkip(din, chunkLength+4);
+                    forceSkip(din, chunkLength + 4);
                 }
             } else if (type == CHUNK_IDAT) {
                 if (alphaType != JNGAlphaType.PNG) {
@@ -79,10 +80,10 @@ final class JngReader {
                 din.readInt(); //CRC
             } else if (type == CHUNK_JSEP) {
                 jdatIndex++;
-                forceSkip(din, chunkLength+4);
+                forceSkip(din, chunkLength + 4);
             } else {
                 // Skip chunk
-                forceSkip(din, chunkLength+4);
+                forceSkip(din, chunkLength + 4);
             }
         }
 
@@ -121,7 +122,7 @@ final class JngReader {
     private static void readChunks(List<byte[]> out, DataInput din, int len) throws IOException {
         int read = 0;
         while (read < len) {
-            byte[] chunk = new byte[Math.min(len-read, 32<<10)];
+            byte[] chunk = new byte[Math.min(len - read, 32 << 10)];
             din.readFully(chunk, 0, chunk.length);
             read += chunk.length;
             out.add(chunk);
@@ -158,14 +159,14 @@ final class JngReader {
 
         byte[] headerBytes = createPNGHeaderForAlpha(header);
 
-        ByteBuffer buf = ByteBuffer.allocate(headerBytes.length + (8+count+4) + IEND.length);
+        ByteBuffer buf = ByteBuffer.allocate(headerBytes.length + (8 + count + 4) + IEND.length);
         buf.order(ByteOrder.BIG_ENDIAN);
         buf.put(headerBytes);
 
         buf.putInt(count);
         buf.putInt(CHUNK_IDAT);
         CRC32 crc = new CRC32();
-        crc.update(buf.array(), buf.position()-4, 4);
+        crc.update(buf.array(), buf.position() - 4, 4);
         for (byte[] b : c) {
             crc.update(b);
             buf.put(b);
@@ -194,7 +195,7 @@ final class JngReader {
         buf.put((byte)hdr.alphaInterlaceMethod);
 
         CRC32 crc = new CRC32();
-        crc.update(buf.array(), MAGIC.length+4, 17);
+        crc.update(buf.array(), MAGIC.length + 4, 17);
         buf.putInt((int)crc.getValue());
 
         return buf.array();
@@ -240,7 +241,7 @@ final class JngReader {
             if (!Arrays.equals(JNG_MAGIC, magicBytes)) {
                 StringBuilder sb = new StringBuilder("Invalid magic value: ");
                 for (byte b : magicBytes) {
-                    sb.append(String.format("%02x ", b&0xFF));
+                    sb.append(String.format("%02x ", b & 0xFF));
                 }
                 throw new IOException(sb.toString());
             }

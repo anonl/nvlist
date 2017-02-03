@@ -17,6 +17,9 @@ public final class VnId extends AbstractId {
         Checks.checkArgument(isValidId(id), "ID must be all lowercase alphnumeric (matching " + REGEX + ")");
     }
 
+    /**
+     * @return {@code true} if the supplied string can be converted into a valid {@link VnId} instance.
+     */
     public static boolean isValidId(String id) {
         return id.matches(REGEX);
     }

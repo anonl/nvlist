@@ -31,10 +31,12 @@ public final class VKey extends AbstractId {
         super(id);
     }
 
+    /** Creates a {@link VKey} instance from an ID string. */
     public static VKey fromString(String id) {
         return new VKey(id);
     }
 
+    /** Returns the default set of {@link VKey} instances. */
     public static Iterable<VKey> getStandardKeys() {
         return STANDARD_KEYS;
     }

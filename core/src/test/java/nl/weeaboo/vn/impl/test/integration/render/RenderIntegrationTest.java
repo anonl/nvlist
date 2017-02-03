@@ -59,6 +59,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         Rect glClip = env.getRenderEnv().getGLClip();
         checkRenderResult(testName, glClip.x, glClip.y, glClip.w, glClip.h);
     }
+
     public void checkRenderResult(String testName, int x, int y, int w, int h) {
         Pixmap actual = ScreenshotHelper.screenshot(x, y, w, h);
 

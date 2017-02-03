@@ -4,7 +4,9 @@ import nl.weeaboo.common.Rect2D;
 
 public interface IMultiLineText extends IText {
 
-    /** @return The index of the first visible line. */
+    /**
+     * @return The index of the first visible line.
+     */
     int getStartLine();
 
     /**
@@ -13,10 +15,14 @@ public interface IMultiLineText extends IText {
      */
     int getEndLine();
 
-    /** @return The number of lines in the current text layout. */
+    /**
+     * @return The number of lines in the current text layout.
+     */
     int getLineCount();
 
-    /** @return The glyph offset at which the requested line starts. */
+    /**
+     * @return The glyph offset at which the requested line starts.
+     */
     int getGlyphOffset(int line);
 
     /** Word-wrap width for this multi-line text */

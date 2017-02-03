@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Insets2D;
-import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.impl.image.NinePatch;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
@@ -17,7 +17,7 @@ public class NinePatchTest {
         NinePatchAssert.assertNativeSize(ninePatch, 0, 0);
         CoreTestUtil.assertEquals(Insets2D.EMPTY, ninePatch.getInsets());
         // All textures null
-        for (EArea area : EArea.values()) {
+        for (AreaId area : AreaId.values()) {
             Assert.assertNull(ninePatch.getTexture(area));
         }
     }
@@ -28,9 +28,9 @@ public class NinePatchTest {
         TestTexture testTexture = new TestTexture();
 
         NinePatch ninePatch = new NinePatch(testTexture);
-        Assert.assertEquals(testTexture, ninePatch.getTexture(EArea.CENTER));
-        Assert.assertEquals(null, ninePatch.getTexture(EArea.TOP_LEFT));
-        Assert.assertEquals(null, ninePatch.getTexture(EArea.BOTTOM_RIGHT));
+        Assert.assertEquals(testTexture, ninePatch.getTexture(AreaId.CENTER));
+        Assert.assertEquals(null, ninePatch.getTexture(AreaId.TOP_LEFT));
+        Assert.assertEquals(null, ninePatch.getTexture(AreaId.BOTTOM_RIGHT));
         CoreTestUtil.assertEquals(Insets2D.EMPTY, ninePatch.getInsets());
 
         // Set insets
@@ -38,12 +38,12 @@ public class NinePatchTest {
         CoreTestUtil.assertEquals(Insets2D.of(1, 2, 3, 4), ninePatch.getInsets());
 
         // Set some other textures
-        ninePatch.setTexture(EArea.CENTER, null); // Seting to null removes the texture
-        ninePatch.setTexture(EArea.TOP_LEFT, testTexture);
-        ninePatch.setTexture(EArea.BOTTOM_RIGHT, testTexture);
-        Assert.assertEquals(null, ninePatch.getTexture(EArea.CENTER));
-        Assert.assertEquals(testTexture, ninePatch.getTexture(EArea.TOP_LEFT));
-        Assert.assertEquals(testTexture, ninePatch.getTexture(EArea.BOTTOM_RIGHT));
+        ninePatch.setTexture(AreaId.CENTER, null); // Seting to null removes the texture
+        ninePatch.setTexture(AreaId.TOP_LEFT, testTexture);
+        ninePatch.setTexture(AreaId.BOTTOM_RIGHT, testTexture);
+        Assert.assertEquals(null, ninePatch.getTexture(AreaId.CENTER));
+        Assert.assertEquals(testTexture, ninePatch.getTexture(AreaId.TOP_LEFT));
+        Assert.assertEquals(testTexture, ninePatch.getTexture(AreaId.BOTTOM_RIGHT));
 
         // Test set() method
         NinePatch copy = new NinePatch();

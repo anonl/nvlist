@@ -223,7 +223,9 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
             return false;
         }
 
-        /** @return The cell at the requested column index, or {@code null} if that cell doesn't exist. */
+        /**
+         * @return The cell at the requested column index, or {@code null} if that cell doesn't exist.
+         */
         public GridCell findColCell(int colIndex) {
             // Rowspan/colspan not yet supported
             if (colIndex < 0 || colIndex >= cells.size()) {

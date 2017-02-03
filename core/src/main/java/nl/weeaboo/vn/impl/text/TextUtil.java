@@ -9,6 +9,9 @@ public final class TextUtil {
     private TextUtil() {
     }
 
+    /**
+     * Null-safe conversion from String to {@link StyledText}.
+     */
     public static StyledText toStyledText(String str) {
         return new StyledText(Strings.nullToEmpty(str));
     }

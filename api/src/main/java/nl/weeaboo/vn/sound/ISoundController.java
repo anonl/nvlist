@@ -46,6 +46,9 @@ public interface ISoundController extends Serializable, IUpdateable {
      */
     boolean isPaused();
 
+    /**
+     * Returns a currently unused sound channel.
+     */
     int getFreeChannel();
 
     /**

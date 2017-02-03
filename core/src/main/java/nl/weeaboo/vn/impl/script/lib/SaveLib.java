@@ -143,6 +143,7 @@ public class SaveLib extends LuaLib {
      *        <ol>
      *        <li>save slot index
      *        </ol>
+     * @throws ScriptException If deletion fails.
      */
     @ScriptFunction
     public Varargs delete(Varargs args) throws ScriptException {

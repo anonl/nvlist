@@ -4,8 +4,11 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
+import nl.weeaboo.vn.core.IChoiceSeenLog;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ISeenLog;
+import nl.weeaboo.vn.core.IResourceSeenLog;
+import nl.weeaboo.vn.core.IScriptSeenLog;
+import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -22,8 +25,20 @@ public class SeenLib extends LuaLib {
         this.env = env;
     }
 
-    private ISeenLog getSeenLog() {
+    private ISeenLogHolder getSeenLog() {
         return env.getSeenLog();
+    }
+
+    private IResourceSeenLog getResourceLog() {
+        return getSeenLog().getResourceLog();
+    }
+
+    private IChoiceSeenLog getChoiceLog() {
+        return getSeenLog().getChoiceLog();
+    }
+
+    private IScriptSeenLog getScriptLog() {
+        return getSeenLog().getScriptLog();
     }
 
     /**
@@ -36,7 +51,7 @@ public class SeenLib extends LuaLib {
     @ScriptFunction
     public Varargs hasSeenImage(Varargs args) {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
-        return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.IMAGE, filename));
+        return LuaValue.valueOf(getResourceLog().hasSeen(MediaType.IMAGE, filename));
     }
 
     /**
@@ -49,7 +64,7 @@ public class SeenLib extends LuaLib {
     @ScriptFunction
     public Varargs hasSeenSound(Varargs args) {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
-        return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.SOUND, filename));
+        return LuaValue.valueOf(getResourceLog().hasSeen(MediaType.SOUND, filename));
     }
 
     /**
@@ -62,7 +77,7 @@ public class SeenLib extends LuaLib {
     @ScriptFunction
     public Varargs hasSeenVideo(Varargs args) {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
-        return LuaValue.valueOf(getSeenLog().hasSeen(MediaType.VIDEO, filename));
+        return LuaValue.valueOf(getResourceLog().hasSeen(MediaType.VIDEO, filename));
     }
 
     /**
@@ -77,7 +92,7 @@ public class SeenLib extends LuaLib {
     public Varargs hasSeenLine(Varargs args) {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
         int lineNumber = args.checkint(2);
-        return LuaValue.valueOf(getSeenLog().hasSeenLine(filename, lineNumber));
+        return LuaValue.valueOf(getScriptLog().hasSeenLine(filename, lineNumber));
     }
 
     /**
@@ -91,7 +106,7 @@ public class SeenLib extends LuaLib {
     public void markLineSeen(Varargs args) {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
         int lineNumber = args.checkint(2);
-        getSeenLog().markLineSeen(filename, lineNumber);
+        getScriptLog().markLineSeen(filename, lineNumber);
     }
 
     /**
@@ -105,7 +120,7 @@ public class SeenLib extends LuaLib {
     public void registerChoice(Varargs args) {
         String uniqueChoiceId = args.tojstring(1);
         int numOptions = args.checkint(2);
-        getSeenLog().registerChoice(uniqueChoiceId, numOptions);
+        getChoiceLog().registerChoice(uniqueChoiceId, numOptions);
     }
 
     /**
@@ -119,7 +134,7 @@ public class SeenLib extends LuaLib {
     public void markChoiceSelected(Varargs args) {
         String uniqueChoiceId = args.tojstring(1);
         int optionIndex = args.checkint(2);
-        getSeenLog().markChoiceSelected(uniqueChoiceId, optionIndex);
+        getChoiceLog().markChoiceSelected(uniqueChoiceId, optionIndex);
     }
 
     /**
@@ -133,7 +148,7 @@ public class SeenLib extends LuaLib {
     public Varargs hasSelectedChoice(Varargs args) {
         String uniqueChoiceId = args.tojstring(1);
         int optionIndex = args.checkint(2);
-        return LuaBoolean.valueOf(getSeenLog().hasSelectedChoice(uniqueChoiceId, optionIndex));
+        return LuaBoolean.valueOf(getChoiceLog().hasSelectedChoice(uniqueChoiceId, optionIndex));
     }
 
 }

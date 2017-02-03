@@ -22,7 +22,7 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
         final Insets2D i = ninePatch.getInsets();
 
         // Center
-        ITexture center = getTexture(EArea.CENTER);
+        ITexture center = getTexture(AreaId.CENTER);
         if (center != null) {
             Area2D bounds = Area2D.of(r.x + i.left, r.y + i.top,
                     r.w - i.left - i.right, r.h - i.top - i.bottom);
@@ -30,44 +30,44 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
         }
 
         // Corners
-        ITexture topLeft = getTexture(EArea.TOP_LEFT);
+        ITexture topLeft = getTexture(AreaId.TOP_LEFT);
         if (topLeft != null) {
             Area2D bounds = Area2D.of(r.x, r.y, i.left, i.top);
             drawBuffer.drawQuad(d, color, topLeft, bounds, uv);
         }
-        ITexture topRight = getTexture(EArea.TOP_RIGHT);
+        ITexture topRight = getTexture(AreaId.TOP_RIGHT);
         if (topRight != null) {
             Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y, i.right, i.top);
             drawBuffer.drawQuad(d, color, topRight, bounds, uv);
         }
-        ITexture bottomLeft = getTexture(EArea.BOTTOM_LEFT);
+        ITexture bottomLeft = getTexture(AreaId.BOTTOM_LEFT);
         if (bottomLeft != null) {
             Area2D bounds = Area2D.of(r.x, r.y + r.h - i.bottom, i.left, i.bottom);
             drawBuffer.drawQuad(d, color, bottomLeft, bounds, uv);
         }
-        ITexture bottomRight = getTexture(EArea.BOTTOM_RIGHT);
+        ITexture bottomRight = getTexture(AreaId.BOTTOM_RIGHT);
         if (bottomRight != null) {
             Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y + r.h - i.bottom, i.right, i.bottom);
             drawBuffer.drawQuad(d, color, bottomRight, bounds, uv);
         }
 
         // Sides
-        ITexture top = getTexture(EArea.TOP);
+        ITexture top = getTexture(AreaId.TOP);
         if (top != null) {
             Area2D bounds = Area2D.of(r.x + i.left, r.y, r.w - i.left - i.right, i.top);
             drawBuffer.drawQuad(d, color, top, bounds, uv);
         }
-        ITexture bottom = getTexture(EArea.BOTTOM);
+        ITexture bottom = getTexture(AreaId.BOTTOM);
         if (bottom != null) {
             Area2D bounds = Area2D.of(r.x + i.left, r.y + r.h - i.bottom, r.w - i.left - i.right, i.bottom);
             drawBuffer.drawQuad(d, color, bottom, bounds, uv);
         }
-        ITexture left = getTexture(EArea.LEFT);
+        ITexture left = getTexture(AreaId.LEFT);
         if (left != null) {
             Area2D bounds = Area2D.of(r.x, r.y + i.top, i.left, r.h - i.top - i.bottom);
             drawBuffer.drawQuad(d, color, left, bounds, uv);
         }
-        ITexture right = getTexture(EArea.RIGHT);
+        ITexture right = getTexture(AreaId.RIGHT);
         if (right != null) {
             Area2D bounds = Area2D.of(r.x + r.w - i.right, r.y + i.top, i.right, r.h - i.top - i.bottom);
             drawBuffer.drawQuad(d, color, right, bounds, uv);
@@ -85,12 +85,12 @@ public class NinePatchRenderer extends AbstractRenderable implements INinePatchR
     }
 
     @Override
-    public ITexture getTexture(EArea area) {
+    public ITexture getTexture(AreaId area) {
         return ninePatch.getTexture(area);
     }
 
     @Override
-    public void setTexture(EArea area, ITexture texture) {
+    public void setTexture(AreaId area, ITexture texture) {
         ninePatch.setTexture(area, texture);
     }
 

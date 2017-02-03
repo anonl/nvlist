@@ -75,11 +75,6 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
-    public void setText(String text) {
-        textRenderer.setText(text);
-    }
-
-    @Override
     public int getLineCount() {
         return textRenderer.getLineCount();
     }
@@ -87,6 +82,11 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public void increaseVisibleText(double textSpeed) {
         textRenderer.increaseVisibleText(textSpeed);
+    }
+
+    @Override
+    public void setText(String text) {
+        textRenderer.setText(text);
     }
 
     @Override
@@ -115,6 +115,11 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     }
 
     @Override
+    public void setVisibleText(int startLine, double visibleGlyphs) {
+        textRenderer.setVisibleText(startLine, visibleGlyphs);
+    }
+
+    @Override
     public double getMaxWidth() {
         return textRenderer.getMaxWidth();
     }
@@ -137,11 +142,6 @@ public class TextDrawable extends Transformable implements ITextDrawable {
     @Override
     public boolean isRightToLeft() {
         return textRenderer.isRightToLeft();
-    }
-
-    @Override
-    public void setVisibleText(int startLine, double visibleGlyphs) {
-        textRenderer.setVisibleText(startLine, visibleGlyphs);
     }
 
     @Override

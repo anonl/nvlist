@@ -45,7 +45,9 @@ public final class PerformanceMetrics {
         }
     }
 
-    /** @return The relative CPU load, or {@code -1} if not supported */
+    /**
+     * @return The relative CPU load, or {@code -1} if not supported
+     */
     public double getCpuLoad() {
         if (!cpuLoadError) {
             try {

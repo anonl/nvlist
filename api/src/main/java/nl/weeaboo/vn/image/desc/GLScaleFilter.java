@@ -26,6 +26,9 @@ public enum GLScaleFilter {
         this.isMipmap = isMipmap;
     }
 
+    /**
+     * Converts a string representation to its corresponding enum value.
+     */
     public static GLScaleFilter fromString(String s) {
         for (GLScaleFilter filter : VALUES) {
             if (s.equalsIgnoreCase(filter.name)) {
@@ -37,10 +40,16 @@ public enum GLScaleFilter {
         return GLScaleFilter.DEFAULT;
     }
 
+    /**
+     * @return The OpenGL enum constant for this filter.
+     */
     public int getGLIdentifier() {
         return glIdentifier;
     }
 
+    /**
+     * @return {@code true} if this filter uses mipmaps.
+     */
     public boolean isMipmap() {
         return isMipmap;
     }

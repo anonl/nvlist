@@ -59,6 +59,11 @@ public final class RenderUtil {
         return Math.max(0, Math.min(255, Math.round(a + (b - a) * w)));
     }
 
+    /**
+     * Multiplies the RGB color components with the alpha, resulting in so-called premuliplied alpha.
+     * <p>
+     * Note that this operation is lossy due to rounding.
+     */
     public static int premultiplyAlpha(int argb) {
         int a = (argb >> 24) & 0xFF;
         int r = (a * ((argb >> 16) & 0xFF) + 127) / 255;
@@ -67,6 +72,11 @@ public final class RenderUtil {
         return (a << 24) | (r << 16) | (g << 8) | (b);
     }
 
+    /**
+     * Performs the opposite operation of {@link #premultiplyAlpha(int)}.
+     * <p>
+     * Note that these operations are lossy due to rounding errors.
+     */
     public static int unPremultiplyAlpha(int argb) {
         int a = (argb >> 24) & 0xFF;
         if (a == 0) {

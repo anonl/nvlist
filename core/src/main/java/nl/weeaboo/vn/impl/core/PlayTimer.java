@@ -67,7 +67,7 @@ public class PlayTimer implements IPlayTimer {
     }
 
     @Override
-    public Duration getTotalTime() {
+    public Duration getTotalPlayTime() {
         return Duration.fromDuration(totalNanos, TimeUnit.NANOSECONDS);
     }
 

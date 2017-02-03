@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableList;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.vn.image.INinePatch;
-import nl.weeaboo.vn.image.INinePatch.EArea;
+import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.impl.image.NinePatchRenderer;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.QuadRenderCommand;
@@ -53,10 +53,10 @@ public class NinePatchRendererTest {
 
     @Test
     public void basicRender() {
-        for (int n = 0; n < EArea.values().length; n++) {
-            renderer.setTexture(EArea.values()[n], textures[n]);
+        for (int n = 0; n < AreaId.values().length; n++) {
+            renderer.setTexture(AreaId.values()[n], textures[n]);
         }
-        ITexture center = textures[EArea.CENTER.ordinal()];
+        ITexture center = textures[AreaId.CENTER.ordinal()];
         assertNativeSize(renderer, center.getWidth(), center.getHeight());
 
         // Cols = 1, 7, 2
@@ -72,17 +72,17 @@ public class NinePatchRendererTest {
 
         // Check bounds of rendered segments
         double topY = 0;
-        assertRenderBounds(EArea.TOP_LEFT, Area2D.of(0, topY, 1, 1));
-        assertRenderBounds(EArea.TOP, Area2D.of(1, topY, 7, 1));
-        assertRenderBounds(EArea.TOP_RIGHT, Area2D.of(8, topY, 2, 1));
+        assertRenderBounds(AreaId.TOP_LEFT, Area2D.of(0, topY, 1, 1));
+        assertRenderBounds(AreaId.TOP, Area2D.of(1, topY, 7, 1));
+        assertRenderBounds(AreaId.TOP_RIGHT, Area2D.of(8, topY, 2, 1));
         double centerY = 1;
-        assertRenderBounds(EArea.LEFT, Area2D.of(0, centerY, 1, 6));
-        assertRenderBounds(EArea.CENTER, Area2D.of(1, centerY, 7, 6));
-        assertRenderBounds(EArea.RIGHT, Area2D.of(8, centerY, 2, 6));
+        assertRenderBounds(AreaId.LEFT, Area2D.of(0, centerY, 1, 6));
+        assertRenderBounds(AreaId.CENTER, Area2D.of(1, centerY, 7, 6));
+        assertRenderBounds(AreaId.RIGHT, Area2D.of(8, centerY, 2, 6));
         double bottomY = 7;
-        assertRenderBounds(EArea.BOTTOM_LEFT, Area2D.of(0, bottomY, 1, 3));
-        assertRenderBounds(EArea.BOTTOM, Area2D.of(1, bottomY, 7, 3));
-        assertRenderBounds(EArea.BOTTOM_RIGHT, Area2D.of(8, bottomY, 2, 3));
+        assertRenderBounds(AreaId.BOTTOM_LEFT, Area2D.of(0, bottomY, 1, 3));
+        assertRenderBounds(AreaId.BOTTOM, Area2D.of(1, bottomY, 7, 3));
+        assertRenderBounds(AreaId.BOTTOM_RIGHT, Area2D.of(8, bottomY, 2, 3));
     }
 
     private void assertNativeSize(INinePatch ninePatch, double expectedW, double expectedH) {
@@ -90,12 +90,12 @@ public class NinePatchRendererTest {
         Assert.assertEquals(expectedH, ninePatch.getNativeHeight(), EPSILON);
     }
 
-    private void assertRenderBounds(EArea area, Area2D expected) {
+    private void assertRenderBounds(AreaId area, Area2D expected) {
         QuadRenderCommand command = findCommand(drawBuffer.getCommands(), area);
         CoreTestUtil.assertEquals(expected, command.bounds);
     }
 
-    private QuadRenderCommand findCommand(ImmutableList<RenderCommand> commands, EArea area) {
+    private QuadRenderCommand findCommand(ImmutableList<RenderCommand> commands, AreaId area) {
         ITexture texture = renderer.getTexture(area);
         for (RenderCommand command : commands) {
             if (command instanceof QuadRenderCommand) {

@@ -30,8 +30,4 @@ public class VisualOrdering extends Ordering<IVisualElement> implements Serializ
         }
     }
 
-    public final boolean isBackToFront() {
-        return backToFront;
-    }
-
 }

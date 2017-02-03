@@ -21,6 +21,9 @@ public final class SimulationRateLimiter {
     private int statsCount;
     private double averageSimUpdateRate;
 
+    /**
+     * Needs to be called every time the app renders to the screen.
+     */
     public void onRender() {
         long now = timestampNanos();
 
@@ -48,6 +51,9 @@ public final class SimulationRateLimiter {
         return TimeUtils.nanoTime();
     }
 
+    /**
+     * Sets the simulation that this rate-limiter should run.
+     */
     public void setSimulation(IUpdateable simulation, int simulationFps) {
         Checks.checkArgument(simulationFps > 0, "simulationFps must be > 0");
 

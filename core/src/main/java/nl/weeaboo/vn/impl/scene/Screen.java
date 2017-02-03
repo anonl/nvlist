@@ -79,6 +79,9 @@ public class Screen implements IScreen {
         SceneUtil.sendSignal(getRootLayer(), signal);
     }
 
+    /**
+     * Draw the contents of this screen (its layers) into the supplied draw buffer.
+     */
     public void draw(IDrawBuffer buffer) {
         Layer layer = (Layer)getRootLayer();
         layer.draw(buffer);

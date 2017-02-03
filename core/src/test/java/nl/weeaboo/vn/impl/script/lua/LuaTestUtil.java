@@ -10,7 +10,6 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.impl.script.TestScriptExceptionHandler;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 
@@ -38,6 +37,7 @@ public final class LuaTestUtil {
     public static void assertGlobal(String name, int val) {
         Assert.assertEquals(val, getGlobal(name).optint(0));
     }
+
     public static void assertGlobal(String name, Object val) {
         LuaValue global = getGlobal(name);
 
@@ -58,6 +58,7 @@ public final class LuaTestUtil {
     public static <T> T getGlobal(String name, Class<T> type) {
         return getGlobal(name).optuserdata(type, null);
     }
+
     public static boolean hasRunnableThreads(IScriptContext context) {
         for (IScriptThread thread : context.getThreads()) {
             if (thread.isRunnable()) {
@@ -86,6 +87,7 @@ public final class LuaTestUtil {
         }
         throw new AssertionError("One or more threads refuse to die");
     }
+
     public static void waitForAllThreads(IContext context) {
         int iteration = 0;
         IScriptContext scriptContext = context.getScriptContext();

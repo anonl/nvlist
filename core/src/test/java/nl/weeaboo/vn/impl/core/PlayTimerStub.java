@@ -23,7 +23,7 @@ public class PlayTimerStub implements IPlayTimer {
     }
 
     @Override
-    public Duration getTotalTime() {
+    public Duration getTotalPlayTime() {
         return Duration.ZERO;
     }
 
