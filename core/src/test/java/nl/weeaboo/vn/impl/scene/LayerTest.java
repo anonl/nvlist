@@ -12,6 +12,8 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.impl.core.RenderEnv;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
@@ -57,15 +59,15 @@ public class LayerTest {
     public void testBounds() {
         Layer layer = new RootLayerStub();
         layer.setBounds(1, 2, 3, 4);
-        CoreTestUtil.assertEquals(1, 2, 3, 4, layer.getBounds());
+        RectAssert.assertEquals(Rect2D.of(1, 2, 3, 4), layer.getBounds(), EPSILON);
         layer.setPos(5, 6);
         layer.setSize(7, 8);
-        CoreTestUtil.assertEquals(5, 6, 7, 8, layer.getBounds());
+        RectAssert.assertEquals(Rect2D.of(5, 6, 7, 8), layer.getBounds(), EPSILON);
         layer.setX(-1);
         layer.setY(-2);
         layer.setWidth(5);
         layer.setHeight(6);
-        CoreTestUtil.assertEquals(-1, -2, 5, 6, layer.getBounds());
+        RectAssert.assertEquals(Rect2D.of(-1, -2, 5, 6), layer.getBounds(), EPSILON);
         Assert.assertEquals(layer.getBounds().x, layer.getX(), EPSILON);
         Assert.assertEquals(layer.getBounds().y, layer.getY(), EPSILON);
         Assert.assertEquals(layer.getBounds().w, layer.getWidth(), EPSILON);
@@ -91,7 +93,7 @@ public class LayerTest {
         // Check generated draw commands
         LayerRenderCommand lrc = buffer.getRootLayerCommand();
         Assert.assertEquals(5, lrc.z);
-        CoreTestUtil.assertEquals(1, 2, 3, 4, lrc.layerBounds);
+        RectAssert.assertEquals(Rect2D.of(1, 2, 3, 4), lrc.layerBounds, EPSILON);
 
         // Find draw commands for sub layers (in correct Z order)
         List<? extends RenderCommand> layerCommands = buffer.getLayerCommands(lrc.layerId);

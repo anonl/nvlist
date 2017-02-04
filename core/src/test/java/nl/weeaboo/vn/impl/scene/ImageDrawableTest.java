@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.scene;
 import org.junit.Assert;
 import org.junit.Test;
 
+import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
@@ -26,37 +28,37 @@ public class ImageDrawableTest {
 
         // Bounds
         image.setBounds(x, y, w, h);
-        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
 
         image.setPos(100, 100);
-        CoreTestUtil.assertEquals(100, 100, w, h, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(100, 100, w, h), image.getVisualBounds(), E);
         image.setSize(200, 200);
-        CoreTestUtil.assertEquals(100, 100, 200, 200, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(100, 100, 200, 200), image.getVisualBounds(), E);
 
         image.setBounds(1, 2, 3, 4);
-        CoreTestUtil.assertEquals(1, 2, 3, 4, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(1, 2, 3, 4), image.getVisualBounds(), E);
 
         image.setX(x);
         image.setY(y);
         image.setWidth(w);
         image.setHeight(h);
-        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
 
         // Rotated bounds
         image.setRotation(64); // Rotate 1/8th circle clockwise around top-left
         final double diagonal = Math.sqrt(w * w + h * h);
-        CoreTestUtil.assertEquals(x - diagonal / 2, y, diagonal, diagonal, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(x - diagonal / 2, y, diagonal, diagonal), image.getVisualBounds(), E);
 
         // Scaled
         image.setRotation(0);
         image.setScale(0.5, 2);
-        CoreTestUtil.assertEquals(x, y, w * .5, h * 2, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(x, y, w * .5, h * 2), image.getVisualBounds(), E);
 
         // Align
         image.setPos(0, 0);
         image.setScale(1, 1);
         image.setAlign(0.5, 0.5);
-        CoreTestUtil.assertEquals(x, y, w, h, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
     }
 
     @Test
@@ -127,7 +129,7 @@ public class ImageDrawableTest {
         Assert.assertEquals(0, image.getY(), E);
 
         image.setTexture(alpha, Direction.CENTER);
-        CoreTestUtil.assertEquals(25, 25, 50, 50, image.getVisualBounds());
+        RectAssert.assertEquals(Rect2D.of(25, 25, 50, 50), image.getVisualBounds(), E);
     }
 
 }

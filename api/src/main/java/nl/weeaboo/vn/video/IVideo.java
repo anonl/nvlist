@@ -8,6 +8,11 @@ import nl.weeaboo.vn.core.IRenderEnv;
 
 public interface IVideo extends Serializable {
 
+    /*
+     * TODO: Define a shared interface between ISound and IVideo to reduce code duplication in tests, and to ensure that
+     * their interfaces work as similar as possible.
+     */
+
     void prepare() throws IOException;
     void start() throws IOException;
     void pause();

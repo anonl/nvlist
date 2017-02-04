@@ -1,10 +1,9 @@
 package nl.weeaboo.vn.math;
 
+import static nl.weeaboo.test.SerializeTester.deserializeObject;
+import static nl.weeaboo.test.SerializeTester.serializeObject;
 import static nl.weeaboo.vn.ApiTestUtil.EPSILON;
-import static nl.weeaboo.vn.ApiTestUtil.deserializeObject;
-import static nl.weeaboo.vn.ApiTestUtil.serializeObject;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -243,7 +242,7 @@ public class MatrixTest {
     }
 
     @Test
-    public void serialize() throws IOException, ClassNotFoundException {
+    public void serialize() {
         Matrix alpha = new Matrix(11, 22, 33, 44, 55, 66);
 
         Assert.assertEquals(alpha, deserializeObject(serializeObject(alpha), Matrix.class));

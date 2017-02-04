@@ -7,19 +7,22 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.ApiTestUtil;
 
 public class PolygonTest {
+
+    private static final double EPSILON = ApiTestUtil.EPSILON;
 
     @Test
     public void boundsTest() {
         Rect2D r = Rect2D.of(1, 2, 3, 4);
         Polygon aligned = Polygon.transformedRect(Matrix.identityMatrix(), r);
-        ApiTestUtil.assertEquals(r, aligned.getBoundingRect());
+        RectAssert.assertEquals(r, aligned.getBoundingRect(), EPSILON);
 
         // Bounds when one or more coords are NaN
         Polygon nanPoly = Polygon.transformedRect(Matrix.translationMatrix(Double.NaN, 0), r);
-        ApiTestUtil.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect());
+        RectAssert.assertEquals(Rect2D.EMPTY, nanPoly.getBoundingRect(), EPSILON);
         Assert.assertFalse(nanPoly.contains(0, 0)); // Bound w/h are exclusive
     }
 

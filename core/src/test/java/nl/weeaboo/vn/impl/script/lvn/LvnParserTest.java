@@ -22,9 +22,9 @@ import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.test.SerializeTester;
 import nl.weeaboo.vn.impl.script.lvn.RuntimeTextParser.ParseResult;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
-import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class LvnParserTest {
 
@@ -69,7 +69,7 @@ public class LvnParserTest {
     }
 
     @Test
-    public void textParserTest() throws IOException, ClassNotFoundException {
+    public void textParserTest() {
         String input = "Text with [embedded()] code and {tag a,b,c,d}embedded tags{/tag} and ${stringifiers} too.";
 
         TextParser parser = new TextParser();
@@ -85,7 +85,7 @@ public class LvnParserTest {
         RuntimeTextParser runtimeParser = new RuntimeTextParser(debugTable);
 
         // Serialize->Deserialize to make sure that doesn't break anything
-        runtimeParser = CoreTestUtil.reserialize(runtimeParser);
+        runtimeParser = SerializeTester.reserialize(runtimeParser);
 
         ParseResult parseResult = runtimeParser.parse(input);
         IntMap<String> commandMap = parseResult.getCommands();

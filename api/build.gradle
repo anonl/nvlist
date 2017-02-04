@@ -10,6 +10,8 @@ dependencies {
     compile "nl.weeaboo.common:tcommon-prefsstore:$tcommonVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "com.google.guava:guava:$guavaVersion"
+    
+    testCompile "nl.weeaboo.common:tcommon-test:$tcommonVersion"
 }
 
 publishing {

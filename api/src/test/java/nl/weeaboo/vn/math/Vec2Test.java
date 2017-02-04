@@ -1,9 +1,7 @@
 package nl.weeaboo.vn.math;
 
-import static nl.weeaboo.vn.ApiTestUtil.deserializeObject;
-import static nl.weeaboo.vn.ApiTestUtil.serializeObject;
-
-import java.io.IOException;
+import static nl.weeaboo.test.SerializeTester.deserializeObject;
+import static nl.weeaboo.test.SerializeTester.serializeObject;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -95,15 +93,12 @@ public class Vec2Test {
     }
     private void checkSerialize(Vec2 vec, double epsilon) {
         String message = "Vec: " + vec;
-        try {
-            Vec2 serialized = deserializeObject(serializeObject(vec), Vec2.class);
-            if (epsilon == 0.0) {
-                Assert.assertEquals(message, vec, serialized);
-            } else {
-                Assert.assertTrue(message, vec.equals(serialized, epsilon));
-            }
-        } catch (ClassNotFoundException | IOException e) {
-            throw new AssertionError(e);
+
+        Vec2 serialized = deserializeObject(serializeObject(vec), Vec2.class);
+        if (epsilon == 0.0) {
+            Assert.assertEquals(message, vec, serialized);
+        } else {
+            Assert.assertTrue(message, vec.equals(serialized, epsilon));
         }
     }
 

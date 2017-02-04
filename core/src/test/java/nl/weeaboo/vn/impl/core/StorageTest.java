@@ -5,14 +5,12 @@ import static nl.weeaboo.vn.impl.core.StorageTestHelper.KEY_DOUBLE;
 import static nl.weeaboo.vn.impl.core.StorageTestHelper.KEY_INT;
 import static nl.weeaboo.vn.impl.core.StorageTestHelper.KEY_STRING;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.test.SerializeTester;
 import nl.weeaboo.vn.impl.save.Storage;
-import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class StorageTest {
 
@@ -76,10 +74,10 @@ public class StorageTest {
 
     /** Test readObject/writeObject implementations (Java serialization) */
     @Test
-    public void javaSerialize() throws IOException, ClassNotFoundException {
+    public void javaSerialize() {
         Storage testData = testHelper.createTestData();
 
-        Storage deserialized = CoreTestUtil.reserialize(testData);
+        Storage deserialized = SerializeTester.reserialize(testData);
 
         testHelper.assertStorageEquals(testData, deserialized);
     }

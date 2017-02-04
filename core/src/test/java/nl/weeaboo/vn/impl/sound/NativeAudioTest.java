@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.sound;
 
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,10 +7,9 @@ import org.junit.Test;
 
 import com.badlogic.gdx.audio.Music;
 
+import nl.weeaboo.test.SerializeTester;
 import nl.weeaboo.vn.gdx.res.StaticResourceStub;
 import nl.weeaboo.vn.impl.core.StaticRef;
-import nl.weeaboo.vn.impl.sound.NativeAudio;
-import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class NativeAudioTest {
 
@@ -119,7 +116,7 @@ public class NativeAudioTest {
      * After deserialization, {@link NativeAudio} should resume playback.
      */
     @Test
-    public void testSerialization() throws ClassNotFoundException, IOException {
+    public void testSerialization() {
         nativeAudio.play(1);
         nativeAudio.setVolume(0.5);
         assertPlaying();
@@ -136,13 +133,13 @@ public class NativeAudioTest {
         assertVolume(0.5);
     }
 
-    private void reserialize() throws IOException, ClassNotFoundException {
-        byte[] serialized = CoreTestUtil.serializeObject(nativeAudio);
+    private void reserialize() {
+        byte[] serialized = SerializeTester.serializeObject(nativeAudio);
 
         // Reset music object to mimic real deserialization of a save file
         mockGdxMusic.reset();
 
-        nativeAudio = CoreTestUtil.deserializeObject(serialized, NativeAudio.class);
+        nativeAudio = SerializeTester.deserializeObject(serialized, NativeAudio.class);
     }
 
     private void assertStopped() {

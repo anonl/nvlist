@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.gdx.graphics.GdxGraphicsTestUtil;
 import nl.weeaboo.vn.gdx.res.ResourceStub;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.impl.image.TextureAdapter;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class TextureAdapterTest {
@@ -45,7 +45,7 @@ public class TextureAdapterTest {
         Assert.assertNotEquals(0, adapter.getHandle());
         Assert.assertEquals(tex, adapter.getTexture());
         Assert.assertEquals(region, adapter.getTextureRegion());
-        CoreTestUtil.assertEquals(Area2D.of(.05, .05, .2, .2), adapter.getUV());
+        RectAssert.assertEquals(Area2D.of(.05, .05, .2, .2), adapter.getUV(), EPSILON);
         assertPixelSize(adapter, 4, 8);
         assertScale(adapter, 2, 2);
         assertSize(adapter, 2 * 4, 2 * 8);

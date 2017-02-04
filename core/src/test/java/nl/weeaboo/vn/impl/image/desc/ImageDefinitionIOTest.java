@@ -17,21 +17,23 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 
+import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
-import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
-import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
 
 public class ImageDefinitionIOTest {
+
+    private static final double EPSILON = CoreTestUtil.EPSILON;
 
     private ImageDefinitionTestHelper testHelper;
 
@@ -68,7 +70,7 @@ public class ImageDefinitionIOTest {
         ImageDefinition def = Iterables.getOnlyElement(load("subrects1.json"));
         IImageSubRect subRect = Iterables.getOnlyElement(def.getSubRects());
         Assert.assertEquals("r1", subRect.getId());
-        CoreTestUtil.assertEquals(1, 2, 3, 4, subRect.getArea().toArea2D());
+        RectAssert.assertEquals(Area2D.of(1, 2, 3, 4), subRect.getArea().toArea2D(), EPSILON);
     }
 
     @Test

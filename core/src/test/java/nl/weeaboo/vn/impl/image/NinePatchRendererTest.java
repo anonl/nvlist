@@ -10,15 +10,16 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.test.InsetsAssert;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.AreaId;
-import nl.weeaboo.vn.impl.image.NinePatchRenderer;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.QuadRenderCommand;
 import nl.weeaboo.vn.impl.render.RenderCommand;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
-import nl.weeaboo.vn.image.ITexture;
 
 public class NinePatchRendererTest {
 
@@ -62,7 +63,7 @@ public class NinePatchRendererTest {
         // Cols = 1, 7, 2
         // Rows = 1, 6, 3
         renderer.setInsets(Insets2D.of(1, 2, 3, 1));
-        CoreTestUtil.assertEquals(Insets2D.of(1, 2, 3, 1), renderer.getInsets());
+        InsetsAssert.assertEquals(Insets2D.of(1, 2, 3, 1), renderer.getInsets(), EPSILON);
         assertNativeSize(renderer, center.getWidth() + 1 + 2, center.getHeight() + 1 + 3);
 
         renderer.render(drawBuffer, imageDrawable, Area2D.of(0, 0, 10, 10));
@@ -92,7 +93,7 @@ public class NinePatchRendererTest {
 
     private void assertRenderBounds(AreaId area, Area2D expected) {
         QuadRenderCommand command = findCommand(drawBuffer.getCommands(), area);
-        CoreTestUtil.assertEquals(expected, command.bounds);
+        RectAssert.assertEquals(expected, command.bounds, EPSILON);
     }
 
     private QuadRenderCommand findCommand(ImmutableList<RenderCommand> commands, AreaId area) {

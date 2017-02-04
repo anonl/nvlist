@@ -7,9 +7,12 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.ApiTestUtil;
 
 public class RenderUtilTest {
+
+    private static final double EPSILON = ApiTestUtil.EPSILON;
 
     @Test
     public void roundClipRect() {
@@ -77,7 +80,7 @@ public class RenderUtilTest {
                 0.3 * base.w,
                 0.4 * base.h);
 
-        ApiTestUtil.assertEquals(expected, combined);
+        RectAssert.assertEquals(expected, combined, EPSILON);
     }
 
     private static void assertColorEquals(String expectedHex, int color) {
