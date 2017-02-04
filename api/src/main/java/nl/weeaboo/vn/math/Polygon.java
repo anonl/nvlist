@@ -2,6 +2,7 @@ package nl.weeaboo.vn.math;
 
 import java.io.Serializable;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 
 public class Polygon implements IShape, Serializable {
@@ -54,7 +55,16 @@ public class Polygon implements IShape, Serializable {
         return result;
     }
 
+    /**
+     * Calculates the bounding box for the given set of input points.
+     *
+     * @param pointsX X-coordinates for the points.
+     * @param pointsY Y-coordinates for the points.
+     */
     public static Rect2D calculateBounds(double[] pointsX, double[] pointsY) {
+        Checks.checkArgument(pointsX.length == pointsY.length, "Arrays must be the same length: pointsX="
+                + pointsX.length + ", pointsY=" + pointsY.length);
+
         double x0 = Double.POSITIVE_INFINITY;
         double y0 = Double.POSITIVE_INFINITY;
         double x1 = Double.NEGATIVE_INFINITY;

@@ -24,8 +24,7 @@ public interface IDrawBuffer {
 
     void drawQuad(IDrawTransform transform, int argb, ITexture tex, Area2D bounds, Area2D uv);
 
-    void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout,
-            double visibleGlyphs);
+    void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout, double visibleGlyphs);
 
     void drawLayer(int layerId, ILayer layer);
 

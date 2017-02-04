@@ -21,10 +21,17 @@ public final class Duration implements Serializable {
         this.millis = millis;
     }
 
+    /** Creates a new duration object representing a number of seconds. */
     public static Duration fromSeconds(long seconds) {
         return fromDuration(seconds, TimeUnit.SECONDS);
     }
 
+    /**
+     * Creates a new duration object.
+     *
+     * @param unit Duration only stores millisecond precision. To prevent unintended precision loss, the
+     *        {@link TimeUnit#MICROSECONDS} and {@link TimeUnit#NANOSECONDS} units are not accepted by this method.
+     */
     public static Duration fromDuration(long duration, TimeUnit unit) {
         if (unit == TimeUnit.MICROSECONDS || unit == TimeUnit.NANOSECONDS) {
             throw new IllegalArgumentException("Duration isn't precise enough to store " + unit);
@@ -36,6 +43,9 @@ public final class Duration implements Serializable {
         return new Duration(unit.toMillis(duration));
     }
 
+    /**
+     * @return The duration in seconds, rounded down.
+     */
     public long toSeconds() {
         return TimeUnit.MILLISECONDS.toSeconds(millis);
     }

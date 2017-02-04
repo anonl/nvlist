@@ -61,6 +61,9 @@ public final class Vec2 implements Externalizable {
         return false;
     }
 
+    /**
+     * Fuzzy compares this vector with another factor. Differences no greater than {@code epsilon} are treated as equal.
+     */
     public boolean equals(Vec2 v, double epsilon) {
         if (epsilon != 0.0) {
             return DoubleMath.fuzzyEquals(x, v.x, epsilon)
@@ -70,37 +73,63 @@ public final class Vec2 implements Externalizable {
         return x == v.x && y == v.y;
     }
 
+    /**
+     * Adds the given vector to this vector.
+     */
     public void add(Vec2 v) {
         x += v.x;
         y += v.y;
     }
 
+    /**
+     * Subtracts the given vector from this vector.
+     */
     public void sub(Vec2 v) {
         x -= v.x;
         y -= v.y;
     }
 
+    /**
+     * Uniformly scales the x/y components by the given factor.
+     */
     public void scale(double s) {
         x *= s;
         y *= s;
     }
 
+    /**
+     * Uniformly scales the x/y components such that the {@link #length()} becomes {@code 1.0}.
+     */
     public void normalize() {
         scale(1.0 / length());
     }
 
+    /**
+     * Calculates the cross product: {@code this ⨯  v}
+     */
     public Vec2 cross(Vec2 v) {
         return new Vec2(y - v.y, v.x - x);
     }
 
+    /**
+     * Calculates the dot product: {@code this ⋅ v}
+     */
     public double dot(Vec2 v) {
         return x * v.x + y * v.y;
     }
 
+    /**
+     * Returns the squared length.
+     */
     public double lengthSquared() {
         return x * x + y * y;
     }
 
+    /**
+     * Returns the length of the vector.
+     *
+     * @see #lengthSquared()
+     */
     public double length() {
         return Math.sqrt(x * x + y * y);
     }

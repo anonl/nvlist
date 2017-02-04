@@ -36,6 +36,9 @@ public final class DistortGrid implements Serializable {
         scansize = other.scansize;
     }
 
+    /**
+     * Creates a copy of the distort grid.
+     */
     public DistortGrid copy() {
         return new DistortGrid(this);
     }
@@ -64,10 +67,16 @@ public final class DistortGrid implements Serializable {
         return data[y * scansize + x * 2 + 1];
     }
 
+    /**
+     * The width of the grid. Both edges of the grid (0 and width) are valid coordinates.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * The height of the grid. Both edges of the grid (0 and height) are valid coordinates.
+     */
     public int getHeight() {
         return height;
     }
