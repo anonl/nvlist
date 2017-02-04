@@ -245,7 +245,11 @@ end
 -- @param str The text to append (may be either a string or a StyledText object).
 -- @bool[opt=false] newPage If <code>true</code>, starts a new page in the textlog before appending the text.
 function appendTextLog(str, newPage)
-    getTextState():appendTextLog(str, newPage)
+    local textLog = getTextState():getTextLog()
+    if newPage then
+        textLog:setText(Text.createStyledText(""))
+    end
+    textLog:appendText(Text.createStyledText(str))
 end
 
 function isLineRead()
