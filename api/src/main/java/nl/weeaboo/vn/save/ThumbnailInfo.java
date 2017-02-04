@@ -23,10 +23,16 @@ public final class ThumbnailInfo {
         Checks.checkRange(imageSize.h, "imageSize.h", 1);
     }
 
+    /**
+     * @return The relative path of the thumbnail image within the save file.
+     */
     public FilePath getPath() {
         return path;
     }
 
+    /**
+     * The pixel dimensions of the thumbnail image.
+     */
     public Dim getImageSize() {
         return imageSize;
     }

@@ -4,7 +4,7 @@ import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawTransform;
 
-public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform {
+public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform, IPositionable {
 
     /**
      * @return The parent layer that contains this drawable, or {@code null} if not attached to any layer.
@@ -35,32 +35,65 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform 
      */
     boolean contains(double cx, double cy);
 
-    void setZ(short z);
-
+    /**
+     * X-coordinate of the drawable. How this corresponds to the final visual bounds depends on the type of drawable.
+     */
     double getX();
+
+    /**
+     * Y-coordinate of the drawable. How this corresponds to the final visual bounds depends on the type of drawable.
+     */
     double getY();
+
+    /**
+     * Width of the drawable.
+     * @see #getVisualBounds()
+     */
     double getWidth(); // getVisualBounds().width
+
+    /**
+     * Height of the drawable.
+     * @see #getVisualBounds()
+     */
     double getHeight(); // getVisualBounds().height
 
     @Override
     Matrix getTransform();
 
+    /**
+     * Sets the X-coordinate of the drawable.
+     * @see #getX()
+     * @see #setPos(double, double)
+     */
+    @Override
     void setX(double x); //Calls setPos
+
+    /**
+     * Sets the Y-coordinate of the drawable.
+     * @see #getY()
+     * @see #setPos(double, double)
+     */
+    @Override
     void setY(double y); //Calls setPos
-    void setWidth(double w); //Calls setSize
-    void setHeight(double h); //Calls setSize
-    void translate(double dx, double dy); //Calls setPos
-    void setPos(double x, double y);
+
+    /**
+     * Stretches the drawable to the given width/height.
+     */
+    @Override
     void setSize(double w, double h);
 
     /**
      * Moves and stretches this drawable to make it fit inside the specified bounding box.
      */
+    @Override
     void setBounds(double x, double y, double w, double h);
+
+    void setZ(short z);
 
     void setVisible(boolean v);
 
     void setBlendMode(BlendMode m);
+
     void setClipEnabled(boolean clip);
 
 }

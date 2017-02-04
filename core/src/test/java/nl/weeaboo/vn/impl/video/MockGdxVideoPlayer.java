@@ -38,6 +38,10 @@ public class MockGdxVideoPlayer implements VideoPlayer {
         renderSize = Dim.of(width, height);
     }
 
+    /**
+     * @return The current rendering size.
+     * @see #resize(int, int)
+     */
     public Dim getRenderSize() {
         return renderSize;
     }
@@ -61,6 +65,9 @@ public class MockGdxVideoPlayer implements VideoPlayer {
         paused = false;
     }
 
+    /**
+     * @return {@code true} if currently paused (but not stopped).
+     */
     public boolean isPaused() {
         return paused;
     }
@@ -81,6 +88,9 @@ public class MockGdxVideoPlayer implements VideoPlayer {
         return videoSize.h;
     }
 
+    /**
+     * Sets the video size and notifies the attached video size listener.
+     */
     public void setVideoSize(int vw, int vh) {
         videoSize = Dim.of(vw, vh);
 
@@ -114,6 +124,9 @@ public class MockGdxVideoPlayer implements VideoPlayer {
         this.completionListener = listener;
     }
 
+    /**
+     * Notifies the attached completion listener that the video has finished.
+     */
     public void fireComplete() {
         if (completionListener != null) {
             completionListener.onCompletionListener(file);

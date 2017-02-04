@@ -39,6 +39,9 @@ public class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
+    /**
+     * Main entry point for desktop platforms (Windows, Linux, MacOS).
+     */
     public static void main(String[] args) {
         InitConfig.init();
 

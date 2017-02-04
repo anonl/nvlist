@@ -15,6 +15,10 @@ public interface IButtonModel extends Serializable {
      */
     boolean isRollover();
 
+    /**
+     * Sets the 'rollover' flag.
+     * @see #isRollover()
+     */
     void setRollover(boolean rollover);
 
     /**
@@ -22,6 +26,10 @@ public interface IButtonModel extends Serializable {
      */
     boolean isPressed();
 
+    /**
+     * Sets the 'pressed' flag.
+     * @see #isPressed()
+     */
     void setPressed(boolean pressed);
 
     /**

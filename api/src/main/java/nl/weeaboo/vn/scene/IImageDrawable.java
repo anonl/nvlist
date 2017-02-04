@@ -6,8 +6,15 @@ import nl.weeaboo.vn.image.ITextureRenderer;
 
 public interface IImageDrawable extends ITransformable {
 
+    /**
+     * @return The renderer that this drawable uses to draw itself.
+     */
     IRenderable getRenderer();
 
+    /**
+     * Changes the renderer. Calls {@link #setRenderer(IRenderable, Direction)} with an achor of
+     * {@link Direction#TOP_LEFT}.
+     */
     void setRenderer(IRenderable r); // Calls setRenderer(IRenderable, int)
 
     /**

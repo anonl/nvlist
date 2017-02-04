@@ -80,19 +80,6 @@ public class ScreenTextState implements IScreenTextState {
         setTextDrawableText(stext);
     }
 
-    @Override
-    public void appendTextLog(String s, boolean newPage) {
-        appendTextLog(toStyledText(s), newPage);
-    }
-
-    @Override
-    public void appendTextLog(StyledText st, boolean newPage) {
-        if (newPage) {
-            textLog.setText(StyledText.EMPTY_STRING);
-        }
-        textLog.appendText(st);
-    }
-
     private void setTextDrawableText(StyledText stext) {
         if (textDrawable == null) {
             return;

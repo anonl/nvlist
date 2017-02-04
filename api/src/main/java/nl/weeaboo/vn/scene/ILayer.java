@@ -3,11 +3,14 @@ package nl.weeaboo.vn.scene;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 
-public interface ILayer extends IVisualGroup {
+public interface ILayer extends IVisualGroup, IPositionable {
 
     @Override
     ILayer getParent();
 
+    /**
+     * Adds a drawable to the layer.
+     */
     void add(IDrawable d);
 
     /**
@@ -26,23 +29,40 @@ public interface ILayer extends IVisualGroup {
      */
     IScreenshotBuffer getScreenshotBuffer();
 
+    /**
+     * @return The top-left X-coordinate of the layer relative to its parent layer.
+     */
     double getX();
+
+    /**
+     * @return The top-left Y-coordinate of the layer relative to its parent layer.
+     */
     double getY();
+
+    /**
+     * @return The width of the layer.
+     */
     double getWidth();
+
+    /**
+     * @return The height of the layer.
+     */
     double getHeight();
+
+    /**
+     * The bounds of the layer.
+     */
     Rect2D getBounds();
 
-    void setX(double x); //Calls setPos
-    void setY(double y); //Calls setPos
+    /**
+     * Changes the relative render order of this element.
+     * @see IVisualElement#getZ()
+     */
     void setZ(short z);
-    void setWidth(double w); //Calls setSize
-    void setHeight(double h); //Calls setSize
-    void setPos(double x, double y);
-    void setSize(double w, double h);
 
-    /** Simultaneously sets the size and pos of this layer. */
-    void setBounds(double x, double y, double w, double h);
-
+    /**
+     * Sets the visibility flag.
+     */
     void setVisible(boolean v);
 
 }

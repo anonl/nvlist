@@ -4,8 +4,10 @@ import nl.weeaboo.vn.layout.GridCellConstraints;
 
 public interface IGridPanel extends IPanel {
 
+    /** Add an element to the panel. */
     void add(IVisualElement elem, GridCellConstraints constraints);
 
+    /** Ends the current row. Further elements will be placed in a line below the current elements. */
     void endRow();
 
     /** Provides convenient access to the layout-specific constraints used by this panel. */

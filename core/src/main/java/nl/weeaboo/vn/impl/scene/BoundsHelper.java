@@ -3,8 +3,9 @@ package nl.weeaboo.vn.impl.scene;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.core.TransientListenerSupport;
+import nl.weeaboo.vn.scene.IPositionable;
 
-public final class BoundsHelper extends TransientListenerSupport {
+public final class BoundsHelper extends TransientListenerSupport implements IPositionable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,10 +44,37 @@ public final class BoundsHelper extends TransientListenerSupport {
         return getBounds().contains(px, py);
     }
 
+    @Override
+    public final void setX(double x) {
+        setPos(x, getY());
+    }
+
+    @Override
+    public final void setY(double y) {
+        setPos(getX(), y);
+    }
+
+    @Override
+    public void translate(double dx, double dy) {
+        setPos(getX() + dx, getY() + dy);
+    }
+
+    @Override
     public void setPos(double x, double y) {
         setBounds(x, y, this.w, this.h);
     }
 
+    @Override
+    public void setWidth(double w) {
+        setSize(w, getHeight());
+    }
+
+    @Override
+    public void setHeight(double h) {
+        setSize(getWidth(), h);
+    }
+
+    @Override
     public void setSize(double w, double h) {
         setBounds(this.x, this.y, w, h);
     }
@@ -55,6 +83,7 @@ public final class BoundsHelper extends TransientListenerSupport {
         setBounds(rect.x, rect.y, rect.w, rect.h);
     }
 
+    @Override
     public void setBounds(double x, double y, double w, double h) {
         Checks.checkRange(x, "x");
         Checks.checkRange(y, "y");

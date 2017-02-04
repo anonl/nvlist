@@ -41,6 +41,7 @@ public final class SceneUtil {
     public static void sendSignal(IVisualElement source, ISignal signal) {
         doSendSignal(getRoot(source), signal);
     }
+
     private static void doSendSignal(IVisualElement elem, ISignal signal) {
         if (signal.isHandled()) {
             return;

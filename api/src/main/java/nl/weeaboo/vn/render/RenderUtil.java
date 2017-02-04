@@ -9,6 +9,9 @@ public final class RenderUtil {
     private RenderUtil() {
     }
 
+    /**
+     * Returns the largest {@link Rect} that completely fits inside the supplied {@link Rect2D}.
+     */
     public static Rect roundClipRect(Rect2D clip2D) {
         //Rounded to ints, resulting clip rect should be no bigger than the non-rounded version.
         int x0 = (int)Math.ceil(clip2D.x);
@@ -22,7 +25,7 @@ public final class RenderUtil {
     }
 
     /**
-     * Returns a subrectangle of the given base UV area
+     * Returns a sub-rectangle of the given base UV area
      *
      * @param baseUV The base UV rectangle.
      * @param uv The relative sub-rectangle within the base UV area.

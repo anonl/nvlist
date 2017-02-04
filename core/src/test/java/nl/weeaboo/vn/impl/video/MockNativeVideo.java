@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.vn.core.IRenderEnv;
-import nl.weeaboo.vn.impl.video.INativeVideo;
 
 public class MockNativeVideo implements INativeVideo {
 
@@ -50,6 +49,10 @@ public class MockNativeVideo implements INativeVideo {
         renderCount.incrementAndGet();
     }
 
+    /**
+     * Gets and clear the internal render counter. This counter tracks the number of times that the {@link #render()}
+     * method is called.
+     */
     public int consumeRenderCount() {
         return renderCount.getAndSet(0);
     }
@@ -74,10 +77,17 @@ public class MockNativeVideo implements INativeVideo {
         this.volume = volume;
     }
 
+    /**
+     * @return The current volume.
+     * @see #setVolume(double)
+     */
     public double getVolume() {
         return volume;
     }
 
+    /**
+     * @return The current render env, or {@code null} if no render env was set.
+     */
     public IRenderEnv getRenderEnv() {
         return renderEnv;
     }

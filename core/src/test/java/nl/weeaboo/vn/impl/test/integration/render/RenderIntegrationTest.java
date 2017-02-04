@@ -44,6 +44,9 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         renderer.destroy();
     }
 
+    /**
+     * @return The draw buffer used by the renderer.
+     */
     public DrawBuffer getDrawBuffer() {
         return renderer.getDrawBuffer();
     }
@@ -55,13 +58,25 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         return texture;
     }
 
+    /**
+     * Checks the render result by comparing a screenshot of the current screen to an image file containing the expected
+     * result.
+     *
+     * @see #checkRenderResult(String, Rect)
+     */
     public void checkRenderResult(String testName) {
-        Rect glClip = env.getRenderEnv().getGLClip();
-        checkRenderResult(testName, glClip.x, glClip.y, glClip.w, glClip.h);
+        checkRenderResult(testName, env.getRenderEnv().getGLClip());
     }
 
-    public void checkRenderResult(String testName, int x, int y, int w, int h) {
-        Pixmap actual = ScreenshotHelper.screenshot(x, y, w, h);
+    /**
+     * Checks the render result by comparing a screenshot of a sub-rect of the current screen to an image file
+     * containing the expected result.
+     *
+     * @param glRect Clip rectangle in OpenGL viewport coordinates (OpenGL uses a flipped y-axis, so y=0 is the bottom
+     *        pixel).
+     */
+    public void checkRenderResult(String testName, Rect glRect) {
+        Pixmap actual = ScreenshotHelper.screenshot(glRect.x, glRect.y, glRect.w, glRect.h);
 
         String outputPath = "src/test/resources/render/" + testName + ".png";
         FileHandle fileHandle = Gdx.files.local(outputPath);

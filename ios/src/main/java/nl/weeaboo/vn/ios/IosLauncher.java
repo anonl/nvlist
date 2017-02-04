@@ -38,6 +38,9 @@ public final class IosLauncher extends IOSApplication.Delegate {
         return new IOSApplication(launcher, config);
     }
 
+    /**
+     * Main entry point for iOS.
+     */
     public static void main(String[] argv) {
         NSAutoreleasePool pool = new NSAutoreleasePool();
         UIApplication.main(argv, null, IosLauncher.class);
