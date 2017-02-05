@@ -23,6 +23,7 @@ public class LogLib extends LuaLib {
     private Logger getLogger() {
         return getLogger(LuaUtil.getLuaStack());
     }
+
     protected Logger getLogger(List<String> luaStackTrace) {
         String luaScriptFile = Iterables.getFirst(luaStackTrace, "unknown");
 
@@ -32,6 +33,7 @@ public class LogLib extends LuaLib {
     private String getLogFormat(Varargs args) {
         return args.tojstring(1);
     }
+
     private Object[] getLogArgs(Varargs args) {
         return LuaConvertUtil.toObjectArray(args, 2);
     }

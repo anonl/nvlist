@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.IStreamingMedia;
 
-public interface ISound extends Serializable {
+public interface ISound extends Serializable, IStreamingMedia {
 
     /**
      * @see #start(int)
@@ -22,6 +23,7 @@ public interface ISound extends Serializable {
     /**
      * @see #stop(int)
      */
+    @Override
     void stop();
 
     /**
@@ -31,24 +33,9 @@ public interface ISound extends Serializable {
      */
     void stop(int fadeOutMillis);
 
-    /**
-     * Temporarily pauses playback. Use {@link #resume()} to resume playback.
-     */
-    void pause();
-
-    /**
-     * Resumes a previously paused sound. Behavior is unspecified when the sound
-     * is not paused.
-     */
-    void resume();
-
     FilePath getFilename();
 
     SoundType getSoundType();
-
-    boolean isPlaying();
-    boolean isPaused();
-    boolean isStopped();
 
     int getLoopsLeft();
 

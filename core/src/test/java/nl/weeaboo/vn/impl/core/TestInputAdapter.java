@@ -2,11 +2,11 @@ package nl.weeaboo.vn.impl.core;
 
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.input.InputAccumulator;
-import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.impl.input.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PressState;
+import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.scene.IVisualElement;
 
@@ -25,6 +25,7 @@ public class TestInputAdapter {
         increaseTime(timeIncrease);
         updateInput();
     }
+
     public void updateInput() {
         input.update(getTime(), accum);
     }

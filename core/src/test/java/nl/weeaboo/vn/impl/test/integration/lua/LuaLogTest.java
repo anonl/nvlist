@@ -54,6 +54,7 @@ public class LuaLogTest extends LuaIntegrationTest {
     private void assertEntry(LogEntry entry, LogLevel level, String message) {
         assertEntry(entry, level, message, null);
     }
+
     private void assertEntry(LogEntry entry, LogLevel level, String message, Throwable exception) {
         Assert.assertEquals(level, entry.getLevel());
         Assert.assertEquals(message, entry.getMessage());

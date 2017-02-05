@@ -104,6 +104,7 @@ final class ParserUtil {
     public static boolean isWord(String string) {
         return isWord(string, 0, string.length());
     }
+
     public static boolean isWord(String string, int from, int to) {
         int n = from;
         while (n < to) {

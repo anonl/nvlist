@@ -28,6 +28,7 @@ public class RenderStats {
 
     public void startRender() {
     }
+
     public void stopRender() {
         framesRendered++;
         if ((framesRendered & 0x3FF) == 0) {

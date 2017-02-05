@@ -199,10 +199,13 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
     protected abstract boolean renderUnknownCommand(RenderCommand cmd);
 
     protected abstract void applyClip(boolean c);
+
     protected abstract void applyColor(int argb);
+
     protected abstract void applyBlendMode(BlendMode bm);
 
     protected abstract void applyClipRect(Rect glRect);
+
     protected abstract void translate(double dx, double dy);
 
     protected void flushQuadBatch() {

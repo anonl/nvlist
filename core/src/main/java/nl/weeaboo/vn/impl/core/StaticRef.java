@@ -20,6 +20,7 @@ public final class StaticRef<T> implements Serializable {
     public static <T> StaticRef<T> anonymous(Class<T> type) {
         return new StaticRef<>(UUID.randomUUID().toString(), type);
     }
+
     public static <T> StaticRef<T> from(String id, Class<T> type) {
         return new StaticRef<>(id, type);
     }

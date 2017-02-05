@@ -74,6 +74,7 @@ public final class GLMatrixStack {
     public void translate(double dx, double dy) {
         translate((float)dx, (float)dy);
     }
+
     public void translate(float dx, float dy) {
         transform.translate(dx, dy, 0);
         onTransformChanged();
@@ -82,6 +83,7 @@ public final class GLMatrixStack {
     public void scale(double dx, double dy) {
         scale((float)dx, (float)dy);
     }
+
     public void scale(float sx, float sy) {
         transform.scale(sx, sy, 1);
         onTransformChanged();

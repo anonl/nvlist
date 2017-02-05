@@ -23,6 +23,7 @@ public final class AlignUtil {
         }
         return getAlignedBounds(tex.getWidth(), tex.getHeight(), alignX, alignY);
     }
+
     public static Rect2D getAlignedBounds(double w, double h, double alignX, double alignY) {
         return Rect2D.of(getAlignOffset(w, alignX), getAlignOffset(h, alignY), w, h);
     }

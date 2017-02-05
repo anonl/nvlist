@@ -117,21 +117,27 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
     protected TriangleGrid getGeometry() {
         return grid;
     }
+
     protected ITexture getStartTexture() {
         return config.getStartTexture().getTexture();
     }
+
     protected Area2D getStartTextureUV() {
         return config.getStartTexture().getUV();
     }
+
     protected ITexture getEndTexture() {
         return config.getEndTexture().getTexture();
     }
+
     protected Area2D getEndTextureUV() {
         return config.getEndTexture().getUV();
     }
+
     protected ITexture getControlTexture() {
         return config.getControlImage().getTexture();
     }
+
     protected ITexture getRemapTexture() {
         return remapTexture;
     }

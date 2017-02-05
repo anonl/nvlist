@@ -32,12 +32,12 @@ public final class LuaConvertUtil {
         throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
     }
 
-    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue)
-            throws ScriptException {
+    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue) throws ScriptException {
         return getTextureArg(imageModule, luaValue, false);
     }
-    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue,
-            boolean suppressLoadErrors) throws ScriptException {
+
+    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue, boolean suppressLoadErrors)
+            throws ScriptException {
 
         if (luaValue.isstring()) {
             // Texture filename
@@ -70,6 +70,7 @@ public final class LuaConvertUtil {
     public static FilePath getPath(Varargs args, int index) {
         return getPath(args.arg(index));
     }
+
     public static FilePath getPath(LuaValue luaValue) {
         return FilePath.of(luaValue.checkjstring());
     }

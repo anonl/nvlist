@@ -52,6 +52,7 @@ public final class DummyLayoutElem extends LayoutElem {
     public final void setLayoutWidths(double min, double pref, double max) {
         setLayoutWidths(LayoutSize.of(min), LayoutSize.of(pref), LayoutSize.of(max));
     }
+
     public final void setLayoutWidths(LayoutSize min, LayoutSize pref, LayoutSize max) {
         this.minWidth = min;
         this.prefWidth = pref;
@@ -61,6 +62,7 @@ public final class DummyLayoutElem extends LayoutElem {
     public final void setLayoutHeights(double min, double pref, double max) {
         setLayoutHeights(LayoutSize.of(min), LayoutSize.of(pref), LayoutSize.of(max));
     }
+
     public final void setLayoutHeights(LayoutSize min, LayoutSize pref, LayoutSize max) {
         this.minHeight = min;
         this.prefHeight = pref;

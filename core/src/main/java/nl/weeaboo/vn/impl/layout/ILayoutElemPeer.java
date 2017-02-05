@@ -17,6 +17,7 @@ public interface ILayoutElemPeer {
     void setLayoutBounds(Rect2D rect);
 
     double getWidth();
+
     double getHeight();
 
 }

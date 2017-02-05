@@ -49,6 +49,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         }
         return rows.get(rows.size() - 1);
     }
+
     private void addRow() {
         rows.add(new GridRow());
     }
@@ -304,9 +305,11 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         public void updatePrefBreadth(LayoutSize newBreadth) {
             prefBreadth = LayoutSize.max(prefBreadth, newBreadth);
         }
+
         public void updateMinBreadth(LayoutSize newBreadth) {
             minBreadth = LayoutSize.max(minBreadth, newBreadth);
         }
+
         public void updateMaxBreadth(LayoutSize newBreadth) {
             maxBreadth = LayoutSize.min(maxBreadth, newBreadth);
         }

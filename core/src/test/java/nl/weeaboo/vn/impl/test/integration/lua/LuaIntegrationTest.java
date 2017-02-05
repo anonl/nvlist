@@ -62,6 +62,7 @@ public abstract class LuaIntegrationTest {
     protected void loadScript(String path) {
         loadScript(FilePath.of(path));
     }
+
     protected void loadScript(FilePath path) {
         try {
             env.getScriptLoader().loadScript(mainThread, path);

@@ -73,6 +73,11 @@ public class MockNativeVideo implements INativeVideo {
     }
 
     @Override
+    public boolean isStopped() {
+        return !isPlaying() && !isPaused();
+    }
+
+    @Override
     public void setVolume(double volume) {
         this.volume = volume;
     }

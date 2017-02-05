@@ -19,6 +19,7 @@ final class SoundTestHelper {
     public MockSound start() {
         return start(SoundType.SOUND);
     }
+
     public MockSound start(SoundType stype) {
         MockSound sound = new MockSound(soundController, stype);
         try {

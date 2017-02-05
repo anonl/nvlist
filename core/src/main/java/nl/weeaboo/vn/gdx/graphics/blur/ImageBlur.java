@@ -138,12 +138,15 @@ public final class ImageBlur {
     private static int getC4(int rgba) {
         return rgba & 0xFF;
     }
+
     private static int getC3(int rgba) {
         return (rgba >> 8) & 0xFF;
     }
+
     private static int getC2(int rgba) {
         return (rgba >> 16) & 0xFF;
     }
+
     private static int getC1(int rgba) {
         return (rgba >> 24) & 0xFF;
     }

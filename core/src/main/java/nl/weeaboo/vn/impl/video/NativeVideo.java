@@ -116,6 +116,11 @@ final class NativeVideo implements INativeVideo {
     }
 
     @Override
+    public boolean isStopped() {
+        return !isPlaying() && !isPaused();
+    }
+
+    @Override
     public void setVolume(double vol) {
         if (this.volume != vol) {
             this.volume = vol;

@@ -31,6 +31,7 @@ final class TextParser {
     public Collection<Token> tokenize(String str) {
         return tokenize(new StringCharacterIterator(str));
     }
+
     public Collection<Token> tokenize(CharacterIterator itr) {
         init(itr);
 

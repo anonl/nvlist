@@ -55,6 +55,7 @@ public class LuaScriptContext implements IScriptContext {
     public IScriptThread newThread(LuaClosure func) throws ScriptException {
         return newThread(func, LuaConstants.NONE);
     }
+
     public IScriptThread newThread(LuaClosure func, Varargs args) throws ScriptException {
         return newThread(new LuaScriptFunction(func, args));
     }

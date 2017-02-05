@@ -163,6 +163,7 @@ public class SeenLogTest {
     private void assertContains(boolean expected, FilePath fn) {
         assertContains(expected, fn, MediaType.OTHER);
     }
+
     private void assertContains(boolean expected, FilePath fn, MediaType mediaType) {
         Assert.assertEquals(expected, seenLog.hasSeen(new ResourceId(mediaType, fn)));
     }
@@ -177,6 +178,7 @@ public class SeenLogTest {
     private boolean add(FilePath fn) {
         return add(fn, MediaType.OTHER);
     }
+
     private boolean add(FilePath fn, MediaType mediaType) {
         return seenLog.markSeen(new ResourceId(mediaType, fn));
     }

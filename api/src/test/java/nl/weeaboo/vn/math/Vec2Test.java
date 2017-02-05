@@ -91,6 +91,7 @@ public class Vec2Test {
     private void checkSerialize(Vec2 vec) {
         checkSerialize(vec, 0.0);
     }
+
     private void checkSerialize(Vec2 vec, double epsilon) {
         String message = "Vec: " + vec;
 

@@ -62,6 +62,7 @@ public abstract class IntegrationTest {
     protected void loadScript(String path) {
         loadScript(FilePath.of(path));
     }
+
     protected void loadScript(FilePath path) {
         IContext context = env.getContextManager().getPrimaryContext();
         try {
