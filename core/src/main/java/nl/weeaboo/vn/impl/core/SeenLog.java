@@ -82,7 +82,7 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
         case VIDEO:
             return env.getVideoModule().resolveResource(filename);
         case SCRIPT:
-            return env.getScriptLoader().resolveResource(filename);
+            return env.getScriptEnv().getScriptLoader().resolveResource(filename);
         case OTHER:
             return null;
         default:

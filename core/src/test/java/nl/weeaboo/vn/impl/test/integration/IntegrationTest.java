@@ -66,7 +66,7 @@ public abstract class IntegrationTest {
     protected void loadScript(FilePath path) {
         IContext context = env.getContextManager().getPrimaryContext();
         try {
-            LuaScriptUtil.loadScript(context, env.getScriptLoader(), path);
+            LuaScriptUtil.loadScript(context, env.getScriptEnv().getScriptLoader(), path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }

@@ -16,9 +16,6 @@ import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.TestContextFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.impl.script.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
 import nl.weeaboo.vn.script.IScriptContext;
@@ -33,7 +30,7 @@ public class BaseScriptTest {
     @Before
     public void init() throws ScriptException {
         TestEnvironment env = TestEnvironment.newInstance();
-        scriptLoader = (LuaScriptLoader)env.getScriptLoader();
+        scriptLoader = (LuaScriptLoader)env.getScriptEnv().getScriptLoader();
         scriptEnv = env.getScriptEnv();
         scriptEnv.initEnv();
     }

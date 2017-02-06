@@ -65,7 +65,7 @@ public abstract class LuaIntegrationTest {
 
     protected void loadScript(FilePath path) {
         try {
-            env.getScriptLoader().loadScript(mainThread, path);
+            env.getScriptEnv().getScriptLoader().loadScript(mainThread, path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }

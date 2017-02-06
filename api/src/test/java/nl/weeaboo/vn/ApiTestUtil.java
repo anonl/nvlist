@@ -11,6 +11,9 @@ public final class ApiTestUtil {
     private ApiTestUtil() {
     }
 
+    /**
+     * Fuzzy equals for {@link Vec2}.
+     */
     public static void assertEquals(double x, double y, Vec2 vec, double epsilon) {
         Assert.assertEquals(x, vec.x, epsilon);
         Assert.assertEquals(y, vec.y, epsilon);
