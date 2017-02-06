@@ -16,6 +16,7 @@ public interface IVideoModule extends IModule, IResourceResolver {
      *
      * @param loadInfo Filename of the requested resource and related metadata.
      * @return An {@link IVideo} object that can be used to control playback.
+     * @throws IOException If an I/O error occurs while opening the video file for reading.
      */
     IVideo movie(ResourceLoadInfo loadInfo) throws IOException;
 

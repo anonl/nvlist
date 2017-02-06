@@ -25,12 +25,14 @@ public interface ISaveModule extends IModule {
     /**
      * Load a save slot. Resumes script execution from the saved state.
      *
+     * @throws IOException If an I/O error occurs while reading data from the save file.
      * @throws SaveFormatException If the stored save data is in an incompatible format.
      */
     void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException;
 
     /**
      * Saves the current state to the specified save slot.
+     * @throws IOException If an I/O error occurs while writing data to the save file.
      */
     void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException;
 
@@ -48,6 +50,8 @@ public interface ISaveModule extends IModule {
      * Reads all metadata from a save file.
      *
      * @param slot The save slot to load.
+     * @throws IOException If an I/O error occurs while reading data from the save file.
+     * @throws SaveFormatException If the stored save data is in an incompatible format.
      * @see #getQuickSaveSlot(int)
      * @see #getAutoSaveSlot(int)
      * @see #readSaveHeader(int)
@@ -58,6 +62,8 @@ public interface ISaveModule extends IModule {
      * Reads only the header of a save file.
      *
      * @param slot The save slot to load.
+     * @throws IOException If an I/O error occurs while reading data from the save file.
+     * @throws SaveFormatException If the stored save data is in an incompatible format.
      * @see #getQuickSaveSlot(int)
      * @see #getAutoSaveSlot(int)
      * @see #readSave(int)

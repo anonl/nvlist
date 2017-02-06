@@ -3,6 +3,8 @@ package nl.weeaboo.vn.layout;
 import java.io.Serializable;
 import java.util.Locale;
 
+import org.omg.CORBA.UNKNOWN;
+
 import com.google.common.primitives.Doubles;
 
 /** Wrapper around a layout-related size value. Makes encoding of infinite values more explicit. */
@@ -24,6 +26,17 @@ public final class LayoutSize implements Serializable {
         this.value = value;
     }
 
+    /**
+     * Converts a double value to a corresponding {@link LayoutSize} object.
+     * <ul>
+     * <li>0.0 maps to {@link LayoutSize#ZERO}
+     * <li>Positive, finite values map to the corresponding finite layout size
+     * <li>Negative, finite values are illegal
+     * <li>POSITIVE_INFINITY maps to {@link LayoutSize#INFINITE}
+     * <li>NEGATIVE_INFINITY is an illegal argument
+     * <li>NaN maps to {@link LayoutSize#UNKNOWN}
+     * </ul>
+     */
     public static LayoutSize of(double value) {
         if (value == Double.POSITIVE_INFINITY) {
             return INFINITE;
@@ -35,14 +48,29 @@ public final class LayoutSize implements Serializable {
         return new LayoutSize(value);
     }
 
+    /**
+     * @return {@code true} if this is an infinite size.
+     * @see LayoutSize#INFINITE
+     */
     public boolean isInfinite() {
         return Double.isInfinite(value);
     }
 
+    /**
+     * @return {@code true} if this is an unknown size.
+     * @see LayoutSize#UNKNOWN
+     */
     public boolean isUnknown() {
         return Double.isNaN(value);
     }
 
+    /**
+     * Converts the layout size to a finite number. Note that this method is <em>not</em> the inverse operation of
+     * {@link #of(double)}.
+     *
+     * @throws IllegalStateException If this layout size doesn't represent a finite number.
+     * @see #value(double)
+     */
     public double value() {
         if (!Doubles.isFinite(value)) {
             throw new IllegalStateException("LayoutSize is not convertible to a scalar value: " + this);
@@ -86,6 +114,12 @@ public final class LayoutSize implements Serializable {
         return String.format(Locale.ROOT, "LayoutSize[%.2f]", value);
     }
 
+    /**
+     * Returns the smallest of two layout sizes.
+     * <p>
+     * Unlike {@link Math#min(double, double)} if one of the values is {@link #UNKNOWN}, the other value is returned and
+     * not necessarily {@link UNKNOWN}.
+     */
     public static LayoutSize min(LayoutSize a, LayoutSize b) {
         if (a.isUnknown()) {
             return b;
@@ -100,6 +134,12 @@ public final class LayoutSize implements Serializable {
         }
     }
 
+    /**
+     * Returns the largest of two layout sizes.
+     * <p>
+     * Unlike {@link Math#max(double, double)} if one of the values is {@link #UNKNOWN}, the other value is returned and
+     * not necessarily {@link UNKNOWN}.
+     */
     public static LayoutSize max(LayoutSize a, LayoutSize b) {
         if (a.isUnknown()) {
             return b;

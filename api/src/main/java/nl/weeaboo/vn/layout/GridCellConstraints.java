@@ -9,17 +9,20 @@ public final class GridCellConstraints implements Serializable {
     public boolean growX = false;
     public boolean growY = false;
 
+    /** Configures the constraints to grow in both directions. */
     public GridCellConstraints grow() {
         growX();
         growY();
         return this;
     }
 
+    /** Configured the constraints to grow in the horizontal direction. */
     public GridCellConstraints growX() {
         growX = true;
         return this;
     }
 
+    /** Configured the constraints to grow in the vertical direction. */
     public GridCellConstraints growY() {
         growY = true;
         return this;

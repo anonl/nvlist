@@ -52,16 +52,16 @@ public class LuaScriptContext implements IScriptContext {
         threads.add(mainThread);
     }
 
-    public IScriptThread newThread(LuaClosure func) throws ScriptException {
-        return newThread(func, LuaConstants.NONE);
+    public IScriptThread createThread(LuaClosure func) throws ScriptException {
+        return createThread(func, LuaConstants.NONE);
     }
 
-    public IScriptThread newThread(LuaClosure func, Varargs args) throws ScriptException {
-        return newThread(new LuaScriptFunction(func, args));
+    public IScriptThread createThread(LuaClosure func, Varargs args) throws ScriptException {
+        return createThread(new LuaScriptFunction(func, args));
     }
 
     @Override
-    public IScriptThread newThread(IScriptFunction func) throws ScriptException {
+    public IScriptThread createThread(IScriptFunction func) throws ScriptException {
         LuaScriptFunction luaFunc = (LuaScriptFunction)func;
 
         LuaScriptThread thread = luaFunc.callInNewThread();

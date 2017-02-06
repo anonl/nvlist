@@ -11,6 +11,9 @@ public final class RenderEnvChangeSignal extends AbstractSignal {
         this.renderEnv = Checks.checkNotNull(renderEnv);
     }
 
+    /**
+     * Returns the new rendering environment.
+     */
     public IRenderEnv getRenderEnv() {
         return renderEnv;
     }

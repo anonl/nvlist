@@ -2,6 +2,7 @@ package nl.weeaboo.vn.image;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.render.IAsyncRenderTask;
+import nl.weeaboo.vn.scene.IVisualElement;
 
 /**
  * Wrapper object for screenshot operations. Since screenshots can only be taken during rendering, it may take
@@ -39,6 +40,11 @@ public interface IScreenshot extends IAsyncRenderTask {
      */
     Dim getScreenSize();
 
+    /**
+     * The Z-index at which this screenshot will be, or was, taken.
+     *
+     * @see IVisualElement#getZ()
+     */
     short getZ();
 
     /**

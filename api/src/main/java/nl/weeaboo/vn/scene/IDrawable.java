@@ -88,12 +88,27 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform,
     @Override
     void setBounds(double x, double y, double w, double h);
 
+    /**
+     * Changes the Z-index.
+     * @see #getZ()
+     */
     void setZ(short z);
 
+    /**
+     * Sets the visibility flag.
+     */
     void setVisible(boolean v);
 
+    /**
+     * Sets the blend mode.
+     * @see #getBlendMode()
+     */
     void setBlendMode(BlendMode m);
 
+    /**
+     * Enabled/disables clipping.
+     * @see #isClipEnabled()
+     */
     void setClipEnabled(boolean clip);
 
 }

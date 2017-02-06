@@ -6,6 +6,9 @@ import nl.weeaboo.vn.core.IInterpolator;
 
 public interface ICrossFadeConfig extends Serializable {
 
+    /**
+     * The interpolator can be used to make the cross-fade non-linear.
+     */
     void setInterpolator(IInterpolator interpolator);
 
     /**

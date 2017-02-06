@@ -82,7 +82,7 @@ public class CoreLib extends LuaLib {
 
         IScriptContext scriptContext = context.getScriptContext();
         IScriptFunction func = LuaScriptUtil.toScriptFunction(args, 1);
-        IScriptThread thread = scriptContext.newThread(func);
+        IScriptThread thread = scriptContext.createThread(func);
 
         return LuajavaLib.toUserdata(thread, IScriptThread.class);
     }

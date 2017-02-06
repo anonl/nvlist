@@ -49,7 +49,7 @@ public class BaseScriptTest {
         LuaScriptContext scriptContext = new LuaScriptContext(scriptEnv);
 
         LuaScriptFunctionStub function = new LuaScriptFunctionStub();
-        IScriptThread thread = scriptContext.newThread(function);
+        IScriptThread thread = scriptContext.createThread(function);
         thread.update();
 
         Assert.assertEquals(1, function.getCallCount());

@@ -30,6 +30,11 @@ public class Polygon implements IShape, Serializable {
         bounds = calculateBounds(pointsX, pointsY);
     }
 
+    /**
+     * Applies a transform to an axis-aligned rectangle.
+     *
+     * @return A polygon representatopn of the transformed rectangle.
+     */
     public static Polygon transformedRect(Matrix transform, Rect2D r) {
         Vec2 p0 = transform.transform(r.x,       r.y      );
         Vec2 p1 = transform.transform(r.x + r.w, r.y      );

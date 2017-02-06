@@ -18,6 +18,7 @@ public interface ISoundModule extends IModule, IResourceResolver {
      * @param loadInfo Filename of the requested resource and related metadata.
      *
      * @throws FileNotFoundException If no sound data could be found for the specified filename.
+     * @throws IOException If an I/O error occurs while opening the audio file for reading.
      */
     ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException;
 

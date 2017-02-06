@@ -12,6 +12,9 @@ public final class VisualElementDestroySignal extends AbstractSignal {
         this.destroyedElement = Checks.checkNotNull(destroyedElement);
     }
 
+    /**
+     * @return The element that was destroyed.
+     */
     public IVisualElement getDestroyedElement() {
         return destroyedElement;
     }

@@ -6,8 +6,15 @@ import nl.weeaboo.vn.core.IInterpolator;
 
 public interface IBitmapTweenConfig extends Serializable {
 
+    /**
+     * Sets the width of the semi-transparent part of the transition.
+     */
     void setRange(double range);
 
+    /**
+     * The interpolator can be used to remap alpha values. The default interpolator is non-linear in order to prevent
+     * mach banding.
+     */
     void setInterpolator(IInterpolator interpolator);
 
     /**

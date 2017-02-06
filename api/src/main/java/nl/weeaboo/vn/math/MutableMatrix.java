@@ -18,10 +18,16 @@ public final class MutableMatrix extends AbstractMatrix {
         super(m);
     }
 
+    /**
+     * Creates an immutable copy of this matrix.
+     */
     public Matrix immutableCopy() {
         return new Matrix(m00, m01, m02, m10, m11, m12);
     }
 
+    /**
+     * Modifies this matrix in-place: {@code this += m}
+     */
     public void add(AbstractMatrix m) {
         m00 += m.m00;
         m01 += m.m01;
@@ -32,6 +38,9 @@ public final class MutableMatrix extends AbstractMatrix {
         m12 += m.m12;
     }
 
+    /**
+     * Modifies this matrix in-place: {@code this -= m}
+     */
     public void sub(AbstractMatrix m) {
         m00 -= m.m00;
         m01 -= m.m01;
@@ -42,6 +51,9 @@ public final class MutableMatrix extends AbstractMatrix {
         m12 -= m.m12;
     }
 
+    /**
+     * Modifies this matrix in-place: {@code this *= s}
+     */
     public void mul(double s) {
         m00 *= s;
         m01 *= s;
@@ -52,6 +64,9 @@ public final class MutableMatrix extends AbstractMatrix {
         m12 *= s;
     }
 
+    /**
+     * Modifies this matrix in-place: {@code this *= m}
+     */
     public void mul(AbstractMatrix m) {
         final double r00 = m00 * m.m00 + m01 * m.m10;
         final double r01 = m00 * m.m01 + m01 * m.m11;
@@ -70,11 +85,17 @@ public final class MutableMatrix extends AbstractMatrix {
         m12 = r12;
     }
 
+    /**
+     * Further translates this matrix by the specified amount.
+     */
     public void translate(double x, double y) {
         m02 += x * m00 + y * m01;
         m12 += x * m10 + y * m11;
     }
 
+    /**
+     * Further rotates this matrix by the specified amount.
+     */
     public void rotate(double angle) {
         double cos = FastMath.fastCos((float)angle);
         double sin = FastMath.fastSin((float)angle);
@@ -90,6 +111,9 @@ public final class MutableMatrix extends AbstractMatrix {
         m11 = b;
     }
 
+    /**
+     * Further scales this matrix by the specified amount.
+     */
     public void scale(double sx, double sy) {
         m00 *= sx;
         m10 *= sx;
@@ -97,18 +121,30 @@ public final class MutableMatrix extends AbstractMatrix {
         m01 *= sy;
     }
 
+    /**
+     * Returns a new mutable identity matrix.
+     */
     public static MutableMatrix identityMatrix() {
         return new MutableMatrix();
     }
 
+    /**
+     * Returns a new mutable translation matrix.
+     */
     public static MutableMatrix translationMatrix(double x, double y) {
         return new MutableMatrix(1, 0, x, 0, 1, y);
     }
 
+    /**
+     * Returns a new mutable scaling matrix.
+     */
     public static MutableMatrix scaleMatrix(double x, double y) {
         return new MutableMatrix(x, 0, 0, 0, y, 0);
     }
 
+    /**
+     * Returns a new mutable rotation matrix.
+     */
     public static MutableMatrix rotationMatrix(double angle) {
         double cos = FastMath.fastCos((float)angle);
         double sin = FastMath.fastSin((float)angle);

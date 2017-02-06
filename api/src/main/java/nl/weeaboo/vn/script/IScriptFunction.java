@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public interface IScriptFunction extends Serializable {
 
-    public void call() throws ScriptException;
+    /**
+     * Runs the script function.
+     * @throws ScriptException If the script encounters a runtime exception.
+     */
+    void call() throws ScriptException;
 
 }

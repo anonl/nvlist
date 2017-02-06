@@ -14,28 +14,43 @@ public final class Matrix extends AbstractMatrix {
         super(m00, m01, m02, m10, m11, m12);
     }
 
+    /**
+     * Returns a mutable copy of this matrix.
+     */
     public MutableMatrix mutableCopy() {
         return new MutableMatrix(m00, m01, m02, m10, m11, m12);
     }
 
+    /**
+     * Returns a new matrix: {@code result = this + m}
+     */
     public Matrix plus(AbstractMatrix m) {
         return new Matrix(
             m00 + m.m00, m01 + m.m01, m02 + m.m02,
             m10 + m.m10, m11 + m.m11, m12 + m.m12);
     }
 
+    /**
+     * Returns a new matrix: {@code result = this - m}
+     */
     public Matrix minus(AbstractMatrix m) {
         return new Matrix(
             m00 - m.m00, m01 - m.m01, m02 - m.m02,
             m10 - m.m10, m11 - m.m11, m12 - m.m12);
     }
 
+    /**
+     * Returns a new matrix: {@code result = this * s}
+     */
     public Matrix multiply(double s) {
         return new Matrix(
             m00 * s, m01 * s, m02 * s,
             m10 * s, m11 * s, m12 * s);
     }
 
+    /**
+     * Returns a new matrix: {@code result = this * m}
+     */
     public Matrix multiply(AbstractMatrix m) {
         return new Matrix(
             m00 * m.m00 + m01 * m.m10,
@@ -85,10 +100,16 @@ public final class Matrix extends AbstractMatrix {
         return glMatrix;
     }
 
+    /**
+     * Returns the identity matrix.
+     */
     public static Matrix identityMatrix() {
         return IDENTITY_MATRIX;
     }
 
+    /**
+     * Creates a translation matrix.
+     */
     public static Matrix translationMatrix(double x, double y) {
         if (x == 0 && y == 0) {
             return IDENTITY_MATRIX;
@@ -96,6 +117,9 @@ public final class Matrix extends AbstractMatrix {
         return new Matrix(1, 0, x, 0, 1, y);
     }
 
+    /**
+     * Creates a scaling matrix.
+     */
     public static Matrix scaleMatrix(double x, double y) {
         if (x == 1 && y == 1) {
             return IDENTITY_MATRIX;
@@ -103,6 +127,9 @@ public final class Matrix extends AbstractMatrix {
         return new Matrix(x, 0, 0, 0, y, 0);
     }
 
+    /**
+     * Creates a rotation matrix.
+     */
     public static Matrix rotationMatrix(double angle) {
         if (angle == 0) {
             return IDENTITY_MATRIX;
