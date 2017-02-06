@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.impl.core.RenderEnv;
 import nl.weeaboo.vn.impl.core.SkipState;
 import nl.weeaboo.vn.impl.image.TestTexture;
@@ -20,6 +19,7 @@ import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.text.TestTextBoxState;
 import nl.weeaboo.vn.math.Vec2;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.script.IScriptContext;
 

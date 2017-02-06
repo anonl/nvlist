@@ -73,18 +73,33 @@ public final class ResourceId implements Serializable {
         }
     }
 
+    /**
+     * Returns the type of resource represented by this resource ID.
+     */
     public MediaType getType() {
         return type;
     }
 
+    /**
+     * Returns the full path to the resource file.
+     */
     public FilePath getFilePath() {
         return filePath;
     }
 
+    /**
+     * @return {@code true} if this resource ID points to a sub-resource of the resource file, rather than the entire
+     *         file.
+     * @see #getSubId()
+     */
     public boolean hasSubId() {
         return subResourceId.length() > 0;
     }
 
+    /**
+     * @return The sub-resource identifier, or an empty string if this resource ID points to the entire file and not a
+     *         sub-resource.
+     */
     public String getSubId() {
         return subResourceId;
     }

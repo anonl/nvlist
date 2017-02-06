@@ -5,10 +5,10 @@ import java.io.Serializable;
 
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IStreamingMedia;
+import nl.weeaboo.vn.render.IRenderEnvConsumer;
 
-public interface INativeVideo extends Serializable, IStreamingMedia {
+public interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
 
     void prepare();
     void play() throws VideoPlayerInitException, IOException;
@@ -18,6 +18,5 @@ public interface INativeVideo extends Serializable, IStreamingMedia {
     boolean isPrepared();
 
     void setVolume(double volume);
-    void setRenderEnv(IRenderEnv renderEnv);
 
 }

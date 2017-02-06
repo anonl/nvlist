@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.render;
 
 import java.io.Serializable;
 

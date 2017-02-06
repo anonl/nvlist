@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.impl.signal.SignalSupport;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;

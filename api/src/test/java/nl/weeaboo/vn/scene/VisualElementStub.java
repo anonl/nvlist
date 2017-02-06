@@ -3,11 +3,11 @@ package nl.weeaboo.vn.scene;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.signal.ISignal;
 import nl.weeaboo.vn.signal.ISignalHandler;
 

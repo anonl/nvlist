@@ -15,7 +15,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.core.Interpolators;
-import nl.weeaboo.vn.core.LUTInterpolator;
+import nl.weeaboo.vn.impl.core.LUTInterpolator;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;

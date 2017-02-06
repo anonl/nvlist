@@ -10,13 +10,13 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.script.DummyScriptExceptionHandler;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreen;
 
 public class Context implements IContext {

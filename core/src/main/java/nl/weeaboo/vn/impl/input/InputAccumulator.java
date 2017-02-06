@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public final class InputAccumulator {
 

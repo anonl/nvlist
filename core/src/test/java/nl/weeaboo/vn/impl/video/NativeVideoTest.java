@@ -10,9 +10,9 @@ import org.junit.Test;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.video.NativeVideo;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public class NativeVideoTest {
 

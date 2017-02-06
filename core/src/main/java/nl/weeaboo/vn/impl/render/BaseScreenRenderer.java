@@ -10,8 +10,8 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.image.IWritableScreenshot;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.IScreenRenderer;
 import nl.weeaboo.vn.render.RenderUtil;
 

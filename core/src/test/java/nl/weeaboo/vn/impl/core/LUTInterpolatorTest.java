@@ -1,9 +1,12 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.impl.core;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.vn.ApiTestUtil;
+import nl.weeaboo.vn.core.IInterpolator;
+import nl.weeaboo.vn.core.Interpolators;
+import nl.weeaboo.vn.impl.core.LUTInterpolator;
 
 public class LUTInterpolatorTest {
 

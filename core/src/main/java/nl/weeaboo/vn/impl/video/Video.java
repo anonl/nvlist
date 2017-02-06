@@ -6,7 +6,7 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 
 public class Video implements IVideo {

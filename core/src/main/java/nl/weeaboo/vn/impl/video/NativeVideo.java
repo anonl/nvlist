@@ -14,11 +14,11 @@ import com.google.common.annotations.VisibleForTesting;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 final class NativeVideo implements INativeVideo {
 

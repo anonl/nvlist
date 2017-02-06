@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
-import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public class MockNativeVideo implements INativeVideo {
 

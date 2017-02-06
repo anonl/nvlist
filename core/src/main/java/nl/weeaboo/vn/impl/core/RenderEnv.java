@@ -5,7 +5,7 @@ import com.google.common.primitives.Doubles;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public final class RenderEnv implements IRenderEnv {
 

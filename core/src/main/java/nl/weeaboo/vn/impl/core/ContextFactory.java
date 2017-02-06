@@ -3,12 +3,12 @@ package nl.weeaboo.vn.impl.core;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IContextFactory;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.scene.ScreenTextState;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.text.ITextModule;
 
 public class ContextFactory implements IContextFactory<Context> {

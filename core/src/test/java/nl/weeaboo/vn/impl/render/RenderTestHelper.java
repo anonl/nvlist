@@ -8,12 +8,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.IDestructible;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.gdx.graphics.GdxShaderUtil;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.scene.Layer;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 

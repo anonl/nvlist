@@ -3,6 +3,7 @@ package nl.weeaboo.vn.core;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public class RenderEnvStub implements IRenderEnv {
 

@@ -11,6 +11,9 @@ public interface IUpdateable {
         }
     };
 
+    /**
+     * Perform some task. This method is more or less equivalent to {@link Runnable#run()}.
+     */
     void update();
 
 }

@@ -11,9 +11,9 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -102,12 +102,6 @@ public final class ContextManager implements IContextManager {
     @Override
     public IContext getPrimaryContext() {
         return Iterables.get(getActiveContexts(), 0, null);
-    }
-
-    @Override
-    public boolean isContextActive(IContext ctxt) {
-        Context context = checkContains(ctxt);
-        return context.isActive();
     }
 
     @Override

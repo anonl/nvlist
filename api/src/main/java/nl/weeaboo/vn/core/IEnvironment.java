@@ -9,6 +9,7 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.script.IScriptLoader;

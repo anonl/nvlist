@@ -33,7 +33,6 @@ import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IRenderEnv;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -65,6 +64,7 @@ import nl.weeaboo.vn.impl.render.GLScreenRenderer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter implements IUpdateable {

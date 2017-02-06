@@ -1,6 +1,7 @@
-package nl.weeaboo.vn.core;
+package nl.weeaboo.vn.impl.core;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.IInterpolator;
 
 public final class LUTInterpolator implements IInterpolator {
 

@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.signal;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.core.IRenderEnv;
+import nl.weeaboo.vn.render.IRenderEnv;
 
 public final class RenderEnvChangeSignal extends AbstractSignal {
 
