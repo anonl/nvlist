@@ -17,10 +17,12 @@ public class TestSystemEnv implements ISystemEnv {
         return isTouchScreen;
     }
 
+    /** Sets the value returned by {@link #canExit()}. */
     public void setCanExit(boolean canExit) {
         this.canExit = canExit;
     }
 
+    /** Sets the value returned by {@link #isTouchScreen()}. */
     public void setTouchScreen(boolean isTouchScreen) {
         this.isTouchScreen = isTouchScreen;
     }

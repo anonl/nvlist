@@ -17,6 +17,7 @@ public final class TriangleGridTestUtil {
     private TriangleGridTestUtil() {
     }
 
+    /** Checks the values at the grid's columns. */
     public static void assertCols(TriangleGrid grid, DataType type, double... colSplits) {
         Assert.assertEquals(colSplits.length, grid.getCols());
 
@@ -27,6 +28,7 @@ public final class TriangleGridTestUtil {
         }
     }
 
+    /** Checks the values at the grid's rows. */
     public static void assertRows(TriangleGrid grid, DataType type, double... rowSplits) {
         Assert.assertEquals(rowSplits.length - 1, grid.getRows());
 

@@ -15,7 +15,6 @@ import nl.weeaboo.vn.impl.image.ImageModuleStub;
 import nl.weeaboo.vn.impl.image.TestScreenshot;
 import nl.weeaboo.vn.impl.image.TestTexture;
 import nl.weeaboo.vn.impl.scene.Layer;
-import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -61,7 +60,7 @@ public class LuaConvertUtilTest {
         TestScreenshot screenshot = new TestScreenshot();
         assertTextureArgException(screenshot, 1);
         // Screenshots work if they are available
-        screenshot.makeAvailable(10, 10);
+        screenshot.setPixels(10, 10);
         assertTextureArgNotNull(screenshot, 1);
 
         // Null works
@@ -105,7 +104,7 @@ public class LuaConvertUtilTest {
         Assert.assertEquals(javaValue, LuaConvertUtil.getLayerArg(varargs, index + 1));
     }
 
-    public static Varargs createVararg(Object javaValue, int index) {
+    private static Varargs createVararg(Object javaValue, int index) {
         LuaValue[] vals = new LuaValue[index + 1];
         Arrays.fill(vals, LuaNil.NIL);
         vals[index] = CoerceJavaToLua.coerce(javaValue);

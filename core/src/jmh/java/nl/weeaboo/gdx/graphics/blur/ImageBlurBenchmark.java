@@ -31,6 +31,7 @@ public class ImageBlurBenchmark {
 
         public Pixmap pixmap;
 
+        /** Init libGDX platform and load the pixmap. */
         @Setup(Level.Trial)
         public void init() {
             HeadlessGdx.init();
@@ -41,6 +42,7 @@ public class ImageBlurBenchmark {
             pixmap = PixmapUtil.resizedCopy(pixmap, Dim.of(1920, 1080), Filter.BiLinear);
         }
 
+        /** Dispose native resources. */
         @TearDown(Level.Trial)
         public void dispose() {
             pixmap.dispose();
@@ -48,16 +50,19 @@ public class ImageBlurBenchmark {
 
     }
 
+    /** Box blur with a kernel size of 7. */
     @Benchmark
     public Pixmap blur7(Input input) {
         return doBlur(input.pixmap, 7);
     }
 
+    /** Box blur with a kernel size of 15. */
     @Benchmark
     public Pixmap blur15(Input input) {
         return doBlur(input.pixmap, 15);
     }
 
+    /** Box blur with a kernel size of 32. */
     @Benchmark
     public Pixmap blur32(Input input) {
         return doBlur(input.pixmap, 32);

@@ -16,7 +16,7 @@ Changes:
  * Removed JavadocParagraph check (empty line before paragraph HTML tag in javadoc seems unnecessary)
  * Allow while-part of do/while on the same line as the '}'
  * Changed switch-case fallthrough relief pattern to the one Eclipse used ('$FALL-THROUGH$')
- * Don't require Javadoc for @Before/@After JUnit test methods
+ * Don't require Javadoc for @Before/@After JUnit test methods.
 [2017-01-29]
  * Removed enforced naming convention for generic type parameters.
  * Set severity level to INFO, to more easily distinguish between style issues (INFO) and code issues (WARN).
@@ -34,6 +34,8 @@ Changes:
    only an @ tag (like @see #setXyz).
  * Allow checkstyle suppression (SuppressionCommentFilter) for exceptional cases where complying to the
    existing checkstyle rules would be worse than leaving the 'violation'.
+ [2017-02-07]
+ * Don't require Javadoc for @BeforeClass/@AfterClass JUnit test methods.
 -->
 
 <module name = "Checker">
@@ -190,7 +192,7 @@ Changes:
             <property name="scope" value="public"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
-            <property name="allowedAnnotations" value="Override, Test, Before, After"/>
+            <property name="allowedAnnotations" value="Override, Test, Before, After, BeforeClass, AfterClass"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
             <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF"/>
         </module>

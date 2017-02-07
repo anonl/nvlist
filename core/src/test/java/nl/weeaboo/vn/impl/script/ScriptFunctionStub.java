@@ -15,6 +15,9 @@ public class ScriptFunctionStub implements IScriptFunction {
         callCount.incrementAndGet();
     }
 
+    /**
+     * Returns the number of times this script function was called, then resets the internal call counter.
+     */
     public int consumeCallCount() {
         return callCount.getAndSet(0);
     }

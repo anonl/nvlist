@@ -21,7 +21,6 @@ import nl.weeaboo.vn.impl.text.TestTextBoxState;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreenTextState;
-import nl.weeaboo.vn.script.IScriptContext;
 
 public final class CoreTestUtil {
 
@@ -34,6 +33,7 @@ public final class CoreTestUtil {
     private CoreTestUtil() {
     }
 
+    /** Creates a new dummy screen. */
     public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
         IScreenTextState textBoxState = new TestTextBoxState();
@@ -41,16 +41,14 @@ public final class CoreTestUtil {
         return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
     }
 
-    public static IScriptContext newScriptContext() {
-        return null;
-    }
-
+    /** Creates a new image drawable, initialized with a dummy texture. */
     public static ImageDrawable newImage() {
         ImageDrawable image = new ImageDrawable();
         image.setTexture(new TestTexture());
         return image;
     }
 
+    /** Configures the SLF4J logger with a configuration used for test execution. */
     public static void configureLogger() {
         try {
             InputStream in = CoreTestUtil.class.getResourceAsStream("logging.debug.properties");
@@ -67,14 +65,9 @@ public final class CoreTestUtil {
         }
     }
 
-    public static void trySleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // Ignore
-        }
-    }
-
+    /**
+     * Fuzzy equals for {@link Vec2}.
+     */
     public static void assertEquals(double x, double y, Vec2 vec, double epsilon) {
         Assert.assertEquals(x, vec.x, epsilon);
         Assert.assertEquals(y, vec.y, epsilon);

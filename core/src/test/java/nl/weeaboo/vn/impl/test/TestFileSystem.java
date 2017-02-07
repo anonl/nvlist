@@ -12,6 +12,7 @@ public final class TestFileSystem {
         HeadlessGdx.init();
     }
 
+    /** Creates a new dummy filesystem to use in unit tests */
     public static MultiFileSystem newInstance() {
         IFileSystem readFileSystem = new InternalGdxFileSystem("");
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);

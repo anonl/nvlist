@@ -40,6 +40,7 @@ public class TestEnvironment extends DefaultEnvironment {
         this.inputAdapter = Checks.checkNotNull(inputAdapter);
     }
 
+    /** Creates a new test environment using the default settings */
     public static TestEnvironment newInstance() {
         LoggerNotifier notifier = new LoggerNotifier();
 
@@ -118,10 +119,14 @@ public class TestEnvironment extends DefaultEnvironment {
         return (ContextManager)super.getContextManager();
     }
 
+    /**
+     * @return An input adapter that may be used to generate dummy input during testing.
+     */
     public TestInputAdapter getInputAdapter() {
         return inputAdapter;
     }
 
+    /** Calls update on everything in the environment that needs it (contexts and input adapter). */
     public void update() {
         inputAdapter.updateInput(100);
 

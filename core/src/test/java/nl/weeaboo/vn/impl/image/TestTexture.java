@@ -10,6 +10,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.GdxGraphicsTestUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 
@@ -56,7 +57,7 @@ public class TestTexture implements ITexture {
     }
 
     private void initTransients() {
-        image = new Pixmap(w, h, Pixmap.Format.RGBA8888);
+        image = PixmapUtil.newUninitializedPixmap(w, h, Pixmap.Format.RGBA8888);
         GdxGraphicsTestUtil.setPixmapPixels(image, argb);
     }
 
@@ -99,14 +100,6 @@ public class TestTexture implements ITexture {
     @Override
     public Area2D getUV() {
         return DEFAULT_UV;
-    }
-
-    public Pixmap getImage() {
-        return image;
-    }
-
-    public int[] getARGB() {
-        return argb;
     }
 
 }

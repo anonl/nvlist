@@ -22,10 +22,16 @@ public class SignalHandlerStub implements ISignalHandler, Serializable {
         }
     }
 
+    /**
+     * Returns the internal signal receive event counter, then clears the internal counter.
+     */
     public int consumeReceived() {
         return receiveCount.getAndSet(0);
     }
 
+    /**
+     * If {@code true}, automatically mark all received signals as handled.
+     */
     public void setHandleAllSignals(boolean handleAllSignals) {
         this.handleAllSignals = handleAllSignals;
     }

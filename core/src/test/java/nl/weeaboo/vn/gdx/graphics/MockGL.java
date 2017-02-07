@@ -18,6 +18,9 @@ public class MockGL extends GL20Profiler {
         super(null);
     }
 
+    /**
+     * Creates a new mock GL20 instance that simulates just enough to not crash during testing.
+     */
     public static GL20 newInstance() {
         final MockGL mockGL = new MockGL();
         return (GL20)Proxy.newProxyInstance(MockGL.class.getClassLoader(),

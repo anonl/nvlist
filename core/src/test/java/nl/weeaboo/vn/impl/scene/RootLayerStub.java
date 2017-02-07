@@ -1,12 +1,11 @@
 package nl.weeaboo.vn.impl.scene;
 
-import nl.weeaboo.vn.impl.scene.Layer;
-import nl.weeaboo.vn.impl.scene.SceneUtil;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.render.IRenderEnvConsumer;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
-public class RootLayerStub extends Layer {
+public class RootLayerStub extends Layer implements IRenderEnvConsumer {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,6 +16,7 @@ public class RootLayerStub extends Layer {
         return renderEnv;
     }
 
+    @Override
     public void setRenderEnv(IRenderEnv env) {
         renderEnv = env;
 

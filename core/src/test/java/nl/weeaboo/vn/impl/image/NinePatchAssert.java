@@ -11,6 +11,10 @@ public class NinePatchAssert {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
 
+    /**
+     * Compares two nine-patches for equality.
+     * @throws AssertionError If the two nine-patches aren't equal to each other.
+     */
     public static void assertEquals(INinePatch expected, INinePatch actual) {
         InsetsAssert.assertEquals(expected.getInsets(), actual.getInsets(), EPSILON);
         assertNativeSize(actual, expected.getNativeWidth(), expected.getNativeHeight());
@@ -19,6 +23,10 @@ public class NinePatchAssert {
         }
     }
 
+    /**
+     * Checks that the native width/height of a nine-patch match the expected values.
+     * @throws AssertionError If the native size of the nine-patch doesn't have the expected value.
+     */
     public static void assertNativeSize(INinePatch ninePatch, double expectedW, double expectedH) {
         Assert.assertEquals(expectedW, ninePatch.getNativeWidth(), EPSILON);
         Assert.assertEquals(expectedH, ninePatch.getNativeHeight(), EPSILON);

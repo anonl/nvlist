@@ -17,6 +17,10 @@ public class GdxInputRobot {
         this.target = target;
     }
 
+    /**
+     * Simulates pressing the corresponding keyboard keys to type out the given text. Only works for basic text
+     * (lowercase alphanumeric and spaces).
+     */
     public GdxInputRobot type(String text) {
         LOG.trace("Type text: \"{}\"", text);
 
@@ -27,6 +31,9 @@ public class GdxInputRobot {
         return this;
     }
 
+    /**
+     * Simulates pressing the keyboard button corresponding to {@code keyChar}.
+     */
     public GdxInputRobot type(char keyChar) {
         // Try to find the keycode so we can generate the appropriate key down/up events as well
         int keyCode = Keys.valueOf(Character.toString(Character.toUpperCase(keyChar)));
@@ -41,6 +48,9 @@ public class GdxInputRobot {
         return this;
     }
 
+    /**
+     * Simulates pressing the keyboard button with the given key code.
+     */
     public GdxInputRobot type(int keyCode) {
         doType(keyCode);
 
@@ -53,6 +63,10 @@ public class GdxInputRobot {
         return this;
     }
 
+    /**
+     * Simulates typing the specified text, then pressing enter.
+     * @see #type(String)
+     */
     public GdxInputRobot enter(String text) {
         type(text);
         enter();

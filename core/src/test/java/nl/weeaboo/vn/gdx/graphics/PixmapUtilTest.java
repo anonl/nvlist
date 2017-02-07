@@ -6,15 +6,17 @@ import org.junit.Test;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
-import nl.weeaboo.vn.impl.image.TestImageUtil;
 
 public class PixmapUtilTest {
+
+    private PixmapEquality pixmapEquals;
 
     @Before
     public void before() {
         HeadlessGdx.init();
+        pixmapEquals = new PixmapEquality();
     }
 
     @Test
@@ -27,7 +29,8 @@ public class PixmapUtilTest {
         Pixmap expected = new Pixmap(2, 3, Format.RGBA8888);
         expected.drawPixel(0, 2, 0xAABBCCDD);
         expected.drawPixel(1, 0, 0x11223344);
-        TestImageUtil.assertEquals(expected, flip);
+
+        pixmapEquals.assertEquals(expected, flip);
 
         flip.dispose();
         expected.dispose();

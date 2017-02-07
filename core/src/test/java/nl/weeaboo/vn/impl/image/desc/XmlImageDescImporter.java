@@ -31,7 +31,14 @@ import nl.weeaboo.vn.image.desc.IImageDefinition;
  */
 public class XmlImageDescImporter {
 
-    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+    /**
+     * Use: XmlImageDescImporter path1 [path2] ... [pathN]
+     * <p>
+     * Reads any number of NVList 3 img.xml files and converts them to NVList 4 img.json files.
+     *
+     * @throws Exception If an error occurs.
+     */
+    public static void main(String[] args) throws Exception {
         XmlImageDescImporter importer = new XmlImageDescImporter();
         for (String path : args) {
             Map<FilePath, IImageDefinition> result = importer.importXml(new File(path));

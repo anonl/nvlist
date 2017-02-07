@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.input;
 
-import nl.weeaboo.vn.impl.input.InputConfig;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;
 
@@ -20,6 +19,7 @@ public final class TestInputConfig {
     private TestInputConfig() {
     }
 
+    /** Returns a default input config to use in unit tests. */
     public static InputConfig getInstance() {
         InputConfig inputConfig = new InputConfig();
         inputConfig.add(VKey.UP, UP);

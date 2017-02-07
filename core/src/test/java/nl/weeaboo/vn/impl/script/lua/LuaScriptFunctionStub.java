@@ -29,6 +29,7 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
         return new ThreadStub(this);
     }
 
+    /** Returns the number of times this script function was called */
     public int getCallCount() {
         return callCount;
     }

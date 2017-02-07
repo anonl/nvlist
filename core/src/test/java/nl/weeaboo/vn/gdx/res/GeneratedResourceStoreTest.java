@@ -9,9 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.google.common.testing.GcFinalization;
+import com.google.common.testing.GcFinalization.FinalizationPredicate;
 
 import nl.weeaboo.vn.impl.core.StaticRef;
-import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class GeneratedResourceStoreTest {
 
@@ -47,14 +48,13 @@ public class GeneratedResourceStoreTest {
     }
 
     private void garbageCollect(int expectedSize) {
-        for (int n = 0; n < 3; n++) {
-            System.gc();
-            store.cleanUp();
-            if (store.size() == expectedSize) {
-                break;
+        GcFinalization.awaitDone(new FinalizationPredicate() {
+            @Override
+            public boolean isDone() {
+                store.cleanUp();
+                return store.size() == expectedSize;
             }
-            CoreTestUtil.trySleep(100);
-        }
+        });
     }
 
     private static void assertNotDisposed(Dummy dummy) {

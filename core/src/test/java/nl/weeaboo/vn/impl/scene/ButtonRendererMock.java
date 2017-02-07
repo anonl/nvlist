@@ -66,10 +66,22 @@ public class ButtonRendererMock extends AbstractRenderable implements IButtonRen
         this.valign = Checks.checkNotNull(align);
     }
 
+    /**
+     * Returns the texture associated with the given view state. If that state uses a nine-patch, or no texture was set,
+     * {@code null} is returned instead.
+     *
+     * @see #setTexture(ButtonViewState, ITexture)
+     */
     public ITexture getRegularTexture(ButtonViewState viewState) {
         return regularTextures.get(viewState);
     }
 
+    /**
+     * Returns the nine-patch associated with the given view state. If that state uses a texture, or no nine-patch was
+     * set, {@code null} is returned instead.
+     *
+     * @see #setTexture(ButtonViewState, INinePatch)
+     */
     public INinePatch getNinePatchTexture(ButtonViewState viewState) {
         return ninePatchTextures.get(viewState);
     }

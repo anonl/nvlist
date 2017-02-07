@@ -24,20 +24,24 @@ public final class LuaTestUtil {
     private LuaTestUtil() {
     }
 
+    /** Creates a new run state and registers it on the current thread. */
     public static LuaRunState newRunState() {
         LuaRunState runState = new LuaRunState();
         runState.registerOnThread();
         return runState;
     }
 
+    /** Creates a new script loader. */
     public static LuaScriptLoader newScriptLoader(IEnvironment env) {
         return LuaScriptLoader.newInstance(env);
     }
 
+    /** Asserts that the value of the Lua global with the given name is equal to the given int value. */
     public static void assertGlobal(String name, int val) {
         Assert.assertEquals(val, getGlobal(name).optint(0));
     }
 
+    /** Asserts that the value of the Lua global with the given name is equal to the given value. */
     public static void assertGlobal(String name, Object val) {
         LuaValue global = getGlobal(name);
 
@@ -50,15 +54,24 @@ public final class LuaTestUtil {
         }
     }
 
+    /** Returns the Lua global with the given name, or {@code LuaNil#NIL} if not found. */
     public static LuaValue getGlobal(String name) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
         return globals.get(name);
     }
 
+    /**
+     * Returns the Lua userdata global with the given name, and extracts the Java object from it. If the Lua global
+     * isn't userdata, returns {@code null}.
+     */
     public static <T> T getGlobal(String name, Class<T> type) {
-        return getGlobal(name).optuserdata(type, null);
+        return getGlobal(name).touserdata(type);
     }
 
+    /**
+     * @return {@code true} if the script context contains one or more runnable threads.
+     * @see IScriptThread#isRunnable()
+     */
     public static boolean hasRunnableThreads(IScriptContext context) {
         for (IScriptThread thread : context.getThreads()) {
             if (thread.isRunnable()) {
@@ -68,9 +81,13 @@ public final class LuaTestUtil {
         return false;
     }
 
+    /**
+     * Runs all threads in all active contexts, until those contexts no longer contain any runnable threads.
+     * @see #hasRunnableThreads(IScriptContext)
+     */
     public static void waitForAllThreads(IContextManager contextManager) {
         int iteration = 0;
-        while (iteration < 10000) {
+        while (iteration < 10_000) {
             boolean anyRunnableThreads = false;
 
             for (IContext context : contextManager.getActiveContexts()) {
@@ -88,6 +105,10 @@ public final class LuaTestUtil {
         throw new AssertionError("One or more threads refuse to die");
     }
 
+    /**
+     * Runs all threads in the given context, until it no longer contains any runnable threads.
+     * @see #hasRunnableThreads(IScriptContext)
+     */
     public static void waitForAllThreads(IContext context) {
         int iteration = 0;
         IScriptContext scriptContext = context.getScriptContext();

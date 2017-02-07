@@ -3,8 +3,6 @@ package nl.weeaboo.vn.impl.image;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
-import nl.weeaboo.vn.impl.image.AbstractScreenshot;
-import nl.weeaboo.vn.impl.image.PixelTextureData;
 
 public class TestScreenshot extends AbstractScreenshot implements IWritableScreenshot {
 
@@ -19,7 +17,10 @@ public class TestScreenshot extends AbstractScreenshot implements IWritableScree
         super.setPixels(texData, screenSize);
     }
 
-    public void makeAvailable(int w, int h) {
+    /**
+     * Calls {@link #setPixels(ITextureData, Dim)} with a dummy texture.
+     */
+    public void setPixels(int w, int h) {
         PixelTextureData texData = TestImageUtil.newTestTextureData(w, h);
         setPixels(texData, Dim.of(1280, 720));
     }

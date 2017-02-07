@@ -16,6 +16,14 @@ public class LuaAssertLib extends LuaLib {
         super(null); // Register functions in global scope
     }
 
+    /**
+     * Throws an assertion error if the boolean argument is {@code false}.
+     *
+     * @param args
+     *        <ol>
+     *        <li>boolean
+     *        </ol>
+     */
     @ScriptFunction
     public void luaAssert(Varargs args) {
         if (!args.checkboolean(1)) {
@@ -23,6 +31,15 @@ public class LuaAssertLib extends LuaLib {
         }
     }
 
+    /**
+     * Throws an assertion error if the two values aren't equal according to Lua's equality operator.
+     *
+     * @param args
+     *        <ol>
+     *        <li>expected value
+     *        <li>actual value
+     *        </ol>
+     */
     @ScriptFunction
     public void luaAssertEquals(Varargs args) {
         LuaValue expected = args.arg(1);

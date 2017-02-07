@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.gdx.graphics.PremultUtil;
 
 @RunWith(Parameterized.class)
 public class PixmapPremultiplyTest {
@@ -19,6 +18,9 @@ public class PixmapPremultiplyTest {
         HeadlessGdx.init();
     }
 
+    /**
+     * Run this test for every libGDX pixmap format.
+     */
     @Parameters(name = "{index}: {0}")
     public static final Format[] params() {
         return Format.values();

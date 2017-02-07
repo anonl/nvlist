@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.sound;
 
-import nl.weeaboo.vn.impl.sound.INativeAudio;
-
 public class MockNativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +49,10 @@ public class MockNativeAudio implements INativeAudio {
         this.volume = volume;
     }
 
+    /**
+     * Returns the current volume for this audio.
+     * @see #setVolume(double)
+     */
     public double getVolume() {
         return volume;
     }

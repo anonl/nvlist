@@ -13,10 +13,17 @@ public class TestProgressListener implements IProgressListener {
         eventCount++;
     }
 
+    /**
+     * @return The most recently received progress amount, or {@code Float#NaN} if no progress was ever received.
+     */
     public synchronized float getLastProgress() {
         return lastProgress;
     }
 
+    /**
+     * Returns the value of an internal counter that counts the number of times that a progress changed event was
+     * received. The internal counter is then reset to {@code 0}.
+     */
     public synchronized int consumeEventCount() {
         int result = eventCount;
         eventCount = 0;

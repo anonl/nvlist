@@ -11,7 +11,7 @@ function foo()
     fooCalled = 1
 end
 
-local thread = context:getScriptContext():newThread(foo)
+local thread = context:getScriptContext():createThread(foo)
 
 waitFrames = 0
 while not thread:isDestroyed() do

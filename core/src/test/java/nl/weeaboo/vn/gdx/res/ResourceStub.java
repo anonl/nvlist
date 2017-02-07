@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.gdx.res;
 
-import nl.weeaboo.vn.gdx.res.IResource;
-
 public class ResourceStub<T> implements IResource<T> {
 
     private static final long serialVersionUID = 1L;
@@ -20,6 +18,7 @@ public class ResourceStub<T> implements IResource<T> {
         return resource;
     }
 
+    /** Sets the inner resource reference. */
     public void set(T resource) {
         this.resource = resource;
     }
