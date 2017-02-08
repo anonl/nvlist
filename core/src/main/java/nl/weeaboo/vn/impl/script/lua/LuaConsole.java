@@ -45,10 +45,14 @@ public class LuaConsole {
         this.sceneEnv = sceneEnv;
     }
 
+    /**
+     * @return {@code true} if the console is currently visible.
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /** Change visibility of the console GUI */
     public void setVisible(boolean v) {
         if (visible != v) {
             visible = v;
@@ -185,6 +189,7 @@ public class LuaConsole {
         console.appendText("\n" + str);
     }
 
+    /** Sets the active context. The Lua console executes commands in this context. */
     public void setActiveContext(IContext context) {
         activeContext = context;
     }

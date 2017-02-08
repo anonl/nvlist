@@ -20,6 +20,11 @@ import nl.weeaboo.vn.script.ScriptException;
 
 public final class LuaConvertUtil {
 
+    /**
+     * Gets an {@link ILayer} from a Lua vararg.
+     *
+     * @throws ScriptException If the Lua value stored at the given index isn't covertible to a layer.
+     */
     public static ILayer getLayerArg(Varargs args, int index) throws ScriptException {
         if (args.isuserdata(index)) {
             ILayer layer = args.touserdata(index, ILayer.class);
@@ -32,10 +37,20 @@ public final class LuaConvertUtil {
         throw new ScriptException("Invalid layer arg: " + args.tojstring(1));
     }
 
+    /**
+     * Gets an {@link ITexture} from a Lua vararg.
+     *
+     * @throws ScriptException If the Lua value isn't convertible to a texture.
+     */
     public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue) throws ScriptException {
         return getTextureArg(imageModule, luaValue, false);
     }
 
+    /**
+     * Gets an {@link ITexture} from a Lua value.
+     *
+     * @throws ScriptException If the Lua value isn't convertible to a texture.
+     */
     public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue, boolean suppressLoadErrors)
             throws ScriptException {
 
@@ -63,18 +78,31 @@ public final class LuaConvertUtil {
         return null;
     }
 
+    /**
+     * Converts a Lua value to {@link ResourceLoadInfo}.
+     */
     public static ResourceLoadInfo getLoadInfo(LuaValue luaValue) {
         return LuaScriptUtil.createLoadInfo(getPath(luaValue));
     }
 
+    /**
+     * @see #getPath(LuaValue)
+     */
     public static FilePath getPath(Varargs args, int index) {
         return getPath(args.arg(index));
     }
 
+    /**
+     * Converts a Lua value to {@link FilePath}.
+     */
     public static FilePath getPath(LuaValue luaValue) {
         return FilePath.of(luaValue.checkjstring());
     }
 
+    /**
+     * Converts a Lua value to {@link TextStyle}.
+     * @throws ScriptException If the Lua value is inconvertible to a text style.
+     */
     public static TextStyle getTextStyleArg(LuaValue val) throws ScriptException {
         TextStyle ts = val.touserdata(TextStyle.class);
         if (ts != null) {
@@ -110,6 +138,9 @@ public final class LuaConvertUtil {
         }
     }
 
+    /**
+     * Converts a Lua value to a Java value compatible with the given text attribute type.
+     */
     public static Object parseTextAttribute(ETextAttribute attribute, LuaValue luaValue) {
         if (luaValue.isstring() && !luaValue.isnumber()) {
             return attribute.valueFromString(luaValue.tojstring());
@@ -118,6 +149,9 @@ public final class LuaConvertUtil {
         }
     }
 
+    /**
+     * Converts part of a Lua vararg to Java objects.
+     */
     public static Object[] toObjectArray(Varargs luaArgs, int luaStartIndex) {
         // Don't check upper bound -- otherwise varargs after an optional arg are annoying to use
         Checks.checkRange(luaStartIndex, "luaStartIndex", 1);
@@ -129,6 +163,7 @@ public final class LuaConvertUtil {
         return result;
     }
 
+    /** Converts a Lua table to {@link Storage}. */
     public static Storage toStorage(LuaTable table) {
         Storage storage = new Storage();
         for (LuaValue subkey : table.keys()) {

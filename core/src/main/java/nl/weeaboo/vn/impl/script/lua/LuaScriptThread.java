@@ -34,6 +34,10 @@ public class LuaScriptThread implements IScriptThread {
         return luaLink.get().isFinished();
     }
 
+    /**
+     * Runs Lua code on this thread.
+     * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
+     */
     public Varargs eval(String code) throws ScriptException {
         LuaLink link = luaLink.get();
 
@@ -45,6 +49,10 @@ public class LuaScriptThread implements IScriptThread {
         }
     }
 
+    /**
+     * Calls a Lua function on this thread.
+     * @throws ScriptException If the function doesn't exist, or the Lua code throws an exception.
+     */
     public void call(String funcName, Object... args) throws ScriptException {
         LuaLink link = luaLink.get();
 
@@ -55,12 +63,20 @@ public class LuaScriptThread implements IScriptThread {
         }
     }
 
+    /**
+     * Calls a Lua function on this thread.
+     * @throws ScriptException If the Lua function throws an exception.
+     */
     public void call(LuaScriptFunction func) throws ScriptException {
         LuaLink link = luaLink.get();
 
         func.call(link);
     }
 
+    /**
+     * Calls a Lua function on this thread.
+     * @throws ScriptException If the Lua function throws an exception.
+     */
     public void call(LuaClosure func) throws ScriptException {
         LuaLink link = luaLink.get();
 

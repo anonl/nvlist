@@ -24,6 +24,11 @@ public class MockNativeAudio implements INativeAudio {
     }
 
     @Override
+    public void stop() {
+        stop(0);
+    }
+
+    @Override
     public void stop(int fadeOutMillis) {
         loopsLeft = 0;
         paused = false;
@@ -37,6 +42,11 @@ public class MockNativeAudio implements INativeAudio {
     @Override
     public boolean isPaused() {
         return paused;
+    }
+
+    @Override
+    public boolean isStopped() {
+        return !isPlaying() && !isPaused();
     }
 
     @Override

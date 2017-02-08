@@ -31,6 +31,12 @@ public final class SoundDefinitionIO {
     private SoundDefinitionIO() {
     }
 
+    /**
+     * Searches the given file system for all snd.json files and deserializes them, returning the combined result.
+     *
+     * @throws IOException If an I/O error occurs while trying to read the files.
+     * @throws SaveFormatException If one of the JSON files can't be parsed.
+     */
     public static Map<FilePath, ISoundDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
             throws IOException, SaveFormatException {
 
@@ -54,6 +60,11 @@ public final class SoundDefinitionIO {
                 fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
     }
 
+    /**
+     * Serializes the given sound definitions to JSON.
+     *
+     * @see #deserialize(String)
+     */
     public static String serialize(Collection<SoundDefinition> soundDefs) {
         SoundDefinitionFileJson fileJson = new SoundDefinitionFileJson();
         fileJson.version = VERSION;
@@ -65,6 +76,12 @@ public final class SoundDefinitionIO {
         return JsonUtil.toJson(fileJson);
     }
 
+    /**
+     * Deserializes sound definitions from JSON.
+     *
+     * @throws SaveFormatException If the JSON data has an incompatible version number.
+     * @see #serialize(Collection)
+     */
     public static Collection<SoundDefinition> deserialize(String string) throws SaveFormatException {
         SoundDefinitionFileJson fileJson = JsonUtil.fromJson(SoundDefinitionFileJson.class, string);
         if (!VERSION.equals(fileJson.version)) {

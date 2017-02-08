@@ -38,6 +38,12 @@ public final class ImageDefinitionIO {
     private ImageDefinitionIO() {
     }
 
+    /**
+     * Searches the given file system for all img.json files and deserializes them, returning the combined result.
+     *
+     * @throws IOException If an I/O error occurs while trying to read the files.
+     * @throws SaveFormatException If one of the JSON files can't be parsed.
+     */
     public static Map<FilePath, IImageDefinition> fromFileSystem(IFileSystem fileSystem, FilePath rootFolder)
             throws IOException, SaveFormatException {
 
@@ -61,6 +67,11 @@ public final class ImageDefinitionIO {
                 fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
     }
 
+    /**
+     * Serializes the given image definitions to JSON.
+     *
+     * @see #deserialize(String)
+     */
     public static String serialize(Collection<? extends IImageDefinition> imageDefs) {
         ImageDefinitionFileJson fileJson = new ImageDefinitionFileJson();
         fileJson.version = VERSION;
@@ -72,6 +83,12 @@ public final class ImageDefinitionIO {
         return JsonUtil.toJson(fileJson);
     }
 
+    /**
+     * Deserializes image definitions from JSON.
+     *
+     * @throws SaveFormatException If the JSON data has an incompatible version number.
+     * @see #serialize(Collection)
+     */
     public static Collection<ImageDefinition> deserialize(String string) throws SaveFormatException {
         ImageDefinitionFileJson fileJson = JsonUtil.fromJson(ImageDefinitionFileJson.class, string);
         if (!VERSION.equals(fileJson.version)) {

@@ -25,6 +25,10 @@ public class LuaScriptEnv implements IScriptEnv {
         this.loader = loader;
     }
 
+    /**
+     * Run the script environment initializers.
+     * @throws ScriptException If script initialization fails.
+     */
     public void initEnv() throws ScriptException {
         initialized = true;
 
@@ -36,20 +40,34 @@ public class LuaScriptEnv implements IScriptEnv {
         }
     }
 
+    /**
+     * Registers this script env as the 'current' script env if the thread on which this method is called.
+     */
     public final void registerOnThread() {
         runState.registerOnThread();
     }
 
+    /**
+     * Adds an additional script environment initialization function.
+     *
+     * @throws IllegalStateException If the script environment has already been initialized.
+     */
     public void addInitializer(ILuaScriptEnvInitializer init) {
         Checks.checkState(!initialized, "Can't change initializers after initEnv() has been called.");
 
         initializers.add(init);
     }
 
+    /**
+     * @return The internal {@link LuaRunState} used by this script environment.
+     */
     public LuaRunState getRunState() {
         return runState;
     }
 
+    /**
+     * @return The Lua environment's globals table.
+     */
     public LuaTable getGlobals() {
         return runState.getGlobalEnvironment();
     }

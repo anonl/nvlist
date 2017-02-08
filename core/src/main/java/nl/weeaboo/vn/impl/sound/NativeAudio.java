@@ -92,6 +92,11 @@ public class NativeAudio implements INativeAudio {
     }
 
     @Override
+    public void stop() {
+        stop(0);
+    }
+
+    @Override
     public void stop(int fadeOutMillis) {
         // TODO Implement fade out time
 
@@ -100,6 +105,11 @@ public class NativeAudio implements INativeAudio {
             music.stop();
             paused = false;
         }
+    }
+
+    @Override
+    public boolean isStopped() {
+        return !isPlaying() && !isPaused();
     }
 
     @Override

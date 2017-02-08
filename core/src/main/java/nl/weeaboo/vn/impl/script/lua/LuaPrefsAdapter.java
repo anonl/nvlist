@@ -20,9 +20,9 @@ import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
-import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
+import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
@@ -37,6 +37,9 @@ public class LuaPrefsAdapter {
         getter = new PrefsMetaFunction(false, StaticEnvironment.PREFS);
     }
 
+    /**
+     * @return A Lua table with an appropriate metatable for accessing NVList preferences.
+     */
     public LuaTable createPrefsTable() {
         LuaTable mt = new LuaTable();
         mt.rawset(LuaConstants.INDEX, getter);

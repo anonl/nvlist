@@ -20,6 +20,7 @@ public final class LuaStorage implements ILuaStorage {
         this.storage = Checks.checkNotNull(storage);
     }
 
+    /** Converts {@link IStorage} to {@link ILuaStorage}. */
     public static ILuaStorage from(IStorage storage) {
         return new LuaStorage(storage);
     }
@@ -34,6 +35,7 @@ public final class LuaStorage implements ILuaStorage {
         storage.set(key, luaToStorage(val));
     }
 
+    /** Converts a Lua value to its equivalent {@link StoragePrimitive}. */
     public static StoragePrimitive luaToStorage(LuaValue lval) {
         if (lval.isnil()) {
             return null;
@@ -47,6 +49,7 @@ public final class LuaStorage implements ILuaStorage {
         throw new IllegalArgumentException("Unable to convert Lua type for storage: " + lval.typename());
     }
 
+    /** Converts a {@link StoragePrimitive} to its equivalent Lua value. */
     public static LuaValue storageToLua(StoragePrimitive sval) {
         if (sval == null) {
             return LuaNil.NIL;

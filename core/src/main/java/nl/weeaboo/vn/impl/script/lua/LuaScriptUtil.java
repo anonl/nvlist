@@ -8,7 +8,6 @@ import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.link.LuaLink;
-import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
@@ -29,7 +28,7 @@ public final class LuaScriptUtil {
     private LuaScriptUtil() {
     }
 
-    public static boolean isLvnFile(String filename) {
+    static boolean isLvnFile(String filename) {
         return filename.endsWith(".lvn");
     }
 
@@ -63,6 +62,9 @@ public final class LuaScriptUtil {
         return new LuaScriptThread(luaLink);
     }
 
+    /**
+     * Finds the topmost '*.lvn' source file in the call stack.
+     */
     public static String getNearestLvnSrcloc(List<String> stack) {
         for (String frame : stack) {
             if (frame.contains(LVN_PATTERN)) {
@@ -72,6 +74,10 @@ public final class LuaScriptUtil {
         return null;
     }
 
+    /**
+     * Creates {@link ResourceLoadInfo} for the current Lua call stack.
+     * @see LuaUtil#getLuaStack()
+     */
     public static ResourceLoadInfo createLoadInfo(FilePath filename) {
         return new ResourceLoadInfo(filename, LuaUtil.getLuaStack());
     }
@@ -83,6 +89,8 @@ public final class LuaScriptUtil {
     /**
      * Loads a script in the main thread of the given context.
      *
+     * @throws IOException If the script file can't be read.
+     * @throws ScriptException If the script throws an exception.
      * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static void loadScript(IContext mainContext, IScriptLoader scriptLoader, FilePath scriptFilename)
@@ -99,6 +107,10 @@ public final class LuaScriptUtil {
         }
     }
 
+    /**
+     * Calls a Lua function on the main thread of the current script context.
+     * @throws ScriptException If the Lua function can't be found, or it throws an exception when called.
+     */
     public static void callFunction(IContext mainContext, String functionName, Object... args)
             throws ScriptException {
 
@@ -114,6 +126,7 @@ public final class LuaScriptUtil {
     /**
      * Calls a function in the main thread of the given context.
      *
+     * @throws ScriptException If the Lua function throws an exception when called.
      * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static void callFunction(IContext mainContext, IScriptFunction func) throws ScriptException {
@@ -129,6 +142,7 @@ public final class LuaScriptUtil {
     /**
      * Runs arbitrary Lua code in the main thread of the given context.
      *
+     * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
      * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static String eval(IContext mainContext, String luaCode) throws ScriptException {
@@ -146,13 +160,6 @@ public final class LuaScriptUtil {
         return result.tojstring();
     }
 
-    public static LuaValue getFunctionEnv(LuaThread thread) {
-        if (thread.callstack != null) {
-            return thread.getCallstackFunction(0).getfenv();
-        }
-        return thread.getfenv();
-    }
-
     private static IScreen getCurrentScreen() throws ScriptException {
         IScreen currentScreen = ContextUtil.getCurrentScreen();
         if (currentScreen == null) {
@@ -161,18 +168,34 @@ public final class LuaScriptUtil {
         return currentScreen;
     }
 
+    /**
+     * @return The active layer of the current screen.
+     * @throws ScriptException If no screen is current.
+     * @see #getCurrentScreen()
+     * @see IScreen#getActiveLayer()
+     */
     public static ILayer getActiveLayer() throws ScriptException {
         return getCurrentScreen().getActiveLayer();
     }
 
+    /**
+     * @return The root layer of the current screen.
+     * @throws ScriptException If no screen is current.
+     * @see #getCurrentScreen()
+     * @see IScreen#getRootLayer()
+     */
     public static ILayer getRootLayer() throws ScriptException {
         return getCurrentScreen().getRootLayer();
     }
 
+    /**
+     * @return The script context of the current context.
+     * @throws ScriptException If no context is current.
+     */
     public static IScriptContext getCurrentScriptContext() throws ScriptException {
         IContext context = ContextUtil.getCurrentContext();
         if (context == null) {
-            throw new ScriptException("No script context active");
+            throw new ScriptException("No script context current");
         }
         return context.getScriptContext();
     }

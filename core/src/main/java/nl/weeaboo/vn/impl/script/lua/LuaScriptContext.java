@@ -52,10 +52,19 @@ public class LuaScriptContext implements IScriptContext {
         threads.add(mainThread);
     }
 
+    /**
+     * Calls a no-arg function in a new thread.
+     * @throws ScriptException If the function can't be called, or the thread can't be created.
+     * @see #createThread(LuaClosure, Varargs)
+     */
     public IScriptThread createThread(LuaClosure func) throws ScriptException {
         return createThread(func, LuaConstants.NONE);
     }
 
+    /**
+     * Calls a function in a new thread, passing {@code args} as the function arguments.
+     * @throws ScriptException If the function can't be called, or the thread can't be created.
+     */
     public IScriptThread createThread(LuaClosure func, Varargs args) throws ScriptException {
         return createThread(new LuaScriptFunction(func, args));
     }
@@ -69,10 +78,16 @@ public class LuaScriptContext implements IScriptContext {
         return thread;
     }
 
+    /**
+     * @return The Lua table containing the system-global settings.
+     */
     public LuaTable getGlobals() {
         return scriptEnv.getGlobals();
     }
 
+    /**
+     * @return The Lua table containing the context-global settings.
+     */
     public LuaTable getContextGlobals() {
         return contextGlobals;
     }

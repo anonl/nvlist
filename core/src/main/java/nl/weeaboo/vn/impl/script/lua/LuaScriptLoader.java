@@ -62,6 +62,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         initTransients();
     }
 
+    /** Creates a new script loader */
     public static LuaScriptLoader newInstance(IEnvironment env) {
         LuaScriptLoader scriptLoader = new LuaScriptLoader(env.getSeenLog(), new LuaScriptResourceLoader(env),
                 env.getPref(NovelPrefs.ENGINE_TARGET_VERSION));
@@ -128,10 +129,6 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         return resourceLoader.isValidFilename(filename);
     }
 
-    public boolean isBuiltInScript(FilePath filename) {
-        return LuaScriptResourceLoader.isBuiltInScript(filename);
-    }
-
     @Override
     public InputStream openScript(FilePath filename) throws IOException {
         ResourceId resourceId = resolveResource(filename);
@@ -146,7 +143,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         return resourceLoader.getMediaFiles(folder);
     }
 
-    public ICompiledLvnFile compileScript(ResourceId resourceId, InputStream in)
+    ICompiledLvnFile compileScript(ResourceId resourceId, InputStream in)
             throws LvnParseException, IOException {
 
         ICompiledLvnFile file = lvnParser.parseFile(resourceId.getFilePath(), in);

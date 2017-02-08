@@ -52,6 +52,7 @@ public class RuntimeTextParser implements Serializable {
         initTransients();
     }
 
+    /** Parses a ".lvn" text line. This must be done at runtime because the text may contain embedded function calls. */
     public ParseResult parse(String line) {
         // Process non-command tokens into StyledText objects.
         List<Object> processed = new ArrayList<>();
@@ -211,15 +212,17 @@ public class RuntimeTextParser implements Serializable {
         private StyledText stext;
         private IntMap<String> commands;
 
-        public ParseResult(StyledText stext, IntMap<String> commands) {
+        private ParseResult(StyledText stext, IntMap<String> commands) {
             this.stext = stext;
             this.commands = commands;
         }
 
+        /** The text to display, after all the embedded commands have been stripped. */
         public StyledText getText() {
             return stext;
         }
 
+        /** Map: text index -&gt; Lua code */
         public IntMap<String> getCommands() {
             return commands;
         }
