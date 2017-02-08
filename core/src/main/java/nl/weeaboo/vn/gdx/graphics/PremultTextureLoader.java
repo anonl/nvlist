@@ -24,6 +24,7 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
         super(resolver);
     }
 
+    /** Registers this texture loader with the given asset manager. */
     public static void register(AssetManager assetManager) {
         FileHandleResolver resolver = assetManager.getFileHandleResolver();
         assetManager.setLoader(Texture.class, new PremultTextureLoader(resolver));

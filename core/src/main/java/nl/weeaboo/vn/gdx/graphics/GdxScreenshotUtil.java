@@ -10,6 +10,9 @@ public final class GdxScreenshotUtil {
     private GdxScreenshotUtil() {
     }
 
+    /**
+     * Takes a screenshot of the current OpenGL framebuffer.
+     */
     public static Pixmap screenshot(Rect glRect) {
         Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
         PixmapUtil.flipVertical(pixmap);

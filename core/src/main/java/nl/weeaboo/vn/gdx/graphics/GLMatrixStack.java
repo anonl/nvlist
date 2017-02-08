@@ -29,6 +29,7 @@ public final class GLMatrixStack {
         this.batch = Checks.checkNotNull(batch);
     }
 
+    /** Push a copy of the current transform onto the matrix stack. */
     public void pushMatrix() {
         Matrix4 copy = alloc(transform);
         matrixStack.push(copy);
@@ -44,6 +45,7 @@ public final class GLMatrixStack {
         return val.cpy();
     }
 
+    /** Pop the top matrix from the stack. */
     public void popMatrix() {
         Matrix4 popped = matrixStack.pop();
         transform.set(popped);
@@ -61,34 +63,41 @@ public final class GLMatrixStack {
         matrixPool.addFirst(val);
     }
 
+    /** Multiply the current transform by the given matrix. */
     public void multiply(Matrix m) {
         Matrix4.mul(transform.val, m.toGLMatrix());
         onTransformChanged();
     }
 
+    /** Multiply the current transform by the given matrix. */
     public void multiply(Matrix4 m) {
         transform.mul(m);
         onTransformChanged();
     }
 
+    /** Translates the current transform by the given offset. */
     public void translate(double dx, double dy) {
         translate((float)dx, (float)dy);
     }
 
+    /** Translates the current transform by the given offset. */
     public void translate(float dx, float dy) {
         transform.translate(dx, dy, 0);
         onTransformChanged();
     }
 
+    /** Scales the current transform by the given factors. */
     public void scale(double dx, double dy) {
         scale((float)dx, (float)dy);
     }
 
+    /** Scales the current transform by the given factors. */
     public void scale(float sx, float sy) {
         transform.scale(sx, sy, 1);
         onTransformChanged();
     }
 
+    /** Returns the current transform multiplied together with the projection matrix. */
     public Matrix4 getCombined() {
         if (combinedDirty) {
             combinedDirty = false;
@@ -102,6 +111,10 @@ public final class GLMatrixStack {
         combinedDirty = true;
     }
 
+    /**
+     * Sets the projection matrix.
+     * @see #getCombined()
+     */
     public void setProjectionMatrix(Matrix4 m) {
         projection.set(m);
         onProjectionChanged();

@@ -40,6 +40,7 @@ public class GuiLib extends LuaLib {
      *        <li>(optional) Background image filename
      *        </ol>
      * @return A button
+     * @throws ScriptException If button creation fails.
      */
     @ScriptFunction
     public Varargs createButton(Varargs args) throws ScriptException {
@@ -78,6 +79,7 @@ public class GuiLib extends LuaLib {
      *        <li>(optional) Parent layer
      *        </ol>
      * @return A button
+     * @throws ScriptException If panel creation fails.
      */
     @ScriptFunction
     public Varargs createGridPanel(Varargs args) throws ScriptException {

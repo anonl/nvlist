@@ -17,6 +17,7 @@ public class JngTextureLoader extends PremultTextureLoader {
         super(resolver);
     }
 
+    /** Registers this texture loader with the given asset manager. */
     public static void register(AssetManager assetManager) {
         FileHandleResolver resolver = assetManager.getFileHandleResolver();
         assetManager.setLoader(Texture.class, ".jng", new JngTextureLoader(resolver));

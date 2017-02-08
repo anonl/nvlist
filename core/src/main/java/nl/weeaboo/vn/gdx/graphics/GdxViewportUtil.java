@@ -10,6 +10,9 @@ public final class GdxViewportUtil {
     private GdxViewportUtil() {
     }
 
+    /**
+     * Sets the specified viewport to orthographic projection.
+     */
     public static void setToOrtho(Viewport viewport, Dim worldSize, boolean ydown) {
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(ydown, worldSize.w, worldSize.h);

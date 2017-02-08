@@ -72,6 +72,7 @@ public class CoreLib extends LuaLib {
      *        <li>Function
      *        <li>Function args
      *        </ol>
+     * @throws ScriptException If thread creation fails.
      */
     @ScriptFunction
     public Varargs newThread(Varargs args) throws ScriptException {

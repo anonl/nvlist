@@ -14,10 +14,16 @@ public final class GdxShaderUtil {
     private GdxShaderUtil() {
     }
 
+    /**
+     * Sets a texture uniform of the given shader.
+     */
     public static void setTexture(ShaderProgram shader, int texUnit, ITexture tex) {
         setTexture(shader, texUnit, tex, "u_texture" + texUnit);
     }
 
+    /**
+     * Sets a texture uniform of the given shader.
+     */
     public static void setTexture(ShaderProgram shader, int texUnit, ITexture tex, String uniformName) {
         GdxTextureUtil.bindTexture(texUnit, tex);
 

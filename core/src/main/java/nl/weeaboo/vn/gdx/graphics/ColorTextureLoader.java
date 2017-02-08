@@ -25,6 +25,7 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
         super(resolver);
     }
 
+    /** Registers this loader with the given asset manager. */
     public static void register(AssetManager assetManager) {
         FileHandleResolver resolver = assetManager.getFileHandleResolver();
         assetManager.setLoader(Texture.class, ".color", new ColorTextureLoader(resolver));
@@ -54,6 +55,7 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
         return argb;
     }
 
+    /** Returns the file name required to load a solid-color texture filled with the given ARGB8888 color. */
     public static String getFilename(int argb) {
         return StringUtil.formatRoot("%08x.color", argb);
     }

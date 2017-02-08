@@ -67,6 +67,11 @@ public final class PixmapUtil {
         return result;
     }
 
+    /**
+     * Takes a sub-rect {@code srcRect} from {@code src} and copies it to a sub-rect {@code dstRect} in {@code dst}.
+     *
+     * @param filter Determines which type of interpolation to use if the src/dst rects are a different size.
+     */
     public static void copySubRect(Pixmap src, Rect srcRect, Pixmap dst, Rect dstRect, Filter filter) {
         // Since the blend mode is mutable global state, do a feeble attempt at synchronization
         synchronized (Pixmap.class) {
@@ -85,6 +90,7 @@ public final class PixmapUtil {
         }
     }
 
+    /** Creates an identical copy (including color format) of the given pixmap. */
     public static Pixmap copy(Pixmap original) {
         Pixmap copy = newUninitializedPixmap(original.getWidth(), original.getHeight(), original.getFormat());
         copy(original, copy);
@@ -116,6 +122,12 @@ public final class PixmapUtil {
         dstPixels.clear();
     }
 
+    /**
+     * Creates a scaled copy of a pixmap.
+     *
+     * @see #copy(Pixmap)
+     * @see #copySubRect(Pixmap, Rect, Pixmap, Rect, Filter)
+     */
     public static Pixmap resizedCopy(Pixmap src, Dim dstSize, Filter filter) {
         Pixmap copy = newUninitializedPixmap(dstSize.w, dstSize.h, src.getFormat());
         copySubRect(src, Rect.of(0, 0, src.getWidth(), src.getHeight()), // src rect

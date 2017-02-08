@@ -20,6 +20,7 @@ public enum GLBlendMode {
         this.dstFunc = dfactor;
     }
 
+    /** Applies this blend mode to the given sprite batch. */
     public void apply(Batch batch) {
         if (this == DISABLED) {
             batch.disableBlending();
@@ -29,6 +30,7 @@ public enum GLBlendMode {
         }
     }
 
+    /** Converts a blend mode from the public API to its {@link GLBlendMode} equivalent. */
     public static GLBlendMode from(BlendMode blendMode) {
         switch (blendMode) {
         case DEFAULT:
