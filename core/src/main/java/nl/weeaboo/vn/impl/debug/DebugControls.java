@@ -62,6 +62,9 @@ public final class DebugControls {
         this.luaConsole = new LuaConsole(sceneEnv);
     }
 
+    /**
+     * Handle input and update internal state.
+     */
     public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
         IRenderEnv renderEnv = env.getRenderEnv();

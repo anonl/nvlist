@@ -19,6 +19,10 @@ public final class NinePatchLoader {
         this.imageModule = imageModule;
     }
 
+    /**
+     * Attempts to load a nine-patch resource.
+     * @return The nine-patch, or {@code null} if loading failed.
+     */
     public INinePatch loadNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         NinePatch ninePatch = new NinePatch();
         for (AreaId area : AreaId.values()) {

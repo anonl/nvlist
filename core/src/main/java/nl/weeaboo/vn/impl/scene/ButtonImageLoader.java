@@ -22,6 +22,9 @@ public final class ButtonImageLoader {
         this.imageModule = imageModule;
     }
 
+    /**
+     * Attempts to load the various images used by a button.
+     */
     public void loadImages(IButton button, ResourceLoadInfo basePath) {
         if (!loadImage(button, ButtonViewState.DEFAULT, basePath, "")) {
             // Fallback if the previous image doesn't exist

@@ -126,7 +126,7 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     protected abstract double getUnscaledHeight();
 
-    public Rect2D getUntransformedVisualBounds() {
+    protected Rect2D getUntransformedVisualBounds() {
         return Rect2D.of(0, 0, getUnscaledWidth(), getUnscaledHeight());
     }
 
@@ -330,10 +330,6 @@ public abstract class Transformable extends VisualElement implements ITransforma
     @Override
     public void setClipEnabled(boolean clip) {
         clipEnabled = clip;
-    }
-
-    public void setBaseTransform(MutableMatrix transform) {
-        setBaseTransform(transform.immutableCopy());
     }
 
     @Override

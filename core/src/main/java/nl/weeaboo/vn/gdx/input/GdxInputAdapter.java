@@ -13,11 +13,11 @@ import com.google.common.annotations.VisibleForTesting;
 
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.impl.input.InputAccumulator;
-import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.impl.input.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PressState;
+import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 
@@ -34,6 +34,9 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         this.viewport = viewport;
     }
 
+    /**
+     * Returns the {@link INativeInput} that this input adapter pushes its key events to.
+     */
     public INativeInput getInput() {
         return input;
     }

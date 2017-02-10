@@ -23,6 +23,9 @@ public class TransientListenerSupport implements Serializable {
         return transientListeners;
     }
 
+    /**
+     * Sends an event to all attached listeners.
+     */
     public final void fireListeners() {
         for (IEventListener cl : transientListeners()) {
             cl.onEvent();
@@ -39,6 +42,9 @@ public class TransientListenerSupport implements Serializable {
         transientListeners().add(Checks.checkNotNull(cl));
     }
 
+    /**
+     * Removes a previously added listener.
+     */
     public void removeTransientListener(IEventListener cl) {
         transientListeners().remove(cl);
     }

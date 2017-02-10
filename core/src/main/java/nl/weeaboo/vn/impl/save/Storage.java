@@ -76,6 +76,9 @@ public class Storage implements IStorage, Json.Serializable {
         properties.putAll(map);
     }
 
+    /**
+     * Serializes a storage object to JSON.
+     */
     public static String toJson(IStorage storage) {
         Storage serializable = new Storage(storage);
         return JsonUtil.toJson(serializable);

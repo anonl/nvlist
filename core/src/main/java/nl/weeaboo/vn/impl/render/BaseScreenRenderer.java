@@ -184,17 +184,17 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
     protected void postRenderCommand(BaseRenderCommand cmd) {
     }
 
-    public abstract void renderQuad(QuadRenderCommand qrc);
+    protected abstract void renderQuad(QuadRenderCommand qrc);
 
-    public abstract void renderDistortQuad(DistortQuadCommand dqc);
+    protected abstract void renderDistortQuad(DistortQuadCommand dqc);
 
-    public abstract void renderText(TextRenderCommand trc);
+    protected abstract void renderText(TextRenderCommand trc);
 
-    public abstract void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader);
+    protected abstract void renderTriangleGrid(TriangleGrid grid, ShaderProgram shader);
 
-    public abstract void renderScreenshot(IWritableScreenshot out, Rect glScreenRect);
+    protected abstract void renderScreenshot(IWritableScreenshot out, Rect glScreenRect);
 
-    public abstract void renderCustom(CustomRenderCommand cmd);
+    protected abstract void renderCustom(CustomRenderCommand cmd);
 
     protected abstract boolean renderUnknownCommand(RenderCommand cmd);
 

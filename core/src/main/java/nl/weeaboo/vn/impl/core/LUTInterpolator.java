@@ -18,6 +18,11 @@ public final class LUTInterpolator implements IInterpolator {
         System.arraycopy(arr, off, values, 0, len);
     }
 
+    /**
+     * Creates a new lookup-table-based interpolator.
+     *
+     * @param len The number of slots in the lookup table.
+     */
     public static LUTInterpolator fromInterpolator(IInterpolator i, int len) {
         Checks.checkRange(len, "len", 1);
 

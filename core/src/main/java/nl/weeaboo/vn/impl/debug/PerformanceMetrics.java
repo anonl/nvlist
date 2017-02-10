@@ -22,7 +22,7 @@ public final class PerformanceMetrics {
     public PerformanceMetrics() {
     }
 
-    public String getPerformanceSummary() {
+    String getPerformanceSummary() {
         List<String> lines = Lists.newArrayList();
         lines.add(StringUtil.formatRoot("FPS: %d (render)", Gdx.graphics.getFramesPerSecond()));
         if (logicFps > 0) {

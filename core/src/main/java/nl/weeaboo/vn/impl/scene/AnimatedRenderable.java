@@ -80,6 +80,9 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
         return getNormalizedTime() >= 1.0;
     }
 
+    /**
+     * @return The current time, normalized to the range {@code [0.0, 1.0]}.
+     */
     public double getNormalizedTime() {
         double duration = getDuration();
         if (duration <= 0) {
@@ -88,14 +91,25 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
         return getTime() / duration;
     }
 
+    /**
+     * @return The current time in the range {@code [0.0, duration]}.
+     * @see #getDuration()
+     */
     public double getTime() {
         return time;
     }
 
+    /**
+     * Changes the current time.
+     * @see #getTime()
+     */
     public void setTime(double newTime) {
         time = Math.min(getDuration(), newTime);
     }
 
+    /**
+     * @return The total duration of the animation (in frames).
+     */
     public double getDuration() {
         return duration;
     }

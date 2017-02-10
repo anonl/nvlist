@@ -78,6 +78,7 @@ public final class ContextManager implements IContextManager {
         }
     }
 
+    /** Draws all contexts to the given draw buffer. */
     public void draw(IDrawBuffer drawBuffer) {
         for (Context context : getActiveContexts()) {
             context.drawScreen(drawBuffer);

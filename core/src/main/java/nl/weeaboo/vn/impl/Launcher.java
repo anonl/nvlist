@@ -380,6 +380,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         Gdx.graphics.setVSync(true);
     }
 
+    /**
+     * Returns the global novel object.
+     */
     public Novel getNovel() {
         return novel;
     }
@@ -409,6 +412,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         }
     }
 
+    /** Returns the global scene2D environment. */
     public Scene2dEnv getSceneEnv() {
         return sceneEnv;
     }

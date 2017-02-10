@@ -33,6 +33,10 @@ public final class NativeInput implements INativeInput {
         buttonStates.clear();
     }
 
+    /**
+     * Drains the buffered events from the giben input accumulator and uses them to update the native input's internal
+     * state.
+     */
     public void update(long timestampMs, InputAccumulator accum) {
         List<Event> events = accum.drainEvents();
 

@@ -314,6 +314,9 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         Gdx.gl.glScissor(glRect.x, glRect.y, glRect.w, glRect.h);
     }
 
+    /**
+     * Sets the projection matrix used for rendering.
+     */
     public void setProjectionMatrix(Matrix4 projectionMatrix) {
         matrixStack.setProjectionMatrix(projectionMatrix);
     }

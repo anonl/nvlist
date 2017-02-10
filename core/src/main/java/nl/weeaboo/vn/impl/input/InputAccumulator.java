@@ -13,10 +13,12 @@ public final class InputAccumulator {
 
     private final List<Event> inputEvents = Lists.newArrayList();
 
+    /** Add an event to the internal buffer. */
     public synchronized void addEvent(Event event) {
         inputEvents.add(Checks.checkNotNull(event));
     }
 
+    /** Returns all buffered events, then clears the internal event buffer. */
     public synchronized List<Event> drainEvents() {
         ImmutableList<Event> result = ImmutableList.copyOf(inputEvents);
         inputEvents.clear();

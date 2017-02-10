@@ -18,10 +18,16 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
     private AlignedTexture startTexture = new AlignedTexture();
     private AlignedTexture endTexture = new AlignedTexture();
 
+    /**
+     * @param duration The duration (in frames).
+     */
     public CrossFadeConfig(double duration) {
         this.duration = Checks.checkRange(duration, "duration", 0);
     }
 
+    /**
+     * @see #setInterpolator(IInterpolator)
+     */
     public IInterpolator getInterpolator() {
         return interpolator;
     }
@@ -31,10 +37,16 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
 
+    /**
+     * @return The duration (in frames).
+     */
     public double getDuration() {
         return duration;
     }
 
+    /**
+     * @see #setStartTexture(ITexture, double, double)
+     */
     public AlignedTexture getStartTexture() {
         return startTexture;
     }
@@ -49,6 +61,9 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
         this.startTexture = new AlignedTexture(texture, alignX, alignY);
     }
 
+    /**
+     * @see #setEndTexture(ITexture, double, double)
+     */
     public AlignedTexture getEndTexture() {
         return endTexture;
     }
@@ -63,6 +78,9 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
         this.endTexture = new AlignedTexture(texture, alignX, alignY);
     }
 
+    /**
+     * @return The bounds to use when rendering.
+     */
     public Rect2D getBounds() {
         return Rect2D.combine(startTexture.getBounds(), endTexture.getBounds());
     }

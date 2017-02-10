@@ -36,6 +36,11 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
         super(parent);
     }
 
+    /**
+     * Adds a new sub-layer.
+     *
+     * @return The newly created sub-layer.
+     */
     public Layer createSubLayer() {
         Layer subLayer = new Layer(this);
         add(subLayer);

@@ -37,6 +37,9 @@ public final class ColorMatrix implements Serializable {
     public ColorMatrix() {
     }
 
+    /**
+     * Returns a column-major float array version of the multiplication part of this matrix.
+     */
     public float[] getGLMatrix() {
         // OpenGL by convention uses column-major matrices
         return new float[] {
@@ -47,12 +50,20 @@ public final class ColorMatrix implements Serializable {
         };
     }
 
+    /**
+     * Returns the offset part of this matrix as a 4-element float array (RGBA order).
+     *
+     * @see #setOffsets(double[])
+     */
     public float[] getGLOffset() {
         return new float[] {
                 (float)off[0], (float)off[1], (float)off[2], (float)off[3],
         };
     }
 
+    /**
+     * Sets the diagonals of the multiplication part (RGBA order).
+     */
     public void setDiagonals(double[] rgba) {
         mul[RR] = rgba[0];
         mul[GG] = rgba[1];
@@ -60,30 +71,51 @@ public final class ColorMatrix implements Serializable {
         mul[AA] = rgba[3];
     }
 
+    /**
+     * Sets the multiplication factors (RGBA order) for the red output.
+     */
     public void setRedFactors(double[] factorsRGBA) {
         for (int n = 0; n < 4; n++) {
             mul[0 + n] = factorsRGBA[n];
         }
     }
 
+    /**
+     * Sets the multiplication factors (RGBA order) for the green output.
+     */
     public void setGreenFactors(double[] factorsRGBA) {
         for (int n = 0; n < 4; n++) {
             mul[4 + n] = factorsRGBA[n];
         }
     }
 
+    /**
+     * Sets the multiplication factors (RGBA order) for the blue output.
+     */
     public void setBlueFactors(double[] factorsRGBA) {
         for (int n = 0; n < 4; n++) {
             mul[8 + n] = factorsRGBA[n];
         }
     }
 
+    /**
+     * Sets the multiplication factors (RGBA order) for the alpha output.
+     */
     public void setAlphaFactors(double[] factorsRGBA) {
         for (int n = 0; n < 4; n++) {
             mul[12 + n] = factorsRGBA[n];
         }
     }
 
+    /**
+     * Sets the offset part of this matrix (RGBA order).
+     * <pre>
+     * r' = r + roff
+     * g' = g + goff
+     * b' = b + boff
+     * a' = a + aoff
+     * </pre>
+     */
     public void setOffsets(double[] offsets) {
         for (int n = 0; n < 4; n++) {
             off[n] = offsets[n];

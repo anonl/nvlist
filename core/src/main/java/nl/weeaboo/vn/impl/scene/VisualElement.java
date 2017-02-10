@@ -112,6 +112,9 @@ public abstract class VisualElement implements IVisualElement {
         return z;
     }
 
+    /**
+     * @see IVisualElement#getZ()
+     */
     public void setZ(short z) {
         this.z = z;
     }

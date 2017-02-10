@@ -28,10 +28,19 @@ public final class ProgressInputStream extends FilterInputStream {
         this.pl = Checks.checkNotNull(pl);
     }
 
+    /**
+     * @see #wrap(InputStream, int, long, IProgressListener)
+     */
     public static InputStream wrap(InputStream in, long length, IProgressListener pl) {
         return wrap(in, 2048, length, pl);
     }
 
+    /**
+     * Wraps the given input stream in such a way that the progress listener is called every {@code updateBytes}. If the
+     * progress listener is {@code null}, the input stream is returned unmodified.
+     *
+     * @param pl May be null.
+     */
     public static InputStream wrap(InputStream in, int updateBytes, long length, IProgressListener pl) {
         if (pl != null) {
             return new ProgressInputStream(in, updateBytes, length, pl);

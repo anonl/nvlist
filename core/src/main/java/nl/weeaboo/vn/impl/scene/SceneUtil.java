@@ -13,6 +13,9 @@ public final class SceneUtil {
     private SceneUtil() {
     }
 
+    /**
+     * Finds the root (most distant ancestor) of a visual element.
+     */
     public static IVisualElement getRoot(IVisualElement elem) {
         while (elem.getParent() != null) {
             elem = elem.getParent();
@@ -20,6 +23,11 @@ public final class SceneUtil {
         return elem;
     }
 
+    /**
+     * Finds the parent layer of a visual element.
+     *
+     * @return The parent layer, or {@code null} if no parent layer was found.
+     */
     public static ILayer getParentLayer(IVisualElement elem) {
         while (elem.getParent() != null) {
             elem = elem.getParent();
@@ -30,6 +38,9 @@ public final class SceneUtil {
         return null;
     }
 
+    /**
+     * @return An immutable sorted snapshot of the direct descendants of the given element.
+     */
     public static ImmutableCollection<? extends IVisualElement> getChildren(IVisualElement elem, VisualOrdering order) {
         if (elem instanceof IVisualGroup) {
             IVisualGroup group = (IVisualGroup)elem;
@@ -38,6 +49,9 @@ public final class SceneUtil {
         return ImmutableSet.of();
     }
 
+    /**
+     * Sends a signal to a visual element and its descendants.
+     */
     public static void sendSignal(IVisualElement source, ISignal signal) {
         doSendSignal(getRoot(source), signal);
     }

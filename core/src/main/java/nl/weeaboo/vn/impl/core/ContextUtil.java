@@ -10,10 +10,19 @@ public final class ContextUtil {
     private ContextUtil() {
     }
 
+    /**
+     * @return The current context, or {@code null} if no context is current.
+     * @see #setCurrentContext(IContext)
+     */
     public static IContext getCurrentContext() {
         return currentContext.get();
     }
 
+    /**
+     * Makes the given context <em>current</em>.
+     * @see IContext#onCurrent()
+     * @see #getCurrentContext()
+     */
     public static IContext setCurrentContext(IContext context) {
         IContext oldContext = getCurrentContext();
         currentContext.set(context);
@@ -23,6 +32,9 @@ public final class ContextUtil {
         return oldContext;
     }
 
+    /**
+     * @return The screen of the current context, or {@code null} if no context is current.
+     */
     public static IScreen getCurrentScreen() {
         IContext context = getCurrentContext();
         if (context == null) {

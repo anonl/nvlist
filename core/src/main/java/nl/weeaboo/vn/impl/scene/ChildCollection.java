@@ -22,11 +22,17 @@ public final class ChildCollection implements Serializable, ISignalHandler {
         this.parentRef = Indirect.of(parent);
     }
 
+    /**
+     * Adds an element to the collection and sets its parent.
+     */
     public void add(IVisualElement elem) {
         children.add(elem);
         elem.setParent(parentRef.get());
     }
 
+    /**
+     * Removes an element from the collection and clears its parent.
+     */
     public void remove(IVisualElement elem) {
         children.remove(elem);
         if (elem.getParent() == parentRef.get()) {
@@ -34,6 +40,9 @@ public final class ChildCollection implements Serializable, ISignalHandler {
         }
     }
 
+    /**
+     * Destroy all children and clear the collection.
+     */
     public void destroyAll() {
         children.destroyAll();
     }
@@ -51,10 +60,16 @@ public final class ChildCollection implements Serializable, ISignalHandler {
         }
     }
 
+    /**
+     * @return {@code true} if this collection contains the specified element.
+     */
     public boolean contains(IVisualElement elem) {
         return children.contains(elem);
     }
 
+    /**
+     * @return A read-only snapshot of the elements in this collection.
+     */
     public Collection<IVisualElement> getSnapshot() {
         return children.getSnapshot();
     }

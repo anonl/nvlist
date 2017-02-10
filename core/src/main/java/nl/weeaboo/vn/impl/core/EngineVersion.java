@@ -40,6 +40,9 @@ public final class EngineVersion {
 
     }
 
+    /**
+     * Returns the current version.
+     */
     public static VersionNumber getEngineVersion() {
         return VERSION;
     }

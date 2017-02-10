@@ -85,10 +85,12 @@ public final class DrawBuffer implements IDrawBuffer {
                 dt.getTransform(), renderLogic));
     }
 
+    /** Adds a draw command to the draw buffer. */
     public void draw(BaseRenderCommand cmd) {
         commands.add(cmd);
     }
 
+    /** Returns the draw command for the root layer, or {@code null} if no such command exists. */
     public LayerRenderCommand getRootLayerCommand() {
         if (layers.size == 0) {
             return null;
@@ -109,6 +111,10 @@ public final class DrawBuffer implements IDrawBuffer {
         }
     }
 
+    /**
+     * Returns the render commands for the requested layer, or an empty collection if nothing is stored for that layer
+     * (even if the layer doesn't exist).
+     */
     public List<? extends BaseRenderCommand> getLayerCommands(int layerId) {
         int start = getLayerStart(layerId);
         int end = getLayerEnd(layerId);
@@ -119,6 +125,9 @@ public final class DrawBuffer implements IDrawBuffer {
         return Arrays.asList(commands.items).subList(start, end);
     }
 
+    /**
+     * Returns a snapshot of all buffered draw commands.
+     */
     public ImmutableList<RenderCommand> getCommands() {
         return ImmutableList.<RenderCommand>copyOf(commands);
     }

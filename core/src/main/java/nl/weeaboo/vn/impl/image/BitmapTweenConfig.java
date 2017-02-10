@@ -24,11 +24,17 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
     private AlignedTexture startTexture = new AlignedTexture();
     private AlignedTexture endTexture = new AlignedTexture();
 
+    /**
+     * @param duration The duration (in frames).
+     */
     public BitmapTweenConfig(double duration, ControlImage controlImage) {
         this.duration = Checks.checkRange(duration, "duration", 0);
         this.controlImage = Checks.checkNotNull(controlImage);
     }
 
+    /**
+     * @see #setRange(double)
+     */
     public double getRange() {
         return range;
     }
@@ -38,6 +44,9 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
         this.range = Checks.checkRange(range, "range", 0);
     }
 
+    /**
+     * @see #setInterpolator(IInterpolator)
+     */
     public IInterpolator getInterpolator() {
         return interpolator;
     }
@@ -47,14 +56,23 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
 
+    /**
+     * @return The duration (in frames).
+     */
     public double getDuration() {
         return duration;
     }
 
+    /**
+     * @see ControlImage
+     */
     public ControlImage getControlImage() {
         return controlImage;
     }
 
+    /**
+     * @see #setStartTexture(ITexture, double, double)
+     */
     public AlignedTexture getStartTexture() {
         return startTexture;
     }
@@ -69,6 +87,9 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
         this.startTexture = new AlignedTexture(texture, alignX, alignY);
     }
 
+    /**
+     * @see #setEndTexture(ITexture, double, double)
+     */
     public AlignedTexture getEndTexture() {
         return endTexture;
     }
@@ -96,14 +117,17 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
             this.tile = tile;
         }
 
+        /** Returns the texture that determines the shape of the dissolve effect, never {@code null}. */
         public ITexture getTexture() {
             return texture;
         }
 
+        /** If {@code true}, the texture should be tiled rather than stretched. */
         public boolean isTile() {
             return tile;
         }
 
+        /** Returns the relative bounds for the control image based on the bounds of the start/end images. */
         public Rect2D getBounds(Rect2D inputA, Rect2D inputB) {
             if (tile) {
                 return AlignUtil.getAlignedBounds(texture, 0, 0);
@@ -112,6 +136,7 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
             }
         }
 
+        /** Returns the UV-rect for the control image. */
         public Area2D getUV() {
             // TODO: Should this be texture.getUV()?
             return ITexture.DEFAULT_UV;

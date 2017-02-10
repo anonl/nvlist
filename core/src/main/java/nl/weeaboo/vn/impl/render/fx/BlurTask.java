@@ -95,6 +95,9 @@ public final class BlurTask extends OffscreenRenderTask {
         return new Vec2(pixels / tex.getWidth(), pixels / tex.getHeight());
     }
 
+    /**
+     * Adds padding to each direction in the set. This padding is needed to avoid clipping the blur.
+     */
     public void setExpandDirs(Set<Direction> expandDirs) {
         double top = (Direction.containsTop(expandDirs) ? scaledRadius : 0);
         double right = (Direction.containsRight(expandDirs) ? scaledRadius : 0);

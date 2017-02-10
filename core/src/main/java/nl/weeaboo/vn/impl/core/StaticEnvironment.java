@@ -9,6 +9,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.styledtext.layout.IFontStore;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
@@ -18,6 +19,10 @@ import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.input.IInput;
 
+/**
+ * The static environment contains services and interfaces that connect to the external system. Static references aren't
+ * stored in save files like the {@link IEnvironment} is, but rather they're set once on startup.
+ */
 public final class StaticEnvironment {
 
     public static final StaticRef<IFileSystem> FILE_SYSTEM =
@@ -66,6 +71,9 @@ public final class StaticEnvironment {
     private StaticEnvironment() {
     }
 
+    /**
+     * Returns a reference the static environment.
+     */
     public static StaticEnvironment getInstance() {
         return INSTANCE;
     }
@@ -76,6 +84,7 @@ public final class StaticEnvironment {
         }
     }
 
+    /** Fetches the value of a static reference. */
     public <T> T get(StaticRef<T> ref) {
         String id = ref.getId();
         Class<T> type = ref.getType();
@@ -84,6 +93,7 @@ public final class StaticEnvironment {
         return type.cast(value);
     }
 
+    /** Sets the value of a static reference. */
     public <T> void set(StaticRef<T> ref, T value) {
         synchronized (objects) {
             if (value == null) {
@@ -94,6 +104,7 @@ public final class StaticEnvironment {
         }
     }
 
+    /** Clears all static references in the environment. */
     public void clear() {
         synchronized (objects) {
             objects.clear();

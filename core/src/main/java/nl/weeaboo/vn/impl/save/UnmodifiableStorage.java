@@ -16,10 +16,16 @@ public final class UnmodifiableStorage implements IStorage {
         this.inner = inner;
     }
 
+    /**
+     * @return A read-only view of the given storage object.
+     */
     public static UnmodifiableStorage from(IStorage storage) {
         return new UnmodifiableStorage(storage);
     }
 
+    /**
+     * @return A read-only snapshot of the given storage object.
+     */
     public static UnmodifiableStorage fromCopy(IStorage storage) {
         return new UnmodifiableStorage(new Storage(storage));
     }

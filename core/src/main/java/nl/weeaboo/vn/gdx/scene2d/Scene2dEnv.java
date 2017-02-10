@@ -57,14 +57,21 @@ public class Scene2dEnv implements Disposable {
         skin.dispose();
     }
 
+    /** Draws the stage. */
     public void draw() {
         stage.draw();
     }
 
+    /**
+     * @return The scene2D stage.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * @return The scene2D skin.
+     */
     public Skin getSkin() {
         return skin;
     }

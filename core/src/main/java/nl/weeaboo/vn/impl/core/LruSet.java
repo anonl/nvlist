@@ -20,6 +20,12 @@ public final class LruSet<T> implements Serializable {
         this.maxSize = maxSize;
     }
 
+    /**
+     * Adds an item to the set.
+     *
+     * @return {@code true} if the item was newly added to the set, {@code false} if the item was already contained in
+     *         the set.
+     */
     public boolean add(T e) {
         boolean alreadyContained = backing.remove(e);
         if (alreadyContained) {
@@ -43,14 +49,26 @@ public final class LruSet<T> implements Serializable {
         }
     }
 
+    /**
+     * @return {@code true} if the given object is contained in this set.
+     */
     public boolean contains(Object obj) {
         return backing.contains(obj);
     }
 
+    /**
+     * Attempts to remove the given object from the set.
+     *
+     * @return {@code true} if the object was removed from this set, or {@code false} if this set didn't contain the
+     *         given object.
+     */
     public boolean remove(Object obj) {
         return backing.remove(obj);
     }
 
+    /**
+     * Removes all objects from the set.
+     */
     public void clear() {
         backing.clear();
     }

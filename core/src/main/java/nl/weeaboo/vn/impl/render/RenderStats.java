@@ -26,9 +26,11 @@ public class RenderStats {
         quadBatchSizes = new ArrayList<>();
     }
 
+    /** Called when rendering starts for a frame. */
     public void startRender() {
     }
 
+    /** Called when rendering ends for a frame. */
     public void stopRender() {
         framesRendered++;
         if ((framesRendered & 0x3FF) == 0) {
@@ -39,10 +41,12 @@ public class RenderStats {
         quadBatchSizes.clear();
     }
 
+    /** Called when a batch of quads is rendered. */
     public void onRenderQuadBatch(int count) {
         quadBatchSizes.add(count);
     }
 
+    /** Called when a render command is rendered. */
     public void logCommand(RenderCommand cmd, long durationNanos) {
         CommandStats stats = cmdStats[cmd.id & 0xFF];
         if (stats == null) {
@@ -52,6 +56,7 @@ public class RenderStats {
         stats.addTime(durationNanos);
     }
 
+    /** Flexible method to log extra performance measurements. */
     public void logExtra(Class<? extends RenderCommand> cmdClass, int cmdId, long durationNanos) {
         CommandStats stats = cmdStats[cmdId];
         if (stats == null) {

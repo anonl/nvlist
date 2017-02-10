@@ -25,15 +25,26 @@ public final class InputConfig implements Json.Serializable {
     public InputConfig() {
     }
 
+    /**
+     * Loads the default input config from a classpath resource.
+     *
+     * @throws IOException If the input config can't be read.
+     */
     public static InputConfig readDefaultConfig() throws IOException {
         String json = Resources.toString(InputConfig.class.getResource("input-config.json"), Charsets.UTF_8);
         return JsonUtil.fromJson(InputConfig.class, json);
     }
 
+    /**
+     * Adds an additional physical keycode for the virtual key {@code vkey}.
+     */
     public void add(VKey vkey, KeyCode keyCode) {
         keyMapping.put(vkey, keyCode);
     }
 
+    /**
+     * Returns all physical keycodes mapped to the supplied virtual key.
+     */
     public Collection<KeyCode> get(VKey vkey) {
         return keyMapping.get(vkey);
     }

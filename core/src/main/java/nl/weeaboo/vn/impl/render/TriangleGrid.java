@@ -39,16 +39,25 @@ public final class TriangleGrid implements Serializable {
         verticesPerRow = cols * 2;
     }
 
+    /**
+     * Constructs a combined mesh from one textured quad.
+     */
     public static TriangleGrid layout1(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0) {
         return layout(new InputQuad(bounds0, texBounds0, wrap0));
     }
 
+    /**
+     * Constructs a combined mesh from two textured quads.
+     */
     public static TriangleGrid layout2(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
             Area2D bounds1, Area2D texBounds1, TextureWrap wrap1) {
 
         return layout(new InputQuad(bounds0, texBounds0, wrap0), new InputQuad(bounds1, texBounds1, wrap1));
     }
 
+    /**
+     * Constructs a combined mesh from three textured quads.
+     */
     public static TriangleGrid layout3(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
             Area2D bounds1, Area2D texBounds1, TextureWrap wrap1,
             Area2D bounds2, Area2D texBounds2, TextureWrap wrap2) {
@@ -143,10 +152,16 @@ public final class TriangleGrid implements Serializable {
         coords.put(1 - (float)v);
     }
 
+    /**
+     * @return The number of vertices in each row of the mesh.
+     */
     public int getVerticesPerRow() {
         return verticesPerRow;
     }
 
+    /**
+     * Copies the mesh vertex coordinates to the supplied output buffer.
+     */
     public void getVertices(int row, FloatBuffer out, int outStride) {
         int src = row * verticesPerRow * 2;
         int dst = out.position();
@@ -157,6 +172,9 @@ public final class TriangleGrid implements Serializable {
         }
     }
 
+    /**
+     * Copies the mesh texture coordinates to the supplied output buffer.
+     */
     public void getTexCoords(int texIndex, int row, FloatBuffer out, int outStride) {
         int src = row * verticesPerRow * 2;
         int dst = out.position();
@@ -167,18 +185,30 @@ public final class TriangleGrid implements Serializable {
         }
     }
 
+    /**
+     * @return The number of rows in the mesh.
+     */
     public int getRows() {
         return rows;
     }
 
+    /**
+     * @return The number of columns in the mesh.
+     */
     public int getCols() {
         return cols;
     }
 
+    /**
+     * @return The number of different textures used in the mesh.
+     */
     public int getTextures() {
         return tex.length;
     }
 
+    /**
+     * @return The memory layout used by the mesh.
+     */
     public VertexAttributes getVertexAttributes() {
         List<VertexAttribute> list = Lists.newArrayList();
         list.add(new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE));

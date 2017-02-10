@@ -56,6 +56,7 @@ public final class Osd implements Disposable {
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
     }
 
+    /** Constructor function. */
     public static Osd newInstance(GdxFileSystem fileSystem, PerformanceMetrics perfMetrics) {
         Osd osd = new Osd(perfMetrics);
         osd.init(fileSystem);
@@ -88,12 +89,14 @@ public final class Osd implements Disposable {
     public void dispose() {
     }
 
+    /** Handle input and update internal state. */
     public void update(INativeInput input) {
         if (input.consumePress(KeyCode.F7)) {
             visible = !visible;
         }
     }
 
+    /** Renders the on-screen display to the screen. If not visible, this is a no-op. */
     public void render(Batch batch, IEnvironment env) {
         if (!visible) {
             return;

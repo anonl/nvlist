@@ -71,6 +71,11 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         am.unload(absolutePath.toString());
     }
 
+    /**
+     * Attempts to load the resource with the given name.
+     *
+     * @return A resource wrapper pointing to the resource, or {@code null} if the resource couldn't be loaded.
+     */
     public IResource<T> get(FilePath absolutePath) {
         Ref<T> entry = getEntry(absolutePath);
         if (entry == null) {
@@ -89,10 +94,6 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
             loadError(absolutePath, e.getCause());
             return null;
         }
-    }
-
-    public void setCache(CacheBuilder<Object, Object> builder) {
-        cache = buildCache(builder);
     }
 
     private class LoadingFunction extends CacheLoader<FilePath, Ref<T>> {

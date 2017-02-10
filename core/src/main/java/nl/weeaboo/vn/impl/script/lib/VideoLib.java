@@ -34,6 +34,7 @@ public class VideoLib extends LuaLib {
      *        <ol>
      *        <li>Filename
      *        </ol>
+     * @throws ScriptException If the video file can't be read.
      */
     @ScriptFunction
     public Varargs movie(Varargs args) throws ScriptException {

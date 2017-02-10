@@ -38,10 +38,15 @@ public final class AlignedTexture implements Serializable {
         return texture;
     }
 
+    /** Returns the relative texture bounds, based on the embedded alignment. */
     public Rect2D getBounds() {
         return AlignUtil.getAlignedBounds(texture, alignX, alignY);
     }
 
+    /**
+     * @return The UV-coordinates of the texture, or {@link ITexture#DEFAULT_UV} if the texture is {@code null}.
+     * @see ITexture#getUV()
+     */
     public Area2D getUV() {
         if (texture == null) {
             return ITexture.DEFAULT_UV;

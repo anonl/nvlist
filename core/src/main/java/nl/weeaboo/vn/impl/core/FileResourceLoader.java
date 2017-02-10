@@ -54,14 +54,17 @@ public class FileResourceLoader extends ResourceLoader {
         return ImmutableList.copyOf(getFileSystem().getFiles(opts));
     }
 
+    /** Resolves a relative path to an absolute path. */
     public FilePath getAbsolutePath(FilePath relPath) {
         return resourceFolder.resolve(relPath);
     }
 
+    /** Returns the base folder. Resource paths are resolved relative to this folder. */
     public FilePath getResourceFolder() {
         return resourceFolder;
     }
 
+    /** Sets the base folder. Resource paths are resolved relative to this folder. */
     public void setResourceFolder(FilePath folder) {
         if (!resourceFolder.equals(folder)) {
             cachedFileSystemView = null;

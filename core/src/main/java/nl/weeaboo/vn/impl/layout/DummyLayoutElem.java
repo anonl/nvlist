@@ -49,20 +49,32 @@ public final class DummyLayoutElem extends LayoutElem {
         }
     }
 
+    /**
+     * Sets the minimum/preferred/maximum widths at once.
+     */
     public final void setLayoutWidths(double min, double pref, double max) {
         setLayoutWidths(LayoutSize.of(min), LayoutSize.of(pref), LayoutSize.of(max));
     }
 
+    /**
+     * Sets the minimum/preferred/maximum widths at once.
+     */
     public final void setLayoutWidths(LayoutSize min, LayoutSize pref, LayoutSize max) {
         this.minWidth = min;
         this.prefWidth = pref;
         this.maxWidth = max;
     }
 
+    /**
+     * Sets the minimum/preferred/maximum heights at once.
+     */
     public final void setLayoutHeights(double min, double pref, double max) {
         setLayoutHeights(LayoutSize.of(min), LayoutSize.of(pref), LayoutSize.of(max));
     }
 
+    /**
+     * Sets the minimum/preferred/maximum heights at once.
+     */
     public final void setLayoutHeights(LayoutSize min, LayoutSize pref, LayoutSize max) {
         this.minHeight = min;
         this.prefHeight = pref;

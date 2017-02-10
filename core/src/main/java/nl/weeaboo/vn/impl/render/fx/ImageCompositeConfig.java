@@ -24,14 +24,24 @@ public final class ImageCompositeConfig implements Serializable {
     public ImageCompositeConfig() {
     }
 
+    /**
+     * Adds a texture draw command.
+     */
     public void add(TextureEntry entry) {
         entries.add(entry);
     }
 
+    /**
+     * Returns a read-only snapshot of the currently buffered entries.
+     */
     public ImmutableList<TextureEntry> getEntries() {
         return ImmutableList.copyOf(entries);
     }
 
+    /**
+     * @return The size of the result. If no explicit size is set ({@link #setSize(int, int)}), a size is calculated
+     *         automatically.
+     */
     public Dim getSize() {
         if (explicitSize != null) {
             return explicitSize;
@@ -49,6 +59,10 @@ public final class ImageCompositeConfig implements Serializable {
         return Dim.of((int)Math.ceil(w), (int)Math.ceil(h));
     }
 
+    /**
+     * Sets an explicit result size.
+     * @see #getSize()
+     */
     public void setSize(int w, int h) {
         explicitSize = Dim.of(w, h);
     }
@@ -67,22 +81,37 @@ public final class ImageCompositeConfig implements Serializable {
             this.bounds = Rect2D.of(0, 0, texture.getWidth(), texture.getHeight());
         }
 
+        /**
+         * @return The texture to render.
+         */
         public ITexture getTexture() {
             return texture;
         }
 
+        /**
+         * @return The position and size used for rendering.
+         */
         public Rect2D getBounds() {
             return bounds;
         }
 
+        /**
+         * Sets the top-left x/y position.
+         */
         public void setPos(double x, double y) {
             bounds = Rect2D.of(x, y, bounds.w, bounds.h);
         }
 
+        /**
+         * @return The blend mode used for rendering.
+         */
         public BlendMode getBlendMode() {
             return blendMode;
         }
 
+        /**
+         * Sets the blend mode used for rendering.
+         */
         public void setBlendMode(BlendMode bm) {
             blendMode = bm;
         }

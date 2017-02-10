@@ -15,22 +15,37 @@ public final class BoundsHelper extends TransientListenerSupport implements IPos
     private double h;
     private transient Rect2D cachedBounds;
 
+    /**
+     * @return The top-left x of the bounds.
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * @return The top-left y of the bounds.
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * @return The width of the bounds.
+     */
     public double getWidth() {
         return w;
     }
 
+    /**
+     * @return The height of the bounds.
+     */
     public double getHeight() {
         return h;
     }
 
+    /**
+     * @return The current bounds.
+     */
     public Rect2D getBounds() {
         if (cachedBounds == null) {
             double w = getWidth();
@@ -40,6 +55,9 @@ public final class BoundsHelper extends TransientListenerSupport implements IPos
         return cachedBounds;
     }
 
+    /**
+     * Checks if the specified point lies inside the bounds, or on its boundary.
+     */
     public boolean contains(double px, double py) {
         return getBounds().contains(px, py);
     }
@@ -79,6 +97,9 @@ public final class BoundsHelper extends TransientListenerSupport implements IPos
         setBounds(this.x, this.y, w, h);
     }
 
+    /**
+     * @see #setBounds(double, double, double, double)
+     */
     public void setBounds(Rect2D rect) {
         setBounds(rect.x, rect.y, rect.w, rect.h);
     }

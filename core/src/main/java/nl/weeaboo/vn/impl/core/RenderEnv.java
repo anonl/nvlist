@@ -39,6 +39,15 @@ public final class RenderEnv implements IRenderEnv {
     }
 
     /**
+     * Convenience constructor. Sets the clip/screen sizes to the vsize.
+     */
+    public static RenderEnv newDefaultInstance(Dim vsize, boolean isTouchScreen) {
+        Rect rclip = Rect.of(0, 0, vsize.w, vsize.h);
+        Dim rscreen = Dim.of(vsize.w, vsize.h);
+        return new RenderEnv(vsize, rclip, rscreen, isTouchScreen);
+    }
+
+    /**
      * @param scale The scale factor from virtual coordinates to real coordinates.
      */
     private static Rect2D calculateGLScreenVirtualBounds(int clipX, int clipY, int screenWidth,
@@ -57,12 +66,6 @@ public final class RenderEnv implements IRenderEnv {
         h = Double.isNaN(h) ? 0 : Math.max(0, h);
 
         return Rect2D.of(x, y, w, h);
-    }
-
-    public static RenderEnv newDefaultInstance(Dim vsize, boolean isTouchScreen) {
-        Rect rclip = Rect.of(0, 0, vsize.w, vsize.h);
-        Dim rscreen = Dim.of(vsize.w, vsize.h);
-        return new RenderEnv(vsize, rclip, rscreen, isTouchScreen);
     }
 
     @Override

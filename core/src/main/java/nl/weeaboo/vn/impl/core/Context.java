@@ -90,10 +90,12 @@ public class Context implements IContext {
         getSkipState().handleInput(input);
     }
 
+    /** Draws the context's screen to the given draw buffer. */
     public void drawScreen(IDrawBuffer drawBuffer) {
         screen.draw(drawBuffer);
     }
 
+    /** Performs tasks that must run in the OpenGL thread. This method is called by the framework. */
     public void updateInRenderThread() {
         screen.getOffscreenRenderTaskBuffer().update();
     }

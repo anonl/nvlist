@@ -59,6 +59,9 @@ public abstract class ResourceLoader implements IResourceResolver {
         return null;
     }
 
+    /**
+     * Logs a warning if the given resource path redundantly includes a file extension.
+     */
     public void checkRedundantFileExt(FilePath resourcePath) {
         FilePath filePath = ResourceId.extractFilePath(resourcePath.toString());
         if (filePath == null || !checkFileExt) {
@@ -88,10 +91,17 @@ public abstract class ResourceLoader implements IResourceResolver {
         }
     }
 
+    /**
+     * Attempts to preload the specified file, logging an error if the filename is invalid.
+     */
     public void preload(FilePath filename) {
         preload(filename, false);
     }
 
+    /**
+     * Attempts to preload the specified file.
+     * @param suppressErrors If {@code true}, logs an error if the filename is invalid.
+     */
     public void preload(FilePath filename, boolean suppressErrors) {
         if (!suppressErrors) {
             checkRedundantFileExt(filename);
@@ -110,12 +120,17 @@ public abstract class ResourceLoader implements IResourceResolver {
         // Default implementation does nothing
     }
 
+    /** Logs a resource load event. */
     public void logLoad(ResourceId resourceId, ResourceLoadInfo info) {
         resourceLoadLog.logLoad(resourceId, info);
     }
 
     protected abstract boolean isValidFilename(FilePath filePath);
 
+    /**
+     * Returns all resource files in the folder. Only returns resources of the file types that this resource loader is
+     * interested in.
+     */
     public Collection<FilePath> getMediaFiles(FilePath folder) {
         try {
             Collection<FilePath> files = getFiles(folder);
@@ -134,6 +149,11 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     protected abstract List<FilePath> getFiles(FilePath folder) throws IOException;
 
+    /**
+     * Sets some file extensions to append to the user-supplied path when attempting to load a resource file. This
+     * allows use to write "myfolder/myimage" in the script, without having to care whether the image is stored as
+     * {@code .jng} or {@code .png}.
+     */
     public void setAutoFileExts(String... exts) {
         autoFileExts = exts.clone();
     }

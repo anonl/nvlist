@@ -245,6 +245,13 @@ public class TextLib extends LuaLib {
         return table;
     }
 
+    /**
+     * @param args
+     *        <ol>
+     *        <li>string
+     *        </ol>
+     * @return The string value interpreted as a Lua literal.
+     */
     @ScriptFunction
     public Varargs parseLuaLiteral(Varargs args) {
         LuaValue val = args.arg1();

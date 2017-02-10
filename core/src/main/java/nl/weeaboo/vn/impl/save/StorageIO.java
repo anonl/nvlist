@@ -21,6 +21,11 @@ public final class StorageIO {
     private StorageIO() {
     }
 
+    /**
+     * Reads a storage object from a filesystem.
+     *
+     * @throws IOException If an I/O error occurs while trying to read the input.
+     */
     public static IStorage read(IFileSystem fs, FilePath path) throws IOException {
         InputStream in = fs.openInputStream(path);
         try {
@@ -30,6 +35,11 @@ public final class StorageIO {
         }
     }
 
+    /**
+     * Reads a storage object.
+     *
+     * @throws IOException If an I/O error occurs while trying to read the input.
+     */
     public static IStorage read(SecureFileWriter fs, FilePath path) throws IOException {
         InputStream in = fs.newInputStream(path);
         try {
@@ -39,6 +49,11 @@ public final class StorageIO {
         }
     }
 
+    /**
+     * Reads a storage object.
+     *
+     * @throws IOException If an I/O error occurs while trying to read the input.
+     */
     public static IStorage read(InputStream in) throws IOException {
         Storage storage = new Storage();
         for (Entry<String, String> entry : PropertiesUtil.load(in).entrySet()) {
@@ -47,6 +62,11 @@ public final class StorageIO {
         return storage;
     }
 
+    /**
+     * Writes a storage object.
+     *
+     * @throws IOException If an I/O error occurs while trying to write to the output.
+     */
     public static void write(IStorage storage, IWritableFileSystem fs, FilePath path) throws IOException {
         OutputStream out = fs.openOutputStream(path, false);
         try {
@@ -56,6 +76,11 @@ public final class StorageIO {
         }
     }
 
+    /**
+     * Writes a storage object.
+     *
+     * @throws IOException If an I/O error occurs while trying to write to the output.
+     */
     public static void write(IStorage storage, SecureFileWriter fs, FilePath path) throws IOException {
         OutputStream out = fs.newOutputStream(path, false);
         try {
@@ -65,6 +90,11 @@ public final class StorageIO {
         }
     }
 
+    /**
+     * Writes a storage object.
+     *
+     * @throws IOException If an I/O error occurs while trying to write to the output.
+     */
     public static void write(OutputStream out, IStorage storage) throws IOException {
         Map<String, String> map = new HashMap<>();
         for (String key : storage.getKeys()) {

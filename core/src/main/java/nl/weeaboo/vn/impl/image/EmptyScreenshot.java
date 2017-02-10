@@ -10,6 +10,7 @@ public final class EmptyScreenshot extends AbstractScreenshot {
         super((short)0, false);
     }
 
+    /** Constructor function. */
     public static EmptyScreenshot getInstance() {
         return INSTANCE;
     }

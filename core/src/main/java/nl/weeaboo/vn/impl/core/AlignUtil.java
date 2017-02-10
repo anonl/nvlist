@@ -17,6 +17,9 @@ public final class AlignUtil {
         return -align * size;
     }
 
+    /**
+     * Returns the relative bounds for the given texture, if aligned using the given fractional alignment.
+     */
     public static Rect2D getAlignedBounds(ITexture tex, double alignX, double alignY) {
         if (tex == null) {
             return getAlignedBounds(0, 0, alignX, alignY);
@@ -24,10 +27,18 @@ public final class AlignUtil {
         return getAlignedBounds(tex.getWidth(), tex.getHeight(), alignX, alignY);
     }
 
+    /**
+     * Returns the relative bounds for an object of the given dimensions, if aligned using the given fractional
+     * alignment.
+     */
     public static Rect2D getAlignedBounds(double w, double h, double alignX, double alignY) {
         return Rect2D.of(getAlignOffset(w, alignX), getAlignOffset(h, alignY), w, h);
     }
 
+    /**
+     * Calculates the relative x-position for {@code inner}, when aligning relative to {@code outer} using
+     * {@code anchor} as its alignment.
+     */
     public static double alignAnchorX(double outer, double inner, Direction anchor) {
         switch (anchor) {
         case TOP:
@@ -43,6 +54,10 @@ public final class AlignUtil {
         }
     }
 
+    /**
+     * Calculates the relative y-position for {@code inner}, when aligning relative to {@code outer} using
+     * {@code anchor} as its alignment.
+     */
     public static double alignAnchorY(double outer, double inner, Direction anchor) {
         switch (anchor) {
         case LEFT:

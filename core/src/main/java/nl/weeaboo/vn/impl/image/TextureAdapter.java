@@ -36,21 +36,33 @@ public class TextureAdapter implements ITexture {
         return (tex != null ? tex.getTextureObjectHandle() : 0);
     }
 
+    /**
+     * @return Returns the embedded libGDX texture or {@code null} if the texture can't be loaded.
+     */
     public Texture getTexture() {
         TextureRegion tr = getTextureRegion();
         return (tr != null ? tr.getTexture() : null);
     }
 
+    /**
+     * @return The embedded libGDX texture region or {@code null} if the texture region can't be loaded.
+     */
     public TextureRegion getTextureRegion() {
         return res.get();
     }
 
+    /**
+     * Derives a sub-region from the libGDX texture region.
+     *
+     * @see #getTextureRegion()
+     */
     public TextureRegion getTextureRegion(Area2D uv) {
-        if (uv.equals(ITexture.DEFAULT_UV)) {
-            return getTextureRegion();
-        }
-
         TextureRegion tr = getTextureRegion();
+        if (tr == null) {
+            return null;
+        } else if (uv.equals(ITexture.DEFAULT_UV)) {
+            return tr;
+        }
 
         float uspan = tr.getU2() - tr.getU();
         float u = tr.getU() + uspan * (float)uv.x;
@@ -109,10 +121,18 @@ public class TextureAdapter implements ITexture {
         return scaleY;
     }
 
+    /**
+     * Sets the texture region.
+     *
+     * @see #setTextureRegion(IResource, double, double)
+     */
     public void setTextureRegion(IResource<TextureRegion> tr, double scale) {
         setTextureRegion(tr, scale, scale);
     }
 
+    /**
+     * Sets the texture region.
+     */
     public void setTextureRegion(IResource<TextureRegion> tr, double sx, double sy) {
         this.res = Checks.checkNotNull(tr);
         this.scaleX = sx;

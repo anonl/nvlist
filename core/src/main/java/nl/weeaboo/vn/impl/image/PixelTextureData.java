@@ -24,6 +24,9 @@ public final class PixelTextureData implements IGdxTextureData {
         this.pixels = Checks.checkNotNull(pixels);
     }
 
+    /**
+     * Creates a new instance from a pixmap using premultiplied alpha.
+     */
     public static PixelTextureData fromPremultipliedPixmap(Pixmap pixmap) {
         return new PixelTextureData(pixmap);
     }

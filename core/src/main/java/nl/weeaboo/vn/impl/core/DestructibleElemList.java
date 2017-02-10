@@ -65,18 +65,22 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
         }
     }
 
+    /** Adds an element to the list. */
     public void add(T elem) {
         elements.add(elem);
     }
 
+    /** Removes an element from the list. */
     public void remove(Object elem) {
         elements.remove(elem);
     }
 
+    /** Removes all elements from the list. */
     public void clear() {
         elements.clear();
     }
 
+    /** Destroys all elements, then clears the list. */
     public void destroyAll() {
         for (T elem : getSnapshot()) {
             elem.destroy();
@@ -86,11 +90,17 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
         removeDestroyedElements();
     }
 
+    /**
+     * @return {@code true} if the given element is stored one or more times in this list.
+     */
     public boolean contains(Object elem) {
         removeDestroyedElements();
         return elements.contains(elem);
     }
 
+    /**
+     * @return The number of non-destroyed elements in the list.
+     */
     public int size() {
         removeDestroyedElements();
         return elements.size();
@@ -101,10 +111,17 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
         return getSnapshot().iterator();
     }
 
+    /**
+     * Returns a read-only snapshot of the elements in the list.
+     */
     public Collection<T> getSnapshot() {
         return getSnapshot(Predicates.alwaysTrue());
     }
 
+    /**
+     * Returns a read-only snapshot of the elements in the list.
+     * @param predicate Only include elements that pass the predicate.
+     */
     public Collection<T> getSnapshot(Predicate<? super T> predicate) {
         removeDestroyedElements();
 

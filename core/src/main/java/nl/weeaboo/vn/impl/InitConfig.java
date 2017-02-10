@@ -16,6 +16,7 @@ public final class InitConfig {
     private InitConfig() {
     }
 
+    /** Initializes JVM global configuration (such as logging). */
     public static void init() {
         configLogging();
     }
@@ -44,7 +45,6 @@ public final class InitConfig {
         }
 
         setLogLevel("nl.weeaboo.vn", Level.FINE);
-        setLogLevel("nl.weeaboo.gdx", Level.FINE);
     }
 
     private static void setLogLevel(String loggerName, Level level) {

@@ -22,11 +22,17 @@ public final class ProgressOutputStream extends FilterOutputStream {
         this.pl = Checks.checkNotNull(pl);
     }
 
+    /**
+     * @see #wrap(OutputStream, int, IProgressListener)
+     */
     public static OutputStream wrap(OutputStream out, IProgressListener pl) {
         return wrap(out, 2048, pl);
     }
 
     /**
+     * Wraps the given output stream in such a way that the progress listener is called every {@code updateBytes}. If
+     * the progress listener is {@code null}, the output stream is returned unmodified.
+     *
      * @param pl May be null.
      */
     public static OutputStream wrap(OutputStream out, int updateBytes, IProgressListener pl) {

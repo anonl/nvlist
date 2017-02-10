@@ -20,6 +20,10 @@ public class ScreenshotBuffer implements IScreenshotBuffer {
         screenshots.add(new ScreenshotEntry(ss, clip));
     }
 
+    /**
+     * For each pending screenshot operation in this buffer, add a screenshot render command to the supplied draw
+     * buffer. The pending screenshots buffer of this class is then cleared.
+     */
     public void flush(IDrawBuffer d) {
         for (ScreenshotEntry entry : screenshots) {
             d.screenshot(entry.screenshot, entry.clip);

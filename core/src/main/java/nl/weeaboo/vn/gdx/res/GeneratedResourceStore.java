@@ -36,6 +36,10 @@ public class GeneratedResourceStore extends AbstractResourceStore {
         garbage = new ReferenceQueue<>();
     }
 
+    /**
+     * Registers a new generated resource. The resource is disposed when the returned {@link IResource} wrapper is no
+     * longer referenced.
+     */
     public <T extends Serializable & Disposable> IResource<T> register(T value) {
         cleanUp();
 
@@ -44,6 +48,9 @@ public class GeneratedResourceStore extends AbstractResourceStore {
         return resource;
     }
 
+    /**
+     * Returns the number of registered resources. When a resource is disposed, it's also automatically unregistered.
+     */
     public int size() {
         return resources.size;
     }
@@ -55,6 +62,7 @@ public class GeneratedResourceStore extends AbstractResourceStore {
         cleanUp();
     }
 
+    /** Garbage collect resources that are no longer referenced. */
     public void cleanUp() {
         // Remove dead references
         Iterator<ResourceRef<?>> itr = resources.iterator();

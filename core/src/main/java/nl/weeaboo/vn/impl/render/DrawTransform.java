@@ -4,6 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawTransform;
+import nl.weeaboo.vn.scene.IVisualElement;
 
 public final class DrawTransform implements IDrawTransform {
 
@@ -30,6 +31,9 @@ public final class DrawTransform implements IDrawTransform {
         return z;
     }
 
+    /**
+     * @see IVisualElement#getZ()
+     */
     public void setZ(short z) {
         this.z = z;
     }
@@ -39,6 +43,9 @@ public final class DrawTransform implements IDrawTransform {
         return clipEnabled;
     }
 
+    /**
+     * @see #isClipEnabled()
+     */
     public void setClipEnabled(boolean clipEnabled) {
         this.clipEnabled = clipEnabled;
     }
@@ -48,6 +55,9 @@ public final class DrawTransform implements IDrawTransform {
         return blendMode;
     }
 
+    /**
+     * @see #getBlendMode()
+     */
     public void setBlendMode(BlendMode blendMode) {
         this.blendMode = Checks.checkNotNull(blendMode);
     }
@@ -57,6 +67,9 @@ public final class DrawTransform implements IDrawTransform {
         return transform;
     }
 
+    /**
+     * @see #getTransform()
+     */
     public void setTransform(Matrix transform) {
         this.transform = Checks.checkNotNull(transform);
     }

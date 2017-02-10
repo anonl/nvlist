@@ -19,10 +19,16 @@ public final class ImageBlur {
     public ImageBlur() {
     }
 
+    /**
+     * Returns the blur radius.
+     *
+     * @see #setRadius(int)
+     */
     public int getRadius() {
         return radius;
     }
 
+    /** Sets the blur radius. */
     public void setRadius(int r) {
         Preconditions.checkArgument(r >= 0);
 

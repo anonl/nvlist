@@ -23,6 +23,11 @@ public class ShaderStore {
 
     private final StaticRef<IFileSystem> fileSystemRef = StaticEnvironment.FILE_SYSTEM;
 
+    /**
+     * Loads a shader from the file system ({@link StaticEnvironment#FILE_SYSTEM}).
+     *
+     * @throws IOException If the shader can't be loaded.
+     */
     public ShaderProgram createShader(String filename) throws IOException {
         IFileSystem fileSystem = fileSystemRef.get();
 
@@ -37,6 +42,11 @@ public class ShaderStore {
         return createShaderFromSources(vertexProgram, fragmentProgram);
     }
 
+    /**
+     * Loads a shader from classpath resources.
+     *
+     * @throws IOException If compilation failed.
+     */
     public ShaderProgram createShaderFromClasspath(Class<?> context, String baseResourcePath) throws IOException {
         String vertexPath = baseResourcePath + ".vert";
         URL vertexUrl = context.getResource(vertexPath);
@@ -59,6 +69,11 @@ public class ShaderStore {
         return createShaderFromSources(vertexProgram, fragmentProgram);
     }
 
+    /**
+     * Compiles a shader from vertex/fragment program sourcecode.
+     *
+     * @throws IOException If compilation failed.
+     */
     public ShaderProgram createShaderFromSources(String vertexProgram, String fragmentProgram) throws IOException {
         ShaderProgram shader = new ShaderProgram(vertexProgram, fragmentProgram);
         if (!shader.isCompiled()) {

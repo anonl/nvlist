@@ -16,8 +16,14 @@ public interface ILayoutElemPeer {
      */
     void setLayoutBounds(Rect2D rect);
 
+    /**
+     * @return The current layout width of the peer.
+     */
     double getWidth();
 
+    /**
+     * @return The current layout height of the peer.
+     */
     double getHeight();
 
 }

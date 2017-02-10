@@ -26,10 +26,12 @@ public final class Indirect<T> implements Externalizable {
         this.referent = referent;
     }
 
+    /** Constructor. */
     public static <T> Indirect<T> of(T referent) {
         return new Indirect<>(referent);
     }
 
+    /** Returns the object that this reference points to. */
     public T get() {
         return referent;
     }

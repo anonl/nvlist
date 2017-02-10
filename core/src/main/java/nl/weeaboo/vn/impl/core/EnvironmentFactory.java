@@ -36,6 +36,11 @@ import nl.weeaboo.vn.script.ScriptException;
 
 public class EnvironmentFactory {
 
+    /**
+     * Creates a new {@link IEnvironment} instance.
+     *
+     * @throws InitException If a fatal error occurs.
+     */
     public DefaultEnvironment build() throws InitException {
         try {
             DefaultEnvironment env = initEnvironment();
@@ -109,6 +114,7 @@ public class EnvironmentFactory {
         }
     }
 
+    /** Registers all standard Lua libraries with the supplied Lua script environment. */
     public static void registerLuaLibs(IEnvironment env, LuaScriptEnv scriptEnv) {
         scriptEnv.addInitializer(new LogLib());
         scriptEnv.addInitializer(new CoreLib(env));

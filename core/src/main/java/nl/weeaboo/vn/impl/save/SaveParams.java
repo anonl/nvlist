@@ -15,6 +15,9 @@ public final class SaveParams implements ISaveParams {
         return UnmodifiableStorage.fromCopy(userData);
     }
 
+    /**
+     * @see #getUserData()
+     */
     public void setUserData(IStorage data) {
         userData.clear();
         userData.addAll(data);
@@ -30,6 +33,9 @@ public final class SaveParams implements ISaveParams {
         return thumbnailData;
     }
 
+    /**
+     * @see #getThumbnailData()
+     */
     public void setThumbnail(ThumbnailInfo info, byte[] data) {
         thumbnailInfo = info;
         thumbnailData = data;
