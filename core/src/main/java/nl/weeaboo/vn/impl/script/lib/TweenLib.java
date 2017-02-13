@@ -15,8 +15,8 @@ import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
-import nl.weeaboo.vn.impl.image.CrossFadeConfig;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
+import nl.weeaboo.vn.impl.image.CrossFadeConfig;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -75,6 +75,7 @@ public class TweenLib extends LuaLib {
      *        <li>tile control image (boolean)
      *        </ol>
      * @return A new {@link IBitmapTweenConfig} object.
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs bitmapTweenConfig(Varargs args) throws ScriptException {

@@ -63,6 +63,7 @@ public class SystemLib extends LuaLib {
 
     /**
      * @param args not used
+     * @throws ScriptException If the restart failed due to an internal error.
      */
     @ScriptFunction
     public void restart(Varargs args) throws ScriptException {
@@ -120,6 +121,7 @@ public class SystemLib extends LuaLib {
      *        </ol>
      * @return {@code -1} if first {@code <} second, {@code 0} if first {@code ==} second, {@code 1} if first
      *         {@code >} second.
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs compareVersion(Varargs args) throws ScriptException {

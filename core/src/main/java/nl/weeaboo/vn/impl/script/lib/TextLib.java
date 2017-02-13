@@ -55,6 +55,7 @@ public class TextLib extends LuaLib {
      *        <li>(optional) Initial text
      *        </ol>
      * @return A text drawable
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs createTextDrawable(Varargs args) throws ScriptException {
@@ -86,6 +87,7 @@ public class TextLib extends LuaLib {
      *        <li>table of text attributes
      *        </ol>
      * @return text style
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs createStyle(Varargs args) throws ScriptException {
@@ -102,6 +104,7 @@ public class TextLib extends LuaLib {
      *        <li>overriding text style
      *        </ol>
      * @return text style
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs extendStyle(Varargs args) throws ScriptException {
@@ -119,6 +122,7 @@ public class TextLib extends LuaLib {
      *        available.
      *        </ol>
      * @return styled text
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs createStyledText(Varargs args) throws ScriptException {
@@ -148,6 +152,7 @@ public class TextLib extends LuaLib {
      *        placeholders.
      *        </ol>
      * @return styled text
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs format(Varargs args) throws ScriptException {
@@ -172,6 +177,7 @@ public class TextLib extends LuaLib {
      *        <li>(optional) table of triggers
      *        </ol>
      * @return (parsed text, triggers table)
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs parseText(Varargs args) throws ScriptException {

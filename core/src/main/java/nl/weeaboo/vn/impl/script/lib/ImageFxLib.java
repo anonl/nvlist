@@ -48,6 +48,20 @@ public class ImageFxLib extends LuaLib {
         this.env = env;
     }
 
+    /**
+     * Creates a cropped version of a texture.
+     *
+     * @param args
+     *        <ol>
+     *        <li>texture or filename
+     *        <li>(optional) number: crop top-left x
+     *        <li>(optional) number: crop top-left y
+     *        <li>(optional) number: crop bottom-right x
+     *        <li>(optional) number: crop bottom-right y
+     *        </ol>
+     * @return A texture object, or {@code null} if the input texture was missing.
+     * @throws ScriptException If the passed method arguments are illegal.
+     */
     @ScriptFunction
     public Varargs crop(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
@@ -101,6 +115,21 @@ public class ImageFxLib extends LuaLib {
         currentScreen.getOffscreenRenderTaskBuffer().add(task);
     }
 
+    /**
+     * Creates a cropped version of a texture.
+     *
+     * @param args
+     *        <ol>
+     *        <li>texture or filename
+     *        <li>(optional) number: Blur radius
+     *        <li>(optional) number: Pad the image with extra whitespace in certain directions. This extra space is
+     *        needed to avoid cropping the blur. Each digit corresponds to a numpad direction (example: 268 is
+     *        bottom+right+top).
+     *        </ol>
+     * @return A reference to the {@link IOffscreenRenderTask} that will perform the required rendering asynchronously,
+     *         or {@code null} if the input texture was missing.
+     * @throws ScriptException If the passed method arguments are illegal.
+     */
     @ScriptFunction
     public Varargs blur(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
@@ -118,6 +147,18 @@ public class ImageFxLib extends LuaLib {
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
     }
 
+    /**
+     * Creates a brightened version of a texture.
+     *
+     * @param args
+     *        <ol>
+     *        <li>texture or filename
+     *        <li>(optional) add: Offset RGB values by this fraction (between -1.0 and 1.0).
+     *        </ol>
+     * @return A reference to the {@link IOffscreenRenderTask} that will perform the required rendering asynchronously,
+     *         or {@code null} if the input texture was missing.
+     * @throws ScriptException If the passed method arguments are illegal.
+     */
     @ScriptFunction
     public Varargs brighten(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();
@@ -136,6 +177,23 @@ public class ImageFxLib extends LuaLib {
         return LuajavaLib.toUserdata(task, IOffscreenRenderTask.class);
     }
 
+    /**
+     * Applies a color conversion matrix to a texture. The result is a new texture -- the input texture is left
+     * unmodified.
+     *
+     * @param args
+     *        <ol>
+     *        <li>texture or filename
+     *        <li>(optional) table: 4 red multiplication factors between 0.0 and 1.0
+     *        <li>(optional) table: 4 green multiplication factors between 0.0 and 1.0
+     *        <li>(optional) table: 4 blue multiplication factors between 0.0 and 1.0
+     *        <li>(optional) table: 4 alpha multiplication factors between 0.0 and 1.0
+     *        <li>(optional) table: 4 color addition values (RGBA) between -1.0 and 1.0
+     *        </ol>
+     * @return A reference to the {@link IOffscreenRenderTask} that will perform the required rendering asynchronously,
+     *         or {@code null} if the input texture was missing.
+     * @throws ScriptException If the passed method arguments are illegal.
+     */
     @ScriptFunction
     public Varargs colorMatrix(Varargs args) throws ScriptException {
         IImageModule imageModule = env.getImageModule();

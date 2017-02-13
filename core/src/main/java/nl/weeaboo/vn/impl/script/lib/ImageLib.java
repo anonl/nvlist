@@ -35,6 +35,17 @@ public class ImageLib extends LuaLib {
         this.env = env;
     }
 
+    /**
+     * Creates an image drawable and adds it to a layer.
+     *
+     * @param args
+     *        <ol>
+     *        <li>Layer to which the new image drawable should be added.
+     *        <li>Texture of filename
+     *        </ol>
+     * @return The newly created image drawable.
+     * @throws ScriptException If the input parameters are invalid.
+     */
     @ScriptFunction
     public Varargs createImage(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
@@ -54,6 +65,16 @@ public class ImageLib extends LuaLib {
         return LuajavaLib.toUserdata(image, IImageDrawable.class);
     }
 
+    /**
+     * Creates a new sub-layer.
+     *
+     * @param args
+     *        <ol>
+     *        <li>Parent layer (or {@code null} to use the root layer).
+     *        </ol>
+     * @return The newly created sub-layer.
+     * @throws ScriptException If the input parameters are invalid.
+     */
     @ScriptFunction
     public Varargs createLayer(Varargs args) throws ScriptException {
         ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
@@ -70,6 +91,7 @@ public class ImageLib extends LuaLib {
 
     /**
      * @param args ignored
+     * @throws ScriptException If no screen is current.
      */
     @ScriptFunction
     public Varargs getRootLayer(Varargs args) throws ScriptException {
@@ -78,6 +100,7 @@ public class ImageLib extends LuaLib {
 
     /**
      * @param args ignored
+     * @throws ScriptException If no screen is current.
      */
     @ScriptFunction
     public Varargs getActiveLayer(Varargs args) throws ScriptException {
@@ -86,6 +109,7 @@ public class ImageLib extends LuaLib {
 
     /**
      * @param args The layer to make active
+     * @throws ScriptException If no screen is current.
      */
     @ScriptFunction
     public void setActiveLayer(Varargs args) throws ScriptException {
@@ -103,6 +127,8 @@ public class ImageLib extends LuaLib {
      * Fetches a snaphot of all the drawables contained in a specific layer
      *
      * @param args The layer to get the drawables from.
+     * @return A table containing all the drawables in the layer.
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs getDrawables(Varargs args) throws ScriptException {
@@ -116,6 +142,22 @@ public class ImageLib extends LuaLib {
         return CoerceJavaToLua.toTable(drawables, IDrawable.class);
     }
 
+    /**
+     * Schedules a screenshot to be taken.
+     *
+     * @param args
+     *        <ol>
+     *        <li>layer in which to take the screenshot
+     *        <li>(optional) number: z-index at which to take the screenshot during rendering.
+     *        <li>(optional) boolean: Clipping mode. If {@code false}, takes a screenshot of the entire screen instead
+     *        of just the layer.
+     *        <li>(optional) boolean: Volatile pixel mode. If {@code true}, the screenshot is stored only in volatile
+     *        GPU memory meaning its pixels may be lost at any time.
+     *        <li>
+     *        </ol>
+     * @return A screenshot object that will be filled asynchronously the next time the screen is rendered.
+     * @throws ScriptException If the input parameters are invalid.
+     */
     @ScriptFunction
     public Varargs screenshot(Varargs args) throws ScriptException {
         ILayer layer = LuaConvertUtil.getLayerArg(args, 1);
@@ -150,6 +192,7 @@ public class ImageLib extends LuaLib {
      *        <li>(optional) boolean suppressErrors
      *        </ol>
      * @return A texture object, or {@code null} if the requested texture couldn't be loaded.
+     * @throws ScriptException If the Lua value isn't convertible to a texture.
      */
     @ScriptFunction
     public Varargs getTexture(Varargs args) throws ScriptException {

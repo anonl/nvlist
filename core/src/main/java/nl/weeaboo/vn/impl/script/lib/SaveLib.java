@@ -67,6 +67,7 @@ public class SaveLib extends LuaLib {
      *        <li>save slot (int)
      *        <li>(optional) userdata table
      *        </ol>
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs save(Varargs args) throws ScriptException {
@@ -93,6 +94,13 @@ public class SaveLib extends LuaLib {
         return result;
     }
 
+    /**
+     * @param args
+     *        <ol>
+     *        <li>save slot (int)
+     *        </ol>
+     * @throws ScriptException If a load error occurs.
+     */
     @ScriptFunction
     public Varargs load(Varargs args) throws ScriptException {
         int slot = args.checkint(1);

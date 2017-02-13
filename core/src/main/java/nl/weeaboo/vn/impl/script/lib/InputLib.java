@@ -58,6 +58,7 @@ public class InputLib extends LuaLib {
      *        <li>vkey
      *        </ol>
      * @return {@code true} if a key press for the requested key was consumed by this method.
+     * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
     public Varargs consume(Varargs args) throws ScriptException {
