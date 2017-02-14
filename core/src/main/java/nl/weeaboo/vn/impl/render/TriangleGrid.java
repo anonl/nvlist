@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 
 public final class TriangleGrid implements Serializable {
 
@@ -40,40 +41,16 @@ public final class TriangleGrid implements Serializable {
     }
 
     /**
-     * Constructs a combined mesh from one textured quad.
+     * Constructs a combined mesh from one or more layers of textured quads.
      */
-    public static TriangleGrid layout1(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0) {
-        return layout(new InputQuad(bounds0, texBounds0, wrap0));
-    }
+    public static TriangleGrid layout(TriangleGridLayer... inputs) {
+        Checks.checkRange(inputs.length, "inputs.length", 1);
 
-    /**
-     * Constructs a combined mesh from two textured quads.
-     */
-    public static TriangleGrid layout2(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
-            Area2D bounds1, Area2D texBounds1, TextureWrap wrap1) {
-
-        return layout(new InputQuad(bounds0, texBounds0, wrap0), new InputQuad(bounds1, texBounds1, wrap1));
-    }
-
-    /**
-     * Constructs a combined mesh from three textured quads.
-     */
-    public static TriangleGrid layout3(Area2D bounds0, Area2D texBounds0, TextureWrap wrap0,
-            Area2D bounds1, Area2D texBounds1, TextureWrap wrap1,
-            Area2D bounds2, Area2D texBounds2, TextureWrap wrap2) {
-
-        return layout(
-                new InputQuad(bounds0, texBounds0, wrap0),
-                new InputQuad(bounds1, texBounds1, wrap1),
-                new InputQuad(bounds2, texBounds2, wrap2));
-    }
-
-    private static TriangleGrid layout(InputQuad... inputs) {
         double[] xsplits = new double[inputs.length * 2];
         double[] ysplits = new double[inputs.length * 2];
 
         int t = 0;
-        for (InputQuad input : inputs) {
+        for (TriangleGridLayer input : inputs) {
             Area2D r = input.bounds;
             xsplits[t] = r.x;
             ysplits[t] = r.y;
@@ -126,7 +103,7 @@ public final class TriangleGrid implements Serializable {
         coords.put((float)y);
     }
 
-    private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y, InputQuad input) {
+    private static void glDrawArrayTexcoord(FloatBuffer coords, double x, double y, TriangleGridLayer input) {
         final Area2D bounds = input.bounds;
         final Area2D texBounds = input.texBounds;
         final TextureWrap wrap = input.wrap;
@@ -219,13 +196,13 @@ public final class TriangleGrid implements Serializable {
         return new VertexAttributes(list.toArray(new VertexAttribute[list.size()]));
     }
 
-    private static class InputQuad {
+    public static class TriangleGridLayer {
 
         public final Area2D bounds;
         public final Area2D texBounds;
         public final TextureWrap wrap;
 
-        public InputQuad(Area2D bounds, Area2D texBounds, TextureWrap wrap) {
+        public TriangleGridLayer(Area2D bounds, Area2D texBounds, TextureWrap wrap) {
             this.bounds = bounds;
             this.texBounds = texBounds;
             this.wrap = wrap;

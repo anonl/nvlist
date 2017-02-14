@@ -12,6 +12,7 @@ import nl.weeaboo.vn.gdx.graphics.GdxShaderUtil;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
+import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
 import nl.weeaboo.vn.impl.scene.Layer;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IDrawTransform;
@@ -112,7 +113,7 @@ public class RenderTestHelper implements IDestructible {
      * Draw a triangle grid to the draw buffer.
      */
     public void drawTriangleGrid(ITexture tex, Area2D bounds) {
-        TriangleGrid grid = TriangleGrid.layout1(bounds, tex.getUV(), TextureWrap.CLAMP);
+        TriangleGrid grid = TriangleGrid.layout(new TriangleGridLayer(bounds, tex.getUV(), TextureWrap.CLAMP));
         drawTriangleGrid(grid, tex);
     }
 

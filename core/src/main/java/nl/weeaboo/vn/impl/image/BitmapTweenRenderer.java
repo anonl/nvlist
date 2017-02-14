@@ -12,6 +12,7 @@ import nl.weeaboo.vn.impl.core.AlignUtil;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.impl.render.TriangleGrid;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
+import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
 import nl.weeaboo.vn.impl.scene.AnimatedRenderable;
 
 public abstract class BitmapTweenRenderer extends AnimatedRenderable implements IBitmapTweenRenderer {
@@ -94,10 +95,11 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
             controlWrap = TextureWrap.CLAMP;
         }
 
-        grid = TriangleGrid.layout3(
-                bounds0.toArea2D(), getStartTextureUV(), wrap0,
-                bounds1.toArea2D(), getEndTextureUV(), wrap1,
-                controlBounds.toArea2D(), controlTexUV, controlWrap);
+        grid = TriangleGrid.layout(
+	        	new TriangleGridLayer(bounds0.toArea2D(), getStartTextureUV(), wrap0),
+    	    	new TriangleGridLayer(bounds1.toArea2D(), getEndTextureUV(), wrap1),
+        		new TriangleGridLayer(controlBounds.toArea2D(), controlTexUV, controlWrap)
+		);
 
         remapTexture = updateRemapTexture(remapTexture); // Init remapTex
 

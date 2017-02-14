@@ -7,6 +7,7 @@ import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.TriangleGrid;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
+import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
 import nl.weeaboo.vn.impl.scene.AnimatedRenderable;
 
 public abstract class CrossFadeRenderer extends AnimatedRenderable implements ICrossFadeRenderer {
@@ -39,9 +40,10 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
         AlignedTexture tex0 = config.getStartTexture();
         AlignedTexture tex1 = config.getEndTexture();
 
-        grid = TriangleGrid.layout2(
-                tex0.getBounds().toArea2D(), tex0.getUV(), TextureWrap.CLAMP,
-                tex1.getBounds().toArea2D(), tex1.getUV(), TextureWrap.CLAMP);
+        grid = TriangleGrid.layout(
+        		new TriangleGridLayer(tex0.getBounds().toArea2D(), tex0.getUV(), TextureWrap.CLAMP),
+        		new TriangleGridLayer(tex1.getBounds().toArea2D(), tex1.getUV(), TextureWrap.CLAMP)
+        );
 
         LOG.debug("Prepare crossFade: start={}, end={}",
                 getStartTexture(), getEndTexture());
