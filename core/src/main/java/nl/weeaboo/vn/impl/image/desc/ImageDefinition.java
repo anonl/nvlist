@@ -35,27 +35,23 @@ public final class ImageDefinition implements IImageDefinition {
     private final ImmutableList<ImageSubRect> subRects;
     // --- Also update ImageDefinitionJson when changing attributes ---
 
-    public ImageDefinition(String filename, int w, int h) {
-        this(filename, Dim.of(w, h),
-                GLScaleFilter.DEFAULT, GLScaleFilter.DEFAULT,
-                GLTilingMode.DEFAULT, GLTilingMode.DEFAULT,
-                ImmutableList.<ImageSubRect>of());
+    public ImageDefinition(String filename, Dim size) {
+        this(new ImageDefinitionBuilder(filename, size));
     }
 
-    public ImageDefinition(String filename, Dim size,
-            GLScaleFilter minf, GLScaleFilter magf,
-            GLTilingMode wrapX, GLTilingMode wrapY,
-            Collection<ImageSubRect> subRects) {
+    ImageDefinition(ImageDefinitionBuilder builder) {
+        this.filename = Checks.checkNotNull(builder.getFilename());
 
         Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
                 "Filename may not be a path: " + filename);
-        this.filename = filename;
 
-        this.size = Checks.checkNotNull(size);
-        this.minFilter = Checks.checkNotNull(minf);
-        this.magFilter = Checks.checkNotNull(magf);
-        this.wrapX = Checks.checkNotNull(wrapX);
-        this.wrapY = Checks.checkNotNull(wrapY);
+        this.size = Checks.checkNotNull(builder.getSize());
+        this.minFilter = Checks.checkNotNull(builder.getMinifyFilter());
+        this.magFilter = Checks.checkNotNull(builder.getMagnifyFilter());
+        this.wrapX = Checks.checkNotNull(builder.getTilingModeX());
+        this.wrapY = Checks.checkNotNull(builder.getTilingModeY());
+
+        this.subRects = ImmutableList.copyOf(builder.getSubRects());
 
         // Validate extra constraints for tiling textures
         if (wrapX == GLTilingMode.REPEAT || wrapY == GLTilingMode.REPEAT) {
@@ -72,7 +68,6 @@ public final class ImageDefinition implements IImageDefinition {
             Checks.checkArgument(bounds.contains(area.x, area.y, area.w, area.h),
                     "Sub-rect " + subRect + " is invalid for image size " + size);
         }
-        this.subRects = ImmutableList.copyOf(subRects);
     }
 
     @Override
@@ -117,12 +112,19 @@ public final class ImageDefinition implements IImageDefinition {
 
     @Override
     public IImageSubRect findSubRect(String id) {
-        for (IImageSubRect subRect : subRects) {
+        ImageSubRect subRect = findSubRect(subRects, id);
+        if (subRect == null) {
+            LOG.trace("Sub-rect not found: {}#{}", filename, id);
+        }
+        return subRect;
+    }
+
+    static <T extends IImageSubRect> T findSubRect(Collection<T> subRects, String id) {
+        for (T subRect : subRects) {
             if (subRect.getId().equals(id)) {
                 return subRect;
             }
         }
-        LOG.trace("Sub-rect not found: {}#{}", filename, id);
         return null;
     }
 

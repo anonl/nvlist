@@ -2,8 +2,8 @@ package nl.weeaboo.vn.impl.image.desc;
 
 import org.junit.Assert;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
-import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
 final class ImageDefinitionTestHelper {
 
@@ -35,7 +35,7 @@ final class ImageDefinitionTestHelper {
     }
 
     public ImageDefinition createImageDef(String id) {
-        return new ImageDefinition(id, 1, 1);
+        return new ImageDefinition(id, Dim.of(1, 1));
     }
 
 }

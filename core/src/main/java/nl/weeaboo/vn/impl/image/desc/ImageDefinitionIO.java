@@ -137,20 +137,21 @@ public final class ImageDefinitionIO {
     }
 
     private static ImageDefinition decodeJson(ImageDefinitionJson imageDefJson) {
-        String filename = imageDefJson.file;
         Dim size = Dim.of(imageDefJson.width, imageDefJson.height);
-        GLScaleFilter minf = parseScaleFilter(imageDefJson.minFilter);
-        GLScaleFilter magf = parseScaleFilter(imageDefJson.magFilter);
-        GLTilingMode wrapX = parseTilingMode(imageDefJson.wrapX);
-        GLTilingMode wrapY = parseTilingMode(imageDefJson.wrapY);
+        ImageDefinitionBuilder b = new ImageDefinitionBuilder(imageDefJson.file, size);
 
-        List<ImageSubRect> subRects = Lists.newArrayList();
+        b.setMinifyFilter(parseScaleFilter(imageDefJson.minFilter));
+        b.setMagnifyFilter(parseScaleFilter(imageDefJson.magFilter));
+        b.setTilingModeX(parseTilingMode(imageDefJson.wrapX));
+        b.setTilingModeY(parseTilingMode(imageDefJson.wrapY));
+
         if (imageDefJson.subRects != null) {
             for (ImageSubRectJson subRectJson : imageDefJson.subRects) {
-                subRects.add(parseSubRect(subRectJson));
+                b.addSubRect(parseSubRect(subRectJson));
             }
         }
-        return new ImageDefinition(filename, size, minf, magf, wrapX, wrapY, subRects);
+
+        return b.build();
     }
 
     private static GLScaleFilter parseScaleFilter(String filterString) {

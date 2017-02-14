@@ -16,7 +16,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import nl.weeaboo.common.Area;
@@ -69,20 +68,22 @@ public class XmlImageDescImporter {
             int height = Integer.parseInt(imageE.getAttribute("height"));
             final Dim size = Dim.of(width, height);
 
+            ImageDefinitionBuilder b = new ImageDefinitionBuilder(filePath.toString(), size);
+
             // Get scale filters
             List<String> scaleFilters = Splitter.on(',')
                     .trimResults()
                     .omitEmptyStrings()
                     .splitToList(Strings.nullToEmpty(imageE.getAttribute("scaleFilter")));
 
-            GLScaleFilter minf = GLScaleFilter.DEFAULT;
             if (scaleFilters.size() >= 1) {
-                minf = GLScaleFilter.fromString(scaleFilters.get(0));
+                GLScaleFilter filter = GLScaleFilter.fromString(scaleFilters.get(0));
+                b.setMinifyFilter(filter);
+                b.setMagnifyFilter(filter);
             }
 
-            GLScaleFilter magf = minf;
             if (scaleFilters.size() >= 2) {
-                magf = GLScaleFilter.fromString(scaleFilters.get(1));
+                b.setMagnifyFilter(GLScaleFilter.fromString(scaleFilters.get(1)));
             }
 
             // Get tiling mode
@@ -91,21 +92,20 @@ public class XmlImageDescImporter {
                     .omitEmptyStrings()
                     .splitToList(Strings.nullToEmpty(imageE.getAttribute("tile")));
 
-            GLTilingMode wrapS = GLTilingMode.DEFAULT;
             if (tileModes.size() >= 1) {
-                wrapS = GLTilingMode.fromString(tileModes.get(0));
+                GLTilingMode tileMode = GLTilingMode.fromString(tileModes.get(0));
+                b.setTilingModeX(tileMode);
+                b.setTilingModeY(tileMode);
             }
 
-            GLTilingMode wrapT = wrapS;
             if (tileModes.size() >= 2) {
-                wrapT = GLTilingMode.fromString(tileModes.get(1));
+                b.setTilingModeY(GLTilingMode.fromString(tileModes.get(1)));
             }
 
             // Get crop rects
             NodeList subrectEList = imageE.getElementsByTagName("subrect");
-            List<ImageSubRect> subRects = Lists.newArrayList();
-            for (int b = 0; b < subrectEList.getLength(); b++) {
-                Element subrectE = (Element)subrectEList.item(b);
+            for (int r = 0; r < subrectEList.getLength(); r++) {
+                Element subrectE = (Element)subrectEList.item(r);
                 String id = subrectE.getAttribute("id");
 
                 List<String> rectString = Splitter.on(',')
@@ -116,12 +116,10 @@ public class XmlImageDescImporter {
                 int y = Integer.parseInt(rectString.get(1));
                 int w = Integer.parseInt(rectString.get(2));
                 int h = Integer.parseInt(rectString.get(3));
-                subRects.add(new ImageSubRect(id, Area.of(x, y, w, h)));
+                b.addSubRect(new ImageSubRect(id, Area.of(x, y, w, h)));
             }
 
-            ImageDefinition imageDef = new ImageDefinition(filePath.toString(), size,
-                    minf, magf, wrapS, wrapT, subRects);
-            result.put(filePath, imageDef);
+            result.put(filePath, b.build());
         }
 
         return result;
