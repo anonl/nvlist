@@ -96,10 +96,10 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
         }
 
         grid = TriangleGrid.layout(
-	        	new TriangleGridLayer(bounds0.toArea2D(), getStartTextureUV(), wrap0),
-    	    	new TriangleGridLayer(bounds1.toArea2D(), getEndTextureUV(), wrap1),
-        		new TriangleGridLayer(controlBounds.toArea2D(), controlTexUV, controlWrap)
-		);
+                new TriangleGridLayer(bounds0.toArea2D(), getStartTextureUV(), wrap0),
+                new TriangleGridLayer(bounds1.toArea2D(), getEndTextureUV(), wrap1),
+                new TriangleGridLayer(controlBounds.toArea2D(), controlTexUV, controlWrap)
+        );
 
         remapTexture = updateRemapTexture(remapTexture); // Init remapTex
 

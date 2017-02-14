@@ -41,8 +41,8 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
         AlignedTexture tex1 = config.getEndTexture();
 
         grid = TriangleGrid.layout(
-        		new TriangleGridLayer(tex0.getBounds().toArea2D(), tex0.getUV(), TextureWrap.CLAMP),
-        		new TriangleGridLayer(tex1.getBounds().toArea2D(), tex1.getUV(), TextureWrap.CLAMP)
+                new TriangleGridLayer(tex0.getBounds().toArea2D(), tex0.getUV(), TextureWrap.CLAMP),
+                new TriangleGridLayer(tex1.getBounds().toArea2D(), tex1.getUV(), TextureWrap.CLAMP)
         );
 
         LOG.debug("Prepare crossFade: start={}, end={}",
