@@ -84,6 +84,11 @@ public abstract class Panel extends Transformable implements IPanel {
 
     @Override
     public void setUnscaledSize(double w, double h) {
+        // Update layout size
+        ILayoutGroup layout = getLayout();
+        Rect2D oldLayoutBounds = layout.getLayoutBounds();
+        layout.setLayoutBounds(Rect2D.of(oldLayoutBounds.x, oldLayoutBounds.y, w, h));
+
         renderer.setSize(w, h);
 
         invalidateTransform();
@@ -98,14 +103,14 @@ public abstract class Panel extends Transformable implements IPanel {
      * Subclasses should call this method to add child elements to the panel. This method doesn't add the
      * element to the layout!
      */
-    protected void add(IVisualElement child) {
+    protected void addChild(IVisualElement child) {
         children.add(child);
     }
 
     /**
      * Removes an element from the panel and its layout.
      */
-    protected void remove(IVisualElement child) {
+    protected void removeChild(IVisualElement child) {
         getLayout().remove(child.getLayoutAdapter());
         children.remove(child);
     }

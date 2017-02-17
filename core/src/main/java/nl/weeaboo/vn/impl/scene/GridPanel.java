@@ -21,9 +21,12 @@ public class GridPanel extends Panel implements IGridPanel {
     }
 
     @Override
-    public void add(IVisualElement elem, GridCellConstraints constraints) {
-        layout.add(elem.getLayoutAdapter(), constraints);
-        add(elem);
+    public GridCellConstraints add(IVisualElement elem) {
+        GridCellConstraints constraints = layout.add(elem.getLayoutAdapter());
+
+        addChild(elem);
+
+        return constraints;
     }
 
     @Override

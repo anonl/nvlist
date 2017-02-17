@@ -3,8 +3,6 @@ package nl.weeaboo.vn.impl.layout;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.layout.GridCellConstraints;
-
 public class GridLayoutTest {
 
     private GridLayout layout;
@@ -18,9 +16,14 @@ public class GridLayoutTest {
 
     @Test
     public void singleRow() {
-        DummyLayoutElem alpha = addDummy(new GridCellConstraints().grow());
-        DummyLayoutElem beta = addDummy(new GridCellConstraints().grow());
-        DummyLayoutElem gamma = addDummy(new GridCellConstraints().grow());
+        DummyLayoutElem alpha = new DummyLayoutElem();
+        layout.add(alpha).grow();
+
+        DummyLayoutElem beta = new DummyLayoutElem();
+        layout.add(beta).grow();
+
+        DummyLayoutElem gamma = new DummyLayoutElem();
+        layout.add(gamma).grow();
 
         alpha.setLayoutWidths(0.0, 50.0, 100.0);
         beta.setLayoutWidths(20.0, 25.0, 200.0);
@@ -29,9 +32,9 @@ public class GridLayoutTest {
 
         // Because gamma has an infinitely large preferred width, it takes up all the remaining room after the
         // other elements have reached their preferred sizes.
-        helper.assertSize(alpha, 50, 300);
-        helper.assertSize(beta, 25, 300);
-        helper.assertSize(gamma, 325, 300);
+        helper.assertSize(alpha, 100, 300);
+        helper.assertSize(beta, 200, 300);
+        helper.assertSize(gamma, 100, 300);
 
         // Change gamma so its preferred width is limited
         // All elements now reach their max widths
@@ -49,11 +52,18 @@ public class GridLayoutTest {
          * -----
          * C | D
          */
-        final DummyLayoutElem alpha = addDummy(new GridCellConstraints().growX());
-        final DummyLayoutElem beta = addDummy(new GridCellConstraints().growY());
+        final DummyLayoutElem alpha = new DummyLayoutElem();
+        layout.add(alpha).growX();
+
+        final DummyLayoutElem beta = new DummyLayoutElem();
+        layout.add(beta).growY();
         layout.endRow();
-        final DummyLayoutElem gamma = addDummy(new GridCellConstraints().growY());
-        final DummyLayoutElem delta = addDummy(new GridCellConstraints().growX());
+
+        final DummyLayoutElem gamma = new DummyLayoutElem();
+        layout.add(gamma).growY();
+
+        final DummyLayoutElem delta = new DummyLayoutElem();
+        layout.add(delta).growX();
 
         alpha.setLayoutWidths(0.0, 50.0, 100.0);
         beta.setLayoutWidths(20.0, 25.0, 200.0);
@@ -64,14 +74,9 @@ public class GridLayoutTest {
         helper.layout(400, 300);
 
         helper.assertSize(alpha, 100, 10); // grow x (10 is the pref. height for alpha)
-        helper.assertSize(beta, 25, 30);   // grow y (30 is the pref. height for beta)
-        helper.assertSize(gamma, 125, 25); // grow y
-        helper.assertSize(delta, 25, 10);  // grow x
+        helper.assertSize(beta, 25, 40);   // grow y (40 is the max. height for beta)
+        helper.assertSize(gamma, 125, 35); // grow y (35 is the max. height for gamma)
+        helper.assertSize(delta, 275, 10);  // grow x
     }
 
-    private DummyLayoutElem addDummy(GridCellConstraints constraints) {
-        DummyLayoutElem elem = new DummyLayoutElem();
-        layout.add(elem, constraints);
-        return elem;
-    }
 }

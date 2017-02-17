@@ -31,11 +31,15 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     }
 
     @Override
-    public void add(ILayoutElem elem, GridCellConstraints constraints) {
+    public GridCellConstraints add(ILayoutElem elem) {
         GridRow row = reserveRow();
+
+        GridCellConstraints constraints = new GridCellConstraints();
         row.cells.add(new GridCell(elem, constraints));
 
         invalidateLayout();
+
+        return constraints;
     }
 
     @Override
@@ -113,8 +117,15 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
 
                 GridCell cell = row.findColCell(c);
                 if (cell != null) {
-                    LOG.debug("Set cell bounds: x={}, y={}, w={}, h={}", x, y, colW, rowH);
-                    cell.setBounds(x, y, colW, rowH);
+                    LayoutSize prefW = cell.calculateLayoutWidth(LayoutSizeType.PREF, LayoutSize.of(rowH));
+                    LayoutSize prefH = cell.calculateLayoutHeight(LayoutSizeType.PREF, LayoutSize.of(colW));
+
+                    // Calculate preferred size based on the cell bounds
+                    double cellW = Math.min(colW, prefW.value(Double.MAX_VALUE));
+                    double cellH = Math.min(rowH, prefH.value(Double.MAX_VALUE));
+
+                    LOG.debug("Set cell bounds: x={}, y={}, w={}, h={}", x, y, cellW, cellH);
+                    cell.setBounds(x, y, cellW, cellH);
                 }
 
                 x += colW;
@@ -270,15 +281,15 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         }
 
         public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
-            if (type == LayoutSizeType.MAX && !constraints.growX) {
-                type = LayoutSizeType.PREF;
+            if (constraints.growX && type == LayoutSizeType.PREF) {
+                type = LayoutSizeType.MAX;
             }
             return contents.calculateLayoutWidth(type, heightHint);
         }
 
         public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
-            if (type == LayoutSizeType.MAX && !constraints.growY) {
-                type = LayoutSizeType.PREF;
+            if (constraints.growY && type == LayoutSizeType.PREF) {
+                type = LayoutSizeType.MAX;
             }
             return contents.calculateLayoutHeight(type, widthHint);
         }

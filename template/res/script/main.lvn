@@ -13,6 +13,8 @@ function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
 
+    testGuiScreen()
+
     registerSpeaker("guy", "Mr. Guy")
     registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
     
@@ -61,6 +63,20 @@ function titlescreen()
     --movie("test")
     call("images")    
     --call("speakers")    
+end
+
+function testGuiScreen()
+    local panel = gridPanel()
+    panel:setSize(screenWidth, screenHeight)
+    
+    panel:add(img("test")):grow()
+    
+    panel:add(img("test"))
+    panel:endRow()
+    panel:add(img("test")):growY()
+    panel:add(img("test"))
+
+    waitClick()
 end
 
 @@

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public interface IGridLayout extends Serializable {
 
     /** Adds an element to the layout */
-    void add(ILayoutElem elem, GridCellConstraints constraints);
+    GridCellConstraints add(ILayoutElem elem);
 
     /** Ends the current row and starts a new one. */
     void endRow();
