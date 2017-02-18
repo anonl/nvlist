@@ -43,7 +43,7 @@ allprojects {
         gdxTestVersion = '1.0.4'
         gdxVersion = '1.9.5'
         gdxVideoVersion = '0.0.4-anonl'
-        guavaVersion = '20.0'        
+        guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
         junitVersion = '4.12'
         luajpp2Version = '2.3.14'
         roboVmVersion = '2.3.0'
