@@ -341,9 +341,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
             return (boundingHeight - contentHeight) / 2;
         case BOTTOM:
             return (boundingHeight - contentHeight);
-        default:
-            throw new IllegalArgumentException("Unsupported alignment: " + verticalAlign);
         }
+
+        throw new IllegalArgumentException("Unsupported alignment: " + verticalAlign);
     }
 
     @Override
@@ -351,4 +351,9 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         return getEndLine() >= getLineCount() && getVisibleText() >= getMaxVisibleText();
     }
 
+    @Override
+    public double calculateTextHeight(double widthHint) {
+        ITextLayout layout = createLayout((int)Math.ceil(widthHint));
+        return layout.getTextHeight();
+    }
 }

@@ -68,9 +68,8 @@ public class PixmapPremultiplyTest {
             return 0x11223388;
         case RGBA8888:
             return 0x11223380;
-        default:
-            throw new AssertionError("Unsupported format: " + format);
         }
+        throw new AssertionError("Unsupported format: " + format);
     }
 
 }

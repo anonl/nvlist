@@ -145,8 +145,6 @@ public class RuntimeTextParser implements Serializable {
             stext = changeBaseStyle(stext, styleStack.getCalculatedStyle());
             out.add(stext);
         } break;
-        default:
-            //Ignore
         }
     }
 

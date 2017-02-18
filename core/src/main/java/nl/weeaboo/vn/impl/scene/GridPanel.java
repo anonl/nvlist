@@ -1,12 +1,18 @@
 package nl.weeaboo.vn.impl.scene;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.impl.layout.GridLayout;
 import nl.weeaboo.vn.layout.GridCellConstraints;
+import nl.weeaboo.vn.layout.LayoutSize;
+import nl.weeaboo.vn.layout.LayoutSizeType;
 import nl.weeaboo.vn.scene.IGridPanel;
 import nl.weeaboo.vn.scene.IVisualElement;
 
 public class GridPanel extends Panel implements IGridPanel {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GridPanel.class);
     private static final long serialVersionUID = 1L;
 
     private final GridLayout layout;
@@ -35,8 +41,13 @@ public class GridPanel extends Panel implements IGridPanel {
     }
 
     @Override
-    public GridCellConstraints newConstraints() {
-        return new GridCellConstraints();
+    public void pack() {
+        LayoutSize widthHint = LayoutSize.of(layout.getChildLayoutBounds().w);
+        LayoutSize prefHeight = layout.calculateLayoutHeight(LayoutSizeType.PREF, widthHint);
+
+        LOG.debug("Calculated packed size: {}x{}", widthHint, prefHeight);
+
+        setUnscaledSize(widthHint.value(), prefHeight.value(getUnscaledHeight()));
     }
 
 }

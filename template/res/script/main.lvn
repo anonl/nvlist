@@ -13,6 +13,7 @@ function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
 
+    testTextLog()
     testGuiScreen()
 
     registerSpeaker("guy", "Mr. Guy")
@@ -65,9 +66,39 @@ function titlescreen()
     --call("speakers")    
 end
 
+function testTextLog()
+    for n=1,10 do
+        appendTextLog("If your decorators include information that is expensive to compute or potentially distracting, you may want to contribute your own preferences that allow the user to further fine-tune the decorator once it is on.", true)
+    end
+    
+    local textLog = getTextState():getTextLog()
+    
+    local panel = gridPanel()
+    
+    local page = textLog:getPageCount() - 1
+    while page >= 0 do
+        local text = textimg(textLog:getPage(page))
+        
+        panel:add(text):growX()
+        panel:endRow()
+        
+        page = page - 1
+    end
+    panel:pack()
+
+    while not Input.consume(VKeys.mouseLeft) do
+        if Input.isPressed(VKeys.up) then
+            panel:setY(panel:getY() - 1)
+        end
+        if Input.isPressed(VKeys.down) then
+            panel:setY(panel:getY() + 1)
+        end
+        yield()
+    end
+end
+
 function testGuiScreen()
     local panel = gridPanel()
-    panel:setSize(screenWidth, screenHeight)
     
     panel:add(img("test")):grow()
     

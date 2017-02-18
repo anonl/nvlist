@@ -53,9 +53,9 @@ public final class NinePatchLoader {
         case BOTTOM_LEFT: return "bottomleft";
         case BOTTOM: return "bottom";
         case BOTTOM_RIGHT: return "bottomright";
-        default:
-            throw new IllegalArgumentException("Unsupported area: " + area);
         }
+
+        throw new IllegalArgumentException("Unsupported area: " + area);
     }
 
 }

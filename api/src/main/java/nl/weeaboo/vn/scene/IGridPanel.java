@@ -9,10 +9,13 @@ public interface IGridPanel extends IPanel {
      */
     GridCellConstraints add(IVisualElement elem);
 
-    /** Ends the current row. Further elements will be placed in a line below the current elements. */
+    /**
+     * Ends the current row. Further elements will be placed in a line below the current elements.
+     */
     void endRow();
 
-    /** Provides convenient access to the layout-specific constraints used by this panel. */
-    GridCellConstraints newConstraints();
-
+    /**
+     * Adjusts the size of the panel to fit its contents.
+     */
+    void pack();
 }

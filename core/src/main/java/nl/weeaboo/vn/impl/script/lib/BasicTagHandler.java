@@ -57,10 +57,10 @@ final class BasicTagHandler extends VarArgFunction {
         case SPEED: return newStyle(ETextAttribute.SPEED, table.rawget(n));
         case ALIGN: return newStyle(ETextAttribute.ALIGN, table.rawget(n));
         case CENTER: return newStyle(ETextAttribute.ALIGN, valueOf("center"));
-        default:
-            LOG.warn("No implementation for tag: {}", tag.getTagId());
-            return null;
         }
+
+        LOG.warn("No implementation for tag: {}", tag.getTagId());
+        return null;
     }
 
     private static TextStyle newStyle(ETextAttribute attribute, LuaValue luaValue) {

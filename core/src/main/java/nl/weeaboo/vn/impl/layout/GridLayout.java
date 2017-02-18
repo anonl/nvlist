@@ -97,12 +97,22 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     }
 
     @Override
-    protected void doLayout() {
-        TrackMetrics[] colSizes = initColumns();
-        adjustColumnSizes(colSizes);
+    public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
+        TrackMetrics[] colSizes = calculateColumnMetrics();
+        return getTotalBreadth(colSizes, type);
+    }
 
-        TrackMetrics[] rowSizes = initRows(colSizes);
-        adjustRowSizes(rowSizes);
+    @Override
+    public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
+        TrackMetrics[] colSizes = calculateColumnMetrics();
+        TrackMetrics[] rowSizes = calculateRowMetrics(colSizes);
+        return getTotalBreadth(rowSizes, type);
+    }
+
+    @Override
+    protected void doLayout() {
+        TrackMetrics[] colSizes = calculateColumnMetrics();
+        TrackMetrics[] rowSizes = calculateRowMetrics(colSizes);
 
         // Position cells based on calculated rows/columns
         Rect2D innerRect = getChildLayoutBounds();
@@ -124,7 +134,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
                     double cellW = Math.min(colW, prefW.value(Double.MAX_VALUE));
                     double cellH = Math.min(rowH, prefH.value(Double.MAX_VALUE));
 
-                    LOG.debug("Set cell bounds: x={}, y={}, w={}, h={}", x, y, cellW, cellH);
+                    LOG.trace("Set cell bounds: x={}, y={}, w={}, h={}", x, y, cellW, cellH);
                     cell.setBounds(x, y, cellW, cellH);
                 }
 
@@ -134,15 +144,53 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         }
     }
 
-    private void adjustColumnSizes(TrackMetrics[] colSizes) {
-        double remainingSpace = getChildLayoutWidth() - getTotalBreadth(colSizes);
-        adjustTrackSizes(colSizes, remainingSpace);
+    /** Calculates sizes for each column */
+    private TrackMetrics[] calculateColumnMetrics() {
+        TrackMetrics[] result = new TrackMetrics[getColCount()];
+        for (int c = 0; c < result.length; c++) {
+            TrackMetrics tm = new TrackMetrics();
+            for (GridCell cell : getColCells(c)) {
+                tm.updatePrefBreadth(cell.calculateLayoutWidth(LayoutSizeType.PREF, LayoutSize.UNKNOWN));
+                tm.updateMinBreadth(cell.calculateLayoutWidth(LayoutSizeType.MIN, LayoutSize.UNKNOWN));
+                tm.updateMaxBreadth(cell.calculateLayoutWidth(LayoutSizeType.MAX, LayoutSize.UNKNOWN));
+            }
+
+            tm.init();
+            result[c] = tm;
+        }
+
+        double remainingSpace = getChildLayoutWidth() - getTotalBreadth(result);
+        adjustTrackSizes(result, remainingSpace);
+
+        return result;
     }
 
-    private void adjustRowSizes(TrackMetrics[] rowSizes) {
-        double remainingSpace = getChildLayoutHeight() - getTotalBreadth(rowSizes);
-        adjustTrackSizes(rowSizes, remainingSpace);
+    /** Calculates sizes for each row based on supplied column sizes */
+    private TrackMetrics[] calculateRowMetrics(TrackMetrics[] colSizes) {
+        TrackMetrics[] result = new TrackMetrics[getRowCount()];
+        for (int r = 0; r < result.length; r++) {
+            TrackMetrics tm = new TrackMetrics();
+            int c = 0;
+            for (GridCell cell : getRowCells(r)) {
+                LayoutSize widthHint = LayoutSize.of(colSizes[c].breadth);
+
+                LOG.trace("Calculate col={} row height for width={}", c, widthHint);
+
+                tm.updatePrefBreadth(cell.calculateLayoutHeight(LayoutSizeType.PREF, widthHint));
+                tm.updateMinBreadth(cell.calculateLayoutHeight(LayoutSizeType.MIN, widthHint));
+                tm.updateMaxBreadth(cell.calculateLayoutHeight(LayoutSizeType.MAX, widthHint));
+                c++;
+            }
+            tm.init();
+            result[r] = tm;
+        }
+
+        double remainingSpace = getChildLayoutHeight() - getTotalBreadth(result);
+        adjustTrackSizes(result, remainingSpace);
+
+        return result;
     }
+
 
     /**
      * @param remainingSpace Negative when shrinking
@@ -175,47 +223,20 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         }
     }
 
-    /** Creates initial sizes for each column */
-    private TrackMetrics[] initColumns() {
-        TrackMetrics[] result = new TrackMetrics[getColCount()];
-        for (int c = 0; c < result.length; c++) {
-            TrackMetrics tm = new TrackMetrics();
-            for (GridCell cell : getColCells(c)) {
-                tm.updatePrefBreadth(cell.calculateLayoutWidth(LayoutSizeType.PREF, LayoutSize.UNKNOWN));
-                tm.updateMinBreadth(cell.calculateLayoutWidth(LayoutSizeType.MIN, LayoutSize.UNKNOWN));
-                tm.updateMaxBreadth(cell.calculateLayoutWidth(LayoutSizeType.MAX, LayoutSize.UNKNOWN));
-            }
-            tm.init();
-            result[c] = tm;
-        }
-        return result;
-    }
-
-    /** Creates initial sizes for each row based on supplied column sizes */
-    private TrackMetrics[] initRows(TrackMetrics[] colSizes) {
-        TrackMetrics[] result = new TrackMetrics[getRowCount()];
-        for (int r = 0; r < result.length; r++) {
-            TrackMetrics tm = new TrackMetrics();
-            int c = 0;
-            for (GridCell cell : getRowCells(r)) {
-                LayoutSize widthHint = LayoutSize.of(colSizes[c].breadth);
-                tm.updatePrefBreadth(cell.calculateLayoutHeight(LayoutSizeType.PREF, widthHint));
-                tm.updateMinBreadth(cell.calculateLayoutHeight(LayoutSizeType.MIN, widthHint));
-                tm.updateMaxBreadth(cell.calculateLayoutHeight(LayoutSizeType.MAX, widthHint));
-                c++;
-            }
-            tm.init();
-            result[r] = tm;
-        }
-        return result;
-    }
-
     private static double getTotalBreadth(TrackMetrics[] sizes) {
         double total = 0.0;
         for (TrackMetrics size : sizes) {
             total += size.breadth;
         }
         return total;
+    }
+
+    private static LayoutSize getTotalBreadth(TrackMetrics[] sizes, LayoutSizeType sizeType) {
+        double total = 0.0;
+        for (TrackMetrics size : sizes) {
+            total += size.getSize(sizeType).value(0);
+        }
+        return LayoutSize.of(total);
     }
 
     private static class GridRow implements Serializable {
@@ -325,13 +346,14 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
             maxBreadth = LayoutSize.min(maxBreadth, newBreadth);
         }
 
-        private LayoutSize getSize(LayoutSizeType type) {
+        LayoutSize getSize(LayoutSizeType type) {
             switch (type) {
             case MIN: return minBreadth;
             case PREF: return prefBreadth;
             case MAX: return maxBreadth;
-            default: throw new IllegalArgumentException("Unsupported size type: " + type);
             }
+
+            throw new IllegalArgumentException("Unsupported size type: " + type);
         }
 
         public double grow(LayoutSizeType limitType, double amount) {

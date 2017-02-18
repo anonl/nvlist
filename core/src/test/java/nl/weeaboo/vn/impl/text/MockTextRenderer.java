@@ -210,4 +210,9 @@ public class MockTextRenderer implements ITextRenderer {
     public void update() {
     }
 
+    @Override
+    public double calculateTextHeight(double widthHint) {
+        return height;
+    }
+
 }

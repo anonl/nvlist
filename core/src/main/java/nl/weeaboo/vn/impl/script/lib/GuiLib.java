@@ -89,6 +89,7 @@ public class GuiLib extends LuaLib {
         }
 
         GridPanel panel = new GridPanel();
+        panel.setUnscaledSize(parentLayer.getWidth(), parentLayer.getHeight());
         parentLayer.add(panel);
 
         return LuajavaLib.toUserdata(panel, IGridPanel.class);

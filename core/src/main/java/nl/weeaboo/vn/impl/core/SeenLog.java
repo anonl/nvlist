@@ -85,10 +85,10 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
             return env.getScriptEnv().getScriptLoader().resolveResource(filename);
         case OTHER:
             return null;
-        default:
-            LOG.warn("Unsupported resource type: {}", type);
-            return null;
         }
+
+        LOG.warn("Unsupported resource type: {}", type);
+        return null;
     }
 
     @Override

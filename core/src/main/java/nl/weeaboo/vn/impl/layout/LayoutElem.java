@@ -19,14 +19,18 @@ public class LayoutElem implements ILayoutElem {
         this.visualElemRef = Indirect.of(Checks.checkNotNull(visualElem));
     }
 
+    protected ILayoutElemPeer getPeer() {
+        return visualElemRef.get();
+    }
+
     @Override
     public boolean isVisible() {
-        return visualElemRef.get().isVisible();
+        return getPeer().isVisible();
     }
 
     @Override
     public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
-        ILayoutElemPeer visualElem = visualElemRef.get();
+        ILayoutElemPeer visualElem = getPeer();
 
         switch (type) {
         case MIN:
@@ -35,14 +39,14 @@ public class LayoutElem implements ILayoutElem {
             return LayoutSize.of(visualElem.getWidth());
         case MAX:
             return LayoutSize.INFINITE;
-        default:
-            throw new IllegalArgumentException("Unknown size type: " + type);
         }
+
+        throw new IllegalArgumentException("Unknown size type: " + type);
     }
 
     @Override
     public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
-        ILayoutElemPeer visualElem = visualElemRef.get();
+        ILayoutElemPeer visualElem = getPeer();
 
         switch (type) {
         case MIN:
@@ -51,9 +55,9 @@ public class LayoutElem implements ILayoutElem {
             return LayoutSize.of(visualElem.getHeight());
         case MAX:
             return LayoutSize.INFINITE;
-        default:
-            throw new IllegalArgumentException("Unknown size type: " + type);
         }
+
+        throw new IllegalArgumentException("Unknown size type: " + type);
     }
 
     /**
@@ -92,7 +96,7 @@ public class LayoutElem implements ILayoutElem {
      * @param rect The new layout bounds.
      */
     protected void onLayoutBoundsChanged(Rect2D rect) {
-        ILayoutElemPeer visualElem = visualElemRef.get();
+        ILayoutElemPeer visualElem = getPeer();
 
         visualElem.setLayoutBounds(rect);
     }

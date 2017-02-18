@@ -67,4 +67,11 @@ public class InputLib extends LuaLib {
         return LuaBoolean.valueOf(getInput().consumePress(key));
     }
 
+    @ScriptFunction
+    public Varargs isPressed(Varargs args) throws ScriptException {
+        VKey key = getVKey(args, 1);
+
+        return LuaBoolean.valueOf(getInput().isPressed(key, false));
+    }
+
 }

@@ -83,18 +83,6 @@ public abstract class Panel extends Transformable implements IPanel {
     }
 
     @Override
-    public void setUnscaledSize(double w, double h) {
-        // Update layout size
-        ILayoutGroup layout = getLayout();
-        Rect2D oldLayoutBounds = layout.getLayoutBounds();
-        layout.setLayoutBounds(Rect2D.of(oldLayoutBounds.x, oldLayoutBounds.y, w, h));
-
-        renderer.setSize(w, h);
-
-        invalidateTransform();
-    }
-
-    @Override
     public void setBackground(INinePatch ninePatch) {
         renderer.set(ninePatch);
     }
@@ -123,6 +111,27 @@ public abstract class Panel extends Transformable implements IPanel {
     @Override
     public Iterable<? extends IVisualElement> getChildren() {
         return children.getSnapshot();
+    }
+
+    @Override
+    public void setPos(double x, double y) {
+        ILayoutGroup layout = getLayout();
+        Rect2D oldLayoutBounds = layout.getLayoutBounds();
+        layout.setLayoutBounds(Rect2D.of(x, y, oldLayoutBounds.w, oldLayoutBounds.h));
+
+        super.setPos(x, y);
+    }
+
+    @Override
+    public void setUnscaledSize(double w, double h) {
+        // Update layout size
+        ILayoutGroup layout = getLayout();
+        Rect2D oldLayoutBounds = layout.getLayoutBounds();
+        layout.setLayoutBounds(Rect2D.of(oldLayoutBounds.x, oldLayoutBounds.y, w, h));
+
+        renderer.setSize(w, h);
+
+        invalidateTransform();
     }
 
     @Override

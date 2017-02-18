@@ -44,7 +44,7 @@ public class TextLog implements ITextLog {
 
     @Override
     public StyledText getPage(int offset) {
-        int pos = pages.size() - offset;
+        int pos = pages.size() - 1 - offset;
         if (pos < 0 || pos >= pages.size()) {
             return null; // Page doesn't exist
         }

@@ -30,9 +30,9 @@ public final class DummyLayoutElem extends LayoutElem {
             return prefWidth;
         case MAX:
             return maxWidth;
-        default:
-            throw new IllegalArgumentException("Unsupported size type: " + type);
         }
+
+        throw new IllegalArgumentException("Unsupported size type: " + type);
     }
 
     @Override
@@ -44,9 +44,9 @@ public final class DummyLayoutElem extends LayoutElem {
             return prefHeight;
         case MAX:
             return maxHeight;
-        default:
-            throw new IllegalArgumentException("Unsupported size type: " + type);
         }
+
+        throw new IllegalArgumentException("Unsupported size type: " + type);
     }
 
     /**

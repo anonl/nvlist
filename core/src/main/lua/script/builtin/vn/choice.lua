@@ -96,9 +96,10 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
         b:setText(styledText)
         buttons[i] = b
         
-        panel:add(b, panel:newConstraints():growX())
+        panel:add(b):growX()
         panel:endRow()
     end
+    panel:pack()
     
     local selected = 0
     while selected == 0 do
