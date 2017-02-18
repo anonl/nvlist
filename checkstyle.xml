@@ -36,6 +36,11 @@ Changes:
    existing checkstyle rules would be worse than leaving the 'violation'.
  [2017-02-07]
  * Don't require Javadoc for @BeforeClass/@AfterClass JUnit test methods.
+ [2017-02-18]
+ * Removed MissingSwitchDefault check due to the way it interacts with error-prone. Error-prone reasons that
+   enum switches shouldn't have a default case, because then the static analysis can warn you when a new enum
+   constant is added and it isn't explicitly handled. If you add a default case throwing an error, you'll get
+   a runtime exception instead.
 -->
 
 <module name = "Checker">
@@ -94,7 +99,6 @@ Changes:
         <module name="OneStatementPerLine"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="ArrayTypeStyle"/>
-        <module name="MissingSwitchDefault" />
         <module name="FallThrough">
             <property name="reliefPattern" value="\$FALL-THROUGH\$" />
         </module>
