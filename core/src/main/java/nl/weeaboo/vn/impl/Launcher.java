@@ -354,7 +354,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        LOG.info("Viewport resized: ({}x{})", width, height);
+        LOG.info("Viewport resized: ({}x{}), backbuffer=({}x{})",
+                width, height,
+                Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
 
         initWindow(width, height);
     }

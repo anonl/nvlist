@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.HdpiMode;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
@@ -131,6 +132,14 @@ public class DesktopLauncher {
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.useVsync(false);
+
+        /*
+         * We have to use HdpiMode.Pixels here. The default mode, HdpiMode.Logical, automatically scales 'logical'
+         * pixels (window coordinates) to 'raw' pixels (OpenGL backbuffer coordinates). This causes problems when trying
+         * to use Viewport to render to something other than the main window (like a FBO).
+         */
+        config.setHdpiMode(HdpiMode.Pixels);
+
         config.setTitle(prefs.get(NovelPrefs.TITLE));
         config.setWindowedMode(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
         config.setWindowListener(new Lwjgl3WindowAdapter() {
