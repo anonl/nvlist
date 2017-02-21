@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.render;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.scene.ILayer;
 
 public final class LayerRenderCommand extends BaseRenderCommand {
 
@@ -10,11 +9,11 @@ public final class LayerRenderCommand extends BaseRenderCommand {
     public final int layerId;
     public final Rect2D layerBounds;
 
-    protected LayerRenderCommand(int layerId, ILayer layer) {
-        super(ID, layer.getZ(), true, (byte)layerId);
+    protected LayerRenderCommand(int layerId, short z, Rect2D layerBounds) {
+        super(ID, z, true, (byte)layerId);
 
         this.layerId = layerId;
-        this.layerBounds = layer.getBounds();
+        this.layerBounds = layerBounds;
     }
 
 }

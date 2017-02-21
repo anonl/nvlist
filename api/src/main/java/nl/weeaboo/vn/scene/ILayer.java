@@ -1,9 +1,8 @@
 package nl.weeaboo.vn.scene;
 
-import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 
-public interface ILayer extends IVisualGroup, IPositionable {
+public interface ILayer extends IAxisAlignedContainer {
 
     @Override
     ILayer getParent();
@@ -30,39 +29,9 @@ public interface ILayer extends IVisualGroup, IPositionable {
     IScreenshotBuffer getScreenshotBuffer();
 
     /**
-     * @return The top-left X-coordinate of the layer relative to its parent layer.
-     */
-    double getX();
-
-    /**
-     * @return The top-left Y-coordinate of the layer relative to its parent layer.
-     */
-    double getY();
-
-    /**
-     * @return The width of the layer.
-     */
-    double getWidth();
-
-    /**
-     * @return The height of the layer.
-     */
-    double getHeight();
-
-    /**
-     * The bounds of the layer.
-     */
-    Rect2D getBounds();
-
-    /**
      * Changes the relative render order of this element.
      * @see IVisualElement#getZ()
      */
     void setZ(short z);
-
-    /**
-     * Sets the visibility flag.
-     */
-    void setVisible(boolean v);
 
 }

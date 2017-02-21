@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.gdx.graphics.GdxShaderUtil;
@@ -13,7 +14,6 @@ import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
-import nl.weeaboo.vn.impl.scene.Layer;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IDrawTransform;
 import nl.weeaboo.vn.render.IRenderEnv;
@@ -62,13 +62,13 @@ public class RenderTestHelper implements IDestructible {
 
     /**
      * Starts a layer in the internal draw buffer.
-     * @see IDrawBuffer#startLayer(int, nl.weeaboo.vn.scene.ILayer)
+     * @see IDrawBuffer#startLayer(int, short, Rect2D)
      */
     public void startLayer() {
         int layerId = drawBuffer.reserveLayerIds(1);
-        Layer layer = new Layer(null);
-        layer.setBounds(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
-        drawBuffer.startLayer(layerId, layer);
+        short z = (short)0;
+        Rect2D bounds = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
+        drawBuffer.startLayer(layerId, z, bounds);
     }
 
     /**

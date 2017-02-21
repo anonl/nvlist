@@ -61,9 +61,11 @@ public abstract class Panel extends Transformable implements IPanel {
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        super.draw(drawBuffer);
-
         validateLayout();
+
+        if (!isVisible()) {
+            return;
+        }
 
         renderer.render(drawBuffer, this, 0, 0);
 

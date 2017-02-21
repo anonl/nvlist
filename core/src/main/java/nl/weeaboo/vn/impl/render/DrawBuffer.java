@@ -10,50 +10,44 @@ import com.badlogic.gdx.utils.Sort;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IDrawTransform;
 import nl.weeaboo.vn.render.IRenderLogic;
-import nl.weeaboo.vn.scene.ILayer;
 
 public final class DrawBuffer implements IDrawBuffer {
 
-    private final Array<ILayer> layers = Array.of(ILayer.class);
     private final IntArray layerStarts = new IntArray();
     private final Array<BaseRenderCommand> commands = Array.of(BaseRenderCommand.class);
 
     @Override
     public void reset() {
-        layers.clear();
         layerStarts.clear();
         commands.clear();
     }
 
     @Override
     public int reserveLayerIds(int count) {
-        int firstId = layers.size;
+        int firstId = layerStarts.size;
         for (int n = 0; n < count; n++) {
-            layers.add(null);
             layerStarts.add(-1);
         }
         return firstId;
     }
 
     @Override
-    public void startLayer(int layerId, ILayer layer) {
-        if (layerId < 0 || layerId >= layers.size) {
+    public void startLayer(int layerId, short z, Rect2D bounds) {
+        if (layerId < 0 || layerId >= layerStarts.size) {
             throw new IllegalArgumentException("The given layerId hasn't been reserved yet: " + layerId);
-        } else if (layers.get(layerId) == layer) {
-            throw new IllegalStateException("Layer has already been added");
         }
 
         if (layerId == 0 && commands.size == 0) {
-            draw(new LayerRenderCommand(layerId, layer));
+            draw(new LayerRenderCommand(layerId, z, bounds));
         }
 
-        layers.set(layerId, layer);
         layerStarts.set(layerId, commands.size);
     }
 
@@ -69,8 +63,8 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     @Override
-    public void drawLayer(int layerId, ILayer layer) {
-        draw(new LayerRenderCommand(layerId, layer));
+    public void drawLayer(int layerId, short z, Rect2D layerBounds) {
+        draw(new LayerRenderCommand(layerId, z, layerBounds));
     }
 
     @Override
@@ -92,7 +86,7 @@ public final class DrawBuffer implements IDrawBuffer {
 
     /** Returns the draw command for the root layer, or {@code null} if no such command exists. */
     public LayerRenderCommand getRootLayerCommand() {
-        if (layers.size == 0) {
+        if (layerStarts.size == 0) {
             return null;
         }
         return (LayerRenderCommand)commands.get(0);

@@ -12,28 +12,25 @@ import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.impl.layout.ILayoutElemPeer;
 import nl.weeaboo.vn.impl.layout.NullLayout;
 import nl.weeaboo.vn.impl.render.ScreenshotBuffer;
-import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutGroup;
-import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
-public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
+public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Layer.class);
 
-    private final BoundsHelper boundsHelper = new BoundsHelper();
     private final ScreenshotBuffer screenshotBuffer = new ScreenshotBuffer();
 
     protected Layer() {
     }
 
     public Layer(ILayer parent) {
-        super(parent);
+        setParent(parent);
     }
 
     /**
@@ -91,15 +88,6 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
     }
 
     @Override
-    public void handleInput(Matrix parentTransform, IInput input) {
-        // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
-        Matrix inputTransform = parentTransform.translatedCopy(-getX(), -getY());
-        for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
-            elem.handleInput(inputTransform, input);
-        }
-    }
-
-    @Override
     public void draw(IDrawBuffer drawBuffer) {
         draw(drawBuffer, drawBuffer.reserveLayerIds(1));
     }
@@ -109,7 +97,7 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
             return;
         }
 
-        drawBuffer.startLayer(layerId, this);
+        drawBuffer.startLayer(layerId, getZ(), getBounds());
 
         ImmutableList<Layer> subLayers = ImmutableList.<Layer>copyOf(getSubLayers());
 
@@ -129,7 +117,7 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
         for (int n = 0; n < subLayers.size(); n++) {
             ILayer subLayer = subLayers.get(n);
             if (!subLayer.isDestroyed() && subLayer.isVisible()) {
-                drawBuffer.drawLayer(baseSubLayerId + n, subLayer);
+                drawBuffer.drawLayer(baseSubLayerId + n, subLayer.getZ(), subLayer.getBounds());
             }
         }
 
@@ -148,31 +136,6 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
     @Override
     public String toString() {
         return String.format("Layer(%08x)", hashCode());
-    }
-
-    @Override
-    public final double getX() {
-        return boundsHelper.getX();
-    }
-
-    @Override
-    public final double getY() {
-        return boundsHelper.getY();
-    }
-
-    @Override
-    public final double getWidth() {
-        return boundsHelper.getWidth();
-    }
-
-    @Override
-    public final double getHeight() {
-        return boundsHelper.getHeight();
-    }
-
-    @Override
-    public Rect2D getBounds() {
-        return boundsHelper.getBounds();
     }
 
     @Override
@@ -197,47 +160,6 @@ public class Layer extends VisualGroup implements ILayer, ILayoutElemPeer {
     @Override
     public IScreenshotBuffer getScreenshotBuffer() {
         return screenshotBuffer;
-    }
-
-    @Override
-    public final void setX(double x) {
-        setPos(x, getY());
-    }
-
-    @Override
-    public final void setY(double y) {
-        setPos(getX(), y);
-    }
-
-    @Override
-    public final void setWidth(double w) {
-        setSize(w, getHeight());
-    }
-
-    @Override
-    public final void setHeight(double h) {
-        setSize(getWidth(), h);
-    }
-
-    @Override
-    public final void translate(double dx, double dy) {
-        setPos(getX() + dx, getY() + dy);
-    }
-
-    @Override
-    public void setPos(double x, double y) {
-        boundsHelper.setPos(x, y);
-    }
-
-    @Override
-    public void setSize(double w, double h) {
-        boundsHelper.setSize(w, h);
-    }
-
-    @Override
-    public void setBounds(double x, double y, double w, double h) {
-        setPos(x, y);
-        setSize(w, h);
     }
 
     @Override
