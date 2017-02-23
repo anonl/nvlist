@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Checks;
@@ -31,6 +30,10 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
 
     public Layer(ILayer parent) {
         setParent(parent);
+
+        if (parent != null) {
+            setBounds(parent.getX(), parent.getY(), parent.getWidth(), parent.getHeight());
+        }
     }
 
     /**
@@ -88,22 +91,16 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
     }
 
     @Override
-    public void draw(IDrawBuffer drawBuffer) {
-        draw(drawBuffer, drawBuffer.reserveLayerIds(1));
-    }
-
-    private void draw(IDrawBuffer drawBuffer, int layerId) {
+    public void draw(IDrawBuffer mainBuffer) {
         if (!isVisible()) {
             return;
         }
 
-        drawBuffer.startLayer(layerId, getZ(), getBounds());
-
-        ImmutableList<Layer> subLayers = ImmutableList.<Layer>copyOf(getSubLayers());
+        IDrawBuffer drawBuffer = mainBuffer.subLayerBuffer(getZ(), getBounds());
 
         // Render children (except sub-layers)
         for (IVisualElement child : getChildren()) {
-            if (child instanceof ILayer || child.isDestroyed()) {
+            if (child.isDestroyed()) {
                 continue;
             }
 
@@ -112,25 +109,8 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
             }
         }
 
-        // Add render commands for our sub-layers
-        int baseSubLayerId = drawBuffer.reserveLayerIds(subLayers.size());
-        for (int n = 0; n < subLayers.size(); n++) {
-            ILayer subLayer = subLayers.get(n);
-            if (!subLayer.isDestroyed() && subLayer.isVisible()) {
-                drawBuffer.drawLayer(baseSubLayerId + n, subLayer.getZ(), subLayer.getBounds());
-            }
-        }
-
         // Add screenshot render commands to the end of the list
         screenshotBuffer.flush(drawBuffer);
-
-        // Recursively render the contents of our sub-layers
-        for (int n = 0; n < subLayers.size(); n++) {
-            Layer subLayer = subLayers.get(n);
-            if (!subLayer.isDestroyed() && subLayer.isVisible()) {
-                subLayer.draw(drawBuffer, baseSubLayerId + n);
-            }
-        }
     }
 
     @Override

@@ -77,7 +77,6 @@ public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
     }
 
     private void doRender() {
-        renderer.startLayer();
         drawable.draw(renderer.getDrawBuffer());
         renderer.render();
     }

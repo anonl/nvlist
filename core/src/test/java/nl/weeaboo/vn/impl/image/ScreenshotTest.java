@@ -10,11 +10,7 @@ import org.junit.Test;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
-import nl.weeaboo.vn.impl.image.PixelTextureData;
-import nl.weeaboo.vn.impl.image.PixmapDecodingScreenshot;
-import nl.weeaboo.vn.impl.image.WritableScreenshot;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
-import nl.weeaboo.vn.impl.render.LayerRenderCommand;
 import nl.weeaboo.vn.impl.render.RenderCommand;
 import nl.weeaboo.vn.impl.render.ScreenshotRenderCommand;
 import nl.weeaboo.vn.impl.scene.Screen;
@@ -85,8 +81,7 @@ public class ScreenshotTest {
         screen.draw(buf);
         Assert.assertTrue(ssb.isEmpty()); // Screenshot buffer empties into the draw buffer
 
-        LayerRenderCommand lrc = buf.getRootLayerCommand();
-        List<? extends RenderCommand> cmds = buf.getLayerCommands(lrc.layerId);
+        List<? extends RenderCommand> cmds = buf.getLayerBuffer(0).getCommands();
         Assert.assertEquals(1, cmds.size());
         ScreenshotRenderCommand src = (ScreenshotRenderCommand)cmds.get(0);
 

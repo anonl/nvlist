@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.impl.render.DrawBuffer;
-import nl.weeaboo.vn.impl.render.DrawTransform;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
@@ -41,7 +39,6 @@ public class GLScreenRendererTest {
     /** Trivial test to see if nothing crashes trying to render an empty draw buffer */
     @Test
     public void renderCustom() {
-        renderer.startLayer();
         DrawBuffer drawBuffer = renderer.getDrawBuffer();
 
         final AtomicBoolean renderCalled = new AtomicBoolean();

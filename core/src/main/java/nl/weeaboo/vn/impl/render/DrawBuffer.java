@@ -1,13 +1,10 @@
 package nl.weeaboo.vn.impl.render;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Sort;
-import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
@@ -20,35 +17,34 @@ import nl.weeaboo.vn.render.IRenderLogic;
 
 public final class DrawBuffer implements IDrawBuffer {
 
-    private final IntArray layerStarts = new IntArray();
-    private final Array<BaseRenderCommand> commands = Array.of(BaseRenderCommand.class);
+    private final Array<BaseRenderCommand> contents = Array.of(BaseRenderCommand.class);
+    private final Array<DrawBuffer> subLayers = Array.of(DrawBuffer.class);
+
+    private Rect2D layerBounds;
+
+    public DrawBuffer() {
+        this(Rect2D.EMPTY);
+    }
+
+    public DrawBuffer(Rect2D layerBounds) {
+        this.layerBounds = layerBounds;
+    }
 
     @Override
     public void reset() {
-        layerStarts.clear();
-        commands.clear();
+        contents.clear();
+        subLayers.clear();
     }
 
     @Override
-    public int reserveLayerIds(int count) {
-        int firstId = layerStarts.size;
-        for (int n = 0; n < count; n++) {
-            layerStarts.add(-1);
-        }
-        return firstId;
-    }
+    public IDrawBuffer subLayerBuffer(short layerZ, Rect2D layerBounds) {
+        int layerId = subLayers.size;
+        LayerRenderCommand lrc = new LayerRenderCommand(layerId, layerZ, layerBounds);
+        contents.add(lrc);
 
-    @Override
-    public void startLayer(int layerId, short z, Rect2D bounds) {
-        if (layerId < 0 || layerId >= layerStarts.size) {
-            throw new IllegalArgumentException("The given layerId hasn't been reserved yet: " + layerId);
-        }
-
-        if (layerId == 0 && commands.size == 0) {
-            draw(new LayerRenderCommand(layerId, z, bounds));
-        }
-
-        layerStarts.set(layerId, commands.size);
+        DrawBuffer subLayerBuffer = new DrawBuffer(layerBounds);
+        subLayers.add(subLayerBuffer);
+        return subLayerBuffer;
     }
 
     @Override
@@ -60,11 +56,6 @@ public final class DrawBuffer implements IDrawBuffer {
     @Override
     public void screenshot(IWritableScreenshot ss, boolean clip) {
         draw(new ScreenshotRenderCommand(ss, clip));
-    }
-
-    @Override
-    public void drawLayer(int layerId, short z, Rect2D layerBounds) {
-        draw(new LayerRenderCommand(layerId, z, layerBounds));
     }
 
     @Override
@@ -81,49 +72,24 @@ public final class DrawBuffer implements IDrawBuffer {
 
     /** Adds a draw command to the draw buffer. */
     public void draw(BaseRenderCommand cmd) {
-        commands.add(cmd);
-    }
-
-    /** Returns the draw command for the root layer, or {@code null} if no such command exists. */
-    public LayerRenderCommand getRootLayerCommand() {
-        if (layerStarts.size == 0) {
-            return null;
-        }
-        return (LayerRenderCommand)commands.get(0);
-    }
-
-    private int getLayerStart(int layerId) {
-        return layerStarts.get(layerId);
-    }
-
-    private int getLayerEnd(int layerId) {
-        int nextId = layerId + 1;
-        if (nextId < layerStarts.size && layerStarts.get(nextId) >= 0) {
-            return layerStarts.get(nextId);
-        } else {
-            return commands.size;
-        }
+        contents.add(cmd);
     }
 
     /**
      * Returns the render commands for the requested layer, or an empty collection if nothing is stored for that layer
      * (even if the layer doesn't exist).
      */
-    public List<? extends BaseRenderCommand> getLayerCommands(int layerId) {
-        int start = getLayerStart(layerId);
-        int end = getLayerEnd(layerId);
-        if (end <= start) {
-            return Collections.emptyList();
-        }
-        Sort.instance().sort(commands.items, start, end);
-        return Arrays.asList(commands.items).subList(start, end);
+    public DrawBuffer getLayerBuffer(int layerId) {
+        return subLayers.get(layerId);
     }
 
-    /**
-     * Returns a snapshot of all buffered draw commands.
-     */
-    public ImmutableList<RenderCommand> getCommands() {
-        return ImmutableList.<RenderCommand>copyOf(commands);
+    public Rect2D getLayerBounds() {
+        return layerBounds;
+    }
+
+    public List<? extends BaseRenderCommand> getCommands() {
+        Sort.instance().sort(contents.items, 0, contents.size);
+        return Arrays.asList(contents.items).subList(0, contents.size);
     }
 
 }

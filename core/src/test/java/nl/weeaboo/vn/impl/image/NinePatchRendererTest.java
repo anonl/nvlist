@@ -1,12 +1,11 @@
 package nl.weeaboo.vn.impl.image;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Insets2D;
@@ -48,7 +47,7 @@ public class NinePatchRendererTest {
         assertNativeSize(renderer, 0, 0);
         renderer.render(drawBuffer, imageDrawable, Area2D.of(0, 0, 10, 10));
 
-        Collection<RenderCommand> commands = drawBuffer.getCommands();
+        Collection<? extends RenderCommand> commands = drawBuffer.getCommands();
         Assert.assertEquals(0, commands.size());
     }
 
@@ -68,7 +67,7 @@ public class NinePatchRendererTest {
 
         renderer.render(drawBuffer, imageDrawable, Area2D.of(0, 0, 10, 10));
 
-        Collection<RenderCommand> commands = drawBuffer.getCommands();
+        Collection<? extends RenderCommand> commands = drawBuffer.getCommands();
         Assert.assertEquals(9, commands.size());
 
         // Check bounds of rendered segments
@@ -96,7 +95,7 @@ public class NinePatchRendererTest {
         RectAssert.assertEquals(expected, command.bounds, EPSILON);
     }
 
-    private QuadRenderCommand findCommand(ImmutableList<RenderCommand> commands, AreaId area) {
+    private QuadRenderCommand findCommand(List<? extends RenderCommand> commands, AreaId area) {
         ITexture texture = renderer.getTexture(area);
         for (RenderCommand command : commands) {
             if (command instanceof QuadRenderCommand) {

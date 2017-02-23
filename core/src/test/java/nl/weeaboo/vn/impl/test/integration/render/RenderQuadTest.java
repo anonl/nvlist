@@ -20,7 +20,6 @@ public class RenderQuadTest extends RenderIntegrationTest {
 
     @Test
     public void render() {
-        renderer.startLayer();
         renderer.drawQuad(tex, Area2D.of(0, 0, 1280, 720));
         renderer.render();
 
@@ -32,7 +31,6 @@ public class RenderQuadTest extends RenderIntegrationTest {
         // The GL renderer only knows how to render TextureAdapters, not TextureStubs
         TextureStub invalidTex = new TextureStub(1, 1);
 
-        renderer.startLayer();
         renderer.drawQuad(invalidTex, Area2D.of(0, 0, 1280, 720));
         renderer.render();
 
@@ -41,8 +39,6 @@ public class RenderQuadTest extends RenderIntegrationTest {
 
     @Test
     public void renderRotated() {
-        renderer.startLayer();
-
         DrawTransform dt = new DrawTransform();
         MutableMatrix mm = new MutableMatrix();
         mm.translate(400, 0);

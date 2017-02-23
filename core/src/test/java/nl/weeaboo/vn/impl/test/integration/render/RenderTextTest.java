@@ -15,7 +15,6 @@ public class RenderTextTest extends RenderIntegrationTest {
     public void render() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        renderer.startLayer();
         renderer.drawText(0, 0, layout);
         renderer.render();
 

@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.Preference;
@@ -332,7 +333,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         }
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         if (drawBuffer == null) {
-            drawBuffer = new DrawBuffer();
+            drawBuffer = new DrawBuffer(Rect2D.EMPTY);
         } else {
             drawBuffer.reset();
         }

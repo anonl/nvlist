@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
@@ -91,12 +92,13 @@ public class LayerTest {
         layer.draw(buffer);
 
         // Check generated draw commands
-        LayerRenderCommand lrc = buffer.getRootLayerCommand();
+        LayerRenderCommand lrc = (LayerRenderCommand)Iterables.getOnlyElement(buffer.getCommands());
         Assert.assertEquals(5, lrc.z);
         RectAssert.assertEquals(Rect2D.of(1, 2, 3, 4), lrc.layerBounds, EPSILON);
 
         // Find draw commands for sub layers (in correct Z order)
-        List<? extends RenderCommand> layerCommands = buffer.getLayerCommands(lrc.layerId);
+        DrawBuffer layerBuffer = buffer.getLayerBuffer(lrc.layerId);
+        List<? extends RenderCommand> layerCommands = layerBuffer.getCommands();
         Assert.assertEquals(2, layerCommands.size());
         // Higher Z-coordinates are in the back and thus drawn first
         Assert.assertEquals(10, ((LayerRenderCommand)layerCommands.get(0)).z);
@@ -108,7 +110,8 @@ public class LayerTest {
         layer.draw(buffer);
 
         // The invisible layer is no longer drawn
-        layerCommands = buffer.getLayerCommands(buffer.getRootLayerCommand().layerId);
+        layerBuffer = buffer.getLayerBuffer(lrc.layerId);
+        layerCommands = layerBuffer.getCommands();
         Assert.assertEquals(1, layerCommands.size());
         Assert.assertEquals(-10, ((LayerRenderCommand)layerCommands.get(0)).z);
     }
@@ -166,8 +169,8 @@ public class LayerTest {
         DrawBuffer buffer = new DrawBuffer();
         layer.draw(buffer);
 
-        LayerRenderCommand lrc = buffer.getRootLayerCommand();
-        List<? extends RenderCommand> cmd = buffer.getLayerCommands(lrc.layerId);
+        DrawBuffer layerBuffer = buffer.getLayerBuffer(0);
+        List<? extends RenderCommand> cmd = layerBuffer.getCommands();
 
         Assert.assertEquals("Commands: " + cmd, elems.length, cmd.size());
         for (int n = 0; n < elems.length; n++) {

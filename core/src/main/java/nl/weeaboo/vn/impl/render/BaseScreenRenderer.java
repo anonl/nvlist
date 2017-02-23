@@ -46,10 +46,8 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
             renderReset();
             renderBegin();
 
-            final LayerRenderCommand lrc = d.getRootLayerCommand();
-            if (lrc != null) {
-                renderLayer(d, lrc, renderEnv.getGLClip(), renderEnv.getGLClip().toRect2D());
-            }
+            Rect2D screenRect = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
+            renderLayer(d, screenRect, renderEnv.getGLClip(), renderEnv.getGLClip().toRect2D());
 
             renderEnd();
         } finally {
@@ -73,15 +71,14 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
         applyColor(foreground);
     }
 
-    protected void renderLayer(DrawBuffer buffer, LayerRenderCommand lrc, Rect parentClip, Rect2D parentClip2D) {
+    protected void renderLayer(DrawBuffer buffer, Rect2D bounds, Rect parentClip, Rect2D parentClip2D) {
         // Get sorted render commands
-        Collection<? extends BaseRenderCommand> cmds = buffer.getLayerCommands(lrc.layerId);
+        Collection<? extends BaseRenderCommand> cmds = buffer.getCommands();
         if (cmds.isEmpty()) {
             return;
         }
 
         //Setup clipping/translate
-        final Rect2D bounds = lrc.layerBounds;
         final Rect2D layerClip2D;
         final double scale = renderEnv.getScale();
         double bx0 = bounds.x * scale;
@@ -135,9 +132,10 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
             preRenderCommand(cmd);
 
             switch (cmd.id) {
-            case LayerRenderCommand.ID:
-                renderLayer(buffer, (LayerRenderCommand)cmd, layerClip, layerClip2D);
-                break;
+            case LayerRenderCommand.ID: {
+                LayerRenderCommand lrc = (LayerRenderCommand)cmd;
+                renderLayer(buffer.getLayerBuffer(lrc.layerId), lrc.layerBounds, layerClip, layerClip2D);
+            } break;
             case QuadRenderCommand.ID:
                 renderQuad((QuadRenderCommand)cmd);
                 break;

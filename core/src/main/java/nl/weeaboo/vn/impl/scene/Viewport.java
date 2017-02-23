@@ -18,6 +18,7 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
+        // Render as if the viewport contains an embedded layer
         IDrawBuffer layerBuffer = drawBuffer.subLayerBuffer(getZ(), getBounds());
 
         super.draw(layerBuffer);

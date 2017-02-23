@@ -17,7 +17,6 @@ public class RenderTriangleGridTest extends RenderIntegrationTest {
 
     @Test
     public void render() {
-        renderer.startLayer();
         // Render triangle grid on the left side
         renderer.drawTriangleGrid(tex, Area2D.of(0, 0, 640, 720));
         // Render on the right side, mirrored in both axes

@@ -71,6 +71,10 @@ public abstract class AxisAlignedContainer extends VisualElement implements IAxi
         return boundsHelper.getBounds();
     }
 
+    @Override
+    public Rect2D getVisualBounds() {
+        return getBounds();
+    }
 
     @Override
     public final void setX(double x) {

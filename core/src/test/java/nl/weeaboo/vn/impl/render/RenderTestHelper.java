@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.gdx.graphics.GdxShaderUtil;
@@ -22,13 +21,10 @@ import nl.weeaboo.vn.render.IScreenRenderer;
 
 public class RenderTestHelper implements IDestructible {
 
-    private final IRenderEnv renderEnv;
     private final DrawBuffer drawBuffer;
     private final GLScreenRenderer renderer;
 
     public RenderTestHelper(IRenderEnv renderEnv) {
-        this.renderEnv = renderEnv;
-
         drawBuffer = new DrawBuffer();
 
         FitViewport viewPort = createViewport(renderEnv);
@@ -58,17 +54,6 @@ public class RenderTestHelper implements IDestructible {
     /** Clears the internal draw buffer. */
     public void reset() {
         drawBuffer.reset();
-    }
-
-    /**
-     * Starts a layer in the internal draw buffer.
-     * @see IDrawBuffer#startLayer(int, short, Rect2D)
-     */
-    public void startLayer() {
-        int layerId = drawBuffer.reserveLayerIds(1);
-        short z = (short)0;
-        Rect2D bounds = Rect2D.of(0, 0, renderEnv.getWidth(), renderEnv.getHeight());
-        drawBuffer.startLayer(layerId, z, bounds);
     }
 
     /**
