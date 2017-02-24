@@ -1,11 +1,14 @@
 package nl.weeaboo.vn.impl.scene;
 
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.layout.ILayoutElemPeer;
 import nl.weeaboo.vn.impl.layout.NullLayout;
 import nl.weeaboo.vn.layout.ILayoutGroup;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IViewport;
+import nl.weeaboo.vn.scene.IVisualElement;
 
 public class Viewport extends AxisAlignedContainer implements IViewport, ILayoutElemPeer {
 
@@ -27,6 +30,16 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
     @Override
     public void setLayoutBounds(Rect2D rect) {
         setBounds(rect.x, rect.y, rect.w, rect.h);
+    }
+
+    @Override
+    public void setContents(IVisualElement elem) {
+        // Remove the existing content element (if any)
+        for (IVisualElement child : ImmutableList.copyOf(getChildren())) {
+            remove(child);
+        }
+
+        add(elem);
     }
 
 }

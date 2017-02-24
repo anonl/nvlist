@@ -28,3 +28,8 @@ end
 function gridPanel()
     return Gui.createGridPanel(getActiveLayer())
 end
+
+---Creates a new viewport
+function createViewport()
+    return Gui.createViewport(getActiveLayer())
+end

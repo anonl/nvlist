@@ -62,8 +62,8 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
     }
 
     @Override
-    public void add(IDrawable d) {
-        super.add(d);
+    public void add(IVisualElement elem) {
+        super.add(elem);
     }
 
     protected boolean isElementVisible(IVisualElement elem) {

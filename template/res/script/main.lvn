@@ -13,6 +13,7 @@ function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
 
+    testViewport()
     testTextLog()
     testGuiScreen()
 
@@ -64,6 +65,20 @@ function titlescreen()
     --movie("test")
     call("images")    
     --call("speakers")    
+end
+
+function testViewport()
+    local view = createViewport()
+
+    local text = textimg("If your decorators include information that is expensive to compute or potentially distracting, you may want to contribute your own preferences that allow the user to further fine-tune the decorator once it is on.")
+    view:setContents(text)
+
+    for n=1,screenWidth do
+        view:setX(n)
+        yield()
+    end
+
+    waitClick()
 end
 
 function testTextLog()

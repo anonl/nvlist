@@ -26,6 +26,11 @@ public final class ChildCollection implements Serializable, ISignalHandler {
      * Adds an element to the collection and sets its parent.
      */
     public void add(IVisualElement elem) {
+        IVisualGroup oldParent = elem.getParent();
+        if (oldParent != null) {
+            oldParent.remove(elem);
+        }
+
         children.add(elem);
         elem.setParent(parentRef.get());
     }

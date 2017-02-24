@@ -8,9 +8,9 @@ public interface ILayer extends IAxisAlignedContainer {
     ILayer getParent();
 
     /**
-     * Adds a drawable to the layer.
+     * Adds contents to the layer.
      */
-    void add(IDrawable d);
+    void add(IVisualElement d);
 
     /**
      * @return {@code true} if the specified layer is a descendant of this layer.

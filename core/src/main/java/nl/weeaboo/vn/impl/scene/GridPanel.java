@@ -36,6 +36,13 @@ public class GridPanel extends Panel implements IGridPanel {
     }
 
     @Override
+    public void remove(IVisualElement elem) {
+        removeChild(elem);
+
+        layout.remove(elem.getLayoutAdapter());
+    }
+
+    @Override
     public void endRow() {
         layout.endRow();
     }

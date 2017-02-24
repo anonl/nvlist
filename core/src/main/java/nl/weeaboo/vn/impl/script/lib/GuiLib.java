@@ -9,12 +9,14 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.scene.ButtonImageLoader;
 import nl.weeaboo.vn.impl.scene.GridPanel;
+import nl.weeaboo.vn.impl.scene.Viewport;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IGridPanel;
 import nl.weeaboo.vn.scene.ILayer;
+import nl.weeaboo.vn.scene.IViewport;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -93,6 +95,30 @@ public class GuiLib extends LuaLib {
         parentLayer.add(panel);
 
         return LuajavaLib.toUserdata(panel, IGridPanel.class);
+    }
+
+    /**
+     * Creates a new {@link IViewport}.
+     *
+     * @param args
+     *        <ol>
+     *        <li>(optional) Parent layer
+     *        </ol>
+     * @return A viewport
+     * @throws ScriptException If creation fails.
+     */
+    @ScriptFunction
+    public Varargs createViewport(Varargs args) throws ScriptException {
+        ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
+        if (parentLayer == null) {
+            parentLayer = LuaScriptUtil.getRootLayer();
+        }
+
+        Viewport viewport = new Viewport();
+        viewport.setSize(parentLayer.getWidth(), parentLayer.getHeight());
+        parentLayer.add(viewport);
+
+        return LuajavaLib.toUserdata(viewport, IViewport.class);
     }
 
 }

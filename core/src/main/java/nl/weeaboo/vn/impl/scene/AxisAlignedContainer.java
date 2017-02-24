@@ -121,7 +121,8 @@ public abstract class AxisAlignedContainer extends VisualElement implements IAxi
         children.add(child);
     }
 
-    protected void remove(IVisualElement child) {
+    @Override
+    public void remove(IVisualElement child) {
         children.remove(child);
     }
 
