@@ -8,6 +8,14 @@ public interface IAxisAlignedContainer extends IVisualGroup, IPositionable {
     IAxisAlignedContainer getParent();
 
     /**
+     * Checks if the specified X/Y point lies 'inside' this container's bounds.
+     *
+     * @param cx The X-coordinate of the point to test.
+     * @param cy The Y-coordinate of the point to test.
+     */
+    boolean contains(double cx, double cy);
+
+    /**
      * @return The top-left X-coordinate of the container relative to its parent.
      */
     double getX();

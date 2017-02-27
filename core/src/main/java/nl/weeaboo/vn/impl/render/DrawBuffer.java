@@ -20,16 +20,6 @@ public final class DrawBuffer implements IDrawBuffer {
     private final Array<BaseRenderCommand> contents = Array.of(BaseRenderCommand.class);
     private final Array<DrawBuffer> subLayers = Array.of(DrawBuffer.class);
 
-    private Rect2D layerBounds;
-
-    public DrawBuffer() {
-        this(Rect2D.EMPTY);
-    }
-
-    public DrawBuffer(Rect2D layerBounds) {
-        this.layerBounds = layerBounds;
-    }
-
     @Override
     public void reset() {
         contents.clear();
@@ -37,12 +27,12 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     @Override
-    public IDrawBuffer subLayerBuffer(short layerZ, Rect2D layerBounds) {
+    public IDrawBuffer subLayerBuffer(short layerZ, Rect2D layerBounds, double contentDx, double contentDy) {
         int layerId = subLayers.size;
-        LayerRenderCommand lrc = new LayerRenderCommand(layerId, layerZ, layerBounds);
+        LayerRenderCommand lrc = new LayerRenderCommand(layerId, layerZ, layerBounds, contentDx, contentDy);
         contents.add(lrc);
 
-        DrawBuffer subLayerBuffer = new DrawBuffer(layerBounds);
+        DrawBuffer subLayerBuffer = new DrawBuffer();
         subLayers.add(subLayerBuffer);
         return subLayerBuffer;
     }
@@ -81,10 +71,6 @@ public final class DrawBuffer implements IDrawBuffer {
      */
     public DrawBuffer getLayerBuffer(int layerId) {
         return subLayers.get(layerId);
-    }
-
-    public Rect2D getLayerBounds() {
-        return layerBounds;
     }
 
     public List<? extends BaseRenderCommand> getCommands() {

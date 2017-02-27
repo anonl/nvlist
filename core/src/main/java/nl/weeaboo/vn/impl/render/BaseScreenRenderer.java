@@ -134,7 +134,9 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
             switch (cmd.id) {
             case LayerRenderCommand.ID: {
                 LayerRenderCommand lrc = (LayerRenderCommand)cmd;
+                translate(lrc.contentDx, lrc.contentDy);
                 renderLayer(buffer.getLayerBuffer(lrc.layerId), lrc.layerBounds, layerClip, layerClip2D);
+                translate(-lrc.contentDx, -lrc.contentDy);
             } break;
             case QuadRenderCommand.ID:
                 renderQuad((QuadRenderCommand)cmd);

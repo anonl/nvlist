@@ -26,7 +26,7 @@ public interface IDrawBuffer {
     /**
      * Returns a new draw buffer that can be used to draw the contents of a sub-layer.
      */
-    IDrawBuffer subLayerBuffer(short layerZ, Rect2D layerBounds);
+    IDrawBuffer subLayerBuffer(short layerZ, Rect2D layerBounds, double contentDx, double contentDy);
 
     /**
      * Adds a custom render command to the draw buffer.

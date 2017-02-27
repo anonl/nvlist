@@ -96,7 +96,7 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
             return;
         }
 
-        IDrawBuffer drawBuffer = mainBuffer.subLayerBuffer(getZ(), getBounds());
+        IDrawBuffer drawBuffer = mainBuffer.subLayerBuffer(getZ(), getBounds(), 0, 0);
 
         // Render children (except sub-layers)
         for (IVisualElement child : getChildren()) {

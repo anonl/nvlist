@@ -38,12 +38,25 @@ public abstract class AxisAlignedContainer extends VisualElement implements IAxi
     }
 
     @Override
+    public boolean contains(double cx, double cy) {
+        return getBounds().contains(cx, cy);
+    }
+
+    @Override
     public void handleInput(Matrix parentTransform, IInput input) {
-        // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
-        Matrix inputTransform = parentTransform.translatedCopy(-getX(), -getY());
+        Matrix inputTransform = getChildInputTransform(parentTransform);
         for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
             elem.handleInput(inputTransform, input);
         }
+    }
+
+    /**
+     * @return The relative transform from pointer coordinates for this container, to pointer coordinates for the
+     *         container's contents.
+     */
+    protected Matrix getChildInputTransform(Matrix parentTransform) {
+        // TODO: Don't multiply a bunch of matrices. Make some kind of TransformedInput to lazily compute if needed
+        return parentTransform.translatedCopy(-getX(), -getY());
     }
 
     @Override
