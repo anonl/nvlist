@@ -59,6 +59,7 @@ local submodules = {
     "system",
     "text",
     "textbox",
+    "textlog",
     "tween",
     "video"
 }

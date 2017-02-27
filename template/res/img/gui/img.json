@@ -47,6 +47,15 @@
                 { "id": "disabled-bottom",      "rect": [ 80, 112, 32, 16] },
                 { "id": "disabled-bottomright", "rect": [112, 112, 16, 16] },
             ]
+        },
+        {
+            "file": "textlog.png",
+            "width": 128,
+            "height": 64,
+            "subRects": [
+                { "id": "edge-top",    "rect": [ 0,  0, 64, 64] },
+                { "id": "edge-bottom", "rect": [64,  0, 64, 64] },
+            ]
         }
     ]
 }
