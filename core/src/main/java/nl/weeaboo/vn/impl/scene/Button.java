@@ -113,7 +113,7 @@ public class Button extends Transformable implements IButton {
 
     @Override
     public void draw(IDrawBuffer drawBuffer) {
-        renderer.render(drawBuffer, this, 0, 0);
+        renderer.render(drawBuffer, this, getAlignOffsetX(), getAlignOffsetY());
     }
 
     @Override
