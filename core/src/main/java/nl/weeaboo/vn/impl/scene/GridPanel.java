@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.vn.impl.layout.GridLayout;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 import nl.weeaboo.vn.layout.LayoutSize;
@@ -55,6 +56,11 @@ public class GridPanel extends Panel implements IGridPanel {
         LOG.debug("Calculated packed size: {}x{}", widthHint, prefHeight);
 
         setUnscaledSize(widthHint.value(), prefHeight.value(getUnscaledHeight()));
+    }
+
+    @Override
+    public void setInsets(Insets2D insets) {
+        layout.setInsets(insets);
     }
 
 }

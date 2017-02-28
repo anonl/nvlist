@@ -69,6 +69,8 @@ function TextLogScreen:show()
     returnButton:setWidth(200)
 
     local panel = gridPanel()
+    local pad = screenHeight / 16
+    panel:setInsets(pad, pad, pad, pad)
     viewport:setContents(panel)
     
     local textLog = getTextState():getTextLog()

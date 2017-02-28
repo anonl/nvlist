@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.layout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutGroup;
@@ -70,5 +71,8 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
         return Rect2D.of(r.x + insets.left, r.y + insets.top, getChildLayoutWidth(), getChildLayoutHeight());
     }
 
+    protected void setInsets(Insets2D i) {
+        insets = Checks.checkNotNull(i);
+    }
 
 }

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.scene;
 
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.image.INinePatch;
@@ -139,6 +140,11 @@ public abstract class Panel extends Transformable implements IPanel {
         renderer.setSize(w, h);
 
         invalidateTransform();
+    }
+
+    @Override
+    public final void setInsets(double top, double right, double bottom, double left) {
+        setInsets(Insets2D.of(top, right, bottom, left));
     }
 
     @Override

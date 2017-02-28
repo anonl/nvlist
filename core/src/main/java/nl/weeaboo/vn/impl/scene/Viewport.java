@@ -27,6 +27,7 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
 
     private boolean dragging;
     private Vec2 lastPointerPos;
+    private double scrollWheelAccel = 30;
 
     @Override
     protected ILayoutGroup createLayoutAdapter() {
@@ -38,7 +39,14 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
         super.handleInput(parentTransform, input);
 
         Vec2 pointerPos = input.getPointerPos(parentTransform);
+        boolean containsPointer = contains(pointerPos.x, pointerPos.y);
 
+        // Mouse scroll wheel handling
+        if (containsPointer) {
+            scroll(0, scrollWheelAccel * input.getPointerScroll());
+        }
+
+        // Mouse/touch draw handling
         if (dragging) {
             if (!input.isPressed(VKey.MOUSE_LEFT, true)) {
                 dragging = false;
@@ -48,7 +56,7 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
                 scroll(lastPointerPos.x - pointerPos.x, lastPointerPos.y - pointerPos.y);
             }
         } else {
-            if (contains(pointerPos.x, pointerPos.y) && input.consumePress(VKey.MOUSE_LEFT)) {
+            if (containsPointer && input.consumePress(VKey.MOUSE_LEFT)) {
                 dragging = true;
             }
         }

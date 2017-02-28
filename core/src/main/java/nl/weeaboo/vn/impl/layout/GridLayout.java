@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 import nl.weeaboo.vn.layout.IGridLayout;
@@ -221,6 +222,11 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
                 }
             }
         }
+    }
+
+    @Override
+    public void setInsets(Insets2D insets) {
+        super.setInsets(insets);
     }
 
     private static double getTotalBreadth(TrackMetrics[] sizes) {
