@@ -62,4 +62,9 @@ public interface IMultiLineText extends IText {
      */
     Rect2D getLineBounds(int lineIndex);
 
+    /**
+     * Calculates the text height given a set width.
+     */
+    double calculateTextHeight(double widthHint);
+
 }

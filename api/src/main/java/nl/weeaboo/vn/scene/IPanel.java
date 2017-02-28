@@ -15,6 +15,7 @@ public interface IPanel extends IVisualGroup, IDrawable {
      */
     void setInsets(double top, double right, double bottom, double left);
 
+    /** Sets the padding for the sides of the panel's layout. */
     void setInsets(Insets2D insets);
 
 }

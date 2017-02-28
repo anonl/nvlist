@@ -12,6 +12,9 @@ public interface IVisualGroup extends IVisualElement {
      */
     Iterable<? extends IVisualElement> getChildren();
 
+    /**
+     * Removes a previously added element.
+     */
     void remove(IVisualElement elem);
 
 }

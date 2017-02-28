@@ -93,14 +93,26 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
         add(elem);
     }
 
+    /**
+     * The horizontal scroll offset. A higher x-scroll values moves the contents leftwards, relative to the viewport.
+     */
     public double getScrollX() {
         return scroll.x;
     }
 
+    /**
+     * The vertical scroll offset. A higher y-scroll value moves the contents upwards, relative to the viewport.
+     */
     public double getScrollY() {
         return scroll.y;
     }
 
+    /**
+     * Relative scroll method.
+     * @see #getScrollX()
+     * @see #getScrollY()
+     * @see #setScroll(double, double)
+     */
     public void scroll(double dx, double dy) {
         setScroll(getScrollX() + dx, getScrollY() + dy);
     }

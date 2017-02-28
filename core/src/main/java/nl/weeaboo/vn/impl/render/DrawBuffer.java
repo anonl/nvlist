@@ -73,6 +73,9 @@ public final class DrawBuffer implements IDrawBuffer {
         return subLayers.get(layerId);
     }
 
+    /**
+     * Returns a sorted list of render commands stored in this buffer.
+     */
     public List<? extends BaseRenderCommand> getCommands() {
         Sort.instance().sort(contents.items, 0, contents.size);
         return Arrays.asList(contents.items).subList(0, contents.size);

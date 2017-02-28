@@ -207,6 +207,7 @@ public class TextDrawable extends Transformable implements ITextDrawable {
         return textRenderer.getLineBounds(lineIndex);
     }
 
+    @Override
     public double calculateTextHeight(double widthHint) {
         return textRenderer.calculateTextHeight(widthHint);
     }

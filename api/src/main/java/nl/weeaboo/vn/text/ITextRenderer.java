@@ -4,6 +4,4 @@ import nl.weeaboo.vn.scene.IRenderable;
 
 public interface ITextRenderer extends ITextRenderState, IRenderable {
 
-    double calculateTextHeight(double widthHint);
-
 }

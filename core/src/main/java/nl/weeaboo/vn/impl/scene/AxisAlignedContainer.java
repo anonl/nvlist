@@ -43,6 +43,11 @@ public abstract class AxisAlignedContainer extends VisualElement implements IAxi
     }
 
     @Override
+    public boolean contains(IVisualElement elem) {
+        return children.contains(elem);
+    }
+
+    @Override
     public void handleInput(Matrix parentTransform, IInput input) {
         Matrix inputTransform = getChildInputTransform(parentTransform);
         for (IVisualElement elem : SceneUtil.getChildren(this, VisualOrdering.FRONT_TO_BACK)) {
@@ -153,11 +158,6 @@ public abstract class AxisAlignedContainer extends VisualElement implements IAxi
     @Override
     public Iterable<? extends IVisualElement> getChildren() {
         return children.getSnapshot();
-    }
-
-    @Override
-    public boolean contains(IVisualElement elem) {
-        return children.contains(elem);
     }
 
     @Override

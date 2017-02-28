@@ -18,6 +18,7 @@ public interface IGridLayout extends Serializable {
     /** Returns the number of columns currently in the layout. */
     int getColCount();
 
+    /** Sets the padding for the sides of the layout. */
     void setInsets(Insets2D insets);
 
 }
