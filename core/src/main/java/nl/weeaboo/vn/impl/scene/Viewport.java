@@ -1,7 +1,11 @@
 package nl.weeaboo.vn.impl.scene;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
+import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.layout.ILayoutElemPeer;
@@ -97,8 +101,21 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
         Checks.checkRange(x, "x");
         Checks.checkRange(y, "y");
 
-        scroll.x = x;
-        scroll.y = y;
+        Area2D scrollBounds = getScrollBounds();
+
+        scroll.x = Math.max(scrollBounds.x, Math.min(x, scrollBounds.x + scrollBounds.w));
+        scroll.y = Math.max(scrollBounds.y, Math.min(y, scrollBounds.y + scrollBounds.h));
+    }
+
+    /** The rectangle within which the scroll offsets must remain. */
+    private Area2D getScrollBounds() {
+        List<Rect2D> childBounds = Lists.newArrayList();
+        for (IVisualElement child : getChildren()) {
+            childBounds.add(child.getVisualBounds());
+        }
+        Rect2D contentBounds = Rect2D.combine(childBounds.toArray(new Rect2D[childBounds.size()]));
+
+        return Area2D.of(contentBounds.x, contentBounds.y, contentBounds.w - getWidth(), contentBounds.h - getHeight());
     }
 
 }

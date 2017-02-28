@@ -16,6 +16,9 @@ public abstract class Panel extends Transformable implements IPanel {
     private final NinePatchRenderer renderer = new NinePatchRenderer();
     private final ChildCollection children;
 
+    private double unscaledWidth;
+    private double unscaledHeight;
+
     private transient IEventListener rendererListener;
 
     public Panel() {
@@ -76,12 +79,12 @@ public abstract class Panel extends Transformable implements IPanel {
 
     @Override
     protected double getUnscaledWidth() {
-        return renderer.getNativeWidth();
+        return unscaledWidth;
     }
 
     @Override
     protected double getUnscaledHeight() {
-        return renderer.getNativeHeight();
+        return unscaledHeight;
     }
 
     @Override
@@ -131,6 +134,8 @@ public abstract class Panel extends Transformable implements IPanel {
         Rect2D oldLayoutBounds = layout.getLayoutBounds();
         layout.setLayoutBounds(Rect2D.of(oldLayoutBounds.x, oldLayoutBounds.y, w, h));
 
+        unscaledWidth = w;
+        unscaledHeight = h;
         renderer.setSize(w, h);
 
         invalidateTransform();
