@@ -2,7 +2,6 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.script.lib.InputLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 

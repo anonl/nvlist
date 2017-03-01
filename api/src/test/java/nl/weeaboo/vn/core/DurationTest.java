@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.core;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -13,7 +12,7 @@ import nl.weeaboo.gdx.test.ExceptionTester;
 
 public class DurationTest {
 
-    private static final Set<TimeUnit> ACCEPTABLE_UNITS = ImmutableSet.of(
+    private static final ImmutableSet<TimeUnit> ACCEPTABLE_UNITS = ImmutableSet.of(
             TimeUnit.DAYS, TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS, TimeUnit.MILLISECONDS
     );
 

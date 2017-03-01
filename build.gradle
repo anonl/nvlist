@@ -44,6 +44,7 @@ allprojects {
         gdxVersion = '1.9.5'
         gdxVideoVersion = '0.0.4-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
+        errorProneVersion = '2.0.18'
         junitVersion = '4.12'
         luajpp2Version = '2.3.14'
         roboVmVersion = '2.3.0'
@@ -142,6 +143,6 @@ def applyErrorPronePlugin(project) {
     project.apply plugin: 'net.ltgt.errorprone'
 
     project.configurations.errorprone {
-        resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.0.17'
+        resolutionStrategy.force "com.google.errorprone:error_prone_core:$errorProneVersion"
     }
 }

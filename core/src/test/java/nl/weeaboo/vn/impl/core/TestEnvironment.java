@@ -80,7 +80,7 @@ public class TestEnvironment extends DefaultEnvironment {
         LuaRunState runState = LuaTestUtil.newRunState();
         LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
-        scriptEnv.addInitializer(new BasicScriptInitializer());
+        scriptEnv.addInitializer(new BasicScriptInitializer(env));
         env.scriptEnv = scriptEnv;
 
         env.saveModule = new SaveModule(env);

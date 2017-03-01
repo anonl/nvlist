@@ -92,7 +92,7 @@ public class EnvironmentFactory {
         LuaScriptEnv scriptEnv = env.getScriptEnv();
 
         // Register basic types/objects
-        scriptEnv.addInitializer(new BasicScriptInitializer());
+        scriptEnv.addInitializer(new BasicScriptInitializer(env));
 
         // Register script libs
         registerLuaLibs(env, scriptEnv);

@@ -1,8 +1,6 @@
 
 @@
 
-require("builtin/vn")
-
 pressed = Input.consume(VKeys.textContinue)
 
 @@

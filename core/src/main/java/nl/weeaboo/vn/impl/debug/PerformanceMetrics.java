@@ -52,6 +52,7 @@ public final class PerformanceMetrics {
         if (!cpuLoadError) {
             try {
                 // java.lang.management isn't supported on Android
+                @SuppressWarnings("LiteralClassName")
                 Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
                 Object osBean = managementFactory.getMethod("getOperatingSystemMXBean").invoke(null);
                 Method method = osBean.getClass().getMethod("getProcessCpuLoad");

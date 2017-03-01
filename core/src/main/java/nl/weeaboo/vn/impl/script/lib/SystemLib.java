@@ -3,15 +3,12 @@ package nl.weeaboo.vn.impl.script.lib;
 import nl.weeaboo.common.VersionNumber;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
-import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
-import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -25,17 +22,6 @@ public class SystemLib extends LuaLib {
         super("System");
 
         this.env = env;
-    }
-
-    @Override
-    public void initEnv(LuaScriptEnv scriptEnv) throws ScriptException {
-        super.initEnv(scriptEnv);
-
-        IRenderEnv renderEnv = env.getRenderEnv();
-
-        LuaTable globals = scriptEnv.getGlobals();
-        globals.rawset("screenWidth", renderEnv.getWidth());
-        globals.rawset("screenHeight", renderEnv.getHeight());
     }
 
     /**
@@ -119,8 +105,8 @@ public class SystemLib extends LuaLib {
      *        <li>First version number
      *        <li>Second version number
      *        </ol>
-     * @return {@code -1} if first {@code <} second, {@code 0} if first {@code ==} second, {@code 1} if first
-     *         {@code >} second.
+     * @return {@code -1} if first {@code <} second, {@code 0} if first {@code ==} second, {@code 1} if first {@code >}
+     *         second.
      * @throws ScriptException If the input parameters are invalid.
      */
     @ScriptFunction
