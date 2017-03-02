@@ -73,7 +73,7 @@ public class Button extends Transformable implements IButton {
 
         if (!isEnabled()) {
             renderer.setViewState(ButtonViewState.DISABLED);
-        } else if (isPressed()) {
+        } else if (isPressed() || isSelected()) {
             renderer.setViewState(ButtonViewState.PRESSED);
         } else if (isRollover()) {
             renderer.setViewState(ButtonViewState.ROLLOVER);
