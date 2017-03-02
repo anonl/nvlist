@@ -56,6 +56,34 @@
                 { "id": "edge-top",    "rect": [ 0,  0, 64, 64] },
                 { "id": "edge-bottom", "rect": [64,  0, 64, 64] },
             ]
-        }
+        },        
+        {   
+            "file": "savescreen.png",
+            "width": 512,
+            "height": 1024,
+            "subRects": [
+                { "id": "slotButton-normal",   "rect": [  1,129,254,190] },
+                { "id": "slotButton-rollover", "rect": [257,129,254,190] },
+                { "id": "slotButton-pressed",  "rect": [  1,321,254,190] },
+                { "id": "slotButton-disabled", "rect": [257,321,254,190] },
+                { "id": "pageButton-normal",   "rect": [  1,513, 61, 61] },
+                { "id": "pageButton-rollover", "rect": [ 65,513, 61, 61] },
+                { "id": "pageButton-pressed",  "rect": [129,513, 61, 61] },
+                { "id": "pageButton-disabled", "rect": [193,513, 61, 61] },
+                { "id": "button-normal",       "rect": [  1,577,253, 61] },
+                { "id": "button-rollover",     "rect": [  1,641,253, 61] },
+                { "id": "button-pressed",      "rect": [  1,705,253, 61] },
+                { "id": "button-disabled",     "rect": [  1,769,253, 61] },
+                { "id": "quicksave-normal",    "rect": [257,577,253, 61] },
+                { "id": "quicksave-rollover",  "rect": [257,641,253, 61] },
+                { "id": "quicksave-pressed",   "rect": [257,705,253, 61] },
+                { "id": "quicksave-disabled",  "rect": [257,769,253, 61] },
+                { "id": "newSlot",         "rect": [  1,  1,254,126] },
+                { "id": "noImage",         "rect": [257,  1,254,126] },
+                { "id": "fade-top",        "rect": [257,513, 62, 62] },
+                { "id": "fade-bottom",     "rect": [321,513, 62, 62] },
+                { "id": "newSave",         "rect": [  1,833, 62, 30] },
+            ]
+        },
     ]
 }

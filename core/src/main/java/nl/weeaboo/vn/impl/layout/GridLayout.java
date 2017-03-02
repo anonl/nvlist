@@ -240,7 +240,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     private static LayoutSize getTotalBreadth(TrackMetrics[] sizes, LayoutSizeType sizeType) {
         double total = 0.0;
         for (TrackMetrics size : sizes) {
-            total += size.getSize(sizeType).value(0);
+            total += size.getSize(sizeType).value(size.breadth);
         }
         return LayoutSize.of(total);
     }

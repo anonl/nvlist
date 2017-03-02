@@ -71,13 +71,13 @@ public interface ISaveModule extends IModule {
     ISaveFileHeader readSaveHeader(int slot) throws SaveFormatException, IOException;
 
     /**
-     * @param slot The quicksave slot index in the range {@code (1, 99)}.
+     * @param slot The quicksave slot index in the range {@code (1, getNumQuickSaveSlots())}.
      * @return The general purpose save slot index.
      */
     int getQuickSaveSlot(int slot);
 
     /**
-     * @param slot The autosave slot index in the range {@code (1, 99)}.
+     * @param slot The autosave slot index in the range {@code (1, getNumAutoSaveSlots())}.
      * @return The general purpose save slot index.
      */
     int getAutoSaveSlot(int slot);

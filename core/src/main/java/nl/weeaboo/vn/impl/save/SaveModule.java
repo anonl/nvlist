@@ -47,7 +47,9 @@ public class SaveModule implements ISaveModule {
     private static final FilePath SHARED_GLOBALS_PATH = FilePath.of("save-shared.bin");
     private static final FilePath SEEN_LOG_PATH = FilePath.of("seen.bin");
     private static final int QUICK_SAVE_OFFSET = 800;
+    private static final int NUM_QUICK_SAVE_SLOTS = 100;
     private static final int AUTO_SAVE_OFFSET = 900;
+    private static final int NUM_AUTO_SAVE_SLOTS = 100;
 
     private final IEnvironment env;
 
@@ -364,7 +366,7 @@ public class SaveModule implements ISaveModule {
     }
 
     static boolean isQuickSaveSlot(int slot) {
-        return slot > QUICK_SAVE_OFFSET && slot < QUICK_SAVE_OFFSET + 100;
+        return slot > QUICK_SAVE_OFFSET && slot < QUICK_SAVE_OFFSET + NUM_QUICK_SAVE_SLOTS;
     }
 
     @Override
@@ -377,7 +379,7 @@ public class SaveModule implements ISaveModule {
     }
 
     static boolean isAutoSaveSlot(int slot) {
-        return slot > AUTO_SAVE_OFFSET && slot < AUTO_SAVE_OFFSET + 100;
+        return slot > AUTO_SAVE_OFFSET && slot < AUTO_SAVE_OFFSET + NUM_AUTO_SAVE_SLOTS;
     }
 
 }

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.vn.core.Direction;
+import nl.weeaboo.vn.impl.core.AlignUtil;
 import nl.weeaboo.vn.impl.layout.GridLayout;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 import nl.weeaboo.vn.layout.LayoutSize;
@@ -49,13 +51,26 @@ public class GridPanel extends Panel implements IGridPanel {
     }
 
     @Override
-    public void pack() {
+    public final void pack(int anchor) {
+        pack(anchor == 0 ? Direction.CENTER : Direction.fromInt(anchor));
+    }
+
+    @Override
+    public void pack(Direction anchor) {
+        double oldWidth = getWidth();
+        double oldHeight = getHeight();
+
         LayoutSize widthHint = LayoutSize.of(layout.getChildLayoutBounds().w);
         LayoutSize prefHeight = layout.calculateLayoutHeight(LayoutSizeType.PREF, widthHint);
+        LayoutSize prefWidth = layout.calculateLayoutWidth(LayoutSizeType.PREF, prefHeight);
 
-        LOG.debug("Calculated packed size: {}x{}", widthHint, prefHeight);
+        LOG.debug("Calculated packed size: {}x{}", prefWidth, prefHeight);
 
-        setUnscaledSize(widthHint.value(), prefHeight.value(getUnscaledHeight()));
+        setUnscaledSize(prefWidth.value(getUnscaledWidth()), prefHeight.value(getUnscaledHeight()));
+
+        double dx = AlignUtil.alignAnchorX(oldWidth, getWidth(), anchor);
+        double dy = AlignUtil.alignAnchorY(oldHeight, getHeight(), anchor);
+        translate(dx, dy);
     }
 
     @Override

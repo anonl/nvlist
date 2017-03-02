@@ -58,11 +58,11 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
     }
 
     protected final double getChildLayoutWidth() {
-        return getLayoutWidth() - insets.left - insets.right;
+        return Math.max(0, getLayoutWidth() - insets.left - insets.right);
     }
 
     protected final double getChildLayoutHeight() {
-        return getLayoutHeight() - insets.top - insets.bottom;
+        return Math.max(0, getLayoutHeight() - insets.top - insets.bottom);
     }
 
     @Override

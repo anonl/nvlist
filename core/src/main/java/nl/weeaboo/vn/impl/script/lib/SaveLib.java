@@ -10,6 +10,7 @@ import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
+import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
@@ -20,7 +21,6 @@ import nl.weeaboo.vn.impl.script.lua.ILuaStorage;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaStorage;
 import nl.weeaboo.vn.save.ISaveFile;
-import nl.weeaboo.vn.save.ISaveFileHeader;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.script.ScriptException;
@@ -56,7 +56,7 @@ public class SaveLib extends LuaLib {
         Collection<ISaveFile> saves = saveModule.getSaves(offset, maxResults);
         LuaTable table = new LuaTable(saves.size(), 0);
         for (ISaveFile saveInfo : saves) {
-            table.rawset(saveInfo.getSlot(), LuajavaLib.toUserdata(saveInfo, ISaveFileHeader.class));
+            table.rawset(saveInfo.getSlot(), LuajavaLib.toUserdata(saveInfo, ISaveFile.class));
         }
         return table;
     }
@@ -166,24 +166,21 @@ public class SaveLib extends LuaLib {
         }
     }
 
-    // TODO: Implement the rest of the save lib functions
-    /*
-    protected Varargs getSavepointStorage(Varargs args) {
-        return LuajavaLib.toUserdata(saveHandler.getSavepointStorage(), IStorage.class);
+    @ScriptFunction
+    public Varargs getQuickSaveSlot(Varargs args) {
+        int slot = args.checkint(1);
+        ISaveModule saveModule = env.getSaveModule();
+
+        return LuaValue.valueOf(saveModule.getQuickSaveSlot(slot));
     }
 
-    protected Varargs getQuickSaveSlot(Varargs args) {
-        return valueOf(saveHandler.getQuickSaveSlot(args.optint(1, 1)));
-    }
+    @ScriptFunction
+    public Varargs getAutoSaveSlot(Varargs args) {
+        int slot = args.checkint(1);
+        ISaveModule saveModule = env.getSaveModule();
 
-    protected Varargs getAutoSaveSlot(Varargs args) {
-        return valueOf(saveHandler.getAutoSaveSlot(args.optint(1, 1)));
+        return LuaValue.valueOf(saveModule.getAutoSaveSlot(slot));
     }
-
-    protected Varargs getFreeSaveSlot(Varargs args) {
-        return valueOf(saveHandler.getNextFreeSlot());
-    }
-    */
 
     /**
      * Returns an {@link IStorage} object that's shared between all save files.

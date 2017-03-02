@@ -20,6 +20,7 @@ function textLog()
     end)
     setContextActive(newContext, true)
     setContextActive(oldContext, false)
+    yield()
 end
 
 ---TextLog screen

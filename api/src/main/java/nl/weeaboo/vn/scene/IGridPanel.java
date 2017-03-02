@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.scene;
 
+import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 
 public interface IGridPanel extends IPanel {
@@ -15,7 +16,11 @@ public interface IGridPanel extends IPanel {
     void endRow();
 
     /**
-     * Adjusts the size of the panel to fit its contents.
+     * @see #pack(Direction)
      */
-    void pack();
+    void pack(int anchor);
+
+    /** Adjusts the size of the panel to fit its contents, aligning the panel based on the given direction. */
+    void pack(Direction anchor);
+
 }

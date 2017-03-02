@@ -13,6 +13,7 @@ function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
 
+    saveScreen()
     testTextLog()
     testGuiScreen()
 
