@@ -10,9 +10,9 @@ matrix:
         components:
           - tools
           - tools
-          - build-tools-24.0.3
+          - build-tools-25.0.2
           - platform-tools
-          - android-24
+          - android-25
       before_script:
         # Start virtual frame buffer, see: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-(e.g.-a-Web-browser)
         - "export DISPLAY=:99.0"
@@ -30,7 +30,7 @@ matrix:
         - brew install android-sdk
         # Install the SDK
         - android list sdk --all --extended
-        - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-24.0.3,platform-tools,android-24
+        - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-25.0.2,platform-tools,android-25
         - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
         ./gradlew robovmArchive

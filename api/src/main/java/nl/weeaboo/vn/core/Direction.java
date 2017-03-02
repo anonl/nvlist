@@ -3,6 +3,7 @@ package nl.weeaboo.vn.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 public enum Direction {
@@ -59,7 +60,12 @@ public enum Direction {
      */
     public static boolean containsTop(Iterable<Direction> dirs) {
         // Don't use a method reference, it crashes RoboVM (ArrayIndexOutOfBounds: -1, LambdaClassGenerator.java:203)
-        return Iterables.any(dirs, d -> d.isTop());
+        return Iterables.any(dirs, new Predicate<Direction>() {
+            @Override
+            public boolean apply(Direction d) {
+                return d.isTop();
+            }
+        });
     }
 
     /**
@@ -74,7 +80,12 @@ public enum Direction {
      */
     public static boolean containsRight(Iterable<Direction> dirs) {
         // Don't use a method reference, see #containsTop()
-        return Iterables.any(dirs, d -> d.isRight());
+        return Iterables.any(dirs, new Predicate<Direction>() {
+            @Override
+            public boolean apply(Direction d) {
+                return d.isRight();
+            }
+        });
     }
 
     /**
@@ -89,7 +100,12 @@ public enum Direction {
      */
     public static boolean containsBottom(Iterable<Direction> dirs) {
         // Don't use a method reference, see #containsTop()
-        return Iterables.any(dirs, d -> d.isBottom());
+        return Iterables.any(dirs, new Predicate<Direction>() {
+            @Override
+            public boolean apply(Direction d) {
+                return d.isBottom();
+            }
+        });
     }
 
     /**
@@ -104,7 +120,12 @@ public enum Direction {
      */
     public static boolean containsLeft(Iterable<Direction> dirs) {
         // Don't use a method reference, see #containsTop()
-        return Iterables.any(dirs, d -> d.isLeft());
+        return Iterables.any(dirs, new Predicate<Direction>() {
+            @Override
+            public boolean apply(Direction d) {
+                return d.isLeft();
+            }
+        });
     }
 
 }

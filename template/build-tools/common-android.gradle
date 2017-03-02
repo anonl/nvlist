@@ -2,8 +2,8 @@
 configurations { natives }
 
 android {
-    buildToolsVersion '24.0.3'
-    compileSdkVersion 'android-24'
+    buildToolsVersion '25.0.2'
+    compileSdkVersion 'android-25'
         
     sourceSets {
         main {
@@ -24,7 +24,7 @@ android {
     }    
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
     }
     lintOptions {
         textOutput 'stdout'
