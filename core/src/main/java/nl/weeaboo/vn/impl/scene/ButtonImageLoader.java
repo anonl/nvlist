@@ -47,7 +47,7 @@ public final class ButtonImageLoader {
             // Attempt to load as as separate image files for each view state
             ResourceLoadInfo path = basePath.withFileSuffix("-" + suffix);
             if (tryLoadImage(button, viewState, path)) {
-                LOG.debug("Loading button image: {}, {}", viewState, path);
+                LOG.trace("Loading button image: {}, {}", viewState, path);
                 return true;
             }
         }
@@ -58,14 +58,14 @@ public final class ButtonImageLoader {
     private boolean tryLoadImage(IButton button, ButtonViewState viewState, ResourceLoadInfo path) {
         INinePatch ninePatch = imageModule.getNinePatch(path, true);
         if (ninePatch != null) {
-            LOG.debug("Loading button ninePatch: {}, {}", viewState, path);
+            LOG.trace("Loading button ninePatch: {}, {}", viewState, path);
             button.setTexture(viewState, ninePatch);
             return true;
         }
 
         ITexture tex = imageModule.getTexture(path, true);
         if (tex != null) {
-            LOG.debug("Loading button texture: {}, {}", viewState, path);
+            LOG.trace("Loading button texture: {}, {}", viewState, path);
             button.setTexture(viewState, tex);
             return true;
         }
