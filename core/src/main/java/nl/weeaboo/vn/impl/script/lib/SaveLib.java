@@ -54,6 +54,7 @@ public class SaveLib extends LuaLib {
 
         ISaveModule saveModule = env.getSaveModule();
         Collection<ISaveFile> saves = saveModule.getSaves(offset, maxResults);
+
         LuaTable table = new LuaTable(saves.size(), 0);
         for (ISaveFile saveInfo : saves) {
             table.rawset(saveInfo.getSlot(), LuajavaLib.toUserdata(saveInfo, ISaveFile.class));

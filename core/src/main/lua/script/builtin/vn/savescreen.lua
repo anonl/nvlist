@@ -39,6 +39,7 @@ local function saveLoadScreen(isSave)
             if isSave then
                 -- TODO: Add a screenshot
                 Save.save(slot, userData)
+                setSharedGlobal(KEY_SAVE_LAST, slot)
             else
                 Save.load(slot)
             end
@@ -282,7 +283,7 @@ function SaveLoadScreen:layout()
         local x = bounds.x
         local y = bounds.y
         
-        local rows = #components / cols
+        local rows = math.ceil(#components / cols)
         local cw = bounds.w / cols
         local ch = bounds.h / rows
         
@@ -327,31 +328,28 @@ function SaveLoadScreen:initQSaves()
     for pass=1,2 do
         local defaultLabel = "autosave"
         local startSlot = Save.getAutoSaveSlot(1)
-        local endSlot = startSlot + getAutoSaveSlots()
+        local maxSlots = getAutoSaveSlots()
+        if self.isSave then
+            -- Don't allow manual saving into autosave slots
+            maxSlots = 0
+        end
+        
         if pass == 2 then
             startSlot = Save.getQuickSaveSlot(1)
-            endSlot = startSlot + 1
+            maxSlots = 1
             defaultLabel = "quicksave"
         end
 
-        local saved = Save.getSaves(startSlot, endSlot)
-        local sorted = {}
-        for _,si in pairs(saved) do
-            table.insert(sorted, si)
-        end     
-        table.sort(sorted, function(x, y)
-            return x:getTimestamp() > y:getTimestamp()
-        end)
-        
-        for i=1,endSlot-startSlot do
-            local slot = startSlot + i
+        local saved = Save.getSaves(startSlot, maxSlots)       
+        for slot=startSlot,startSlot+maxSlots-1 do
+            local i = slot - startSlot + 1
             local label = "Empty\n" .. defaultLabel .. " " .. i
             local empty = true
             
-            local si = sorted[i]
+            local si = saved[slot]
             if si ~= nil then
-                slot = si:getSlot()
-                label = defaultLabel .. " " .. i .. "\n" .. si:getDateString()
+                -- TODO
+                label = defaultLabel .. " " .. i --.. "\n" .. si:getDateString()
                 empty = false
             end
             
@@ -395,8 +393,9 @@ function SaveLoadScreen:setPage(p, force)
             local si = saved[i]
             if si ~= nil then
                 slot = si:getSlot()
+                -- TODO
                 --screenshot = si:getScreenshot(self.screenshotWidth, self.screenshotHeight)
-                --label = si:getLabel()
+                label = "Save " .. slot -- .. "\n" .. si:getDateString()
                 empty = false
                 new = (lastSaved == i)
             end
