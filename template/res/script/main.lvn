@@ -12,8 +12,10 @@ end
 function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
-
-    saveScreen()
+    
+    local slot = saveScreen()
+    Log.info("Saved in slot {}", slot)
+    
     testTextLog()
     testGuiScreen()
 

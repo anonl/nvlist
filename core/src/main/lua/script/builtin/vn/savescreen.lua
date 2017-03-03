@@ -14,14 +14,13 @@ local KEY_SAVE_PAGE = "vn.save.lastPage"
 ---Global accessor functions
 -------------------------------------------------------------------------------------------------------------- @section globals
 
----Shows the textlog screen.
+---Shows the save or load screen.
 local function saveLoadScreen(isSave)
     local oldContext = getCurrentContext()
-
-    local newContext = createContext(function()
-        local slot = nil
-        local userData = nil
-        
+    
+    local slot = nil
+    local userData = nil
+    local newContext = createContext(function()        
         local function showScreen()
             local screen = nil
             if isSave then
@@ -48,9 +47,12 @@ local function saveLoadScreen(isSave)
     setContextActive(newContext, true)
     setContextActive(oldContext, false)
     yield()
+    
+    return slot
 end
 
 ---Shows the save screen.
+-- @return The save slot that the user saved in, or nil if cancelled.
 function saveScreen()
     return saveLoadScreen(true)
 end
@@ -105,7 +107,7 @@ function SaveSlot.new(self)
             i:setZ(button:getZ() - button:getWidth()/2)   
         end
         
-        if self.new and not self.empty then
+        if self.isNew and not self.empty then
             newI = img("gui/savescreen#newSave")
             newI:setZ(i:getZ() - 1)
         end
@@ -132,20 +134,25 @@ function SaveSlot:setBounds(x, y, w, h)
     local l = self.label
     local i = self.image
 
-    if i ~= nil then
-        local iw = b:getWidth() * 224 / 254
-        local ih = b:getHeight() * 126 / 190
-        local pad = (b:getWidth() - iw) / 2
-        i:setBounds(x + pad, y + pad, iw, ih)
-    else
-        l:setSize(b:getWidth(), b:getHeight())
-    end 
+    local fontSize = math.ceil(w * .065)
+    Log.debug("SaveSlot fontSize={}", fontSize)
+    l:extendDefaultStyle(Text.createStyle{align="center", fontSize=fontSize})
 
-    local fontSize = b:getWidth() * .06
-    l:extendDefaultStyle(Text.createStyle{anchor=2, fontSize=fontSize})
+    if i ~= nil then
+        local iw = w * 224 / 254
+        local ih = h * 126 / 190
+        local ipad = (w - iw) / 2
+        i:setBounds(x + ipad, y + ipad, iw, ih)
+        
+        local lh = h - ih - ipad
+        l:setSize(iw, lh)
+        l:setPos(math.ceil(x), math.ceil(y + h - (lh + l:getTextHeight()) / 2))
+    else
+        l:setSize(w, h)
+        l:setPos(math.ceil(x), math.ceil(y + (h - l:getTextHeight()) / 2))
+    end 
     
     b:setBounds(x, y, w, h)
-    l:setPos(x, y + b:getHeight() - l:getHeight())
     
     local newI = self.newImage
     if newI ~= nil then
@@ -216,26 +223,9 @@ function SaveLoadScreen.new(self)
     cancelB = button("gui/savescreen#button-")
     cancelB:setText(cancelText)
     
-    local bscale = math.min(2, .10 * screenHeight / okB:getHeight())
-    if not android then
-        bscale = math.min(1, bscale)
-    end
-
-    okB:setScale(bscale)
-    cancelB:setScale(bscale)        
-    
-    local sz = okB:getHeight() / 2.5    
-    
-    --TODO
-    --local buttonStyle = createStyle{fontName="SansSerif", fontStyle="bold", fontSize=sz, shadowColor=0}
-    --okB:extendDefaultStyle(buttonStyle)
-    --cancelB:extendDefaultStyle(buttonStyle)
-        
     self.pageButtons = {}       
     for p=1,self.pages do
         local tb = button("gui/savescreen#pageButton-")
-        tb:setScale(bscale)
-        --tb:extendDefaultStyle(buttonStyle)
         tb:setText(p)
         tb:setToggle(true)
         self.pageButtons[p] = tb
@@ -292,28 +282,28 @@ function SaveLoadScreen:layout()
         local x = bounds.x
         local y = bounds.y
         
+        local rows = #components / cols
+        local cw = bounds.w / cols
+        local ch = bounds.h / rows
+        
         local col = 0
         for _,component in ipairs(components) do
-            local cb = component:getBounds()
-
-            print(x, y, cb.w, cb.h)
-            
-            component:setBounds(x, y, cb.w, cb.h)
+            component:setBounds(x + ipad, y + ipad, cw - ipad, ch - ipad)
         
             col = col + 1
             if col >= cols then
                 col = 0
                 x = bounds.x
-                y = y + cb.h
+                y = y + ch
             else
-                x = x + cb.w
+                x = x + cw
             end
         end
     end
     
     -- Layout save slot buttons
     gridLayout({x=x+ipad, y=y+vpad+ipad, w=mainW, h=mainH}, self.cols, self.saves)   
-    gridLayout({x=x+ipad, y=y+h-vpad-qh-ipad, w=mainW, h=qh}, self.qcols, self.qsaves)
+    gridLayout({x=x+ipad, y=y+h-vpad-qh-ipad*2, w=mainW, h=qh}, self.qcols, self.qsaves)
 
     -- Bottom buttons
     local bottomButtonPanel = gridPanel()
