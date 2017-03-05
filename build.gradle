@@ -41,7 +41,7 @@ allprojects {
         javaVersion = JavaVersion.VERSION_1_8
         
         gdxTestVersion = '1.0.4'
-        gdxVersion = '1.9.5'
+        gdxVersion = '1.9.6'
         gdxVideoVersion = '0.0.4-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
         errorProneVersion = '2.0.18'

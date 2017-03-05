@@ -73,20 +73,17 @@ public final class PixmapUtil {
      * @param filter Determines which type of interpolation to use if the src/dst rects are a different size.
      */
     public static void copySubRect(Pixmap src, Rect srcRect, Pixmap dst, Rect dstRect, Filter filter) {
-        // Since the blend mode is mutable global state, do a feeble attempt at synchronization
-        synchronized (Pixmap.class) {
-            Blending oldBlend = Pixmap.getBlending();
-            Filter oldFilter = Filter.BiLinear;
-            try {
-                Pixmap.setBlending(Blending.None);
-                Pixmap.setFilter(filter);
+        Blending oldBlend = dst.getBlending();
+        Filter oldFilter = Filter.BiLinear;
+        try {
+            dst.setBlending(Blending.None);
+            dst.setFilter(filter);
 
-                dst.drawPixmap(src, srcRect.x, srcRect.y, srcRect.w, srcRect.h,
-                        dstRect.x, dstRect.y, dstRect.w, dstRect.h);
-            } finally {
-                Pixmap.setBlending(oldBlend);
-                Pixmap.setFilter(oldFilter);
-            }
+            dst.drawPixmap(src, srcRect.x, srcRect.y, srcRect.w, srcRect.h,
+                    dstRect.x, dstRect.y, dstRect.w, dstRect.h);
+        } finally {
+            dst.setBlending(oldBlend);
+            dst.setFilter(oldFilter);
         }
     }
 
