@@ -53,8 +53,8 @@
             "width": 128,
             "height": 64,
             "subRects": [
-                { "id": "edge-top",    "rect": [ 0,  0, 64, 64] },
-                { "id": "edge-bottom", "rect": [64,  0, 64, 64] },
+                { "id": "edge-top",    "rect": [ 1,  1, 62, 62] },
+                { "id": "edge-bottom", "rect": [65,  1, 62, 62] },
             ]
         },        
         {   

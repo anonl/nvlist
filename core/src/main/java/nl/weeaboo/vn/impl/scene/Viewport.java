@@ -35,6 +35,13 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
     }
 
     @Override
+    protected void onTick() {
+        super.onTick();
+
+        limitScroll();
+    }
+
+    @Override
     public void handleInput(Matrix parentTransform, IInput input) {
         super.handleInput(parentTransform, input);
 
@@ -121,10 +128,18 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
         Checks.checkRange(x, "x");
         Checks.checkRange(y, "y");
 
+        scroll.x = x;
+        scroll.y = y;
+
+        limitScroll();
+    }
+
+    /** Clamps the scroll position to within the scroll bounds. */
+    private void limitScroll() {
         Area2D scrollBounds = getScrollBounds();
 
-        scroll.x = Math.max(scrollBounds.x, Math.min(x, scrollBounds.x + scrollBounds.w));
-        scroll.y = Math.max(scrollBounds.y, Math.min(y, scrollBounds.y + scrollBounds.h));
+        scroll.x = Math.max(scrollBounds.x, Math.min(scroll.x, scrollBounds.x + scrollBounds.w));
+        scroll.y = Math.max(scrollBounds.y, Math.min(scroll.y, scrollBounds.y + scrollBounds.h));
     }
 
     /** The rectangle within which the scroll offsets must remain. */
