@@ -85,6 +85,9 @@ function TextLogScreen:show()
         page = page - 1
     end
     panel:pack()
+    
+    -- Scroll to bottom
+    viewport:scroll(0, 999999)
 
     setActiveLayer(oldActiveLayer)
 
