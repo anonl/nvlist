@@ -28,10 +28,10 @@ public final class PerformanceMetrics {
         if (logicFps > 0) {
             lines.add(StringUtil.formatRoot("FPS: %.2f (logic)", logicFps));
         }
-        lines.add(String.format("CPU: %s", getCpuLoadText()));
+        lines.add(StringUtil.formatRoot("CPU: %s", getCpuLoadText()));
         lines.add(String.format("Memory use (heap): %s",
                 StringUtil.formatMemoryAmount(Gdx.app.getJavaHeap())));
-        lines.add(String.format("Memory use (non-heap): %s",
+        lines.add(StringUtil.formatRoot("Memory use (non-heap): %s",
                 StringUtil.formatMemoryAmount(Gdx.app.getNativeHeap())));
         return Joiner.on('\n').join(lines);
     }
@@ -39,7 +39,7 @@ public final class PerformanceMetrics {
     private String getCpuLoadText() {
         double cpuLoad = getCpuLoad();
         if (cpuLoad >= 0) {
-            return String.format("%03d%%", Math.round(100 * cpuLoad));
+            return StringUtil.formatRoot("%03d%%", Math.round(100 * cpuLoad));
         } else {
             return "---";
         }

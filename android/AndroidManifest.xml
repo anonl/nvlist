@@ -3,9 +3,6 @@
     package="nl.weeaboo.vn.android"
     android:versionCode="1"
     android:versionName="1.0" >
-
-    <!-- This is the SDK to use when testing nvlist-android from Eclipse during development -->
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="24" />
     
     <application
         android:allowBackup="false"
