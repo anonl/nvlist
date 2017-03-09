@@ -27,6 +27,7 @@ import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISkipState;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
@@ -50,7 +51,7 @@ public final class Osd implements Disposable {
     private final PerformanceMetrics performanceMetrics;
 
     private TextRenderer textRenderer;
-    private boolean visible = true;
+    private boolean visible = false;
 
     private Osd(PerformanceMetrics perfMetrics) {
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
@@ -90,7 +91,11 @@ public final class Osd implements Disposable {
     }
 
     /** Handle input and update internal state. */
-    public void update(INativeInput input) {
+    public void update(IEnvironment env, INativeInput input) {
+        if (!env.getPref(NovelPrefs.DEBUG)) {
+            return; // Debug mode not enabled
+        }
+
         if (input.consumePress(KeyCode.F7)) {
             visible = !visible;
         }
