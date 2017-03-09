@@ -64,6 +64,7 @@ import nl.weeaboo.vn.impl.render.GLScreenRenderer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -314,12 +315,31 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         inputAdapter.update();
         INativeInput input = inputAdapter.getInput();
 
-        debugControls.update(novel, input);
+        handleInput(input);
 
         performanceMetrics.setLogicFps(simulationRateLimiter.getSimulationUpdateRate());
-        osd.update(input);
 
         novel.update();
+    }
+
+    private void handleInput(INativeInput input) {
+        debugControls.update(novel, input);
+
+        IEnvironment env = novel.getEnv();
+        osd.update(env, input);
+
+        // Fullscreen toggle
+        IRenderEnv renderEnv = env.getRenderEnv();
+        if (input.isPressed(KeyCode.ALT_LEFT, true) && input.consumePress(KeyCode.ENTER)) {
+            if (!Gdx.graphics.isFullscreen()) {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            } else {
+                Gdx.graphics.setWindowedMode(renderEnv.getWidth(), renderEnv.getHeight());
+            }
+
+            // GDX clears internal press state, so we should do the same
+            input.clearButtonStates();
+        }
     }
 
     protected void renderScreen(SpriteBatch batch) {

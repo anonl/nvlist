@@ -6,7 +6,6 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.Gdx;
 import com.google.common.io.BaseEncoding;
 
 import nl.weeaboo.common.Insets2D;
@@ -21,6 +20,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.vn.gdx.graphics.GdxCrossFadeRenderer;
@@ -37,7 +37,6 @@ import nl.weeaboo.vn.impl.scene.ComponentFactory;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
-import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.RenderUtil;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.SaveFormatException;
@@ -67,7 +66,9 @@ public final class DebugControls {
      */
     public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
-        IRenderEnv renderEnv = env.getRenderEnv();
+        if (!env.getPref(NovelPrefs.DEBUG)) {
+            return; // Debug mode not enabled
+        }
 
         IContext activeContext = env.getContextManager().getPrimaryContext();
         IScriptContext scriptContext = null;
@@ -111,18 +112,6 @@ public final class DebugControls {
             } catch (IOException e) {
                 LOG.warn("Load error", e);
             }
-        }
-
-        // Fullscreen toggle
-        if (alt && input.consumePress(KeyCode.ENTER)) {
-            if (!Gdx.graphics.isFullscreen()) {
-                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-            } else {
-                Gdx.graphics.setWindowedMode(renderEnv.getWidth(), renderEnv.getHeight());
-            }
-
-            // GDX clears internal press state, so we should do the same
-            input.clearButtonStates();
         }
 
         // Image
