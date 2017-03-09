@@ -175,7 +175,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
             for (GridCell cell : getRowCells(r)) {
                 LayoutSize widthHint = LayoutSize.of(colSizes[c].breadth);
 
-                LOG.trace("Calculate col={} row height for width={}", c, widthHint);
+                LOG.trace("Calculating col={} row height for width={}", c, widthHint);
 
                 tm.updatePrefBreadth(cell.calculateLayoutHeight(LayoutSizeType.PREF, widthHint));
                 tm.updateMinBreadth(cell.calculateLayoutHeight(LayoutSizeType.MIN, widthHint));

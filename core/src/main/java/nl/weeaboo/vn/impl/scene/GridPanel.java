@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Insets2D;
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.impl.core.AlignUtil;
 import nl.weeaboo.vn.impl.layout.GridLayout;
@@ -60,13 +61,17 @@ public class GridPanel extends Panel implements IGridPanel {
         double oldWidth = getWidth();
         double oldHeight = getHeight();
 
-        LayoutSize widthHint = LayoutSize.of(layout.getChildLayoutBounds().w);
+        Rect2D oldChildLayoutBounds = layout.getChildLayoutBounds();
+        LayoutSize widthHint = LayoutSize.of(oldChildLayoutBounds.w);
         LayoutSize prefHeight = layout.calculateLayoutHeight(LayoutSizeType.PREF, widthHint);
         LayoutSize prefWidth = layout.calculateLayoutWidth(LayoutSizeType.PREF, prefHeight);
 
-        LOG.debug("Calculated packed size: {}x{}", prefWidth, prefHeight);
+        LOG.debug("Measured packed child contents size: {}x{}", prefWidth, prefHeight);
 
-        setUnscaledSize(prefWidth.value(getUnscaledWidth()), prefHeight.value(getUnscaledHeight()));
+        Insets2D insets = layout.getInsets();
+        double newLayoutWidth = insets.getHorizontal() + prefWidth.value(oldChildLayoutBounds.w);
+        double newLayoutHeight = insets.getVertical() + prefHeight.value(oldChildLayoutBounds.h);
+        setUnscaledSize(newLayoutWidth, newLayoutHeight);
 
         double dx = AlignUtil.alignAnchorX(oldWidth, getWidth(), anchor);
         double dy = AlignUtil.alignAnchorY(oldHeight, getHeight(), anchor);

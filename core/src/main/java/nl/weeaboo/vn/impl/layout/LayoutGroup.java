@@ -58,17 +58,21 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
     }
 
     protected final double getChildLayoutWidth() {
-        return Math.max(0, getLayoutWidth() - insets.left - insets.right);
+        return Math.max(0, getLayoutWidth() - insets.getHorizontal());
     }
 
     protected final double getChildLayoutHeight() {
-        return Math.max(0, getLayoutHeight() - insets.top - insets.bottom);
+        return Math.max(0, getLayoutHeight() - insets.getVertical());
     }
 
     @Override
     public final Rect2D getChildLayoutBounds() {
         Rect2D r = getLayoutBounds();
         return Rect2D.of(r.x + insets.left, r.y + insets.top, getChildLayoutWidth(), getChildLayoutHeight());
+    }
+
+    public Insets2D getInsets() {
+        return insets;
     }
 
     protected void setInsets(Insets2D i) {
