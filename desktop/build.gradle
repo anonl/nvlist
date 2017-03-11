@@ -25,6 +25,10 @@ publishing {
         desktop(MavenPublication) {
             from components.java
             artifactId 'nvlist-desktop'
+
+            pom.withXml {
+                asNode().children().last() + pomLicenseConfig
+            }  
         }
     }
 }

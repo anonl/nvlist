@@ -27,6 +27,9 @@ publishing {
         core(MavenPublication) {
             from components.java
             artifactId 'nvlist-core'
+            pom.withXml {
+                asNode().children().last() + pomLicenseConfig
+            }  
         }
     }
 }

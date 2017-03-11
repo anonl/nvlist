@@ -55,7 +55,18 @@ allprojects {
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')
-        buildToolsDir = new File(templateDir, 'build-tools')        
+        buildToolsDir = new File(templateDir, 'build-tools') 
+        
+	    pomLicenseConfig = {
+	       licenses {
+	            license {
+	                name 'The Apache Software License, Version 2.0'
+	                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+	                distribution 'repo'
+	            }
+	        }
+	    }
+	    pomLicenseConfig.resolveStrategy = Closure.DELEGATE_ONLY // Otherwise 'license' elem is missing
     }
 
     repositories {
@@ -124,7 +135,7 @@ allprojects {
 	        }
         }
     }
-    
+
     bintray {
         user = System.getenv('BINTRAY_USER')
         key = System.getenv('BINTRAY_KEY')
@@ -135,7 +146,7 @@ allprojects {
             vcsUrl = 'https://github.com/anonl/nvlist.git'
             version {
                 name = project.version
-            }
+            }          
         }
     }    
 }

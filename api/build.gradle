@@ -19,6 +19,9 @@ publishing {
         api(MavenPublication) {
             from components.java
             artifactId 'nvlist-api'
+            pom.withXml {
+                asNode().children().last() + pomLicenseConfig
+            }  
         }
     }
 }

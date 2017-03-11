@@ -127,6 +127,11 @@ publishing {
                     depNode.appendNode('artifactId', it.moduleName)
                     depNode.appendNode('version', it.moduleVersion)
                 }
+
+                // Append license info
+	            pom.withXml {
+	                asNode().children().last() + pomLicenseConfig
+	            }  
             }
             
             artifactId 'nvlist-android'
