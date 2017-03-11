@@ -91,6 +91,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private PerformanceMetrics performanceMetrics;
 
     private Novel novel;
+    private NovelPrefsStore prefs;
     private SimulationRateLimiter simulationRateLimiter;
     private GLScreenRenderer renderer;
     private DrawBuffer drawBuffer;
@@ -103,7 +104,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     /** Note: This method may be called at any time, even before {@link #create()} */
     public NovelPrefsStore loadPreferences() {
-        NovelPrefsStore prefs = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
+        prefs = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
         try {
             prefs.loadVariables();
         } catch (IOException ioe) {
@@ -122,7 +123,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         JngTextureLoader.register(assetManager);
         Texture.setAssetManager(assetManager);
 
-        NovelPrefsStore prefs = loadPreferences();
+        if (prefs == null) {
+            loadPreferences();
+        }
         vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
 
         performanceMetrics = new PerformanceMetrics();

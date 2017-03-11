@@ -24,7 +24,7 @@ public final class NovelPrefs {
             "Desired height for the main window. This is the height that will be passed to user code, "
                     + "the framework will take care of any scaling required.");
 
-    public static final Preference<Boolean> DEBUG = newConstPreference("debug",
+    public static final Preference<Boolean> DEBUG = newPreference("debug",
             "Debug",
             false,
             "Enables developer mode, unlocking various debugging features.");

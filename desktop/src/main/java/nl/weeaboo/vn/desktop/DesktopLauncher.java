@@ -2,7 +2,6 @@ package nl.weeaboo.vn.desktop;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,14 +20,20 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import joptsimple.OptionException;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.prefsstore.Preference;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
@@ -36,16 +41,26 @@ import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 
-public class DesktopLauncher {
+public final class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
+
+    private final ImmutableList<String> args;
+
+    public DesktopLauncher(String[] args) {
+        this.args = ImmutableList.copyOf(args);
+    }
 
     /**
      * Main entry point for desktop platforms (Windows, Linux, MacOS).
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InitException {
         InitConfig.init();
 
+        new DesktopLauncher(args).start();
+    }
+
+    public void start() throws InitException {
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();
         DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
@@ -60,9 +75,10 @@ public class DesktopLauncher {
             }
         };
 
-        LOG.info("Commandline args: {}", Arrays.asList(args));
+        NovelPrefsStore prefs = launcher.loadPreferences();
+        handleCommandlineOptions(prefs);
 
-        Lwjgl3ApplicationConfiguration config = createConfig(launcher);
+        Lwjgl3ApplicationConfiguration config = createConfig(launcher, prefs);
         Lwjgl3Application app = new Lwjgl3Application(launcher, config);
         app.addLifecycleListener(new LifecycleListener() {
             @Override
@@ -127,9 +143,7 @@ public class DesktopLauncher {
         }
     }
 
-    private static Lwjgl3ApplicationConfiguration createConfig(Launcher launcher) {
-        NovelPrefsStore prefs = launcher.loadPreferences();
-
+    private Lwjgl3ApplicationConfiguration createConfig(Launcher launcher, NovelPrefsStore prefs) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.useVsync(false);
 
@@ -151,4 +165,41 @@ public class DesktopLauncher {
 
         return config;
     }
+
+    private void handleCommandlineOptions(NovelPrefsStore prefs) throws InitException {
+        LOG.info("Commandline args: {}", args);
+
+        List<Preference<?>> declaredPrefs = NovelPrefsStore.getDeclaredPrefs(NovelPrefs.class);
+
+        OptionParser optionParser = new OptionParser();
+        for (Preference<?> pref : declaredPrefs) {
+            optionParser.accepts("P" + pref.getKey()).withRequiredArg();
+        }
+
+        OptionSet options;
+        try {
+            options = optionParser.parse(args.toArray(new String[0]));
+        } catch (OptionException oe) {
+            try {
+                optionParser.printHelpOn(System.out);
+            } catch (IOException e) {
+                LOG.error("Error printing supported commandline options", e);
+            }
+            throw new InitException("Error parsing commandline options", oe);
+        }
+
+        // Allow setting preference values from the commandline
+        for (Preference<?> pref : declaredPrefs) {
+            Object value = options.valueOf("P" + pref.getKey());
+            if (value != null) {
+                setPref(prefs, pref, value.toString());
+            }
+        }
+    }
+
+    private <T> void setPref(NovelPrefsStore prefs, Preference<T> pref, String value) {
+        LOG.info("Set preference: {}={}", pref.getKey(), value);
+        prefs.set(pref, pref.fromString(value));
+    }
+
 }

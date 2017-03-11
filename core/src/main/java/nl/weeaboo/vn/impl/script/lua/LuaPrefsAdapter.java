@@ -1,14 +1,12 @@
 package nl.weeaboo.vn.impl.script.lua;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.lua2.io.LuaSerializable;
@@ -22,8 +20,8 @@ import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
-import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
@@ -48,24 +46,6 @@ public class LuaPrefsAdapter {
         LuaTable table = new LuaTable();
         table.setmetatable(mt);
         return table;
-    }
-
-    /**
-     * @return All preferences declared in static fields
-     */
-    static List<Preference<?>> getDeclaredPrefs(Class<?> clazz) {
-        List<Preference<?>> result = Lists.newArrayList();
-
-        try {
-            for (Preference<?> pref : ReflectUtil.getConstants(clazz, Preference.class).values()) {
-                LOG.trace("Found declared preference: {}", pref.getKey());
-
-                result.add(pref);
-            }
-        } catch (IllegalAccessException e) {
-            LOG.warn("Error retrieving attributes from preference holder: {}", clazz, e);
-        }
-        return result;
     }
 
     @LuaSerializable
@@ -95,7 +75,7 @@ public class LuaPrefsAdapter {
 
                     try {
                         Class<?> clazz = Class.forName(className);
-                        for (Preference<?> pref : getDeclaredPrefs(clazz)) {
+                        for (Preference<?> pref : NovelPrefsStore.getDeclaredPrefs(clazz)) {
                             String key = pref.getKey();
                             if (key.startsWith("vn.")) {
                                 key = key.substring(3); // Remove "vn." prefix
