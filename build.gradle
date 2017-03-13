@@ -40,18 +40,19 @@ allprojects {
     ext {
         javaVersion = JavaVersion.VERSION_1_8
         
-        gdxTestVersion = '1.0.4'
+        gdxTestVersion = '2.0.0'
         gdxVersion = '1.9.6'
-        gdxVideoVersion = '0.0.4-anonl'
+        gdxVideoVersion = '1.0.0-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
         errorProneVersion = '2.0.18'
         joptVersion = '5.0.3'
         junitVersion = '4.12'
-        luajpp2Version = '2.3.14'
+        luajpp2Version = '2.3.15'
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
-        styledTextVersion = '1.7.3'
-        tcommonVersion = '2.2.0'
+        styledTextVersion = '2.0.1'
+        tcommonVersion = '2.2.1'
+        // Note: Update ./template/build-tools/NOTICE when adding runtime third-party dependencies
         
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')
@@ -70,6 +71,7 @@ allprojects {
     }
 
     repositories {
+        mavenLocal()
         jcenter()
         maven { url 'https://dl.bintray.com/anonl/gdx/' }
         maven { url 'https://dl.bintray.com/anonl/gdx-styledtext/' }

@@ -119,8 +119,10 @@ publishing {
                 projectDeps += configurations.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
                 projectDeps += configurations.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
 
+                def root = asNode()
+                
                 // Append dependencies to POM
-                def depsNode = asNode().appendNode('dependencies')
+                def depsNode = root.appendNode('dependencies')
                 projectDeps.each {
                     def depNode = depsNode.appendNode('dependency')
                     depNode.appendNode('groupId', it.moduleGroup)
@@ -129,9 +131,7 @@ publishing {
                 }
 
                 // Append license info
-	            pom.withXml {
-	                asNode().children().last() + pomLicenseConfig
-	            }  
+                root = root.children().last() + pomLicenseConfig
             }
             
             artifactId 'nvlist-android'

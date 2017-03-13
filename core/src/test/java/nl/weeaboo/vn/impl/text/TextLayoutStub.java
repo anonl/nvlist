@@ -39,11 +39,6 @@ public class TextLayoutStub implements ITextLayout {
     }
 
     @Override
-    public float getOriginY() {
-        return 0;
-    }
-
-    @Override
     public float getTextWidth() {
         return 0;
     }
