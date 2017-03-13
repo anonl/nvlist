@@ -23,4 +23,8 @@ public interface IGridPanel extends IPanel {
     /** Adjusts the size of the panel to fit its contents, aligning the panel based on the given direction. */
     void pack(Direction anchor);
 
+    void setRowSpacing(double amount);
+
+    void setColSpacing(double amount);
+
 }

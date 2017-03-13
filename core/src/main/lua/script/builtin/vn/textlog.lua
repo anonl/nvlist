@@ -72,13 +72,14 @@ function TextLogScreen:show()
     local panel = gridPanel()
     local pad = screenHeight / 16
     panel:setInsets(pad, pad, pad, pad)
+    panel:setRowSpacing(pad)
     viewport:setContents(panel)
     
     local textLog = getTextState():getTextLog()
     local page = textLog:getPageCount() - 1
     while page >= 0 do
         local text = textimg(textLog:getPage(page))
-        
+
         panel:add(text):growX()
         panel:endRow()
         

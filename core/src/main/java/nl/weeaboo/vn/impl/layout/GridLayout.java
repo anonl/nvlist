@@ -26,6 +26,9 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     private static final double ADJUST_EPSILON = 0.001;
 
     private final List<GridRow> rows = Lists.newArrayList();
+    private boolean rowFinished;
+    private double rowSpacing;
+    private double colSpacing;
 
     public GridLayout(ILayoutElemPeer visualElem) {
         super(visualElem);
@@ -45,11 +48,11 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
 
     @Override
     public void endRow() {
-        addRow();
+        rowFinished = true;
     }
 
     private GridRow reserveRow() {
-        if (rows.isEmpty()) {
+        if (rows.isEmpty() || rowFinished) {
             addRow();
         }
         return rows.get(rows.size() - 1);
@@ -57,6 +60,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
 
     private void addRow() {
         rows.add(new GridRow());
+        rowFinished = false;
     }
 
     @Override
@@ -100,14 +104,14 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     @Override
     public LayoutSize calculateLayoutWidth(LayoutSizeType type, LayoutSize heightHint) {
         TrackMetrics[] colSizes = calculateColumnMetrics();
-        return getTotalBreadth(colSizes, type);
+        return getTotalBreadth(colSizes, type, getTotalColSpacing());
     }
 
     @Override
     public LayoutSize calculateLayoutHeight(LayoutSizeType type, LayoutSize widthHint) {
         TrackMetrics[] colSizes = calculateColumnMetrics();
         TrackMetrics[] rowSizes = calculateRowMetrics(colSizes);
-        return getTotalBreadth(rowSizes, type);
+        return getTotalBreadth(rowSizes, type, getTotalRowSpacing());
     }
 
     @Override
@@ -139,9 +143,9 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
                     cell.setBounds(x, y, cellW, cellH);
                 }
 
-                x += colW;
+                x += colW + colSpacing;
             }
-            y += rowH;
+            y += rowH + rowSpacing;
         }
     }
 
@@ -160,7 +164,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
             result[c] = tm;
         }
 
-        double remainingSpace = getChildLayoutWidth() - getTotalBreadth(result);
+        double remainingSpace = getAvailableTrackWidth() - getTotalBreadth(result);
         adjustTrackSizes(result, remainingSpace);
 
         return result;
@@ -186,10 +190,26 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
             result[r] = tm;
         }
 
-        double remainingSpace = getChildLayoutHeight() - getTotalBreadth(result);
+        double remainingSpace = getAvailableTrackHeight() - getTotalBreadth(result);
         adjustTrackSizes(result, remainingSpace);
 
         return result;
+    }
+
+    private double getAvailableTrackWidth() {
+        return getChildLayoutWidth() - getTotalColSpacing();
+    }
+
+    private double getTotalColSpacing() {
+        return (getColCount() - 1) * colSpacing;
+    }
+
+    private double getAvailableTrackHeight() {
+        return getChildLayoutHeight() - getTotalRowSpacing();
+    }
+
+    private double getTotalRowSpacing() {
+        return (getRowCount() - 1) * rowSpacing;
     }
 
 
@@ -229,6 +249,20 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         super.setInsets(insets);
     }
 
+    @Override
+    public void setRowSpacing(double amount) {
+        Checks.checkRange(amount, "amount", 0.0);
+
+        rowSpacing = amount;
+    }
+
+    @Override
+    public void setColSpacing(double amount) {
+        Checks.checkRange(amount, "amount", 0.0);
+
+        colSpacing = amount;
+    }
+
     private static double getTotalBreadth(TrackMetrics[] sizes) {
         double total = 0.0;
         for (TrackMetrics size : sizes) {
@@ -237,8 +271,10 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         return total;
     }
 
-    private static LayoutSize getTotalBreadth(TrackMetrics[] sizes, LayoutSizeType sizeType) {
-        double total = 0.0;
+    private static LayoutSize getTotalBreadth(TrackMetrics[] sizes, LayoutSizeType sizeType,
+            double sumInterTrackSpacing) {
+
+        double total = sumInterTrackSpacing;
         for (TrackMetrics size : sizes) {
             total += size.getSize(sizeType).value(size.breadth);
         }

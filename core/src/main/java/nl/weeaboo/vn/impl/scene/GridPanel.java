@@ -83,4 +83,14 @@ public class GridPanel extends Panel implements IGridPanel {
         layout.setInsets(insets);
     }
 
+    @Override
+    public void setRowSpacing(double amount) {
+        layout.setRowSpacing(amount);
+    }
+
+    @Override
+    public void setColSpacing(double amount) {
+        layout.setColSpacing(amount);
+    }
+
 }

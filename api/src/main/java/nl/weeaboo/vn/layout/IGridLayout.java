@@ -21,4 +21,8 @@ public interface IGridLayout extends Serializable {
     /** Sets the padding for the sides of the layout. */
     void setInsets(Insets2D insets);
 
+    void setRowSpacing(double amount);
+
+    void setColSpacing(double amount);
+
 }
