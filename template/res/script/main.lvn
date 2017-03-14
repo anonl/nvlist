@@ -17,7 +17,7 @@ function titlescreen()
     --Log.info("Saved in slot {}", slot)
     
     testTextLog()
-    testGuiScreen()
+    --testGuiScreen()
 
     registerSpeaker("guy", "Mr. Guy")
     registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
