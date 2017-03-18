@@ -167,6 +167,14 @@ public class SaveLib extends LuaLib {
         }
     }
 
+    /**
+     * Returns the save slot corresponding to the given quick save slot index.
+     *
+     * @param args
+     *        <ol>
+     *        <li>quick save slot index
+     *        </ol>
+     */
     @ScriptFunction
     public Varargs getQuickSaveSlot(Varargs args) {
         int slot = args.checkint(1);
@@ -175,6 +183,14 @@ public class SaveLib extends LuaLib {
         return LuaValue.valueOf(saveModule.getQuickSaveSlot(slot));
     }
 
+    /**
+     * Returns the save slot corresponding to the given auto save slot index.
+     *
+     * @param args
+     *        <ol>
+     *        <li>auto save slot index
+     *        </ol>
+     */
     @ScriptFunction
     public Varargs getAutoSaveSlot(Varargs args) {
         int slot = args.checkint(1);

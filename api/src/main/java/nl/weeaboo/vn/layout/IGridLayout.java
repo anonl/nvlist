@@ -6,10 +6,14 @@ import nl.weeaboo.common.Insets2D;
 
 public interface IGridLayout extends Serializable {
 
-    /** Adds an element to the layout */
+    /**
+     * Add an element to the panel.
+     */
     GridCellConstraints add(ILayoutElem elem);
 
-    /** Ends the current row and starts a new one. */
+    /**
+     * Ends the current row. Further elements will be placed in a line below the current elements.
+     */
     void endRow();
 
     /** Returns the number of rows currently in the layout. */
@@ -21,8 +25,10 @@ public interface IGridLayout extends Serializable {
     /** Sets the padding for the sides of the layout. */
     void setInsets(Insets2D insets);
 
+    /** Sets the amount of spacing between grid rows. */
     void setRowSpacing(double amount);
 
+    /** Sets the amount of spacing between grid columns. */
     void setColSpacing(double amount);
 
 }

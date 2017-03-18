@@ -53,6 +53,7 @@ public final class DesktopLauncher {
 
     /**
      * Main entry point for desktop platforms (Windows, Linux, MacOS).
+     * @throws InitException If a fatal error occurs during initialization.
      */
     public static void main(String[] args) throws InitException {
         InitConfig.init();
@@ -60,6 +61,9 @@ public final class DesktopLauncher {
         new DesktopLauncher(args).start();
     }
 
+    /**
+     * @throws InitException If a fatal error occurs during initialization.
+     */
     public void start() throws InitException {
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();

@@ -15,6 +15,12 @@ public interface IGridPanel extends IPanel {
      */
     void endRow();
 
+    /** Sets the amount of spacing between grid rows. */
+    void setRowSpacing(double amount);
+
+    /** Sets the amount of spacing between grid columns. */
+    void setColSpacing(double amount);
+
     /**
      * @see #pack(Direction)
      */
@@ -22,9 +28,5 @@ public interface IGridPanel extends IPanel {
 
     /** Adjusts the size of the panel to fit its contents, aligning the panel based on the given direction. */
     void pack(Direction anchor);
-
-    void setRowSpacing(double amount);
-
-    void setColSpacing(double amount);
 
 }

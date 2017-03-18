@@ -71,6 +71,9 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
         return Rect2D.of(r.x + insets.left, r.y + insets.top, getChildLayoutWidth(), getChildLayoutHeight());
     }
 
+    /**
+     * @return The insets between the layouts outer bounds and its contents.
+     */
     public Insets2D getInsets() {
         return insets;
     }

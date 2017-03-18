@@ -67,6 +67,14 @@ public class InputLib extends LuaLib {
         return LuaBoolean.valueOf(getInput().consumePress(key));
     }
 
+    /**
+     * @param args
+     *        <ol>
+     *        <li>vkey
+     *        </ol>
+     * @return {@code true} if the given key is currently pressed, and not yet consumed by {@link #consume(Varargs)}.
+     * @throws ScriptException If the input parameters are invalid.
+     */
     @ScriptFunction
     public Varargs isPressed(Varargs args) throws ScriptException {
         VKey key = getVKey(args, 1);

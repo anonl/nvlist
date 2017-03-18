@@ -20,6 +20,10 @@ public interface IScrollable {
      */
     void scroll(double dx, double dy);
 
+    /**
+     * Sets the absolute scroll position.
+     * @see #scroll(double, double)
+     */
     void setScroll(double x, double y);
 
 }
