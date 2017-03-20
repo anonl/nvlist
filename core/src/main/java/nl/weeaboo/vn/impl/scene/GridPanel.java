@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
+
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.Direction;
@@ -58,6 +60,8 @@ public class GridPanel extends Panel implements IGridPanel {
 
     @Override
     public void pack(Direction anchor) {
+        anchor = MoreObjects.firstNonNull(anchor, Direction.CENTER);
+
         double oldWidth = getWidth();
         double oldHeight = getHeight();
 
