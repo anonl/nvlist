@@ -150,7 +150,7 @@ allprojects {
                 name = project.version
             }          
         }
-    }    
+    }
 }
 
 def applyErrorPronePlugin(project) {

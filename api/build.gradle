@@ -27,7 +27,5 @@ publishing {
 }
 
 bintray {
-    gradle.projectsEvaluated {
-        publications = ['api']
-    }
+    publications = ['api']
 }
