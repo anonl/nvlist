@@ -36,7 +36,7 @@ allprojects {
     apply plugin: 'com.jfrog.bintray'
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha10'
+    version = '4.0.0-alpha11'
     ext {
         javaVersion = JavaVersion.VERSION_1_8
         
