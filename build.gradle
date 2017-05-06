@@ -4,15 +4,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        // Plugin for making a 'fat' JAR
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:2.3.0'        
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha6'        
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'        
 
         // Plugins for iOS
-        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0"
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0'
     }
 }
 
@@ -21,11 +18,17 @@ plugins {
     // Note: Causes a classpath conflict for org.apache.tools.zip
     id 'com.jfrog.bintray' version '1.7.3'
     
-    id "net.ltgt.errorprone" version "0.0.8"
-    id "com.github.hierynomus.license" version "0.13.1"
+    // Google error-prone
+    id 'net.ltgt.errorprone' version '0.0.10'
+    
+    // Plugin used for reporting on the licenses of third-part licenses
+    id 'com.github.hierynomus.license' version '0.13.1'
     
     // Java Microbenchmark Harness plugin
-    id "me.champeau.gradle.jmh" version "0.3.1" apply false
+    id 'me.champeau.gradle.jmh' version '0.3.1' apply false
+    
+    // Plugin for making a 'fat' JAR
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
 def templateDir = file('template').getAbsoluteFile()
