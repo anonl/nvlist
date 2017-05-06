@@ -47,7 +47,7 @@ allprojects {
         gdxVersion = '1.9.6'
         gdxVideoVersion = '1.0.0-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
-        errorProneVersion = '2.0.18'
+        errorProneVersion = '2.0.19'
         joptVersion = '5.0.3'
         junitVersion = '4.12'
         luajpp2Version = '2.3.15'
