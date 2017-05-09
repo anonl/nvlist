@@ -93,8 +93,10 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
             int endLine = Math.min(layout.getLineCount(), startLine + count);
             cachedVisibleLayout = layout.getLineRange(startLine, endLine);
 
-            LOG.trace("Text layout created: startLine={}, endLine={}, height={}/{}",
-                    startLine, endLine, cachedVisibleLayout.getTextHeight(), getLayoutMaxHeight());
+            LOG.trace("Text layout created: lines={}-{}/{}, glyphs={}/{}, height={}/{}",
+                    startLine, endLine, getLineCount(),
+                    cachedVisibleLayout.getGlyphCount(), layout.getGlyphCount(),
+                    cachedVisibleLayout.getTextHeight(), getLayoutMaxHeight());
         }
         return cachedVisibleLayout;
     }
@@ -275,7 +277,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public double getVisibleText() {
-        return visibleGlyphs;
+        return Math.min(visibleGlyphs, getMaxVisibleText());
     }
 
     @Override
@@ -285,8 +287,11 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public void setVisibleText(double vc) {
-        // Limit value to its maximum
-        vc = Math.min(vc, getMaxVisibleText());
+        /*
+         * Fix for #46: Remember the intention to show all glyphs, so the visible glyphs aren't reduced by changes in
+         * the visible layout.
+         */
+        vc = Math.min(vc, ALL_GLYPHS_VISIBLE);
 
         if (visibleGlyphs != vc) {
             visibleGlyphs = vc;
