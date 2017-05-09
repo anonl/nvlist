@@ -1,0 +1,153 @@
+body {
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    min-height: 100%;
+    background: #e7e4e9 url('../img/main/content.png') repeat-x;
+
+    font-size: 11pt;
+    font-family: tahoma, arial;
+    text-align: left;
+}
+
+a {
+    color: #644971;
+}
+a:hover {
+    background: #644971;
+    color: #fff;
+}
+a.image-link {
+    background: inherit;
+    color: auto;
+}
+a.image-link img {
+    border-width: 0px;
+}
+
+h1, div.section-header1 {
+    font-family: georgia, serif;
+    font-weight: normal;
+    font-size: 2.0em;
+}
+h2, div.section-header2 {
+    font-family: georgia, serif;
+    font-weight: normal;
+    font-size: 1.7em;
+    line-height: 1em;
+    color: #333;
+}
+h3, div.section-header3 {
+    font-family: tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 1.2em;
+    line-height: 0em;
+    color: #666;
+}
+
+code {
+    padding: 0px 2px;
+    background-color: #d8d8d8;
+}
+
+div#header {
+    height: 100px;
+    margin-left: 100px;
+}
+div#content {
+    width: 650px;
+    padding: 10px;
+    margin-left: 100px;
+}
+div#footer {
+    margin-left: 100px;
+}
+
+div.section {
+    padding: 10px 0px;
+}
+
+blockquote, pre.code-block {
+    padding: 5px;
+    margin: 1em 0em;
+    display: block;
+    max-width: 600px;
+    max-height: 20em;
+    overflow: auto;
+    border: 1px solid #555;
+    background-color: #f0f0f0;
+}
+
+div.chapter-group {
+    margin: 1em;
+}
+span.chapter-group {
+    font-size: 1.5em;
+}
+span.chapter-number {
+    font-size: .75em;
+    color: #555;
+}
+span.chapter {
+    font-size: 1em;
+}
+
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    background-color: #f0f0f0;
+}
+th {
+    font-weight: normal;
+    border: 1px solid black;
+    padding: .3em;
+}
+td {
+    border: 1px solid black;
+    padding: .3em;
+}
+td.supported {
+    background-color: #2aba17;
+}
+td.unsupported {
+    background-color: #e23636;
+}
+
+.figure {
+    text-align: center;
+    margin: 1em;
+}
+.figure img {
+    border: 1px solid #aaa;
+}
+.figure-desc {
+    font-style: italic;
+    font-size: .75em;
+}
+
+.optional {
+    color: #888;
+    font-style: italic;
+}
+.optional a {
+    color: ccaddd;
+}
+
+.tooltip {
+    border-bottom: 1px dotted gray;
+}
+
+.grid-table {
+}
+.grid-table td {
+    width: 50%;
+    vertical-align: top;
+}
+
+ul.drawable-icons-list {
+    list-style-type: none;
+}
+.drawable-icons-list li img {
+    vertical-align: middle;
+}

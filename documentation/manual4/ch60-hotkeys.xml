@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="style/default.xsl"?>
+
+<section>
+  
+  <section title="Hotkeys" level="1">
+    <p>Some of these are only available when running in debug mode.</p>
+    
+    <table>
+      <tr>
+        <th style="width: 100px">Alt + Enter</th>
+        <td>Toggles fullscreen mode.</td>
+      </tr>
+      <tr>
+        <th>Ctrl</th>
+        <td>Hold to enable skip mode.</td>
+      </tr>
+      <tr>
+        <th>Shift + Ctrl</th>
+        <td>Activates skip mode, but with the opposite &quot;skip unread&quot; setting.</td>
+      </tr>
+      <tr>
+        <th>Space</th>
+        <td>Toggles textbox visibility.</td>
+      </tr>
+      <tr>
+        <th>Numpad +/-</th>
+        <td>Quicksave/quickload</td>
+      </tr>
+      <tr>
+        <th>F5</th>
+        <td>Full restart. Returns to the titlescreen and reloads all scripts. Can be used to test script changes without closing the NVList window.</td>
+      </tr>
+      <tr>
+        <th>F7</th>
+        <td>Toggles on-screen display of framerate and other interesting information.</td>
+      </tr>
+      <tr>
+        <th>F8</th>
+        <td>Starts/stops the built-in video capture. Records at 30fps, no audio. Video capture requires an x264 executable to be in your <a href="http://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a>.</td>
+      </tr>
+      <tr>
+        <th>F9</th>
+        <td>Clears the texture cache and disposes all OpenGL resources.</td>
+      </tr>
+      <tr>
+        <th>F11/F12</th>
+        <td>F12 toggles the texture viewer. When the texture viewer is active, F11 zooms in on the texture under the mouse cursor.</td>
+      </tr>
+      <tr>
+        <th>Numpad *</th>
+        <td>Divides by zero.</td>
+      </tr>
+    </table>
+  </section>
+  
+</section>

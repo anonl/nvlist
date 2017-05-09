@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="style/default.xsl"?>
+
+<section>
+
+  <section title="Animation" level="1">
+    <p>A collection of animation utility functions is defined in <code>vn/anim.lua</code>. Use of the animation functions is entirely optional, you can use threads to do animations if you want. The animation functions simply make it easier to cancel, skip or link animations together.</p>
+  </section>
+  
+  <section title="Animators" level="1">
+    <p>A number of functions in <code>Anim</code> return an Animator object. Call the <code>start</code> method to start the animation and use <code>Anim.waitFor(...)</code> to wait for animations to finish.</p>
+    <sourcecode lang="lvn"><![CDATA[@local i = img("character1", "c")
+#Create an animator that gradually changes alpha from 0.0 to 1.0
+@local a = Anim.createTween(i, "alpha", 0.0, 1.0, 60)
+@a:start() --Start the animation
+This text displays while the animation runs in the background.
+@a:finish() --Skip to the end of the animation]]></sourcecode>
+  
+    <section title="Property Animator" level="2">
+      <p><code>Anim.createTween</code> creates a PropertyAnimator which changes the value of an object property over time. It can be used to change alpha, color, rotation, and nearly every other property with a <code>setXXX</code> function in the object.</p>
+      <p>Because this type of animator is so common, two additional utility functions are defined: <code>Anim.tweenTo</code>/<code>Anim.tweenFromTo</code>. These create a PropertyAnimator internally and immediately run it.</p>
+      <sourcecode lang="lvn"><![CDATA[@local i = imgf("character1", "c")
+#Stretch image to fill the entire screen
+@Anim.tweenTo(i, "bounds", {0,0,screenWidth,screenHeight}, 120)]]></sourcecode>
+    </section>
+    <section title="Wait Animator" level="2">
+      <p><code>Anim.createWait</code>, an animator that does nothing but wait for the specified time. Useful as a spacer when combining animations with <code>Anim.seq</code> or <code>Anim.par</code>.</p>
+    </section>
+    <section title="Functor Animator" level="2">
+      <p><code>Anim.fromFunction</code> creates an animator which calls a function each frame for the duration of the animation.</p>
+    </section>
+    <section title="Filmstrip Animator" level="2">
+      <p><code>Anim.createFilmstrip</code> returns an animator which changes the texture of the given ImageDrawable based on a table of textures and durations.</p>
+      
+      <sourcecode lang="lvn"><![CDATA[@local frames = {}
+@for i=1,4 do
+@    frames[i] = {texture=tex("anim/anim01#" .. i), duration=15}
+@end
+@local drawable = img(frames[1].texture)
+@local texAnim = Anim.createFilmstrip(drawable, frames)
+@texAnim:start(3) --Loop animation 3 times]]></sourcecode>    
+    </section>
+
+    <section title="Combining Animators" level="2">
+      <p><code>Anim.seq</code> and <code>Anim.par</code> can be used to combine animators together. <code>seq</code> creates an animator which runs the given animators in <em>seq</em>uence. <code>par</code> creates an animator which runs the given animators in <em>par</em>allel. Good use of <code>seq</code> and <code>par</code> is critical in building complex animations.</p>
+      
+      <sourcecode lang="lvn"><![CDATA[@local i1 = img("character1", "l")
+@local i2 = img("character2", "r")
+
+#Move the sprites to the top of the screen, one after the other
+@Anim.seq(
+@    Anim.createTween(i1, "y", nil, 0, 60),
+@    Anim.createTween(i2, "y", nil, 0, 120)
+@):run()]]></sourcecode>
+    </section>
+  </section>
+
+  <section title="Interpolators" level="1">
+    <p>Simple linear interpolation looks unnatural in many cases, particularly for movement. Objects in the real world simply don't instantly start moving at their top speed. Animation functions in NVList use a more natural looking interpolation which slows down near the start and end. You can pass in <code>Interpolators.LINEAR</code> as an additional argument to most animation functions to use linear interpolation instead.</p>
+    <p>It's also possible to create an interpolator from a Lua function. Just pass the function to <code>Interpolators.get</code>. The Lua function should take one argument, a number in the range <code>[0.0, 1.0]</code> and return a number also in the range <code>[0.0, 1.0]</code>.</p>
+  </section>
+  
+</section>

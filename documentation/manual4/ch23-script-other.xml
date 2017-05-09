@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="style/default.xsl"?>
+
+<section>
+  <section title="Other Common Tasks" level="1">
+
+    <section title="Audio" level="2">  
+      <sourcecode lang="lvn"><![CDATA[Starting music
+@music("music1")
+
+Playing sound effect
+@sound("sfx")
+
+Playing a voice sound effect
+@voice("voice")
+
+Changing music (crossfades to the new music)
+@music("music2")
+
+Stopping music
+@musicStop()]]></sourcecode>
+    </section>
+
+    <section title="Video" level="2">  
+      <sourcecode lang="lvn"><![CDATA[Playing a cutscene
+@movie("video")]]></sourcecode>
+    </section>
+
+    <section title="Special Screens" level="2">
+      <sourcecode lang="lvn"><![CDATA[Showing the save screen
+@saveScreen()
+
+Showing the load screen
+@loadScreen()
+
+Showing the text log
+@textLog()]]></sourcecode>
+    </section>
+
+    <section title="Restarting" level="2">
+      <p>At the end of a route (or at any other time), you can use <code>restart()</code> to clear all variables and return to the title screen.</p>
+    </section>
+    
+    <section title="Custom Special Screens" level="2">
+      <p>The save/load/choice/... screens are defined inside <code>res/script/screens.lua</code> and can be freely edited.</p>
+    </section>
+    
+    <section title="Accessing Preferences" level="2">
+      <p>Preferences whose name starts with &quot;vn.&quot; are made available to Lua through a global <code>prefs</code> table.</p>
+      <sourcecode lang="lvn"><![CDATA[Text style: ${prefs.textStyle}]]></sourcecode>
+    </section>
+    
+    <section title="Doing Two Things at Once" level="2">
+      <sourcecode lang="lvn"><![CDATA[Fades in two images, one after the other
+@imgf("image1", "l")
+@imgf("image2", "r")]]></sourcecode>
+
+  <sourcecode lang="lvn"><![CDATA[Fades in two images simultaneously
+#Start two background threads
+@local t1 = newThread(imgf, "image1", "l")
+@local t2 = newThread(imgf, "image2", "r")
+#Wait for t1 and t2 to finish
+@join({t1, t2})]]></sourcecode>
+    </section>
+          
+  </section>  
+  
+</section>
