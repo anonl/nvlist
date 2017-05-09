@@ -25,10 +25,5 @@ matrix:
     - os: osx
       language: java
       osx_image: xcode8.2
-      before_install:
-        # Install the SDK
-        - android list sdk --all --extended
-        - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-25.0.2,platform-tools,android-25
-        - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
         ./gradlew robovmArchive
