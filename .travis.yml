@@ -26,9 +26,6 @@ matrix:
       language: java
       osx_image: xcode8.2
       before_install:
-        # Download SDK
-        - brew tap caskroom/cask
-        - brew cask install android-sdk
         # Install the SDK
         - android list sdk --all --extended
         - (while sleep 5; do echo "y"; done) | android update sdk --no-ui --all --filter tools,tools,build-tools-25.0.2,platform-tools,android-25
