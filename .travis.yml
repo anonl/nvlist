@@ -30,7 +30,7 @@ matrix:
         - brew update
         - brew cask install android-sdk
         # Install the SDK
-        - (while sleep 5; do echo "y"; done) | sdkmanager tools;tools;build-tools-25.0.2;platform-tools;android-25
+        - (while sleep 5; do echo "y"; done) | sdkmanager "tools;tools;build-tools-25.0.2;platform-tools;android-25"
         - export ANDROID_HOME=/usr/local/opt/android-sdk
       script:
         ./gradlew robovmArchive
