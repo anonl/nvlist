@@ -10,7 +10,6 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.text.TextRenderer;
 
 public class TextRendererTest {
 
@@ -68,7 +67,7 @@ public class TextRendererTest {
     @Test
     public void changeVisibleText() {
         // Initial state
-        assertVisibleText(0, TextRenderer.ALL_GLYPHS_VISIBLE);
+        assertVisibleText(0, 0);
 
         // After changing the text, by default all glyphs become visible
         textRenderer.setText("abcdefghijklmnopqrstuvwxyz");
