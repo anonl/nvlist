@@ -90,7 +90,7 @@
 
   <xsl:template match="chapter-index">
     <xsl:for-each select="chapter-group">
-      <xsl:variable name="ch" select="position()-1" />
+      <xsl:variable name="ch" select="position()" />
 
       <div class="chapter-group">
         <xsl:value-of select="$ch" />.

@@ -5,40 +5,44 @@
 
   <chapter-index>
     <chapter-group title="Introduction">
-      <chapter url="ch01-getting-started.xml">Getting started</chapter>
-      <chapter url="ch02-features.xml">NVList features</chapter>
+      <chapter url="ch10-introduction.xml">Introduction</chapter>
+      <chapter url="ch11-quick-start.xml">Quick-start guide</chapter>
+      <chapter url="ch12-file-types.xml">Supported file types</chapter>
     </chapter-group>
     <chapter-group title="Basics">
-      <chapter url="ch10-build.xml">Build system and settings</chapter>
-      <chapter url="ch11-resources.xml">Adding images and other resources</chapter>
-      <chapter url="ch12-folder-layout.xml">Project folder layout</chapter>
+      <chapter url="ch20-script-intro.xml">Scripting introduction</chapter>
+      <chapter url="ch21-script-structure.xml">Script structure</chapter>
+      <chapter url="ch22-text.xml">Text</chapter>
+      <chapter url="ch23-images.xml">Images</chapter>
+      <chapter url="ch24-sound.xml">Sound</chapter>
+      <chapter url="ch25-choices-branches.xml">Choices and branches</chapter>
+      <chapter url="ch26-textbox.xml">Text box functions</chapter>
+      <chapter url="ch27-transitions.xml">Transitions</chapter>
+      <chapter url="ch28-video.xml">Video</chapter>
     </chapter-group>
-    <chapter-group title="Scripting">
-      <chapter url="ch20-script-basics.xml">Scripting basics</chapter>
-      <chapter url="ch21-script-text.xml">Adding text</chapter>
-      <chapter url="ch22-script-image.xml">Showing images</chapter>
-      <chapter url="ch23-script-other.xml">Other common tasks</chapter>
+    <chapter-group title="Project setup and deployment">
+      <chapter url="ch30-create-new-project.xml">Setting up a new project</chapter>
+      <chapter url="ch31-folder-layout.xml">Project folder layout</chapter>
+      <chapter url="ch32-distribution.xml">Distribution</chapter>
     </chapter-group>
-    <chapter-group title="Advanced Scripting">
-      <chapter url="ch30-drawables.xml">Drawables and layers</chapter>
-      <chapter url="ch31-gui.xml">User interface</chapter>
-      <chapter url="ch32-animation.xml">Animation</chapter>
+    <chapter-group title="Animation and transitions">
+      <chapter url="ch40-advanced-transitions.xml">Advanced transitions</chapter>
+      <chapter url="ch41-animations.xml">Animations</chapter>
+    </chapter-group>
+    <chapter-group title="User interface customization">
+      <chapter url="ch50-builtin-screens.xml">Built-in screens</chapter>
+      <chapter url="ch51-gui-components.xml">User interface components</chapter>
+      <chapter url="ch52-gui-layout.xml">Interface layout</chapter>
+      <chapter url="ch53-replace-builtin-screens.xml">Replacing built-in screens</chapter>
+    </chapter-group>
+    <chapter-group title="Advanced text functions">
+      <chapter url="ch60-custom-text-tags.xml">Custom text tags</chapter>
+      <chapter url="ch61-stringifiers.xml">Stringifiers</chapter>
     </chapter-group>
     <chapter-group title="References">
-      <chapter url="ch40-script-env.xml">Lua environment</chapter>
+      <chapter url="ch70-script-env.xml">Lua environment</chapter>
       <chapter url="../script-reference/index.html">Script functions</chapter>
       <chapter url="../engine-internals/index.html">Engine internals</chapter>
-      <chapter url="ch43-android-differences.xml">Differences on Android</chapter>
-    </chapter-group>
-    <chapter-group title="Distribution">
-      <chapter url="ch50-create-distro.xml">Creating a distribution</chapter>
-      <chapter url="ch51-resource-optimizer.xml">Resource optimizer</chapter>
-      <chapter url="ch52-android.xml">Releasing for Android</chapter>
-    </chapter-group>
-    <chapter-group title="Developer tools">
-      <chapter url="ch60-hotkeys.xml">Hotkeys</chapter>
-      <chapter url="ch61-debug-window.xml">Debug window</chapter>
-      <chapter url="ch62-bug-reports.xml">Bug reports</chapter>
     </chapter-group>
   </chapter-index>
 
