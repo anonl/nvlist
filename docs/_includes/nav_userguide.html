@@ -1,0 +1,14 @@
+<div class="nav-userguide">
+  {% for section in site.data.nav_userguide %}
+    <div class="nav-docs-section">
+      <h3>{{ section.title }}</h3>
+      <ul>
+        {% for item in section.items %}
+          <li>
+            <a href="{{site.baseurl}}/userguide/{{item.id}}">{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>
