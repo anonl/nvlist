@@ -13,12 +13,11 @@ layout: default
   
   <div class="bottom-nav">
     {% if page.previous %}
-      <a class="prev" href="{{ site.baseurl }}{{ page.previous.url }}">&larr; Prev</a>
+      <a class="prev" href="{{ site.baseurl }}{{ page.previous.url }}">&larr; Previous</a>
     {% endif %}
+    &nbsp;
     {% if page.next %}
       <a class="next" href="{{ site.baseurl }}{{ page.next.url }}">Next &rarr;</a>
 	{% endif %}
   </div>
-  
-  {% include nav_userguide.html %}
 </article>

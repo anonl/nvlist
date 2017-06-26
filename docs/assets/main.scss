@@ -1,0 +1,8 @@
+---
+# Import the theme's root stylesheet, as well as the stylesheet with NVList-specific overrides
+---
+
+$baseurl: {{ site.baseurl }};
+
+@import "minima";
+@import "nvlist";
