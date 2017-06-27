@@ -19,6 +19,7 @@ description: ''
 url: "https://anonl.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "/nvlist" # the subpath of your site, e.g. /blog
 repository: anonl/nvlist
+exclude: [build]
 
 collections:
   userguide:

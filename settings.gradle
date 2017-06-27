@@ -15,3 +15,6 @@ project(':nvlist-android').projectDir=new File('android')
 
 include 'nvlist-ios'
 project(':nvlist-ios').projectDir=new File('ios')
+
+include 'nvlist-docs'
+project(':nvlist-docs').projectDir=new File('docs')
