@@ -10,4 +10,14 @@
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}">
+
+    <!-- CodeMirror + stylesheets -->
+    <link rel="stylesheet" href="{{ "/assets/codemirror/lib/codemirror.css" | relative_url }}" />
+    <link rel="stylesheet" href="{{ "/assets/codemirror/theme/gedit.css" | relative_url }}" />
+    <script src="{{ "/assets/codemirror/lib/codemirror.js" | relative_url }}" type="text/javascript"></script>
+    <script src="{{ "/assets/codemirror/lib/util/runmode.js" | relative_url }}" type="text/javascript"></script>
+    <script src="{{ "/assets/codemirror/mode/lvn/lvn.js" | relative_url }}" type="text/javascript"></script>
+    <script src="{{ "/assets/codemirror/mode/lua/lua.js" | relative_url }}" type="text/javascript"></script>
+    <script src="{{ "/assets/codemirror/mode/xml/xml.js" | relative_url }}" type="text/javascript"></script>
+
 </head>

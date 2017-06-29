@@ -1,0 +1,21 @@
+
+{% assign id = "sourcecode" %}
+{% if include.id %}
+{% assign id = include.id %}
+{% endif %}
+
+{% assign lang = "lvn" %}
+{% if include.lang %}
+{% assign lang = include.lang %}
+{% endif %}
+
+<textarea id="{{ id }}-source">{{ include.content }}</textarea>
+<pre id="{{ id }}" class="code-block cm-s-gedit" style="display: none;"></pre>
+<script>
+  var id = "{{ id }}"
+  var inputElement = document.getElementById(id + "-source");
+  var outputElement = document.getElementById(id);
+  CodeMirror.runMode(inputElement.value, {name: "{{ lang }}"}, outputElement);
+  inputElement.style.display = "none";
+  outputElement.style.display = "block";
+</script>

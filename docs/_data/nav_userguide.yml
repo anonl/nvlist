@@ -29,8 +29,8 @@
       title: Video
 - title: Project setup and deployment
   items:
-    - id: ch30-settings-up-a-new-project
-      title: Settings up a new project
+    - id: ch30-setting-up-a-new-project
+      title: Setting up a new project
     - id: ch31-project-folder-layout
       title: Project folder layout
     - id: ch32-distribution

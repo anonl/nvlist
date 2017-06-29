@@ -6,7 +6,7 @@ body {
     width: 100%;
     min-height: 100%;
     
-    background: #e7e4e9 url($baseurl + "/assets/page-background.png") repeat-x;
+    background-color: #e7e4e9;
 
     font-size: 11pt;
     font-family: tahoma, arial;
@@ -26,6 +26,19 @@ a.image-link {
 }
 a.image-link img {
     border-width: 0px;
+}
+
+.site-header {
+    background-color: #a38dae;
+}
+
+.site-nav .page-link:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+a.index-link {
+    margin: 0px 1.5em;
 }
 
 h1, div.section-header1 {
@@ -51,19 +64,6 @@ h3, div.section-header3 {
 code {
     padding: 0px 2px;
     background-color: #d8d8d8;
-}
-
-div#site-header {
-    height: 100px;
-    margin-left: 100px;
-}
-div#content {
-    width: 650px;
-    padding: 10px;
-    margin-left: 100px;
-}
-div#site-footer {
-    margin-left: 100px;
 }
 
 div.section {
@@ -104,6 +104,7 @@ th {
     font-weight: normal;
     border: 1px solid black;
     padding: .3em;
+    background-color: #e0e0e0;
 }
 td {
     border: 1px solid black;

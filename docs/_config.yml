@@ -36,6 +36,7 @@ defaults:
       type: "userguide"
     values:
       layout: "chapter"
+      index: "/userguide.html"
 
 # Build settings
 markdown: kramdown

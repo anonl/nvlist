@@ -15,7 +15,9 @@ layout: default
     {% if page.previous %}
       <a class="prev" href="{{ site.baseurl }}{{ page.previous.url }}">&larr; Previous</a>
     {% endif %}
-    &nbsp;
+    {% if page.previous %}
+      <a class="index-link" href="{{ site.baseurl }}{{ page.index }}">Index</a>
+    {% endif %}
     {% if page.next %}
       <a class="next" href="{{ site.baseurl }}{{ page.next.url }}">Next &rarr;</a>
 	{% endif %}
