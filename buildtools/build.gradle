@@ -1,0 +1,25 @@
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+applyErrorPronePlugin(project)
+
+dependencies {
+    compile project(':nvlist-core')
+}
+
+publishing {
+    publications {
+        buildtools(MavenPublication) {
+            from components.java
+            artifactId 'nvlist-buildtools'
+            pom.withXml {
+                asNode().children().last() + pomLicenseConfig
+            }  
+        }
+    }
+}
+
+bintray {
+    publications = ['buildtools']
+}

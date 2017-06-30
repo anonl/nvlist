@@ -18,3 +18,9 @@ project(':nvlist-ios').projectDir=new File('ios')
 
 include 'nvlist-docs'
 project(':nvlist-docs').projectDir=new File('docs')
+
+include 'nvlist-buildtools'
+project(':nvlist-buildtools').projectDir=new File('buildtools')
+
+include 'nvlist-buildgui'
+project(':nvlist-buildgui').projectDir=new File('buildgui')
