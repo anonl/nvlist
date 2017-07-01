@@ -10,6 +10,7 @@ dependencies {
     compile "nl.weeaboo.common:tcommon-prefsstore:$tcommonVersion"
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "com.google.guava:guava:$guavaVersion"
+    compile "com.google.code.findbugs:jsr305:$javaxAnnotationVersion" // javax.annotation.*
     
     testCompile "nl.weeaboo.common:tcommon-test:$tcommonVersion"
 }
