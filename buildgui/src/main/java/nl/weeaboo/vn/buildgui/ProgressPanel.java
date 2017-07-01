@@ -1,12 +1,12 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.Optional;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import com.google.common.base.Preconditions;
@@ -21,21 +21,25 @@ import nl.weeaboo.vn.buildgui.task.ITask;
 @SuppressWarnings("serial")
 final class ProgressPanel extends JPanel implements IActiveTaskListener {
 
-    private final JProgressBar progressBar;
+    private final ImageIcon progressIcon;
+    private final JLabel progressIndicator;
     private final JLabel messageLabel;
 
     private final IProgressListener progressListener = new ProgressListener();
     private ITask currentTask;
 
     public ProgressPanel() {
-        progressBar = new JProgressBar();
+        progressIcon = new ImageIcon(getClass().getResource("progress.gif"));
+        progressIndicator = new JLabel();
+        progressIndicator.setPreferredSize(new Dimension(progressIcon.getIconWidth(),
+                progressIcon.getIconHeight()));
 
         messageLabel = new JLabel("");
 
-        setLayout(new GridLayout(2, 1));
-        setPreferredSize(new Dimension(100, 40));
-        add(progressBar);
-        add(messageLabel);
+        setOpaque(false);
+        setLayout(new BorderLayout(10, 10));
+        add(progressIndicator, BorderLayout.WEST);
+        add(messageLabel, BorderLayout.CENTER);
     }
 
     @Override
@@ -45,13 +49,13 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
         if (currentTask != null) {
             currentTask.removeProgressListener(progressListener);
             messageLabel.setText("");
-            progressBar.setIndeterminate(false);
+            progressIndicator.setIcon(null);
         }
 
         currentTask = task.orElse(null);
 
         if (currentTask != null) {
-            progressBar.setIndeterminate(true);
+            progressIndicator.setIcon(progressIcon);
             messageLabel.setText("");
             currentTask.addProgressListener(progressListener);
         }

@@ -25,8 +25,8 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
         this.buildController = Objects.requireNonNull(buildController);
 
         runCancelButton = new JButton();
-        runCancelButton.setFont(runCancelButton.getFont().deriveFont(Font.BOLD, 18f));
-        runCancelButton.setPreferredSize(new Dimension(150, 50));
+        runCancelButton.setFont(runCancelButton.getFont().deriveFont(Font.BOLD, 14f));
+        runCancelButton.setPreferredSize(new Dimension(125, 35));
         runCancelButton.addActionListener(e -> handleRunCancelButtonPress());
 
         // TODO: Add button(s) to run other Gradle tasks
