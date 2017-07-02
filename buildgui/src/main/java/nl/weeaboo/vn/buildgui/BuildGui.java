@@ -9,7 +9,6 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -34,7 +33,7 @@ final class BuildGui extends JFrame {
         setDefaultWindowIcon(this);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        getContentPane().setBackground(StyleConstants.WINDOW_BACKGROUND);
+        getContentPane().setBackground(Styles.WINDOW_BACKGROUND);
         setLayout(new BorderLayout());
         add(createTopPanel(), BorderLayout.NORTH);
         add(createCenterPanel(), BorderLayout.CENTER);
@@ -50,9 +49,17 @@ final class BuildGui extends JFrame {
     }
 
     private JPanel createCenterPanel() {
+        BuildGuiModel model = controller.getModel();
+        IBuildController buildController = controller.getBuildController();
+
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("First", Box.createGlue());
-        tabbedPane.addTab("Second", Box.createGlue());
+        ProjectOverviewPanel projectOverviewPanel = new ProjectOverviewPanel();
+        model.addProjectListener(projectOverviewPanel);
+        tabbedPane.addTab("Overview", projectOverviewPanel);
+
+        LogPanel logPanel = new LogPanel();
+        buildController.addLogListener(logPanel);
+        tabbedPane.addTab("Log", logPanel);
 
         JPanel wrapperPanel = new JPanel(new BorderLayout());
         wrapperPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -71,7 +78,7 @@ final class BuildGui extends JFrame {
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(true);
-        panel.setBackground(StyleConstants.WINDOW_BACKGROUND2);
+        panel.setBackground(Styles.WINDOW_BACKGROUND2);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(progressPanel, BorderLayout.CENTER);
         panel.add(taskButton, BorderLayout.EAST);

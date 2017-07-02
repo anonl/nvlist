@@ -2,6 +2,8 @@ package nl.weeaboo.vn.buildgui.task;
 
 import java.util.Optional;
 
+import nl.weeaboo.vn.buildtools.task.ITask;
+
 public interface IActiveTaskListener {
 
     /**

@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.buildgui.task;
+package nl.weeaboo.vn.buildtools.task;
 
 public interface IProgressListener {
 

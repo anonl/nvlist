@@ -3,6 +3,7 @@ package nl.weeaboo.vn.buildgui;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -18,8 +19,17 @@ final class SwingImageUtil {
      */
     public static List<BufferedImage> getScaledImages(BufferedImage original, int... sizes) {
         List<BufferedImage> result = Lists.newArrayList();
-        for (int size : sizes) {
-            result.add(scaledImage(original, size, size));
+
+        int[] sortedSizes = sizes.clone();
+        Arrays.sort(sortedSizes);
+
+        // Use the results of a previous scaling step to obtain better-looking results.
+        // Scaling from 256x256 -> 64x64 -> 32x32 provides better results than scaling 256 -> 32 directly.
+        BufferedImage current = original;
+        for (int n = sortedSizes.length - 1; n >= 0; n--) {
+            int size = sortedSizes[n];
+            current = scaledImage(current, size, size);
+            result.add(current);
         }
         return result;
     }
@@ -27,7 +37,7 @@ final class SwingImageUtil {
     /**
      * Returns a scaled version of an image, returning the original image if it was already the correct size.
      */
-    private static BufferedImage scaledImage(BufferedImage original, int newWidth, int newHeight) {
+    public static BufferedImage scaledImage(BufferedImage original, int newWidth, int newHeight) {
         int newType = BufferedImage.TYPE_INT_ARGB;
         if (!original.getColorModel().hasAlpha()) {
             newType = BufferedImage.TYPE_INT_BGR;

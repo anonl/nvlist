@@ -8,4 +8,6 @@ public interface IBuildGuiController {
 
     ITaskController getTaskController();
 
+    BuildGuiModel getModel();
+
 }

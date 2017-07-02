@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.SwingUtilities;
 
 import nl.weeaboo.vn.buildgui.SwingHelper;
+import nl.weeaboo.vn.buildtools.task.IProgressListener;
+import nl.weeaboo.vn.buildtools.task.ITask;
 
 public final class TaskController implements ITaskController {
 

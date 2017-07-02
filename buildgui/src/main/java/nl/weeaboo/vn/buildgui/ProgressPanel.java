@@ -12,8 +12,8 @@ import javax.swing.SwingUtilities;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
-import nl.weeaboo.vn.buildgui.task.IProgressListener;
-import nl.weeaboo.vn.buildgui.task.ITask;
+import nl.weeaboo.vn.buildtools.task.IProgressListener;
+import nl.weeaboo.vn.buildtools.task.ITask;
 
 /**
  * Panel showing progress for the currently running task.

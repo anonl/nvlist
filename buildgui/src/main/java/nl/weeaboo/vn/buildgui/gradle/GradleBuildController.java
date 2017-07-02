@@ -8,22 +8,39 @@ import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProgressEvent;
 import org.gradle.tooling.ProgressListener;
 import org.gradle.tooling.ResultHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.buildgui.IBuildController;
-import nl.weeaboo.vn.buildgui.task.AbstractTask;
-import nl.weeaboo.vn.buildgui.task.ITask;
+import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
+import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.task.AbstractTask;
+import nl.weeaboo.vn.buildtools.task.ITask;
 
 public final class GradleBuildController implements IBuildController {
 
-    private final GradleMonitor gradleMonitor;
-    private final ITaskController taskController;
+    private static final Logger LOG = LoggerFactory.getLogger(GradleBuildController.class);
 
-    public GradleBuildController(GradleMonitor gradleMonitor, ITaskController taskController) {
-        this.taskController = taskController;
-        this.gradleMonitor = Objects.requireNonNull(gradleMonitor);
+    private final ITaskController taskController;
+    private final GradleMonitor gradleMonitor;
+
+    public GradleBuildController(ITaskController taskController) {
+        this.taskController = Objects.requireNonNull(taskController);
+
+        gradleMonitor = new GradleMonitor();
+    }
+
+    @Override
+    public void addLogListener(IBuildLogListener listener) {
+        gradleMonitor.addLogListener(listener);
+    }
+
+    @Override
+    public void removeLogListener(IBuildLogListener listener) {
+        gradleMonitor.removeLogListener(listener);
     }
 
     @Override
@@ -31,11 +48,25 @@ public final class GradleBuildController implements IBuildController {
         return startTask("run");
     }
 
+    @Override
+    public ITask startAssembleDistTask() {
+        return startTask("assembleDist");
+    }
+
     private GradleTask startTask(String taskName) {
         GradleTask task = new GradleTask(gradleMonitor);
         taskController.setActiveTask(task);
         task.start(taskName);
         return task;
+    }
+
+    @Override
+    public void onProjectModelChanged(ProjectModel projectModel) {
+        try {
+            gradleMonitor.open(projectModel.getFolderConfig());
+        } catch (CheckedGradleException e) {
+            LOG.error("Error connecting to Gradle build");
+        }
     }
 
     private static final class GradleTask extends AbstractTask {
@@ -82,4 +113,5 @@ public final class GradleBuildController implements IBuildController {
                     });
         }
     }
+
 }

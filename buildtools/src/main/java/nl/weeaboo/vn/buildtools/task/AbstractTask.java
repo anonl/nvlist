@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.buildgui.task;
+package nl.weeaboo.vn.buildtools.task;
 
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;

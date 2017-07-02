@@ -18,7 +18,7 @@ final class HeaderPanel extends JPanel {
         logoIcon = new ImageIcon(getClass().getResource("logo.png"));
 
         setOpaque(true);
-        setBackground(StyleConstants.HEADER_BACKGROUND);
+        setBackground(Styles.HEADER_BACKGROUND);
         setPreferredSize(new Dimension(logoIcon.getIconWidth() + 2 * BORDER_SIZE,
                 logoIcon.getIconHeight() + 2 * BORDER_SIZE));
         setBorder(BorderFactory.createEmptyBorder(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));

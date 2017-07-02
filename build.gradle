@@ -55,7 +55,7 @@ allprojects {
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '2.0.1'
-        tcommonVersion = '2.2.1'
+        tcommonVersion = '2.3.0'
         gradleToolingApiVersion = '4.0'
         // Note: Update ./template/build-tools/NOTICE when adding runtime third-party dependencies
         
