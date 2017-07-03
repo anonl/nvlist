@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
 import nl.weeaboo.vn.buildtools.task.IProgressListener;
 import nl.weeaboo.vn.buildtools.task.ITask;
+import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 /**
  * Panel showing progress for the currently running task.
@@ -22,6 +23,8 @@ import nl.weeaboo.vn.buildtools.task.ITask;
 final class ProgressPanel extends JPanel implements IActiveTaskListener {
 
     private final ImageIcon progressIcon;
+    private final ImageIcon failedIcon;
+
     private final JLabel progressIndicator;
     private final JLabel messageLabel;
 
@@ -29,7 +32,9 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
     private ITask currentTask;
 
     public ProgressPanel() {
-        progressIcon = new ImageIcon(getClass().getResource("progress.gif"));
+        progressIcon = new ImageIcon(getClass().getResource("task-progress.gif"));
+        failedIcon = new ImageIcon(getClass().getResource("task-failed.gif"));
+
         progressIndicator = new JLabel();
         progressIndicator.setPreferredSize(new Dimension(progressIcon.getIconWidth(),
                 progressIcon.getIconHeight()));
@@ -48,8 +53,6 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
 
         if (currentTask != null) {
             currentTask.removeProgressListener(progressListener);
-            messageLabel.setText("");
-            progressIndicator.setIcon(null);
         }
 
         currentTask = task.orElse(null);
@@ -65,7 +68,22 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
 
         @Override
         public void onProgress(String message) {
-            SwingUtilities.invokeLater(() -> messageLabel.setText(message));
+            SwingUtilities.invokeLater(() -> {
+                messageLabel.setText(message);
+            });
+        }
+
+        @Override
+        public void onFinished(TaskResultType resultType, String message) {
+            SwingUtilities.invokeLater(() -> {
+                if (resultType == TaskResultType.FAILED) {
+                    progressIndicator.setIcon(failedIcon);
+                    messageLabel.setText(message);
+                } else {
+                    progressIndicator.setIcon(null);
+                    messageLabel.setText("");
+                }
+            });
         }
 
     }

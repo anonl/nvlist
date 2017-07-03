@@ -10,8 +10,10 @@ public interface IProgressListener {
 
     /**
      * Called when the task finishes -- even if it finishes with an error.
+     * @param resultType Indicates success or failure.
+     * @param message Human readable result message.
      */
-    default void onFinished() {
+    default void onFinished(TaskResultType resultType, String message) {
     }
 
 }

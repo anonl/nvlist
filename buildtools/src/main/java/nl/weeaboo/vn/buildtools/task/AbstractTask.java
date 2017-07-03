@@ -25,8 +25,8 @@ public abstract class AbstractTask implements ITask {
         progressListeners.forEach(ls -> ls.onProgress(message));
     }
 
-    protected final void fireFinished() {
-        progressListeners.forEach(ls -> ls.onFinished());
+    protected final void fireFinished(TaskResultType resultType, String message) {
+        progressListeners.forEach(ls -> ls.onFinished(resultType, message));
     }
 
 }

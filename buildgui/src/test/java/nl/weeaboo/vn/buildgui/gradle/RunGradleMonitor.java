@@ -9,6 +9,7 @@ public final class RunGradleMonitor {
 
     /**
      * Tests {@link GradleMonitor} by connecting it to the NVList build.
+     * @throws CheckedGradleException If an error occurs while trying to connect to the Gradle build.
      */
     public static void main(String[] args) throws CheckedGradleException {
         InitConfig.init();

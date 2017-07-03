@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import nl.weeaboo.vn.buildgui.SwingHelper;
 import nl.weeaboo.vn.buildtools.task.IProgressListener;
 import nl.weeaboo.vn.buildtools.task.ITask;
+import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 public final class TaskController implements ITaskController {
 
@@ -52,7 +53,7 @@ public final class TaskController implements ITaskController {
     private final class TaskFinishListener implements IProgressListener {
 
         @Override
-        public void onFinished() {
+        public void onFinished(TaskResultType resultType, String message) {
             // Remove task-related state when the task finishes
             SwingUtilities.invokeLater(() -> setActiveTask(null));
         }

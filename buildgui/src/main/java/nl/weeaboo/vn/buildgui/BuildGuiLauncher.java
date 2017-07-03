@@ -26,7 +26,6 @@ public final class BuildGuiLauncher {
         SwingUtilities.invokeLater(() -> {
             BuildGui window = new BuildGui(controller);
 
-            // TODO: Project should be (re)openened when based on the selected project/engine folders, not hardcoded
             ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("../template/"), new File(".."));
             controller.getModel().setProjectFolders(folderConfig);
 

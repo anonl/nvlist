@@ -54,9 +54,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     private static BufferedImage readImage(IFileSystem fileSystem, String path) throws IOException {
         byte[] iconBytes = FileSystemUtil.readBytes(fileSystem, FilePath.of(path));
-        BufferedImage icon = ImageIO.read(new ByteArrayInputStream(iconBytes));
-        icon = SwingImageUtil.scaledImage(icon, 64, 64);
-        return icon;
+        return ImageIO.read(new ByteArrayInputStream(iconBytes));
     }
 
     @Override
@@ -81,9 +79,19 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
         private final JButton browseProjectButton;
         private final JButton browseBuildToolsButton;
 
+        private final BufferedImage missingIcon;
+
         private @Nullable ProjectFolderConfig folderConfig;
 
         public HeaderPanel() {
+            BufferedImage missingIcon;
+            try {
+                missingIcon = ImageIO.read(getClass().getResource("missing-icon.png"));
+            } catch (IOException ioe) {
+                missingIcon = SwingHelper.newBufferedImage(1, 1);
+            }
+            this.missingIcon = missingIcon;
+
             iconLabel = new JLabel();
 
             titleLabel = new JLabel();
@@ -103,7 +111,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             buttonPanel.add(browseProjectButton);
             buttonPanel.add(browseBuildToolsButton);
 
-            setLayout(new BorderLayout());
+            setLayout(new BorderLayout(10, 10));
             add(iconLabel, BorderLayout.WEST);
             add(titleLabel, BorderLayout.CENTER);
             add(buttonPanel, BorderLayout.EAST);
@@ -127,12 +135,15 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
                 folderConfig = projectModel.getFolderConfig();
 
                 IFileSystem fileSystem = projectModel.getResFileSystem();
+                BufferedImage icon;
                 try {
-                    BufferedImage icon = readImage(fileSystem, "icon.png");
-                    iconLabel.setIcon(new ImageIcon(icon));
+                    icon = readImage(fileSystem, "icon.png");
                 } catch (IOException ioe) {
                     LOG.warn("Project icon not found: {}", ioe.toString());
+                    icon = missingIcon;
                 }
+                icon = SwingImageUtil.scaledImage(icon, 64, 64);
+                iconLabel.setIcon(new ImageIcon(icon));
 
                 titleLabel.setText(projectModel.getPref(NovelPrefs.TITLE));
 
