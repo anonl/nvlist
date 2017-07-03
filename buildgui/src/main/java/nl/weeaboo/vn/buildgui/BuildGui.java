@@ -45,7 +45,11 @@ final class BuildGui extends JFrame {
     }
 
     private JPanel createTopPanel() {
-        return new HeaderPanel();
+        BuildGuiModel model = controller.getModel();
+
+        HeaderPanel headerPanel = new HeaderPanel(controller);
+        model.addProjectListener(headerPanel);
+        return headerPanel;
     }
 
     private JPanel createCenterPanel() {
@@ -53,7 +57,7 @@ final class BuildGui extends JFrame {
         IBuildController buildController = controller.getBuildController();
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        ProjectOverviewPanel projectOverviewPanel = new ProjectOverviewPanel();
+        ProjectOverviewPanel projectOverviewPanel = new ProjectOverviewPanel(model);
         model.addProjectListener(projectOverviewPanel);
         tabbedPane.addTab("Overview", projectOverviewPanel);
 

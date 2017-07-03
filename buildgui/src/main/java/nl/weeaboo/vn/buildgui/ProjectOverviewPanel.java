@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -24,23 +26,30 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.core.NovelPrefs;
 
 @SuppressWarnings("serial")
-final class ProjectOverviewPanel extends JPanel implements IProjectModelListener {
+final class ProjectOverviewPanel extends JPanel implements IProjectModelListener, IActiveTaskListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverviewPanel.class);
 
+    private final BuildGuiModel model;
     private final HeaderPanel headerPanel;
 
-    public ProjectOverviewPanel() {
+    public ProjectOverviewPanel(BuildGuiModel model) {
+        this.model = Objects.requireNonNull(model);
+
         headerPanel = new HeaderPanel();
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         add(headerPanel, BorderLayout.NORTH);
+
+        refresh();
     }
 
     private static BufferedImage readImage(IFileSystem fileSystem, String path) throws IOException {
@@ -52,7 +61,16 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     @Override
     public void onProjectModelChanged(ProjectModel projectModel) {
-        headerPanel.onProjectModelChanged(projectModel);
+        refresh();
+    }
+
+    @Override
+    public void onActiveTaskChanged(Optional<ITask> currentTask) {
+        refresh();
+    }
+
+    private void refresh() {
+        headerPanel.onProjectModelChanged(model.getProject().orElse(null));
     }
 
     @SuppressWarnings("unused")
@@ -102,7 +120,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             browseBuildToolsButton.setVisible(false);
         }
 
-        private void onProjectModelChanged(ProjectModel projectModel) {
+        private void onProjectModelChanged(@Nullable ProjectModel projectModel) {
             resetState();
 
             if (projectModel != null) {
@@ -113,7 +131,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
                     BufferedImage icon = readImage(fileSystem, "icon.png");
                     iconLabel.setIcon(new ImageIcon(icon));
                 } catch (IOException ioe) {
-                    LOG.warn("Project icon not found", ioe);
+                    LOG.warn("Project icon not found: {}", ioe.toString());
                 }
 
                 titleLabel.setText(projectModel.getPref(NovelPrefs.TITLE));

@@ -12,6 +12,11 @@ public interface IBuildController extends IProjectModelListener {
     void removeLogListener(IBuildLogListener listener);
 
     /**
+     * Creates an empty NVList project in the current project folder.
+     */
+    ITask startInitProjectTask();
+
+    /**
      * Runs the current NVList project.
      */
     ITask startRunTask();

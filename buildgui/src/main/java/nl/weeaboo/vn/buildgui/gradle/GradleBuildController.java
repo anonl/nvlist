@@ -44,6 +44,11 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
+    public ITask startInitProjectTask() {
+        return startTask("initProject");
+    }
+
+    @Override
     public ITask startRunTask() {
         return startTask("run");
     }
