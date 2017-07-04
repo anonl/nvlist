@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -23,8 +22,6 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
@@ -39,22 +36,20 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     private final BuildGuiModel model;
     private final HeaderPanel headerPanel;
+    private final RandomImageBackgroundPanel centerPanel;
 
     public ProjectOverviewPanel(BuildGuiModel model) {
         this.model = Objects.requireNonNull(model);
 
         headerPanel = new HeaderPanel();
+        centerPanel = new RandomImageBackgroundPanel();
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         add(headerPanel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
 
         refresh();
-    }
-
-    private static BufferedImage readImage(IFileSystem fileSystem, String path) throws IOException {
-        byte[] iconBytes = FileSystemUtil.readBytes(fileSystem, FilePath.of(path));
-        return ImageIO.read(new ByteArrayInputStream(iconBytes));
     }
 
     @Override
@@ -69,6 +64,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     private void refresh() {
         headerPanel.onProjectModelChanged(model.getProject().orElse(null));
+        centerPanel.onProjectModelChanged(model.getProject().orElse(null));
     }
 
     @SuppressWarnings("unused")
@@ -137,7 +133,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
                 IFileSystem fileSystem = projectModel.getResFileSystem();
                 BufferedImage icon;
                 try {
-                    icon = readImage(fileSystem, "icon.png");
+                    icon = SwingImageUtil.readImage(fileSystem, "icon.png");
                 } catch (IOException ioe) {
                     LOG.warn("Project icon not found: {}", ioe.toString());
                     icon = missingIcon;

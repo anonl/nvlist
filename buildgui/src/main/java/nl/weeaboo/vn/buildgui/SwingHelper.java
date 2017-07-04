@@ -1,7 +1,10 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -34,5 +37,14 @@ public final class SwingHelper {
 
     public static BufferedImage newBufferedImage(int width, int height) {
         return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    public static void registerVisibilityChangeListener(JComponent component, Runnable listener) {
+        component.addHierarchyListener(new HierarchyListener() {
+            @Override
+            public void hierarchyChanged(HierarchyEvent e) {
+                listener.run();
+            }
+        });
     }
 }

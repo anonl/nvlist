@@ -3,10 +3,18 @@ package nl.weeaboo.vn.buildgui;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import com.google.common.collect.Lists;
+
+import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.filesystem.FileSystemUtil;
+import nl.weeaboo.filesystem.IFileSystem;
 
 final class SwingImageUtil {
 
@@ -49,5 +57,10 @@ final class SwingImageUtil {
         g.drawImage(original, 0, 0, newWidth, newHeight, null);
         g.dispose();
         return result;
+    }
+
+    public static BufferedImage readImage(IFileSystem fileSystem, String path) throws IOException {
+        byte[] iconBytes = FileSystemUtil.readBytes(fileSystem, FilePath.of(path));
+        return ImageIO.read(new ByteArrayInputStream(iconBytes));
     }
 }
