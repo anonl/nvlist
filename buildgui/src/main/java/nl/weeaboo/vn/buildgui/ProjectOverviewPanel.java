@@ -36,18 +36,15 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     private final BuildGuiModel model;
     private final HeaderPanel headerPanel;
-    private final RandomImageBackgroundPanel centerPanel;
 
     public ProjectOverviewPanel(BuildGuiModel model) {
         this.model = Objects.requireNonNull(model);
 
         headerPanel = new HeaderPanel();
-        centerPanel = new RandomImageBackgroundPanel();
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
         add(headerPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
 
         refresh();
     }
@@ -64,7 +61,6 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
     private void refresh() {
         headerPanel.onProjectModelChanged(model.getProject().orElse(null));
-        centerPanel.onProjectModelChanged(model.getProject().orElse(null));
     }
 
     @SuppressWarnings("unused")
