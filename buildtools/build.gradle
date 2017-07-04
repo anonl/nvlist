@@ -5,7 +5,7 @@ apply plugin: 'maven-publish'
 applyErrorPronePlugin(project)
 
 dependencies {
-    compile project(':nvlist-core')
+    compile project(':nvlist-desktop')
 }
 
 publishing {

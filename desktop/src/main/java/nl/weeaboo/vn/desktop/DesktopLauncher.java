@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.desktop;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -65,9 +66,7 @@ public final class DesktopLauncher {
      * @throws InitException If a fatal error occurs during initialization.
      */
     public void start() throws InitException {
-        // Manually init Gdx.files (we need to load some resources to configure the application)
-        Gdx.files = new Lwjgl3Files();
-        DesktopGdxFileSystem gdxFileSystem = new DesktopGdxFileSystem();
+        DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("res/"));
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
@@ -100,6 +99,12 @@ public final class DesktopLauncher {
                 LOG.info("App dispose");
             }
         });
+    }
+
+    public static DesktopGdxFileSystem openResourceFileSystem(File projectFolder) {
+        // Manually init Gdx.files (we need to load some resources to configure the application)
+        Gdx.files = new Lwjgl3Files();
+        return new DesktopGdxFileSystem(projectFolder.toString().replace('\\', '/') + "/res/");
     }
 
     private static void setWindowIcon(IFileSystem fileSystem) {

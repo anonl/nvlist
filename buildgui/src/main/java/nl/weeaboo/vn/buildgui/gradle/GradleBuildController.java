@@ -19,7 +19,7 @@ import com.google.common.base.Throwables;
 import nl.weeaboo.vn.buildgui.IBuildController;
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.task.AbstractTask;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
@@ -73,7 +73,7 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public void onProjectModelChanged(ProjectModel projectModel) {
+    public void onProjectChanged(NvlistProjectConnection projectModel) {
         try {
             gradleMonitor.open(projectModel.getFolderConfig());
         } catch (CheckedGradleException e) {

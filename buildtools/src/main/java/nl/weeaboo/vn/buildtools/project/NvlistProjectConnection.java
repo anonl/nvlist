@@ -11,38 +11,47 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.RegularFileSystem;
 import nl.weeaboo.prefsstore.Preference;
+import nl.weeaboo.vn.desktop.DesktopLauncher;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 
-public final class ProjectModel {
+public final class NvlistProjectConnection implements AutoCloseable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProjectModel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NvlistProjectConnection.class);
 
     private final ProjectFolderConfig folderConfig;
 
-    private IWritableFileSystem resFileSystem;
+    private IFileSystem resFileSystem;
+    private IWritableFileSystem outputFileSystem;
     private NovelPrefsStore preferences;
 
-    private ProjectModel(ProjectFolderConfig folderConfig) {
+    private NvlistProjectConnection(ProjectFolderConfig folderConfig) {
         this.folderConfig = Objects.requireNonNull(folderConfig);
     }
 
-    public static ProjectModel createProjectModel(ProjectFolderConfig folderConfig) {
-        ProjectModel projectModel = new ProjectModel(folderConfig);
-        projectModel.init();
+    public static NvlistProjectConnection openProject(ProjectFolderConfig folderConfig) {
+        NvlistProjectConnection projectModel = new NvlistProjectConnection(folderConfig);
+        projectModel.open();
         return projectModel;
     }
 
-    private void init() {
+    private void open() {
         File projectFolder = folderConfig.getProjectFolder();
-        File resFolder = new File(projectFolder, "res");
-        resFileSystem = new RegularFileSystem(resFolder);
 
-        preferences = new NovelPrefsStore(resFileSystem, resFileSystem);
+        resFileSystem = DesktopLauncher.openResourceFileSystem(projectFolder);
+        outputFileSystem = new RegularFileSystem(new File(projectFolder, "res/"));
+
+        preferences = new NovelPrefsStore(resFileSystem, outputFileSystem);
         try {
             preferences.loadVariables();
         } catch (IOException e) {
             LOG.warn("Unable to load preferences", e);
         }
+    }
+
+    @Override
+    public void close() {
+        outputFileSystem.close();
+        resFileSystem.close();
     }
 
     public ProjectFolderConfig getFolderConfig() {

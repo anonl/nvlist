@@ -6,14 +6,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.Nullable;
 
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
 
 final class BuildGuiModel {
 
     private final CopyOnWriteArrayList<IProjectModelListener> projectListeners = new CopyOnWriteArrayList<>();
 
-    private @Nullable ProjectModel project;
+    private @Nullable NvlistProjectConnection project;
 
     public void addProjectListener(IProjectModelListener listener) {
         projectListeners.add(Objects.requireNonNull(listener));
@@ -23,14 +23,18 @@ final class BuildGuiModel {
         projectListeners.remove(Objects.requireNonNull(listener));
     }
 
-    public Optional<ProjectModel> getProject() {
+    public Optional<NvlistProjectConnection> getProject() {
         return Optional.ofNullable(project);
     }
 
     public void setProjectFolders(ProjectFolderConfig folderConfig) {
-        project = ProjectModel.createProjectModel(folderConfig);
+        if (project != null) {
+            project.close();
+        }
 
-        projectListeners.forEach(ls -> ls.onProjectModelChanged(project));
+        project = NvlistProjectConnection.openProject(folderConfig);
+
+        projectListeners.forEach(ls -> ls.onProjectChanged(project));
     }
 
 }

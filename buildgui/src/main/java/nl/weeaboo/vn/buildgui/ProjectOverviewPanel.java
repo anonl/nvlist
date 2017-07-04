@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.core.NovelPrefs;
 
@@ -50,7 +50,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
     }
 
     @Override
-    public void onProjectModelChanged(ProjectModel projectModel) {
+    public void onProjectChanged(NvlistProjectConnection projectModel) {
         refresh();
     }
 
@@ -120,7 +120,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             browseBuildToolsButton.setVisible(false);
         }
 
-        private void onProjectModelChanged(@Nullable ProjectModel projectModel) {
+        private void onProjectModelChanged(@Nullable NvlistProjectConnection projectModel) {
             resetState();
 
             if (projectModel != null) {

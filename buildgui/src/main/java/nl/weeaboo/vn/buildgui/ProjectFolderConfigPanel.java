@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
 @SuppressWarnings("serial")
 final class ProjectFolderConfigPanel extends JPanel implements IProjectModelListener {
@@ -77,7 +77,7 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
         BuildGuiModel model = guiController.getModel();
 
         ProjectFolderConfig folderConfig = model.getProject()
-                .map(ProjectModel::getFolderConfig)
+                .map(NvlistProjectConnection::getFolderConfig)
                 .orElseGet(ProjectFolderConfig::new);
 
         Optional<File> newProjectFolder = selectFolder(folderConfig.getProjectFolder());
@@ -101,7 +101,7 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
     }
 
     @Override
-    public void onProjectModelChanged(ProjectModel projectModel) {
+    public void onProjectChanged(NvlistProjectConnection projectModel) {
         refresh();
     }
 

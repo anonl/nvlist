@@ -14,7 +14,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -36,12 +35,10 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
-import nl.weeaboo.vn.gdx.graphics.JngTextureLoader;
-import nl.weeaboo.vn.gdx.graphics.PremultTextureLoader;
 import nl.weeaboo.vn.gdx.input.GdxInputAdapter;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
+import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
@@ -117,11 +114,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     public void create() {
         LOG.info("Launcher.create() start");
 
-        assetManager = new AssetManager(resourceFileSystem);
-        PremultTextureLoader.register(assetManager);
-        ColorTextureLoader.register(assetManager);
-        JngTextureLoader.register(assetManager);
-        Texture.setAssetManager(assetManager);
+        assetManager = new GdxAssetManager(resourceFileSystem);
 
         if (prefs == null) {
             loadPreferences();

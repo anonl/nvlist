@@ -1,9 +1,9 @@
 package nl.weeaboo.vn.buildgui;
 
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
 public interface IProjectModelListener {
 
-    void onProjectModelChanged(ProjectModel projectModel);
+    void onProjectChanged(NvlistProjectConnection projectModel);
 
 }

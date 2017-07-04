@@ -9,7 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import nl.weeaboo.vn.buildtools.project.ProjectModel;
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
 @SuppressWarnings("serial")
 final class HeaderPanel extends JPanel implements IProjectModelListener {
@@ -45,8 +45,8 @@ final class HeaderPanel extends JPanel implements IProjectModelListener {
     }
 
     @Override
-    public void onProjectModelChanged(ProjectModel projectModel) {
-        folderConfigPanel.onProjectModelChanged(projectModel);
+    public void onProjectChanged(NvlistProjectConnection projectModel) {
+        folderConfigPanel.onProjectChanged(projectModel);
     }
 
 }

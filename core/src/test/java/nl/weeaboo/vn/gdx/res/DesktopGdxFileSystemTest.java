@@ -31,7 +31,6 @@ import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.io.ZipUtil;
 import nl.weeaboo.io.ZipUtil.Compression;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 
 public class DesktopGdxFileSystemTest {
 
