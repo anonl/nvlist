@@ -36,3 +36,4 @@ publishing {
 bintray {
     publications = ['desktop']
 }
+

@@ -1,6 +1,9 @@
 
+apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
+
+mainClassName = 'nl.weeaboo.vn.buildgui.BuildGuiLauncher'
 
 applyErrorPronePlugin(project)
 
@@ -8,6 +11,14 @@ dependencies {
     compile project(':nvlist-buildtools')
     compile project(':nvlist-desktop')
     compile "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+   baseName = 'nvlist-build'
+   classifier = null
+   version = null
 }
 
 publishing {
@@ -25,3 +36,5 @@ publishing {
 bintray {
     publications = ['buildgui']
 }
+
+tasks.distTar.enabled = false // Don't bother generating a .tar distribution

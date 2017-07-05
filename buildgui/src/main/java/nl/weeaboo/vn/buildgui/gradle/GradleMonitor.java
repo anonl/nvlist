@@ -5,12 +5,16 @@ import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 
 public final class GradleMonitor implements AutoCloseable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GradleMonitor.class);
 
     private ProjectConnection connection;
     private ProjectFolderConfig folderConfig;
@@ -42,18 +46,31 @@ public final class GradleMonitor implements AutoCloseable {
 
     <T> ModelBuilder<T> modelBuilder(Class<T> type) {
         return connection.model(type)
-            .withArguments(getDefaultArguments());
+                .setStandardOutput(System.out)
+                .setStandardError(System.err)
+                .withArguments(getDefaultArguments());
     }
 
     BuildLauncher buildLauncher(String taskName) {
         return connection.newBuild()
             .forTasks(taskName)
+            .setStandardOutput(System.out)
+            .setStandardError(System.err)
             .withArguments(getDefaultArguments());
     }
 
     private Iterable<String> getDefaultArguments() {
-        String escapedProjectPath = folderConfig.getProjectFolder().toURI().getPath();
-        return ImmutableList.of("-PvnRoot=\"" + escapedProjectPath + "\"");
+        String projectPath = ProjectFolderConfig.toCanonicalPath(folderConfig.getProjectFolder());
+        for (String c : new String[] {" ", "\""}) {
+            if (projectPath.contains(c)) {
+                LOG.warn("Project path contains a dangerous character ({}), things may break: {}",
+                        c, projectPath);
+            }
+        }
+
+        ImmutableList<String> result = ImmutableList.of("-PvnRoot=" + projectPath);
+        LOG.debug("Default Gradle arguments: {}", result);
+        return result;
     }
 
 }

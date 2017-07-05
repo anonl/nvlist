@@ -1,4 +1,4 @@
-package nl.weeaboo.buildtools.optimizer;
+package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.File;
 import java.util.Objects;

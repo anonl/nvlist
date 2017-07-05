@@ -23,6 +23,8 @@ def loadProperties(String filename) {
     return props
 }
 
+logger.lifecycle("VN root parameter: " + vnRoot)
+
 // Standard folders
 allprojects {
     ext {
@@ -33,7 +35,6 @@ allprojects {
     }
 }
 
-logger.lifecycle("VN root folder: " + vnRootDir)
 logger.lifecycle("VN resource folder: " + vnResDir)
 logger.lifecycle("VN build-resource folder: " + buildResDir)
 

@@ -165,3 +165,20 @@ def applyErrorPronePlugin(project) {
         resolutionStrategy.force "com.google.errorprone:error_prone_core:$errorProneVersion"
     }
 }
+
+apply plugin: 'distribution'
+
+distributions {
+    main {
+        contents {
+            from('template') {
+                include 'res/**'
+                include 'build-res/**'
+                include 'build-tools/**'
+            }
+            from { project(':nvlist-buildgui').shadowJar }
+        }
+    }
+}
+
+tasks.distTar.enabled = false // Don't bother generating a .tar distribution

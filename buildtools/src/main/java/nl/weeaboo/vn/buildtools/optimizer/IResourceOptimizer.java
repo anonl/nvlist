@@ -1,4 +1,4 @@
-package nl.weeaboo.buildtools.optimizer;
+package nl.weeaboo.vn.buildtools.optimizer;
 
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
