@@ -22,10 +22,14 @@ public class FileResourceLoader extends ResourceLoader {
 
     private transient FileSystemView cachedFileSystemView;
 
+    public FileResourceLoader(IEnvironment env, MediaType mediaType) {
+        this(env, mediaType, mediaType.getSubFolder());
+    }
+
     public FileResourceLoader(IEnvironment env, MediaType mediaType, FilePath resourceFolder) {
         super(mediaType, env.getResourceLoadLog());
 
-        this.env = env;
+        this.env = Checks.checkNotNull(env);
         this.resourceFolder = Checks.checkNotNull(resourceFolder);
     }
 

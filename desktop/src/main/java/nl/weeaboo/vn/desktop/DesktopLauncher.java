@@ -66,7 +66,7 @@ public final class DesktopLauncher {
      * @throws InitException If a fatal error occurs during initialization.
      */
     public void start() throws InitException {
-        DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("res/"));
+        DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("."));
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {

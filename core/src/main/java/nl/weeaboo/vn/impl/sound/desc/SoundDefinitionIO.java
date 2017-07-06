@@ -32,7 +32,8 @@ public final class SoundDefinitionIO {
     }
 
     /**
-     * Searches the given file system for all snd.json files and deserializes them, returning the combined result.
+     * Searches the given file system for all sound definition files and deserializes them, returning the
+     * combined result.
      *
      * @throws IOException If an I/O error occurs while trying to read the files.
      * @throws SaveFormatException If one of the JSON files can't be parsed.
@@ -42,7 +43,7 @@ public final class SoundDefinitionIO {
 
         Map<FilePath, ISoundDefinition> result = Maps.newHashMap();
         for (FilePath folder : getFolders(fileSystem, rootFolder)) {
-            FilePath path = folder.resolve("snd.json");
+            FilePath path = folder.resolve(ISoundDefinition.SND_DEF_FILE);
             if (!fileSystem.getFileExists(path)) {
                 continue;
             }

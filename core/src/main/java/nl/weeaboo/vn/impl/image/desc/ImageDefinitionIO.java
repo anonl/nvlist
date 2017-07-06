@@ -49,7 +49,7 @@ public final class ImageDefinitionIO {
 
         Map<FilePath, IImageDefinition> result = Maps.newHashMap();
         for (FilePath folder : getFolders(fileSystem, rootFolder)) {
-            FilePath path = folder.resolve("img.json");
+            FilePath path = folder.resolve(IImageDefinition.IMG_DEF_FILE);
             if (!fileSystem.getFileExists(path)) {
                 continue;
             }

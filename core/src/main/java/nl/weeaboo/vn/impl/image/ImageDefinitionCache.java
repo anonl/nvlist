@@ -39,7 +39,7 @@ final class ImageDefinitionCache {
             return imageDef;
         }
 
-        // Check if we need to load the img.json for this folder
+        // Check if we need to load the image definition file for this folder
         FilePath folder = MoreObjects.firstNonNull(path.getParent(), FilePath.empty());
         if (seenFolders.add(folder)) {
             try {
@@ -59,7 +59,7 @@ final class ImageDefinitionCache {
     private void loadJson(FilePath folder) throws IOException {
         FileSystemView fileSystem = resourceLoader.getFileSystem();
 
-        FilePath jsonPath = folder.resolve("img.json");
+        FilePath jsonPath = folder.resolve(IImageDefinition.IMG_DEF_FILE);
         String json = FileSystemUtil.readString(fileSystem, jsonPath);
 
         // Load JSON and add image definitions to the cache
