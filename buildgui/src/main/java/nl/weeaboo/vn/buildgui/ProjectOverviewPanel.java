@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
-import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
+import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.core.NovelPrefs;
 
@@ -63,7 +63,6 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
         headerPanel.onProjectModelChanged(model.getProject().orElse(null));
     }
 
-    @SuppressWarnings("unused")
     private static final class HeaderPanel extends JPanel {
 
         private final JLabel iconLabel;

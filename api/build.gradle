@@ -2,8 +2,6 @@
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
-applyErrorPronePlugin(project)
-
 dependencies {
     compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
     compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
@@ -11,6 +9,7 @@ dependencies {
     compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
     compile "com.google.guava:guava:$guavaVersion"
     compile "com.google.code.findbugs:jsr305:$javaxAnnotationVersion" // javax.annotation.*
+    compile "com.google.errorprone:error_prone_annotations:$errorProneVersion"
     
     testCompile "nl.weeaboo.common:tcommon-test:$tcommonVersion"
 }

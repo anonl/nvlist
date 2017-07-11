@@ -1,4 +1,7 @@
 
+// Note: Use --include-build flag to override external JAR dependencies with local copies of those libraries.
+//   See: https://docs.gradle.org/current/userguide/composite_builds.html#command_line_composite 
+
 rootProject.name = 'nvlist'
 
 include 'nvlist-api'

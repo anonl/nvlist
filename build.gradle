@@ -19,7 +19,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     
     // Google error-prone
-    id 'net.ltgt.errorprone' version '0.0.10'
+    id 'net.ltgt.errorprone' version '0.0.10' apply false
     
     // Plugin used for reporting on the licenses of third-part licenses
     id 'com.github.hierynomus.license' version '0.13.1'
@@ -48,14 +48,14 @@ allprojects {
         gdxVideoVersion = '1.0.0-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
         javaxAnnotationVersion = '3.0.1'
-        errorProneVersion = '2.0.19'
+        errorProneVersion = '2.0.21'
         joptVersion = '5.0.3'
         junitVersion = '4.12'
         luajpp2Version = '2.3.15'
         roboVmVersion = '2.3.0'
         slf4jVersion = '1.7.21'
         styledTextVersion = '2.0.1'
-        tcommonVersion = '2.3.0'
+        tcommonVersion = '2.3.1'
         gradleToolingApiVersion = '4.0'
         // Note: Update ./template/build-tools/NOTICE when adding runtime third-party dependencies
         
@@ -90,7 +90,6 @@ allprojects {
         
         tasks.withType(JavaCompile) {
             options.encoding = 'UTF-8'
-            options.compilerArgs += '-Werror'
         }
 
         sourceSets {
@@ -133,6 +132,9 @@ allprojects {
             }
         }
         
+        project.apply from: rootProject.file('errorprone.gradle')
+        
+        // Apply JMH plugin
         if (file('src/jmh/java').exists()) {
             // Only apply JMH if there are any tests (otherwise the task fails)
             project.apply plugin: "me.champeau.gradle.jmh"
@@ -155,14 +157,6 @@ allprojects {
                 name = project.version
             }          
         }
-    }
-}
-
-def applyErrorPronePlugin(project) {
-    project.apply plugin: 'net.ltgt.errorprone'
-
-    project.configurations.errorprone {
-        resolutionStrategy.force "com.google.errorprone:error_prone_core:$errorProneVersion"
     }
 }
 

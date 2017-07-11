@@ -5,8 +5,6 @@ apply plugin: 'maven-publish'
 
 mainClassName = 'nl.weeaboo.vn.buildgui.BuildGuiLauncher'
 
-applyErrorPronePlugin(project)
-
 dependencies {
     compile project(':nvlist-buildtools')
     compile project(':nvlist-desktop')

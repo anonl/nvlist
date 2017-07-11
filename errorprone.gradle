@@ -1,0 +1,20 @@
+
+// Apply ErrorProne plugin
+apply plugin: 'net.ltgt.errorprone'
+
+dependencies {
+    errorprone "com.google.errorprone:error_prone_core:$errorProneVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += [
+        '-Werror',
+        
+        // These checkers exist, but can't be enabled yet in errorprone-2.0.21
+        // '-Xep:FieldMissingNullable:WARN',
+        // '-Xep:ParameterNotNullable:WARN',
+        // '-Xep:ReturnMissingNullable:WARN',
+    ]
+}
+

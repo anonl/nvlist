@@ -3,6 +3,7 @@ package nl.weeaboo.vn.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -63,7 +64,7 @@ public enum Direction {
         return Iterables.any(dirs, new Predicate<Direction>() {
             @Override
             public boolean apply(Direction d) {
-                return d.isTop();
+                return Preconditions.checkNotNull(d).isTop();
             }
         });
     }
@@ -83,7 +84,7 @@ public enum Direction {
         return Iterables.any(dirs, new Predicate<Direction>() {
             @Override
             public boolean apply(Direction d) {
-                return d.isRight();
+                return Preconditions.checkNotNull(d).isRight();
             }
         });
     }
@@ -103,7 +104,7 @@ public enum Direction {
         return Iterables.any(dirs, new Predicate<Direction>() {
             @Override
             public boolean apply(Direction d) {
-                return d.isBottom();
+                return Preconditions.checkNotNull(d).isBottom();
             }
         });
     }
@@ -123,7 +124,7 @@ public enum Direction {
         return Iterables.any(dirs, new Predicate<Direction>() {
             @Override
             public boolean apply(Direction d) {
-                return d.isLeft();
+                return Preconditions.checkNotNull(d).isLeft();
             }
         });
     }

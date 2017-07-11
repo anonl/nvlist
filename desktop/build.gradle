@@ -3,8 +3,6 @@ apply from: "${buildToolsDir}/common-desktop.gradle"
 
 apply plugin: 'maven-publish'
 
-applyErrorPronePlugin(project)
-
 dependencies {
     compile project(":nvlist-core")
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
