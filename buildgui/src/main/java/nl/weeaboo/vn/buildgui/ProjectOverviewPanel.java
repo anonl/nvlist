@@ -13,6 +13,7 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -101,6 +102,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
             buttonPanel.add(browseProjectButton);
             buttonPanel.add(browseBuildToolsButton);
+            buttonPanel.add(Box.createGlue());
 
             setLayout(new BorderLayout(10, 10));
             add(iconLabel, BorderLayout.WEST);
