@@ -171,9 +171,6 @@ distributions {
                 include 'build-tools/**'
             }
             from{ project(':nvlist-buildgui').shadowJar }
-            from{ project(':nvlist-docs').jekyllBuild } {
-                into 'docs'
-            }
         }
     }
 }
