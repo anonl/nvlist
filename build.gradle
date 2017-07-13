@@ -170,7 +170,10 @@ distributions {
                 include 'build-res/**'
                 include 'build-tools/**'
             }
-            from { project(':nvlist-buildgui').shadowJar }
+            from{ project(':nvlist-buildgui').shadowJar }
+            from{ project(':nvlist-docs').jekyllBuild } {
+                into 'docs'
+            }
         }
     }
 }

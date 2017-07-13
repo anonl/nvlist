@@ -35,5 +35,10 @@ def jekyllTask(name, args) {
     }
 }
 
-// Define jekyllServe task
+// 'jekyllServe' task for running a local Jekyll server
 jekyllTask('jekyllServe', 'serve')
+
+// 'jekyllBuild' task that builds the site into the '_site' folder
+jekyllTask('jekyllBuild', 'build').with {
+    outputs.dir('_site')
+}
