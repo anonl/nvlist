@@ -41,6 +41,9 @@ defaults:
 # Build settings
 markdown: kramdown
 theme: jekyll-theme-minimal
+sass:
+  load_paths:
+    - _sass
 gems:
   - jekyll-feed
 
