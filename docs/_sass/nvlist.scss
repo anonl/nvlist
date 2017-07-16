@@ -1,4 +1,8 @@
 
+$tableBorderColor: #c0c0c0;
+$tableBackground: #f0f0f0;
+$tableHeaderBackground: #e0e0e0;
+
 body {
     position: absolute;
     padding: 0px;
@@ -30,11 +34,32 @@ a.image-link img {
 
 .site-header {
     background-color: #a38dae;
+    width: 100%;
+    margin-bottom: 2em;
 }
 
-.site-nav .page-link:hover {
+.site-nav {
+    position: relative;
+}
+
+.page-link {
     text-decoration: none;
+    color: black;
+    font-size: 1.1em;
+}
+.page-link:hover {
     color: #fff;
+}
+
+div.trigger {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0px;
+}
+
+div.wrapper {
+    margin: auto;
+    max-width: 800px;
 }
 
 a.index-link {
@@ -77,8 +102,8 @@ blockquote, pre.code-block {
     max-width: 600px;
     max-height: 20em;
     overflow: auto;
-    border: 1px solid #555;
-    background-color: #f0f0f0;
+    border: 1px solid $tableBorderColor;
+    background-color: $tableBackground;
 }
 
 div.chapter-group {
@@ -98,16 +123,16 @@ span.chapter {
 table {
     border-spacing: 0px;
     border-collapse: collapse;
-    background-color: #f0f0f0;
+    background-color: $tableBackground;
 }
 th {
     font-weight: normal;
-    border: 1px solid black;
+    border: 1px solid $tableBorderColor;
     padding: .3em;
-    background-color: #e0e0e0;
+    background-color: $tableHeaderBackground;
 }
 td {
-    border: 1px solid black;
+    border: 1px solid $tableBorderColor;
     padding: .3em;
 }
 td.supported {
