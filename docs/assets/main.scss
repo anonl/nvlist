@@ -1,7 +1,186 @@
 ---
-# Import the theme's root stylesheet, as well as the stylesheet with NVList-specific overrides
+# We define everything ourselves, so no theme stylesheet is imported
 ---
 
 $baseurl: {{ site.baseurl }};
 
-@import "nvlist";
+$tableBorderColor: #c0c0c0;
+$tableBackground: #f0f0f0;
+$tableHeaderBackground: #e0e0e0;
+
+body {
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    min-height: 100%;
+    
+    background-color: #e7e4e9;
+
+    font-size: 11pt;
+    font-family: tahoma, arial;
+    text-align: left;
+}
+
+a {
+    color: #644971;
+}
+a:hover {
+    background: #644971;
+    color: #fff;
+}
+a.image-link {
+    background: inherit;
+    color: auto;
+}
+a.image-link img {
+    border-width: 0px;
+}
+
+.site-header {
+    background-color: #a38dae;
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.site-nav {
+    position: relative;
+}
+
+.page-link {
+    text-decoration: none;
+    color: black;
+    font-size: 1.1em;
+}
+.page-link:hover {
+    color: #fff;
+}
+
+div.trigger {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0px;
+}
+
+div.wrapper {
+    margin: auto;
+    max-width: 800px;
+}
+
+a.index-link {
+    margin: 0px 1.5em;
+}
+
+h1, div.section-header1 {
+    font-family: georgia, serif;
+    font-weight: normal;
+    font-size: 2.0em;
+}
+h2, div.section-header2 {
+    font-family: georgia, serif;
+    font-weight: normal;
+    font-size: 1.7em;
+    line-height: 1em;
+    color: #333;
+}
+h3, div.section-header3 {
+    font-family: tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 1.2em;
+    line-height: 0em;
+    color: #666;
+}
+
+code {
+    padding: 0px 2px;
+    background-color: #d8d8d8;
+}
+
+div.section {
+    padding: 10px 0px;
+}
+
+blockquote, pre.code-block {
+    padding: 5px;
+    margin: 1em 0em;
+    display: block;
+    max-width: 600px;
+    max-height: 20em;
+    overflow: auto;
+    border: 1px solid $tableBorderColor;
+    background-color: $tableBackground;
+}
+
+div.chapter-group {
+    margin: 1em;
+}
+span.chapter-group {
+    font-size: 1.5em;
+}
+span.chapter-number {
+    font-size: .75em;
+    color: #555;
+}
+span.chapter {
+    font-size: 1em;
+}
+
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    background-color: $tableBackground;
+}
+th {
+    font-weight: normal;
+    border: 1px solid $tableBorderColor;
+    padding: .3em;
+    background-color: $tableHeaderBackground;
+}
+td {
+    border: 1px solid $tableBorderColor;
+    padding: .3em;
+}
+td.supported {
+    background-color: #2aba17;
+}
+td.unsupported {
+    background-color: #e23636;
+}
+
+.figure {
+    text-align: center;
+    margin: 1em;
+}
+.figure img {
+    border: 1px solid #aaa;
+}
+.figure-desc {
+    font-style: italic;
+    font-size: .75em;
+}
+
+.optional {
+    color: #888;
+    font-style: italic;
+}
+.optional a {
+    color: ccaddd;
+}
+
+.tooltip {
+    border-bottom: 1px dotted gray;
+}
+
+.grid-table {
+}
+.grid-table td {
+    width: 50%;
+    vertical-align: top;
+}
+
+ul.drawable-icons-list {
+    list-style-type: none;
+}
+.drawable-icons-list li img {
+    vertical-align: middle;
+}
