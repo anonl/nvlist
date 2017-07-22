@@ -15,8 +15,10 @@ repositories {
 }
 
 dependencies {
+    jrubyExec 'rubygems:bundler:1.5.2'
     jrubyExec 'rubygems:jekyll-feed:0.9.2'
-    jrubyExec 'rubygems:jekyll:3.4.3'
+    jrubyExec 'rubygems:jekyll:3.4.5'
+    jrubyExec 'rubygems:jekyll-theme-minimal:0.0.4'
 }
 
 task clean(type: Delete) {
