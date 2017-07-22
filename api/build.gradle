@@ -29,3 +29,22 @@ publishing {
 bintray {
     publications = ['api']
 }
+
+configurations {
+    oldApi {
+        transitive = false
+    }
+}
+
+dependencies {
+    oldApi "nl.weeaboo.vn:nvlist-api:4.0.0-alpha10"
+}
+
+task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
+    oldClasspath = files(configurations.oldApi)
+    newClasspath = files(jar)
+    ignoreMissingClasses = true
+    onlyModified = true
+    failOnModification = true
+    htmlOutputFile  = file("$buildDir/reports/japi.html")
+}
