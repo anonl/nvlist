@@ -22,7 +22,7 @@ public final class RunImageOptimizer {
         Lwjgl3NativesLoader.load();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("."), new File("."));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File(""), new File(""));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             IFileSystem resFileSystem = connection.getResFileSystem();
 

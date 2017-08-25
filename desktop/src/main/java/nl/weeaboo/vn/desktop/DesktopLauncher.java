@@ -104,7 +104,14 @@ public final class DesktopLauncher {
     public static DesktopGdxFileSystem openResourceFileSystem(File projectFolder) {
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();
-        return new DesktopGdxFileSystem(projectFolder.toString().replace('\\', '/') + "/res/");
+
+        StringBuilder path = new StringBuilder();
+        path.append(projectFolder.toString().replace('\\', '/'));
+        if (path.length() > 0) {
+            path.append('/');
+        }
+        path.append("res/");
+        return new DesktopGdxFileSystem(path.toString());
     }
 
     private static void setWindowIcon(IFileSystem fileSystem) {
