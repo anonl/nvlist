@@ -31,7 +31,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     /**
      * @return The parent of this element in the view hierarchy. For example, a {@link ILayer}.
      */
-    IVisualGroup getParent();
+    @Nullable IVisualGroup getParent();
 
     /**
      * Attaches this element to the given parent.
@@ -41,7 +41,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
      *
      * @param parent May be null.
      */
-    void setParent(IVisualGroup parent);
+    void setParent(@Nullable IVisualGroup parent);
 
     /**
      * @return The relative rendering order of this element. Elements with lower Z-values are rendered on top of

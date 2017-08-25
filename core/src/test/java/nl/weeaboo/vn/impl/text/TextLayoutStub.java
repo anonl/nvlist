@@ -20,7 +20,7 @@ public class TextLayoutStub implements ITextLayout {
 
     @Override
     public TextStyle getGlyphStyle(int glyphIndex) {
-        return null;
+        return TextStyle.defaultInstance();
     }
 
     @Override

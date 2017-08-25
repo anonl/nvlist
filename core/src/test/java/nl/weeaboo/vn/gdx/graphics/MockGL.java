@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.nio.IntBuffer;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.profiling.GL20Profiler;
 
@@ -88,7 +90,7 @@ public class MockGL extends GL20Profiler {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
+        public @Nullable Object invoke(Object proxy, Method method, Object[] args) throws Exception {
             try {
                 // Call equivalent method in MockGL if it exists
                 Method mockMethod = MockGL.class.getDeclaredMethod(method.getName(), method.getParameterTypes());

@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.text;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
@@ -28,7 +30,7 @@ public class MockTextRenderer implements ITextRenderer {
     private TextStyle defaultStyle = TextStyle.defaultInstance();
 
     @Override
-    public int[] getHitTags(double cx, double cy) {
+    public @Nullable int[] getHitTags(double cx, double cy) {
         return null;
     }
 
