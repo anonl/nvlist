@@ -31,6 +31,17 @@ public final class ImageDefinitionBuilder implements IImageDefinition {
         this.size = Checks.checkNotNull(size);
     }
 
+    public ImageDefinitionBuilder(ImageDefinition original) {
+        this(original.getFilename(), original.getSize());
+
+        minFilter = original.getMinifyFilter();
+        magFilter = original.getMagnifyFilter();
+        tileX = original.getTilingModeX();
+        tileY = original.getTilingModeY();
+
+        subRects.addAll(original.getSubRects());
+    }
+
     /** Creates a new immutable {@link ImageDefinition} instance. */
     public ImageDefinition build() {
         return new ImageDefinition(this);

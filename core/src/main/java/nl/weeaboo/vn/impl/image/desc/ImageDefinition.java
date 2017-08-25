@@ -70,6 +70,10 @@ public final class ImageDefinition implements IImageDefinition {
         }
     }
 
+    public ImageDefinitionBuilder builder() {
+        return new ImageDefinitionBuilder(this);
+    }
+
     @Override
     public String toString() {
         return StringUtil.formatRoot("ImageDesc(%s: %dx%d)", filename, size.w, size.h);
@@ -106,7 +110,7 @@ public final class ImageDefinition implements IImageDefinition {
     }
 
     @Override
-    public ImmutableCollection<? extends IImageSubRect> getSubRects() {
+    public ImmutableCollection<ImageSubRect> getSubRects() {
         return subRects;
     }
 
