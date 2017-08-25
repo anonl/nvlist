@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath path) {
+    public @Nullable ResourceId resolveResource(FilePath path) {
         if (path == null) {
             return null;
         }

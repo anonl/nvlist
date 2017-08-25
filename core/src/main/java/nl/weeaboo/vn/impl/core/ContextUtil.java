@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.core;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.scene.IScreen;
 
@@ -35,7 +37,7 @@ public final class ContextUtil {
     /**
      * @return The screen of the current context, or {@code null} if no context is current.
      */
-    public static IScreen getCurrentScreen() {
+    public static @Nullable IScreen getCurrentScreen() {
         IContext context = getCurrentContext();
         if (context == null) {
             return null;

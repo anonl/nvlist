@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.video;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,7 +139,7 @@ final class NativeVideo implements INativeVideo {
     }
 
     @VisibleForTesting
-    VideoPlayer getVideoPlayer() {
+    @Nullable VideoPlayer getVideoPlayer() {
         if (videoPlayerRef == null) {
             return null;
         }

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -301,7 +303,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         /**
          * @return The cell at the requested column index, or {@code null} if that cell doesn't exist.
          */
-        public GridCell findColCell(int colIndex) {
+        public @Nullable GridCell findColCell(int colIndex) {
             // Rowspan/colspan not yet supported
             if (colIndex < 0 || colIndex >= cells.size()) {
                 return null;

@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
@@ -63,7 +65,7 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
     }
 
     @Override
-    public Texture loadSync(AssetManager manager, String fileName, FileHandle file,
+    public @Nullable Texture loadSync(AssetManager manager, String fileName, FileHandle file,
             TextureParameter parameter) {
         if (info == null) {
             return null;
@@ -87,7 +89,7 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
+    public @Nullable Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
             TextureParameter parameter) {
         return null;
     }

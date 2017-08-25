@@ -3,6 +3,8 @@ package nl.weeaboo.vn.core;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
 import nl.weeaboo.vn.script.IScriptFunction;
 
@@ -35,7 +37,7 @@ public interface IContextManager extends Serializable, IUpdateable, IRenderEnvCo
     /**
      * Returns the 'most important' active context, or {@code null} if no context is active.
      */
-    IContext getPrimaryContext();
+    @Nullable IContext getPrimaryContext();
 
     /**
      * Activates/deactivates the given context.

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +75,7 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
         initTransients();
     }
 
-    private ResourceId resolveResource(MediaType type, FilePath filename) {
+    private @Nullable ResourceId resolveResource(MediaType type, FilePath filename) {
         switch (type) {
         case IMAGE:
             return env.getImageModule().resolveResource(filename);

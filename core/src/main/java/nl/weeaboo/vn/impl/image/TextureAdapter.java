@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.image;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -39,7 +41,7 @@ public class TextureAdapter implements ITexture {
     /**
      * @return Returns the embedded libGDX texture or {@code null} if the texture can't be loaded.
      */
-    public Texture getTexture() {
+    public @Nullable Texture getTexture() {
         TextureRegion tr = getTextureRegion();
         return (tr != null ? tr.getTexture() : null);
     }
@@ -47,7 +49,7 @@ public class TextureAdapter implements ITexture {
     /**
      * @return The embedded libGDX texture region or {@code null} if the texture region can't be loaded.
      */
-    public TextureRegion getTextureRegion() {
+    public @Nullable TextureRegion getTextureRegion() {
         return res.get();
     }
 
@@ -56,7 +58,7 @@ public class TextureAdapter implements ITexture {
      *
      * @see #getTextureRegion()
      */
-    public TextureRegion getTextureRegion(Area2D uv) {
+    public @Nullable TextureRegion getTextureRegion(Area2D uv) {
         TextureRegion tr = getTextureRegion();
         if (tr == null) {
             return null;

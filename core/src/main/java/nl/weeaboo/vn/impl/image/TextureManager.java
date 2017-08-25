@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,7 @@ final class TextureManager implements Serializable {
         return cachedImageDefs.getImageDef(relPath);
     }
 
-    public ITexture getTexture(ResourceId resourceId) {
+    public @Nullable ITexture getTexture(ResourceId resourceId) {
         if (textureCache == null) {
             textureCache = new TextureCache(new CacheLoader<ResourceId, ITexture>() {
                 @Override
@@ -142,7 +144,9 @@ final class TextureManager implements Serializable {
     public ITexture getColorTexture(int argb) {
         String filename = ColorTextureLoader.getFilename(argb);
         ResourceId resourceId = new ResourceId(MediaType.IMAGE, FilePath.of(filename));
-        return getTexture(resourceId);
+
+        ITexture texture = getTexture(resourceId);
+        return Checks.checkNotNull(texture, "Color texture loading should never fail");
     }
 
     private static ITexture newTexture(IResource<TextureRegion> tr, double sx, double sy) {

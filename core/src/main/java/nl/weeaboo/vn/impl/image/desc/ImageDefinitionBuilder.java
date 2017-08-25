@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -141,7 +143,7 @@ public final class ImageDefinitionBuilder implements IImageDefinition {
     }
 
     @Override
-    public IImageSubRect findSubRect(String id) {
+    public @Nullable IImageSubRect findSubRect(String id) {
         return ImageDefinition.findSubRect(subRects, id);
     }
 

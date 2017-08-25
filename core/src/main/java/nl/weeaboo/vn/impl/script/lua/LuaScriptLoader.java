@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
@@ -90,7 +92,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     }
 
     @Override
-    public LuaResource findResource(String filename) {
+    public @Nullable LuaResource findResource(String filename) {
         ResourceId resourceId = resolveResource(FilePath.of(filename));
         if (resourceId == null) {
             return null;
@@ -108,7 +110,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath path) {
+    public @Nullable ResourceId resolveResource(FilePath path) {
         if (getScriptExists(path)) {
             return new ResourceId(MediaType.SCRIPT, path);
         }

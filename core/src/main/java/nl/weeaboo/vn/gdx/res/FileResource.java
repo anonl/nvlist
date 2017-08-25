@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.gdx.res;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.StaticRef;
@@ -19,7 +21,7 @@ final class FileResource<T> implements IResource<T> {
     }
 
     @Override
-    public T get() {
+    public @Nullable T get() {
         T value = getValue();
         if (value != null) {
             return value;
@@ -30,7 +32,7 @@ final class FileResource<T> implements IResource<T> {
         return getValue();
     }
 
-    private T getValue() {
+    private @Nullable T getValue() {
         Ref<T> ref = valueRef;
         return (ref != null ? ref.get() : null);
     }

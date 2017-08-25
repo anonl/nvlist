@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaDouble;
@@ -36,7 +38,7 @@ public final class LuaStorage implements ILuaStorage {
     }
 
     /** Converts a Lua value to its equivalent {@link StoragePrimitive}. */
-    public static StoragePrimitive luaToStorage(LuaValue lval) {
+    public static @Nullable StoragePrimitive luaToStorage(LuaValue lval) {
         if (lval.isnil()) {
             return null;
         } else if (lval.isboolean()) {
@@ -50,7 +52,7 @@ public final class LuaStorage implements ILuaStorage {
     }
 
     /** Converts a {@link StoragePrimitive} to its equivalent Lua value. */
-    public static LuaValue storageToLua(StoragePrimitive sval) {
+    public static LuaValue storageToLua(@Nullable StoragePrimitive sval) {
         if (sval == null) {
             return LuaNil.NIL;
         } else if (sval.isBoolean()) {

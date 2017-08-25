@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.scene;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.BlendMode;
@@ -80,7 +82,7 @@ public abstract class Transformable extends VisualElement implements ITransforma
     }
 
     @Override
-    public ILayer getLayer() {
+    public @Nullable ILayer getLayer() {
         return SceneUtil.getParentLayer(this);
     }
 

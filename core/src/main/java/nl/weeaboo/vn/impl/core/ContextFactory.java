@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.core;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IContextFactory;
@@ -44,7 +46,7 @@ public class ContextFactory implements IContextFactory<Context> {
         return new Screen(rect, renderEnv, textBoxState, skipState);
     }
 
-    protected LuaScriptContext newScriptContext() {
+    protected @Nullable LuaScriptContext newScriptContext() {
         if (scriptEnv == null) {
             return null;
         }

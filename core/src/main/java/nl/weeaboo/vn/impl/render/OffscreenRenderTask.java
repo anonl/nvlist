@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.render;
 import java.io.IOException;
 import java.math.RoundingMode;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +87,7 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     }
 
     @Override
-    public ITexture getResult() {
+    public @Nullable ITexture getResult() {
         if (resultPixels == null) {
             return null;
         }

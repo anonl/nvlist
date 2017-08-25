@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +46,7 @@ final class BasicTagHandler extends VarArgFunction {
         return varargsOf(LuaNil.NIL, LuajavaLib.toUserdata(style, TextStyle.class));
     }
 
-    private TextStyle handleTag(Tag tag, LuaTable table) {
+    private @Nullable TextStyle handleTag(Tag tag, LuaTable table) {
         int n = 1;
 
         switch (tag) {
@@ -101,7 +103,7 @@ final class BasicTagHandler extends VarArgFunction {
             return tagId;
         }
 
-        public static Tag fromTagId(String tagId) {
+        public static @Nullable Tag fromTagId(String tagId) {
             for (Tag tag : values()) {
                 if (tag.tagId.equals(tagId)) {
                     return tag;

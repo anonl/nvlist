@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
@@ -36,7 +38,7 @@ public interface IImageDrawable extends ITransformable {
      * Otherwise, {@code null} is returned.
      * @see ITextureRenderer#getTexture()
      */
-    ITexture getTexture();
+    @Nullable ITexture getTexture();
 
     /**
      * Sets the renderer to a {@link ITextureRenderer} using the given texture

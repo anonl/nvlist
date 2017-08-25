@@ -2,6 +2,8 @@ package nl.weeaboo.vn.image.desc;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Dim;
 
 public interface IImageDefinition {
@@ -21,16 +23,24 @@ public interface IImageDefinition {
      */
     Dim getSize();
 
-    /** Returns a read-only view of all sub-rects defined for this image. */
+    /**
+     * Returns a read-only view of all sub-rects defined for this image.
+     */
     Collection<? extends IImageSubRect> getSubRects();
 
-    /** Returns the sub-rect with the given ID, or {@code null} if not found. */
-    IImageSubRect findSubRect(String id);
+    /**
+     * Returns the sub-rect with the given ID, or {@code null} if not found.
+     */
+    @Nullable IImageSubRect findSubRect(String id);
 
-    /** Interpolation method to use when downscaling the image. */
+    /**
+     * Interpolation method to use when downscaling the image.
+     */
     GLScaleFilter getMinifyFilter();
 
-    /** Interpolation method to use when upscaling the image. */
+    /**
+     * Interpolation method to use when upscaling the image.
+     */
     GLScaleFilter getMagnifyFilter();
 
     /**

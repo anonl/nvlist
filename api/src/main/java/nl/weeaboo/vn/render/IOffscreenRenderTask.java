@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.render;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.image.ITexture;
 
 public interface IOffscreenRenderTask extends IAsyncRenderTask {
@@ -12,6 +14,6 @@ public interface IOffscreenRenderTask extends IAsyncRenderTask {
     /**
      * @return If available, the {@link ITexture} result, or else {@code null}.
      */
-    ITexture getResult();
+    @Nullable ITexture getResult();
 
 }

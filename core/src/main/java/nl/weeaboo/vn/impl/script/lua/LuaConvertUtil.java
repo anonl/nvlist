@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
@@ -25,7 +27,7 @@ public final class LuaConvertUtil {
      *
      * @throws ScriptException If the Lua value stored at the given index isn't covertible to a layer.
      */
-    public static ILayer getLayerArg(Varargs args, int index) throws ScriptException {
+    public static @Nullable ILayer getLayerArg(Varargs args, int index) throws ScriptException {
         if (args.isuserdata(index)) {
             ILayer layer = args.touserdata(index, ILayer.class);
             if (layer != null) {
@@ -42,7 +44,9 @@ public final class LuaConvertUtil {
      *
      * @throws ScriptException If the Lua value isn't convertible to a texture.
      */
-    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue) throws ScriptException {
+    public static @Nullable ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue)
+            throws ScriptException {
+
         return getTextureArg(imageModule, luaValue, false);
     }
 
@@ -51,8 +55,8 @@ public final class LuaConvertUtil {
      *
      * @throws ScriptException If the Lua value isn't convertible to a texture.
      */
-    public static ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue, boolean suppressLoadErrors)
-            throws ScriptException {
+    public static @Nullable ITexture getTextureArg(IImageModule imageModule, LuaValue luaValue,
+            boolean suppressLoadErrors) throws ScriptException {
 
         if (luaValue.isstring()) {
             // Texture filename

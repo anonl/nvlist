@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -43,7 +45,9 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, Parameters parameter) {
+    public @Nullable Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
+            Parameters parameter) {
+
         return null;
     }
 

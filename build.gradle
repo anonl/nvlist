@@ -19,7 +19,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     
     // Google error-prone
-    id 'net.ltgt.errorprone' version '0.0.10' apply false
+    id 'net.ltgt.errorprone' version '0.0.11' apply false
     
     // Plugin used for reporting on the licenses of third-part licenses
     id 'com.github.hierynomus.license' version '0.13.1'
@@ -48,7 +48,7 @@ allprojects {
         gdxVideoVersion = '1.0.0-anonl'
         guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
         javaxAnnotationVersion = '3.0.1'
-        errorProneVersion = '2.0.21'
+        errorProneVersion = '2.1.0'
         joptVersion = '5.0.3'
         junitVersion = '4.12'
         luajpp2Version = '2.3.15'

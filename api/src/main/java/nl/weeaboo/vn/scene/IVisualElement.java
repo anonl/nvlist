@@ -2,6 +2,8 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.input.IInputHandler;
@@ -60,7 +62,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     /**
      * Returns information about the rendering environment.
      */
-    IRenderEnv getRenderEnv();
+    @Nullable IRenderEnv getRenderEnv();
 
     /**
      * @return The interface used to access this visual element's layout properties.

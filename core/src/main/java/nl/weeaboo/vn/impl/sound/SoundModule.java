@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.sound;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,12 +59,12 @@ public class SoundModule implements ISoundModule {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath filename) {
+    public @Nullable ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 
     @Override
-    public ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
+    public @Nullable ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
@@ -86,7 +88,7 @@ public class SoundModule implements ISoundModule {
      * @param filename Path to an audio file
      */
     @Override
-    public String getDisplayName(FilePath filename) {
+    public @Nullable String getDisplayName(FilePath filename) {
         ResourceId resourceId = resourceLoader.resolveResource(filename);
         if (resourceId == null) {
             return null;
@@ -94,7 +96,7 @@ public class SoundModule implements ISoundModule {
         return "";
     }
 
-    private INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
+    private @Nullable INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
         FilePath filename = resourceId.getFilePath();
         filename = loader.getAbsolutePath(filename);
 

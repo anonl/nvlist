@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.image;
 
 import java.util.concurrent.ExecutionException;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ final class TextureCache {
     /**
      * @return The texture matching the given resource ID, or {@code null} if no such texture exists.
      */
-    public ITexture getTexture(ResourceId resourceId) {
+    public @Nullable ITexture getTexture(ResourceId resourceId) {
         try {
             return cache.get(resourceId);
         } catch (ExecutionException e) {
