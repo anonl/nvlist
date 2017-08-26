@@ -29,6 +29,9 @@ plugins {
     
     // Plugin for making a 'fat' JAR
     id 'com.github.johnrengelman.shadow' version '1.2.4'
+    
+    // Public API change detection
+    id 'me.champeau.gradle.japicmp' version '0.2.5'    
 }
 
 def templateDir = file('template').getAbsoluteFile()
