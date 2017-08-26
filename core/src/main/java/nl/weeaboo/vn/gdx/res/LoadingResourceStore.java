@@ -3,6 +3,8 @@ package nl.weeaboo.vn.gdx.res;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +78,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
      *
      * @return A resource wrapper pointing to the resource, or {@code null} if the resource couldn't be loaded.
      */
-    public IResource<T> get(FilePath absolutePath) {
+    public @Nullable IResource<T> get(FilePath absolutePath) {
         Ref<T> entry = getEntry(absolutePath);
         if (entry == null) {
             return null;
@@ -87,7 +89,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         return resource;
     }
 
-    protected Ref<T> getEntry(FilePath absolutePath) {
+    protected @Nullable Ref<T> getEntry(FilePath absolutePath) {
         try {
             return cache.get(absolutePath);
         } catch (ExecutionException e) {

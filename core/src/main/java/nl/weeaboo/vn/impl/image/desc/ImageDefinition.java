@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.image.desc;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,7 +117,7 @@ public final class ImageDefinition implements IImageDefinition {
     }
 
     @Override
-    public IImageSubRect findSubRect(String id) {
+    public @Nullable IImageSubRect findSubRect(String id) {
         ImageSubRect subRect = findSubRect(subRects, id);
         if (subRect == null) {
             LOG.trace("Sub-rect not found: {}#{}", filename, id);
@@ -123,7 +125,7 @@ public final class ImageDefinition implements IImageDefinition {
         return subRect;
     }
 
-    static <T extends IImageSubRect> T findSubRect(Collection<T> subRects, String id) {
+    static @Nullable <T extends IImageSubRect> T findSubRect(Collection<T> subRects, String id) {
         for (T subRect : subRects) {
             if (subRect.getId().equals(id)) {
                 return subRect;

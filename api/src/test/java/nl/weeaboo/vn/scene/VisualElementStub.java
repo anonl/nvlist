@@ -2,6 +2,8 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.layout.ILayoutElem;
@@ -45,7 +47,7 @@ public class VisualElementStub implements IVisualElement {
     }
 
     @Override
-    public IVisualGroup getParent() {
+    public @Nullable IVisualGroup getParent() {
         return null;
     }
 

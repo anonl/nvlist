@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.image;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +25,7 @@ public final class NinePatchLoader {
      * Attempts to load a nine-patch resource.
      * @return The nine-patch, or {@code null} if loading failed.
      */
-    public INinePatch loadNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
+    public @Nullable INinePatch loadNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         NinePatch ninePatch = new NinePatch();
         for (AreaId area : AreaId.values()) {
             String subId = getSubId(area);

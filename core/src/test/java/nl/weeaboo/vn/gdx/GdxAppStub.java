@@ -139,7 +139,7 @@ final class GdxAppStub implements Application {
 
     @Override
     public Clipboard getClipboard() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

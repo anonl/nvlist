@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.Nullable;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +17,6 @@ import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaUserdata;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
-import nl.weeaboo.vn.impl.script.lib.LuaLib;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -107,7 +108,7 @@ public class LuaLibTest {
         }
     }
 
-    private Method findMethod(String methodName) {
+    private @Nullable Method findMethod(String methodName) {
         for (Method method : testLib.getClass().getDeclaredMethods()) {
             if (method.getName().equals(methodName)) {
                 return method;

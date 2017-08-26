@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.save;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Objects;
 
 import nl.weeaboo.common.StringUtil;
@@ -27,7 +29,7 @@ public final class StoragePrimitive {
      * @return The JSON value converted to a {@link StoragePrimitive} object, or {@code null} if the JSON
      *         value couldn't be parsed.
      */
-    public static StoragePrimitive fromJson(String json) {
+    public static @Nullable StoragePrimitive fromJson(String json) {
         if (json == null || json.equals("undefined")) {
             return null;
         }

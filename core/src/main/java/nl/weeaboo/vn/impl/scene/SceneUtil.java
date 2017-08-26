@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.scene;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSet;
 
@@ -28,7 +30,7 @@ public final class SceneUtil {
      *
      * @return The parent layer, or {@code null} if no parent layer was found.
      */
-    public static ILayer getParentLayer(IVisualElement elem) {
+    public static @Nullable ILayer getParentLayer(IVisualElement elem) {
         while (elem.getParent() != null) {
             elem = elem.getParent();
             if (elem instanceof ILayer) {

@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.text;
 
 import java.util.Deque;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Queues;
 
@@ -43,7 +45,7 @@ public class TextLog implements ITextLog {
     }
 
     @Override
-    public StyledText getPage(int offset) {
+    public @Nullable StyledText getPage(int offset) {
         int pos = pages.size() - 1 - offset;
         if (pos < 0 || pos >= pages.size()) {
             return null; // Page doesn't exist

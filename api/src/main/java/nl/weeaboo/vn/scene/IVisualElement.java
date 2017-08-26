@@ -2,6 +2,8 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.input.IInputHandler;
@@ -29,7 +31,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     /**
      * @return The parent of this element in the view hierarchy. For example, a {@link ILayer}.
      */
-    IVisualGroup getParent();
+    @Nullable IVisualGroup getParent();
 
     /**
      * Attaches this element to the given parent.
@@ -39,7 +41,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
      *
      * @param parent May be null.
      */
-    void setParent(IVisualGroup parent);
+    void setParent(@Nullable IVisualGroup parent);
 
     /**
      * @return The relative rendering order of this element. Elements with lower Z-values are rendered on top of
@@ -60,7 +62,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     /**
      * Returns information about the rendering environment.
      */
-    IRenderEnv getRenderEnv();
+    @Nullable IRenderEnv getRenderEnv();
 
     /**
      * @return The interface used to access this visual element's layout properties.

@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,7 +23,7 @@ public final class GdxTextureUtil {
      * Returns the backing libGDX texture for the given {@link ITexture}, or {@code null} if unable to extract a valid
      * texture.
      */
-    public static Texture getTexture(ITexture tex) {
+    public static @Nullable Texture getTexture(ITexture tex) {
         if (tex instanceof TextureAdapter) {
             return ((TextureAdapter)tex).getTexture();
         } else {
@@ -32,7 +34,7 @@ public final class GdxTextureUtil {
     /**
      * @see #getTexture(ITexture)
      */
-    public static TextureRegion getTextureRegion(ITexture tex) {
+    public static @Nullable TextureRegion getTextureRegion(ITexture tex) {
         return getTextureRegion(tex, ITexture.DEFAULT_UV);
     }
 
@@ -40,7 +42,7 @@ public final class GdxTextureUtil {
      * Returns a sub-region of the backing libGDX texture for the given {@link ITexture}, or {@code null} if unable to
      * extract a valid texture.
      */
-    public static TextureRegion getTextureRegion(ITexture tex, Area2D uv) {
+    public static @Nullable TextureRegion getTextureRegion(ITexture tex, Area2D uv) {
         if (tex instanceof TextureAdapter) {
             return ((TextureAdapter)tex).getTextureRegion(uv);
         } else {

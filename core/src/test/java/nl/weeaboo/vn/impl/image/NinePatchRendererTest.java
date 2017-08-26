@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.image;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,7 +97,7 @@ public class NinePatchRendererTest {
         RectAssert.assertEquals(expected, command.bounds, EPSILON);
     }
 
-    private QuadRenderCommand findCommand(List<? extends RenderCommand> commands, AreaId area) {
+    private @Nullable QuadRenderCommand findCommand(List<? extends RenderCommand> commands, AreaId area) {
         ITexture texture = renderer.getTexture(area);
         for (RenderCommand command : commands) {
             if (command instanceof QuadRenderCommand) {

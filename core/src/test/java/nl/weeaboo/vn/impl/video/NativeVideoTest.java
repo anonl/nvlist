@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.video;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,7 +13,6 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.video.NativeVideo;
 import nl.weeaboo.vn.render.IRenderEnv;
 
 public class NativeVideoTest {
@@ -92,7 +93,7 @@ public class NativeVideoTest {
         Assert.assertEquals((float)expected, getVideoPlayer().getVolume(), 0.001f);
     }
 
-    private MockGdxVideoPlayer getVideoPlayer() {
+    private @Nullable MockGdxVideoPlayer getVideoPlayer() {
         return (MockGdxVideoPlayer)nativeVideo.getVideoPlayer();
     }
 

@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.debug;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,7 +181,7 @@ public final class DebugControls {
         image.setTexture(texture);
     }
 
-    private static ITexture getTestTexture(IImageModule imageModule) {
+    private static @Nullable ITexture getTestTexture(IImageModule imageModule) {
         return imageModule.getTexture(FilePath.of("test"));
     }
 

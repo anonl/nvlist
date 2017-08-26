@@ -2,6 +2,8 @@ package nl.weeaboo.vn.text;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.styledtext.StyledText;
 
 public interface ITextLog extends Serializable {
@@ -17,9 +19,9 @@ public interface ITextLog extends Serializable {
     int getPageCount();
 
     /**
-     * Returns the contents of the indicated page.
+     * Returns the contents of the indicated page, or {@code null} if the specified page doesn't exist.
      */
-    StyledText getPage(int offset);
+    @Nullable StyledText getPage(int offset);
 
     /**
      * Returns the maximum number of pages that this text log will store. Attempting to store more pages will discard

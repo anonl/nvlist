@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.core;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +103,7 @@ public final class ContextManager implements IContextManager {
     }
 
     @Override
-    public IContext getPrimaryContext() {
+    public @Nullable IContext getPrimaryContext() {
         return Iterables.get(getActiveContexts(), 0, null);
     }
 

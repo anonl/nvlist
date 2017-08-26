@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.scene;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
@@ -137,7 +139,7 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
     }
 
     @Override
-    public ITexture getTexture() {
+    public @Nullable ITexture getTexture() {
         if (!(renderer instanceof ITextureRenderer)) {
             return null;
         }

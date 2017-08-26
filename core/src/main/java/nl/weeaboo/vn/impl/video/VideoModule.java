@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +60,7 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath filename) {
+    public @Nullable ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 

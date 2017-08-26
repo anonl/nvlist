@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.image;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.ResourceId;
@@ -12,8 +14,6 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
-import nl.weeaboo.vn.impl.image.PixelTextureData;
-import nl.weeaboo.vn.impl.image.WritableScreenshot;
 import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.TextDrawable;
@@ -36,7 +36,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath filename) {
+    public @Nullable ResourceId resolveResource(FilePath filename) {
         return null;
     }
 
@@ -66,7 +66,7 @@ public class ImageModuleStub implements IImageModule {
     }
 
     @Override
-    public INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors) {
+    public @Nullable INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors) {
         return null;
     }
 

@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.test.integration.render;
 
+import javax.annotation.Nullable;
+
 import org.junit.After;
 import org.junit.Before;
 
@@ -7,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
 import nl.weeaboo.common.Dim;
@@ -51,10 +54,13 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         return renderer.getDrawBuffer();
     }
 
-    protected ITexture getTexture(String path) {
+    protected @Nullable ITexture getTexture(String path) {
         ITexture texture = env.getImageModule().getTexture(FilePath.of(path));
         // Set filtering to nearest so we don't get trolled by slight interpolation differences on the build server
-        GdxTextureUtil.getTexture(texture).setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        Texture gdxTexture = GdxTextureUtil.getTexture(texture);
+        if (gdxTexture != null) {
+            gdxTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        }
         return texture;
     }
 

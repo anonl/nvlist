@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawTransform;
@@ -9,7 +11,7 @@ public interface IDrawable extends IVisualElement, IColorizable, IDrawTransform,
     /**
      * @return The parent layer that contains this drawable, or {@code null} if not attached to any layer.
      */
-    ILayer getLayer();
+    @Nullable ILayer getLayer();
 
     @Override
     BlendMode getBlendMode();

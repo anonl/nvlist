@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.signal.SignalSupport;
@@ -137,7 +139,7 @@ public abstract class VisualElement implements IVisualElement {
     }
 
     @Override
-    public IRenderEnv getRenderEnv() {
+    public @Nullable IRenderEnv getRenderEnv() {
         return (parent != null ? parent.getRenderEnv() : null);
     }
 

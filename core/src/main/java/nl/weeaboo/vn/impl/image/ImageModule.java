@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.image;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +63,7 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ResourceId resolveResource(FilePath filename) {
+    public @Nullable ResourceId resolveResource(FilePath filename) {
         return resourceLoader.resolveResource(filename);
     }
 
@@ -81,12 +83,12 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public ITexture getTexture(FilePath filename) {
+    public @Nullable ITexture getTexture(FilePath filename) {
         return getTexture(new ResourceLoadInfo(filename), false);
     }
 
     @Override
-    public ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
+    public @Nullable ITexture getTexture(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
@@ -113,7 +115,7 @@ public class ImageModule implements IImageModule {
     }
 
     @Override
-    public INinePatch getNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
+    public @Nullable INinePatch getNinePatch(ResourceLoadInfo loadInfo, boolean suppressErrors) {
         NinePatchLoader loader = new NinePatchLoader(this);
         return loader.loadNinePatch(loadInfo, suppressErrors);
     }
@@ -121,7 +123,7 @@ public class ImageModule implements IImageModule {
     /**
      * Is called from {@link #getTexture(ResourceLoadInfo, boolean)}
      */
-    protected ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
+    protected @Nullable ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(resourceId, loadInfo);
 
         return texManager.getTexture(resourceId);

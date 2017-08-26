@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.script.lua;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
@@ -36,7 +38,7 @@ public final class LuaScriptUtil {
      * Creates a {@link LuaScriptFunction} from the closure stored in the given vararg in the given position.
      * All remaining arguments in the vararg are passed as parameters to the returned function.
      */
-    public static LuaScriptFunction toScriptFunction(Varargs args, int offset) {
+    public static @Nullable LuaScriptFunction toScriptFunction(Varargs args, int offset) {
         if (args.isnil(offset)) {
             return null;
         }
@@ -65,7 +67,7 @@ public final class LuaScriptUtil {
     /**
      * Finds the topmost '*.lvn' source file in the call stack.
      */
-    public static String getNearestLvnSrcloc(List<String> stack) {
+    public static @Nullable String getNearestLvnSrcloc(List<String> stack) {
         for (String frame : stack) {
             if (frame.contains(LVN_PATTERN)) {
                 return frame;

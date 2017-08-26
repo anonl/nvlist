@@ -2,6 +2,8 @@ package nl.weeaboo.vn.image;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IModule;
@@ -33,7 +35,7 @@ public interface IImageModule extends IModule, IResourceResolver {
     /**
      * Convenience method for {@link #getTexture(ResourceLoadInfo, boolean)}.
      */
-    ITexture getTexture(FilePath filename);
+    @Nullable ITexture getTexture(FilePath filename);
 
     /**
      * Attempts to load the texture with the specified filename.
@@ -42,7 +44,7 @@ public interface IImageModule extends IModule, IResourceResolver {
      * @param suppressErrors If {@code true} doesn't log any errors that may occur.
      * @return The texture, or {@code null} if loading failed.
      */
-    ITexture getTexture(ResourceLoadInfo path, boolean suppressErrors);
+    @Nullable ITexture getTexture(ResourceLoadInfo path, boolean suppressErrors);
 
     /**
      * Attempts to load a ninepatch based on the specified filename.
@@ -51,7 +53,7 @@ public interface IImageModule extends IModule, IResourceResolver {
      * @param suppressErrors If {@code true} doesn't log any errors that may occur.
      * @return The ninepatch, or {@code null} if loading failed.
      */
-    INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors);
+    @Nullable INinePatch getNinePatch(ResourceLoadInfo path, boolean suppressErrors);
 
     /**
      * Creates a solid-color texture with the given color.
