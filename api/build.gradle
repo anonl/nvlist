@@ -41,6 +41,8 @@ dependencies {
 }
 
 task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
+    group = 'verification'
+
     oldClasspath = files(configurations.oldApi)
     newClasspath = files(jar)
     ignoreMissingClasses = true
