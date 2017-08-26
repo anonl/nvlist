@@ -25,7 +25,7 @@ plugins {
     id 'com.github.hierynomus.license' version '0.13.1'
     
     // Java Microbenchmark Harness plugin
-    id 'me.champeau.gradle.jmh' version '0.3.1' apply false
+    id 'me.champeau.gradle.jmh' version '0.4.3' apply false
     
     // Plugin for making a 'fat' JAR
     id 'com.github.johnrengelman.shadow' version '1.2.4'
