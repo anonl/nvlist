@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.gdx.graphics;
+package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -7,33 +7,24 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.CRC32;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.base.Preconditions;
 
-final class JngReader {
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
-    private enum JNGAlphaType {
+public final class JngReader {
+
+    private enum JngAlphaType {
         JPEG, PNG
     }
-
-    private static final byte[] JNG_MAGIC = {
-        (byte)0x8B, 0x4A, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
-    };
 
     private static final byte[] IEND = {
         0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, (byte)0xAE, 0x42, 0x60, (byte)0x82
     };
 
-    private static final int CHUNK_JHDR = 0x4A484452;
-    private static final int CHUNK_JDAT = 0x4A444154;
-    private static final int CHUNK_JDAA = 0x4A444141;
-    private static final int CHUNK_JSEP = 0x4A534550;
-    private static final int CHUNK_IDAT = 0x49444154;
-    private static final int CHUNK_IEND = 0x49454E44;
 
     public static Pixmap read(InputStream in) throws IOException {
         DataInput din = new DataInputStream(in);
@@ -43,18 +34,18 @@ final class JngReader {
     public static Pixmap read(DataInput din) throws IOException {
         List<byte[]> colorBytes = new ArrayList<>(); // Forms a valid JPEG file
 
-        JNGAlphaType alphaType = null;
+        JngAlphaType alphaType = null;
         List<byte[]> alphaBytes = new ArrayList<>(); // Forms a valid JPEG/PNG file
 
-        JNGHeader header = JNGHeader.fromDataInput(din);
+        JngHeader header = JngHeader.fromDataInput(din);
 
         int jdatIndex = 0;
         while (true) {
             int chunkLength = din.readInt();
             int type = din.readInt();
-            if (type == CHUNK_IEND) {
+            if (type == JngConstants.CHUNK_IEND) {
                 break;
-            } else if (type == CHUNK_JDAT) {
+            } else if (type == JngConstants.CHUNK_JDAT) {
                 if (jdatIndex == 0) {
                     // Only read the first jpeg image
                     readChunks(colorBytes, din, chunkLength);
@@ -62,23 +53,23 @@ final class JngReader {
                 } else {
                     forceSkip(din, chunkLength + 4);
                 }
-            } else if (type == CHUNK_IDAT) {
-                if (alphaType != JNGAlphaType.PNG) {
-                    alphaType = JNGAlphaType.PNG;
+            } else if (type == JngConstants.CHUNK_IDAT) {
+                if (alphaType != JngAlphaType.PNG) {
+                    alphaType = JngAlphaType.PNG;
                     alphaBytes.clear();
                 }
 
                 readChunks(alphaBytes, din, chunkLength);
                 din.readInt(); //CRC
-            } else if (type == CHUNK_JDAA) {
-                if (alphaType != JNGAlphaType.JPEG) {
-                    alphaType = JNGAlphaType.JPEG;
+            } else if (type == JngConstants.CHUNK_JDAA) {
+                if (alphaType != JngAlphaType.JPEG) {
+                    alphaType = JngAlphaType.JPEG;
                     alphaBytes.clear();
                 }
 
                 readChunks(alphaBytes, din, chunkLength);
                 din.readInt(); //CRC
-            } else if (type == CHUNK_JSEP) {
+            } else if (type == JngConstants.CHUNK_JSEP) {
                 jdatIndex++;
                 forceSkip(din, chunkLength + 4);
             } else {
@@ -145,10 +136,10 @@ final class JngReader {
         return array;
     }
 
-    protected static byte[] mergeAlpha(JNGHeader header, JNGAlphaType type, List<byte[]> c) {
+    protected static byte[] mergeAlpha(JngHeader header, JngAlphaType type, List<byte[]> c) {
         Preconditions.checkArgument(type != null, "Invalid alpha type for this method: " + type);
 
-        if (type != JNGAlphaType.PNG) {
+        if (type != JngAlphaType.PNG) {
             return merge(c);
         }
 
@@ -164,7 +155,7 @@ final class JngReader {
         buf.put(headerBytes);
 
         buf.putInt(count);
-        buf.putInt(CHUNK_IDAT);
+        buf.putInt(JngConstants.CHUNK_IDAT);
         CRC32 crc = new CRC32();
         crc.update(buf.array(), buf.position() - 4, 4);
         for (byte[] b : c) {
@@ -177,7 +168,7 @@ final class JngReader {
         return buf.array();
     }
 
-    private static byte[] createPNGHeaderForAlpha(JNGHeader hdr) {
+    private static byte[] createPNGHeaderForAlpha(JngHeader hdr) {
         final byte[] MAGIC = {(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
         final int CHUNK_IHDR = 0x49484452;
 
@@ -213,64 +204,6 @@ final class JngReader {
         for (int n = skipped; n < toSkip; n++) {
             in.readByte();
         }
-    }
-
-    private static class JNGHeader {
-
-        public final int width;
-        public final int height;
-        public final int alphaSampleDepth;
-        public final int alphaCompressionMethod;
-        public final int alphaFilterMethod;
-        public final int alphaInterlaceMethod;
-
-        public JNGHeader(int w, int h, int alphaSampleDepth, int alphaCompressionMethod,
-                int alphaFilterMethod, int alphaInterlaceMethod) {
-
-            this.width = w;
-            this.height = h;
-            this.alphaSampleDepth = alphaSampleDepth;
-            this.alphaCompressionMethod = alphaCompressionMethod;
-            this.alphaFilterMethod = alphaFilterMethod;
-            this.alphaInterlaceMethod = alphaInterlaceMethod;
-        }
-
-        public static JNGHeader fromDataInput(DataInput din) throws IOException {
-            byte[] magicBytes = new byte[JNG_MAGIC.length];
-            din.readFully(magicBytes);
-            if (!Arrays.equals(JNG_MAGIC, magicBytes)) {
-                StringBuilder sb = new StringBuilder("Invalid magic value: ");
-                for (byte b : magicBytes) {
-                    sb.append(String.format("%02x ", b & 0xFF));
-                }
-                throw new IOException(sb.toString());
-            }
-
-            int jhdrBytes = din.readInt();
-            if (jhdrBytes != 16) {
-                throw new IOException("Invalid JHDR length: " + jhdrBytes);
-            }
-            int jhdrMagic = din.readInt();
-            if (jhdrMagic != CHUNK_JHDR) {
-                throw new IOException(String.format("Invalid JHDR magic: 0x%08x", jhdrMagic));
-            }
-
-            final int w = din.readInt();
-            final int h = din.readInt();
-            /*int colorType = */din.readUnsignedByte();
-            /*int imageSampleDepth = */din.readUnsignedByte();
-            /*int imageCompressionMethod = */din.readUnsignedByte();
-            /*int imageInterlaceMethod = */din.readUnsignedByte();
-            final int alphaSampleDepth = din.readUnsignedByte();
-            final int alphaCompressionMethod = din.readUnsignedByte();
-            final int alphaFilterMethod = din.readUnsignedByte();
-            final int alphaInterlaceMethod = din.readUnsignedByte();
-            /*int crc = */din.readInt();
-
-            return new JNGHeader(w, h, alphaSampleDepth, alphaCompressionMethod, alphaFilterMethod,
-                    alphaInterlaceMethod);
-        }
-
     }
 
 }

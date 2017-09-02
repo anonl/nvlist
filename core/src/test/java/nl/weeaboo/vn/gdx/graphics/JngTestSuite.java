@@ -16,7 +16,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.ZipFileArchive;
 import nl.weeaboo.io.RandomAccessUtil;
-import nl.weeaboo.vn.gdx.graphics.JngReader;
+import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
 
 class JngTestSuite implements Disposable {
 

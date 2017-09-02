@@ -16,7 +16,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.gdx.graphics.JngTextureLoader;
 
 public class JngTextureLoaderTest {
 

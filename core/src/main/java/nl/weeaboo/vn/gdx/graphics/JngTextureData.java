@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.utils.StreamUtils;
 
+import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
+
 /**
  * Texture data based on a .jng file source.
  */
