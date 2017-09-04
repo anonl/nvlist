@@ -72,6 +72,9 @@ public final class ImageDefinition implements IImageDefinition {
         }
     }
 
+    /**
+     * Returns a mutable copy of this definition.
+     */
     public ImageDefinitionBuilder builder() {
         return new ImageDefinitionBuilder(this);
     }
