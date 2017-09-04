@@ -14,30 +14,41 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 
 public final class JngReader {
-
-    private enum JngAlphaType {
-        JPEG, PNG
-    }
 
     private static final byte[] IEND = {
         0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, (byte)0xAE, 0x42, 0x60, (byte)0x82
     };
 
+    private JngReader() {
+    }
 
+    /**
+     * Reads a .jng image.
+     *
+     * @throws IOException If the image can't be read.
+     * @see #read(InputStream)
+     */
     public static Pixmap read(InputStream in) throws IOException {
         DataInput din = new DataInputStream(in);
         return read(din);
     }
 
+    /**
+     * Reads a .jng image.
+     *
+     * @throws IOException If the image can't be read.
+     * @see #read(InputStream)
+     */
     public static Pixmap read(DataInput din) throws IOException {
         List<byte[]> colorBytes = new ArrayList<>(); // Forms a valid JPEG file
 
         JngAlphaType alphaType = null;
         List<byte[]> alphaBytes = new ArrayList<>(); // Forms a valid JPEG/PNG file
 
-        JngHeader header = JngHeader.fromDataInput(din);
+        JngHeader header = JngHeader.read(din);
 
         int jdatIndex = 0;
         while (true) {
@@ -60,7 +71,7 @@ public final class JngReader {
                 }
 
                 readChunks(alphaBytes, din, chunkLength);
-                din.readInt(); //CRC
+                din.readInt(); // CRC
             } else if (type == JngConstants.CHUNK_JDAA) {
                 if (alphaType != JngAlphaType.JPEG) {
                     alphaType = JngAlphaType.JPEG;
@@ -68,7 +79,7 @@ public final class JngReader {
                 }
 
                 readChunks(alphaBytes, din, chunkLength);
-                din.readInt(); //CRC
+                din.readInt(); // CRC
             } else if (type == JngConstants.CHUNK_JSEP) {
                 jdatIndex++;
                 forceSkip(din, chunkLength + 4);
@@ -78,7 +89,7 @@ public final class JngReader {
             }
         }
 
-        //Read color data
+        // Read color data
         Pixmap result;
         {
             byte[] colorBytesMerged = merge(colorBytes);
@@ -86,7 +97,7 @@ public final class JngReader {
             result = PixmapUtil.convert(result, Pixmap.Format.RGBA8888, true);
         }
 
-        //Read and apply alpha mask if it exists
+        // Read and apply alpha mask if it exists
         if (alphaType != null && !alphaBytes.isEmpty()) {
             final int iw = result.getWidth();
             final int ih = result.getHeight();
@@ -148,7 +159,7 @@ public final class JngReader {
             count += b.length;
         }
 
-        byte[] headerBytes = createPNGHeaderForAlpha(header);
+        byte[] headerBytes = createPngHeaderForAlpha(header);
 
         ByteBuffer buf = ByteBuffer.allocate(headerBytes.length + (8 + count + 4) + IEND.length);
         buf.order(ByteOrder.BIG_ENDIAN);
@@ -168,22 +179,24 @@ public final class JngReader {
         return buf.array();
     }
 
-    private static byte[] createPNGHeaderForAlpha(JngHeader hdr) {
-        final byte[] MAGIC = {(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
-        final int CHUNK_IHDR = 0x49484452;
+    private static byte[] createPngHeaderForAlpha(JngHeader hdr) {
+        final byte[] MAGIC = JngConstants.PNG_MAGIC;
 
         ByteBuffer buf = ByteBuffer.allocate(MAGIC.length + (8 + 13 + 4));
         buf.order(ByteOrder.BIG_ENDIAN);
         buf.put(MAGIC);
         buf.putInt(13);
-        buf.putInt(CHUNK_IHDR);
-        buf.putInt(hdr.width);
-        buf.putInt(hdr.height);
-        buf.put((byte)hdr.alphaSampleDepth);
-        buf.put((byte)0); //colorType is always grayscale
-        buf.put((byte)hdr.alphaCompressionMethod);
-        buf.put((byte)hdr.alphaFilterMethod);
-        buf.put((byte)hdr.alphaInterlaceMethod);
+        buf.putInt(JngConstants.CHUNK_IHDR);
+
+        buf.putInt(hdr.size.w);
+        buf.putInt(hdr.size.h);
+
+        AlphaSettings alpha = hdr.alpha;
+        buf.put((byte)alpha.sampleDepth);
+        buf.put((byte)0); // colorType is always grayscale
+        buf.put((byte)alpha.compressionMethod);
+        buf.put((byte)alpha.filterMethod);
+        buf.put((byte)alpha.interlaceMethod);
 
         CRC32 crc = new CRC32();
         crc.update(buf.array(), MAGIC.length + 4, 17);

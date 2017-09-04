@@ -24,13 +24,13 @@ enum JngColorType {
         return intValue;
     }
 
-    public static JngColorType fromInt(int ival) {
+    public static JngColorType fromInt(int ival) throws JngParseException {
         for (JngColorType colorType : values()) {
             if (colorType.intValue == ival) {
                 return colorType;
             }
         }
-        throw new IllegalArgumentException("Unsupported ival: " + ival);
+        throw new JngParseException("Unsupported ival: " + ival);
     }
 
     public boolean hasAlpha() {

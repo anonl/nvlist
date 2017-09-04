@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -21,7 +22,11 @@ final class JngHeader {
         this.alpha = alpha;
     }
 
-    public static JngHeader fromDataInput(DataInput din) throws IOException {
+    public boolean hasAlpha() {
+        return color.colorType.hasAlpha();
+    }
+
+    public static JngHeader read(DataInput din) throws IOException, JngParseException {
         byte[] magicBytes = new byte[JngConstants.JNG_MAGIC.length];
         din.readFully(magicBytes);
         if (!Arrays.equals(JngConstants.JNG_MAGIC, magicBytes)) {
@@ -29,32 +34,38 @@ final class JngHeader {
             for (byte b : magicBytes) {
                 sb.append(String.format("%02x ", b & 0xFF));
             }
-            throw new IOException(sb.toString());
+            throw new JngParseException(sb.toString());
         }
 
         int jhdrBytes = din.readInt();
         if (jhdrBytes != 16) {
-            throw new IOException("Invalid JHDR length: " + jhdrBytes);
+            throw new JngParseException("Invalid JHDR length: " + jhdrBytes);
         }
+
         int jhdrMagic = din.readInt();
         if (jhdrMagic != JngConstants.CHUNK_JHDR) {
-            throw new IOException(String.format("Invalid JHDR magic: 0x%08x", jhdrMagic));
+            throw new JngParseException(String.format("Invalid JHDR magic: 0x%08x", jhdrMagic));
         }
 
-        final int w = din.readInt();
-        final int h = din.readInt();
-        int colorType = din.readUnsignedByte();
-        int imageSampleDepth = din.readUnsignedByte();
-        int imageCompressionMethod = din.readUnsignedByte();
-        int imageInterlaceMethod = din.readUnsignedByte();
-        final int alphaSampleDepth = din.readUnsignedByte();
-        final int alphaCompressionMethod = din.readUnsignedByte();
-        final int alphaFilterMethod = din.readUnsignedByte();
-        final int alphaInterlaceMethod = din.readUnsignedByte();
+        int w = din.readInt();
+        int h = din.readInt();
+        final Dim size = Dim.of(w, h);
+
+        final ColorSettings color = new ColorSettings();
+        color.colorType = JngColorType.fromInt(din.readUnsignedByte());
+        color.sampleDepth = din.readUnsignedByte();
+        color.compressionMethod = din.readUnsignedByte();
+        color.interlaceMethod = din.readUnsignedByte();
+
+        final AlphaSettings alpha = new AlphaSettings();
+        alpha.sampleDepth = din.readUnsignedByte();
+        alpha.compressionMethod = din.readUnsignedByte();
+        alpha.filterMethod = din.readUnsignedByte();
+        alpha.interlaceMethod = din.readUnsignedByte();
+
         /*int crc = */din.readInt();
 
-        return new JngHeader(w, h, alphaSampleDepth, alphaCompressionMethod, alphaFilterMethod,
-                alphaInterlaceMethod);
+        return new JngHeader(size, color, alpha);
     }
 
     public void write(DataOutput dout) throws IOException {
@@ -62,16 +73,16 @@ final class JngHeader {
 
         ByteBuffer jhdr = ByteBuffer.allocate(16);
         jhdr.order(ByteOrder.BIG_ENDIAN);
-        jhdr.putInt(width);
-        jhdr.putInt(height);
-        jhdr.put((byte)colorType);
-        jhdr.put((byte)imageSampleDepth);
-        jhdr.put((byte)imageCompressionMethod);
-        jhdr.put((byte)imageInterlaceMethod);
-        jhdr.put((byte)alphaSampleDepth);
-        jhdr.put((byte)alphaCompressionMethod);
-        jhdr.put((byte)alphaFilterMethod);
-        jhdr.put((byte)alphaInterlaceMethod);
+        jhdr.putInt(size.w);
+        jhdr.putInt(size.h);
+        jhdr.put((byte)color.colorType.intValue());
+        jhdr.put((byte)color.sampleDepth);
+        jhdr.put((byte)color.sampleDepth);
+        jhdr.put((byte)color.interlaceMethod);
+        jhdr.put((byte)alpha.sampleDepth);
+        jhdr.put((byte)alpha.compressionMethod);
+        jhdr.put((byte)alpha.filterMethod);
+        jhdr.put((byte)alpha.interlaceMethod);
 
         dout.writeInt(jhdr.limit());
         dout.writeInt(JngConstants.CHUNK_JHDR);
@@ -80,10 +91,6 @@ final class JngHeader {
         CRC32 crc = new CRC32();
         crc.update(jhdr.array());
         dout.writeInt((int)crc.getValue());
-    }
-
-    public boolean hasAlpha() {
-        return color.colorType.hasAlpha();
     }
 
     public static final class ColorSettings {
