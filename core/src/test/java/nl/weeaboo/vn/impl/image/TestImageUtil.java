@@ -28,7 +28,11 @@ public final class TestImageUtil {
      */
     public static void writePng(Pixmap pixmap, OutputStream out) throws IOException {
         PNG encoder = new PixmapIO.PNG();
-        encoder.write(out, pixmap);
+        try {
+            encoder.write(out, pixmap);
+        } finally {
+            encoder.dispose();
+        }
     }
 
     /** Creates a new {@code w x h} texture data object filled with a dummy color. */

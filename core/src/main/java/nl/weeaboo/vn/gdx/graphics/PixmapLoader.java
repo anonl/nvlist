@@ -22,12 +22,19 @@ public final class PixmapLoader {
      */
     public static Pixmap load(IFileSystem fileSystem, FilePath path) throws IOException {
         byte[] encodedData = FileSystemUtil.readBytes(fileSystem, path);
+        return load(encodedData, 0, encodedData.length);
+    }
 
-        if (path.getExt().equals("jng")) {
-            return JngReader.read(new ByteArrayInputStream(encodedData));
+    /**
+     * Reads a pixmap from encoded data.
+     *
+     * @throws IOException If the file can't be read.
+     */
+    public static Pixmap load(byte[] bytes, int offset, int length) throws IOException {
+        if (JngReader.isJng(bytes, offset, length)) {
+            return JngReader.read(new ByteArrayInputStream(bytes, offset, length));
         }
-
-        return new Pixmap(encodedData, 0, encodedData.length);
+        return new Pixmap(bytes, offset, length);
     }
 
 }

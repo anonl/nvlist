@@ -20,11 +20,11 @@ enum JngColorType {
         intValue = ival;
     }
 
-    public int intValue() {
+    int toInt() {
         return intValue;
     }
 
-    public static JngColorType fromInt(int ival) throws JngParseException {
+    static JngColorType fromInt(int ival) throws JngParseException {
         for (JngColorType colorType : values()) {
             if (colorType.intValue == ival) {
                 return colorType;

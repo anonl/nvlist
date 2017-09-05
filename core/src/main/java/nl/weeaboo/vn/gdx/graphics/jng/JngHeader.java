@@ -30,11 +30,7 @@ final class JngHeader {
         byte[] magicBytes = new byte[JngConstants.JNG_MAGIC.length];
         din.readFully(magicBytes);
         if (!Arrays.equals(JngConstants.JNG_MAGIC, magicBytes)) {
-            StringBuilder sb = new StringBuilder("Invalid magic value: ");
-            for (byte b : magicBytes) {
-                sb.append(String.format("%02x ", b & 0xFF));
-            }
-            throw new JngParseException(sb.toString());
+            throw new JngParseException(JngInputUtil.toByteString(magicBytes));
         }
 
         int jhdrBytes = din.readInt();
@@ -59,7 +55,7 @@ final class JngHeader {
 
         final AlphaSettings alpha = new AlphaSettings();
         alpha.sampleDepth = din.readUnsignedByte();
-        alpha.compressionMethod = din.readUnsignedByte();
+        alpha.compressionMethod = JngAlphaType.fromInt(din.readUnsignedByte());
         alpha.filterMethod = din.readUnsignedByte();
         alpha.interlaceMethod = din.readUnsignedByte();
 
@@ -75,12 +71,12 @@ final class JngHeader {
         jhdr.order(ByteOrder.BIG_ENDIAN);
         jhdr.putInt(size.w);
         jhdr.putInt(size.h);
-        jhdr.put((byte)color.colorType.intValue());
+        jhdr.put((byte)color.colorType.toInt());
         jhdr.put((byte)color.sampleDepth);
         jhdr.put((byte)color.sampleDepth);
         jhdr.put((byte)color.interlaceMethod);
         jhdr.put((byte)alpha.sampleDepth);
-        jhdr.put((byte)alpha.compressionMethod);
+        jhdr.put((byte)alpha.compressionMethod.toInt());
         jhdr.put((byte)alpha.filterMethod);
         jhdr.put((byte)alpha.interlaceMethod);
 
@@ -137,14 +133,7 @@ final class JngHeader {
          */
         public int sampleDepth = 8;
 
-        /**
-         * Possible values:
-         * <ul>
-         * <li> 0: PNG grayscale IDAT format.
-         * <li> 8: JNG 8-bit grayscale JDAA format.
-         * </ul>
-         */
-        public int compressionMethod = 8;
+        public JngAlphaType compressionMethod = JngAlphaType.PNG;
 
         /**
          * Possible values:

@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -14,15 +13,17 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
-import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 
 public final class JngReader {
 
-    private static final byte[] IEND = {
-        0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, (byte)0xAE, 0x42, 0x60, (byte)0x82
-    };
-
     private JngReader() {
+    }
+
+    /**
+     * @return {@code true} if the given data has a JNG header.
+     */
+    public static boolean isJng(byte[] bytes, int offset, int length) {
+        return JngInputUtil.startsWith(bytes, offset, length, JngConstants.JNG_MAGIC);
     }
 
     /**
@@ -32,8 +33,7 @@ public final class JngReader {
      * @see #read(InputStream)
      */
     public static Pixmap read(InputStream in) throws IOException {
-        DataInput din = new DataInputStream(in);
-        return read(din);
+        return read(JngInputUtil.toDataInput(in));
     }
 
     /**
@@ -62,7 +62,7 @@ public final class JngReader {
                     readChunks(colorBytes, din, chunkLength);
                     din.readInt();
                 } else {
-                    forceSkip(din, chunkLength + 4);
+                    JngInputUtil.forceSkip(din, chunkLength + 4);
                 }
             } else if (type == JngConstants.CHUNK_IDAT) {
                 if (alphaType != JngAlphaType.PNG) {
@@ -82,17 +82,17 @@ public final class JngReader {
                 din.readInt(); // CRC
             } else if (type == JngConstants.CHUNK_JSEP) {
                 jdatIndex++;
-                forceSkip(din, chunkLength + 4);
+                JngInputUtil.forceSkip(din, chunkLength + 4);
             } else {
                 // Skip chunk
-                forceSkip(din, chunkLength + 4);
+                JngInputUtil.forceSkip(din, chunkLength + 4);
             }
         }
 
         // Read color data
         Pixmap result;
         {
-            byte[] colorBytesMerged = merge(colorBytes);
+            byte[] colorBytesMerged = JngInputUtil.concatChunks(colorBytes);
             result = new Pixmap(colorBytesMerged, 0, colorBytesMerged.length);
             result = PixmapUtil.convert(result, Pixmap.Format.RGBA8888, true);
         }
@@ -131,27 +131,11 @@ public final class JngReader {
         }
     }
 
-    private static byte[] merge(List<byte[]> c) {
-        int count = 0;
-        for (byte[] b : c) {
-            count += b.length;
-        }
-
-        byte[] array = new byte[count];
-        int t = 0;
-        for (byte[] b : c) {
-            System.arraycopy(b, 0, array, t, b.length);
-            t += b.length;
-        }
-        c.clear();
-        return array;
-    }
-
     protected static byte[] mergeAlpha(JngHeader header, JngAlphaType type, List<byte[]> c) {
         Preconditions.checkArgument(type != null, "Invalid alpha type for this method: " + type);
 
         if (type != JngAlphaType.PNG) {
-            return merge(c);
+            return JngInputUtil.concatChunks(c);
         }
 
         int count = 0;
@@ -159,9 +143,9 @@ public final class JngReader {
             count += b.length;
         }
 
-        byte[] headerBytes = createPngHeaderForAlpha(header);
+        byte[] headerBytes = PngHelper.createPngHeaderForAlpha(header);
 
-        ByteBuffer buf = ByteBuffer.allocate(headerBytes.length + (8 + count + 4) + IEND.length);
+        ByteBuffer buf = ByteBuffer.allocate(headerBytes.length + (8 + count + 4) + PngHelper.IEND.length);
         buf.order(ByteOrder.BIG_ENDIAN);
         buf.put(headerBytes);
 
@@ -174,49 +158,10 @@ public final class JngReader {
             buf.put(b);
         }
         buf.putInt((int)crc.getValue());
-        buf.put(IEND);
+        buf.put(PngHelper.IEND);
 
         return buf.array();
     }
 
-    private static byte[] createPngHeaderForAlpha(JngHeader hdr) {
-        final byte[] MAGIC = JngConstants.PNG_MAGIC;
-
-        ByteBuffer buf = ByteBuffer.allocate(MAGIC.length + (8 + 13 + 4));
-        buf.order(ByteOrder.BIG_ENDIAN);
-        buf.put(MAGIC);
-        buf.putInt(13);
-        buf.putInt(JngConstants.CHUNK_IHDR);
-
-        buf.putInt(hdr.size.w);
-        buf.putInt(hdr.size.h);
-
-        AlphaSettings alpha = hdr.alpha;
-        buf.put((byte)alpha.sampleDepth);
-        buf.put((byte)0); // colorType is always grayscale
-        buf.put((byte)alpha.compressionMethod);
-        buf.put((byte)alpha.filterMethod);
-        buf.put((byte)alpha.interlaceMethod);
-
-        CRC32 crc = new CRC32();
-        crc.update(buf.array(), MAGIC.length + 4, 17);
-        buf.putInt((int)crc.getValue());
-
-        return buf.array();
-    }
-
-    private static void forceSkip(DataInput in, int toSkip) throws IOException {
-        int skipped = 0;
-        while (skipped < toSkip) {
-            int s = in.skipBytes(toSkip - skipped);
-            if (s <= 0) {
-                break;
-            }
-            skipped += s;
-        }
-        for (int n = skipped; n < toSkip; n++) {
-            in.readByte();
-        }
-    }
 
 }

@@ -7,11 +7,6 @@ final class JngConstants {
      */
     static final byte[] JNG_MAGIC = { (byte)0x8B, 0x4A, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
-    /**
-     * Byte pattern at the start of every PNG file.
-     */
-    static final byte[] PNG_MAGIC = { (byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-
     // --- Chunk identifiers ---------------------------------------------------
     static final int CHUNK_JHDR = 0x4A484452;
     static final int CHUNK_JDAT = 0x4A444154;

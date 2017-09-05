@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.image;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,7 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
+
+import nl.weeaboo.vn.gdx.graphics.PngUtil;
 
 final class PixelTextureDataIO {
 
@@ -16,19 +16,11 @@ final class PixelTextureDataIO {
     }
 
     public static void serialize(Pixmap pixmap, OutputStream out) throws IOException {
-        PixmapIO.PNG encoder = new PixmapIO.PNG();
-        encoder.setFlipY(false);
-
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        try {
-            encoder.write(bout, pixmap);
-        } finally {
-            bout.close();
-        }
+        byte[] bytes = PngUtil.encodePng(pixmap);
 
         DataOutputStream dout = new DataOutputStream(out);
-        dout.writeInt(bout.size());
-        bout.writeTo(out);
+        dout.writeInt(bytes.length);
+        out.write(bytes, 0, bytes.length);
     }
 
     public static Pixmap deserialize(InputStream in) throws IOException {
