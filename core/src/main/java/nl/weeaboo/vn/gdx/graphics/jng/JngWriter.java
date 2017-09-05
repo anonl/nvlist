@@ -15,19 +15,15 @@ import javax.imageio.IIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
-import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
-import nl.weeaboo.vn.gdx.graphics.PngUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.ColorSettings;
 
 public final class JngWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JngWriter.class);
+
+    private final IJpegEncoder jpegEncoder;
 
     private JngWriteParams params = new JngWriteParams();
 
@@ -40,7 +36,10 @@ public final class JngWriter {
     private byte[] alphaBytes;
     private JngAlphaType alphaType;
 
-    public JngWriter() {
+
+    public JngWriter(IJpegEncoder jpegEncoder) {
+        this.jpegEncoder = jpegEncoder;
+
         resetImageState();
     }
 
@@ -65,6 +64,7 @@ public final class JngWriter {
     public void write(DataOutput dout) throws IOException {
         ColorSettings color = new ColorSettings();
         color.colorType = getOutputColorType();
+        color.sampleDepth = colorSampleDepth;
 
         AlphaSettings alpha = new AlphaSettings();
         alpha.compressionMethod = alphaType;
@@ -107,7 +107,7 @@ public final class JngWriter {
     }
 
     public void setColorInput(byte[] data) throws IOException {
-        data = JpegHelper.convertToJpeg(data);
+        data = JpegHelper.toJpeg(data, jpegEncoder);
 
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
 
@@ -163,11 +163,11 @@ public final class JngWriter {
 
             byte[] pngFile = data;
             if (colorType != PngColorType.GRAYSCALE.toInt() || width != size.w || height != size.h) {
-                pngFile = toGrayscalePng(data);
+                pngFile = PngHelper.toGrayscalePng(data);
             }
             pngData = PngHelper.readIDAT(new ByteArrayInputStream(pngFile));
         } else {
-            byte[] pngFile = toGrayscalePng(data);
+            byte[] pngFile = PngHelper.toGrayscalePng(data);
             pngData = PngHelper.readIDAT(new ByteArrayInputStream(pngFile));
         }
 
@@ -176,8 +176,8 @@ public final class JngWriter {
             if (JpegHelper.isJpeg(data, 0, data.length)) {
                 jpgData = data;
             } else {
-                byte[] pngFile = toGrayscalePng(data);
-                jpgData = JpegHelper.convertToJpeg(pngFile);
+                byte[] pngFile = PngHelper.toGrayscalePng(data);
+                jpgData = JpegHelper.toJpeg(pngFile, jpegEncoder);
             }
         }
 
@@ -198,15 +198,6 @@ public final class JngWriter {
         crc.update(data, 0, data.length);
         dout.write(data, 0, data.length);
         dout.writeInt((int)crc.getValue());
-    }
-
-    private static byte[] toGrayscalePng(byte[] imageFile) throws IOException {
-        Pixmap pixmap = PixmapLoader.load(imageFile, 0, imageFile.length);
-        pixmap = PixmapUtil.convert(pixmap, Format.Intensity, true);
-
-        byte[] pngData = PngUtil.encodePng(pixmap);
-        pixmap.dispose();
-        return pngData;
     }
 
 }

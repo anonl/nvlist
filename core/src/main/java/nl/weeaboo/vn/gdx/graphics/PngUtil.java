@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.PixmapIO;
 public final class PngUtil {
 
     /**
-     *
      * @see Pixmap#Pixmap(byte[], int, int)
      */
     public static byte[] encodePng(Pixmap pixmap) throws IOException {

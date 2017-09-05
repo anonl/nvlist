@@ -17,13 +17,20 @@ final class JpegHelper {
         return JngInputUtil.startsWith(bytes, offset, length, JPEG_MAGIC);
     }
 
-    public static byte[] convertToJpeg(byte[] data) throws IOException {
+    public static byte[] toJpeg(byte[] data, IJpegEncoder jpegEncoder) throws IOException {
         if (JpegHelper.isJpeg(data, 0, data.length)) {
             // The data is already a JPEG file
             return data;
         }
 
         Pixmap pixmap = PixmapLoader.load(data, 0, data.length);
+        byte[] jpegData;
+        try {
+            jpegData = jpegEncoder.encodeJpeg(pixmap);
+        } finally {
+            pixmap.dispose();
+        }
+        return jpegData;
     }
 
 }
