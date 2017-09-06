@@ -1,8 +1,8 @@
-package nl.weeaboo.vn.gdx.graphics.jng;
+package nl.weeaboo.vn.buildtools.optimizer.image;
 
 import nl.weeaboo.common.Checks;
 
-final class JngWriteParams {
+final class JngEncoderParams {
 
     private float jpegQuality = .90f;
     private float jpegAlphaQuality = .95f;

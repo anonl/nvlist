@@ -27,7 +27,7 @@ enum PngColorType {
      */
     RGBA(6);
 
-    int intValue;
+    private final int intValue;
 
     private PngColorType(int intValue) {
         this.intValue = intValue;

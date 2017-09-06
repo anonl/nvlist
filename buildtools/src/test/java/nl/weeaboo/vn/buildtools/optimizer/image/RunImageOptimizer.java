@@ -21,6 +21,9 @@ public final class RunImageOptimizer {
         InitConfig.init();
         Lwjgl3NativesLoader.load();
 
+        File dstFolder = new File("tmp");
+        dstFolder.mkdirs();
+
         // NVList root project
         ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File(""), new File(""));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
@@ -36,6 +39,9 @@ public final class RunImageOptimizer {
             ImageResizer resizer = new ImageResizer(config);
             ImageWithDef optimized = resizer.optimize(imageWithDef);
             System.out.println(optimized.getDef());
+
+            JngEncoder jngEncoder = new JngEncoder();
+            jngEncoder.encode(optimized, new File(dstFolder, "out.jng"));
         }
     }
 

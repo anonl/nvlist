@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-
-import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
-import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
-import nl.weeaboo.vn.gdx.graphics.PngUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 
 final class PngHelper {
@@ -31,6 +25,10 @@ final class PngHelper {
     };
 
     private PngHelper() {
+    }
+
+    public static boolean isPng(byte[] data) {
+        return isPng(data, 0, data.length);
     }
 
     public static boolean isPng(byte[] data, int offset, int length) {
@@ -90,18 +88,4 @@ final class PngHelper {
         return buf.array();
     }
 
-    public static byte[] toGrayscalePng(byte[] data) throws IOException {
-        // TODO: Consider checking if the input is already a grayscale PNG
-
-        Pixmap pixmap = PixmapLoader.load(data, 0, data.length);
-        pixmap = PixmapUtil.convert(pixmap, Format.Intensity, true);
-
-        byte[] pngData;
-        try {
-            pngData = PngUtil.encodePng(pixmap);
-        } finally {
-            pixmap.dispose();
-        }
-        return pngData;
-    }
 }

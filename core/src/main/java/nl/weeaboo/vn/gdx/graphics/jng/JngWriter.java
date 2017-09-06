@@ -15,6 +15,7 @@ import javax.imageio.IIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.ColorSettings;
@@ -22,10 +23,6 @@ import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.ColorSettings;
 public final class JngWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JngWriter.class);
-
-    private final IJpegEncoder jpegEncoder;
-
-    private JngWriteParams params = new JngWriteParams();
 
     private Dim size;
 
@@ -36,15 +33,12 @@ public final class JngWriter {
     private byte[] alphaBytes;
     private JngAlphaType alphaType;
 
-
-    public JngWriter(IJpegEncoder jpegEncoder) {
-        this.jpegEncoder = jpegEncoder;
-
+    public JngWriter() {
         resetImageState();
     }
 
     /**
-     * Reset all image-specific state. General settings ({@link JngWriteParams}) are left unchanged by this method.
+     * Reset all image-specific state.
      */
     public final void resetImageState() {
         size = Dim.EMPTY;
@@ -55,39 +49,6 @@ public final class JngWriter {
 
         alphaBytes = null;
         alphaType = JngAlphaType.PNG;
-    }
-
-    public void write(OutputStream out) throws IOException {
-        write(out instanceof DataOutput ? (DataOutput)out : new DataOutputStream(out));
-    }
-
-    public void write(DataOutput dout) throws IOException {
-        ColorSettings color = new ColorSettings();
-        color.colorType = getOutputColorType();
-        color.sampleDepth = colorSampleDepth;
-
-        AlphaSettings alpha = new AlphaSettings();
-        alpha.compressionMethod = alphaType;
-
-        JngHeader header = new JngHeader(size, color, alpha);
-        header.write(dout);
-
-        writeChunk(dout, JngConstants.CHUNK_JDAT, colorBytes);
-
-        if (header.hasAlpha()) {
-            switch (alphaType) {
-            case PNG: {
-                writeChunk(dout, JngConstants.CHUNK_IDAT, alphaBytes);
-            } break;
-            case JPEG: {
-                writeChunk(dout, JngConstants.CHUNK_JDAA, alphaBytes);
-            } break;
-            default:
-                throw new IllegalStateException("Invalid alphaType: " + alphaType);
-            }
-        }
-
-        dout.write(PngHelper.IEND);
     }
 
     private JngColorType getOutputColorType() {
@@ -107,7 +68,7 @@ public final class JngWriter {
     }
 
     public void setColorInput(byte[] data) throws IOException {
-        data = JpegHelper.toJpeg(data, jpegEncoder);
+        Checks.checkArgument(JpegHelper.isJpeg(data), "Color input must be a JPEG file");
 
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
 
@@ -146,48 +107,68 @@ public final class JngWriter {
             throw new IllegalStateException("Must set color input before alpha");
         }
 
-        byte[] pngData;
-        if (PngHelper.isPng(data, 0, data.length)) {
+        if (PngHelper.isPng(data)) {
             ByteBuffer buf = ByteBuffer.wrap(data);
             buf.order(ByteOrder.BIG_ENDIAN);
             buf.position(buf.position() + 16); // Skip until width
             int width = buf.getInt();
             int height = buf.getInt();
+            Dim alphaSize = Dim.of(width, height);
+
+            Checks.checkArgument(alphaSize.equals(size),
+                    "Alpha image size (" + alphaSize + ") != color size (" + size + ")");
+
             int bitDepth = buf.get() & 0xFF;
             if (bitDepth > 8) {
-                LOG.trace("Alpha input with bitDepth={} found, result image may use a lower bit depth",
+                LOG.debug("Alpha input with bitDepth={} found, result image may use a lower bit depth",
                         bitDepth);
             }
 
             int colorType = buf.get() & 0xFF;
+            Checks.checkArgument(colorType == PngColorType.GRAYSCALE.toInt(),
+                    "Non-grayscale color type: " + colorType);
 
-            byte[] pngFile = data;
-            if (colorType != PngColorType.GRAYSCALE.toInt() || width != size.w || height != size.h) {
-                pngFile = PngHelper.toGrayscalePng(data);
-            }
-            pngData = PngHelper.readIDAT(new ByteArrayInputStream(pngFile));
-        } else {
-            byte[] pngFile = PngHelper.toGrayscalePng(data);
-            pngData = PngHelper.readIDAT(new ByteArrayInputStream(pngFile));
-        }
-
-        byte[] jpgData = null;
-        if (params.isAllowLossyAlpha()) {
-            if (JpegHelper.isJpeg(data, 0, data.length)) {
-                jpgData = data;
-            } else {
-                byte[] pngFile = PngHelper.toGrayscalePng(data);
-                jpgData = JpegHelper.toJpeg(pngFile, jpegEncoder);
-            }
-        }
-
-        if (jpgData == null || pngData.length <= jpgData.length) {
-            alphaBytes = pngData;
+            alphaBytes = PngHelper.readIDAT(new ByteArrayInputStream(data));
             alphaType = JngAlphaType.PNG;
-        } else {
-            alphaBytes = jpgData;
+        } else if (JpegHelper.isJpeg(data)) {
+            alphaBytes = data;
             alphaType = JngAlphaType.JPEG;
+        } else {
+            throw new IllegalArgumentException("Alpha input was an invalid file type (must be PNG or JPEG)");
         }
+    }
+
+    public void write(OutputStream out) throws IOException {
+        write(out instanceof DataOutput ? (DataOutput)out : new DataOutputStream(out));
+    }
+
+    public void write(DataOutput dout) throws IOException {
+        ColorSettings color = new ColorSettings();
+        color.colorType = getOutputColorType();
+        color.sampleDepth = colorSampleDepth;
+
+        AlphaSettings alpha = new AlphaSettings();
+        alpha.compressionMethod = alphaType;
+
+        JngHeader header = new JngHeader(size, color, alpha);
+        header.write(dout);
+
+        writeChunk(dout, JngConstants.CHUNK_JDAT, colorBytes);
+
+        if (header.hasAlpha()) {
+            switch (alphaType) {
+            case PNG: {
+                writeChunk(dout, JngConstants.CHUNK_IDAT, alphaBytes);
+            } break;
+            case JPEG: {
+                writeChunk(dout, JngConstants.CHUNK_JDAA, alphaBytes);
+            } break;
+            default:
+                throw new IllegalStateException("Invalid alphaType: " + alphaType);
+            }
+        }
+
+        dout.write(PngHelper.IEND);
     }
 
     private static void writeChunk(DataOutput dout, int chunkId, byte[] data) throws IOException {
