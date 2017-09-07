@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.buildtools.optimizer.image;
+package nl.weeaboo.vn.buildtools.optimizer.image.encoder;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+import nl.weeaboo.vn.buildtools.optimizer.image.IImageEncoder;
+import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngWriter;
 
@@ -21,26 +23,35 @@ public class JngEncoder implements IImageEncoder {
 
     private final JngEncoderParams params = new JngEncoderParams();
 
+    private final IJpegEncoder jpegEncoder;
+    private final IPngEncoder pngEncoder;
+
+    public JngEncoder() {
+        this(new DesktopJpegEncoder(), new DesktopPngEncoder());
+    }
+
+    public JngEncoder(IJpegEncoder jpegEncoder, IPngEncoder pngEncoder) {
+        this.jpegEncoder = jpegEncoder;
+        this.pngEncoder = pngEncoder;
+    }
+
     @Override
     public void encode(ImageWithDef image, File outputFile) throws IOException {
         Pixmap pixmap = image.getPixmap();
 
-        DesktopJpegEncoder jpegEncoder = new DesktopJpegEncoder();
-        DesktopPngEncoder pngEncoder = new DesktopPngEncoder();
-
         JngWriter writer = new JngWriter();
 
         // Set RGB color
-        byte[] colorData = jpegEncoder.encodeJpeg(pixmap, params.getJpegQuality());
+        byte[] colorData = jpegEncoder.encode(pixmap, newJpegParams(params.getJpegQuality()));
         writer.setColorInput(colorData);
 
         // Set alpha
         Pixmap alphaPixmap = extractAlpha(pixmap);
         byte[] alphaData;
         if (params.isAllowLossyAlpha()) {
-            alphaData = jpegEncoder.encodeJpeg(alphaPixmap, params.getJpegAlphaQuality());
+            alphaData = jpegEncoder.encode(alphaPixmap, newJpegParams(params.getJpegAlphaQuality()));
         } else {
-            alphaData = pngEncoder.encodePng(alphaPixmap);
+            alphaData = pngEncoder.encode(alphaPixmap, new PngEncoderParams());
         }
         writer.setAlphaInput(alphaData);
 
@@ -50,6 +61,12 @@ public class JngEncoder implements IImageEncoder {
         } finally {
             out.close();
         }
+    }
+
+    private JpegEncoderParams newJpegParams(float jpegQuality) {
+        JpegEncoderParams result = new JpegEncoderParams();
+        result.setQuality(jpegQuality);
+        return result;
     }
 
     private static @Nullable Pixmap extractAlpha(Pixmap src) {

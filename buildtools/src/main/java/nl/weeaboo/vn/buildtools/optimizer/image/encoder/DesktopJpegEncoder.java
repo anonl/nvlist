@@ -1,7 +1,8 @@
-package nl.weeaboo.vn.buildtools.optimizer.image;
+package nl.weeaboo.vn.buildtools.optimizer.image.encoder;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -14,10 +15,15 @@ import javax.imageio.stream.ImageOutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.collect.Iterators;
+import com.google.common.io.Files;
 
-final class DesktopJpegEncoder {
+import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageHelper;
+import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 
-    public byte[] encodeJpeg(Pixmap pixmap, float quality) throws IOException {
+final class DesktopJpegEncoder implements IJpegEncoder {
+
+    @Override
+    public byte[] encode(Pixmap pixmap, JpegEncoderParams params) throws IOException {
         BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_3BYTE_BGR);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -28,7 +34,7 @@ final class DesktopJpegEncoder {
 
             JPEGImageWriteParam iwparam = new JPEGImageWriteParam(Locale.ROOT);
             iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT) ;
-            iwparam.setCompressionQuality(quality);
+            iwparam.setCompressionQuality(params.getQuality());
             iwparam.setOptimizeHuffmanTables(true);
 
             // Write the image
@@ -42,6 +48,12 @@ final class DesktopJpegEncoder {
 
         image.flush();
         return out.toByteArray();
+    }
+
+    @Override
+    public void encode(ImageWithDef image, File outputFile) throws IOException {
+        byte[] bytes = encode(image.getPixmap(), new JpegEncoderParams());
+        Files.write(bytes, outputFile);
     }
 
 }

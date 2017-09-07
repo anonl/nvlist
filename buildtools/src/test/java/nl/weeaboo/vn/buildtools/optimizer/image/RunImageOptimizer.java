@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.gdx.graphics.PixmapLoader;

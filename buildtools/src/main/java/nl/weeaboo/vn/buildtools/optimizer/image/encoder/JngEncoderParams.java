@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.buildtools.optimizer.image;
+package nl.weeaboo.vn.buildtools.optimizer.image.encoder;
 
 import nl.weeaboo.common.Checks;
 

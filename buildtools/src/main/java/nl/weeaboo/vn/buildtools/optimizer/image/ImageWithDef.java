@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
-final class ImageWithDef implements Disposable {
+public final class ImageWithDef implements Disposable {
 
     private final Pixmap pixmap;
     private final ImageDefinition def;
