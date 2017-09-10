@@ -101,6 +101,9 @@ public final class DesktopLauncher {
         });
     }
 
+    /**
+     * Opens the virtual file system for reading game resources (res folder + .nvl files)
+     */
     public static DesktopGdxFileSystem openResourceFileSystem(File projectFolder) {
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();

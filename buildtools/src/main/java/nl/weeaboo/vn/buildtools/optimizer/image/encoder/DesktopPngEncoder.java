@@ -17,8 +17,7 @@ final class DesktopPngEncoder implements IPngEncoder {
 
     @Override
     public byte[] encode(Pixmap pixmap, PngEncoderParams params) throws IOException {
-        BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap,
-                BufferedImageHelper.toBufferedImageType(pixmap.getFormat()));
+        BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(image, "png", out);

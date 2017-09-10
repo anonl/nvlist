@@ -14,12 +14,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
-import nl.weeaboo.vn.buildtools.optimizer.image.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngWriter;
 
-public class JngEncoder implements IImageEncoder {
+public final class JngEncoder implements IImageEncoder {
 
     private final JngEncoderParams params = new JngEncoderParams();
 

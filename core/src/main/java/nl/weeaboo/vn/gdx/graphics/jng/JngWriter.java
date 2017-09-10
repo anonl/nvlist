@@ -67,15 +67,22 @@ public final class JngWriter {
         }
     }
 
-    public void setColorInput(byte[] data) throws IOException {
-        Checks.checkArgument(JpegHelper.isJpeg(data), "Color input must be a JPEG file");
+    /**
+     * Sets the color (RGB) part of the image.
+     *
+     * @param jpegData A JPEG encoded image
+     * @throws IOException If an error occurs while attempting to parse the JPEG data.
+     * @see #setAlphaInput(byte[])
+     */
+    public void setColorInput(byte[] jpegData) throws IOException {
+        Checks.checkArgument(JpegHelper.isJpeg(jpegData), "Color input must be a JPEG file");
 
-        DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
+        DataInputStream din = new DataInputStream(new ByteArrayInputStream(jpegData));
 
         byte[] magic = new byte[JpegHelper.JPEG_MAGIC.length];
         din.readFully(magic);
         if (!JpegHelper.isJpeg(magic, 0, magic.length)) {
-            throw new JngParseException("Invalig JPEG magic: " + JngInputUtil.toByteString(magic));
+            throw new IIOException("Invalig JPEG magic: " + JngInputUtil.toByteString(magic));
         }
 
         while (true) {
@@ -99,16 +106,26 @@ public final class JngWriter {
             }
         }
 
-        colorBytes = data;
+        colorBytes = jpegData;
     }
 
-    public void setAlphaInput(byte[] data) throws IOException {
+    /**
+     * Sets the alpha (transparency) part of the image. The color input must be set first.
+     *
+     * @param imageData A JPEG or PNG encoded image
+     * @throws IllegalStateException When this method is called before the color input is set.
+     * @throws IllegalArgumentException If the passed image is incompatible because it has the wrong
+     *         dimensions, or an invalid/unsupported encoding.
+     * @throws IOException If an error occurs while attempting to parse the image data.
+     * @see #setColorInput(byte[])
+     */
+    public void setAlphaInput(byte[] imageData) throws IOException {
         if (colorBytes == null) {
             throw new IllegalStateException("Must set color input before alpha");
         }
 
-        if (PngHelper.isPng(data)) {
-            ByteBuffer buf = ByteBuffer.wrap(data);
+        if (PngHelper.isPng(imageData)) {
+            ByteBuffer buf = ByteBuffer.wrap(imageData);
             buf.order(ByteOrder.BIG_ENDIAN);
             buf.position(buf.position() + 16); // Skip until width
             int width = buf.getInt();
@@ -128,23 +145,44 @@ public final class JngWriter {
             Checks.checkArgument(colorType == PngColorType.GRAYSCALE.toInt(),
                     "Non-grayscale color type: " + colorType);
 
-            alphaBytes = PngHelper.readIDAT(new ByteArrayInputStream(data));
+            alphaBytes = PngHelper.readIDAT(new ByteArrayInputStream(imageData));
             alphaType = JngAlphaType.PNG;
-        } else if (JpegHelper.isJpeg(data)) {
-            alphaBytes = data;
+        } else if (JpegHelper.isJpeg(imageData)) {
+            alphaBytes = imageData;
+
+            // TODO: Check dimensions
+
             alphaType = JngAlphaType.JPEG;
         } else {
             throw new IllegalArgumentException("Alpha input was an invalid file type (must be PNG or JPEG)");
         }
     }
 
+    /**
+     * @see #write(DataOutput)
+     * @throws IOException If an I/O error occurs while writing the file.
+     */
     public void write(OutputStream out) throws IOException {
         write(out instanceof DataOutput ? (DataOutput)out : new DataOutputStream(out));
     }
 
+    /**
+     * Writes the encoded JNG file to the supplied output. The color/image data
+     *
+     * @throws IOException If an I/O error occurs while writing the file.
+     */
     public void write(DataOutput dout) throws IOException {
+        Checks.checkState(colorBytes != null, "Color input must be set first");
+
+        JngColorType outputColorType = getOutputColorType();
+        if (outputColorType.hasAlpha()) {
+            // If the output needs alpha, check first if the alpha input has set before writing anything
+            Checks.checkState(alphaBytes != null,
+                    "Alpha input must be set first (colorType=" + outputColorType + ")");
+        }
+
         ColorSettings color = new ColorSettings();
-        color.colorType = getOutputColorType();
+        color.colorType = outputColorType;
         color.sampleDepth = colorSampleDepth;
 
         AlphaSettings alpha = new AlphaSettings();
@@ -155,7 +193,7 @@ public final class JngWriter {
 
         writeChunk(dout, JngConstants.CHUNK_JDAT, colorBytes);
 
-        if (header.hasAlpha()) {
+        if (outputColorType.hasAlpha()) {
             switch (alphaType) {
             case PNG: {
                 writeChunk(dout, JngConstants.CHUNK_IDAT, alphaBytes);

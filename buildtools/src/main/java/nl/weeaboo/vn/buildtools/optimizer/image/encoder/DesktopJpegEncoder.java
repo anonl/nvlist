@@ -24,6 +24,7 @@ final class DesktopJpegEncoder implements IJpegEncoder {
 
     @Override
     public byte[] encode(Pixmap pixmap, JpegEncoderParams params) throws IOException {
+        // Use an explicit image type to flatten any alpha in the source pixmap
         BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_3BYTE_BGR);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -12,6 +12,23 @@ public final class BufferedImageHelper {
     private BufferedImageHelper() {
     }
 
+    /**
+     * Converts a {@link Pixmap} to an equivalent {@link BufferedImage}. The buffered image type is
+     * automatically determined from the pixmap's format.
+     *
+     * @see #toBufferedImage(Pixmap, int)
+     * @see #toBufferedImageType(Format)
+     */
+    public static BufferedImage toBufferedImage(Pixmap pixmap) {
+        return toBufferedImage(pixmap, BufferedImageHelper.toBufferedImageType(pixmap.getFormat()));
+    }
+
+    /**
+     * Converts a {@link Pixmap} to an equivalent {@link BufferedImage}, using an explicit buffered image
+     * type ({@link BufferedImage#getType()}) for the resulting image.
+     *
+     * @see BufferedImage#getType()
+     */
     public static BufferedImage toBufferedImage(Pixmap pixmap, int bufferedImageType) {
         final int iw = pixmap.getWidth();
         final int ih = pixmap.getHeight();
@@ -26,6 +43,10 @@ public final class BufferedImageHelper {
         return result;
     }
 
+    /**
+     * Returns the equivalent buffered image type ({@link BufferedImage#getType()}) for the given pixmap
+     * format.
+     */
     public static int toBufferedImageType(Format format) {
         switch (format) {
         case Intensity:

@@ -25,12 +25,22 @@ public final class ImageWithDef implements Disposable {
         pixmap.dispose();
     }
 
+    /**
+     * Returns the pixmap.
+     *
+     * @throws IllegalStateException If this object is disposed.
+     */
     public Pixmap getPixmap() {
         Preconditions.checkState(!disposed);
 
         return pixmap;
     }
 
+    /**
+     * Returns the image definition.
+     *
+     * @throws IllegalStateException If this object is disposed.
+     */
     public ImageDefinition getDef() {
         Preconditions.checkState(!disposed);
 

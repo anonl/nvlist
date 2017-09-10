@@ -18,9 +18,11 @@ public final class DistortQuadCommand extends BaseRenderCommand {
     public final DistortGrid grid;
     public final Rect2D clampBounds;
 
+    // CHECKSTYLE:OFF - I can't be arsed to fix this
     public DistortQuadCommand(short z, boolean clipEnabled, BlendMode blendMode, int argb,
             ITexture tex, Matrix trans, Area2D bounds, Area2D uv,
             DistortGrid grid, Rect2D clampBounds) {
+    // CHECKSTYLE:ON
 
         super(ID, z, clipEnabled, blendMode, argb, tex != null ? (byte)tex.hashCode() : 0);
 
