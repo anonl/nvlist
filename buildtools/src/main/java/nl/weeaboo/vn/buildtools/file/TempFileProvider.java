@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.buildtools.optimizer;
+package nl.weeaboo.vn.buildtools.file;
 
 import java.io.File;
 import java.io.IOException;
