@@ -2,15 +2,16 @@ package nl.weeaboo.vn.buildtools.optimizer.image.encoder;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.google.common.io.Files;
 
+import nl.weeaboo.vn.buildtools.file.EncodedResource;
+import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageHelper;
+import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 
 final class DesktopPngEncoder implements IPngEncoder {
@@ -26,9 +27,11 @@ final class DesktopPngEncoder implements IPngEncoder {
     }
 
     @Override
-    public void encode(ImageWithDef image, File outputFile) throws IOException {
+    public EncodedImage encode(ImageWithDef image) throws IOException {
         byte[] bytes = encode(image.getPixmap(), new PngEncoderParams());
-        Files.write(bytes, outputFile);
+
+        IEncodedResource encodedImage = EncodedResource.fromBytes(bytes);
+        return new EncodedImage(encodedImage, image.getDef());
     }
 
 }

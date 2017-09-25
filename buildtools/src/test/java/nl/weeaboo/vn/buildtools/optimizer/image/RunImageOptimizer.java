@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.google.common.io.Files;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
@@ -42,7 +43,9 @@ public final class RunImageOptimizer {
             System.out.println(optimized.getDef());
 
             JngEncoder jngEncoder = new JngEncoder();
-            jngEncoder.encode(optimized, new File(dstFolder, "out.jng"));
+            EncodedImage encoded = jngEncoder.encode(optimized);
+
+            Files.write(encoded.readImageBytes(), new File(dstFolder, "out.jng"));
         }
     }
 

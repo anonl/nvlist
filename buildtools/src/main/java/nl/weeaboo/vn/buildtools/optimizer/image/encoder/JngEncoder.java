@@ -1,8 +1,6 @@
 package nl.weeaboo.vn.buildtools.optimizer.image.encoder;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,6 +12,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+import nl.weeaboo.vn.buildtools.file.EncodedResource;
+import nl.weeaboo.vn.buildtools.file.IEncodedResource;
+import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngWriter;
@@ -35,7 +36,7 @@ public final class JngEncoder implements IImageEncoder {
     }
 
     @Override
-    public void encode(ImageWithDef image, File outputFile) throws IOException {
+    public EncodedImage encode(ImageWithDef image) throws IOException {
         Pixmap pixmap = image.getPixmap();
 
         JngWriter writer = new JngWriter();
@@ -54,12 +55,11 @@ public final class JngEncoder implements IImageEncoder {
         }
         writer.setAlphaInput(alphaData);
 
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
-        try {
-            writer.write(out);
-        } finally {
-            out.close();
-        }
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        writer.write(bout);
+        IEncodedResource encoded = EncodedResource.fromBytes(bout.toByteArray());
+
+        return new EncodedImage(encoded, image.getDef());
     }
 
     private JpegEncoderParams newJpegParams(float jpegQuality) {

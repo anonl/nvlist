@@ -26,8 +26,6 @@ final class ImageResizer implements IImageOperation {
         Pixmap pixmap = original.getPixmap();
         Pixmap resizedPixmap = PixmapUtil.resizedCopy(pixmap, scaledDef.getSize(), Filter.BiLinear);
 
-        original.dispose();
-
         return new ImageWithDef(resizedPixmap, scaledDef);
     }
 
