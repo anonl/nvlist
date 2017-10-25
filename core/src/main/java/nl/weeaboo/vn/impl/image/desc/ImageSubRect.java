@@ -20,6 +20,13 @@ public final class ImageSubRect implements IImageSubRect {
         this.area = area;
     }
 
+    public static ImageSubRect from(IImageSubRect subRect) {
+        if (subRect instanceof ImageSubRect) {
+            return (ImageSubRect)subRect;
+        }
+        return new ImageSubRect(subRect.getId(), subRect.getArea());
+    }
+
     @Override
     public String getId() {
         return id;

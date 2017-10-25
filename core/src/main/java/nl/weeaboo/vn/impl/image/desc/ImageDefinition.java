@@ -72,6 +72,13 @@ public final class ImageDefinition implements IImageDefinition {
         }
     }
 
+    public static ImageDefinition from(IImageDefinition imageDef) {
+        if (imageDef instanceof ImageDefinition) {
+            return (ImageDefinition)imageDef;
+        }
+        return new ImageDefinitionBuilder(imageDef).build();
+    }
+
     /**
      * Returns a mutable copy of this definition.
      */

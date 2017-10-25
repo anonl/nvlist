@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.base.Preconditions;
 
+import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
 public final class ImageWithDef implements Disposable {
@@ -13,9 +14,9 @@ public final class ImageWithDef implements Disposable {
 
     private volatile boolean disposed;
 
-    public ImageWithDef(Pixmap pixmap, ImageDefinition def) {
+    public ImageWithDef(Pixmap pixmap, IImageDefinition def) {
         this.pixmap = pixmap;
-        this.def = def;
+        this.def = ImageDefinition.from(def);
     }
 
     @Override

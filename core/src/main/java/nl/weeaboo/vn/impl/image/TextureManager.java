@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
@@ -66,9 +67,10 @@ final class TextureManager implements Serializable {
         }
     }
 
+    @CheckForNull
     final IImageDefinition getImageDef(FilePath relPath) {
         if (cachedImageDefs == null) {
-            cachedImageDefs = new ImageDefinitionCache(resourceLoader);
+            cachedImageDefs = new ImageDefinitionCache(resourceLoader.getFileSystem());
         }
         return cachedImageDefs.getImageDef(relPath);
     }

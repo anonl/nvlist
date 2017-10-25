@@ -33,7 +33,7 @@ public final class ImageDefinitionBuilder implements IImageDefinition {
         this.size = Checks.checkNotNull(size);
     }
 
-    public ImageDefinitionBuilder(ImageDefinition original) {
+    public ImageDefinitionBuilder(IImageDefinition original) {
         this(original.getFilename(), original.getSize());
 
         minFilter = original.getMinifyFilter();
@@ -41,7 +41,9 @@ public final class ImageDefinitionBuilder implements IImageDefinition {
         tileX = original.getTilingModeX();
         tileY = original.getTilingModeY();
 
-        subRects.addAll(original.getSubRects());
+        for (IImageSubRect subRect : original.getSubRects()) {
+            subRects.add(ImageSubRect.from(subRect));
+        }
     }
 
     /** Creates a new immutable {@link ImageDefinition} instance. */

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.CheckForNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,24 +17,24 @@ import com.google.common.collect.Sets;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
-import nl.weeaboo.filesystem.FileSystemView;
+import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
-import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
-final class ImageDefinitionCache {
+public final class ImageDefinitionCache {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageDefinitionCache.class);
 
-    private final FileResourceLoader resourceLoader;
+    private final IFileSystem fileSystem;
 
     private final Map<FilePath, IImageDefinition> cache = Maps.newHashMap();
     private final Set<FilePath> seenFolders = Sets.newHashSet();
 
-    public ImageDefinitionCache(FileResourceLoader resourceLoader) {
-        this.resourceLoader = Checks.checkNotNull(resourceLoader);
+    public ImageDefinitionCache(IFileSystem fileSystem) {
+        this.fileSystem = Checks.checkNotNull(fileSystem);
     }
 
+    @CheckForNull
     public IImageDefinition getImageDef(FilePath path) {
         IImageDefinition imageDef = cache.get(path);
         if (imageDef != null) {
@@ -57,8 +59,6 @@ final class ImageDefinitionCache {
     }
 
     private void loadJson(FilePath folder) throws IOException {
-        FileSystemView fileSystem = resourceLoader.getFileSystem();
-
         FilePath jsonPath = folder.resolve(IImageDefinition.IMG_DEF_FILE);
         String json = FileSystemUtil.readString(fileSystem, jsonPath);
 
