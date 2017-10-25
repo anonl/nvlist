@@ -7,6 +7,9 @@ import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
  */
 public interface IOptimizerContext {
 
+    /**
+     * Returns a {@link ITempFileProvider} that manages creation and deletion of temporary files.
+     */
     ITempFileProvider getTempFileProvider();
 
 }

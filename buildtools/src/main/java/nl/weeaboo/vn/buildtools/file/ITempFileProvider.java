@@ -10,6 +10,10 @@ public interface ITempFileProvider {
      */
     void deleteAll();
 
+    /**
+     * @return A temporary file.
+     * @throws IOException If the temporary file couldn't be created.
+     */
     File newTempFile() throws IOException;
 
 }

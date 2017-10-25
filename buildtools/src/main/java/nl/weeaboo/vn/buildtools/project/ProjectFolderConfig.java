@@ -42,6 +42,10 @@ public final class ProjectFolderConfig {
         return buildToolsFolder;
     }
 
+    /**
+     * Returns the canonical path for the given file. In some cases, no canonical path can be determined. In
+     * those cases, the file's absolute path is returned instead.
+     */
     public static String toCanonicalPath(File file) {
         try {
             return file.getCanonicalPath();

@@ -11,6 +11,9 @@ public final class ResourceOptimizerConfig {
         this.outputFolder = Objects.requireNonNull(outputFolder);
     }
 
+    /**
+     * The output folder to where the optimized resources should be written.
+     */
     public File getOutputFolder() {
         return outputFolder;
     }

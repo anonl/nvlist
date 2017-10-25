@@ -2,6 +2,9 @@ package nl.weeaboo.vn.buildtools.optimizer.image;
 
 import java.io.IOException;
 
+/**
+ * Decodes an image
+ */
 public interface IImageDecoder {
 
     /**

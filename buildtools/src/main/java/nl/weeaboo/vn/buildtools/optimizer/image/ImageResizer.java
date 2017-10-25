@@ -20,7 +20,7 @@ final class ImageResizer implements IImageOperation {
     }
 
     @Override
-    public ImageWithDef optimize(ImageWithDef original) throws IOException {
+    public ImageWithDef process(ImageWithDef original) throws IOException {
         ImageDefinition scaledDef = scale(original.getDef());
 
         Pixmap pixmap = original.getPixmap();

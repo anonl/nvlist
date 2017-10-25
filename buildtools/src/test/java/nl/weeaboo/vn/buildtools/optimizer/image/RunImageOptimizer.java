@@ -17,8 +17,11 @@ import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
 import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
-public final class RunImageOptimizer {
+final class RunImageOptimizer {
 
+    /**
+     * Test runner for the image optimizer pipeline.
+     */
     public static void main(String[] args) throws IOException {
         InitConfig.init();
         Lwjgl3NativesLoader.load();
@@ -39,13 +42,13 @@ public final class RunImageOptimizer {
             ImageResizerConfig config = new ImageResizerConfig();
             config.setScaleFactor(0.5);
             ImageResizer resizer = new ImageResizer(config);
-            ImageWithDef optimized = resizer.optimize(imageWithDef);
+            ImageWithDef optimized = resizer.process(imageWithDef);
             System.out.println(optimized.getDef());
 
             JngEncoder jngEncoder = new JngEncoder();
             EncodedImage encoded = jngEncoder.encode(optimized);
 
-            Files.write(encoded.readImageBytes(), new File(dstFolder, "out.jng"));
+            Files.write(encoded.readBytes(), new File(dstFolder, "out.jng"));
         }
     }
 
