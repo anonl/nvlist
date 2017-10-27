@@ -1,5 +1,6 @@
 
-sudo: true
+sudo: required
+dist: trusty
 
 matrix:
   include:
