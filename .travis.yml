@@ -1,5 +1,5 @@
 
-sudo: required
+sudo: false
 dist: trusty
 
 matrix:
@@ -10,7 +10,8 @@ matrix:
       addons:
         apt:
           packages:
-            - xvfb          
+            - xvfb
+            - libgles2-mesa-dev
       android:
         components:
           - tools
