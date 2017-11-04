@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.gdx.res;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -146,14 +147,16 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
         Set<FilePath> result = Sets.newHashSet();
         try {
             Iterables.addAll(result, internalFileSystem.getFiles(collectOpts));
+        } catch (FileNotFoundException fnfe) {
+            // Ignore
         } catch (IOException e) {
-            LOG.warn("Error retrieving file list {}({})", internalFileSystem, path);
+            LOG.warn("Error retrieving file list {}({}) :: {}", internalFileSystem, path, e.toString());
         }
         for (ZipFileArchive arc : getFileArchives()) {
             try {
                 Iterables.addAll(result, arc.getFiles(collectOpts));
             } catch (IOException e) {
-                LOG.warn("Error retrieving file list {}({})", arc, path);
+                LOG.warn("Error retrieving file list {}({}) :: {}", arc, path, e.toString());
             }
         }
         return result;
