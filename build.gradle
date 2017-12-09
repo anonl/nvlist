@@ -1,12 +1,13 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:2.3.3'        
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'        
+        classpath 'com.android.tools.build:gradle:3.0.1'        
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'        
 
         // Plugins for iOS
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.2'
@@ -16,19 +17,19 @@ buildscript {
 plugins {
     // Plugin for uploading to bintray
     // Note: Causes a classpath conflict for org.apache.tools.zip
-    id 'com.jfrog.bintray' version '1.7.3'
+    id 'com.jfrog.bintray' version '1.8.0'
     
     // Google error-prone
-    id 'net.ltgt.errorprone' version '0.0.11' apply false
+    id 'net.ltgt.errorprone' version '0.0.13' apply false
     
     // Plugin used for reporting on the licenses of third-part licenses
-    id 'com.github.hierynomus.license' version '0.13.1'
+    id 'com.github.hierynomus.license' version '0.14.0'
     
     // Java Microbenchmark Harness plugin
-    id 'me.champeau.gradle.jmh' version '0.4.3' apply false
+    id 'me.champeau.gradle.jmh' version '0.4.5' apply false
     
     // Plugin for making a 'fat' JAR
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
     
     // Public API change detection
     id 'me.champeau.gradle.japicmp' version '0.2.5'    
@@ -42,7 +43,7 @@ allprojects {
     apply plugin: 'com.jfrog.bintray'
 
     group = 'nl.weeaboo.vn'
-    version = '4.0.0-alpha11'
+    version = '4.0.0-alpha12'
     ext {
         javaVersion = JavaVersion.VERSION_1_8
         

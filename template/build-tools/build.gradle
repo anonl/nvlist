@@ -1,13 +1,15 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
         // Plugin for making a 'fat' JAR
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
 
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        // Plugins for Android
+        classpath 'com.android.tools.build:gradle:3.0.1'        
    }
 }
 
@@ -97,9 +99,6 @@ project(':android') {
             manifestPlaceholders = [
                 androidMain: settings.androidMain
             ]
-            jackOptions {
-               enabled true
-            }
         }
     }
 

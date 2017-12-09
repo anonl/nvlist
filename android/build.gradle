@@ -1,16 +1,6 @@
 
-apply plugin: 'com.android.library' // Doesn't work yet when using Jack compiler
-
-/*
-apply plugin: 'com.android.application'
-android {
-    defaultConfig {
-        jackOptions {
-           enabled true
-        }
-    }
-}
-*/
+apply plugin: 'com.android.library'
+// apply plugin: 'com.android.application'
 
 apply from: "${buildToolsDir}/common-android.gradle"
 
@@ -18,32 +8,20 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
-    compile project(":nvlist-api")
-    compile(project(":nvlist-core")) {
-        exclude group: "com.badlogicgames.gdx", module: "gdx-backend-headless"
-        exclude group: "com.badlogicgames.gdx", module: "gdx-platform"
-    }
-    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-    compile "org.slf4j:slf4j-api:$slf4jVersion"
-    compile "org.slf4j:slf4j-android:$slf4jVersion"
-    compile "com.google.guava:guava:$guavaVersion"
+    implementation project(":nvlist-core")
+   
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+    implementation "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
 
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    compile "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
-    
-    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"        
-    compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+    
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
@@ -109,15 +87,15 @@ eclipse {
 
 publishing {
     publications {
-        android(MavenPublication) {        
+        android(MavenPublication) {
             // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
             artifact file("${buildDir}/outputs/aar/${project.name}-release.aar")
             
             pom.withXml {                
                 // Gather dependencies
-                def projectDeps = []
-                projectDeps += configurations.runtime.getResolvedConfiguration().getFirstLevelModuleDependencies()
-                projectDeps += configurations.natives.getResolvedConfiguration().getFirstLevelModuleDependencies()
+                def projectDeps = [].toSet()
+                projectDeps += configurations.implementation.allDependencies
+                // projectDeps += configurations.natives.allDependencies
 
                 def root = asNode()
                 
@@ -125,9 +103,9 @@ publishing {
                 def depsNode = root.appendNode('dependencies')
                 projectDeps.each {
                     def depNode = depsNode.appendNode('dependency')
-                    depNode.appendNode('groupId', it.moduleGroup)
-                    depNode.appendNode('artifactId', it.moduleName)
-                    depNode.appendNode('version', it.moduleVersion)
+                    depNode.appendNode('groupId', it.group)
+                    depNode.appendNode('artifactId', it.name)
+                    depNode.appendNode('version', it.version)
                 }
 
                 // Append license info

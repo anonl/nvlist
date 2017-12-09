@@ -16,7 +16,7 @@ matrix:
         components:
           - tools
           - tools
-          - build-tools-25.0.2
+          - build-tools-26.0.2
           - platform-tools
           - android-25
       before_script:

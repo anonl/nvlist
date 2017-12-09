@@ -2,7 +2,7 @@
 configurations { natives }
 
 android {
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.2'
     compileSdkVersion 'android-25'
         
     sourceSets {
