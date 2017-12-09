@@ -2,6 +2,9 @@ package nl.weeaboo.vn.gdx.graphics;
 
 import java.io.IOException;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +36,7 @@ public class GdxCrossFadeRenderer extends CrossFadeRenderer {
 
     private final IImageModule imageModule;
 
-    private transient ShaderProgram shader;
+    private transient @Nullable ShaderProgram shader;
 
     public GdxCrossFadeRenderer(IImageModule imageModule, CrossFadeConfig config) {
         super(config);
@@ -58,7 +61,8 @@ public class GdxCrossFadeRenderer extends CrossFadeRenderer {
         }
     }
 
-    private ShaderProgram getShader() {
+    @CheckForNull
+    private @Nullable ShaderProgram getShader() {
         if (shader == null) {
             // TODO: If loading fails, this causes an exception every frame.
             // TODO: Standardize some helper for shader loading and use in this class and bitmaptween.

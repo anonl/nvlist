@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITextureData;
 
@@ -12,7 +14,7 @@ public abstract class DecodingScreenshot extends AbstractScreenshot {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-    private transient byte[] data;
+    private transient @Nullable byte[] data;
     private transient boolean isLoaded;
 
     public DecodingScreenshot(byte[] bytes) {

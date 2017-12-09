@@ -2,6 +2,8 @@ package nl.weeaboo.vn.buildtools.file;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
@@ -46,7 +48,7 @@ public final class EncodedResource {
 
     private static final class InMemoryResource implements IEncodedResource {
 
-        private byte[] bytes;
+        private @Nullable byte[] bytes;
 
         public InMemoryResource(byte[] bytes) {
             this.bytes = bytes;
@@ -59,11 +61,11 @@ public final class EncodedResource {
 
         @Override
         public byte[] readBytes() throws IOException {
-            if (bytes == null) {
+            byte[] result = bytes;
+            if (result == null) {
                 throw new IOException("disposed");
             }
-
-            return bytes;
+            return result;
         }
 
     }

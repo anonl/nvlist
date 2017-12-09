@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
@@ -11,7 +13,7 @@ import nl.weeaboo.styledtext.TextStyle;
 final class StyleStack {
 
     private final List<TaggedEntry> stack;
-    private transient TextStyle calculated;
+    private transient @Nullable TextStyle calculated;
 
     public StyleStack() {
         stack = new ArrayList<>();
@@ -49,14 +51,16 @@ final class StyleStack {
     }
 
     public TextStyle getCalculatedStyle() {
-        if (calculated == null) {
+        TextStyle result = calculated;
+        if (result == null) {
             MutableTextStyle mts = new MutableTextStyle();
             for (TaggedEntry entry : stack) {
                 mts.extend(entry.style);
             }
-            calculated = mts.immutableCopy();
+            result = mts.immutableCopy();
+            calculated = result;
         }
-        return calculated;
+        return result;
     }
 
     private static class TaggedEntry {

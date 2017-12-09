@@ -48,8 +48,8 @@ final class TextureManager implements Serializable {
     private final Dim virtualSize;
     private Dim imageResolution;
 
-    private transient TextureCache textureCache;
-    private transient ImageDefinitionCache cachedImageDefs;
+    private transient @Nullable TextureCache textureCache;
+    private transient @Nullable ImageDefinitionCache cachedImageDefs;
 
     public TextureManager(FileResourceLoader resourceLoader, Dim virtualSize) {
         this.resourceLoader = resourceLoader;
@@ -159,8 +159,7 @@ final class TextureManager implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        /** May be null */
-        private final Area subRect;
+        private final @Nullable Area subRect;
 
         public RegionResource(IResource<Texture> inner) {
             super(inner);

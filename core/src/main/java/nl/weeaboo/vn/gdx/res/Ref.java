@@ -1,14 +1,16 @@
 package nl.weeaboo.vn.gdx.res;
 
+import javax.annotation.Nullable;
+
 final class Ref<T> {
 
-    private T referent;
+    private @Nullable T referent;
 
-    public Ref(T referent) {
+    public Ref(@Nullable T referent) {
         this.referent = referent;
     }
 
-    public T get() {
+    public @Nullable T get() {
         return referent;
     }
 

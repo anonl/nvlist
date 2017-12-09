@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.core;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
@@ -20,7 +22,7 @@ public class FileResourceLoader extends ResourceLoader {
 
     private FilePath resourceFolder;
 
-    private transient FileSystemView cachedFileSystemView;
+    private transient @Nullable FileSystemView cachedFileSystemView;
 
     public FileResourceLoader(IEnvironment env, MediaType mediaType) {
         this(env, mediaType, mediaType.getSubFolder());
@@ -38,10 +40,12 @@ public class FileResourceLoader extends ResourceLoader {
      *         may change or point to a different (sub)folder.
      */
     public final FileSystemView getFileSystem() {
-        if (cachedFileSystemView == null) {
-            cachedFileSystemView = new FileSystemView(env.getFileSystem(), resourceFolder);
+        FileSystemView result = cachedFileSystemView;
+        if (result == null) {
+            result = new FileSystemView(env.getFileSystem(), resourceFolder);
+            cachedFileSystemView = result;
         }
-        return cachedFileSystemView;
+        return result;
     }
 
     @Override

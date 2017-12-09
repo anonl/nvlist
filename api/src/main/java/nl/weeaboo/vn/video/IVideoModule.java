@@ -3,6 +3,8 @@ package nl.weeaboo.vn.video;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.annotation.CheckForNull;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IModule;
@@ -24,6 +26,7 @@ public interface IVideoModule extends IModule, IResourceResolver {
      * @return The currently playing full-screen video, or {@code null} if there's no full-screen video
      *         currently playing.
      */
+    @CheckForNull
     IVideo getBlocking();
 
     /**

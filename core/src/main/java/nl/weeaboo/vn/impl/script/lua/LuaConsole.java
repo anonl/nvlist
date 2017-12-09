@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.script.lua;
 
 import java.util.Deque;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +36,9 @@ public class LuaConsole {
     private final StringBuilder log = new StringBuilder("*** Lua console ***");
     private Deque<String> inputBuffer = Queues.newArrayDeque();
     private int inputBufferIndex;
-    private IContext activeContext;
+    private @Nullable IContext activeContext;
 
-    private Table layout;
+    private @Nullable Table layout;
     private TextArea console;
     private TextField inputField;
     private boolean visible;

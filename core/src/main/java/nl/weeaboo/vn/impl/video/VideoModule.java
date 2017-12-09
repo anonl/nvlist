@@ -32,7 +32,7 @@ public class VideoModule implements IVideoModule {
     protected final VideoResourceLoader resourceLoader;
     private final INativeVideoFactory nativeVideoFactory;
 
-    private IVideo fullscreenMovie;
+    private @Nullable IVideo fullscreenMovie;
     private FilePath videoFolder = DEFAULT_VIDEO_FOLDER;
     private Dim videoResolution;
 
@@ -72,11 +72,11 @@ public class VideoModule implements IVideoModule {
 
         LOG.info("Attempt to play movie: videoFolder={}, path={}", videoFolder, loadInfo.getPath());
 
-        fullscreenMovie = createVideo(loadInfo);
+        IVideo newMovie = createVideo(loadInfo);
+        fullscreenMovie = newMovie;
 
-        fullscreenMovie.start();
-
-        return fullscreenMovie;
+        newMovie.start();
+        return newMovie;
     }
 
     private IVideo createVideo(ResourceLoadInfo loadInfo) throws FileNotFoundException {
@@ -97,7 +97,7 @@ public class VideoModule implements IVideoModule {
     }
 
     @Override
-    public IVideo getBlocking() {
+    public @Nullable IVideo getBlocking() {
         checkIfMovieFinished();
         return fullscreenMovie;
     }

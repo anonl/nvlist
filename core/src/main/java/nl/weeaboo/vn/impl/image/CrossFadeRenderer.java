@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.image;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,7 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
     protected final CrossFadeConfig config;
 
     // --- Initialized in prepare() ---
-    private TriangleGrid grid;
+    private @Nullable TriangleGrid grid;
 
     public CrossFadeRenderer(CrossFadeConfig config) {
         super(config.getDuration());
@@ -59,6 +61,7 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
         return config.getBounds().h;
     }
 
+    @Nullable
     protected TriangleGrid getGeometry() {
         return grid;
     }

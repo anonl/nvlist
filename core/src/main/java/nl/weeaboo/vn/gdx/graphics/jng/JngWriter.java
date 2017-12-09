@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.zip.CRC32;
 
+import javax.annotation.Nullable;
 import javax.imageio.IIOException;
 
 import org.slf4j.Logger;
@@ -26,11 +27,11 @@ public final class JngWriter {
 
     private Dim size;
 
-    private byte[] colorBytes;
+    private @Nullable byte[] colorBytes;
     private int colorComponents;
     private int colorSampleDepth;
 
-    private byte[] alphaBytes;
+    private @Nullable byte[] alphaBytes;
     private JngAlphaType alphaType;
 
     public JngWriter() {

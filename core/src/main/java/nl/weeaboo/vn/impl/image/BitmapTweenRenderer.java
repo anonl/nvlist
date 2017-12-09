@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.image;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +27,8 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
     protected final BitmapTweenConfig config;
 
     // --- Initialized in prepare() ---
-    private ITexture remapTexture;
-    private TriangleGrid grid;
+    private @Nullable ITexture remapTexture;
+    private @Nullable TriangleGrid grid;
 
     public BitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
         super(config.getDuration());
@@ -116,6 +118,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
 
     protected abstract ITexture updateRemapTexture(ITexture remapTexture);
 
+    @Nullable
     protected TriangleGrid getGeometry() {
         return grid;
     }
@@ -140,6 +143,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
         return config.getControlImage().getTexture();
     }
 
+    @Nullable
     protected ITexture getRemapTexture() {
         return remapTexture;
     }

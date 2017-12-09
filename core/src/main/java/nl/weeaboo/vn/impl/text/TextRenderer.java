@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.text;
 
 import static nl.weeaboo.vn.impl.text.TextUtil.toStyledText;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +44,8 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private double maxWidth = -1;
     private double maxHeight = -1;
 
-    private transient ITextLayout cachedLayout;
-    private transient ITextLayout cachedVisibleLayout;
+    private transient @Nullable ITextLayout cachedLayout;
+    private transient @Nullable ITextLayout cachedVisibleLayout;
 
     protected ITextLayout createLayout(int wrapWidth) {
         MutableStyledText newText = getText().mutableCopy();
@@ -74,10 +76,12 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     }
 
     protected final ITextLayout getLayout() {
-        if (cachedLayout == null) {
-            cachedLayout = createLayout(getLayoutMaxWidth());
+        ITextLayout result = cachedLayout;
+        if (result == null) {
+            result = createLayout(getLayoutMaxWidth());
+            cachedLayout = result;
         }
-        return cachedLayout;
+        return result;
     }
 
     protected void invalidateLayout() {
@@ -87,18 +91,20 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     @Override
     public final ITextLayout getVisibleLayout() {
-        if (cachedVisibleLayout == null) {
+        ITextLayout result = cachedVisibleLayout;
+        if (result == null) {
             ITextLayout layout = getLayout();
             int count = LayoutUtil.getVisibleLines(layout, startLine, getLayoutMaxHeight());
             int endLine = Math.min(layout.getLineCount(), startLine + count);
-            cachedVisibleLayout = layout.getLineRange(startLine, endLine);
+            result = layout.getLineRange(startLine, endLine);
 
             LOG.trace("Text layout created: lines={}-{}/{}, glyphs={}/{}, height={}/{}",
                     startLine, endLine, getLineCount(),
-                    cachedVisibleLayout.getGlyphCount(), layout.getGlyphCount(),
-                    cachedVisibleLayout.getTextHeight(), getLayoutMaxHeight());
+                    result.getGlyphCount(), layout.getGlyphCount(),
+                    result.getTextHeight(), getLayoutMaxHeight());
+            cachedVisibleLayout = result;
         }
-        return cachedVisibleLayout;
+        return result;
     }
 
     protected void onVisibleTextChanged() {

@@ -3,6 +3,8 @@ package nl.weeaboo.vn.gdx.graphics;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IInterpolator;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
@@ -38,7 +41,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
 
     private final StaticRef<ShaderStore> shaderStore = StaticEnvironment.SHADER_STORE;
 
-    private transient ShaderProgram shader;
+    private transient @Nullable ShaderProgram shader;
 
     public GdxBitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
         super(imageModule, config);
@@ -61,6 +64,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         }
     }
 
+    @Nullable
     private ShaderProgram getShader() {
         if (shader == null) {
             String filename = "bitmaptween";
@@ -85,7 +89,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         matrix.scale(getWidth() / getNativeWidth(), getHeight() / getNativeHeight());
         transform.setTransform(matrix.immutableCopy());
 
-        drawBuffer.drawCustom(transform, parent.getColorARGB(), new Logic());
+        drawBuffer.drawCustom(transform, parent.getColorARGB(), new Logic(getGeometry()));
     }
 
     // TODO: Re-enable optimized versions of renderStart/renderEnd
@@ -162,7 +166,11 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
 
     protected final class Logic implements IRenderLogic {
 
-        private final TriangleGrid geometry = getGeometry();
+        private final TriangleGrid geometry;
+
+        Logic(TriangleGrid geometry) {
+            this.geometry = Checks.checkNotNull(geometry);
+        }
 
         @Override
         public void render(IScreenRenderer<?> renderer) {

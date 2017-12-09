@@ -95,8 +95,8 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
     }
 
     private static class TextureLoaderInfo {
-        TextureData data;
-        Texture texture;
+        @Nullable TextureData data;
+        @Nullable Texture texture;
     }
 
 }

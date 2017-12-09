@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.TextureStub;
 import nl.weeaboo.vn.impl.render.DrawTransform;
@@ -15,7 +16,7 @@ public class RenderQuadTest extends RenderIntegrationTest {
 
     @Before
     public void before() {
-        tex = getTexture("test");
+        tex = Checks.checkNotNull(getTexture("test"));
     }
 
     @Test

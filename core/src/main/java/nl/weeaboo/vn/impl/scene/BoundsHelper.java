@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.scene;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.core.TransientListenerSupport;
@@ -13,7 +15,7 @@ public final class BoundsHelper extends TransientListenerSupport implements IPos
     private double y;
     private double w;
     private double h;
-    private transient Rect2D cachedBounds;
+    private transient @Nullable Rect2D cachedBounds;
 
     /**
      * @return The top-left x of the bounds.
@@ -47,12 +49,14 @@ public final class BoundsHelper extends TransientListenerSupport implements IPos
      * @return The current bounds.
      */
     public Rect2D getBounds() {
-        if (cachedBounds == null) {
+        Rect2D result = cachedBounds;
+        if (result == null) {
             double w = getWidth();
             double h = getHeight();
-            cachedBounds = Rect2D.of(x, y, Double.isNaN(w) ? 0 : w, Double.isNaN(h) ? 0 : h);
+            result = Rect2D.of(x, y, Double.isNaN(w) ? 0 : w, Double.isNaN(h) ? 0 : h);
+            cachedBounds = result;
         }
-        return cachedBounds;
+        return result;
     }
 
     /**

@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.sound;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.audio.Music;
 
 class MockGdxMusic implements Music, Serializable {
@@ -14,7 +16,7 @@ class MockGdxMusic implements Music, Serializable {
 
     private float volume;
 
-    private OnCompletionListener completionListener;
+    private @Nullable OnCompletionListener completionListener;
 
     public MockGdxMusic() {
         reset();

@@ -34,9 +34,9 @@ public abstract class Transformable extends VisualElement implements ITransforma
     private double imageAlignY;
     private Matrix baseTransform = Matrix.identityMatrix();
 
-    private transient IShape cachedCollisionShape;
-    private transient Rect2D cachedVisualBounds;
-    private transient Matrix cachedTransform;
+    private transient @Nullable IShape cachedCollisionShape;
+    private transient @Nullable Rect2D cachedVisualBounds;
+    private transient @Nullable Matrix cachedTransform;
 
     public Transformable() {
     }
@@ -118,10 +118,12 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     @Override
     public final Rect2D getVisualBounds() {
-        if (cachedVisualBounds == null) {
-            cachedVisualBounds = createVisualBounds();
+        Rect2D result = cachedVisualBounds;
+        if (result == null) {
+            result = createVisualBounds();
+            cachedVisualBounds = result;
         }
-        return cachedVisualBounds;
+        return result;
     }
 
     protected abstract double getUnscaledWidth();
@@ -143,17 +145,21 @@ public abstract class Transformable extends VisualElement implements ITransforma
 
     @Override
     public final Matrix getTransform() {
-        if (cachedTransform == null) {
-            cachedTransform = createTransform();
+        Matrix result = cachedTransform;
+        if (result == null) {
+            result = createTransform();
+            cachedTransform = result;
         }
-        return cachedTransform;
+        return result;
     }
 
     protected final IShape getCollisionShape() {
-        if (cachedCollisionShape == null) {
-            cachedCollisionShape = createCollisionShape();
+        IShape result = cachedCollisionShape;
+        if (result == null) {
+            result = createCollisionShape();
+            cachedCollisionShape = result;
         }
-        return cachedCollisionShape;
+        return result;
     }
 
     @Override

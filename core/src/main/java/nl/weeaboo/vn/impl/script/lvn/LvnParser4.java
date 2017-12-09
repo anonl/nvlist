@@ -24,6 +24,7 @@ class LvnParser4 implements ILvnParser {
 
     public LvnParser4() {
         textParser = new TextParser();
+        reset();
     }
 
     private void init(FilePath filename, InputStream in) throws IOException {
@@ -35,9 +36,9 @@ class LvnParser4 implements ILvnParser {
     }
 
     private void reset() {
-        filename = null;
-        sourceLines = null;
-        compiledLines = null;
+        filename = FilePath.empty();
+        sourceLines = ImmutableList.of();
+        compiledLines = ImmutableList.of();
     }
 
     @Override

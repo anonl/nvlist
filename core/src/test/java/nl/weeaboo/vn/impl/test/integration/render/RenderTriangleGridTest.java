@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.image.ITexture;
 
 public class RenderTriangleGridTest extends RenderIntegrationTest {
@@ -12,7 +13,7 @@ public class RenderTriangleGridTest extends RenderIntegrationTest {
 
     @Before
     public void before() {
-        tex = getTexture("test");
+        tex = Checks.checkNotNull(getTexture("test"));
     }
 
     @Test

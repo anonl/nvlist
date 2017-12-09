@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,26 +74,26 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private final GdxFileSystem resourceFileSystem;
     private final IWritableFileSystem outputFileSystem;
 
-    private AssetManager assetManager;
-    private FrameBuffer frameBuffer;
+    private @Nullable AssetManager assetManager;
+    private @Nullable FrameBuffer frameBuffer;
     private Dim vsize = Dim.of(1280, 720);
 
-    private FitViewport frameBufferViewport;
-    private FitViewport screenViewport;
-    private FitViewport scene2dViewport;
+    private @Nullable FitViewport frameBufferViewport;
+    private @Nullable FitViewport screenViewport;
+    private @Nullable FitViewport scene2dViewport;
 
-    private Scene2dEnv sceneEnv;
-    private Osd osd;
-    private DebugControls debugControls;
-    private SpriteBatch batch;
-    private GdxInputAdapter inputAdapter;
-    private PerformanceMetrics performanceMetrics;
+    private @Nullable Scene2dEnv sceneEnv;
+    private @Nullable Osd osd;
+    private @Nullable DebugControls debugControls;
+    private @Nullable SpriteBatch batch;
+    private @Nullable GdxInputAdapter inputAdapter;
+    private @Nullable PerformanceMetrics performanceMetrics;
 
-    private Novel novel;
-    private NovelPrefsStore prefs;
-    private SimulationRateLimiter simulationRateLimiter;
-    private GLScreenRenderer renderer;
-    private DrawBuffer drawBuffer;
+    private @Nullable Novel novel;
+    private @Nullable NovelPrefsStore prefs;
+    private @Nullable SimulationRateLimiter simulationRateLimiter;
+    private @Nullable GLScreenRenderer renderer;
+    private @Nullable DrawBuffer drawBuffer;
     private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
@@ -101,13 +103,14 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     /** Note: This method may be called at any time, even before {@link #create()} */
     public NovelPrefsStore loadPreferences() {
-        prefs = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
+        NovelPrefsStore prefsStore = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
         try {
-            prefs.loadVariables();
+            prefsStore.loadVariables();
         } catch (IOException ioe) {
             LOG.warn("Unable to load variables", ioe);
         }
-        return prefs;
+        this.prefs = prefsStore;
+        return prefsStore;
     }
 
     @Override
@@ -402,7 +405,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
      * Returns the global novel object.
      */
     public Novel getNovel() {
-        return novel;
+        return Checks.checkNotNull(novel);
     }
 
     private void onUncaughtException(RuntimeException re) {
@@ -432,7 +435,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     /** Returns the global scene2D environment. */
     public Scene2dEnv getSceneEnv() {
-        return sceneEnv;
+        return Checks.checkNotNull(sceneEnv);
     }
 
 }

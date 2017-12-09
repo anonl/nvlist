@@ -2,6 +2,8 @@ package nl.weeaboo.vn.gdx.graphics;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -25,11 +27,11 @@ class PremultFileTextureData implements TextureData {
     private final boolean mipmap;
 
     // Only available between prepare() and consumePixmap()
-    private Pixmap pixmap;
+    private @Nullable Pixmap pixmap;
 
     // Store some data we still need after consumePixmap() is called by the framework
     private boolean initialized;
-    private Format format;
+    private @Nullable Format format;
     private int width;
     private int height;
 
@@ -37,7 +39,7 @@ class PremultFileTextureData implements TextureData {
      * @param format (optional) If not {@code null}, convert the pixmap to this format before uploading it as
      *        texture data.
      */
-    public PremultFileTextureData(FileHandle file, Format format, boolean mipmap) {
+    public PremultFileTextureData(FileHandle file, @Nullable Format format, boolean mipmap) {
         this.file = Checks.checkNotNull(file);
         this.format = format; // May be null
         this.mipmap = mipmap;
@@ -92,7 +94,11 @@ class PremultFileTextureData implements TextureData {
 
     @Override
     public Pixmap consumePixmap() {
-        Pixmap result = pixmap;
+        final Pixmap result = pixmap;
+        if (result == null) {
+            throw new IllegalStateException("Pixmap is null; did you forget to call prepare()?");
+        }
+
         pixmap = null;
         return result;
     }
@@ -103,7 +109,7 @@ class PremultFileTextureData implements TextureData {
     }
 
     @Override
-    public Format getFormat() {
+    public @Nullable Format getFormat() {
         checkInitialized();
         return format;
     }

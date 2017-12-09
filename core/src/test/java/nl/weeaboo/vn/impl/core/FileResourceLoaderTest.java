@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +17,13 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
-import nl.weeaboo.vn.impl.core.FileResourceLoader;
 
 public class FileResourceLoaderTest {
 
     private static final FilePath BASE_FOLDER = FilePath.of("base/");
 
     private FileResourceLoader resourceLoader;
-    private ResourceId lastPreload;
+    private @Nullable ResourceId lastPreload;
 
     @Before
     public void before() throws IOException {
