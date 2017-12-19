@@ -1,14 +1,14 @@
 
 apply plugin: 'application'
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 mainClassName = 'nl.weeaboo.vn.buildgui.BuildGuiLauncher'
 
 dependencies {
-    compile project(':nvlist-buildtools')
-    compile project(':nvlist-desktop')
-    compile "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
+    implementation project(':nvlist-buildtools')
+    implementation project(':nvlist-desktop')
+    implementation deps.gradle_tooling_api
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'

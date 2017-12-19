@@ -35,6 +35,8 @@ plugins {
     id 'me.champeau.gradle.japicmp' version '0.2.5'    
 }
 
+apply from: 'dependencies.gradle'
+
 def templateDir = file('template').getAbsoluteFile()
 
 allprojects {
@@ -46,23 +48,7 @@ allprojects {
     version = '4.0.0-alpha12'
     ext {
         javaVersion = JavaVersion.VERSION_1_8
-        
-        gdxTestVersion = '2.0.0'
-        gdxVersion = '1.9.6'
-        gdxVideoVersion = '1.0.0-anonl'
-        guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
-        javaxAnnotationVersion = '3.0.1'
-        errorProneVersion = '2.1.3'
-        joptVersion = '5.0.3'
-        junitVersion = '4.12'
-        luajpp2Version = '2.3.15'
-        roboVmVersion = '2.3.0'
-        slf4jVersion = '1.7.21'
-        styledTextVersion = '2.0.1'
-        tcommonVersion = '2.3.1'
-        gradleToolingApiVersion = '4.0'
-        // Note: Update ./template/build-tools/NOTICE when adding runtime third-party dependencies
-        
+                
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')
         buildToolsDir = new File(templateDir, 'build-tools') 
@@ -112,11 +98,13 @@ allprojects {
         }
 
         dependencies {
-            testCompile "junit:junit:$junitVersion"
-            testCompile "com.google.guava:guava-testlib:$guavaVersion"
+            compileOnly deps.static_analysis_annotations
+
+            testImplementation deps.junit
+            testImplementation deps.guava_testlib
             
             // gdx-test is a required dependency since it contains the GdxUiTest test category
-            testCompile "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
+            testImplementation deps.gdx_test
         }
         
         test {

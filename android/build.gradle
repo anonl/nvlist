@@ -9,25 +9,9 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     implementation project(":nvlist-core")
-   
-    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
-    implementation "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion"
 
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"        
-    
-    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"        
+    implementation deps.gdx_android
+    implementation deps.gdx_android_natives
 }
 
 // called every time gradle gets executed, takes the native dependencies of
@@ -66,7 +50,7 @@ eclipse {
 
     jdt {
         sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = javaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
     }
 
     project {
@@ -88,8 +72,8 @@ eclipse {
 publishing {
     publications {
         android(MavenPublication) {
-            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
-            artifact file("${buildDir}/outputs/aar/${project.name}-release.aar")
+            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)            
+            artifact project.tasks.bundleRelease
             
             pom.withXml {                
                 // Gather dependencies

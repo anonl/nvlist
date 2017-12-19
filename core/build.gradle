@@ -1,23 +1,24 @@
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 dependencies {
-    compile project(":nvlist-api")
-    compile "nl.weeaboo.luajpp2:luajpp2-core:$luajpp2Version"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    api project(":nvlist-api")
+    api deps.gdx_core
+    api deps.guava
+    api deps.tcommon_prefsstore
     
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"        
-    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"        
-    compile "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion"
+    implementation deps.lua_core
+    implementation deps.slf4j_api
+    implementation deps.styled_text_impl
 
-    testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-    testRuntime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    testRuntime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    testCompile "nl.weeaboo.common:tcommon-test:$tcommonVersion"
-    testRuntime "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    testImplementation deps.gdx_headless
+    testImplementation deps.gdx_test
+    testImplementation deps.tcommon_logging
+    testImplementation deps.tcommon_test
+
+    testRuntime deps.gdx_desktop
+    testRuntime deps.slf4j_impl
 }
 
 publishing {

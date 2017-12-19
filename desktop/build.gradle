@@ -4,18 +4,12 @@ apply from: "${buildToolsDir}/common-desktop.gradle"
 apply plugin: 'maven-publish'
 
 dependencies {
-    compile project(":nvlist-core")
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
-    compile "net.sf.jopt-simple:jopt-simple:$joptVersion"
+    api project(":nvlist-core")
     
-    runtime "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    runtime "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    runtime "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-    runtime "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    runtime "nl.weeaboo.gdx.video:gdx-video-desktop:$gdxVideoVersion"
-    runtime "nl.weeaboo.gdx.video:gdx-video-desktop-natives:$gdxVideoVersion"
+    implementation deps.gdx_desktop
+    implementation deps.jopt_simple
+    
+    runtime deps.slf4j_impl
 }
 
 publishing {

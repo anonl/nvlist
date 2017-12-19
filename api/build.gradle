@@ -1,17 +1,16 @@
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
 dependencies {
-    compile "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-    compile "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
-    compile "nl.weeaboo.common:tcommon-prefsstore:$tcommonVersion"
-    compile "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
-    compile "com.google.guava:guava:$guavaVersion"
-    compile "com.google.code.findbugs:jsr305:$javaxAnnotationVersion" // javax.annotation.*
-    compile "com.google.errorprone:error_prone_annotations:$errorProneVersion"
+    api deps.styled_text_api
+    api deps.tcommon_core
     
-    testCompile "nl.weeaboo.common:tcommon-test:$tcommonVersion"
+    implementation deps.guava
+    implementation deps.tcommon_logging
+    implementation deps.tcommon_prefsstore
+    
+    testImplementation deps.tcommon_test
 }
 
 publishing {
