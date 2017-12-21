@@ -2,11 +2,15 @@ package nl.weeaboo.vn.buildtools.optimizer.image;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import nl.weeaboo.common.Dim;
@@ -40,7 +44,7 @@ public final class ImageOptimizer {
     public void optimizeResources() {
         Iterable<FilePath> inputFiles;
         try {
-            inputFiles = resFileSystem.getFiles(getResourceFileFilter());
+            inputFiles = getImageFiles();
         } catch (IOException ioe) {
             LOG.warn("Unable to read folder", ioe);
             return;
@@ -54,6 +58,11 @@ public final class ImageOptimizer {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
             }
         }
+    }
+
+    private Iterable<FilePath> getImageFiles() throws IOException {
+        FileCollectOptions filter = FileCollectOptions.files(MediaType.IMAGE.getSubFolder());
+        return filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
     }
 
     private void optimizeImage(FilePath inputFile) throws IOException {
@@ -82,8 +91,12 @@ public final class ImageOptimizer {
         Files.write(encoded.readBytes(), outputF);
     }
 
-    protected FileCollectOptions getResourceFileFilter() {
-        return FileCollectOptions.files(MediaType.IMAGE.getSubFolder());
+    private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {
+        // Use a tree set so we can match in a case-insensitive way
+        TreeSet<String> validExtsSet = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
+        validExtsSet.addAll(validExts);
+
+        return Iterables.filter(files, path -> validExtsSet.contains(path.getExt()));
     }
 
 }

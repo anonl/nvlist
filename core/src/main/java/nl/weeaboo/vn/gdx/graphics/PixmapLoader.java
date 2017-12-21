@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
@@ -13,6 +14,12 @@ import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
 public final class PixmapLoader {
 
     private PixmapLoader() {
+    }
+
+    public static ImmutableSet<String> getSupportedImageExts() {
+        return ImmutableSet.of(
+                "png", "jpg", "bmp", // Supported by Pixmap
+                "jng"); // Supported by JngReader
     }
 
     /**
