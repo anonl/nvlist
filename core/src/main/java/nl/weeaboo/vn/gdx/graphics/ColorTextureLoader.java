@@ -44,8 +44,9 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
     }
 
     @SuppressWarnings("rawtypes")
+    @Nullable
     @Override
-    public @Nullable Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
+    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
             Parameters parameter) {
 
         return null;

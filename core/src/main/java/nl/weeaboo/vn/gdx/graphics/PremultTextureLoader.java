@@ -64,8 +64,9 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
         return new PremultFileTextureData(file, format, genMipMaps);
     }
 
+    @Nullable
     @Override
-    public @Nullable Texture loadSync(AssetManager manager, String fileName, FileHandle file,
+    public Texture loadSync(AssetManager manager, String fileName, FileHandle file,
             TextureParameter parameter) {
         if (info == null) {
             return null;
@@ -88,8 +89,9 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
     }
 
     @SuppressWarnings("rawtypes")
+    @Nullable
     @Override
-    public @Nullable Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
+    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
             TextureParameter parameter) {
         return null;
     }
