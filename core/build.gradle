@@ -17,8 +17,8 @@ dependencies {
     testImplementation deps.tcommon_logging
     testImplementation deps.tcommon_test
 
-    testRuntime deps.gdx_desktop
-    testRuntime deps.slf4j_impl
+    testRuntimeOnly deps.gdx_desktop
+    testRuntimeOnly deps.slf4j_impl
 }
 
 publishing {

@@ -112,7 +112,7 @@ deps.slf4j_api = [
 ]
 
 deps.slf4j_impl = [
-    "org.slf4j:slf4j-api:$slf4jVersion"
+    "org.slf4j:slf4j-jdk14:$slf4jVersion"
 ]
 
 deps.styled_text_api = [
