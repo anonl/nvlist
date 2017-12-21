@@ -3,13 +3,19 @@ package nl.weeaboo.vn.buildtools.optimizer.image;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.google.common.base.Charsets;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
@@ -25,6 +31,7 @@ import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.image.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
 public final class ImageOptimizer {
 
@@ -34,6 +41,10 @@ public final class ImageOptimizer {
     private final IFileSystem resFileSystem;
     private final ImageDefinitionCache imageDefCache;
 
+    // --- State during optimization ---
+    /** Definition per (optimized) image file */
+    private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
+
     public ImageOptimizer(NvlistProjectConnection project, ResourceOptimizerConfig config) {
         this.config = config;
 
@@ -41,7 +52,13 @@ public final class ImageOptimizer {
         imageDefCache = new ImageDefinitionCache(resFileSystem);
     }
 
+    private void resetState() {
+        optimizedDefs.clear();
+    }
+
     public void optimizeResources() {
+        resetState();
+
         Iterable<FilePath> inputFiles;
         try {
             inputFiles = getImageFiles();
@@ -51,11 +68,31 @@ public final class ImageOptimizer {
         }
 
         for (FilePath inputFile : inputFiles) {
-            // TODO Only try to convert supported file types. Perhaps define ImageResourceLoader's auto file exts in MediaType.
             try {
                 optimizeImage(inputFile);
             } catch (IOException | RuntimeException e) {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
+            }
+        }
+
+        writeImageDefinitions();
+    }
+
+    private void writeImageDefinitions() {
+        Multimap<FilePath, ImageDefinition> defsPerFolder = HashMultimap.create();
+        for (Entry<FilePath, ImageDefinition> entry : optimizedDefs.entrySet()) {
+            defsPerFolder.put(entry.getKey().getParent(), entry.getValue());
+        }
+
+        for (Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
+            FilePath outputPath = folderEntry.getKey().resolve("img.json");
+            File outputF = new File(config.getOutputFolder(), outputPath.toString());
+
+            String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
+            try {
+                Files.write(serialized, outputF, Charsets.UTF_8);
+            } catch (IOException e) {
+                LOG.warn("Error writing {}: {}", outputPath, e);
             }
         }
     }
@@ -67,8 +104,6 @@ public final class ImageOptimizer {
 
     private void optimizeImage(FilePath inputFile) throws IOException {
         LOG.debug("Optimizing image: {}", inputFile);
-
-        File dstF = config.getOutputFolder();
 
         Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
         IImageDefinition imageDef = imageDefCache.getImageDef(inputFile);
@@ -86,9 +121,13 @@ public final class ImageOptimizer {
         JngEncoder jngEncoder = new JngEncoder();
         EncodedImage encoded = jngEncoder.encode(optimized);
 
-        File outputF = new File(dstF, inputFile.withExt("jng").toString());
+        FilePath outputPath = inputFile.withExt("jng");
+
+        File outputF = new File(config.getOutputFolder(), outputPath.toString());
         Files.createParentDirs(outputF);
         Files.write(encoded.readBytes(), outputF);
+
+        optimizedDefs.put(outputPath, optimized.getDef());
     }
 
     private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {

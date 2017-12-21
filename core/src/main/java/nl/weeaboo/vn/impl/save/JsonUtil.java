@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.save;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 public final class JsonUtil {
 
@@ -41,7 +42,8 @@ public final class JsonUtil {
      */
     public static String toJson(Object value) {
         Json json = newJson();
-        return json.toJson(value);
+        json.setOutputType(OutputType.json);
+        return json.prettyPrint(value);
     }
 
 }
