@@ -16,6 +16,10 @@ public final class PixmapLoader {
     private PixmapLoader() {
     }
 
+    /**
+     * Returns the set of file extensions (without the '.' prefix) supported by the load methods of this
+     * class.
+     */
     public static ImmutableSet<String> getSupportedImageExts() {
         return ImmutableSet.of(
                 "png", "jpg", "bmp", // Supported by Pixmap

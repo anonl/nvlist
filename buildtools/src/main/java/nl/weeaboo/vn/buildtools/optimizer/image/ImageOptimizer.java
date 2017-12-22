@@ -56,6 +56,9 @@ public final class ImageOptimizer {
         optimizedDefs.clear();
     }
 
+    /**
+     * Runs the image optimizer.
+     */
     public void optimizeResources() {
         resetState();
 
