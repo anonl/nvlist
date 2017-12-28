@@ -12,11 +12,11 @@ ext.errorProneVersion = '2.1.3'
 def gdxTestVersion = '2.0.0'
 def gdxVersion = '1.9.6'
 def gdxVideoVersion = '1.0.0-anonl'
-def guavaVersion = '20.0' // v21 isn't compatible with Android/Java6
+def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible
 def roboVmVersion = '2.3.0'
 def slf4jVersion = '1.7.21'
 def styledTextVersion = '2.0.1'
-def tcommonVersion = '2.3.1'
+def tcommonVersion = '2.4.0'
 def gradleToolingApiVersion = '4.0'
 
 deps.static_analysis_annotations = [

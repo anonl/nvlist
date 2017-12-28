@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.google.common.base.Charsets;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -23,6 +22,9 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.io.FileUtil;
+import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
+import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
@@ -39,15 +41,19 @@ public final class ImageOptimizer {
 
     private final ResourceOptimizerConfig config;
     private final IFileSystem resFileSystem;
+    private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
 
     // --- State during optimization ---
     /** Definition per (optimized) image file */
     private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
 
-    public ImageOptimizer(NvlistProjectConnection project, ResourceOptimizerConfig config) {
-        this.config = config;
 
+    public ImageOptimizer(IOptimizerContext context) {
+        this.config = context.getConfig();
+        optimizerFileSet = context.getFileSet();
+
+        NvlistProjectConnection project = context.getProject();
         resFileSystem = project.getResFileSystem();
         imageDefCache = new ImageDefinitionCache(resFileSystem);
     }
@@ -62,6 +68,11 @@ public final class ImageOptimizer {
     public void optimizeResources() {
         resetState();
 
+        optimizeImages();
+        writeImageDefinitions();
+    }
+
+    private void optimizeImages() {
         Iterable<FilePath> inputFiles;
         try {
             inputFiles = getImageFiles();
@@ -77,8 +88,6 @@ public final class ImageOptimizer {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
             }
         }
-
-        writeImageDefinitions();
     }
 
     private void writeImageDefinitions() {
@@ -88,14 +97,16 @@ public final class ImageOptimizer {
         }
 
         for (Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
-            FilePath outputPath = folderEntry.getKey().resolve("img.json");
-            File outputF = new File(config.getOutputFolder(), outputPath.toString());
+            FilePath jsonRelativePath = folderEntry.getKey().resolve("img.json");
+            optimizerFileSet.markOptimized(jsonRelativePath);
+
+            File outputF = new File(config.getOutputFolder(), jsonRelativePath.toString());
 
             String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
             try {
-                Files.write(serialized, outputF, Charsets.UTF_8);
+                FileUtil.writeUtf8(outputF, serialized);
             } catch (IOException e) {
-                LOG.warn("Error writing {}: {}", outputPath, e);
+                LOG.warn("Error writing {}: {}", jsonRelativePath, e);
             }
         }
     }
@@ -131,6 +142,7 @@ public final class ImageOptimizer {
         Files.write(encoded.readBytes(), outputF);
 
         optimizedDefs.put(outputPath, optimized.getDef());
+        optimizerFileSet.markOptimized(inputFile);
     }
 
     private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {

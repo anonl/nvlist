@@ -19,15 +19,14 @@ import org.junit.rules.TemporaryFolder;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Files;
 
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.gdx.test.ExceptionTester;
+import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.io.ZipUtil;
 import nl.weeaboo.io.ZipUtil.Compression;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
@@ -137,7 +136,7 @@ public class DesktopGdxFileSystemTest {
         // Replace res.nvl with garbage
         File arc1 = new File(tempFolder.getRoot(), "res.nvl");
         arc1.delete();
-        Files.write("invalid", arc1, Charsets.UTF_8);
+        FileUtil.writeUtf8(arc1, "invalid");
 
         assertFile("d", "res2.nvl"); // res2.nvl can be opened
         assertInvalidFile("folder/2"); // Files that should be in res.nvl can no longer be opened
@@ -221,7 +220,7 @@ public class DesktopGdxFileSystemTest {
             }
 
             File file = tempFolder.newFile(path);
-            Files.write("file", file, Charsets.UTF_8);
+            FileUtil.writeUtf8(file, "file");
         }
     }
 

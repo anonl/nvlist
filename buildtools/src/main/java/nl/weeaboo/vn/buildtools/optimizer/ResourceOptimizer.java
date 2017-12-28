@@ -6,14 +6,15 @@ import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 public final class ResourceOptimizer implements IResourceOptimizer {
 
     @Override
-    public void optimizeResources(NvlistProjectConnection project, ResourceOptimizerConfig config) {
-        // TODO: Implement
-        // ImageOptimizer imageOptimizer = new ImageOptimizer(sourceProject, config);
-
-        ImageOptimizer imageOptimizer = new ImageOptimizer(project, config);
+    public void optimizeResources(IOptimizerContext context) {
+        ImageOptimizer imageOptimizer = new ImageOptimizer(context);
         imageOptimizer.optimizeResources();
 
-        // TODO: Ensure the full contents of the resource filesystem is copied to the outputFolder, even files that aren't optimized.
+        // Any files that don't have a specific optimizer are copied to the output folder
+        NvlistProjectConnection project = context.getProject();
+        ResourceOptimizerConfig config = context.getConfig();
+        new UnoptimizedFileCopier().copyOtherResources(project.getResFileSystem(), context.getFileSet(),
+                config.getOutputFolder());
     }
 
 }
