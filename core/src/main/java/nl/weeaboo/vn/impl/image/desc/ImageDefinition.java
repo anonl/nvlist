@@ -72,6 +72,9 @@ public final class ImageDefinition implements IImageDefinition {
         }
     }
 
+    /**
+     * Instantiates a new {@link ImageDefinition} initialized with the given definition.
+     */
     public static ImageDefinition from(IImageDefinition imageDef) {
         if (imageDef instanceof ImageDefinition) {
             return (ImageDefinition)imageDef;

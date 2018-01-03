@@ -34,6 +34,10 @@ public final class ImageDefinitionCache {
         this.fileSystem = Checks.checkNotNull(fileSystem);
     }
 
+    /**
+     * @return Returns the image definition for the given path, or {@code null} if the given image has no
+     *         definition.
+     */
     @CheckForNull
     public IImageDefinition getImageDef(FilePath path) {
         IImageDefinition imageDef = cache.get(path);

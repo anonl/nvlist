@@ -20,6 +20,9 @@ public final class ImageSubRect implements IImageSubRect {
         this.area = area;
     }
 
+    /**
+     * Instantiates a new {@link ImageSubRect} initialized with the given sub-rect.
+     */
     public static ImageSubRect from(IImageSubRect subRect) {
         if (subRect instanceof ImageSubRect) {
             return (ImageSubRect)subRect;
