@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.desktop;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -15,38 +14,31 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.HdpiMode;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Filter;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.FileSystemUtil;
-import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 
 public final class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
     private final ImmutableList<String> args;
+
+    private Dim windowedSize;
 
     public DesktopLauncher(String[] args) {
         this.args = ImmutableList.copyOf(args);
@@ -72,9 +64,26 @@ public final class DesktopLauncher {
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override
             public void create() {
-                setWindowIcon(gdxFileSystem);
+                DesktopGraphicsUtil.setWindowIcon(gdxFileSystem);
+                windowedSize = DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
 
                 super.create();
+            }
+
+            @Override
+            public void resize(int width, int height) {
+                super.resize(width, height);
+
+                if (!Gdx.graphics.isFullscreen()) {
+                    windowedSize = Dim.of(width, height);
+                }
+            }
+
+            @Override
+            protected void handleInput(INativeInput input) {
+                super.handleInput(input);
+
+                DesktopLauncher.this.handleInput(input);
             }
         };
 
@@ -115,51 +124,6 @@ public final class DesktopLauncher {
         }
         path.append("res/");
         return new DesktopGdxFileSystem(path.toString());
-    }
-
-    private static void setWindowIcon(IFileSystem fileSystem) {
-        // Oddly, the only public way to get a reference to the main window is through the graphics object...
-        Lwjgl3Graphics graphics = (Lwjgl3Graphics)Gdx.graphics;
-        Lwjgl3Window window = graphics.getWindow();
-
-        // Try to load icons in various sizes
-        List<Pixmap> pixmaps = Lists.newArrayList();
-        try {
-            FilePath path = FilePath.of("icon.png");
-            try {
-                byte[] bytes = FileSystemUtil.readBytes(fileSystem, path);
-
-                LOG.info("Loading icon: {}", path);
-                Pixmap fullSize = new Pixmap(bytes, 0, bytes.length);
-                /*
-                 * Convert to RGBA8888 (libGDX will do this later anyway, doing it now makes resize behavior
-                 * more predictable)
-                 */
-                fullSize = PixmapUtil.convert(fullSize, Format.RGBA8888, true);
-                pixmaps.add(fullSize);
-
-                // Derive smaller-sized versions of the icon (if needed)
-                Pixmap previousLevel = fullSize;
-                while (previousLevel.getWidth() > 16) {
-                    Dim targetSize = Dim.of(previousLevel.getWidth() / 2, previousLevel.getHeight() / 2);
-
-                    LOG.debug("Creating resized icon: {}", targetSize);
-                    Pixmap pixmap = PixmapUtil.resizedCopy(previousLevel, targetSize, Filter.BiLinear);
-                    pixmaps.add(0, pixmap);
-                    previousLevel = pixmap;
-                }
-            } catch (FileNotFoundException fnfe) {
-                // File doesn't exist
-            } catch (IOException ioe) {
-                LOG.warn("Error loading icon: {}", path, ioe);
-            }
-
-            window.setIcon(Iterables.toArray(pixmaps, Pixmap.class));
-        } finally {
-            for (Pixmap pixmap : pixmaps) {
-                pixmap.dispose();
-            }
-        }
     }
 
     private Lwjgl3ApplicationConfiguration createConfig(Launcher launcher, NovelPrefsStore prefs) {
@@ -219,6 +183,22 @@ public final class DesktopLauncher {
     private <T> void setPref(NovelPrefsStore prefs, Preference<T> pref, String value) {
         LOG.info("Set preference: {}={}", pref.getKey(), value);
         prefs.set(pref, pref.fromString(value));
+    }
+
+    private void handleInput(INativeInput input) {
+        // Fullscreen toggle
+        if (input.isPressed(KeyCode.ALT_LEFT, true) && input.consumePress(KeyCode.ENTER)) {
+            if (!Gdx.graphics.isFullscreen()) {
+                LOG.debug("Switch to fullscreen mode");
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            } else {
+                LOG.debug("Switch to windowed mode: {}x{}", windowedSize.w, windowedSize.h);
+                Gdx.graphics.setWindowedMode(windowedSize.w, windowedSize.h);
+            }
+
+            // GDX clears internal press state, so we should do the same
+            input.clearButtonStates();
+        }
     }
 
 }
