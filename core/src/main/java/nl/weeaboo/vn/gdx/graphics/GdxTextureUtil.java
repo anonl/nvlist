@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.image.desc.GLScaleFilter;
+import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.impl.image.TextureAdapter;
 
 public final class GdxTextureUtil {
@@ -87,6 +89,26 @@ public final class GdxTextureUtil {
     public static void setDefaultTextureParams(Texture texture) {
         texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         texture.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
+    }
+
+    public static TextureFilter toGdxFilter(GLScaleFilter filter) {
+        switch (filter) {
+        case NEAREST: return TextureFilter.Nearest;
+        case NEAREST_MIPMAP: return TextureFilter.MipMapNearestLinear;
+        case LINEAR: return TextureFilter.Linear;
+        case LINEAR_MIPMAP: return TextureFilter.MipMapLinearLinear;
+        }
+
+        throw new IllegalArgumentException("Unsupported filter type: " + filter);
+    }
+
+    public static TextureWrap toGdxWrap(GLTilingMode mode) {
+        switch (mode) {
+        case CLAMP: return TextureWrap.ClampToEdge;
+        case REPEAT: return TextureWrap.Repeat;
+        }
+
+        throw new IllegalArgumentException("Unsupported tiling mode: " + mode);
     }
 
 }

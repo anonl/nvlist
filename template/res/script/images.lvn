@@ -17,4 +17,5 @@ local subA = imgf("test#a", 1280 - 128 * 4, 0)
 local subB = imgf("test#b", 1280 - 128 * 3, 0)
 local subC = imgf("test#c", 1280 - 128 * 2, 0)
 local subD = imgf("test#d", 1280 - 128 * 1, 0)
+subD:setScale(5, 5)
 @@

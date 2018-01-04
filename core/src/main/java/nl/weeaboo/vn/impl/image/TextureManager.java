@@ -49,7 +49,6 @@ final class TextureManager implements Serializable {
     private Dim imageResolution;
 
     private transient @Nullable TextureCache textureCache;
-    private transient @Nullable ImageDefinitionCache cachedImageDefs;
 
     public TextureManager(FileResourceLoader resourceLoader, Dim virtualSize) {
         this.resourceLoader = resourceLoader;
@@ -63,16 +62,16 @@ final class TextureManager implements Serializable {
             imageResolution = size;
 
             // Image resolution changed
-            cachedImageDefs = null;
+            if (textureCache != null) {
+                textureCache.clear();
+            }
         }
     }
 
     @CheckForNull
     final IImageDefinition getImageDef(FilePath relPath) {
-        if (cachedImageDefs == null) {
-            cachedImageDefs = new ImageDefinitionCache(resourceLoader.getFileSystem());
-        }
-        return cachedImageDefs.getImageDef(relPath);
+        FilePath absolutePath = resourceLoader.getAbsolutePath(relPath);
+        return textureStore.get().getImageDef(absolutePath);
     }
 
     public @Nullable ITexture getTexture(ResourceId resourceId) {
@@ -94,6 +93,14 @@ final class TextureManager implements Serializable {
     private ITexture loadTexture(ResourceId resourceId) throws IOException {
         FilePath relPath = resourceId.getFilePath();
         FilePath absolutePath = resourceLoader.getAbsolutePath(relPath);
+
+        IImageDefinition imageDef = getImageDef(relPath);
+        if (imageDef == null && resourceId.hasSubId()) {
+            LOG.warn("Image definition not found: {}", relPath);
+            throw new FileNotFoundException("Texture sub-rect not found (missing image definition): "
+                    + resourceId);
+        }
+
         IResource<Texture> res = textureStore.get().get(absolutePath);
         if (res == null) {
             throw new FileNotFoundException("Texture resource not found: " + absolutePath);
@@ -101,17 +108,9 @@ final class TextureManager implements Serializable {
 
         double scale = getImageScale();
 
-        IImageDefinition imageDef = getImageDef(relPath);
-        if (imageDef == null) {
-            if (resourceId.hasSubId()) {
-                LOG.warn("Image definition not found: {}", relPath);
-                throw new FileNotFoundException("Texture sub-rect not found (missing image definition): "
-                        + resourceId);
-            }
-
-            LOG.trace("Image definition not found: {}", relPath);
-        } else {
+        if (imageDef != null) {
             LOG.trace("Image definition found: {}", relPath);
+
             if (resourceId.hasSubId()) {
                 IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
                 if (subRect != null) {

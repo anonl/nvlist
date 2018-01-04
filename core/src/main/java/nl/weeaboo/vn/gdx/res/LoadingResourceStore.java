@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.CacheBuilder;
@@ -58,12 +59,20 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
         AssetManager am = assetManager.get();
         String pathString = absolutePath.toString();
-        am.load(pathString, assetType);
+        am.load(pathString, assetType, getLoadingParams(absolutePath));
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
         LOG.debug("Loading resource '{}' took {}", absolutePath, stopwatch);
         return resource;
+    }
+
+    /**
+     * @param absolutePath The path to the resource that's being loaded (may not exist).
+     */
+    @Nullable
+    protected AssetLoaderParameters<T> getLoadingParams(FilePath absolutePath) {
+        return null;
     }
 
     protected void unloadResource(FilePath absolutePath, Ref<T> entry) {

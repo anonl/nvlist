@@ -32,6 +32,10 @@ final class TextureCache {
                 .build(loadFunction);
     }
 
+    public void clear() {
+        cache.invalidateAll();
+    }
+
     /**
      * @return The texture matching the given resource ID, or {@code null} if no such texture exists.
      */
