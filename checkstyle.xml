@@ -217,6 +217,5 @@ Changes:
             <property name="max" value="6"/>
         </module>
         <module name="MutableException" />
-        <module name="SuppressionCommentFilter" />
     </module>
 </module>

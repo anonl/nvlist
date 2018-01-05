@@ -16,7 +16,7 @@ function titlescreen()
     --local slot = saveScreen()
     --Log.info("Saved in slot {}", slot)
     
-    testTextLog()
+    --testTextLog()
     --testGuiScreen()
 
     registerSpeaker("guy", "Mr. Guy")

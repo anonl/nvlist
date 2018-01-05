@@ -18,12 +18,13 @@ public final class VKey extends AbstractId {
     public static final VKey CANCEL = new VKey("cancel");
     public static final VKey TEXT_CONTINUE = new VKey("textContinue");
     public static final VKey SKIP = new VKey("skip");
+    public static final VKey ALT_SKIP = new VKey("altSkip");
 
     public static final VKey MOUSE_LEFT = new VKey("mouseLeft");
 
     private static final ImmutableList<VKey> STANDARD_KEYS = ImmutableList.of(
             UP, DOWN, LEFT, RIGHT,
-            CONFIRM, CANCEL, TEXT_CONTINUE, SKIP,
+            CONFIRM, CANCEL, TEXT_CONTINUE, SKIP, ALT_SKIP,
             MOUSE_LEFT
     );
 

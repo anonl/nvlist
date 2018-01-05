@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.vn.impl.input.InputConfig;
 import nl.weeaboo.vn.impl.save.JsonUtil;
 import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.KeyCombination;
 import nl.weeaboo.vn.input.VKey;
 
 public class InputConfigTest {
@@ -49,7 +49,7 @@ public class InputConfigTest {
 
         // All standard keys must be mapped
         for (VKey vkey : VKey.getStandardKeys()) {
-            Collection<KeyCode> mapped = config.get(vkey);
+            Collection<KeyCombination> mapped = config.get(vkey);
             LOG.info("Default {}: {}", vkey, mapped);
             Assert.assertNotEquals(0, mapped.size());
         }

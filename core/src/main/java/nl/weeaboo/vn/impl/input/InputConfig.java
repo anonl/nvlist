@@ -2,23 +2,29 @@ package nl.weeaboo.vn.impl.input;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
 import nl.weeaboo.vn.impl.save.JsonUtil;
 import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.KeyCombination;
 import nl.weeaboo.vn.input.VKey;
 
 public final class InputConfig implements Json.Serializable {
 
     // --- Uses manual serialization ---
-    private final ListMultimap<VKey, KeyCode> keyMapping = ArrayListMultimap.create();
+    private final ListMultimap<VKey, KeyCombination> keyMapping = ArrayListMultimap.create();
     // --- Uses manual serialization ---
 
     // No-arg constructor required for JSON deserialization
@@ -36,28 +42,41 @@ public final class InputConfig implements Json.Serializable {
     }
 
     /**
-     * Adds an additional physical keycode for the virtual key {@code vkey}.
+     * Adds an additional physical key for the virtual key {@code vkey}.
+     *
+     * @see #add(VKey, KeyCombination)
      */
-    public void add(VKey vkey, KeyCode keyCode) {
-        keyMapping.put(vkey, keyCode);
+    public void add(VKey vkey, KeyCode physicalKey) {
+        add(vkey, new KeyCombination(ImmutableSet.of(physicalKey)));
     }
 
     /**
-     * Returns all physical keycodes mapped to the supplied virtual key.
+     * Adds an additional physical key combination for the virtual key {@code vkey}.
      */
-    public Collection<KeyCode> get(VKey vkey) {
+    public void add(VKey vkey, KeyCombination physicalKeys) {
+        keyMapping.put(vkey, physicalKeys);
+    }
+
+    /**
+     * Returns a list of physical key combinations mapped to the supplied virtual key.
+     */
+    public Collection<KeyCombination> get(VKey vkey) {
         return keyMapping.get(vkey);
     }
 
     @Override
     public void write(Json json) {
-        for (Entry<VKey, Collection<KeyCode>> entry : keyMapping.asMap().entrySet()) {
+        for (Entry<VKey, Collection<KeyCombination>> entry : keyMapping.asMap().entrySet()) {
             json.writeArrayStart(entry.getKey().toString());
-            for (KeyCode keyCode : entry.getValue()) {
-                json.writeValue(keyCode);
+            for (KeyCombination keyCombination : entry.getValue()) {
+                writeKeyCombination(json, keyCombination);
             }
             json.writeArrayEnd();
         }
+    }
+
+    private static void writeKeyCombination(Json json, KeyCombination keyCombination) {
+        json.writeValue(Joiner.on('+').join(keyCombination.getKeys()));
     }
 
     @Override
@@ -65,8 +84,17 @@ public final class InputConfig implements Json.Serializable {
         for (JsonValue vkeyEntry : jsonData) {
             VKey vkey = VKey.fromString(vkeyEntry.name);
             for (JsonValue mappedEntry : vkeyEntry) {
-                keyMapping.put(vkey, json.readValue(KeyCode.class, mappedEntry));
+                KeyCombination keyCombination = readKeyCombination(mappedEntry.asString());
+                keyMapping.put(vkey, keyCombination);
             }
         }
+    }
+
+    private static KeyCombination readKeyCombination(String json) {
+        List<KeyCode> keyCodes = Lists.newArrayList();
+        for (String keyString : Splitter.on('+').split(json)) {
+            keyCodes.add(KeyCode.valueOf(keyString));
+        }
+        return new KeyCombination(keyCodes);
     }
 }
