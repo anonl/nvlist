@@ -31,7 +31,7 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
 
     @Override
     @Nullable
-    protected AssetLoaderParameters<Texture> getLoadingParams(FilePath imagePath) {
+    protected AssetLoaderParameters<Texture> getLoadParams(FilePath imagePath) {
         IImageDefinition imageDef = getImageDef(imagePath);
         if (imageDef == null) {
             return null;

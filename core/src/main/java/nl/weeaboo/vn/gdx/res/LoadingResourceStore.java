@@ -59,7 +59,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
         AssetManager am = assetManager.get();
         String pathString = absolutePath.toString();
-        am.load(pathString, assetType, getLoadingParams(absolutePath));
+        am.load(pathString, assetType, getLoadParams(absolutePath));
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
@@ -71,7 +71,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
      * @param absolutePath The path to the resource that's being loaded (may not exist).
      */
     @Nullable
-    protected AssetLoaderParameters<T> getLoadingParams(FilePath absolutePath) {
+    protected AssetLoaderParameters<T> getLoadParams(FilePath absolutePath) {
         return null;
     }
 

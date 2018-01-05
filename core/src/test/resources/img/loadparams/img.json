@@ -1,0 +1,15 @@
+{
+    "version": "1.0",
+    
+    "images": [
+        {
+            "file": "loadparams.png",
+            "width": 128,
+            "height": 128,
+            "minFilter": "linear mipmap",
+            "magFilter": "nearest",
+            "wrapX": "clamp",
+            "wrapY": "repeat"
+        }
+    ]
+}
