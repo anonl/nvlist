@@ -22,6 +22,11 @@ public final class GradleMonitor implements AutoCloseable {
     public GradleMonitor() {
     }
 
+    /**
+     * Connects to the NVList project at the specified location.
+     *
+     * @throws CheckedGradleException If connecting the the project's Gradle build fails.
+     */
     public void open(ProjectFolderConfig folderConfig) throws CheckedGradleException {
         if (connection != null) {
             connection.close();

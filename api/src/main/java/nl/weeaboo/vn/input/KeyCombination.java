@@ -28,6 +28,9 @@ public final class KeyCombination {
         return keys.equals(other.keys);
     }
 
+    /**
+     * @return A read-only collection of the keys that must simultaneously be held to activate this key combination.
+     */
     public Collection<KeyCode> getKeys() {
         return keys;
     }

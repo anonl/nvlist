@@ -91,6 +91,9 @@ public final class GdxTextureUtil {
         texture.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
     }
 
+    /**
+     * Converts {@link GLScaleFilter} to its equivalent {@link TextureFilter}.
+     */
     public static TextureFilter toGdxFilter(GLScaleFilter filter) {
         switch (filter) {
         case NEAREST: return TextureFilter.Nearest;
@@ -102,6 +105,9 @@ public final class GdxTextureUtil {
         throw new IllegalArgumentException("Unsupported filter type: " + filter);
     }
 
+    /**
+     * Converts {@link GLTilingMode} to its equivalent {@link TextureWrap}.
+     */
     public static TextureWrap toGdxWrap(GLTilingMode mode) {
         switch (mode) {
         case CLAMP: return TextureWrap.ClampToEdge;

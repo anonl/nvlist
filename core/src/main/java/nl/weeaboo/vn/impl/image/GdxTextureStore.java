@@ -24,6 +24,10 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
         cachedImageDefs = new ImageDefinitionCache(fileSystem);
     }
 
+    /**
+     * Returns the image defintion corresponding to the specified image file, or {@code null} if the image
+     * doesn't exist or doesn't have an image definition..
+     */
     @CheckForNull
     public final IImageDefinition getImageDef(FilePath imagePath) {
         return cachedImageDefs.getImageDef(imagePath);

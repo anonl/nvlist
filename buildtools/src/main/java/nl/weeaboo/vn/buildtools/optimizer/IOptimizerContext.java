@@ -13,10 +13,20 @@ public interface IOptimizerContext {
      */
     ITempFileProvider getTempFileProvider();
 
+    /**
+     * Returns the {@link NvlistProjectConnection} which provides access to the internals, including resource files, of
+     * a single NVList project.
+     */
     NvlistProjectConnection getProject();
 
+    /**
+     * The resource optimizer configuration.
+     */
     ResourceOptimizerConfig getConfig();
 
+    /**
+     * The optimizer file set tracks which source files have already been processed.
+     */
     IOptimizerFileSet getFileSet();
 
 }
