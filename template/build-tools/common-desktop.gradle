@@ -1,14 +1,4 @@
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        // Plugin for creating runnable distributions (Win/Mac/Linux)
-        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
-    }
-}
-
 apply plugin: 'java-library'
 apply plugin: 'application'
 
@@ -47,54 +37,7 @@ shadowJar {
    version = null
 }
 
-import com.badlogicgames.packr.*
-
-// Pack-all tasks that depends on each platform-specific pack task
-task packrAll() {    
+task assemblePackrResources() {
+    dependsOn assembleNvl
 }
-assembleDist.dependsOn packrAll
-
-def platforms = [
-    PackrConfig.Platform.Windows64,
-    // PackrConfig.Platform.Windows32, // Should be obsolete
-    PackrConfig.Platform.Linux64,
-    // PackrConfig.Platform.Linux32, // Should be obsolete
-    PackrConfig.Platform.MacOS,
-]
-
-platforms.each{ platform ->
-    def packTask = tasks.create("packr${platform}") {
-        dependsOn shadowJar
-        dependsOn assembleNvl
-        
-        doLast {
-            def platformId = platform.toString().toLowerCase(Locale.ROOT)                    
-            def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
-            def shadowJar = "${projectDir}/build/libs/${rootProject.name}.jar".toString()
-            
-            def vmArgs = []
-            vmArgs += applicationDefaultJvmArgs            
-            if (platform == PackrConfig.Platform.MacOS) {
-                vmArgs += ['XstartOnFirstThread'] // Required for LWJGL3
-            }
-
-            PackrConfig config = new PackrConfig()
-            config.executable = rootProject.name
-            config.classpath = [shadowJar]
-            config.mainClass = mainClassName
-            config.resources = assembleNvl.outputs.files.collect() //[vnResDir]
-
-            config.platform = platform
-            config.outDir = new File(buildDir, 'packr/' + platformId)
-            config.bundleIdentifier = project.group // MacOS app bundle identifier
-            config.iconResource = new File(vnResDir, 'icon.icns') // icon attribute is only used by MacOS platform
-
-            config.jdk = jrePath
-            config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
-            config.vmArgs = vmArgs
-            
-            new Packr().pack(config);
-        }
-    }
-    packrAll.dependsOn packTask
-}
+apply from: "${buildToolsDir}/common-packr.gradle"

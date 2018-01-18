@@ -1,0 +1,62 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // Plugin for creating runnable distributions (Win/Mac/Linux)
+        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
+    }
+}
+
+
+import com.badlogicgames.packr.*
+
+// Pack-all tasks that depends on each platform-specific pack task
+task packrAll() {    
+}
+assembleDist.dependsOn packrAll
+
+def platforms = [
+    PackrConfig.Platform.Windows64,
+    // PackrConfig.Platform.Windows32, // Should be obsolete
+    PackrConfig.Platform.Linux64,
+    // PackrConfig.Platform.Linux32, // Should be obsolete
+    PackrConfig.Platform.MacOS,
+]
+
+platforms.each{ platform ->
+    def packTask = tasks.create("packr${platform}") {
+        dependsOn shadowJar
+        dependsOn assemblePackrResources
+        
+        doLast {
+            def platformId = platform.toString().toLowerCase(Locale.ROOT)                    
+            def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
+            
+            def vmArgs = []
+            vmArgs += applicationDefaultJvmArgs            
+            if (platform == PackrConfig.Platform.MacOS) {
+                vmArgs += ['XstartOnFirstThread'] // Required for LWJGL3
+            }
+
+            PackrConfig config = new PackrConfig()
+            config.executable = shadowJar.baseName
+            config.classpath = shadowJar.outputs.files.collect{ it.toString() }
+            config.mainClass = mainClassName
+            config.resources = assemblePackrResources.outputs.files.collect()
+
+            config.platform = platform
+            config.outDir = new File(buildDir, 'packr/' + platformId)
+            config.bundleIdentifier = project.group + '.' + shadowJar.baseName // MacOS app bundle identifier
+            config.iconResource = new File(vnResDir, 'icon.icns') // icon attribute is only used by MacOS platform
+
+            config.jdk = jrePath
+            config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
+            config.vmArgs = vmArgs
+            
+            new Packr().pack(config);
+        }
+    }
+    packrAll.dependsOn packTask
+}
