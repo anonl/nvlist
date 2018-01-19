@@ -65,7 +65,16 @@ eclipse {
     
     classpath {
         plusConfigurations += [ project.configurations.compileClasspath ]        
-        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
+        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
+        
+        file.whenMerged {
+            entries.each { entry ->
+                // Ignore warnings in generated source files
+                if (entry.kind == 'src' && entry.path == 'gen') {
+                    entry.entryAttributes['ignore_optional_problems'] = 'true'
+                }
+            }
+        }
     }
 }
 
