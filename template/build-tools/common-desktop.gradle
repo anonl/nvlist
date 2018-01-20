@@ -37,7 +37,10 @@ shadowJar {
    version = null
 }
 
-task assemblePackrResources() {
-    dependsOn assembleNvl
-}
 apply from: "${buildToolsDir}/common-packr.gradle"
+
+packr {
+    resources {
+        from(assembleNvl)
+    }
+}

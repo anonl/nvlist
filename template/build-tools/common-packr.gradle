@@ -9,7 +9,6 @@ buildscript {
     }
 }
 
-
 import com.badlogicgames.packr.*
 
 // Pack-all tasks that depends on each platform-specific pack task
@@ -17,21 +16,39 @@ task packrAll() {
 }
 assembleDist.dependsOn packrAll
 
-def platforms = [
-    PackrConfig.Platform.Windows64,
-    // PackrConfig.Platform.Windows32, // Should be obsolete
-    PackrConfig.Platform.Linux64,
-    // PackrConfig.Platform.Linux32, // Should be obsolete
-    PackrConfig.Platform.MacOS,
-]
+class PackrExtension {
+    def final platforms = [
+        PackrConfig.Platform.Windows64,
+        // PackrConfig.Platform.Windows32, // Should be obsolete
+        PackrConfig.Platform.Linux64,
+        // PackrConfig.Platform.Linux32, // Should be obsolete
+        PackrConfig.Platform.MacOS,
+    ].asImmutable()
+    
+    private final CopySpec resources;
+    
+    PackrExtension(project) {
+        resources = project.copySpec()
+    }
+    
+    public CopySpec getResources() {
+        return resources
+    }
+    
+    public void resources(Action<? super CopySpec> action) {
+        action.execute(resources)
+    }
+}
 
-platforms.each{ platform ->
-    def packTask = tasks.create("packr${platform}") {
+extensions.create('packr', PackrExtension, project)
+
+packr.platforms.each{ platform ->
+    def platformId = platform.toString().toLowerCase(Locale.ROOT)
+
+    task "packr${platform}"(type: Copy) {
         dependsOn shadowJar
-        dependsOn assemblePackrResources
-        
-        doLast {
-            def platformId = platform.toString().toLowerCase(Locale.ROOT)                    
+    
+        doFirst {
             def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
             
             def vmArgs = []
@@ -44,10 +61,10 @@ platforms.each{ platform ->
             config.executable = shadowJar.baseName
             config.classpath = shadowJar.outputs.files.collect{ it.toString() }
             config.mainClass = mainClassName
-            config.resources = assemblePackrResources.outputs.files.collect()
+            config.resources = [] // Resources have already been included using the packr.resource copySpec
 
             config.platform = platform
-            config.outDir = new File(buildDir, 'packr/' + platformId)
+            config.outDir = getDestinationDir()
             config.bundleIdentifier = project.group + '.' + shadowJar.baseName // MacOS app bundle identifier
             config.iconResource = new File(vnResDir, 'icon.icns') // icon attribute is only used by MacOS platform
 
@@ -57,6 +74,9 @@ platforms.each{ platform ->
             
             new Packr().pack(config);
         }
+        
+        with packr.resources
+        into "$buildDir/packr/$platformId"
     }
-    packrAll.dependsOn packTask
+    packrAll.dependsOn "packr${platform}"
 }

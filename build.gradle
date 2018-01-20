@@ -130,7 +130,7 @@ allprojects {
         if (file('src/jmh/java').exists()) {
             // Only apply JMH if there are any tests (otherwise the task fails)
             project.apply plugin: "me.champeau.gradle.jmh"
-                
+
 	        jmh {
 	            fork = 1
 	        }
@@ -151,20 +151,3 @@ allprojects {
         }
     }
 }
-
-apply plugin: 'distribution'
-
-distributions {
-    main {
-        contents {
-            from('template') {
-                include 'res/**'
-                include 'build-res/**'
-                include 'build-tools/**'
-            }
-            from{ project(':nvlist-buildgui').shadowJar }
-        }
-    }
-}
-
-tasks.distTar.enabled = false // Don't bother generating a .tar distribution
