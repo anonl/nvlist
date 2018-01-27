@@ -49,32 +49,34 @@ CodeMirror.defineMode("lvn", function(config, parserConfig) {
   var dedentTokens = wordRE(["end", "until", "\\)", "}"]);
   var dedentPartial = prefixRE(["end", "until", "\\)", "}", "else", "elseif"]);
 
-  function normal(stream, state) {
-    if (stream.sol()) {
-      var ch = stream.peek();
-      if (state.codeBlock || ch == "@") {
-        var mode = code
-        if (ch == "@") {
-          stream.next();
-          if (stream.peek() == "@") {
-            stream.next();
-            state.codeBlock = !state.codeBlock;
-            if (!state.codeBlock) {
-              mode = normal;
-            }
-          }
-        }
-        state.cur = mode
-        return "code";
-      } else if (ch == "#") {
-        stream.next();
-        if (stream.eat("#")) return (state.cur = commentBlock)(stream, state);
-        else return (state.cur = commentLine)(stream, state);
-      }
-    }    
+  	function normal(stream, state) {
+  		var sol = stream.sol();
+  		var ch = stream.peek();
     
-    return (state.cur = textLine)(stream, state);
-  }
+  		if (state.codeBlock || (sol && ch == "@")) {
+			var mode = code
+			if (ch == "@") {
+				stream.next();
+				if (stream.peek() == "@") {
+					stream.next();
+					state.codeBlock = !state.codeBlock;
+					if (!state.codeBlock) {
+						mode = normal;
+					}
+				}
+			}
+			state.cur = mode
+			return "code";
+		} else if (sol && ch == "#") {
+			stream.next();
+			if (stream.eat("#")) {
+				return (state.cur = commentBlock)(stream, state);
+			} else {
+				return (state.cur = commentLine)(stream, state);
+			}
+		}    
+  		return (state.cur = textLine)(stream, state);
+  	}
 
   function textLine(stream, state) {
     while (!stream.eol()) {
