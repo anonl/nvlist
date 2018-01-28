@@ -176,10 +176,11 @@ CodeMirror.defineMode("lvn", function(config, parserConfig) {
   
   function embeddedCode(stream, state) {
     var style = "code";
-    var ch = stream.next();
+    var ch = stream.peek();
     if (ch == '\\') {
       stream.next();
     } else if (ch == ']') {
+        stream.next();
       state.cur = normal;
     } else {
       return code(stream, state);
@@ -201,7 +202,7 @@ CodeMirror.defineMode("lvn", function(config, parserConfig) {
         style = "comment";
       }
     } else if (ch == "\"" || ch == "'") {
-      style = (state.cur = string(ch, code))(stream, state);
+      style = (state.cur = string(ch, state.cur))(stream, state);
     } else if (ch == "[" && /[\[=]/.test(stream.peek())) {
       style = (state.cur = bracketed(readBracket(stream), "string"))(stream, state);
     } else if (/\d/.test(ch)) {
