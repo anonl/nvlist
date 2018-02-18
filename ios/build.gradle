@@ -1,25 +1,10 @@
 
-apply plugin: 'java-library'
-apply plugin: 'robovm'
-
-ext {
-    mainClassName = "nl.weeaboo.vn.ios.IosLauncher"
-}
+apply from: "${buildToolsDir}/common-ios.gradle"
 
 dependencies {
     implementation project(":nvlist-core")
 
     implementation deps.gdx_ios
-    
-    runtime deps.slf4j_impl    
-}
 
-robovm {
-    iosSkipSigning = true
+    runtime deps.slf4j_impl
 }
-
-robovmArchive.dependsOn build
-launchIPhoneSimulator.dependsOn build
-launchIPadSimulator.dependsOn build
-launchIOSDevice.dependsOn build
-createIPA.dependsOn build

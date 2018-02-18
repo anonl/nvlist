@@ -1,0 +1,17 @@
+
+apply plugin: 'java-library'
+apply plugin: 'robovm'
+
+ext {
+    mainClassName = "nl.weeaboo.vn.ios.IosLauncher"
+}
+
+robovm {
+    iosSkipSigning = true
+}
+
+robovmArchive.dependsOn build
+launchIPhoneSimulator.dependsOn build
+launchIPadSimulator.dependsOn build
+launchIOSDevice.dependsOn build
+createIPA.dependsOn build
