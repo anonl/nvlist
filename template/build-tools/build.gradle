@@ -74,13 +74,17 @@ project(':desktop') {
     apply from: "${buildToolsDir}/common-desktop.gradle"
 
     dependencies {
-        compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"        
-    }    
+        compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"
+    }
 
     mainClassName = settings.desktopMain
 }
 
 project(':android') {
+    if (!settings.androidEnabled.toBoolean()) {
+        return
+    }
+
     apply plugin: 'com.android.application'
 
     apply from: "${buildToolsDir}/common-android.gradle"
@@ -110,8 +114,22 @@ project(':android') {
     }
     // Install, then run debug build
     task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
-    }    
+    }
     // Install, then run release build
     task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
-    }    
+    }
+}
+
+project(':ios') {
+    if (!settings.iosEnabled.toBoolean()) {
+        return
+    }
+
+    apply from: "${buildToolsDir}/common-ios.gradle"
+    
+    dependencies {
+        compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"
+    }
+
+    ext.mainClassName = settings.iosMain
 }

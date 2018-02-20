@@ -42,10 +42,14 @@ apply from: "${buildToolsDir}/common-packr.gradle"
 
 packr {
     resources {
+        // Exclude build artifacts that may be in the template folder
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+
         from("${rootProject.projectDir}/template") {
             include 'res/**'
             include 'build-res/**'
             include 'build-tools/**'
         }
-    }    
+    }
 }
