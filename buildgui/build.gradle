@@ -7,7 +7,7 @@ mainClassName = 'nl.weeaboo.vn.buildgui.BuildGuiLauncher'
 
 dependencies {
     implementation project(':nvlist-buildtools')
-    implementation project(':nvlist-desktop')
+    implementation project(':nvlist-core')
     implementation deps.gradle_tooling_api
 }
 

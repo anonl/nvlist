@@ -10,6 +10,7 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.vn.buildgui.gradle.GradleBuildController;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildgui.task.TaskController;
+import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.InitConfig;
 
@@ -22,6 +23,7 @@ public final class BuildGuiLauncher {
         // Use ["../template", ".."] to run from Eclipse
 
         InitConfig.init();
+        HeadlessGdx.init();
         SwingHelper.setDefaultLookAndFeel();
 
         ImmutableList<String> args = ImmutableList.copyOf(argsArray);

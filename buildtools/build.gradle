@@ -5,7 +5,8 @@ apply plugin: 'maven-publish'
 dependencies {
     api project(':nvlist-api')
     
-    implementation project(':nvlist-desktop')
+    implementation project(':nvlist-core')
+    implementation deps.gdx_headless
 }
 
 publishing {

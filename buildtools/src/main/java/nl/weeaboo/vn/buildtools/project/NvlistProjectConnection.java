@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.buildtools.project;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -12,7 +11,7 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.RegularFileSystem;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.desktop.DesktopLauncher;
+import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 
 public final class NvlistProjectConnection implements AutoCloseable {
@@ -39,9 +38,7 @@ public final class NvlistProjectConnection implements AutoCloseable {
     }
 
     private void open() {
-        File projectFolder = folderConfig.getProjectFolder();
-
-        resFileSystem = DesktopLauncher.openResourceFileSystem(projectFolder);
+        resFileSystem = new DesktopGdxFileSystem(folderConfig.getResFolder().toString());
         outputFileSystem = new RegularFileSystem(folderConfig.getResFolder());
 
         preferences = new NovelPrefsStore(resFileSystem, outputFileSystem);
