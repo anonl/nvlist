@@ -139,7 +139,12 @@ public final class GradleBuildController implements IBuildController {
                              * Note: Use the cause's message, since the outer exception's message just says
                              * something generic about a build failure using a specific Gradle distribution
                              */
-                            String shortMessage = "Task failed: " + failure.getCause().getMessage();
+                            String shortMessage = "Task failed: ";
+                            if (failure.getCause() == null) {
+                                shortMessage += failure.getMessage();
+                            } else {
+                                shortMessage += failure.getCause().getMessage();
+                            }
                             fireFinished(TaskResultType.FAILED, shortMessage);
                         }
                     });
