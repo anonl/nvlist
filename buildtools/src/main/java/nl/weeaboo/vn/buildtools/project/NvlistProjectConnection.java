@@ -42,7 +42,7 @@ public final class NvlistProjectConnection implements AutoCloseable {
         File projectFolder = folderConfig.getProjectFolder();
 
         resFileSystem = DesktopLauncher.openResourceFileSystem(projectFolder);
-        outputFileSystem = new RegularFileSystem(new File(projectFolder, "res/"));
+        outputFileSystem = new RegularFileSystem(folderConfig.getResFolder());
 
         preferences = new NovelPrefsStore(resFileSystem, outputFileSystem);
         try {

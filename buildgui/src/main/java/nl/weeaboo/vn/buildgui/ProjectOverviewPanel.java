@@ -36,16 +36,16 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverviewPanel.class);
 
     private final BuildGuiModel model;
-    private final HeaderPanel headerPanel;
+    private final TopPanel topPanel;
 
     public ProjectOverviewPanel(BuildGuiModel model) {
         this.model = Objects.requireNonNull(model);
 
-        headerPanel = new HeaderPanel();
+        topPanel = new TopPanel();
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new BorderLayout());
-        add(headerPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         refresh();
     }
@@ -61,10 +61,10 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
     }
 
     private void refresh() {
-        headerPanel.onProjectModelChanged(model.getProject().orElse(null));
+        topPanel.onProjectModelChanged(model.getProject().orElse(null));
     }
 
-    private static final class HeaderPanel extends JPanel {
+    private static final class TopPanel extends JPanel {
 
         private final JLabel iconLabel;
         private final JLabel titleLabel;
@@ -75,7 +75,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
         private @Nullable ProjectFolderConfig folderConfig;
 
-        public HeaderPanel() {
+        public TopPanel() {
             BufferedImage missingIcon;
             try {
                 missingIcon = ImageIO.read(getClass().getResource("missing-icon.png"));

@@ -106,7 +106,6 @@ public final class GradleBuildController implements IBuildController {
             cancelTokenSource = GradleConnector.newCancellationTokenSource();
 
             gradleMonitor.buildLauncher(taskName)
-                    .setStandardOutput(System.out)
                     .addProgressListener(new ProgressListener() {
                         @Override
                         public void statusChanged(ProgressEvent event) {

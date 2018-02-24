@@ -35,6 +35,41 @@ public final class ProjectFolderConfig {
     }
 
     /**
+     * Folder containing resources files used by the project.
+     */
+    public File getResFolder() {
+        return getResFolder(projectFolder);
+    }
+
+    /**
+     * Folder containing resources files used by the project.
+     */
+    public static File getResFolder(File projectFolder) {
+        return new File(projectFolder, "res");
+    }
+
+    /**
+     * Folder containing resources and config for building the project.
+     */
+    public File getBuildResFolder() {
+        return getBuildResFolder(projectFolder);
+    }
+
+    /**
+     * Folder containing resources and config for building the project.
+     */
+    public static File getBuildResFolder(File projectFolder) {
+        return new File(projectFolder, "build-res");
+    }
+
+    /**
+     * Properties file containing build properties.
+     */
+    public File getBuildPropertiesFile() {
+        return new File(getBuildResFolder(), "build.properties");
+    }
+
+    /**
      * The build-tools folder containing the Gradle build scripts and other engine-version-specific resources.
      * This folder may be a sub-folder of the project folder, or an entire separate folder.
      */

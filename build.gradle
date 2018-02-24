@@ -68,6 +68,7 @@ allprojects {
     repositories {
         mavenLocal()
         jcenter()
+        maven { url 'https://repo.gradle.org/gradle/libs-releases' } // For Gradle tooling API
         maven { url 'https://dl.bintray.com/anonl/gdx/' }
         maven { url 'https://dl.bintray.com/anonl/gdx-styledtext/' }
         maven { url 'https://dl.bintray.com/anonl/gdx-video/' }

@@ -65,6 +65,10 @@ final class BuildGui extends JFrame {
         buildController.addLogListener(logPanel);
         tabbedPane.addTab("Log", logPanel);
 
+        PropertiesPanel propertiesPanel = new PropertiesPanel();
+        model.addProjectListener(propertiesPanel);
+        tabbedPane.addTab("Properties", propertiesPanel);
+
         JPanel wrapperPanel = new JPanel(new BorderLayout());
         wrapperPanel.add(tabbedPane, BorderLayout.CENTER);
         wrapperPanel.add(new JSeparator(), BorderLayout.SOUTH);
