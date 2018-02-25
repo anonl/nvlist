@@ -117,13 +117,7 @@ public final class DesktopLauncher {
         // Manually init Gdx.files (we need to load some resources to configure the application)
         Gdx.files = new Lwjgl3Files();
 
-        StringBuilder path = new StringBuilder();
-        path.append(projectFolder.toString().replace('\\', '/'));
-        if (path.length() > 0) {
-            path.append('/');
-        }
-        path.append("res/");
-        return new DesktopGdxFileSystem(path.toString());
+        return new DesktopGdxFileSystem(new File(projectFolder, "res"));
     }
 
     private Lwjgl3ApplicationConfiguration createConfig(Launcher launcher, NovelPrefsStore prefs) {

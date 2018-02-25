@@ -2,9 +2,9 @@ package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.File;
 
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 import com.badlogic.gdx.files.FileHandle;
 
+import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.InitConfig;
@@ -16,7 +16,7 @@ final class RunResourceOptimizer {
      */
     public static void main(String[] args) {
         InitConfig.init();
-        Lwjgl3NativesLoader.load();
+        HeadlessGdx.init();
 
         File dstFolder = new File("tmp");
 
@@ -27,7 +27,7 @@ final class RunResourceOptimizer {
         dstFolder.mkdirs();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File(""), new File(""));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("."), new File("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             ResourceOptimizerConfig config = new ResourceOptimizerConfig(dstFolder);
             OptimizerContext context = new OptimizerContext(connection, config);

@@ -3,13 +3,13 @@ package nl.weeaboo.vn.buildtools.optimizer.image;
 import java.io.File;
 import java.io.IOException;
 
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.io.Files;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
@@ -24,13 +24,13 @@ final class RunImageOptimizer {
      */
     public static void main(String[] args) throws IOException {
         InitConfig.init();
-        Lwjgl3NativesLoader.load();
+        HeadlessGdx.init();
 
         File dstFolder = new File("tmp");
         dstFolder.mkdirs();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File(""), new File(""));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("."), new File("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             IFileSystem resFileSystem = connection.getResFileSystem();
 

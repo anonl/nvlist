@@ -35,6 +35,10 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
     // Cached file archives. Archives are searched in order.
     private transient ImmutableList<ZipFileArchive> cachedFileArchives;
 
+    public DesktopGdxFileSystem(File baseFolder) {
+        this(baseFolder.toString().replace('\\', '/') + "/");
+    }
+
     public DesktopGdxFileSystem(String internalFilePrefix) {
         super(true);
 

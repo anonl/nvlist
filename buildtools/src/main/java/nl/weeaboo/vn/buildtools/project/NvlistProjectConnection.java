@@ -38,7 +38,7 @@ public final class NvlistProjectConnection implements AutoCloseable {
     }
 
     private void open() {
-        resFileSystem = new DesktopGdxFileSystem(folderConfig.getResFolder().toString());
+        resFileSystem = new DesktopGdxFileSystem(folderConfig.getResFolder());
         outputFileSystem = new RegularFileSystem(folderConfig.getResFolder());
 
         preferences = new NovelPrefsStore(resFileSystem, outputFileSystem);
