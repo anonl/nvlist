@@ -1,17 +1,11 @@
 package nl.weeaboo.vn.buildgui;
 
-import java.io.File;
-
 import javax.swing.SwingUtilities;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 import nl.weeaboo.vn.buildgui.gradle.GradleBuildController;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildgui.task.TaskController;
 import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
-import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.InitConfig;
 
 public final class BuildGuiLauncher {
@@ -26,21 +20,19 @@ public final class BuildGuiLauncher {
         HeadlessGdx.init();
         SwingHelper.setDefaultLookAndFeel();
 
-        ImmutableList<String> args = ImmutableList.copyOf(argsArray);
-        String projectPath = Iterables.get(args, 0, ".");
-        String buildToolsPath = Iterables.get(args, 0, "build-tools");
+        BuildGuiPrefs prefs = BuildGuiPrefs.load(argsArray);
 
         ITaskController taskController = new TaskController();
         GradleBuildController buildController = new GradleBuildController(taskController);
         BuildGuiController controller = new BuildGuiController(buildController, taskController);
 
+        // TODO: Who save the preferences? And when?
+
         SwingUtilities.invokeLater(() -> {
+            BuildGuiModel model = controller.getModel();
+            model.setProjectFolders(prefs.getProjectFolderConfig());
+
             BuildGui window = new BuildGui(controller);
-
-            ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File(projectPath),
-                    new File(buildToolsPath));
-            controller.getModel().setProjectFolders(folderConfig);
-
             window.setVisible(true);
         });
     }
