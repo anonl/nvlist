@@ -2,34 +2,45 @@
 title: Quick-start guide
 ---
 
-@@@ Does the default distribution include a JDK? It probably should so the user doesn't have to install any separate software.
-
 ## Download and install NVList
 
-@@@ Project set-up (condensed version)
-- Download and extract zip
-- Navigate to extracted folder, should look something like this (add screenshot of NVList engine folder)
-- Start the build tool:
-  Windows: buildgui.exe
-  @@@ Create some sort of visual marker for WIP sections of the manual
-  Linux: buildgui
-  MacOS: ???
+1. Download NVList from <http://nvlist.weeaboo.nl/>
+2. Extract the downloaded archive file (.zip/.7z) to a new folder.<br/>The result should look something like this:<br/>
+_TODO Add screenshot_
+
+3. Start the build tool:<br/>
+   - Windows: `nvlist-build.exe`
+   - Other: `java -jar nvlist-build.jar`
+
+_TODO Add screenshot_
 
 ## Creating a new visual novel project
 
-  - Point to the full chapter (ch30)
+The following section is an abridged version of the chapter ["Setting up a new project"]({{site.baseurl}}{% link _userguide/ch30-setting-up-a-new-project.md %})
 
-@@@ edit the template script to show a line of dialogue, with a single sprite and background.
-  - Point the user to the right folders. Its easier if the template project already includes a usable sprite, so we can just show that instead of requiring a new image to be added.
+@@@ Point the user to the right folders using the build GUI. It's easier if the template project already includes a usable sprite, so we can just show that instead of requiring a new image to be added.
 
-{% include sourcecode.html content="
+@@@ Text by named character. Define character, then refer to it with $.
+
+{% include sourcecode.html id="text" content="
 @registerSpeaker(\"bob\", \"Man named Bob\")
 $bob Hi, my name is Bob.
 " %}
-  
-  
-@@@ run your VN to test
-  - For now: gradlew run
+
+@@@ Now that we've edited the script, time to test. Save changes in whatever text editor you're using then go back to build tool. Press the big fat Run game button. First run can take quite a while, some parts still need to be downloaded.
+
+@@@ Not much of a visual novel without visuals. First add a background, then show bob in front of it.
+
+{% include sourcecode.html id="images" content="
+@bgf(\"bg/example\")
+@imgf(\"sprite/bob\")
+" %}
+
+## Distribution
+
+The following section is an abridged version of the chapter ["Distribution"]({{site.baseurl}}{% link _userguide/ch32-distribution.md %})
+
 @@@ distribute (condensed version)
-  - Point to the full chapter
+@@@ TODO: Improve build tool to bundle/show packaged releases
+
   

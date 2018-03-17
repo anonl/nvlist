@@ -2,6 +2,16 @@
 title: Script structure
 ---
 
- - Structure
-   - Where to store scripts
-   - Using multiple script files
+- script folder
+- file exts
+
+## Using multiple script files
+
+@@@ Split up scripts per chapter.
+
+- jump command + example
+- call command + example. Explain difference with jump.
+
+## Backup
+
+- Please

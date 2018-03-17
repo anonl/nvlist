@@ -1,8 +1,8 @@
 ---
-title: Supported file types
+title: Supported resource file types
 ---
 
-## Images
+## Images (sprites and backgrounds)
 
 | Format | Description |
 | --- | --- |
@@ -11,7 +11,7 @@ title: Supported file types
 | .jng   | Hybrid format combining the compression of .jpg with support for transparency. Very few image editors directly support this format, but NVList's image optimizer (work in progress) can generate these for you. |
 | .ktx   | Uncompressed image data. Images of this type take a large amount of disk-space, but are very fast to load. KTX files are assumed to use [premultiplied alpha](https://en.wikipedia.org/wiki/Alpha_compositing#Other_transparency_methods). |
 
-## Audio
+## Audio (music and sound effects)
 
 | Format | Description |
 | --- | --- |
