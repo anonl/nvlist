@@ -8,7 +8,7 @@ title: Script introduction
 
 @@@ Just type what you want to appear. Every line is a separate sentence (starts a new paragraph in NVL mode, new window of text for ADV mode (<- too advanced?))
 
-{% include sourcecode.html id="text" content="
+{% include sourcecode.html id="textnotation" content="
 A line of text.
 Another line of text.
 " %}
@@ -17,7 +17,7 @@ Another line of text.
 
 @@@ Lines starting with an `@`-character are code lines. NVList uses Lua (link!) as its scripting language. Easy to learn and VNs require very little programming.
 
-{% include sourcecode.html id="code" content="
+{% include sourcecode.html id="codenotation" content="
 @value = 2
 Text
 @@
@@ -34,7 +34,7 @@ end
 
 It can be convenient to leave notes in your script. A popular use is to leave `TO DO` comments for yourself to mark places in the code that are unfinished or can be improved in some way. 
 
-{% include sourcecode.html id="commentsExample" content="
+{% include sourcecode.html id="commentnotation" content="
 &#35;Single line comment
 Text
 &#35;&#35;
