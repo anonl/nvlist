@@ -47,6 +47,7 @@ packr.platforms.each{ platform ->
 
     task "packr${platform}"(type: Copy) {
         dependsOn shadowJar
+        inputs.files shadowJar.outputs.files
 
         doFirst {
             file("$buildDir/packr/$platformId").mkdirs();
