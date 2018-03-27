@@ -20,8 +20,13 @@ final class BuildGuiPrefs {
     public static BuildGuiPrefs load(String[] commandLineArgs) {
         // Load preferences from OS-dependent storage
         Preferences node = Preferences.userNodeForPackage(BuildGuiPrefs.class);
+
+        // Load storage from JSON
         String jsonString = node.get(PREFS_KEY, "{}");
         Storage storage = JsonUtil.fromJson(Storage.class, jsonString);
+        if (storage == null) {
+            storage = new Storage();
+        }
 
         // Override certain properties with command-line overrides
         if (commandLineArgs.length >= 1) {
@@ -46,8 +51,8 @@ final class BuildGuiPrefs {
     }
 
     private static final class Storage {
-        String projectPath;
-        String buildToolsPath;
+        String projectPath = ".";
+        String buildToolsPath = "build-tools";
     }
 
 }

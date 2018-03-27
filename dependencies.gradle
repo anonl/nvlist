@@ -68,7 +68,8 @@ deps.gdx_desktop = [
 ]
 
 deps.gdx_headless = [
-    "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion",
+    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop", // Required native libraries
 ]
 
 deps.gdx_ios = [

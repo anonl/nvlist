@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.save;
 
+import javax.annotation.CheckForNull;
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -18,6 +20,7 @@ public final class JsonUtil {
     /**
      * Deserializes some JSON to a Java object of the specified type.
      */
+    @CheckForNull
     public static <T> T fromJson(Class<T> type, String json) {
         return fromJson(type, parse(json));
     }
@@ -25,6 +28,7 @@ public final class JsonUtil {
     /**
      * Deserializes some JSON to a Java object of the specified type.
      */
+    @CheckForNull
     public static <T> T fromJson(Class<T> type, JsonValue value) {
         Json json = newJson();
         return json.readValue(type, value);

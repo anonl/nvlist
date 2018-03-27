@@ -47,8 +47,10 @@ packr.platforms.each{ platform ->
 
     task "packr${platform}"(type: Copy) {
         dependsOn shadowJar
-    
+
         doFirst {
+            file("$buildDir/packr/$platformId").mkdirs();
+        
             def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
             
             def vmArgs = []
