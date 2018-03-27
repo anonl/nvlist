@@ -5,6 +5,7 @@ import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
+import org.gradle.tooling.internal.consumer.DefaultGradleConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,20 @@ import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 public final class GradleMonitor implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GradleMonitor.class);
+
+    static {
+        Runtime.getRuntime()
+                .addShutdownHook(new Thread("GradleMonitor-ShutdownHook") {
+                    @Override
+                    public void run() {
+                        /*
+                         * There's unfortunately no way to stop spawned daemons in the public API, so use this
+                         * internal API instead...
+                         */
+                        DefaultGradleConnector.close();
+                    }
+                });
+    }
 
     private ProjectConnection connection;
     private ProjectFolderConfig folderConfig;
@@ -29,6 +44,7 @@ public final class GradleMonitor implements AutoCloseable {
      */
     public void open(ProjectFolderConfig folderConfig) throws CheckedGradleException {
         if (connection != null) {
+            LOG.warn("Double-open of Gradle monitor detected: folderConfig={}", folderConfig);
             connection.close();
         }
 
