@@ -36,7 +36,7 @@ final class PropertiesPanel extends JPanel implements IProjectModelListener {
 
     private @Nullable ProjectFolderConfig folderConfig;
 
-    public PropertiesPanel() {
+    public PropertiesPanel(BuildGuiModel model) {
         table = new JTable();
 
         editButton = new JButton("Edit");
@@ -58,6 +58,12 @@ final class PropertiesPanel extends JPanel implements IProjectModelListener {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(tablePanel, BorderLayout.WEST);
+
+        model.getProject().ifPresent(project -> {
+            folderConfig = project.getFolderConfig();
+        });
+
+        refresh();
     }
 
     @Override
