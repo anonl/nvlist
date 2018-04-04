@@ -63,6 +63,7 @@ public final class GradleMonitor implements AutoCloseable {
     @Override
     public void close() {
         connection.close();
+        connection = null;
     }
 
     <T> ModelBuilder<T> modelBuilder(Class<T> type) {

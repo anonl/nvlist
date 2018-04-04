@@ -3,10 +3,15 @@ package nl.weeaboo.vn.buildgui;
 import java.io.File;
 import java.util.prefs.Preferences;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.save.JsonUtil;
 
 final class BuildGuiPrefs {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BuildGuiPrefs.class);
 
     // If the prefs format changes, the key should change as well
     private static final String PREFS_KEY = "prefs001";
@@ -19,10 +24,15 @@ final class BuildGuiPrefs {
 
     public static BuildGuiPrefs load(String[] commandLineArgs) {
         // Load preferences from OS-dependent storage
+        // Note: this may print a warning due to a JDK bug: https://bugs.openjdk.java.net/browse/JDK-8139507
         Preferences node = Preferences.userNodeForPackage(BuildGuiPrefs.class);
-
-        // Load storage from JSON
         String jsonString = node.get(PREFS_KEY, "{}");
+
+        return load(jsonString, commandLineArgs);
+    }
+
+    private static BuildGuiPrefs load(String jsonString, String[] commandLineArgs) {
+        // Load storage from JSON
         Storage storage = JsonUtil.fromJson(Storage.class, jsonString);
         if (storage == null) {
             storage = new Storage();
@@ -37,6 +47,19 @@ final class BuildGuiPrefs {
         }
 
         return new BuildGuiPrefs(storage);
+    }
+
+    private String toJson() {
+        return JsonUtil.toJson(storage);
+    }
+
+    public void save() {
+        String jsonString = toJson();
+
+        LOG.info("Storing preferences: {}", jsonString);
+
+        Preferences node = Preferences.userNodeForPackage(BuildGuiPrefs.class);
+        node.put(PREFS_KEY, jsonString);
     }
 
     public ProjectFolderConfig getProjectFolderConfig() {

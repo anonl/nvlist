@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.SwingUtilities;
 
 import nl.weeaboo.vn.buildgui.gradle.GradleBuildController;
@@ -26,15 +29,29 @@ public final class BuildGuiLauncher {
         GradleBuildController buildController = new GradleBuildController(taskController);
         BuildGuiController controller = new BuildGuiController(buildController, taskController);
 
-        // TODO: Who save the preferences? And when?
-
         SwingUtilities.invokeLater(() -> {
             BuildGuiModel model = controller.getModel();
             model.setProjectFolders(prefs.getProjectFolderConfig());
 
             BuildGui window = new BuildGui(controller);
+            window.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    super.windowClosed(e);
+
+                    // Store (possible changed) user preferences
+                    storePrefs(model, prefs);
+                }
+            });
             window.setVisible(true);
         });
+    }
+
+    private static void storePrefs(BuildGuiModel model, BuildGuiPrefs prefs) {
+        model.getProject().ifPresent(project -> {
+            prefs.setProjectFolderConfig(project.getFolderConfig());
+        });
+        prefs.save();
     }
 
 }
