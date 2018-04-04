@@ -9,6 +9,8 @@ dependencies {
     implementation project(':nvlist-buildtools')
     implementation project(':nvlist-core')
     implementation deps.gradle_tooling_api
+    
+    runtimeOnly deps.slf4j_impl
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
