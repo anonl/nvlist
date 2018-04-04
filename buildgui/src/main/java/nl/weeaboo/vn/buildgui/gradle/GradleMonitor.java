@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.buildgui.gradle;
 
+import javax.annotation.Nullable;
+
 import org.gradle.tooling.BuildLauncher;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
@@ -31,7 +33,7 @@ public final class GradleMonitor implements AutoCloseable {
                 });
     }
 
-    private ProjectConnection connection;
+    private @Nullable ProjectConnection connection;
     private ProjectFolderConfig folderConfig;
 
     public GradleMonitor() {
@@ -62,11 +64,17 @@ public final class GradleMonitor implements AutoCloseable {
 
     @Override
     public void close() {
-        connection.close();
-        connection = null;
+        if (connection != null) {
+            connection.close();
+            connection = null;
+        }
     }
 
     <T> ModelBuilder<T> modelBuilder(Class<T> type) {
+        if (connection == null) {
+            throw new IllegalStateException("closed");
+        }
+
         return connection.model(type)
                 .setStandardOutput(System.out)
                 .setStandardError(System.err)
@@ -74,6 +82,10 @@ public final class GradleMonitor implements AutoCloseable {
     }
 
     BuildLauncher buildLauncher(String taskName) {
+        if (connection == null) {
+            throw new IllegalStateException("closed");
+        }
+
         return connection.newBuild()
             .forTasks(taskName)
             .setStandardOutput(System.out)
