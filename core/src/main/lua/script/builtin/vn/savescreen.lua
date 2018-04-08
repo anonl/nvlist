@@ -11,6 +11,9 @@ local LoadScreen = {}
 local KEY_SAVE_LAST = "vn.save.lastSaved" -- Property value gets set in onSave()
 local KEY_SAVE_PAGE = "vn.save.lastPage"
 
+local SCREENSHOT_WIDTH = 256
+local SCREENSHOT_HEIGHT = 144
+
 ---Global accessor functions
 -------------------------------------------------------------------------------------------------------------- @section globals
 
@@ -37,8 +40,12 @@ local function saveLoadScreen(isSave)
         
         if slot ~= nil then
             if isSave then
-                -- TODO: Add a screenshot
-                Save.save(slot, userData)
+                -- Take a screenshot to add to the save file
+                local ss = screenshot(getRootLayer(), -32768)
+                ss:markTransient()
+                local screenshotInfo = {screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
+                
+                Save.save(slot, userData, screenshotInfo)
                 setSharedGlobal(KEY_SAVE_LAST, slot)
             else
                 Save.load(slot)
@@ -75,7 +82,8 @@ local SaveSlot = {
 
     compact=false, -- Toggles between full view and compact view
     
-    backgroundImagePath="gui/savescreen#slotButton-"
+    backgroundImagePath="gui/savescreen#slotButton-",
+    screenshot=nil, -- Thumbnail image (nil for empty slots)
     }
 
 function SaveSlot.new(self)
@@ -348,7 +356,6 @@ function SaveLoadScreen:initQSaves()
             
             local si = saved[slot]
             if si ~= nil then
-                -- TODO
                 label = defaultLabel .. " " .. i --.. "\n" .. si:getDateString()
                 empty = false
             end
@@ -393,8 +400,7 @@ function SaveLoadScreen:setPage(p, force)
             local si = saved[i]
             if si ~= nil then
                 slot = si:getSlot()
-                -- TODO
-                --screenshot = si:getScreenshot(self.screenshotWidth, self.screenshotHeight)
+                screenshot = si:getThumbnail(self.screenshotWidth, self.screenshotHeight)
                 label = "Save " .. slot -- .. "\n" .. si:getDateString()
                 empty = false
                 new = (lastSaved == i)

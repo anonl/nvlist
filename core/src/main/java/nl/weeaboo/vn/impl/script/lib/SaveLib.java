@@ -3,6 +3,14 @@ package nl.weeaboo.vn.impl.script.lib;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
+
+import nl.weeaboo.common.Dim;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
@@ -14,6 +22,10 @@ import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.graphics.PngUtil;
+import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.save.SaveParams;
@@ -23,12 +35,15 @@ import nl.weeaboo.vn.impl.script.lua.LuaStorage;
 import nl.weeaboo.vn.save.ISaveFile;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.save.IStorage;
+import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
 public class SaveLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SaveLib.class);
 
     private final StaticRef<INovel> novelRef = StaticEnvironment.NOVEL;
     private final IEnvironment env;
@@ -67,6 +82,7 @@ public class SaveLib extends LuaLib {
      *        <ol>
      *        <li>save slot (int)
      *        <li>(optional) userdata table
+     *        <li>(optional) screenshot table (screenshot, width, height)
      *        </ol>
      * @throws ScriptException If the input parameters are invalid.
      */
@@ -81,7 +97,8 @@ public class SaveLib extends LuaLib {
         SaveParams saveParams = new SaveParams();
         saveParams.setUserData(userData);
 
-        // TODO: Store screenshot in the save data
+        // Add screenshot
+        handleScreenshotParam(args.checktable(3), saveParams);
 
         // Save
         final LuaRunState lrs = LuaRunState.getCurrent();
@@ -93,6 +110,33 @@ public class SaveLib extends LuaLib {
             throw new ScriptException("Error saving to slot " + slot, e);
         }
         return result;
+    }
+
+    private static void handleScreenshotParam(LuaValue ssTable, SaveParams saveParams) {
+        if (ssTable.isnil()) {
+            return;
+        }
+
+        IScreenshot screenshot = ssTable.get("screenshot").checkuserdata(IScreenshot.class);
+        Dim targetSize = Dim.of(ssTable.get("width").checkint(), ssTable.get("height").checkint());
+
+        Pixmap original = GdxScreenshotUtil.getPixels(screenshot);
+
+        byte[] pngBytes;
+        Pixmap resized = PixmapUtil.resizedCopy(original, targetSize, Filter.BiLinear);
+        try {
+            try {
+                pngBytes = PngUtil.encodePng(resized);
+            } catch (IOException e) {
+                LOG.warn("Error encoding thumbnail for save slot", e);
+                return;
+            }
+        } finally {
+            resized.dispose();
+        }
+
+        ThumbnailInfo thumbnailInfo = new ThumbnailInfo(FilePath.of("thumbnail.png"), targetSize);
+        saveParams.setThumbnail(thumbnailInfo, pngBytes);
     }
 
     /**
