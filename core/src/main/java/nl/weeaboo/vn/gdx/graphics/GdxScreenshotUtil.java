@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.gdx.graphics;
 
-import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -24,7 +24,7 @@ public final class GdxScreenshotUtil {
         return pixmap;
     }
 
-    @CheckForNull
+    @Nullable
     public static Pixmap getPixels(IScreenshot screenshot) {
         ITextureData textureData = screenshot.getPixels();
         if (textureData instanceof PixelTextureData) {

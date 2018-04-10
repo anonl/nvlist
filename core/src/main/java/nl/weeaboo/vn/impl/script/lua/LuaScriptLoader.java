@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
@@ -118,7 +119,8 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
         // Use Lua PATH to find the file
         LuaRunState lrs = LuaRunState.getCurrent();
         PackageLib packageLib = lrs.getPackageLib();
-        for (String pattern : packageLib.PACKAGE.get(PATH).tojstring().split(";")) {
+        String packageString = packageLib.PACKAGE.get(PATH).tojstring();
+        for (String pattern : Splitter.on(';').split(packageString)) {
             FilePath filename = FilePath.of(pattern.replaceFirst("\\?", path.toString()));
             if (getScriptExists(filename)) {
                 return new ResourceId(MediaType.SCRIPT, filename);

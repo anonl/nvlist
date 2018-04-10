@@ -12,9 +12,13 @@ end
 function titlescreen()
 	print("titlescreen")
 	print(System.getEnv())
+
+    local i = img("ziponly", 200, 200)
+    i:setAlign(0.5, 0.5)
     
     --local slot = saveScreen()
     --Log.info("Saved in slot {}", slot)
+    --loadScreen()
     
     --testTextLog()
     --testGuiScreen()
