@@ -24,8 +24,11 @@ public final class GdxScreenshotUtil {
         return pixmap;
     }
 
-    @Nullable
-    public static Pixmap getPixels(IScreenshot screenshot) {
+    /**
+     * Returns a reference to the backing pixmap of the given screenshot. This method may fail either because
+     * the screenshot has no backing pixmap, or if the specific type of screenshot isn't supported.
+     */
+    public static @Nullable Pixmap getPixels(IScreenshot screenshot) {
         ITextureData textureData = screenshot.getPixels();
         if (textureData instanceof PixelTextureData) {
             PixelTextureData pixelData = (PixelTextureData)textureData;

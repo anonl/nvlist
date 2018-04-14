@@ -266,6 +266,7 @@ public class SaveModule implements ISaveModule {
 
         try {
             ObjectDeserializer is = luaSerializer.openDeserializer(in);
+            is.setDepthWarnLimit(100);
             try {
                 novel.readAttributes(is);
             } catch (ClassNotFoundException e) {
