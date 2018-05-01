@@ -4,6 +4,7 @@ import static nl.weeaboo.vn.core.NovelPrefs.HEIGHT;
 import static nl.weeaboo.vn.core.NovelPrefs.WIDTH;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
@@ -70,7 +71,12 @@ public class EnvironmentFactory {
         env.playTimer = new PlayTimer();
 
         // Init Lua script env
-        LuaRunState runState = new LuaRunState();
+        LuaRunState runState;
+        try {
+            runState = LuaRunState.create();
+        } catch (LuaException e) {
+            throw new InitException("Error instantiating Lua context", e);
+        }
         LuaScriptLoader scriptLoader = LuaScriptLoader.newInstance(env);
         LuaScriptEnv scriptEnv = new LuaScriptEnv(runState, scriptLoader);
         env.scriptEnv = scriptEnv;

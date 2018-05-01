@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.script.lua;
 import org.junit.Assert;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
@@ -26,7 +27,12 @@ public final class LuaTestUtil {
 
     /** Creates a new run state and registers it on the current thread. */
     public static LuaRunState newRunState() {
-        LuaRunState runState = new LuaRunState();
+        LuaRunState runState;
+        try {
+            runState = LuaRunState.create();
+        } catch (LuaException e) {
+            throw new AssertionError("Error instantiating Lua context", e);
+        }
         runState.registerOnThread();
         return runState;
     }

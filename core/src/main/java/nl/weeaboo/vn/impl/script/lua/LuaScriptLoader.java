@@ -22,12 +22,10 @@ import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.io.StreamUtil;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.compiler.ScriptLoader;
+import nl.weeaboo.lua2.lib.ILuaResourceFinder;
 import nl.weeaboo.lua2.lib.LuaResource;
-import nl.weeaboo.lua2.lib.LuaResourceFinder;
-import nl.weeaboo.lua2.stdlib.BaseLib;
-import nl.weeaboo.lua2.stdlib.PackageLib;
 import nl.weeaboo.lua2.vm.LuaError;
-import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISeenLogHolder;
@@ -44,11 +42,9 @@ import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
 @CustomSerializable
-public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
+public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
-
-    private static final LuaString PATH = LuaString.valueOf("path");
 
     private final ISeenLogHolder seenLog;
     private final LuaScriptResourceLoader resourceLoader;
@@ -86,9 +82,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     void initEnv() {
         LuaRunState lrs = LuaRunState.getCurrent();
 
-        PackageLib packageLib = lrs.getPackageLib();
-        packageLib.setLuaPath("?.lvn;?.lua");
-
+        lrs.setLuaPath("?.lvn;?.lua");
         lrs.setResourceFinder(this);
     }
 
@@ -118,9 +112,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
 
         // Use Lua PATH to find the file
         LuaRunState lrs = LuaRunState.getCurrent();
-        PackageLib packageLib = lrs.getPackageLib();
-        String packageString = packageLib.PACKAGE.get(PATH).tojstring();
-        for (String pattern : Splitter.on(';').split(packageString)) {
+        for (String pattern : Splitter.on(';').split(lrs.getLuaPath())) {
             FilePath filename = FilePath.of(pattern.replaceFirst("\\?", path.toString()));
             if (getScriptExists(filename)) {
                 return new ResourceId(MediaType.SCRIPT, filename);
@@ -194,7 +186,7 @@ public class LuaScriptLoader implements IScriptLoader, LuaResourceFinder {
     public void loadScript(IScriptThread thread, FilePath filename) throws IOException, ScriptException {
         LuaScriptThread luaThread = (LuaScriptThread)thread;
 
-        Varargs loadResult = BaseLib.loadFile(filename.toString());
+        Varargs loadResult = ScriptLoader.loadFile(filename.toString());
         if (!loadResult.arg1().isclosure()) {
             throw new ScriptException("Error loading script, " + filename + ": " + loadResult.arg(2));
         }

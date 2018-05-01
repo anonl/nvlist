@@ -24,23 +24,20 @@ class LuaScriptFunction implements IScriptFunction {
     @Override
     public void call() throws ScriptException {
         LuaRunState runState = LuaImpl.getRunState();
-        call(runState.getCurrentLink());
+
+        call(runState.getMainThread());
     }
 
-    void call(ILuaLink currentLink) throws ScriptException {
+    void call(ILuaLink link) throws ScriptException {
         LuaRunState runState = LuaImpl.getRunState();
-        if (runState == null || currentLink == null) {
-            throw new ScriptException("Unable to call Lua function -- no thread is current");
+        if (runState == null || link == null) {
+            throw new ScriptException("Unable to call Lua function -- no thread is running");
         }
 
-        ILuaLink oldLink = runState.getCurrentLink();
         try {
-            runState.setCurrentLink(currentLink);
-            currentLink.call(func, args);
+            link.call(func, args);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error calling function: " + this, e);
-        } finally {
-            runState.setCurrentLink(oldLink);
         }
     }
 

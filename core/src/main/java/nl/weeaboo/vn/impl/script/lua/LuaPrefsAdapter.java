@@ -40,8 +40,8 @@ public class LuaPrefsAdapter {
      */
     public LuaTable createPrefsTable() {
         LuaTable mt = new LuaTable();
-        mt.rawset(LuaConstants.INDEX, getter);
-        // mt.rawset(LuaConstants.NEWINDEX, prefsSetterFunction);
+        mt.rawset(LuaConstants.META_INDEX, getter);
+        // mt.rawset(LuaConstants.META_NEWINDEX, prefsSetterFunction);
 
         LuaTable table = new LuaTable();
         table.setmetatable(mt);
