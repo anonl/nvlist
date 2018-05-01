@@ -2,9 +2,6 @@ package nl.weeaboo.vn.impl.core;
 
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.core.EngineVersion;
-import nl.weeaboo.vn.impl.core.UnsupportedVersionException;
-
 public class EngineVersionTest {
 
     private final String currentVersion = EngineVersion.getEngineVersion().toString();

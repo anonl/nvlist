@@ -9,8 +9,6 @@ import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.styledtext.StyleParseException;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.impl.script.lib.BasicTagHandler;
-import nl.weeaboo.vn.impl.script.lib.TextLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.scene.ITextDrawable;

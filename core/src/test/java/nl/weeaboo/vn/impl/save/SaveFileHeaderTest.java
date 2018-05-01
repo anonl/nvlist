@@ -7,10 +7,6 @@ import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.impl.save.JsonUtil;
-import nl.weeaboo.vn.impl.save.SaveFileHeader;
-import nl.weeaboo.vn.impl.save.SaveFileHeaderJson;
-import nl.weeaboo.vn.impl.save.Storage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 

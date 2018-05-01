@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.gdx.res;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 /** Resource stub backed by a static reference */

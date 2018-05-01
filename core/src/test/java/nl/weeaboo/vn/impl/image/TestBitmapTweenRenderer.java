@@ -3,8 +3,6 @@ package nl.weeaboo.vn.impl.image;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
-import nl.weeaboo.vn.impl.image.BitmapTweenRenderer;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 

@@ -9,8 +9,6 @@ import org.junit.Test;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.video.VideoModule;
-import nl.weeaboo.vn.impl.video.VideoResourceLoader;
 import nl.weeaboo.vn.video.IVideo;
 
 public class VideoModuleTest {

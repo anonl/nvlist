@@ -11,9 +11,6 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.image.NinePatchAssert;
-import nl.weeaboo.vn.impl.scene.Button;
-import nl.weeaboo.vn.impl.scene.ButtonImageLoader;
-import nl.weeaboo.vn.impl.scene.ButtonModel;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.scene.ButtonViewState;
 

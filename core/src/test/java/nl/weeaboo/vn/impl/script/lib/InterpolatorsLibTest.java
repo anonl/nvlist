@@ -6,7 +6,6 @@ import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.vn.core.Interpolators;
-import nl.weeaboo.vn.impl.script.lib.InterpolatorsLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.ScriptException;
 

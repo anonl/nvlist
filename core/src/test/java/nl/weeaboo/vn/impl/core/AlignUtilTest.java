@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.Direction;
-import nl.weeaboo.vn.impl.core.AlignUtil;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.math.Vec2;
 

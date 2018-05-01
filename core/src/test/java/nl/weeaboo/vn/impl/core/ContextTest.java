@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.impl.core.Context;
-import nl.weeaboo.vn.impl.core.ContextManager;
 
 public class ContextTest  {
 

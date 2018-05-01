@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.layout;
 import org.junit.Assert;
 
 import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.impl.layout.DummyLayoutElem;
 import nl.weeaboo.vn.layout.ILayoutGroup;
 
 final class LayoutTestHelper {

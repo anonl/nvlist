@@ -7,7 +7,6 @@ import org.junit.Test;
 import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.impl.scene.TextDrawable;
 import nl.weeaboo.vn.impl.text.MockTextRenderer;
 import nl.weeaboo.vn.text.ITextRenderer;
 

@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.impl.script.lib;
 
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.lib.BaseLib;
+import nl.weeaboo.lua2.stdlib.BaseLib;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.IEnvironment;

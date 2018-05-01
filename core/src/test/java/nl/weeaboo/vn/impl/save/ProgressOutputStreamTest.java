@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.impl.core.TestProgressListener;
-import nl.weeaboo.vn.impl.save.ProgressOutputStream;
 
 public class ProgressOutputStreamTest {
 

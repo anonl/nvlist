@@ -8,9 +8,6 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.impl.script.lvn.CompiledLvnFile;
-import nl.weeaboo.vn.impl.script.lvn.LvnLine;
-import nl.weeaboo.vn.impl.script.lvn.LvnMode;
 
 public class CompiledLvnFileTest {
 

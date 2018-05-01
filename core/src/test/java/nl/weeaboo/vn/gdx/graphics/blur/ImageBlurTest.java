@@ -12,7 +12,6 @@ import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.PremultUtil;
-import nl.weeaboo.vn.gdx.graphics.blur.ImageBlur;
 
 public class ImageBlurTest {
 

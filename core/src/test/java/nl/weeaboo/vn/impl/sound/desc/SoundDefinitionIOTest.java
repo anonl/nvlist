@@ -22,8 +22,6 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
-import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionIO;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
 
 public class SoundDefinitionIOTest {

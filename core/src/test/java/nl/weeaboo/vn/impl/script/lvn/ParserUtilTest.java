@@ -7,8 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.script.lvn.ParserUtil;
-
 public class ParserUtilTest {
 
     @Test
