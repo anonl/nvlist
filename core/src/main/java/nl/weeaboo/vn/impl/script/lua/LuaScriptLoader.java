@@ -21,11 +21,11 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemView;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.io.StreamUtil;
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.compiler.ScriptLoader;
 import nl.weeaboo.lua2.lib.ILuaResourceFinder;
 import nl.weeaboo.lua2.lib.LuaResource;
-import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISeenLogHolder;
@@ -96,11 +96,11 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
         try {
             return luaOpenScript(resourceId);
         } catch (LvnParseException e) {
-            throw new LuaError(e);
+            throw LuaException.wrap("Error parsing script: " + filename, e);
         } catch (FileNotFoundException e) {
             return null;
         } catch (IOException e) {
-            throw new LuaError(e);
+            throw LuaException.wrap("Error reading script: " + filename, e);
         }
     }
 

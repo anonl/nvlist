@@ -5,7 +5,7 @@ import nl.weeaboo.vn.script.ScriptException;
 
 final class LuaImpl {
 
-    static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 2L;
 
     private LuaImpl() {
     }

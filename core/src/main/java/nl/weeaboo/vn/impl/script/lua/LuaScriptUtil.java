@@ -9,7 +9,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
@@ -59,9 +59,10 @@ public final class LuaScriptUtil {
      * @see LuaLink#setPersistent(boolean)
      */
     public static LuaScriptThread createPersistentThread(LuaRunState runState, LuaValue environment) {
-        LuaLink luaLink = new LuaLink(runState, environment);
-        luaLink.setPersistent(true);
-        return new LuaScriptThread(luaLink);
+        LuaThread thread = runState.newThread();
+        // TODO: Fix
+        // thread.setPersistent(true);
+        return new LuaScriptThread(thread);
     }
 
     /**

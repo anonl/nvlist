@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.compiler.LoadState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
-import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
@@ -207,7 +207,7 @@ public class TextLib extends LuaLib {
                 func = ipair.arg(2);
                 try {
                     env = oldTriggers.getfenv();
-                } catch (LuaError le) {
+                } catch (LuaException le) {
                     // This value has no fenv (not an error)
                     LOG.debug("No fenv for function embedded in text: #{}", oldTableIndex);
                 }

@@ -46,6 +46,8 @@ Changes:
  [2017-12-21]
  * Removed maxLineLength from LeftCurly (attribute no longer supported by Checkstyle)
  * Removed FileContentsHolder element (no longer supported by Checkstyle)
+ [2018-05-01]
+ * Allow suppression using @SuppressWarnings annotation
 -->
 
 <module name = "Checker">
@@ -217,5 +219,12 @@ Changes:
             <property name="max" value="6"/>
         </module>
         <module name="MutableException" />
+        <module name="SuppressWarningsHolder" />
+        
+        <!-- Make comments visible to suppression comment filter -->
+        <module name="FileContentsHolder"/>
     </module>
+    
+    <module name="SuppressWarningsFilter" />
+    <module name="SuppressionCommentFilter" />
 </module>

@@ -46,7 +46,7 @@ public class LuaScriptUtilTest {
         ScriptException converted = LuaScriptUtil.toScriptException("newMessage", original);
 
         // The conversion doesn't wrap the entire exception in another layer!
-        Assert.assertEquals("newMessage: message: cause", converted.getMessage());
+        Assert.assertEquals("newMessage: message", converted.getMessage());
         Assert.assertSame(original.getCause(), converted.getCause());
     }
 

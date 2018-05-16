@@ -9,10 +9,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.lib.VarArgFunction;
 import nl.weeaboo.lua2.vm.LuaConstants;
-import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaUserdata;
 import nl.weeaboo.lua2.vm.LuaValue;
@@ -74,7 +74,7 @@ public class LuaLibTest {
         Assert.assertEquals(0, out.narg());
     }
 
-    @Test(expected = LuaError.class)
+    @Test(expected = LuaException.class)
     public void scriptFunctionThrowsException() {
         VarArgFunction method = getWrappedFunction("throwsException");
 
@@ -82,7 +82,7 @@ public class LuaLibTest {
         method.invoke(LuaUserdata.userdataOf(new RuntimeException()));
     }
 
-    @Test(expected = LuaError.class)
+    @Test(expected = LuaException.class)
     public void inaccessibleScriptFunction() {
         VarArgFunction method = getWrappedFunction("privateMethod");
 

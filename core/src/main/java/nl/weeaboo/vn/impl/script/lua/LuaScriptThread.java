@@ -6,9 +6,10 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.link.LuaLink;
+import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.impl.core.Indirect;
 import nl.weeaboo.vn.script.IScriptThread;
@@ -18,20 +19,20 @@ public class LuaScriptThread implements IScriptThread {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
-    final Indirect<LuaLink> luaLink;
+    final Indirect<LuaThread> threadRef;
 
-    LuaScriptThread(LuaLink link) {
-        this.luaLink = Indirect.of(link);
+    LuaScriptThread(LuaThread thread) {
+        this.threadRef = Indirect.of(thread);
     }
 
     @Override
     public void destroy() {
-        luaLink.get().destroy();
+        threadRef.get().destroy();
     }
 
     @Override
     public boolean isDestroyed() {
-        return luaLink.get().isFinished();
+        return threadRef.get().isFinished();
     }
 
     /**
@@ -39,11 +40,11 @@ public class LuaScriptThread implements IScriptThread {
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
      */
     public Varargs eval(String code) throws ScriptException {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
         try {
-            LuaClosure func = LuaUtil.compileForEval(code, link.getThread().getCallEnv());
-            return link.call(func, LuaConstants.NONE);
+            LuaClosure func = LuaUtil.compileForEval(code, thread.getCallEnv());
+            return thread.callFunctionInThread(func, LuaConstants.NONE);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
         }
@@ -54,10 +55,12 @@ public class LuaScriptThread implements IScriptThread {
      * @throws ScriptException If the function doesn't exist, or the Lua code throws an exception.
      */
     public void call(String funcName, Object... args) throws ScriptException {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
         try {
-            link.call(funcName, args);
+            LuaClosure function = LuaUtil.getEntryForPath(thread, funcName).checkclosure();
+            Varargs luaArgs = CoerceJavaToLua.coerceArgs(args);
+            thread.callFunctionInThread(function, luaArgs);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
         }
@@ -68,9 +71,9 @@ public class LuaScriptThread implements IScriptThread {
      * @throws ScriptException If the Lua function throws an exception.
      */
     public void call(LuaScriptFunction func) throws ScriptException {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
-        func.call(link);
+        func.call(thread);
     }
 
     /**
@@ -78,10 +81,10 @@ public class LuaScriptThread implements IScriptThread {
      * @throws ScriptException If the Lua function throws an exception.
      */
     public void call(LuaClosure func) throws ScriptException {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
         try {
-            link.call(func, LuaConstants.NONE);
+            thread.callFunctionInThread(func, LuaConstants.NONE);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
         }
@@ -89,10 +92,10 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public void update() throws ScriptException {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
         try {
-            link.update();
+            thread.resume(LuaConstants.NONE);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
         }
@@ -100,29 +103,29 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public boolean isRunnable() {
-        LuaLink link = luaLink.get();
+        LuaThread thread = threadRef.get();
 
-        return link.isRunnable();
+        return !thread.isFinished();
     }
 
     @Override
     public String toString() {
-        LuaLink link = luaLink.get();
-        if (link == null) {
+        LuaThread thread = threadRef.get();
+        if (thread == null) {
             return "<no-thread-active>";
         }
 
-        return String.valueOf(link.getThread());
+        return String.valueOf(thread);
     }
 
     @Override
     public List<String> getStackTrace() {
-        LuaLink link = luaLink.get();
-        if (link == null) {
+        LuaThread thread = threadRef.get();
+        if (thread == null) {
             return ImmutableList.of();
         }
 
-        return LuaUtil.getLuaStack(link.getThread());
+        return LuaUtil.getLuaStack(thread);
     }
 
 }

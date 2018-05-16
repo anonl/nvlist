@@ -27,3 +27,5 @@ project(':nvlist-buildtools').projectDir=new File('buildtools')
 
 include 'nvlist-buildgui'
 project(':nvlist-buildgui').projectDir=new File('buildgui')
+
+includeBuild '../luajpp2'
