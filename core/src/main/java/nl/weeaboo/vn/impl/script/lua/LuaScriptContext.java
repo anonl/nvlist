@@ -43,12 +43,11 @@ public class LuaScriptContext implements IScriptContext {
         eventDispatcher = new ScriptEventDispatcher();
 
         LuaRunState lrs = scriptEnv.getRunState();
-        LuaTable globals = lrs.getGlobalEnvironment();
 
-        eventThread = LuaScriptUtil.createPersistentThread(lrs, globals);
+        eventThread = LuaScriptUtil.createPersistentThread(lrs);
         threads.add(eventThread);
 
-        mainThread = LuaScriptUtil.createPersistentThread(lrs, globals);
+        mainThread = LuaScriptUtil.createPersistentThread(lrs);
         threads.add(mainThread);
     }
 

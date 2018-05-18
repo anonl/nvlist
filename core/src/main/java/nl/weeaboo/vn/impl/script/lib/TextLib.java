@@ -13,6 +13,7 @@ import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.compiler.LoadState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaFunction;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
@@ -198,7 +199,10 @@ public class TextLib extends LuaLib {
 
             LuaThread thread = lrs.getRunningThread();
             if (thread != null) {
-                env = thread.getCallEnv();
+                LuaFunction callingFunction = thread.getCallstackFunction(1);
+                if (callingFunction != null) {
+                    env = callingFunction.getfenv();
+                }
             }
 
             if (oldTriggers != null) {

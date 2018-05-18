@@ -32,7 +32,7 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public boolean isDestroyed() {
-        return threadRef.get().isFinished();
+        return threadRef.get().isDead();
     }
 
     /**
@@ -43,7 +43,7 @@ public class LuaScriptThread implements IScriptThread {
         LuaThread thread = threadRef.get();
 
         try {
-            LuaClosure func = LuaUtil.compileForEval(code, thread.getCallEnv());
+            LuaClosure func = LuaUtil.compileForEval(code, thread.getfenv());
             return thread.callFunctionInThread(func, LuaConstants.NONE);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
@@ -105,7 +105,7 @@ public class LuaScriptThread implements IScriptThread {
     public boolean isRunnable() {
         LuaThread thread = threadRef.get();
 
-        return !thread.isFinished();
+        return thread.isRunnable();
     }
 
     @Override
