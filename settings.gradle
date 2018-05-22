@@ -4,28 +4,18 @@
 
 rootProject.name = 'nvlist'
 
-include 'nvlist-api'
-project(':nvlist-api').projectDir=new File('api')
+def subProjects = [
+    'api',
+    'core',
+    'desktop',
+    'android',
+    'ios',
+    'docs',
+    'buildtools',
+    'buildgui',
+]
 
-include 'nvlist-core'
-project(':nvlist-core').projectDir=new File('core')
-
-include 'nvlist-desktop'
-project(':nvlist-desktop').projectDir=new File('desktop')
-
-include 'nvlist-android'
-project(':nvlist-android').projectDir=new File('android')
-
-include 'nvlist-ios'
-project(':nvlist-ios').projectDir=new File('ios')
-
-include 'nvlist-docs'
-project(':nvlist-docs').projectDir=new File('docs')
-
-include 'nvlist-buildtools'
-project(':nvlist-buildtools').projectDir=new File('buildtools')
-
-include 'nvlist-buildgui'
-project(':nvlist-buildgui').projectDir=new File('buildgui')
-
-includeBuild '../luajpp2'
+subProjects.each { proj ->
+    include "nvlist-$proj"
+    project(":nvlist-$proj").projectDir = new File(proj)
+}
