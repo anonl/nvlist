@@ -94,10 +94,12 @@ public class LuaScriptThread implements IScriptThread {
     public void update() throws ScriptException {
         LuaThread thread = threadRef.get();
 
-        try {
-            thread.resume(LuaConstants.NONE);
-        } catch (LuaException e) {
-            throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
+        if (!thread.isDead()) {
+            try {
+                thread.resume(LuaConstants.NONE);
+            } catch (LuaException e) {
+                throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
+            }
         }
     }
 
