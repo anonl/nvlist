@@ -2,8 +2,6 @@ package nl.weeaboo.vn.impl.video;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
-import nl.weeaboo.vn.impl.video.INativeVideo;
-import nl.weeaboo.vn.impl.video.INativeVideoFactory;
 import nl.weeaboo.vn.render.IRenderEnv;
 
 public class MockNativeVideoFactory implements INativeVideoFactory {

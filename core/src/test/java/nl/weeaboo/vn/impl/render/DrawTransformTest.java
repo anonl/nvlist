@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.impl.render.DrawTransform;
 import nl.weeaboo.vn.math.Matrix;
 
 public class DrawTransformTest {

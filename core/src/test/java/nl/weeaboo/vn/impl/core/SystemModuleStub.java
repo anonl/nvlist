@@ -5,7 +5,6 @@ import com.badlogic.gdx.Application.ApplicationType;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
-import nl.weeaboo.vn.impl.core.SystemEnv;
 
 public class SystemModuleStub implements ISystemModule {
 

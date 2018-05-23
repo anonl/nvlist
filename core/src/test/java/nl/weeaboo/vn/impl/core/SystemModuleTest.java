@@ -7,8 +7,6 @@ import org.junit.Test;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.core.StaticRef;
 
 public class SystemModuleTest {
 

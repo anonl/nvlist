@@ -1,9 +1,6 @@
 package nl.weeaboo.vn.impl.core;
 
 import nl.weeaboo.vn.core.IContextFactory;
-import nl.weeaboo.vn.impl.core.Context;
-import nl.weeaboo.vn.impl.core.ContextArgs;
-import nl.weeaboo.vn.impl.core.SkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;

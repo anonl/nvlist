@@ -3,8 +3,6 @@ package nl.weeaboo.vn.impl.signal;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.signal.SignalSupport;
-
 public class SignalSupportTest {
 
     private SignalSupport signalSupport;

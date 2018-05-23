@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.scene.Button;
-import nl.weeaboo.vn.impl.scene.ButtonModel;
-import nl.weeaboo.vn.impl.scene.ButtonRenderer;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.text.TestFontStore;
 import nl.weeaboo.vn.scene.ButtonViewState;

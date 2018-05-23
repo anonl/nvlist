@@ -10,7 +10,6 @@ import nl.weeaboo.vn.impl.core.TestInputAdapter;
 import nl.weeaboo.vn.impl.input.Input;
 import nl.weeaboo.vn.impl.input.InputConfig;
 import nl.weeaboo.vn.impl.input.NativeInput;
-import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.script.ScriptFunctionStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;

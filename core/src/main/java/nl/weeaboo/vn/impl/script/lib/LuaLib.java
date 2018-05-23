@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.lib.VarArgFunction;
 import nl.weeaboo.lua2.vm.LuaConstants;
-import nl.weeaboo.lua2.vm.LuaError;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
@@ -88,6 +88,8 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
         private transient Method method;
 
         public FunctionWrapper(LuaLib object, String methodName, Class<?>[] parameterTypes) {
+            this.name = methodName;
+
             this.object = object;
             this.methodName = methodName;
             this.parameterTypes = parameterTypes.clone();
@@ -106,14 +108,14 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
                     return LuaConstants.NONE;
                 } else {
                     // This may happen if the methods return type changed (can happen due to serialization)
-                    throw new LuaError("Java method (" + method + ") returned non-varargs: "
+                    throw new LuaException("Java method (" + method + ") returned non-varargs: "
                             + (result != null ? result.getClass().getName() : "null"));
                 }
             } catch (InvocationTargetException ite) {
                 Throwable cause = ite.getCause();
-                throw new LuaError(invokeErrorMessage(args, cause), cause);
+                throw LuaException.wrap(invokeErrorMessage(args, cause), cause);
             } catch (Exception e) {
-                throw new LuaError(invokeErrorMessage(args, e), e);
+                throw LuaException.wrap(invokeErrorMessage(args, e), e);
             }
         }
 

@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.scene;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.scene.ILayer;
 

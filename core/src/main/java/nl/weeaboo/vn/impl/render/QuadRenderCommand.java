@@ -15,10 +15,9 @@ public final class QuadRenderCommand extends BaseRenderCommand {
     public final Area2D bounds;
     public final Area2D uv;
 
-    // CHECKSTYLE:OFF - I can't be arsed to fix this
+    @SuppressWarnings("checkstyle:ParameterNumber") // I can't be arsed to fix this
     public QuadRenderCommand(short z, boolean clipEnabled, BlendMode blendMode,
             int argb, ITexture tex, Matrix transform, Area2D bounds, Area2D uv) {
-    // CHECKSTYLE:ON
 
         super(ID, z, clipEnabled, blendMode, argb, (byte)tex.hashCode());
 

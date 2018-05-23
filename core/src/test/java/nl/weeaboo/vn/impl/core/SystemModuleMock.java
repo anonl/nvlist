@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.google.common.collect.Sets;
 
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.impl.core.SystemModule;
 
 class SystemModuleMock extends SystemModule {
 

@@ -2,8 +2,6 @@ package nl.weeaboo.vn.impl.sound.desc;
 
 import org.junit.Assert;
 
-import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
-
 final class SoundDefinitionTestHelper {
 
     public SoundDefinition findDefById(Iterable<SoundDefinition> available, String filename) {

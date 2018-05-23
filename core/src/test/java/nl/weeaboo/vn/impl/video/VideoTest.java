@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
-import nl.weeaboo.vn.impl.video.Video;
 
 public class VideoTest {
 

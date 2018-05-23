@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.impl.script.lib.CoreLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 

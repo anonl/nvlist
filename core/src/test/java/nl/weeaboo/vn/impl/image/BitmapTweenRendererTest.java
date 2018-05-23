@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.image.IImageModule;
-import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 
 public class BitmapTweenRendererTest {

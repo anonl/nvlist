@@ -38,7 +38,7 @@ local function saveLoadScreen(isSave)
         showScreen()
         setContextActive(oldContext, true)
         
-        if slot ~= nil then
+        if slot > 0 then
             if isSave then
                 -- Take a screenshot to add to the save file
                 local ss = screenshot(getRootLayer(), -32768)

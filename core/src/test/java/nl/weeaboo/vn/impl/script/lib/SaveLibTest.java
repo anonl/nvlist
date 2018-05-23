@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.impl.save.SaveModule;
 import nl.weeaboo.vn.impl.save.SaveTestUtil;
-import nl.weeaboo.vn.impl.script.lib.SaveLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 
 public class SaveLibTest extends AbstractLibTest {

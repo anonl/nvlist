@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.sound;
 import java.io.IOException;
 
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.impl.sound.AbstractSound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
