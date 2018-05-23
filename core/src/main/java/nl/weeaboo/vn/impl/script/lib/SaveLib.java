@@ -98,7 +98,7 @@ public class SaveLib extends LuaLib {
         saveParams.setUserData(userData);
 
         // Add screenshot
-        handleScreenshotParam(args.checktable(3), saveParams);
+        handleScreenshotParam(args.arg(3), saveParams);
 
         // Save
         final LuaRunState lrs = LuaRunState.getCurrent();
