@@ -265,6 +265,10 @@ public class ImageFxLib extends LuaLib {
         for (int n = 1; (v = table.get(n)) != LuaNil.NIL; n++) {
             // texture
             ITexture tex = LuaConvertUtil.getTextureArg(imageModule, v.get(S_TEX));
+            if (tex == null) {
+                continue;
+            }
+
             TextureEntry entry = new TextureEntry(tex);
 
             // (optional) posistion

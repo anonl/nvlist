@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.BlendMode;
@@ -77,7 +78,7 @@ public final class ImageCompositeConfig implements Serializable {
         private BlendMode blendMode = BlendMode.DEFAULT;
 
         public TextureEntry(ITexture texture) {
-            this.texture = texture;
+            this.texture = Checks.checkNotNull(texture);
             this.bounds = Rect2D.of(0, 0, texture.getWidth(), texture.getHeight());
         }
 
