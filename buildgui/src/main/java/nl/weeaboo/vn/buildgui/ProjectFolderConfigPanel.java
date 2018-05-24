@@ -6,16 +6,18 @@ import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
+import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 
 @SuppressWarnings("serial")
 final class ProjectFolderConfigPanel extends JPanel implements IProjectModelListener {
@@ -67,13 +69,19 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
     }
 
     private void doCreateProject() {
-        if (doOpenProject()) {
-            IBuildController buildController = guiController.getBuildController();
-            buildController.startInitProjectTask();
+        ProjectFolderConfig folderConfig = selectProjectFolder();
+        if (folderConfig == null) {
+            return;
         }
+
+        BuildGuiModel model = guiController.getModel();
+        model.setProjectFolders(folderConfig);
+
+        IBuildController buildController = guiController.getBuildController();
+        buildController.startInitProjectTask();
     }
 
-    private boolean doOpenProject() {
+    private @Nullable ProjectFolderConfig selectProjectFolder() {
         BuildGuiModel model = guiController.getModel();
 
         ProjectFolderConfig folderConfig = model.getProject()
@@ -82,11 +90,30 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
 
         Optional<File> newProjectFolder = selectFolder(folderConfig.getProjectFolder());
         if (!newProjectFolder.isPresent()) {
-            return false; // Folder selection was cancelled
+            return null; // Folder selection was cancelled
         }
 
-        model.setProjectFolders(folderConfig.withProjectFolder(newProjectFolder.get()));
-        return true;
+        return folderConfig.withProjectFolder(newProjectFolder.get());
+    }
+
+    private void doOpenProject() {
+        ProjectFolderConfig folderConfig = selectProjectFolder();
+        if (folderConfig == null) {
+            return;
+        }
+
+        if (!folderConfig.getResFolder().isDirectory()) {
+            String message = "Selected folder doesn't contain a resource folder ('res')";
+            JOptionPane.showMessageDialog(this, message, "Invalid project folder", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (!folderConfig.getBuildResFolder().isDirectory()) {
+            String message = "Selected folder doesn't contain a build-resource folder ('build-res')";
+            JOptionPane.showMessageDialog(this, message, "Invalid project folder", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BuildGuiModel model = guiController.getModel();
+        model.setProjectFolders(folderConfig);
     }
 
     private Optional<File> selectFolder(File initialSelection) {
