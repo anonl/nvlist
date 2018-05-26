@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
@@ -14,6 +18,8 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.save.ISaveModule;
 
 public abstract class AbstractNovel implements INovel {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     // --- Note: This class uses manual serialization ---
     private EnvironmentFactory envFactory;
@@ -52,6 +58,12 @@ public abstract class AbstractNovel implements INovel {
 
     @Override
     public void stop() {
+        try {
+            env.getPrefStore().saveVariables();
+        } catch (Exception e) {
+            log.warn("Error saving preferences", e);
+        }
+
         getSaveModule().savePersistent();
     }
 
@@ -81,7 +93,10 @@ public abstract class AbstractNovel implements INovel {
 
     /** Called when the global preferences change. */
     public void onPrefsChanged() {
-        env.getSystemModule().onPrefsChanged(env.getPrefStore());
+        IPreferenceStore prefsStore = env.getPrefStore();
+        for (IModule module : env.getModules()) {
+            module.onPrefsChanged(prefsStore);
+        }
     }
 
 }

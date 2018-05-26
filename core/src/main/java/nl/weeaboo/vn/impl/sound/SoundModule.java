@@ -11,10 +11,13 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.audio.Music;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.gdx.res.IResource;
+import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
@@ -23,7 +26,7 @@ import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 
-public class SoundModule implements ISoundModule {
+public class SoundModule extends AbstractModule implements ISoundModule {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SoundModule.class);
@@ -50,11 +53,15 @@ public class SoundModule implements ISoundModule {
 
     @Override
     public void destroy() {
+        super.destroy();
+
         soundController.stopAll();
     }
 
     @Override
     public void update() {
+        super.update();
+
         soundController.update();
     }
 
@@ -116,6 +123,15 @@ public class SoundModule implements ISoundModule {
     @Override
     public ISoundController getSoundController() {
         return soundController;
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
+        super.onPrefsChanged(config);
+
+        soundController.setMasterVolume(SoundType.MUSIC, config.get(NovelPrefs.MUSIC_VOLUME));
+        soundController.setMasterVolume(SoundType.SOUND, config.get(NovelPrefs.SOUND_EFFECT_VOLUME));
+        soundController.setMasterVolume(SoundType.VOICE, config.get(NovelPrefs.VOICE_VOLUME));
     }
 
 }

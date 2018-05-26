@@ -1,10 +1,11 @@
 package nl.weeaboo.vn.impl.text;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.text.ITextLog;
 import nl.weeaboo.vn.text.ITextModule;
 
-public class TextModule implements ITextModule {
+public class TextModule extends AbstractModule implements ITextModule {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;
 
@@ -16,14 +17,6 @@ public class TextModule implements ITextModule {
 
     public TextModule(TextLog textLog) {
         this.textLog = Checks.checkNotNull(textLog);
-    }
-
-    @Override
-    public void destroy() {
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override

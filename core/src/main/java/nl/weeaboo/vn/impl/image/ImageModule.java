@@ -19,6 +19,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
+import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.scene.ComponentFactory;
@@ -29,7 +30,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
 
-public class ImageModule implements IImageModule {
+public class ImageModule extends AbstractModule implements IImageModule {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(ImageModule.class);
@@ -52,14 +53,6 @@ public class ImageModule implements IImageModule {
         IRenderEnv renderEnv = env.getRenderEnv();
 
         texManager = new TextureManager(resourceLoader, renderEnv.getVirtualSize());
-    }
-
-    @Override
-    public void destroy() {
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override

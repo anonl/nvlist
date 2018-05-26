@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.core;
 
-import nl.weeaboo.prefsstore.IPreferenceStore;
-
 /** Interface for interacting with hardware and external applications. */
 public interface ISystemModule extends IModule {
 
@@ -31,13 +29,6 @@ public interface ISystemModule extends IModule {
      * Opens an external browser for the specified URL.
      */
     void openWebsite(String url);
-
-    /**
-     * Called when the user preferences have changed.
-     *
-     * @param config An object containing the user preferences.
-     */
-    void onPrefsChanged(IPreferenceStore config);
 
     /**
      * @return The system environment data.

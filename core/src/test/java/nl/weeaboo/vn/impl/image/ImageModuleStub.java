@@ -14,6 +14,7 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
+import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.TextDrawable;
@@ -23,17 +24,9 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
 
-public class ImageModuleStub implements IImageModule {
+public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public void destroy() {
-    }
-
-    @Override
-    public void update() {
-    }
 
     @Override
     public @Nullable ResourceId resolveResource(FilePath filename) {

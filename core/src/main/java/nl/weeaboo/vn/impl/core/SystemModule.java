@@ -16,7 +16,7 @@ import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 
-public class SystemModule implements ISystemModule {
+public class SystemModule extends AbstractModule implements ISystemModule {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SystemModule.class);
@@ -71,6 +71,8 @@ public class SystemModule implements ISystemModule {
 
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
+        super.onPrefsChanged(config);
+
         LOG.info("SystemEventHandler.onPrefsChanged()");
 
         call(KnownScriptFunctions.ON_PREFS_CHANGE);

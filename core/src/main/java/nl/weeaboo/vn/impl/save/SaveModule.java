@@ -30,6 +30,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.IProgressListener;
 import nl.weeaboo.vn.image.IScreenshot;
+import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.image.EmptyScreenshot;
 import nl.weeaboo.vn.impl.image.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.save.ISaveFile;
@@ -40,7 +41,7 @@ import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
 @CustomSerializable
-public class SaveModule implements ISaveModule {
+public class SaveModule extends AbstractModule implements ISaveModule {
 
     private static final long serialVersionUID = SaveImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SaveModule.class);
@@ -77,11 +78,9 @@ public class SaveModule implements ISaveModule {
 
     @Override
     public void destroy() {
-        savePersistent();
-    }
+        super.destroy();
 
-    @Override
-    public void update() {
+        savePersistent();
     }
 
     protected final SecureFileWriter getSecureFileWriter() {

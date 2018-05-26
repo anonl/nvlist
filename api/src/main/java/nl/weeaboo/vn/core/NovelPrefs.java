@@ -55,4 +55,19 @@ public final class NovelPrefs {
             50,
             "The number of pages the textlog keeps in memory.");
 
+    public static final Preference<Double> MUSIC_VOLUME = newPreference("vn.sound.volume.music",
+            "Music volume",
+            1.0,
+            "Master volume (between 0.0 and 1.0) for music.");
+
+    public static final Preference<Double> SOUND_EFFECT_VOLUME = newPreference("vn.sound.volume.sound",
+            "Sound effect volume",
+            1.0,
+            "Master volume (between 0.0 and 1.0) for sound effects.");
+
+    public static final Preference<Double> VOICE_VOLUME = newPreference("vn.sound.volume.voice",
+            "Voice volume",
+            1.0,
+            "Master volume (between 0.0 and 1.0) for voice audio.");
+
 }

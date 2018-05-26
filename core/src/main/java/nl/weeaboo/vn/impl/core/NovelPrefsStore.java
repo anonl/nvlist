@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
@@ -20,6 +22,7 @@ import nl.weeaboo.prefsstore.AbstractPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.settings.PropertiesUtil;
+import nl.weeaboo.vn.core.NovelPrefs;
 
 public final class NovelPrefsStore extends AbstractPreferenceStore {
 
@@ -29,6 +32,7 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
     private static final FilePath DEFAULTS_FILENAME = FilePath.of("prefs.default.ini");
     private static final FilePath VARIABLES_FILENAME = FilePath.of("prefs.ini");
 
+    private ImmutableSet<String> constKeys = ImmutableSet.of();
     private final IFileSystem resourceFileSystem;
     private final IWritableFileSystem outputSystem;
 
@@ -39,7 +43,9 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
 
     @Override
     public void loadVariables() throws IOException {
-        initConsts(load(resourceFileSystem, CONSTANTS_FILENAME));
+        Map<String, String> consts = load(resourceFileSystem, CONSTANTS_FILENAME);
+        constKeys = ImmutableSet.copyOf(consts.keySet());
+        initConsts(consts);
         setAll(load(resourceFileSystem, DEFAULTS_FILENAME));
         setAll(load(outputSystem, VARIABLES_FILENAME));
     }
@@ -59,12 +65,25 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
 
     @Override
     public void saveVariables() throws IOException {
+        LOG.trace("Saving preferences to file: {}", VARIABLES_FILENAME);
+
+        Map<String, String> vars = new HashMap<>();
+        for (Preference<?> pref : getDeclaredPrefs(NovelPrefs.class)) {
+            vars.put(pref.getKey(), getDefaultValueString(pref));
+        }
+        vars.putAll(getVariables());
+        vars.keySet().removeAll(constKeys);
+
         OutputStream out = outputSystem.openOutputStream(VARIABLES_FILENAME, false);
         try {
-            PropertiesUtil.save(out, getVariables());
+            PropertiesUtil.save(out, vars);
         } finally {
             out.close();
         }
+    }
+
+    private <T> String getDefaultValueString(Preference<T> pref) {
+        return pref.toString(pref.getDefaultValue());
     }
 
     /**
