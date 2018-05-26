@@ -51,7 +51,10 @@ public final class GradleBuildController implements IBuildController {
 
     @Override
     public ITask startInitProjectTask() {
-        // TODO: Actually implement this task in the Gradle build.
+        /*
+         * TODO: Actually implement this task in the Gradle build (then make the create project button visible
+         * again).
+         */
         return startTask("initProject");
     }
 

@@ -69,6 +69,13 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
     }
 
     private void doCreateProject() {
+        /*
+         * TODO: Once the initProject task is actually implemented, we can re-enable this button action.
+         */
+        JOptionPane.showMessageDialog(this, "Not implemented yet", "Error creating new project",
+                JOptionPane.ERROR_MESSAGE);
+
+        /*
         ProjectFolderConfig folderConfig = selectProjectFolder();
         if (folderConfig == null) {
             return;
@@ -79,6 +86,7 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
 
         IBuildController buildController = guiController.getBuildController();
         buildController.startInitProjectTask();
+        */
     }
 
     private @Nullable ProjectFolderConfig selectProjectFolder() {
