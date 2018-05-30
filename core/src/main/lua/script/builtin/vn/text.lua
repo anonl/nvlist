@@ -209,7 +209,7 @@ function appendText(str, meta)
     local textDrawable = getMainTextDrawable()
     local textState = getTextState()
     if textDrawable == nil then
-        Log.info("No text drawable set, unable to display text")
+        Log.warn("Unable to display text (no text drawable set) :: {}", str)
         textState:appendText(styled)
         appendTextLog(logStyled)
         return
