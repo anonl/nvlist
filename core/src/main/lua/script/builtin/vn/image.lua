@@ -59,8 +59,11 @@ end
 function img(tex, x, y, properties)
     if type(x) == "table" then
         properties = x
+        x = nil
+        y = nil
     elseif type(y) == "table" then
         properties = y
+        y = nil
     end
 
     local i = Image.createImage(getActiveLayer(), tex)
