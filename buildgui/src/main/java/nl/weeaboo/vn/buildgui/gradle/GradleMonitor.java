@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import org.gradle.tooling.BuildLauncher;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector;
 import org.slf4j.Logger;
@@ -68,17 +67,6 @@ public final class GradleMonitor implements AutoCloseable {
             connection.close();
             connection = null;
         }
-    }
-
-    <T> ModelBuilder<T> modelBuilder(Class<T> type) {
-        if (connection == null) {
-            throw new IllegalStateException("closed");
-        }
-
-        return connection.model(type)
-                .setStandardOutput(System.out)
-                .setStandardError(System.err)
-                .withArguments(getDefaultArguments());
     }
 
     BuildLauncher buildLauncher(String taskName) {

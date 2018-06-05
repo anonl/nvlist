@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.buildgui.gradle;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -109,13 +110,15 @@ public final class GradleBuildController implements IBuildController {
             cancelTokenSource = GradleConnector.newCancellationTokenSource();
 
             gradleMonitor.buildLauncher(taskName)
+                    .setStandardOutput(new OutputToLogAdapter(this::fireLogLine))
+                    .setStandardError(new OutputToLogAdapter(this::fireLogLine))
                     .addProgressListener(new ProgressListener() {
                         @Override
                         public void statusChanged(ProgressEvent event) {
                             String message = event.getDescription();
                             LOG.debug("[gradle] {}", message);
 
-                            logListeners.forEach(ls -> ls.onLogLine(message));
+                            fireLogLine(message, LogStyles.DEBUG_COLOR);
                             fireProgress(message);
                         }
                     })
@@ -126,7 +129,7 @@ public final class GradleBuildController implements IBuildController {
                             String message = "Task completed";
                             LOG.info("[gradle] {}", message);
 
-                            logListeners.forEach(ls -> ls.onLogLine(message));
+                            fireLogLine(message, LogStyles.GRADLE_COMPLETE_COLOR);
                             fireFinished(TaskResultType.SUCCESS, message);
                         }
 
@@ -135,7 +138,7 @@ public final class GradleBuildController implements IBuildController {
                             String longMessage = "Task failed: " + Throwables.getStackTraceAsString(failure);
                             LOG.warn("[gradle] {}", longMessage);
 
-                            logListeners.forEach(ls -> ls.onLogLine(longMessage));
+                            fireLogLine(longMessage, LogStyles.GRADLE_FAILED_COLOR);
 
                             /*
                              * Note: Use the cause's message, since the outer exception's message just says
@@ -150,6 +153,10 @@ public final class GradleBuildController implements IBuildController {
                             fireFinished(TaskResultType.FAILED, shortMessage);
                         }
                     });
+        }
+
+        private void fireLogLine(String line, Color color) {
+            logListeners.forEach(ls -> ls.onLogLine(line, color));
         }
     }
 

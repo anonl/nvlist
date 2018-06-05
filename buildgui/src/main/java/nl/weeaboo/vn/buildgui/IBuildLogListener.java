@@ -1,10 +1,21 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.awt.Color;
+
 public interface IBuildLogListener {
 
     /**
      * Callback that's called when the build process generates a log message.
+     *
+     * @see #onLogLine(String, Color)
      */
-    void onLogLine(String message);
+    default void onLogLine(String message) {
+        onLogLine(message, Color.BLACK);
+    }
+
+    /**
+     * Callback that's called when the build process generates a log message.
+     */
+    void onLogLine(String message, Color color);
 
 }
