@@ -13,7 +13,7 @@ function titlescreen()
     print("titlescreen")
     print(System.getEnv())
 
-    local i = img("ziponly", 200, 200)
+    local i = img("test", 200, 200)
     i:setAlign(0.5, 0.5)
     
     --[[
@@ -24,6 +24,12 @@ function titlescreen()
     
     --testTextLog()
     --testGuiScreen()
+
+    for i=1,3 do
+        print("Show choice: ", i)
+        local selected = choice("one two three", "b", "Agh")
+        print("selected", selected)
+    end
 
     registerSpeaker("guy", "Mr. Guy")
     registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
@@ -65,11 +71,6 @@ function titlescreen()
 
     -- button("gui/button")
     
-    for i=1,3 do
-        local selected = choice("one two three", "b", "Agh")
-        print("selected", selected)
-    end
-
     --movie("test")
     call("images")    
     --call("speakers")

@@ -96,6 +96,15 @@ project(':android') {
     }
     
     android {
+        signingConfigs {
+            release {
+                keyAlias  settings.keyAlias
+                keyPassword  settings.keyPassword
+                storeFile new File(buildResDir, settings.keyStoreFile)
+                storePassword settings.keyStorePassword
+            }
+        }
+
         defaultConfig {
             applicationId settings.appPackage
             versionCode settings.androidVersionCode as int
@@ -104,12 +113,18 @@ project(':android') {
                 androidMain: settings.androidMain
             ]
         }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
     }
 
     // Run installed app through adb
     task runInstalled(type: Exec) {
         def adb = android.getAdbExe()
-        def target = settings.androidPackage + '/' + settings.androidMain
+        def target = settings.appPackage + '/' + settings.androidMain
         commandLine "$adb", 'shell', 'am', 'start', '-n', target
     }
     // Install, then run debug build
