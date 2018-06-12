@@ -23,23 +23,23 @@ android {
 
         instrumentTest.setRoot('tests')
     }
-    
+
     compileOptions {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion
     }
-        
+
     lintOptions {
         textOutput 'stdout'
         textReport true
     }
-    
+
     if (android.hasProperty("applicationVariants")) {
         android.applicationVariants.all { variant ->
             variant.mergeAssets.doLast {
                 // Generate an assets.list file containing all assets files in the APK
                 def fileTree = fileTree(dir: outputDir)
-                
+
                 def assetList = ""
                 fileTree.visit {
                     assetList <<= it.relativePath
@@ -49,12 +49,16 @@ android {
                     }
                     assetList <<= "\n"
                 }
-            
+
                 def outputFile = new File(outputDir, "assets.list")
                 outputFile.text = assetList
-                
+
                 logger.info("Wrote assets list to {}", outputFile)
             }
         }
-    }    
+    }
+}
+
+task assembleDist {
+    dependsOn 'assembleRelease'
 }
