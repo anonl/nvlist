@@ -2,14 +2,20 @@ package nl.weeaboo.vn.impl.render.fx;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.gdx.graphics.GLBlendMode;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTask;
@@ -18,6 +24,7 @@ import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig.TextureEntry;
 public final class ImageCompositeTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = LoggerFactory.getLogger(ImageCompositeTask.class);
 
     private final ImageCompositeConfig config;
 
@@ -29,9 +36,15 @@ public final class ImageCompositeTask extends OffscreenRenderTask {
 
     @Override
     protected Pixmap render(RenderContext context) throws IOException {
+        Dim outerSize = context.outerSize;
+        if (outerSize.w <= 0 || outerSize.h <= 0) {
+            LOG.info("Skip {}, outerSize is empty: {}", getClass().getSimpleName(), outerSize);
+            return PixmapUtil.newUninitializedPixmap(outerSize.w, outerSize.h, Format.RGBA8888);
+        }
+
         PingPongFbo fbos = null;
         try {
-            fbos = new PingPongFbo(context.outerSize);
+            fbos = new PingPongFbo(outerSize);
             fbos.start();
 
             SpriteBatch batch = context.batch;

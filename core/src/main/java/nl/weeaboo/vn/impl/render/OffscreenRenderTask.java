@@ -111,13 +111,13 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
             Pixmap pixels = render(renderContext);
 
             resultPixels = PixelTextureData.fromPremultipliedPixmap(pixels);
+            LOG.debug("Offscreen render task {} took {}", this, sw);
         } catch (Exception e) {
             LOG.error("Error in offscreen render task: {}", this, e);
+            cancel(); // If the task fails, call the cancel() method to abort
         } finally {
             renderContext.dispose();
         }
-
-        LOG.debug("Offscreen render task {} took {}", this, sw);
     }
 
     protected abstract Pixmap render(RenderContext context) throws IOException;

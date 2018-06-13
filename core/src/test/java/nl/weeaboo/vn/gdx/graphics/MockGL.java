@@ -7,17 +7,19 @@ import java.nio.IntBuffer;
 
 import javax.annotation.Nullable;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.profiling.GL20Profiler;
+import com.badlogic.gdx.graphics.profiling.GL20Interceptor;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 
-public class MockGL extends GL20Profiler {
+public class MockGL extends GL20Interceptor {
 
     private int textureId;
     private int shaderId;
     private int programId;
 
     private MockGL() {
-        super(null);
+        super(new GLProfiler(Gdx.graphics), newInstance());
     }
 
     /**

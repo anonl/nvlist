@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.impl.render.fx;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,12 +19,18 @@ import nl.weeaboo.vn.gdx.res.DisposeUtil;
 
 final class PingPongFbo implements Disposable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PingPongFbo.class);
+
     private final Dim size;
 
     private FrameBuffer[] fbos = new FrameBuffer[2];
     private int currentIndex = -1;
 
     public PingPongFbo(Dim size) {
+        if (size.w <= 0 || size.h <= 0) {
+            throw new IllegalArgumentException("Both dimensions must be > 0, was: " + size);
+        }
+
         this.size = size;
     }
 
@@ -71,7 +80,11 @@ final class PingPongFbo implements Disposable {
     private FrameBuffer currentFbo() {
         FrameBuffer result = fbos[currentIndex];
         if (result == null) {
-            result = new FrameBuffer(Format.RGBA8888, size.w, size.h, false);
+            final Format format = Format.RGBA8888;
+
+            LOG.info("Create FBO: size={}x{}, format={}", size.w, size.h, format);
+
+            result = new FrameBuffer(format, size.w, size.h, false);
             fbos[currentIndex] = result;
         }
         return result;

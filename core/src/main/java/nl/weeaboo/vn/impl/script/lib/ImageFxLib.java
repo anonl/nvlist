@@ -262,7 +262,7 @@ public class ImageFxLib extends LuaLib {
         // Handle main table containing the compositing configuration
         LuaTable table = args.opttable(1, new LuaTable());
         LuaValue v;
-        for (int n = 1; (v = table.get(n)) != LuaNil.NIL; n++) {
+        for (int n = 1; !(v = table.get(n)).isnil(); n++) {
             // texture
             ITexture tex = LuaConvertUtil.getTextureArg(imageModule, v.get(S_TEX));
             if (tex == null) {

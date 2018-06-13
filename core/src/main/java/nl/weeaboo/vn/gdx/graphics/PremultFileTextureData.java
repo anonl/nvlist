@@ -4,19 +4,15 @@ import java.io.IOException;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.common.Dim;
 
 /**
  * Variant of {@link FileTextureData} that generates texture data with premultiplied alpha.
@@ -62,7 +58,6 @@ class PremultFileTextureData implements TextureData {
         initialized = false;
         try {
             pixmap = loadPixmap(file);
-            pixmap = ensurePot(pixmap);
 
             if (format == null) {
                 format = pixmap.getFormat();
@@ -138,21 +133,6 @@ class PremultFileTextureData implements TextureData {
     @Override
     public boolean isManaged() {
         return true;
-    }
-
-    protected Pixmap ensurePot(Pixmap pixmap) {
-        if (Gdx.gl20 == null && FileTextureData.copyToPOT) {
-            int pixmapWidth = pixmap.getWidth();
-            int pixmapHeight = pixmap.getHeight();
-            int potWidth = MathUtils.nextPowerOfTwo(pixmapWidth);
-            int potHeight = MathUtils.nextPowerOfTwo(pixmapHeight);
-            if (pixmapWidth != potWidth || pixmapHeight != potHeight) {
-                Pixmap copy = PixmapUtil.resizedCopy(pixmap, Dim.of(potWidth, potHeight), Filter.BiLinear);
-                pixmap.dispose();
-                return copy;
-            }
-        }
-        return pixmap;
     }
 
 }

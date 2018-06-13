@@ -9,7 +9,7 @@ dependencies {
     implementation deps.gdx_desktop
     implementation deps.jopt_simple
     
-    runtimeOnly deps.slf4j_impl
+    runtimeOnly deps.slf4j_desktop
 }
 
 publishing {

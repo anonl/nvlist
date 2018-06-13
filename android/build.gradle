@@ -12,6 +12,8 @@ dependencies {
 
     implementation deps.gdx_android
     implementation deps.gdx_android_natives
+
+    runtimeOnly deps.slf4j_android
 }
 
 // called every time gradle gets executed, takes the native dependencies of
@@ -78,38 +80,51 @@ eclipse {
     }
 }
 
-publishing {
-    publications {
-        android(MavenPublication) {
-            // Manually configure artifact and dependencies (Android plugin doesn't supply a component)            
-            artifact project.tasks.bundleRelease
-            
-            pom.withXml {                
-                // Gather dependencies
-                def projectDeps = [].toSet()
-                projectDeps += configurations.implementation.allDependencies
-                // projectDeps += configurations.natives.allDependencies
-
-                def root = asNode()
-                
-                // Append dependencies to POM
-                def depsNode = root.appendNode('dependencies')
-                projectDeps.each {
-                    def depNode = depsNode.appendNode('dependency')
-                    depNode.appendNode('groupId', it.group)
-                    depNode.appendNode('artifactId', it.name)
-                    depNode.appendNode('version', it.version)
-                }
-
-                // Append license info
-                root = root.children().last() + pomLicenseConfig
-            }
-            
-            artifactId 'nvlist-android'
-        }
-    }
+// Run installed app through adb
+task runInstalled(type: Exec) {
+    def adb = android.getAdbExe()
+    def target = 'nl.weeaboo.vn.android/nl.weeaboo.vn.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', target
 }
 
-bintray {
-    publications = ['android']
+// Install, then run debug build
+task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
+}
+
+plugins.withId('com.android.library') {
+    publishing {
+        publications {
+            android(MavenPublication) {
+                // Manually configure artifact and dependencies (Android plugin doesn't supply a component)            
+                artifact project.tasks.bundleRelease
+
+                pom.withXml {                
+                    // Gather dependencies
+                    def projectDeps = [].toSet()
+                    projectDeps += configurations.implementation.allDependencies
+                    // projectDeps += configurations.natives.allDependencies
+
+                    def root = asNode()
+
+                    // Append dependencies to POM
+                    def depsNode = root.appendNode('dependencies')
+                    projectDeps.each {
+                        def depNode = depsNode.appendNode('dependency')
+                        depNode.appendNode('groupId', it.group)
+                        depNode.appendNode('artifactId', it.name)
+                        depNode.appendNode('version', it.version)
+                    }
+
+                    // Append license info
+                    root = root.children().last() + pomLicenseConfig
+                }
+
+                artifactId 'nvlist-android'
+            }
+        }
+    }
+
+    bintray {
+        publications = ['android']
+    }
 }

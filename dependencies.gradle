@@ -10,7 +10,7 @@ ext.deps = [:]
 ext.errorProneVersion = '2.2.0'
 
 def gdxTestVersion = '2.0.0'
-def gdxVersion = '1.9.6'
+def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
 def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible
 def roboVmVersion = '2.3.0'
@@ -112,9 +112,13 @@ deps.slf4j_api = [
     "org.slf4j:slf4j-api:$slf4jVersion"
 ]
 
-deps.slf4j_impl = [
+deps.slf4j_desktop = [
     "org.slf4j:jul-to-slf4j:$slf4jVersion",
     'ch.qos.logback:logback-classic:1.2.3',
+]
+
+deps.slf4j_android = [
+    "org.slf4j:slf4j-android:$slf4jVersion",
 ]
 
 deps.styled_text_api = [

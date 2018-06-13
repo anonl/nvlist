@@ -8,7 +8,7 @@ dependencies {
     implementation project(':nvlist-core')
     implementation deps.gdx_headless
 
-    testRuntimeOnly deps.slf4j_impl
+    testRuntimeOnly deps.slf4j_desktop
 }
 
 publishing {

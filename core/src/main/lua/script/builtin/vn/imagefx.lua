@@ -3,8 +3,11 @@
 module("vn.imagefx", package.seeall)
 
 local function waitForTask(task)
-    while not task:isAvailable() and not task:isFailed() do
-        Log.debug("Waiting for async task to finish: {}", task)
+    local maxWaitFrames = 3600 -- 60 seconds @ 60 Hz
+    local frame = 0
+    while not task:isAvailable() and not task:isFailed() and frame < maxWaitFrames do
+        Log.debug("Waiting for async task to finish ({}): {}", frame, task)
+        frame = frame + 1
         yield()
     end
 
