@@ -37,12 +37,12 @@ function titlescreen()
     setTextModeADV()
     texton()
     
-    local i = img("ziponly", 200, 200)
+    local i = img("test", 200, 200)
     i:setAlign(0.5, 0.5)
 
     local mergedTex = composite({
-        {tex="ziponly"},
-        {tex="ziponly", pos={100, 100}},
+        {tex="test"},
+        {tex="test", pos={100, 100}},
     })
     i = img(mergedTex, 400, 0)
     
