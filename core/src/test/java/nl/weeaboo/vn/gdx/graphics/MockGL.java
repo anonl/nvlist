@@ -19,7 +19,7 @@ public class MockGL extends GL20Interceptor {
     private int programId;
 
     private MockGL() {
-        super(new GLProfiler(Gdx.graphics), newInstance());
+        super(new GLProfiler(Gdx.graphics), null);
     }
 
     /**
