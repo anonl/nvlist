@@ -26,6 +26,8 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoadingResourceStore.class);
 
+    private static final int SLOW_LOAD_WARN_MS = 500;
+
     private final StaticRef<? extends LoadingResourceStore<T>> selfId;
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
@@ -63,7 +65,12 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
-        LOG.debug("Loading resource '{}' took {}", absolutePath, stopwatch);
+        long loadDurationMs = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        if (loadDurationMs >= SLOW_LOAD_WARN_MS) {
+            LOG.warn("Loading resource '{}' took {}", absolutePath, stopwatch);
+        } else {
+            LOG.debug("Loading resource '{}' took {}", absolutePath, stopwatch);
+        }
         return resource;
     }
 
