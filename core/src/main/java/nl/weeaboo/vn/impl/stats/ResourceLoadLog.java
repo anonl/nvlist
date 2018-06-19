@@ -9,7 +9,7 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 import nl.weeaboo.vn.stats.ISeenLogHolder;
 
-public final class ResourceLoadLog implements IResourceLoadLog {
+final class ResourceLoadLog implements IResourceLoadLog {
 
     private static final long serialVersionUID = StatsImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(ResourceLoadLog.class);

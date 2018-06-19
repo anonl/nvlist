@@ -10,7 +10,7 @@ import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.stats.IPlayTimer;
 
-public class PlayTimer implements IPlayTimer {
+final class PlayTimer implements IPlayTimer {
 
     private static final long serialVersionUID = 1L;
 

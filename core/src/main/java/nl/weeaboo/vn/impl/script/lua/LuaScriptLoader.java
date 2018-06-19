@@ -63,7 +63,8 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 
     /** Creates a new script loader */
     public static LuaScriptLoader newInstance(IEnvironment env) {
-        LuaScriptLoader scriptLoader = new LuaScriptLoader(env.getSeenLog(), new LuaScriptResourceLoader(env),
+        ISeenLogHolder seenLog = env.getStatsModule().getSeenLog();
+        LuaScriptLoader scriptLoader = new LuaScriptLoader(seenLog, new LuaScriptResourceLoader(env),
                 env.getPref(NovelPrefs.ENGINE_TARGET_VERSION));
         scriptLoader.initEnv();
         return scriptLoader;

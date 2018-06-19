@@ -30,9 +30,7 @@ import nl.weeaboo.vn.impl.script.lib.VideoLib;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.impl.sound.SoundModule;
-import nl.weeaboo.vn.impl.stats.PlayTimer;
-import nl.weeaboo.vn.impl.stats.ResourceLoadLog;
-import nl.weeaboo.vn.impl.stats.SeenLog;
+import nl.weeaboo.vn.impl.stats.StatsModule;
 import nl.weeaboo.vn.impl.text.TextModule;
 import nl.weeaboo.vn.impl.video.VideoModule;
 import nl.weeaboo.vn.save.ISaveModule;
@@ -69,9 +67,7 @@ public class EnvironmentFactory {
         RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
 
         env.renderEnv = renderEnv;
-        env.seenLog = new SeenLog(env);
-        env.resourceLoadLog = new ResourceLoadLog(env.getSeenLog());
-        env.playTimer = new PlayTimer();
+        env.statsModule = new StatsModule(env);
 
         // Init Lua script env
         LuaRunState runState;

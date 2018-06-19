@@ -26,7 +26,7 @@ public class SeenLib extends LuaLib {
     }
 
     private ISeenLogHolder getSeenLog() {
-        return env.getSeenLog();
+        return env.getStatsModule().getSeenLog();
     }
 
     private IResourceSeenLog getResourceLog() {

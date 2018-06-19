@@ -92,7 +92,7 @@ public class SystemLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs getTimer(Varargs args) {
-        IPlayTimer playTimer = env.getPlayTimer();
+        IPlayTimer playTimer = env.getStatsModule().getPlayTimer();
 
         return LuajavaLib.toUserdata(playTimer, IPlayTimer.class);
     }

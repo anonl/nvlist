@@ -39,6 +39,7 @@ import nl.weeaboo.vn.save.ISaveParams;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
+import nl.weeaboo.vn.stats.IStatsModule;
 
 @CustomSerializable
 public class SaveModule extends AbstractModule implements ISaveModule {
@@ -47,6 +48,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     private static final Logger LOG = LoggerFactory.getLogger(SaveModule.class);
     private static final FilePath SHARED_GLOBALS_PATH = FilePath.of("save-shared.bin");
     private static final FilePath SEEN_LOG_PATH = FilePath.of("seen.bin");
+    private static final FilePath ANALYTICS_PATH = FilePath.of("analytics.bin");
     private static final int QUICK_SAVE_OFFSET = 800;
     private static final int NUM_QUICK_SAVE_SLOTS = 100;
     private static final int AUTO_SAVE_OFFSET = 900;
@@ -95,19 +97,30 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     public void loadPersistent() {
         tryLoadSharedGlobals();
 
+        IStatsModule statsModule = env.getStatsModule();
+
         try {
-            env.getPlayTimer().load(sharedGlobals);
+            statsModule.getPlayTimer().load(sharedGlobals);
         } catch (IOException e) {
             LOG.error("Unable to load play timer state from shared globals", e);
         }
 
         SecureFileWriter sfw = getSecureFileWriter();
+
         try {
-            env.getSeenLog().load(sfw, SEEN_LOG_PATH);
+            statsModule.getSeenLog().load(sfw, SEEN_LOG_PATH);
         } catch (FileNotFoundException fnfe) {
             // Seen log doesn't exist yet, not an error
         } catch (IOException ioe) {
             LOG.error("Error loading seen log", ioe);
+        }
+
+        try {
+            statsModule.getAnalytics().load(sfw, ANALYTICS_PATH);
+        } catch (FileNotFoundException fnfe) {
+            // Analytics file doesn't exist yet, not an error
+        } catch (IOException ioe) {
+            LOG.error("Error loading analytics", ioe);
         }
     }
 
@@ -135,10 +148,11 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     @Override
     public void savePersistent() {
+        IStatsModule statsModule = env.getStatsModule();
         SecureFileWriter sfw = getSecureFileWriter();
 
         try {
-            env.getPlayTimer().save(sharedGlobals);
+            statsModule.getPlayTimer().save(sharedGlobals);
         } catch (IOException e) {
             LOG.error("Unable to save play timer state to shared globals", e);
         }
@@ -150,24 +164,16 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         }
 
         try {
-            env.getSeenLog().save(sfw, SEEN_LOG_PATH);
+            statsModule.getSeenLog().save(sfw, SEEN_LOG_PATH);
         } catch (IOException e) {
             LOG.error("Unable to save seen log", e);
         }
-        generatePreloaderData();
-    }
 
-    protected void generatePreloaderData() {
-        // TODO LVN-011 Re-enable analytics
-        //      IAnalytics an = novel.getAnalytics();
-        //      if (an instanceof BaseLoggingAnalytics) {
-        //          BaseLoggingAnalytics ba = (BaseLoggingAnalytics)an;
-        //          try {
-        //              ba.optimizeLog(true);
-        //          } catch (IOException ioe) {
-        //              GameLog.w("Error dumping analytics", ioe);
-        //          }
-        //      }
+        try {
+            statsModule.getAnalytics().save(sfw, ANALYTICS_PATH);
+        } catch (IOException e) {
+            LOG.error("Unable to save analytics", e);
+        }
     }
 
     @Override

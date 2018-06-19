@@ -13,9 +13,7 @@ import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.sound.ISoundModule;
-import nl.weeaboo.vn.stats.IPlayTimer;
-import nl.weeaboo.vn.stats.IResourceLoadLog;
-import nl.weeaboo.vn.stats.ISeenLogHolder;
+import nl.weeaboo.vn.stats.IStatsModule;
 import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
@@ -25,15 +23,13 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
 
     IContextManager contextManager;
     LuaScriptEnv scriptEnv;
-    IResourceLoadLog resourceLoadLog;
-    ISeenLogHolder seenLog;
-    IPlayTimer playTimer;
 
     IImageModule imageModule;
     ISoundModule soundModule;
     IVideoModule videoModule;
     ITextModule textModule;
     ISaveModule saveModule;
+    IStatsModule statsModule;
     ISystemModule systemModule;
 
     IRenderEnv renderEnv;
@@ -79,21 +75,6 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     }
 
     @Override
-    public IResourceLoadLog getResourceLoadLog() {
-        return checkSet(resourceLoadLog);
-    }
-
-    @Override
-    public ISeenLogHolder getSeenLog() {
-        return checkSet(seenLog);
-    }
-
-    @Override
-    public IPlayTimer getPlayTimer() {
-        return checkSet(playTimer);
-    }
-
-    @Override
     public IImageModule getImageModule() {
         return checkSet(imageModule);
     }
@@ -121,6 +102,11 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public ISystemModule getSystemModule() {
         return checkSet(systemModule);
+    }
+
+    @Override
+    public IStatsModule getStatsModule() {
+        return checkSet(statsModule);
     }
 
     @Override

@@ -35,7 +35,7 @@ import nl.weeaboo.vn.stats.IScriptSeenLog;
 import nl.weeaboo.vn.stats.ISeenLogHolder;
 
 @CustomSerializable
-public final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog, IChoiceSeenLog {
+final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog, IChoiceSeenLog {
 
     private static final long serialVersionUID = StatsImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);

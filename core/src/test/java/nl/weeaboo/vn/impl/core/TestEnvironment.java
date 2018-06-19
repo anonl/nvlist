@@ -24,8 +24,7 @@ import nl.weeaboo.vn.impl.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.impl.sound.SoundModule;
 import nl.weeaboo.vn.impl.stats.PlayTimerStub;
-import nl.weeaboo.vn.impl.stats.ResourceLoadLogStub;
-import nl.weeaboo.vn.impl.stats.SeenLog;
+import nl.weeaboo.vn.impl.stats.StatsModule;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
 import nl.weeaboo.vn.impl.text.TestFontStore;
@@ -76,9 +75,6 @@ public class TestEnvironment extends DefaultEnvironment {
 
         TestEnvironment env = new TestEnvironment(inputAdapter);
         env.renderEnv = CoreTestUtil.BASIC_ENV;
-        env.resourceLoadLog = new ResourceLoadLogStub();
-        env.seenLog = new SeenLog(env);
-        env.playTimer = new PlayTimerStub();
 
         LuaRunState runState = LuaTestUtil.newRunState();
         LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
@@ -86,6 +82,7 @@ public class TestEnvironment extends DefaultEnvironment {
         scriptEnv.addInitializer(new BasicScriptInitializer(env));
         env.scriptEnv = scriptEnv;
 
+        env.statsModule = new StatsModule(env, new PlayTimerStub());
         env.saveModule = new SaveModule(env);
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);

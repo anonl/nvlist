@@ -10,6 +10,7 @@ import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INotifier;
+import nl.weeaboo.vn.stats.IResourceLoadLog;
 
 abstract class AbstractEnvironment implements IEnvironment {
 
@@ -34,6 +35,11 @@ abstract class AbstractEnvironment implements IEnvironment {
     }
 
     @Override
+    public IResourceLoadLog getResourceLoadLog() {
+        return getStatsModule().getResourceLoadLog();
+    }
+
+    @Override
     public <T> T getPref(Preference<T> pref) {
         return getPrefStore().get(pref);
     }
@@ -46,6 +52,7 @@ abstract class AbstractEnvironment implements IEnvironment {
             getVideoModule(),
             getTextModule(),
             getSystemModule(),
+            getStatsModule(),
             getSaveModule()); // Destroy save module last, so other modules can still save during destroy()
     }
 

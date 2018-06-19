@@ -13,9 +13,8 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.sound.ISoundModule;
-import nl.weeaboo.vn.stats.IPlayTimer;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
-import nl.weeaboo.vn.stats.ISeenLogHolder;
+import nl.weeaboo.vn.stats.IStatsModule;
 import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
@@ -49,14 +48,11 @@ public interface IEnvironment extends IDestructible {
     /** Information about the current rendering environment. */
     IRenderEnv getRenderEnv();
 
-    /** The global resource loading log. */
+    /**
+     * The global resource loading log.
+     * @see IStatsModule#getResourceLoadLog()
+     */
     IResourceLoadLog getResourceLoadLog();
-
-    /** Logs which resources, text lines, choice options have been seen/used by the player. */
-    ISeenLogHolder getSeenLog();
-
-    /** The global play timer */
-    IPlayTimer getPlayTimer();
 
     // --- Start modules -----------------------------------------------------------------------------------------------
 
@@ -74,6 +70,9 @@ public interface IEnvironment extends IDestructible {
 
     /** The global save module. */
     ISaveModule getSaveModule();
+
+    /** The global stats module. */
+    IStatsModule getStatsModule();
 
     /** The global system module. */
     ISystemModule getSystemModule();
