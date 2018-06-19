@@ -18,7 +18,7 @@ public class StatsModule extends AbstractModule implements IStatsModule {
     private final IPlayTimer playTimer;
 
     public StatsModule(IEnvironment env) {
-        this(env, new PlayTimerStub());
+        this(env, new PlayTimer());
     }
 
     public StatsModule(IEnvironment env, IPlayTimer playTimer) {

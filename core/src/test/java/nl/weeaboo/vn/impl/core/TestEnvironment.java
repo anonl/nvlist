@@ -75,6 +75,7 @@ public class TestEnvironment extends DefaultEnvironment {
 
         TestEnvironment env = new TestEnvironment(inputAdapter);
         env.renderEnv = CoreTestUtil.BASIC_ENV;
+        env.statsModule = new StatsModule(env, new PlayTimerStub());
 
         LuaRunState runState = LuaTestUtil.newRunState();
         LuaScriptLoader scriptLoader = LuaTestUtil.newScriptLoader(env);
@@ -82,7 +83,6 @@ public class TestEnvironment extends DefaultEnvironment {
         scriptEnv.addInitializer(new BasicScriptInitializer(env));
         env.scriptEnv = scriptEnv;
 
-        env.statsModule = new StatsModule(env, new PlayTimerStub());
         env.saveModule = new SaveModule(env);
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
