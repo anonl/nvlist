@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.impl.core;
+package nl.weeaboo.vn.impl.stats;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,18 +26,18 @@ import nl.weeaboo.lua2.io.LuaSerializable;
 import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
-import nl.weeaboo.vn.core.IChoiceSeenLog;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IResourceSeenLog;
-import nl.weeaboo.vn.core.IScriptSeenLog;
-import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
+import nl.weeaboo.vn.stats.IChoiceSeenLog;
+import nl.weeaboo.vn.stats.IResourceSeenLog;
+import nl.weeaboo.vn.stats.IScriptSeenLog;
+import nl.weeaboo.vn.stats.ISeenLogHolder;
 
 @CustomSerializable
-final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog, IChoiceSeenLog {
+public final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog, IChoiceSeenLog {
 
-    private static final long serialVersionUID = CoreImpl.serialVersionUID;
+    private static final long serialVersionUID = StatsImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SeenLog.class);
     private static final int VERSION = 2;
 

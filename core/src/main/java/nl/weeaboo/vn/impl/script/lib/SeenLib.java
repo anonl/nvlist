@@ -4,14 +4,14 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
-import nl.weeaboo.vn.core.IChoiceSeenLog;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IResourceSeenLog;
-import nl.weeaboo.vn.core.IScriptSeenLog;
-import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.stats.IChoiceSeenLog;
+import nl.weeaboo.vn.stats.IResourceSeenLog;
+import nl.weeaboo.vn.stats.IScriptSeenLog;
+import nl.weeaboo.vn.stats.ISeenLogHolder;
 
 public class SeenLib extends LuaLib {
 

@@ -1,8 +1,8 @@
-package nl.weeaboo.vn.impl.core;
+package nl.weeaboo.vn.impl.stats;
 
-import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.stats.IResourceLoadLog;
 
 public class ResourceLoadLogStub implements IResourceLoadLog {
 

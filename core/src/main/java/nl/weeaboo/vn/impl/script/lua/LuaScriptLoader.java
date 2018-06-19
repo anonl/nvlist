@@ -28,7 +28,6 @@ import nl.weeaboo.lua2.lib.ILuaResourceFinder;
 import nl.weeaboo.lua2.lib.LuaResource;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ISeenLogHolder;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceId;
@@ -40,6 +39,7 @@ import nl.weeaboo.vn.impl.script.lvn.LvnParserFactory;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.stats.ISeenLogHolder;
 
 @CustomSerializable
 public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {

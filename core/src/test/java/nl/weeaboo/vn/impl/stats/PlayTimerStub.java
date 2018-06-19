@@ -1,10 +1,10 @@
-package nl.weeaboo.vn.impl.core;
+package nl.weeaboo.vn.impl.stats;
 
 import java.io.IOException;
 
 import nl.weeaboo.vn.core.Duration;
-import nl.weeaboo.vn.core.IPlayTimer;
 import nl.weeaboo.vn.save.IStorage;
+import nl.weeaboo.vn.stats.IPlayTimer;
 
 public class PlayTimerStub implements IPlayTimer {
 

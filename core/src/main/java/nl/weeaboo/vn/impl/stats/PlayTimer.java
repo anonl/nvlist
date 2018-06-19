@@ -1,12 +1,14 @@
-package nl.weeaboo.vn.impl.core;
+package nl.weeaboo.vn.impl.stats;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import nl.weeaboo.vn.core.Duration;
-import nl.weeaboo.vn.core.IPlayTimer;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.save.IStorage;
+import nl.weeaboo.vn.stats.IPlayTimer;
 
 public class PlayTimer implements IPlayTimer {
 

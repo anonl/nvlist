@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.core.IResourceLoadLog;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.stats.IResourceLoadLog;
 
 public abstract class ResourceLoader implements IResourceResolver {
 

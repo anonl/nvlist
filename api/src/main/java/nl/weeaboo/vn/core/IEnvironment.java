@@ -13,6 +13,9 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.sound.ISoundModule;
+import nl.weeaboo.vn.stats.IPlayTimer;
+import nl.weeaboo.vn.stats.IResourceLoadLog;
+import nl.weeaboo.vn.stats.ISeenLogHolder;
 import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
