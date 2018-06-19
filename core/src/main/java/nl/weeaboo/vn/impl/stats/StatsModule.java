@@ -13,9 +13,9 @@ public class StatsModule extends AbstractModule implements IStatsModule {
     private static final long serialVersionUID = StatsImpl.serialVersionUID;
 
     private final SeenLog seenLog;
+    private final IAnalytics analytics;
     private final IResourceLoadLog resourceLoadLog;
     private final IPlayTimer playTimer;
-    private final IAnalytics analytics;
 
     public StatsModule(IEnvironment env) {
         this(env, new PlayTimerStub());
@@ -23,9 +23,9 @@ public class StatsModule extends AbstractModule implements IStatsModule {
 
     public StatsModule(IEnvironment env, IPlayTimer playTimer) {
         seenLog = new SeenLog(env);
-        resourceLoadLog = new ResourceLoadLog(seenLog);
-        this.playTimer = Checks.checkNotNull(playTimer);
         analytics = new Analytics();
+        resourceLoadLog = new ResourceLoadLog(seenLog, analytics);
+        this.playTimer = Checks.checkNotNull(playTimer);
     }
 
     @Override
