@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.video.IVideo;
@@ -25,7 +26,7 @@ public class VideoModuleTest {
 
     @Test
     public void validMovie() throws IOException {
-        IVideo video = videoModule.movie(new ResourceLoadInfo(blankPath));
+        IVideo video = videoModule.movie(new ResourceLoadInfo(MediaType.VIDEO, blankPath));
         Assert.assertNotNull(video);
 
         // Video is playing
@@ -42,8 +43,8 @@ public class VideoModuleTest {
     /** Attempt to start a fullscreen movie while a fullscreen movie is still playing. */
     @Test(expected = IllegalStateException.class)
     public void doubleStartMovie() throws IOException {
-        videoModule.movie(new ResourceLoadInfo(blankPath));
-        videoModule.movie(new ResourceLoadInfo(blankPath));
+        videoModule.movie(new ResourceLoadInfo(MediaType.VIDEO, blankPath));
+        videoModule.movie(new ResourceLoadInfo(MediaType.VIDEO, blankPath));
     }
 
 }

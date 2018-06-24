@@ -11,16 +11,18 @@ import nl.weeaboo.filesystem.FilePath;
 
 public class ResourceLoadInfoTest {
 
+    private static final MediaType MEDIA_TYPE = MediaType.IMAGE;
     private static final FilePath PATH = FilePath.of("path");
     private static final List<String> STACK_TRACE = Arrays.asList("a", "b", "c");
 
     @Test
     public void validArgs() {
-        ResourceLoadInfo info = new ResourceLoadInfo(PATH, STACK_TRACE);
+        ResourceLoadInfo info = new ResourceLoadInfo(MEDIA_TYPE, PATH, STACK_TRACE);
+        Assert.assertEquals(MEDIA_TYPE, info.getMediaType());
         Assert.assertEquals(PATH, info.getPath());
         Assert.assertEquals(STACK_TRACE, info.getCallStackTrace());
 
-        info = new ResourceLoadInfo(PATH, Collections.<String>emptyList());
+        info = new ResourceLoadInfo(MEDIA_TYPE, PATH, Collections.<String>emptyList());
         Assert.assertEquals(Arrays.asList(), info.getCallStackTrace());
     }
 
@@ -32,7 +34,7 @@ public class ResourceLoadInfoTest {
 
     private void assertInvalidArg(FilePath path, List<String> stackTrace) {
         try {
-            ResourceLoadInfo info = new ResourceLoadInfo(path, stackTrace);
+            ResourceLoadInfo info = new ResourceLoadInfo(MEDIA_TYPE, path, stackTrace);
             Assert.fail("Expected exception, got object: " + info);
         } catch (IllegalArgumentException iae) {
             // This is expected
@@ -41,7 +43,7 @@ public class ResourceLoadInfoTest {
 
     @Test
     public void testAppenders() {
-        ResourceLoadInfo info = new ResourceLoadInfo(FilePath.of("x"));
+        ResourceLoadInfo info = new ResourceLoadInfo(MEDIA_TYPE, FilePath.of("x"));
         assertPath("a", info.withPath(FilePath.of("a")));
         assertPath("xy", info.withFileSuffix("y"));
         assertPath("x#y", info.withSubId("y"));

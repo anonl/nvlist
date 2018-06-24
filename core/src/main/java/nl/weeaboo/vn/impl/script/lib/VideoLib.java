@@ -7,6 +7,7 @@ import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
@@ -39,7 +40,7 @@ public class VideoLib extends LuaLib {
     @ScriptFunction
     public Varargs movie(Varargs args) throws ScriptException {
         FilePath filename = LuaConvertUtil.getPath(args, 1);
-        ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(filename);
+        ResourceLoadInfo loadInfo = LuaScriptUtil.createLoadInfo(MediaType.VIDEO, filename);
 
         IVideoModule videoModule = env.getVideoModule();
         try {

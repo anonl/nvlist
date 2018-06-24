@@ -5,10 +5,11 @@ import java.io.Serializable;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
+import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface IAnalytics extends Serializable {
+public interface IAnalytics extends Serializable, IUpdateable {
 
     void logResourceLoad(ResourceId resourceId, ResourceLoadInfo info);
 

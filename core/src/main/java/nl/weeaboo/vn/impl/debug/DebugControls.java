@@ -22,6 +22,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.gdx.graphics.GdxBitmapTweenRenderer;
@@ -157,7 +158,7 @@ public final class DebugControls {
         if (alt && input.consumePress(KeyCode.M)) {
             try {
                 ISound sound = soundModule.createSound(SoundType.MUSIC,
-                        new ResourceLoadInfo(FilePath.of("music.ogg")));
+                        new ResourceLoadInfo(MediaType.SOUND, FilePath.of("music.ogg")));
                 sound.start(2);
             } catch (IOException e) {
                 LOG.warn("Audio error", e);

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
@@ -23,6 +24,7 @@ import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.scene.ComponentFactory;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
@@ -77,7 +79,7 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
     @Override
     public @Nullable ITexture getTexture(FilePath filename) {
-        return getTexture(new ResourceLoadInfo(filename), false);
+        return getTexture(LuaScriptUtil.createLoadInfo(MediaType.IMAGE, filename), false);
     }
 
     @Override

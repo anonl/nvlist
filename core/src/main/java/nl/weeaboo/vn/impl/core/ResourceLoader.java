@@ -120,6 +120,7 @@ public abstract class ResourceLoader implements IResourceResolver {
      */
     protected void preloadNormalized(ResourceId resourceId) {
         // Default implementation does nothing
+        LOG.trace("Preload (no-op implementation): {}", resourceId);
     }
 
     /** Logs a resource load event. */

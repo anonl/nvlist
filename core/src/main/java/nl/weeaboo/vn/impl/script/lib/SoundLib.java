@@ -12,6 +12,7 @@ import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -43,7 +44,7 @@ public class SoundLib extends LuaLib {
      */
     @ScriptFunction
     public Varargs create(Varargs args) {
-        ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(args.arg(1));
+        ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(MediaType.SOUND, args.arg(1));
         SoundType stype = MoreObjects.firstNonNull(args.touserdata(2, SoundType.class), SoundType.SOUND);
 
         ISoundModule soundModule = env.getSoundModule();

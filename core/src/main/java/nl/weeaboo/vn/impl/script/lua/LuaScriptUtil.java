@@ -12,8 +12,10 @@ import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.ContextUtil;
+import nl.weeaboo.vn.impl.stats.FileLine;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
@@ -66,10 +68,10 @@ public final class LuaScriptUtil {
     /**
      * Finds the topmost '*.lvn' source file in the call stack.
      */
-    public static @Nullable String getNearestLvnSrcloc(List<String> stack) {
+    public static @Nullable FileLine getNearestLvnSrcloc(List<String> stack) {
         for (String frame : stack) {
             if (frame.contains(LVN_PATTERN)) {
-                return frame;
+                return FileLine.fromString(frame);
             }
         }
         return null;
@@ -79,8 +81,8 @@ public final class LuaScriptUtil {
      * Creates {@link ResourceLoadInfo} for the current Lua call stack.
      * @see LuaUtil#getLuaStack()
      */
-    public static ResourceLoadInfo createLoadInfo(FilePath filename) {
-        return new ResourceLoadInfo(filename, LuaUtil.getLuaStack());
+    public static ResourceLoadInfo createLoadInfo(MediaType mediaType, FilePath filename) {
+        return new ResourceLoadInfo(mediaType, filename, LuaUtil.getLuaStack());
     }
 
     private static LuaScriptContext getScriptContext(IContext context) {

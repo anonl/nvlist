@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.image;
 
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 
 final class ImageResourceLoader extends FileResourceLoader {
@@ -12,6 +13,11 @@ final class ImageResourceLoader extends FileResourceLoader {
         super(env, MediaType.IMAGE);
 
         setAutoFileExts("ktx", "png", "jpg", "jng");
+    }
+
+    @Override
+    protected void preloadNormalized(ResourceId resourceId) {
+        // TODO: Implement
     }
 
 }

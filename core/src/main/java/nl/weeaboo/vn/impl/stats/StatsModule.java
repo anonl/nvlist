@@ -23,7 +23,7 @@ public class StatsModule extends AbstractModule implements IStatsModule {
 
     public StatsModule(IEnvironment env, IPlayTimer playTimer) {
         seenLog = new SeenLog(env);
-        analytics = new Analytics();
+        analytics = new Analytics(env);
         resourceLoadLog = new ResourceLoadLog(seenLog, analytics);
         this.playTimer = Checks.checkNotNull(playTimer);
     }
@@ -33,6 +33,7 @@ public class StatsModule extends AbstractModule implements IStatsModule {
         super.update();
 
         playTimer.update();
+        analytics.update();
     }
 
     @Override
