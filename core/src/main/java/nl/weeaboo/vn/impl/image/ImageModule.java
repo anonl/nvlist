@@ -55,6 +55,7 @@ public class ImageModule extends AbstractModule implements IImageModule {
         IRenderEnv renderEnv = env.getRenderEnv();
 
         texManager = new TextureManager(resourceLoader, renderEnv.getVirtualSize());
+        resourceLoader.setPreloadHandler(texManager);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class ImageModule extends AbstractModule implements IImageModule {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
-        ResourceId resourceId = resourceLoader.resolveResource(path);
+        ResourceId resourceId = resolveResource(path);
         if (resourceId == null) {
             if (!suppressErrors) {
                 LOG.debug("Unable to find image file: " + path);

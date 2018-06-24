@@ -13,7 +13,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.utils.StringBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -160,14 +159,6 @@ final class Analytics implements IAnalytics {
 
     @Override
     public void save(SecureFileWriter sfw, FilePath path) throws IOException {
-        StringBuilder sb = new StringBuilder("[analytics]");
-        for (FileLine line : loadsPerLine.keySet()) {
-            LineStats lineStats = loadsPerLine.get(line);
-            sb.append("\n").append(line).append(": ").append(lineStats);
-        }
-
-        LOG.debug(sb.toString());
-
         LOG.info("Saving analytics: {}", path);
 
         LuaSerializer ls = new LuaSerializer();

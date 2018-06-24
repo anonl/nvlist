@@ -29,6 +29,8 @@ public abstract class ResourceLoader implements IResourceResolver {
     private final IResourceLoadLog resourceLoadLog;
     private final LruSet<FilePath> checkedFilenames;
 
+    private @Nullable IPreloadHandler preloadHandler;
+
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt = true;
 
@@ -119,8 +121,13 @@ public abstract class ResourceLoader implements IResourceResolver {
      * @param resourceId Canonical identifier of the resource to preload.
      */
     protected void preloadNormalized(ResourceId resourceId) {
-        // Default implementation does nothing
-        LOG.trace("Preload (no-op implementation): {}", resourceId);
+        if (preloadHandler == null) {
+            // Default implementation does nothing
+            LOG.trace("Preload (no-op implementation): {}", resourceId);
+        } else {
+            LOG.trace("Preload: {}", resourceId);
+            preloadHandler.preloadNormalized(resourceId);
+        }
     }
 
     /** Logs a resource load event. */
@@ -161,4 +168,8 @@ public abstract class ResourceLoader implements IResourceResolver {
         autoFileExts = exts.clone();
     }
 
+    /** Sets the function that handles calls to {@link #preloadNormalized(nl.weeaboo.vn.core.ResourceId)}. */
+    public void setPreloadHandler(IPreloadHandler preloadHandler) {
+        this.preloadHandler = Checks.checkNotNull(preloadHandler);
+    }
 }

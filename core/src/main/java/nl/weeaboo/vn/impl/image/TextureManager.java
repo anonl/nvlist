@@ -2,7 +2,6 @@ package nl.weeaboo.vn.impl.image;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
@@ -30,13 +29,14 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
+import nl.weeaboo.vn.impl.core.IPreloadHandler;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 /**
  * Does the heavy lifting related to texture loading and generation for {@link IImageModule}.
  */
-final class TextureManager implements Serializable {
+final class TextureManager implements IPreloadHandler {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(TextureManager.class);
@@ -66,6 +66,12 @@ final class TextureManager implements Serializable {
                 textureCache.clear();
             }
         }
+    }
+
+    @Override
+    public void preloadNormalized(ResourceId resourceId) {
+        FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
+        textureStore.get().get(absolutePath);
     }
 
     @CheckForNull
