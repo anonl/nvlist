@@ -115,7 +115,8 @@ public final class JngEncoder implements IImageEncoder {
             throw new IllegalArgumentException("Pixmap with unsupported format: " + src.getFormat());
         }
 
-        dstPixels.flip();
+        dstPixels.rewind();
+
         return dst;
     }
 

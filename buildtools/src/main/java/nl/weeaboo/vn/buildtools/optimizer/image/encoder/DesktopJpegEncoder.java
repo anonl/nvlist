@@ -35,7 +35,7 @@ final class DesktopJpegEncoder implements IJpegEncoder {
             writer.setOutput(ios);
 
             JPEGImageWriteParam iwparam = new JPEGImageWriteParam(Locale.ROOT);
-            iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT) ;
+            iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             iwparam.setCompressionQuality(params.getQuality());
             iwparam.setOptimizeHuffmanTables(true);
 

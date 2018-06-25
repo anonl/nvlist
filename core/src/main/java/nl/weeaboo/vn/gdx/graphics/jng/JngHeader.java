@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
-import java.util.zip.CRC32;
 
 import nl.weeaboo.common.Dim;
 
@@ -73,20 +72,14 @@ final class JngHeader {
         jhdr.putInt(size.h);
         jhdr.put((byte)color.colorType.toInt());
         jhdr.put((byte)color.sampleDepth);
-        jhdr.put((byte)color.sampleDepth);
+        jhdr.put((byte)color.compressionMethod);
         jhdr.put((byte)color.interlaceMethod);
         jhdr.put((byte)alpha.sampleDepth);
         jhdr.put((byte)alpha.compressionMethod.toInt());
         jhdr.put((byte)alpha.filterMethod);
         jhdr.put((byte)alpha.interlaceMethod);
 
-        dout.writeInt(jhdr.limit());
-        dout.writeInt(JngConstants.CHUNK_JHDR);
-        dout.write(jhdr.array());
-
-        CRC32 crc = new CRC32();
-        crc.update(jhdr.array());
-        dout.writeInt((int)crc.getValue());
+        JngWriter.writeChunk(dout, JngConstants.CHUNK_JHDR, jhdr.array());
     }
 
     public static final class ColorSettings {
@@ -118,7 +111,7 @@ final class JngHeader {
          * <li> 8: Progressive JPEG
          * </ul>
          */
-        public int interlaceMethod = 0;
+        public int interlaceMethod = 8;
 
     }
 

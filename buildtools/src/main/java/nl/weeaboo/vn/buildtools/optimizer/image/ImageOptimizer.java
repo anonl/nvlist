@@ -39,7 +39,8 @@ public final class ImageOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageOptimizer.class);
 
-    private final ResourceOptimizerConfig config;
+    private final ResourceOptimizerConfig optimizerConfig;
+    private final ImageResizerConfig resizeConfig;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
@@ -50,7 +51,9 @@ public final class ImageOptimizer {
 
 
     public ImageOptimizer(IOptimizerContext context) {
-        this.config = context.getConfig();
+        optimizerConfig = context.getConfig();
+        resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
+
         optimizerFileSet = context.getFileSet();
 
         NvlistProjectConnection project = context.getProject();
@@ -100,7 +103,7 @@ public final class ImageOptimizer {
             FilePath jsonRelativePath = folderEntry.getKey().resolve("img.json");
             optimizerFileSet.markOptimized(jsonRelativePath);
 
-            File outputF = new File(config.getOutputFolder(), jsonRelativePath.toString());
+            File outputF = new File(optimizerConfig.getOutputFolder(), jsonRelativePath.toString());
 
             String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
             try {
@@ -127,8 +130,6 @@ public final class ImageOptimizer {
 
         ImageWithDef imageWithDef = new ImageWithDef(pixmap, imageDef);
 
-        ImageResizerConfig resizeConfig = new ImageResizerConfig();
-        resizeConfig.setScaleFactor(0.5);
         ImageResizer resizer = new ImageResizer(resizeConfig);
         ImageWithDef optimized = resizer.process(imageWithDef);
 
@@ -137,7 +138,7 @@ public final class ImageOptimizer {
 
         FilePath outputPath = inputFile.withExt("jng");
 
-        File outputF = new File(config.getOutputFolder(), outputPath.toString());
+        File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
         Files.createParentDirs(outputF);
         Files.write(encoded.readBytes(), outputF);
 

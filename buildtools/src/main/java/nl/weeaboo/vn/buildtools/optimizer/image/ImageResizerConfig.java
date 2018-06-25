@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.buildtools.optimizer.image;
 
-public final class ImageResizerConfig {
+import nl.weeaboo.vn.buildtools.optimizer.IOptimizerConfig;
+
+public final class ImageResizerConfig implements IOptimizerConfig {
 
     private double scaleFactor = 1.0;
 
