@@ -163,6 +163,8 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
     @Override
     public void setImageResolution(Dim size) {
+        // TODO: Select the appropriate image folder and set it as the resourceLoader folder
+
         texManager.setImageResolution(size);
     }
 

@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.common.Rect;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
@@ -108,8 +109,8 @@ public final class Osd implements Disposable {
             return;
         }
 
-        IRenderEnv renderEnv = env.getRenderEnv();
-        final Dim vsize = renderEnv.getVirtualSize();
+        IRenderEnv renv = env.getRenderEnv();
+        final Dim vsize = renv.getVirtualSize();
         final int pad = Math.min(vsize.w, vsize.h) / 64;
         final int wrapWidth = vsize.w - pad * 2;
 
@@ -138,6 +139,9 @@ public final class Osd implements Disposable {
                 }
             }
         }
+
+        Rect rclip = renv.getRealClip();
+        text.append("\nResolution: [" + rclip.x + ", " + rclip.y + ", " + rclip.w + ", " + rclip.h + "]");
 
         IInput input = StaticEnvironment.INPUT.get();
         Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());
