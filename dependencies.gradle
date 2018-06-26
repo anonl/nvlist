@@ -117,10 +117,6 @@ deps.slf4j_desktop = [
     'ch.qos.logback:logback-classic:1.2.3',
 ]
 
-deps.slf4j_android = [
-    "org.slf4j:slf4j-android:$slf4jVersion",
-]
-
 deps.styled_text_api = [
     "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
 ]
