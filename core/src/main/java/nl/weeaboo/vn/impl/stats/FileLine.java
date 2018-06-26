@@ -61,7 +61,7 @@ public final class FileLine {
 
     @Override
     public int hashCode() {
-        return filePath.hashCode() ^ Integer.hashCode(lineNumber);
+        return filePath.hashCode() ^ lineNumber;
     }
 
     @Override
