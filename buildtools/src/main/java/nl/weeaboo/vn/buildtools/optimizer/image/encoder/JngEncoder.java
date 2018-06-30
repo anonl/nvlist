@@ -48,10 +48,14 @@ public final class JngEncoder implements IImageEncoder {
         // Set alpha
         Pixmap alphaPixmap = extractAlpha(pixmap);
         byte[] alphaData;
-        if (params.isAllowLossyAlpha()) {
-            alphaData = jpegEncoder.encode(alphaPixmap, newJpegParams(params.getJpegAlphaQuality()));
-        } else {
-            alphaData = pngEncoder.encode(alphaPixmap, new PngEncoderParams());
+        try {
+            if (params.isAllowLossyAlpha()) {
+                alphaData = jpegEncoder.encode(alphaPixmap, newJpegParams(params.getJpegAlphaQuality()));
+            } else {
+                alphaData = pngEncoder.encode(alphaPixmap, new PngEncoderParams());
+            }
+        } finally {
+            alphaPixmap.dispose();
         }
         writer.setAlphaInput(alphaData);
 

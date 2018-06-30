@@ -62,7 +62,14 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
         if (fileName.endsWith(".ktx") || fileName.endsWith(".zktx")) {
             return new KTXTextureData(file, genMipMaps);
         }
-        return new PremultFileTextureData(file, format, genMipMaps);
+
+        boolean needsPremultiplyAlpha = true;
+        if (fileName.contains(".pre.")) {
+            // Assume files named abc.pre.ext are already premultiplied
+            needsPremultiplyAlpha = false;
+        }
+
+        return new PremultFileTextureData(file, format, genMipMaps, needsPremultiplyAlpha);
     }
 
     @Nullable

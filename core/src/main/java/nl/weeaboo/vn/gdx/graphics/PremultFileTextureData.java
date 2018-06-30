@@ -34,6 +34,7 @@ class PremultFileTextureData implements TextureData {
 
     private final FileHandle file;
     private final boolean mipmap;
+    private final boolean needsPremultiplyAlpha;
 
     // Only available between prepare() and consumePixmap()
     private @Nullable Pixmap pixmap;
@@ -48,10 +49,13 @@ class PremultFileTextureData implements TextureData {
      * @param format (optional) If not {@code null}, convert the pixmap to this format before uploading it as
      *        texture data.
      */
-    public PremultFileTextureData(FileHandle file, @Nullable Format format, boolean mipmap) {
+    public PremultFileTextureData(FileHandle file, @Nullable Format format, boolean mipmap,
+            boolean needsPremultiplyAlpha) {
+
         this.file = Checks.checkNotNull(file);
         this.format = format; // May be null
         this.mipmap = mipmap;
+        this.needsPremultiplyAlpha = needsPremultiplyAlpha;
     }
 
     @Override
@@ -115,9 +119,11 @@ class PremultFileTextureData implements TextureData {
             throw new IOException("Error loading texture: " + file);
         }
 
-        DurationLogger premultiplyStopwatch = DurationLogger.createStarted(LOG);
-        PremultUtil.premultiplyAlpha(pixmap);
-        premultiplyStopwatch.logDuration("PremultTextureData.premultiplyAlpha: {}", file);
+        if (needsPremultiplyAlpha) {
+            DurationLogger premultiplyStopwatch = DurationLogger.createStarted(LOG);
+            PremultUtil.premultiplyAlpha(pixmap);
+            premultiplyStopwatch.logDuration("PremultTextureData.premultiplyAlpha: {}", file);
+        }
         return pixmap;
     }
 

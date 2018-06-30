@@ -50,9 +50,9 @@ public final class PremultUtil {
         for (int n = 0; n < limit; n += 4) {
             int abgr = pixels.getInt(n);
             int a = abgr >>> 24;
-            int b = lut[((abgr >> 8) & 0xFF00) | a];
-            int g = lut[((abgr     ) & 0xFF00) | a];
-            int r = lut[((abgr << 8) & 0xFF00) | a];
+            int b = lut[((abgr >> 8) & 0xFF00) | a] & 0xFF;
+            int g = lut[((abgr     ) & 0xFF00) | a] & 0xFF;
+            int r = lut[((abgr << 8) & 0xFF00) | a] & 0xFF;
             pixels.putInt(n, (a << 24) | (b << 16) | (g << 8) | r);
         }
 
