@@ -33,7 +33,7 @@ public class JngTextureLoaderTest {
         testSuite = JngTestSuite.open();
 
         assetManager = new AssetManager(new AbsoluteFileHandleResolver());
-        JngTextureLoader.register(assetManager);
+        PremultTextureLoader.register(assetManager);
     }
 
     @After

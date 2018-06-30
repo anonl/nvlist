@@ -71,7 +71,7 @@ final class TextureManager implements IPreloadHandler {
     @Override
     public void preloadNormalized(ResourceId resourceId) {
         FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
-        textureStore.get().get(absolutePath);
+        textureStore.get().preload(absolutePath);
     }
 
     @CheckForNull

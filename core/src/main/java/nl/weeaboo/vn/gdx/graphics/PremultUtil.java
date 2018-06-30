@@ -70,13 +70,9 @@ public final class PremultUtil {
                 int b = pixels.get(n + 2) & 0xFF;
                 int a = pixels.get(n + 3) & 0xFF;
 
-                r = (a * r + 127) / 255;
-                g = (a * g + 127) / 255;
-                b = (a * b + 127) / 255;
-
-                pixels.put(n    , (byte)r);
-                pixels.put(n + 1, (byte)g);
-                pixels.put(n + 2, (byte)b);
+                pixels.put(n    , PremultLut8.LUT[(r << 8) | a]);
+                pixels.put(n + 1, PremultLut8.LUT[(g << 8) | a]);
+                pixels.put(n + 2, PremultLut8.LUT[(b << 8) | a]);
             }
         } break;
         default:
@@ -185,4 +181,19 @@ public final class PremultUtil {
         PixmapIO.writePNG(fileHandle, pngPixmap);
     }
 
+    /** Lookup table for alpha pre-multiplication (8bpp). */
+    private static final class PremultLut8 {
+
+        static final byte[] LUT = new byte[256 * 256];
+
+        static {
+            int n = 0;
+            for (int x = 0; x < 256; x++) {
+                for (int y = 0; y < 256; y++) {
+                    LUT[n++] = (byte)((x * y + 127) / 255);
+                }
+            }
+        }
+
+    }
 }

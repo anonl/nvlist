@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
-import com.google.common.base.Stopwatch;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -19,14 +18,13 @@ import com.google.common.cache.RemovalNotification;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.impl.core.DurationLogger;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 public class LoadingResourceStore<T> extends AbstractResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoadingResourceStore.class);
-
-    private static final int SLOW_LOAD_WARN_MS = 500;
 
     private final StaticRef<? extends LoadingResourceStore<T>> selfId;
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
@@ -56,21 +54,33 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache.invalidateAll();
     }
 
-    protected T loadResource(FilePath absolutePath) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
+    /**
+     * Request a preload of the given resource.
+     */
+    public void preload(FilePath absolutePath) {
+        startLoadingResource(absolutePath);
+    }
 
+    private void startLoadingResource(FilePath absolutePath) {
         AssetManager am = assetManager.get();
         String pathString = absolutePath.toString();
+
         am.load(pathString, assetType, getLoadParams(absolutePath));
+    }
+
+    protected T loadResource(FilePath absolutePath) {
+        DurationLogger dl = DurationLogger.createStarted(LOG);
+        AssetManager am = assetManager.get();
+
+        startLoadingResource(absolutePath);
+
+        // Finish loading resource
+        String pathString = absolutePath.toString();
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
-        long loadDurationMs = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        if (loadDurationMs >= SLOW_LOAD_WARN_MS) {
-            LOG.warn("Loading resource '{}' took {}", absolutePath, stopwatch);
-        } else {
-            LOG.debug("Loading resource '{}' took {}", absolutePath, stopwatch);
-        }
+        dl.logDuration("Loading resource '{}'", absolutePath);
+
         return resource;
     }
 

@@ -101,6 +101,7 @@ public final class JngEncoder implements IImageEncoder {
             final int limit = src.getWidth() * src.getHeight();
             for (int n = 0; n < limit; n++) {
                 int a = pixels.get(n) & 0xF;
+                a = (a << 4) | a; // 4 bpp -> 8 bpp
                 dstPixels.put((byte)a);
             }
         } break;
