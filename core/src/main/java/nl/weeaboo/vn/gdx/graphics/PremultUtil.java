@@ -18,8 +18,16 @@ public final class PremultUtil {
      * Converts an RGBA8888 pixmap with unassociated alpha to premultiplied alpha.
      */
     public static void premultiplyAlpha(Pixmap pixmap) {
-        Format format = pixmap.getFormat();
-        switch (format) {
+        switch (pixmap.getFormat()) {
+        case RGBA8888:
+            premultiplyAlphaRGBA8888(pixmap);
+            break;
+        case RGBA4444:
+            premultiplyAlphaRGBA4444(pixmap);
+            break;
+        case LuminanceAlpha:
+            premultiplyAlphaLA(pixmap);
+            break;
         case RGB565:
         case RGB888:
             break; // Format doesn't have alpha, so nothing to do
@@ -27,56 +35,63 @@ public final class PremultUtil {
             break; // GDX treats incorrectly treats INTENSITY as ALPHA
         case Alpha:
             break; // Format only has alpha, so nothing to do
-        case LuminanceAlpha: {
-            final ByteBuffer pixels = pixmap.getPixels();
-            final int limit = pixmap.getWidth() * pixmap.getHeight() * 2;
-            for (int n = 0; n < limit; n += 2) {
-                int i = pixels.get(n    ) & 0xFF;
-                int a = pixels.get(n + 1) & 0xFF;
-
-                i = (a * i + 127) / 255;
-
-                pixels.put(n, (byte)i);
-            }
-        } break;
-        case RGBA4444: {
-            final ByteBuffer byteBuffer = pixmap.getPixels();
-            // RGBA4444 is stored as shorts in native order (see Pixmap#getPixels)
-            byteBuffer.order(ByteOrder.nativeOrder());
-            ShortBuffer pixels = byteBuffer.asShortBuffer();
-
-            final int limit = pixmap.getWidth() * pixmap.getHeight();
-            for (int n = 0; n < limit; n++) {
-                int rgba16 = pixels.get(n);
-
-                int r = (rgba16 >> 12) & 0xF;
-                int g = (rgba16 >> 8 ) & 0xF;
-                int b = (rgba16 >> 4 ) & 0xF;
-                int a = (rgba16      ) & 0xF;
-
-                r = (a * r + 7) / 15;
-                g = (a * g + 7) / 15;
-                b = (a * b + 7) / 15;
-
-                pixels.put(n, (short)((r << 12) | (g << 8) | (b << 4) | a));
-            }
-        } break;
-        case RGBA8888: {
-            final ByteBuffer pixels = pixmap.getPixels();
-            final int limit = pixmap.getWidth() * pixmap.getHeight() * 4;
-            for (int n = 0; n < limit; n += 4) {
-                int r = pixels.get(n    ) & 0xFF;
-                int g = pixels.get(n + 1) & 0xFF;
-                int b = pixels.get(n + 2) & 0xFF;
-                int a = pixels.get(n + 3) & 0xFF;
-
-                pixels.put(n    , PremultLut8.LUT[(r << 8) | a]);
-                pixels.put(n + 1, PremultLut8.LUT[(g << 8) | a]);
-                pixels.put(n + 2, PremultLut8.LUT[(b << 8) | a]);
-            }
-        } break;
         default:
-            throw new IllegalArgumentException("Pixmap with unsupported format: " + format);
+            throw new IllegalArgumentException("Pixmap with unsupported format: " + pixmap.getFormat());
+        }
+    }
+
+    private static void premultiplyAlphaRGBA8888(Pixmap pixmap) {
+        final ByteBuffer pixels = pixmap.getPixels();
+        ByteOrder oldOrder = pixels.order();
+        pixels.order(ByteOrder.LITTLE_ENDIAN);
+
+        final byte[] lut = PremultLut8.LUT;
+        final int limit = pixmap.getWidth() * pixmap.getHeight() * 4;
+        for (int n = 0; n < limit; n += 4) {
+            int abgr = pixels.getInt(n);
+            int a = abgr >>> 24;
+            int b = lut[((abgr >> 8) & 0xFF00) | a];
+            int g = lut[((abgr     ) & 0xFF00) | a];
+            int r = lut[((abgr << 8) & 0xFF00) | a];
+            pixels.putInt(n, (a << 24) | (b << 16) | (g << 8) | r);
+        }
+
+        pixels.order(oldOrder);
+    }
+
+    private static void premultiplyAlphaRGBA4444(Pixmap pixmap) {
+        final ByteBuffer byteBuffer = pixmap.getPixels();
+        // RGBA4444 is stored as shorts in native order (see Pixmap#getPixels)
+        byteBuffer.order(ByteOrder.nativeOrder());
+        ShortBuffer pixels = byteBuffer.asShortBuffer();
+
+        final int limit = pixmap.getWidth() * pixmap.getHeight();
+        for (int n = 0; n < limit; n++) {
+            int rgba16 = pixels.get(n);
+
+            int r = (rgba16 >> 12) & 0xF;
+            int g = (rgba16 >> 8 ) & 0xF;
+            int b = (rgba16 >> 4 ) & 0xF;
+            int a = (rgba16      ) & 0xF;
+
+            r = (a * r + 7) / 15;
+            g = (a * g + 7) / 15;
+            b = (a * b + 7) / 15;
+
+            pixels.put(n, (short)((r << 12) | (g << 8) | (b << 4) | a));
+        }
+    }
+
+    private static void premultiplyAlphaLA(Pixmap pixmap) {
+        final ByteBuffer pixels = pixmap.getPixels();
+        final int limit = pixmap.getWidth() * pixmap.getHeight() * 2;
+        for (int n = 0; n < limit; n += 2) {
+            int i = pixels.get(n    ) & 0xFF;
+            int a = pixels.get(n + 1) & 0xFF;
+
+            i = (a * i + 127) / 255;
+
+            pixels.put(n, (byte)i);
         }
     }
 

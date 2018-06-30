@@ -1,4 +1,4 @@
-package nl.weeaboo.gdx.graphics.blur;
+package nl.weeaboo.vn.gdx.graphics.blur;
 
 import java.util.concurrent.TimeUnit;
 
