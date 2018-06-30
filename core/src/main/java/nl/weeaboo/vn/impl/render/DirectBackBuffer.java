@@ -50,13 +50,14 @@ public final class DirectBackBuffer implements IBackBuffer {
 
     @Override
     public void setWindowSize(IEnvironment env, Dim windowSize) {
-        Rect crop = Rect.of(0, 0, windowSize.w, windowSize.h);
-        env.updateRenderEnv(crop, windowSize);
-
         // Update viewports
-        GdxViewportUtil.setToOrtho(screenViewport, Dim.of(crop.w, crop.h), true);
+        GdxViewportUtil.setToOrtho(screenViewport, Dim.of(windowSize.w, windowSize.h), true);
         screenViewport.update(windowSize.w, windowSize.h, true);
         scene2dViewport.update(windowSize.w, windowSize.h, true);
+
+        Rect crop = Rect.of(screenViewport.getScreenX(), screenViewport.getScreenY(),
+                screenViewport.getScreenWidth(), screenViewport.getScreenHeight());
+        env.updateRenderEnv(crop, windowSize);
     }
 
     @Override
