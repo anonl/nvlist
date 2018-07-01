@@ -26,7 +26,6 @@ import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.YDir;
-import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
@@ -37,6 +36,7 @@ import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.vn.impl.core.Destructibles;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.LoggerNotifier;
 import nl.weeaboo.vn.impl.core.Novel;
@@ -82,6 +82,11 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable GLScreenRenderer renderer;
     private @Nullable DrawBuffer drawBuffer;
     private @Nullable IBackBuffer backBuffer;
+    private @Nullable GdxTextureStore textureStore;
+    private @Nullable GdxMusicStore musicStore;
+    private @Nullable ShaderStore shaderStore;
+    private @Nullable GeneratedResourceStore generatedResourceStore;
+    private @Nullable GdxFontStore fontStore;
     private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
@@ -158,11 +163,13 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
-        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem));
-        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
-        StaticEnvironment.SHADER_STORE.set(new ShaderStore());
-        StaticEnvironment.MUSIC_STORE.set(new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
-        StaticEnvironment.FONT_STORE.set(createFontStore());
+        StaticEnvironment.TEXTURE_STORE.set(textureStore =
+                new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem));
+        StaticEnvironment.GENERATED_RESOURCES.set(generatedResourceStore =
+                new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
+        StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
+        StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
+        StaticEnvironment.FONT_STORE.set(fontStore = createFontStore());
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
@@ -178,7 +185,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         });
     }
 
-    private IFontStore createFontStore() {
+    private GdxFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();
         try {
             String fontFamily = "RobotoSlab";
@@ -222,6 +229,12 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         disposeRenderer();
         backBuffer.dispose();
         osd = DisposeUtil.dispose(osd);
+
+        textureStore = Destructibles.destroy(textureStore);
+        generatedResourceStore = Destructibles.destroy(generatedResourceStore);
+        shaderStore = Destructibles.destroy(shaderStore);
+        musicStore = Destructibles.destroy(musicStore);
+        fontStore = DisposeUtil.dispose(fontStore);
         assetManager = DisposeUtil.dispose(assetManager);
     }
 

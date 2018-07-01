@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.gdx.res;
 
-public interface IResourceStore {
+import nl.weeaboo.vn.core.IDestructible;
+
+public interface IResourceStore extends IDestructible {
 
     /** Disposes all resources associated with this resource store. */
     void clear();

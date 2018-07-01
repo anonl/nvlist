@@ -30,9 +30,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
-    private final CacheLoader<FilePath, Ref<T>> loadingFunction = new LoadingFunction();
-    private final AssetRemovalListener assetRemovalListener = new AssetRemovalListener();
-
+    private LoadingCache<FilePath, PreloadRef> preloadCache;
     private LoadingCache<FilePath, Ref<T>> cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
@@ -41,16 +39,38 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         this.selfId = selfId;
         this.assetType = Checks.checkNotNull(type);
 
-        cache = buildCache(CacheBuilder.newBuilder().expireAfterAccess(15, TimeUnit.SECONDS));
+        preloadCache = buildPreloadCache();
+        cache = buildLoadCache();
     }
 
-    private LoadingCache<FilePath, Ref<T>> buildCache(CacheBuilder<Object, Object> builder) {
-        return builder.removalListener(assetRemovalListener)
-                .build(loadingFunction);
+    private LoadingCache<FilePath, PreloadRef> buildPreloadCache() {
+        return CacheBuilder.newBuilder()
+                .expireAfterAccess(15, TimeUnit.SECONDS)
+                .removalListener(new RemovalListener<FilePath, PreloadRef>() {
+                    @Override
+                    public void onRemoval(RemovalNotification<FilePath, PreloadRef> notification) {
+                        unloadResource(notification.getKey());
+                    }
+                })
+                .build(new PreloadFunction());
+    }
+
+    private LoadingCache<FilePath, Ref<T>> buildLoadCache() {
+        return CacheBuilder.newBuilder()
+                .expireAfterAccess(15, TimeUnit.SECONDS)
+                .removalListener(new RemovalListener<FilePath, Ref<T>>() {
+                    @Override
+                    public void onRemoval(RemovalNotification<FilePath, Ref<T>> notification) {
+                        notification.getValue().invalidate();
+                        unloadResource(notification.getKey());
+                    }
+                })
+                .build(new LoadFunction());
     }
 
     @Override
     public void clear() {
+        preloadCache.invalidateAll();
         cache.invalidateAll();
     }
 
@@ -58,30 +78,35 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
      * Request a preload of the given resource.
      */
     public void preload(FilePath absolutePath) {
-        startLoadingResource(absolutePath);
-    }
-
-    private void startLoadingResource(FilePath absolutePath) {
-        AssetManager am = assetManager.get();
-        String pathString = absolutePath.toString();
-
-        am.load(pathString, assetType, getLoadParams(absolutePath));
+        try {
+            preloadCache.get(absolutePath);
+        } catch (ExecutionException e) {
+            LOG.warn("Preload failed: {}", absolutePath, e.getCause());
+        }
     }
 
     protected T loadResource(FilePath absolutePath) {
         DurationLogger dl = DurationLogger.createStarted(LOG);
         AssetManager am = assetManager.get();
 
-        startLoadingResource(absolutePath);
-
         // Finish loading resource
         String pathString = absolutePath.toString();
+        startLoading(absolutePath);
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
         dl.logDuration("Loading resource '{}'", absolutePath);
 
         return resource;
+    }
+
+    private void startLoading(FilePath absolutePath) {
+        AssetManager am = assetManager.get();
+        String pathString = absolutePath.toString();
+
+        LOG.debug("Start loading: {}", absolutePath);
+
+        am.load(pathString, assetType, getLoadParams(absolutePath));
     }
 
     /**
@@ -92,9 +117,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         return null;
     }
 
-    protected void unloadResource(FilePath absolutePath, Ref<T> entry) {
-        entry.invalidate();
-
+    private void unloadResource(FilePath absolutePath) {
         AssetManager am = assetManager.get();
         am.unload(absolutePath.toString());
     }
@@ -124,15 +147,15 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         }
     }
 
-    private class LoadingFunction extends CacheLoader<FilePath, Ref<T>> {
+    private class LoadFunction extends CacheLoader<FilePath, Ref<T>> {
 
         @Override
-        public Ref<T> load(FilePath filename) {
+        public Ref<T> load(FilePath absolutePath) {
             T resource;
             try {
-                resource = loadResource(filename);
+                resource = loadResource(absolutePath);
             } catch (RuntimeException re) {
-                loadError(filename, re);
+                loadError(absolutePath, re);
                 resource = null;
             }
             return new Ref<>(resource);
@@ -140,13 +163,17 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
     }
 
-    private class AssetRemovalListener implements RemovalListener<FilePath, Ref<T>> {
+    private class PreloadFunction extends CacheLoader<FilePath, PreloadRef> {
 
         @Override
-        public void onRemoval(RemovalNotification<FilePath, Ref<T>> notification) {
-            unloadResource(notification.getKey(), notification.getValue());
+        public PreloadRef load(FilePath absolutePath) {
+            startLoading(absolutePath);
+            return new PreloadRef();
         }
 
+    }
+
+    private static final class PreloadRef {
     }
 
 }

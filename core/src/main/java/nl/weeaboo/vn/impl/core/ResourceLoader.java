@@ -1,15 +1,22 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
@@ -27,7 +34,8 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private final MediaType mediaType;
     private final IResourceLoadLog resourceLoadLog;
-    private final LruSet<FilePath> checkedFilenames;
+    private final LruSet<FilePath> checkedRedundantFilenames;
+    private final LoadingCache<FilePath, ResourceId> resolveCache;
 
     private @Nullable IPreloadHandler preloadHandler;
 
@@ -37,7 +45,15 @@ public abstract class ResourceLoader implements IResourceResolver {
     public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
-        this.checkedFilenames = new LruSet<>(128);
+
+        checkedRedundantFilenames = new LruSet<>(128);
+        resolveCache = buildResolveCache();
+    }
+
+    private LoadingCache<FilePath, ResourceId> buildResolveCache() {
+        return CacheBuilder.newBuilder()
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .build(new FileResolveFunction());
     }
 
     @Override
@@ -46,21 +62,12 @@ public abstract class ResourceLoader implements IResourceResolver {
             return null;
         }
 
-        FilePath filePath = ResourceId.extractFilePath(path.toString());
-        String subId = ResourceId.extractSubId(path.getName());
-        if (isValidFilename(filePath)) {
-            // The given extension works
-            return new ResourceId(mediaType, filePath, subId);
+        try {
+            return resolveCache.get(path);
+        } catch (ExecutionException e) {
+            LOG.warn("Resource not found '{}' :: {}", path, e.getCause());
+            return null;
         }
-
-        for (String ext : autoFileExts) {
-            FilePath fn = filePath.withExt(ext);
-            if (isValidFilename(fn)) {
-                // This extension works
-                return new ResourceId(mediaType, fn, subId);
-            }
-        }
-        return null;
     }
 
     /**
@@ -72,7 +79,7 @@ public abstract class ResourceLoader implements IResourceResolver {
             return;
         }
 
-        if (!checkedFilenames.add(filePath)) {
+        if (!checkedRedundantFilenames.add(filePath)) {
             return;
         }
 
@@ -171,5 +178,29 @@ public abstract class ResourceLoader implements IResourceResolver {
     /** Sets the function that handles calls to {@link #preloadNormalized(nl.weeaboo.vn.core.ResourceId)}. */
     public void setPreloadHandler(IPreloadHandler preloadHandler) {
         this.preloadHandler = Checks.checkNotNull(preloadHandler);
+    }
+
+    private final class FileResolveFunction extends CacheLoader<FilePath, ResourceId> {
+
+        @Override
+        public ResourceId load(FilePath path) throws FileNotFoundException {
+            FilePath filePath = ResourceId.extractFilePath(path.toString());
+            String subId = ResourceId.extractSubId(path.getName());
+            if (isValidFilename(filePath)) {
+                // The given extension works
+                return new ResourceId(mediaType, filePath, subId);
+            }
+
+            for (String ext : autoFileExts) {
+                FilePath fn = filePath.withExt(ext);
+                if (isValidFilename(fn)) {
+                    // This extension works
+                    return new ResourceId(mediaType, fn, subId);
+                }
+            }
+
+            throw new FileNotFoundException(path.toString());
+        }
+
     }
 }

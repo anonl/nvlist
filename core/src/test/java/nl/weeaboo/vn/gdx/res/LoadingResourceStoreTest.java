@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.gdx.res;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,11 @@ public class LoadingResourceStoreTest {
     public void init() {
         StaticEnvironment.ASSET_MANAGER.set(new TestAssetManager());
         testId.set(cam = new PixmapResourceStore(testId));
+    }
+
+    @After
+    public void deinit() {
+        cam.clear();
     }
 
     @Test
