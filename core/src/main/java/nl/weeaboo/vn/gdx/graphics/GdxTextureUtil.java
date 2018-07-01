@@ -117,4 +117,13 @@ public final class GdxTextureUtil {
         throw new IllegalArgumentException("Unsupported tiling mode: " + mode);
     }
 
+    /**
+     * Returns an estimate of the RAM usage of the given texture.
+     */
+    public static int estimateMemoryUseBytes(Texture tex) {
+        int pixelCount = tex.getWidth() * tex.getHeight();
+        int bpp = PixmapUtil.getBitsPerPixel(tex.getTextureData().getFormat());
+        return pixelCount * bpp / 8;
+    }
+
 }

@@ -161,4 +161,24 @@ public final class PixmapUtil {
         throw new IllegalArgumentException("Unsupported format: " + format);
     }
 
+    /**
+     * Returns the number of bits per pixel for pixmaps with the given format.
+     */
+    public static int getBitsPerPixel(Format format) {
+        switch (format) {
+        case Alpha:
+        case Intensity:
+            return 8;
+        case LuminanceAlpha:
+        case RGB565:
+        case RGBA4444:
+            return 16;
+        case RGB888:
+            return 24;
+        case RGBA8888:
+            return 32;
+        }
+        throw new IllegalArgumentException("Unsupported format: " + format);
+    }
+
 }

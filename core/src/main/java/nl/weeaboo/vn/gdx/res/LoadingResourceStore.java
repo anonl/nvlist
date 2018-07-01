@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.gdx.res;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -10,11 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
@@ -30,8 +24,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
-    private LoadingCache<FilePath, PreloadRef> preloadCache;
-    private LoadingCache<FilePath, Ref<T>> cache;
+    private ResourceStoreCache<T> cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
         super(LoggerFactory.getLogger("LoadingResourceStore<" + type.getSimpleName() + ">"));
@@ -39,50 +32,19 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         this.selfId = selfId;
         this.assetType = Checks.checkNotNull(type);
 
-        preloadCache = buildPreloadCache();
-        cache = buildLoadCache();
-    }
-
-    private LoadingCache<FilePath, PreloadRef> buildPreloadCache() {
-        return CacheBuilder.newBuilder()
-                .expireAfterAccess(15, TimeUnit.SECONDS)
-                .removalListener(new RemovalListener<FilePath, PreloadRef>() {
-                    @Override
-                    public void onRemoval(RemovalNotification<FilePath, PreloadRef> notification) {
-                        unloadResource(notification.getKey());
-                    }
-                })
-                .build(new PreloadFunction());
-    }
-
-    private LoadingCache<FilePath, Ref<T>> buildLoadCache() {
-        return CacheBuilder.newBuilder()
-                .expireAfterAccess(15, TimeUnit.SECONDS)
-                .removalListener(new RemovalListener<FilePath, Ref<T>>() {
-                    @Override
-                    public void onRemoval(RemovalNotification<FilePath, Ref<T>> notification) {
-                        notification.getValue().invalidate();
-                        unloadResource(notification.getKey());
-                    }
-                })
-                .build(new LoadFunction());
+        cache = new Cache(new ResourceStoreCacheConfig<>());
     }
 
     @Override
     public void clear() {
-        preloadCache.invalidateAll();
-        cache.invalidateAll();
+        cache.clear();
     }
 
     /**
      * Request a preload of the given resource.
      */
     public void preload(FilePath absolutePath) {
-        try {
-            preloadCache.get(absolutePath);
-        } catch (ExecutionException e) {
-            LOG.warn("Preload failed: {}", absolutePath, e.getCause());
-        }
+        cache.preload(absolutePath);
     }
 
     protected T loadResource(FilePath absolutePath) {
@@ -117,11 +79,6 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         return null;
     }
 
-    private void unloadResource(FilePath absolutePath) {
-        AssetManager am = assetManager.get();
-        am.unload(absolutePath.toString());
-    }
-
     /**
      * Attempts to load the resource with the given name.
      *
@@ -140,17 +97,36 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
     protected @Nullable Ref<T> getEntry(FilePath absolutePath) {
         try {
-            return cache.get(absolutePath);
+            return cache.getEntry(absolutePath);
         } catch (ExecutionException e) {
             loadError(absolutePath, e.getCause());
             return null;
         }
     }
 
-    private class LoadFunction extends CacheLoader<FilePath, Ref<T>> {
+    /**
+     * Changes the cache config (invalidates all existing cached entries).
+     */
+    public final void setCacheConfig(ResourceStoreCacheConfig<T> config) {
+        // Clear existing cache
+        cache.clear();
+
+        // Init a new cache with the new config
+        cache = new Cache(config);
+    }
+
+    protected final ResourceStoreCache<T> getCache() {
+        return cache;
+    }
+
+    private final class Cache extends ResourceStoreCache<T> {
+
+        public Cache(ResourceStoreCacheConfig<T> config) {
+            super(config);
+        }
 
         @Override
-        public Ref<T> load(FilePath absolutePath) {
+        public Ref<T> doLoad(FilePath absolutePath) {
             T resource;
             try {
                 resource = loadResource(absolutePath);
@@ -161,19 +137,16 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
             return new Ref<>(resource);
         }
 
-    }
-
-    private class PreloadFunction extends CacheLoader<FilePath, PreloadRef> {
-
         @Override
-        public PreloadRef load(FilePath absolutePath) {
+        protected void doPreload(FilePath absolutePath) {
             startLoading(absolutePath);
-            return new PreloadRef();
         }
 
-    }
-
-    private static final class PreloadRef {
+        @Override
+        protected void doUnload(FilePath absolutePath) {
+            AssetManager am = assetManager.get();
+            am.unload(absolutePath.toString());
+        }
     }
 
 }
