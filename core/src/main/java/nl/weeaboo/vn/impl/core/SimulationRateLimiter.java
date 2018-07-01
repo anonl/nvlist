@@ -12,6 +12,7 @@ public final class SimulationRateLimiter {
 
     private IUpdateable simulation = IUpdateable.EMPTY;
     private double simulationStepS = 1.0 / 60.0;
+    private int maxUpdatesPerFrame = 3; // Max. num of calls to update() per rendered frame
 
     private long lastRenderTime;
     private double accumS;
@@ -29,11 +30,19 @@ public final class SimulationRateLimiter {
 
         accumS += Math.min(1.0, (now - lastRenderTime) * nanosToSeconds);
 
+        int updateCount = 0;
         while (accumS >= simulationStepS) {
             accumS -= simulationStepS;
 
             simulation.update();
             statsCount++;
+            updateCount++;
+
+            // Abort if we're skipping too many frames at once
+            if (updateCount >= maxUpdatesPerFrame) {
+                accumS = 0;
+                break;
+            }
         }
 
         if (now >= statsPeriodStart + 1_000_000_000L) {
