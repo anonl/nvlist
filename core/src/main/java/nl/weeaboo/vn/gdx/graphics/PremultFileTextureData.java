@@ -1,8 +1,5 @@
 package nl.weeaboo.vn.gdx.graphics;
 
-import static com.badlogic.gdx.graphics.g2d.Gdx2DPixmap.GDX2D_FORMAT_RGB565;
-import static com.badlogic.gdx.graphics.g2d.Gdx2DPixmap.GDX2D_FORMAT_RGBA4444;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
@@ -105,9 +102,7 @@ class PremultFileTextureData implements TextureData {
             if (JngReader.isJng(fileBytes, 0, fileBytes.length)) {
                 // .jng files
                 JngReaderOpts opts = new JngReaderOpts();
-                if (targetFormat == GDX2D_FORMAT_RGB565 || targetFormat == GDX2D_FORMAT_RGBA4444) {
-                    opts.lowPrecision = true;
-                }
+                opts.resultFormat = format;
                 pixmap = JngReader.read(new ByteArrayInputStream(fileBytes), opts);
             } else {
                 // .jpg, .png files

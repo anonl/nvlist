@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
 public final class JngReader {
 
@@ -99,10 +100,10 @@ public final class JngReader {
             }
         }
 
-        boolean hasAlpha = alphaType != null && !alphaBytes.isEmpty();
+        boolean inputHasAlpha = alphaType != null && !alphaBytes.isEmpty();
 
         // Read color data
-        final Format resultFormat = getResultFormat(hasAlpha);
+        final Format resultFormat = getResultFormat(inputHasAlpha);
         Pixmap result;
         {
             byte[] colorBytesMerged = JngInputUtil.concatChunks(colorBytes);
@@ -111,7 +112,7 @@ public final class JngReader {
         }
 
         // Read and apply alpha mask if it exists
-        if (hasAlpha) {
+        if (inputHasAlpha && PixmapUtil.hasAlpha(resultFormat)) {
             Pixmap alpha;
             {
                 byte[] alphaBytesMerged = mergeAlpha(header, alphaType, alphaBytes);
@@ -167,11 +168,12 @@ public final class JngReader {
     }
 
     private Format getResultFormat(boolean hasAlpha) {
-        if (opts.lowPrecision) {
-            return (hasAlpha ? Format.RGBA4444 : Format.RGB565);
-        } else {
-            return (hasAlpha ? Format.RGBA8888 : Format.RGB888);
+        Format resultFormat = opts.resultFormat;
+        if (resultFormat != null) {
+            return resultFormat;
         }
+
+        return (hasAlpha ? Format.RGBA8888 : Format.RGB888);
     }
 
     private static void readChunks(List<byte[]> out, DataInput din, int len) throws IOException {

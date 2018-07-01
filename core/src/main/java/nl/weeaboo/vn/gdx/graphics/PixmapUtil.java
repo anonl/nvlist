@@ -143,4 +143,22 @@ public final class PixmapUtil {
         return new Pixmap(gdx2dPixmap);
     }
 
+    /**
+     * Returns {@code true} if the given format has an alpha channel.
+     */
+    public static boolean hasAlpha(Format format) {
+        switch (format) {
+        case Alpha:
+        case LuminanceAlpha:
+        case RGBA4444:
+        case RGBA8888:
+            return true;
+        case Intensity:
+        case RGB565:
+        case RGB888:
+            return false;
+        }
+        throw new IllegalArgumentException("Unsupported format: " + format);
+    }
+
 }
