@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.core;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,12 +21,14 @@ import com.google.common.cache.LoadingCache;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
+@CustomSerializable
 public abstract class ResourceLoader implements IResourceResolver {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
@@ -34,8 +37,9 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private final MediaType mediaType;
     private final IResourceLoadLog resourceLoadLog;
-    private final LruSet<FilePath> checkedRedundantFilenames;
-    private final LoadingCache<FilePath, ResourceId> resolveCache;
+
+    private transient LruSet<FilePath> checkedRedundantFilenames;
+    private transient @Nullable LoadingCache<FilePath, ResourceId> resolveCache;
 
     private @Nullable IPreloadHandler preloadHandler;
 
@@ -46,8 +50,18 @@ public abstract class ResourceLoader implements IResourceResolver {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
 
+        initTransients();
+    }
+
+    private void initTransients() {
         checkedRedundantFilenames = new LruSet<>(128);
         resolveCache = buildResolveCache();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
     }
 
     private LoadingCache<FilePath, ResourceId> buildResolveCache() {
