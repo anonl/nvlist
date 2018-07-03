@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.render;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -38,17 +37,5 @@ public interface IBackBuffer {
      * Notifies the back buffer of a change to the dimensions of the native window.
      */
     void setWindowSize(IEnvironment env, Dim windowSize);
-
-    /**
-     * Returns the viewport for rendering to the back buffer.
-     * @see #getScene2dViewport()
-     */
-    Viewport getScreenViewport();
-
-    /**
-     * Returns the viewport for Scene2d.
-     * @see #getScreenViewport()
-     */
-    Viewport getScene2dViewport();
 
 }

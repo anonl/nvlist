@@ -21,21 +21,18 @@ import nl.weeaboo.vn.gdx.res.DisposeUtil;
 public final class FboBackBuffer implements IBackBuffer {
 
     private final Dim vsize;
+    private final GdxViewports viewports;
 
     private final FitViewport frameBufferViewport;
-    private final FitViewport screenViewport;
-    private final FitViewport scene2dViewport;
 
     private final SpriteBatch batch;
     private @Nullable FrameBuffer frameBuffer;
 
-    public FboBackBuffer(Dim vsize) {
+    public FboBackBuffer(Dim vsize, GdxViewports viewports) {
         this.vsize = Checks.checkNotNull(vsize);
+        this.viewports = Checks.checkNotNull(viewports);
 
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
-        screenViewport = new FitViewport(vsize.w, vsize.h);
-        scene2dViewport = new FitViewport(vsize.w, vsize.h);
-
         batch = new SpriteBatch();
     }
 
@@ -71,6 +68,7 @@ public final class FboBackBuffer implements IBackBuffer {
     public void flip() {
         checkFboExists();
 
+        Viewport screenViewport = viewports.getScreenViewport();
         screenViewport.apply();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -98,29 +96,21 @@ public final class FboBackBuffer implements IBackBuffer {
     public void setWindowSize(IEnvironment env, Dim windowSize) {
         disposeFrameBuffer();
 
-        Dim fboSize = Dim.of(vsize.w / 2, vsize.h / 2);
-
+        Dim fboSize = vsize;
         env.updateRenderEnv(Rect.of(0, 0, fboSize.w, fboSize.h), fboSize);
 
         // Update viewports
+        Viewport screenViewport = viewports.getScreenViewport();
         GdxViewportUtil.setToOrtho(screenViewport, fboSize, true);
         screenViewport.update(windowSize.w, windowSize.h, true);
+
+        Viewport scene2dViewport = viewports.getScene2dViewport();
         scene2dViewport.update(windowSize.w, windowSize.h, true);
 
         // (Re)init screensize-related resources
         frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, fboSize.w, fboSize.h, false);
         GdxViewportUtil.setToOrtho(frameBufferViewport, fboSize, true);
         frameBufferViewport.update(fboSize.w, fboSize.h, true);
-    }
-
-    @Override
-    public Viewport getScreenViewport() {
-        return screenViewport;
-    }
-
-    @Override
-    public Viewport getScene2dViewport() {
-        return scene2dViewport;
     }
 
 }

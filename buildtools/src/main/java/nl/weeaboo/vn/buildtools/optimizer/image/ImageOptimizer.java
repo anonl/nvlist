@@ -27,6 +27,7 @@ import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.image.ImageEncoderConfig.EImageEncoding;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
@@ -46,6 +47,7 @@ public final class ImageOptimizer {
 
     private final ResourceOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
+    private ImageEncoderConfig encoderConfig;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
@@ -54,10 +56,10 @@ public final class ImageOptimizer {
     /** Definition per (optimized) image file */
     private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
 
-
     public ImageOptimizer(IOptimizerContext context) {
         optimizerConfig = context.getConfig();
         resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
+        encoderConfig = context.getConfig(ImageEncoderConfig.class, new ImageEncoderConfig());
 
         optimizerFileSet = context.getFileSet();
 
@@ -145,7 +147,7 @@ public final class ImageOptimizer {
         ImageWithDef optimized = resizer.process(imageWithDef);
         pixmap.dispose();
 
-        IImageEncoder imageEncoder = new JngEncoder();
+        IImageEncoder imageEncoder = createEncoder();
         EncodedImage encoded = imageEncoder.encode(optimized);
         optimized.dispose();
 
@@ -161,6 +163,15 @@ public final class ImageOptimizer {
 
         optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+    }
+
+    private IImageEncoder createEncoder() {
+        EImageEncoding encoding = encoderConfig.getEncoding();
+        switch (encoding) {
+        case JNG:
+            return new JngEncoder();
+        }
+        throw new IllegalArgumentException("Unsupported encoding: " + encoding);
     }
 
     private void addPremultipyFileExt(EncodedImage encoded) {

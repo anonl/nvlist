@@ -51,9 +51,10 @@ import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.input.Input;
 import nl.weeaboo.vn.impl.input.InputConfig;
-import nl.weeaboo.vn.impl.render.DirectBackBuffer;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.GLScreenRenderer;
+import nl.weeaboo.vn.impl.render.GdxViewports;
+import nl.weeaboo.vn.impl.render.HybridBackBuffer;
 import nl.weeaboo.vn.impl.render.IBackBuffer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
@@ -119,11 +120,10 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         performanceMetrics = new PerformanceMetrics();
 
         Dim vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
-        // backBuffer = new FboBackBuffer(vsize);
-        backBuffer = new DirectBackBuffer(vsize);
 
-        // TODO: Input adapter wants a transform from screen to world (y-down)
-        inputAdapter = new GdxInputAdapter(backBuffer.getScreenViewport());
+        GdxViewports viewports = new GdxViewports(vsize);
+        backBuffer = new HybridBackBuffer(vsize, viewports);
+        inputAdapter = new GdxInputAdapter(viewports.getScreenViewport());
 
         try {
             initNovel(prefs);
@@ -134,7 +134,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         simulationRateLimiter = new SimulationRateLimiter();
         simulationRateLimiter.setSimulation(this, 60);
 
-        sceneEnv = new Scene2dEnv(resourceFileSystem, backBuffer.getScene2dViewport());
+        sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
         osd = Osd.newInstance(resourceFileSystem, performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
@@ -198,7 +198,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 if (style.isItalic()) {
                     name += "Oblique";
                 }
-
 
                 MutableTextStyle ts = new MutableTextStyle();
                 ts.setFontName(name);
