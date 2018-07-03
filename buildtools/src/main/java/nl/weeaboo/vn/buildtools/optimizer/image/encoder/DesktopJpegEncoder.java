@@ -26,7 +26,15 @@ final class DesktopJpegEncoder implements IJpegEncoder {
     @Override
     public byte[] encode(Pixmap pixmap, JpegEncoderParams params) throws IOException {
         // Use an explicit image type to flatten any alpha in the source pixmap
-        BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage image;
+        switch (pixmap.getFormat()) {
+        case Alpha:
+        case Intensity:
+            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_BYTE_GRAY);
+            break;
+        default:
+            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_3BYTE_BGR);
+        }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageWriter writer = Iterators.get(ImageIO.getImageWritersByFormatName("jpg"), 0);

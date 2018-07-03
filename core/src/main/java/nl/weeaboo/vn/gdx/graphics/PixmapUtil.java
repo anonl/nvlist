@@ -162,6 +162,27 @@ public final class PixmapUtil {
     }
 
     /**
+     * Returns {@code true} if the given pixmap contains one or more pixels that have some translucency (alpha
+     * is less that the maximum value).
+     */
+    public static boolean hasTranslucentPixel(Pixmap pixmap) {
+        if (!hasAlpha(pixmap.getFormat())) {
+            return false;
+        }
+
+        for (int y = 0; y < pixmap.getHeight(); y++) {
+            for (int x = 0; x < pixmap.getWidth(); x++) {
+                int rgba8888 = pixmap.getPixel(x, y);
+                int alpha = (rgba8888 & 0xFF);
+                if (alpha < 255) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the number of bits per pixel for pixmaps with the given format.
      */
     public static int getBitsPerPixel(Format format) {

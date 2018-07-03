@@ -23,17 +23,21 @@ import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.io.FileUtil;
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.PremultUtil;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.image.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
 public final class ImageOptimizer {
@@ -123,9 +127,9 @@ public final class ImageOptimizer {
     private void optimizeImage(FilePath inputFile) throws IOException {
         LOG.debug("Optimizing image: {}", inputFile);
 
-        final boolean premultiplyAlpha = true;
-
         Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
+
+        final boolean premultiplyAlpha = true && PixmapUtil.hasAlpha(pixmap.getFormat());
         if (premultiplyAlpha) {
             PremultUtil.premultiplyAlpha(pixmap);
         }
@@ -139,24 +143,36 @@ public final class ImageOptimizer {
 
         ImageResizer resizer = new ImageResizer(resizeConfig);
         ImageWithDef optimized = resizer.process(imageWithDef);
+        pixmap.dispose();
 
-        // TODO: Use .jpg if the image has no alpha
-        JngEncoder jngEncoder = new JngEncoder();
-        EncodedImage encoded = jngEncoder.encode(optimized);
+        IImageEncoder imageEncoder = new JngEncoder();
+        EncodedImage encoded = imageEncoder.encode(optimized);
+        optimized.dispose();
 
-        FilePath outputPath;
-        if (premultiplyAlpha) {
-            outputPath = inputFile.withExt("pre.jng");
-        } else {
-            outputPath = inputFile.withExt("jng");
+        // Give files with premultiplied alpha .pre.ext-style extension.
+        if (premultiplyAlpha && encoded.hasAlpha()) {
+            addPremultipyFileExt(encoded);
         }
+        FilePath outputPath = getOutputPath(inputFile, encoded.getDef().getFilename());
 
         File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
         Files.createParentDirs(outputF);
         Files.write(encoded.readBytes(), outputF);
 
-        optimizedDefs.put(outputPath, optimized.getDef());
+        optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+    }
+
+    private void addPremultipyFileExt(EncodedImage encoded) {
+        ImageDefinitionBuilder def = encoded.getDef().builder();
+        String fn = def.getFilename();
+        def.setFilename(Filenames.replaceExt(fn, "pre." + Filenames.getExtension(fn)));
+        encoded.setDef(def.build());
+    }
+
+    private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
+        FilePath folder = inputPath.getParent();
+        return folder.resolve(outputFilename);
     }
 
     private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {
