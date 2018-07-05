@@ -2,16 +2,17 @@ package nl.weeaboo.vn.buildtools.optimizer.sound;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
+import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
 public final class SoundWithDef {
 
     private final IEncodedResource audioData;
-    private final ISoundDefinition def;
+    private final SoundDefinition def;
 
     public SoundWithDef(IEncodedResource audioData, ISoundDefinition def) {
         this.audioData = Checks.checkNotNull(audioData);
-        this.def = Checks.checkNotNull(def);
+        this.def = SoundDefinition.from(def);
     }
 
     /**
@@ -24,7 +25,7 @@ public final class SoundWithDef {
     /**
      * Returns the sound definition.
      */
-    public ISoundDefinition getDef() {
+    public SoundDefinition getDef() {
         return def;
     }
 

@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.common.io.Files;
 
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
@@ -22,14 +24,15 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
+import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
-import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.NoOpSoundEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
-import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
+import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionCache;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionIO;
@@ -40,8 +43,9 @@ public final class SoundOptimizer {
     private static final Logger LOG = LoggerFactory.getLogger(SoundOptimizer.class);
 
     private final ResourceOptimizerConfig optimizerConfig;
-    private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
+    private final ITempFileProvider tempFileProvider;
+    private final IFileSystem resFileSystem;
     private final SoundDefinitionCache soundDefCache;
 
     // --- State during optimization ---
@@ -50,8 +54,8 @@ public final class SoundOptimizer {
 
     public SoundOptimizer(IOptimizerContext context) {
         optimizerConfig = context.getConfig();
-
         optimizerFileSet = context.getFileSet();
+        tempFileProvider = context.getTempFileProvider();
 
         NvlistProjectConnection project = context.getProject();
         resFileSystem = project.getResFileSystem();
@@ -73,21 +77,21 @@ public final class SoundOptimizer {
     }
 
     private void optimizeSounds() {
-        Iterable<FilePath> inputFiles;
+        ImmutableList<FilePath> inputFiles;
         try {
-            inputFiles = getSoundFiles();
+            inputFiles = ImmutableList.copyOf(getSoundFiles());
         } catch (IOException ioe) {
             LOG.warn("Unable to read folder", ioe);
             return;
         }
 
-        for (FilePath inputFile : inputFiles) {
+        inputFiles.parallelStream().forEach(inputFile -> {
             try {
                 optimizeSound(inputFile);
             } catch (IOException | RuntimeException e) {
                 LOG.warn("Error optimizing audio file: {}", inputFile, e);
             }
-        }
+        });
     }
 
     private void writeSoundDefinitions() {
@@ -113,7 +117,7 @@ public final class SoundOptimizer {
 
     private Iterable<FilePath> getSoundFiles() throws IOException {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.SOUND.getSubFolder());
-        return filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
+        return filterByExts(resFileSystem.getFiles(filter), GdxMusicStore.getSupportedFileExts());
     }
 
     private void optimizeSound(FilePath inputFile) throws IOException {
@@ -125,8 +129,15 @@ public final class SoundOptimizer {
         EncodedSound encoded = encoder.encode(soundWithDef);
 
         FilePath outputPath = getOutputPath(inputFile, encoded.getDef().getFilename());
+
+        // Write optimized file
+        File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
+        Files.createParentDirs(outputF);
+        Files.write(encoded.readBytes(), outputF);
+
         optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+        encoded.dispose();
     }
 
     private SoundWithDef loadInput(FilePath inputFile) {
@@ -141,7 +152,7 @@ public final class SoundOptimizer {
     }
 
     private ISoundEncoder createEncoder() {
-        return new NoOpSoundEncoder();
+        return new FfmpegSoundEncoder(tempFileProvider);
     }
 
     private FilePath getOutputPath(FilePath inputPath, String outputFilename) {

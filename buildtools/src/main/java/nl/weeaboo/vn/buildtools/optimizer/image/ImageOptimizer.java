@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -83,21 +84,21 @@ public final class ImageOptimizer {
     }
 
     private void optimizeImages() {
-        Iterable<FilePath> inputFiles;
+        ImmutableList<FilePath> inputFiles;
         try {
-            inputFiles = getImageFiles();
+            inputFiles = ImmutableList.copyOf(getImageFiles());
         } catch (IOException ioe) {
             LOG.warn("Unable to read folder", ioe);
             return;
         }
 
-        for (FilePath inputFile : inputFiles) {
+        inputFiles.parallelStream().forEach(inputFile -> {
             try {
                 optimizeImage(inputFile);
             } catch (IOException | RuntimeException e) {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
             }
-        }
+        });
     }
 
     private void writeImageDefinitions() {
@@ -163,6 +164,7 @@ public final class ImageOptimizer {
 
         optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+        encoded.dispose();
     }
 
     private IImageEncoder createEncoder() {

@@ -108,9 +108,9 @@ public final class SoundDefinitionIO {
     }
 
     private static SoundDefinition decodeJson(SoundDefinitionJson soundDefJson) {
-        String filename = soundDefJson.file;
-        String displayName = soundDefJson.displayName;
-        return new SoundDefinition(filename, displayName);
+        SoundDefinitionBuilder builder = new SoundDefinitionBuilder(soundDefJson.file);
+        builder.setDisplayName(soundDefJson.displayName);
+        return builder.build();
     }
 
 }
