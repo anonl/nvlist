@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.sound.desc;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
@@ -15,9 +17,16 @@ public final class SoundDefinition implements ISoundDefinition {
     // --- Also update SoundDefinitionJson when changing attributes ---
 
     /**
+     * @see #SoundDefinition(String, String)
+     */
+    public SoundDefinition(String filename) {
+        this(filename, null);
+    }
+
+    /**
      * @param displayName (optional) Display name for this audio file.
      */
-    public SoundDefinition(String filename, String displayName) {
+    public SoundDefinition(String filename, @Nullable String displayName) {
         Preconditions.checkArgument(FilePath.of(filename).getName().equals(filename),
                 "Filename may not be a path: " + filename);
         this.filename = filename;
@@ -27,6 +36,16 @@ public final class SoundDefinition implements ISoundDefinition {
                     "Display name may be null, but not an empty string");
         }
         this.displayName = displayName;
+    }
+
+    /**
+     * Instantiates a new {@link SoundDefinition} initialized with the given definition.
+     */
+    public static SoundDefinition from(ISoundDefinition def) {
+        if (def instanceof SoundDefinition) {
+            return (SoundDefinition)def;
+        }
+        return new SoundDefinition(def.getFilename(), def.getDisplayName());
     }
 
     @Override

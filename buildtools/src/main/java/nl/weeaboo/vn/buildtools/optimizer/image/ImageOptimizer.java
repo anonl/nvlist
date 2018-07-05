@@ -36,9 +36,9 @@ import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.PremultUtil;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
-import nl.weeaboo.vn.impl.image.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
 public final class ImageOptimizer {
@@ -47,7 +47,7 @@ public final class ImageOptimizer {
 
     private final ResourceOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
-    private ImageEncoderConfig encoderConfig;
+    private final ImageEncoderConfig encoderConfig;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
@@ -107,7 +107,7 @@ public final class ImageOptimizer {
         }
 
         for (Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
-            FilePath jsonRelativePath = folderEntry.getKey().resolve("img.json");
+            FilePath jsonRelativePath = folderEntry.getKey().resolve(IImageDefinition.IMG_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 
             File outputF = new File(optimizerConfig.getOutputFolder(), jsonRelativePath.toString());
@@ -136,7 +136,7 @@ public final class ImageOptimizer {
             PremultUtil.premultiplyAlpha(pixmap);
         }
 
-        IImageDefinition imageDef = imageDefCache.getImageDef(inputFile);
+        IImageDefinition imageDef = imageDefCache.getMetaData(inputFile);
         if (imageDef == null) {
             imageDef = new ImageDefinition(inputFile.getName(), Dim.of(pixmap.getWidth(), pixmap.getHeight()));
         }

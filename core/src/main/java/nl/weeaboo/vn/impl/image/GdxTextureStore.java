@@ -17,6 +17,7 @@ import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCacheConfig;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.StaticRef;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
 
 public final class GdxTextureStore extends LoadingResourceStore<Texture> {
 
@@ -49,7 +50,7 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
      */
     @CheckForNull
     public final IImageDefinition getImageDef(FilePath imagePath) {
-        return cachedImageDefs.getImageDef(imagePath);
+        return cachedImageDefs.getMetaData(imagePath);
     }
 
     @Override
