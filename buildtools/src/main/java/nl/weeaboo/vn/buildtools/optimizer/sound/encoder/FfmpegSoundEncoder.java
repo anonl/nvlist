@@ -3,7 +3,11 @@ package nl.weeaboo.vn.buildtools.optimizer.sound.encoder;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
+import java.util.Arrays;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -20,10 +24,26 @@ import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionBuilder;
 
 public final class FfmpegSoundEncoder implements ISoundEncoder {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FfmpegSoundEncoder.class);
+
     private final ITempFileProvider tempFileProvider;
 
     public FfmpegSoundEncoder(ITempFileProvider tempFileProvider) {
         this.tempFileProvider = Checks.checkNotNull(tempFileProvider);
+    }
+
+    /**
+     * @return {@code true} if a usable ffmpeg executable was found, allowing this encoder to be used.
+     */
+    public static boolean isAvailable() {
+        try {
+            runProcess(Arrays.asList("ffmpeg", "-h"));
+            LOG.debug("ffmpeg is available");
+            return true;
+        } catch (IOException e) {
+            LOG.info("ffmpeg not available: {}", e.toString());
+            return false;
+        }
     }
 
     @Override
@@ -36,7 +56,7 @@ public final class FfmpegSoundEncoder implements ISoundEncoder {
             // Copy sound to temp file (input)
             Files.write(sound.getAudioData().readBytes(), inputFile);
 
-            runEncoderProcess(getCommandLineArgs(inputFile, outputFile));
+            runProcess(getCommandLineArgs(inputFile, outputFile));
             resultAudioData = EncodedResource.fromTempFile(outputFile);
         } finally {
             inputFile.delete();
@@ -47,7 +67,7 @@ public final class FfmpegSoundEncoder implements ISoundEncoder {
         return new EncodedSound(resultAudioData, soundDef.build());
     }
 
-    private void runEncoderProcess(List<String> command) throws IOException {
+    private static void runProcess(List<String> command) throws IOException {
         String commandString = Joiner.on(' ').join(command);
 
         Process process = new ProcessBuilder()

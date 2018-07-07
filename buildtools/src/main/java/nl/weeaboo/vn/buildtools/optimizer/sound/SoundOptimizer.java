@@ -30,6 +30,7 @@ import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
+import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.NoOpSoundEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
@@ -51,6 +52,7 @@ public final class SoundOptimizer {
     // --- State during optimization ---
     /** Definition per (optimized) sound file */
     private final Map<FilePath, SoundDefinition> optimizedDefs = Maps.newHashMap();
+    private boolean ffmpegAvailable;
 
     public SoundOptimizer(IOptimizerContext context) {
         optimizerConfig = context.getConfig();
@@ -64,6 +66,8 @@ public final class SoundOptimizer {
 
     private void resetState() {
         optimizedDefs.clear();
+
+        ffmpegAvailable = FfmpegSoundEncoder.isAvailable();
     }
 
     /**
@@ -152,7 +156,11 @@ public final class SoundOptimizer {
     }
 
     private ISoundEncoder createEncoder() {
-        return new FfmpegSoundEncoder(tempFileProvider);
+        if (ffmpegAvailable) {
+            return new FfmpegSoundEncoder(tempFileProvider);
+        } else {
+            return new NoOpSoundEncoder();
+        }
     }
 
     private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
