@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.sound.desc;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
@@ -11,7 +13,7 @@ public final class SoundDefinition implements ISoundDefinition {
 
     // --- Also update SoundDefinitionJson when changing attributes ---
     private final String filename;
-    private final String displayName; // May be null
+    private final @Nullable String displayName; // May be null
     // --- Also update SoundDefinitionJson when changing attributes ---
 
     /**
@@ -61,7 +63,7 @@ public final class SoundDefinition implements ISoundDefinition {
     }
 
     @Override
-    public String getDisplayName() {
+    public @Nullable String getDisplayName() {
         return displayName;
     }
 
