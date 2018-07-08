@@ -14,14 +14,17 @@ import com.google.common.io.Resources;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
-public class ShaderStore {
+public final class ShaderStore implements IDestructible {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShaderStore.class);
 
     private final StaticRef<IFileSystem> fileSystemRef = StaticEnvironment.FILE_SYSTEM;
+
+    private boolean destroyed;
 
     /**
      * Loads a shader from the file system ({@link StaticEnvironment#FILE_SYSTEM}).
@@ -41,6 +44,18 @@ public class ShaderStore {
 
         return createShaderFromSources(vertexProgram, fragmentProgram);
     }
+
+    @Override
+    public void destroy() {
+        destroyed = true;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+
 
     /**
      * Loads a shader from classpath resources.

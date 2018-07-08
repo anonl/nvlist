@@ -5,6 +5,7 @@ import java.io.File;
 import com.badlogic.gdx.files.FileHandle;
 
 import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
+import nl.weeaboo.vn.buildtools.optimizer.image.ImageResizerConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.InitConfig;
@@ -27,10 +28,14 @@ final class RunResourceOptimizer {
         dstFolder.mkdirs();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("."), new File("."));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("C:\\vn-project\\LoMa"), new File("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             ResourceOptimizerConfig config = new ResourceOptimizerConfig(dstFolder);
             OptimizerContext context = new OptimizerContext(connection, config);
+
+            ImageResizerConfig resizerConfig = new ImageResizerConfig();
+            // resizerConfig.setScaleFactor(0.5);
+            context.setConfig(resizerConfig);
 
             ResourceOptimizer optimizer = new ResourceOptimizer();
             optimizer.optimizeResources(context);

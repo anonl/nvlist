@@ -192,8 +192,6 @@ public final class JngWriter {
         JngHeader header = new JngHeader(size, color, alpha);
         header.write(dout);
 
-        writeChunk(dout, JngConstants.CHUNK_JDAT, colorBytes);
-
         if (outputColorType.hasAlpha()) {
             switch (alphaType) {
             case PNG: {
@@ -207,14 +205,22 @@ public final class JngWriter {
             }
         }
 
+        writeChunk(dout, JngConstants.CHUNK_JDAT, colorBytes);
+
         dout.write(PngHelper.IEND);
     }
 
-    private static void writeChunk(DataOutput dout, int chunkId, byte[] data) throws IOException {
+    static void writeChunk(DataOutput dout, int chunkType, byte[] data) throws IOException {
         dout.writeInt(data.length);
-        dout.writeInt(chunkId);
 
         CRC32 crc = new CRC32();
+
+        crc.update((chunkType >> 24) & 0xFF);
+        crc.update((chunkType >> 16) & 0xFF);
+        crc.update((chunkType >> 8 ) & 0xFF);
+        crc.update((chunkType      ) & 0xFF);
+        dout.writeInt(chunkType);
+
         crc.update(data, 0, data.length);
         dout.write(data, 0, data.length);
         dout.writeInt((int)crc.getValue());

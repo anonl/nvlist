@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.google.common.collect.Sets;
 
+@ThreadSafe
 public final class TempFileProvider implements ITempFileProvider {
 
     private final File tempFolder;
@@ -17,7 +20,7 @@ public final class TempFileProvider implements ITempFileProvider {
     }
 
     @Override
-    public void deleteAll() {
+    public synchronized void deleteAll() {
         for (Iterator<File> itr = tempFiles.iterator(); itr.hasNext(); ) {
             File file = itr.next();
             if (file.delete()) {
@@ -27,7 +30,7 @@ public final class TempFileProvider implements ITempFileProvider {
     }
 
     @Override
-    public File newTempFile() throws IOException {
+    public synchronized File newTempFile() throws IOException {
         File file = File.createTempFile("nvlist", ".tmp", tempFolder);
         tempFiles.add(file);
         return file;

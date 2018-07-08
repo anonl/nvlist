@@ -3,7 +3,7 @@ package nl.weeaboo.vn.buildtools.optimizer;
 import java.io.File;
 import java.util.Objects;
 
-public final class ResourceOptimizerConfig {
+public final class ResourceOptimizerConfig implements IOptimizerConfig {
 
     private final File outputFolder;
 

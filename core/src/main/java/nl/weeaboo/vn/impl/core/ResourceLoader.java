@@ -1,24 +1,34 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
+@CustomSerializable
 public abstract class ResourceLoader implements IResourceResolver {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
@@ -27,7 +37,11 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private final MediaType mediaType;
     private final IResourceLoadLog resourceLoadLog;
-    private final LruSet<FilePath> checkedFilenames;
+
+    private transient LruSet<FilePath> checkedRedundantFilenames;
+    private transient @Nullable LoadingCache<FilePath, ResourceId> resolveCache;
+
+    private @Nullable IPreloadHandler preloadHandler;
 
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt = true;
@@ -35,7 +49,25 @@ public abstract class ResourceLoader implements IResourceResolver {
     public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
-        this.checkedFilenames = new LruSet<>(128);
+
+        initTransients();
+    }
+
+    private void initTransients() {
+        checkedRedundantFilenames = new LruSet<>(128);
+        resolveCache = buildResolveCache();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
+    }
+
+    private LoadingCache<FilePath, ResourceId> buildResolveCache() {
+        return CacheBuilder.newBuilder()
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .build(new FileResolveFunction());
     }
 
     @Override
@@ -44,21 +76,12 @@ public abstract class ResourceLoader implements IResourceResolver {
             return null;
         }
 
-        FilePath filePath = ResourceId.extractFilePath(path.toString());
-        String subId = ResourceId.extractSubId(path.getName());
-        if (isValidFilename(filePath)) {
-            // The given extension works
-            return new ResourceId(mediaType, filePath, subId);
+        try {
+            return resolveCache.get(path);
+        } catch (ExecutionException e) {
+            LOG.warn("Resource not found '{}' :: {}", path, e.getCause());
+            return null;
         }
-
-        for (String ext : autoFileExts) {
-            FilePath fn = filePath.withExt(ext);
-            if (isValidFilename(fn)) {
-                // This extension works
-                return new ResourceId(mediaType, fn, subId);
-            }
-        }
-        return null;
     }
 
     /**
@@ -70,7 +93,7 @@ public abstract class ResourceLoader implements IResourceResolver {
             return;
         }
 
-        if (!checkedFilenames.add(filePath)) {
+        if (!checkedRedundantFilenames.add(filePath)) {
             return;
         }
 
@@ -119,7 +142,13 @@ public abstract class ResourceLoader implements IResourceResolver {
      * @param resourceId Canonical identifier of the resource to preload.
      */
     protected void preloadNormalized(ResourceId resourceId) {
-        // Default implementation does nothing
+        if (preloadHandler == null) {
+            // Default implementation does nothing
+            LOG.trace("Preload (no-op implementation): {}", resourceId);
+        } else {
+            LOG.trace("Preload: {}", resourceId);
+            preloadHandler.preloadNormalized(resourceId);
+        }
     }
 
     /** Logs a resource load event. */
@@ -160,4 +189,32 @@ public abstract class ResourceLoader implements IResourceResolver {
         autoFileExts = exts.clone();
     }
 
+    /** Sets the function that handles calls to {@link #preloadNormalized(nl.weeaboo.vn.core.ResourceId)}. */
+    public void setPreloadHandler(IPreloadHandler preloadHandler) {
+        this.preloadHandler = Checks.checkNotNull(preloadHandler);
+    }
+
+    private final class FileResolveFunction extends CacheLoader<FilePath, ResourceId> {
+
+        @Override
+        public ResourceId load(FilePath path) throws FileNotFoundException {
+            FilePath filePath = ResourceId.extractFilePath(path.toString());
+            String subId = ResourceId.extractSubId(path.getName());
+            if (isValidFilename(filePath)) {
+                // The given extension works
+                return new ResourceId(mediaType, filePath, subId);
+            }
+
+            for (String ext : autoFileExts) {
+                FilePath fn = filePath.withExt(ext);
+                if (isValidFilename(fn)) {
+                    // This extension works
+                    return new ResourceId(mediaType, fn, subId);
+                }
+            }
+
+            throw new FileNotFoundException(path.toString());
+        }
+
+    }
 }

@@ -17,6 +17,7 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.ZipFileArchive;
 import nl.weeaboo.io.RandomAccessUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
+import nl.weeaboo.vn.gdx.graphics.jng.JngReaderOpts;
 
 class JngTestSuite implements Disposable {
 
@@ -45,7 +46,7 @@ class JngTestSuite implements Disposable {
         InputStream in = archive.openInputStream(FilePath.of(path));
         try {
             LOG.info("Reading JNG file: {}", path);
-            return JngReader.read(in);
+            return JngReader.read(in, new JngReaderOpts());
         } finally {
             in.close();
         }

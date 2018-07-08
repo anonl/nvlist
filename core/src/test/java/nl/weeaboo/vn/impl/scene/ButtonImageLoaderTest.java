@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
@@ -39,7 +40,7 @@ public class ButtonImageLoaderTest {
     /** Textures for each button state are stored in separate images */
     @Test
     public void loadSeparateImages() {
-        imageLoader.loadImages(button, loadInfo("button/separate"));
+        imageLoader.loadImages(button, imageLoadInfo("button/separate"));
 
         // Check that the expected textures were loaded
         assertTexture(ButtonViewState.DEFAULT, "button/separate");
@@ -51,7 +52,7 @@ public class ButtonImageLoaderTest {
     /** Textures for each button state are stored in sub-rectangles of a single image */
     @Test
     public void loadSubRects() {
-        imageLoader.loadImages(button, loadInfo("button/button"));
+        imageLoader.loadImages(button, imageLoadInfo("button/button"));
 
         // Check that the expected textures were loaded
         assertNinePatch(ButtonViewState.DEFAULT, "button/button");
@@ -69,7 +70,7 @@ public class ButtonImageLoaderTest {
     }
 
     private void assertNinePatch(ButtonViewState viewState, String expectedNinePatch) {
-        ResourceLoadInfo loadInfo = loadInfo(expectedNinePatch);
+        ResourceLoadInfo loadInfo = imageLoadInfo(expectedNinePatch);
         INinePatch expected = env.getImageModule().getNinePatch(loadInfo, false);
         Assert.assertNotNull(expected);
 
@@ -77,8 +78,8 @@ public class ButtonImageLoaderTest {
         NinePatchAssert.assertEquals(expected, actual);
     }
 
-    private ResourceLoadInfo loadInfo(String path) {
-        return new ResourceLoadInfo(FilePath.of(path));
+    private ResourceLoadInfo imageLoadInfo(String path) {
+        return new ResourceLoadInfo(MediaType.IMAGE, FilePath.of(path));
     }
 
 }

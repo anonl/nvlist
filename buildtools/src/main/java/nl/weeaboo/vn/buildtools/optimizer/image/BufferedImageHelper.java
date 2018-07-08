@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.buildtools.optimizer.image;
 
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -34,10 +35,22 @@ public final class BufferedImageHelper {
         final int ih = pixmap.getHeight();
 
         BufferedImage result = new BufferedImage(iw, ih, bufferedImageType);
-        for (int y = 0; y < ih; y++) {
-            for (int x = 0; x < iw; x++) {
-                int rgba8888 = pixmap.getPixel(x, y);
-                result.setRGB(x, y, RenderUtil.rgba2argb(rgba8888));
+        if (pixmap.getFormat() == Format.Alpha) {
+            // Pixmap Alpha matches BufferedImage Gray, which requires treating alpha as color
+            ByteBuffer alphaBytes = pixmap.getPixels();
+            for (int y = 0; y < ih; y++) {
+                for (int x = 0; x < iw; x++) {
+                    int alpha = alphaBytes.get() & 0xFF;
+                    result.setRGB(x, y, (alpha << 24) | (alpha << 16) | (alpha << 8) | alpha);
+                }
+            }
+            alphaBytes.rewind();
+        } else {
+            for (int y = 0; y < ih; y++) {
+                for (int x = 0; x < iw; x++) {
+                    int rgba8888 = pixmap.getPixel(x, y);
+                    result.setRGB(x, y, RenderUtil.rgba2argb(rgba8888));
+                }
             }
         }
         return result;

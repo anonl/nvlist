@@ -6,7 +6,7 @@ final class JngEncoderParams {
 
     private float jpegQuality = .90f;
     private float jpegAlphaQuality = .95f;
-    private boolean allowLossyAlpha = false;
+    private boolean allowLossyAlpha = true;
 
     public float getJpegQuality() {
         return jpegQuality;

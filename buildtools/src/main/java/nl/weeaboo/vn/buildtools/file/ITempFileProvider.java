@@ -3,6 +3,9 @@ package nl.weeaboo.vn.buildtools.file;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.concurrent.ThreadSafe;
+
+@ThreadSafe
 public interface ITempFileProvider {
 
     /**

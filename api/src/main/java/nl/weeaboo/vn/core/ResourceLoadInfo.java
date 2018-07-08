@@ -14,14 +14,16 @@ import nl.weeaboo.io.Filenames;
  */
 public final class ResourceLoadInfo {
 
+    private final MediaType mediaType;
     private final FilePath path;
     private final ImmutableList<String> callStackTrace;
 
-    public ResourceLoadInfo(FilePath path) {
-        this(path, ImmutableList.<String>of());
+    public ResourceLoadInfo(MediaType mediaType, FilePath path) {
+        this(mediaType, path, ImmutableList.<String>of());
     }
 
-    public ResourceLoadInfo(FilePath path, List<String> callStackTrace) {
+    public ResourceLoadInfo(MediaType mediaType, FilePath path, List<String> callStackTrace) {
+        this.mediaType = Checks.checkNotNull(mediaType);
         this.path = Checks.checkNotNull(path);
         this.callStackTrace = ImmutableList.copyOf(Checks.checkNotNull(callStackTrace));
     }
@@ -30,7 +32,7 @@ public final class ResourceLoadInfo {
      * Creates a copy of this object, but with the given path instead.
      */
     public ResourceLoadInfo withPath(FilePath path) {
-        return new ResourceLoadInfo(path, callStackTrace);
+        return new ResourceLoadInfo(mediaType, path, callStackTrace);
     }
 
     /**
@@ -72,6 +74,13 @@ public final class ResourceLoadInfo {
         } else {
             return withSubId(current + "-" + suffix);
         }
+    }
+
+    /**
+     * @return The {@link MediaType} of resource that's being loaded.
+     */
+    public MediaType getMediaType() {
+        return mediaType;
     }
 
     /**

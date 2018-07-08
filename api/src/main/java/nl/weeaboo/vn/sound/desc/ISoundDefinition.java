@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.sound.desc;
 
+import javax.annotation.Nullable;
+
 public interface ISoundDefinition {
 
     /**
@@ -15,6 +17,6 @@ public interface ISoundDefinition {
     /**
      * @return The display name for this audio file, or {@code null} if no display name was defined.
      */
-    String getDisplayName();
+    @Nullable String getDisplayName();
 
 }

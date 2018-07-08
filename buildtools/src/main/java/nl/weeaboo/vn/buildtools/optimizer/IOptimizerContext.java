@@ -20,9 +20,15 @@ public interface IOptimizerContext {
     NvlistProjectConnection getProject();
 
     /**
-     * The resource optimizer configuration.
+     * The main resource optimizer configuration.
      */
     ResourceOptimizerConfig getConfig();
+
+    /**
+     * Returns the configuration of the given type. If no configuration of that type was explicitly
+     * registered, the supplied default instance is returned instead.
+     */
+    <T extends IOptimizerConfig> T getConfig(Class<T> configClass, T defaultValue);
 
     /**
      * The optimizer file set tracks which source files have already been processed.

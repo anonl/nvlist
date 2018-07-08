@@ -11,6 +11,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.impl.image.GdxTextureStore;
 
 public final class PerformanceMetrics {
 
@@ -33,6 +35,10 @@ public final class PerformanceMetrics {
                 StringUtil.formatMemoryAmount(Gdx.app.getJavaHeap())));
         lines.add(StringUtil.formatRoot("Memory use (non-heap): %s",
                 StringUtil.formatMemoryAmount(Gdx.app.getNativeHeap())));
+
+        GdxTextureStore texStore = StaticEnvironment.TEXTURE_STORE.get();
+        lines.add("Texture cache: " + texStore.getCacheStatus());
+
         return Joiner.on('\n').join(lines);
     }
 

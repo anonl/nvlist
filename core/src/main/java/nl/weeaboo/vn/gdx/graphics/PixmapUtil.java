@@ -143,4 +143,63 @@ public final class PixmapUtil {
         return new Pixmap(gdx2dPixmap);
     }
 
+    /**
+     * Returns {@code true} if the given format has an alpha channel.
+     */
+    public static boolean hasAlpha(Format format) {
+        switch (format) {
+        case Alpha:
+        case LuminanceAlpha:
+        case RGBA4444:
+        case RGBA8888:
+            return true;
+        case Intensity:
+        case RGB565:
+        case RGB888:
+            return false;
+        }
+        throw new IllegalArgumentException("Unsupported format: " + format);
+    }
+
+    /**
+     * Returns {@code true} if the given pixmap contains one or more pixels that have some translucency (alpha
+     * is less that the maximum value).
+     */
+    public static boolean hasTranslucentPixel(Pixmap pixmap) {
+        if (!hasAlpha(pixmap.getFormat())) {
+            return false;
+        }
+
+        for (int y = 0; y < pixmap.getHeight(); y++) {
+            for (int x = 0; x < pixmap.getWidth(); x++) {
+                int rgba8888 = pixmap.getPixel(x, y);
+                int alpha = (rgba8888 & 0xFF);
+                if (alpha < 255) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the number of bits per pixel for pixmaps with the given format.
+     */
+    public static int getBitsPerPixel(Format format) {
+        switch (format) {
+        case Alpha:
+        case Intensity:
+            return 8;
+        case LuminanceAlpha:
+        case RGB565:
+        case RGBA4444:
+            return 16;
+        case RGB888:
+            return 24;
+        case RGBA8888:
+            return 32;
+        }
+        throw new IllegalArgumentException("Unsupported format: " + format);
+    }
+
 }

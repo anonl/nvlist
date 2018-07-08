@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -23,23 +24,31 @@ import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.io.FileUtil;
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.image.ImageEncoderConfig.EImageEncoding;
+import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.graphics.PremultUtil;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
-import nl.weeaboo.vn.impl.image.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
 public final class ImageOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageOptimizer.class);
 
-    private final ResourceOptimizerConfig config;
+    private final ResourceOptimizerConfig optimizerConfig;
+    private final ImageResizerConfig resizeConfig;
+    private final ImageEncoderConfig encoderConfig;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
@@ -48,9 +57,11 @@ public final class ImageOptimizer {
     /** Definition per (optimized) image file */
     private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
 
-
     public ImageOptimizer(IOptimizerContext context) {
-        this.config = context.getConfig();
+        optimizerConfig = context.getConfig();
+        resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
+        encoderConfig = context.getConfig(ImageEncoderConfig.class, new ImageEncoderConfig());
+
         optimizerFileSet = context.getFileSet();
 
         NvlistProjectConnection project = context.getProject();
@@ -73,21 +84,21 @@ public final class ImageOptimizer {
     }
 
     private void optimizeImages() {
-        Iterable<FilePath> inputFiles;
+        ImmutableList<FilePath> inputFiles;
         try {
-            inputFiles = getImageFiles();
+            inputFiles = ImmutableList.copyOf(getImageFiles());
         } catch (IOException ioe) {
             LOG.warn("Unable to read folder", ioe);
             return;
         }
 
-        for (FilePath inputFile : inputFiles) {
+        inputFiles.parallelStream().forEach(inputFile -> {
             try {
                 optimizeImage(inputFile);
             } catch (IOException | RuntimeException e) {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
             }
-        }
+        });
     }
 
     private void writeImageDefinitions() {
@@ -97,10 +108,10 @@ public final class ImageOptimizer {
         }
 
         for (Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
-            FilePath jsonRelativePath = folderEntry.getKey().resolve("img.json");
+            FilePath jsonRelativePath = folderEntry.getKey().resolve(IImageDefinition.IMG_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 
-            File outputF = new File(config.getOutputFolder(), jsonRelativePath.toString());
+            File outputF = new File(optimizerConfig.getOutputFolder(), jsonRelativePath.toString());
 
             String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
             try {
@@ -120,29 +131,61 @@ public final class ImageOptimizer {
         LOG.debug("Optimizing image: {}", inputFile);
 
         Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
-        IImageDefinition imageDef = imageDefCache.getImageDef(inputFile);
+
+        final boolean premultiplyAlpha = true && PixmapUtil.hasAlpha(pixmap.getFormat());
+        if (premultiplyAlpha) {
+            PremultUtil.premultiplyAlpha(pixmap);
+        }
+
+        IImageDefinition imageDef = imageDefCache.getMetaData(inputFile);
         if (imageDef == null) {
             imageDef = new ImageDefinition(inputFile.getName(), Dim.of(pixmap.getWidth(), pixmap.getHeight()));
         }
 
         ImageWithDef imageWithDef = new ImageWithDef(pixmap, imageDef);
 
-        ImageResizerConfig resizeConfig = new ImageResizerConfig();
-        resizeConfig.setScaleFactor(0.5);
         ImageResizer resizer = new ImageResizer(resizeConfig);
         ImageWithDef optimized = resizer.process(imageWithDef);
+        pixmap.dispose();
 
-        JngEncoder jngEncoder = new JngEncoder();
-        EncodedImage encoded = jngEncoder.encode(optimized);
+        IImageEncoder imageEncoder = createEncoder();
+        EncodedImage encoded = imageEncoder.encode(optimized);
+        optimized.dispose();
 
-        FilePath outputPath = inputFile.withExt("jng");
+        // Give files with premultiplied alpha .pre.ext-style extension.
+        if (premultiplyAlpha && encoded.hasAlpha()) {
+            addPremultipyFileExt(encoded);
+        }
+        FilePath outputPath = getOutputPath(inputFile, encoded.getDef().getFilename());
 
-        File outputF = new File(config.getOutputFolder(), outputPath.toString());
+        File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
         Files.createParentDirs(outputF);
         Files.write(encoded.readBytes(), outputF);
 
-        optimizedDefs.put(outputPath, optimized.getDef());
+        optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+        encoded.dispose();
+    }
+
+    private IImageEncoder createEncoder() {
+        EImageEncoding encoding = encoderConfig.getEncoding();
+        switch (encoding) {
+        case JNG:
+            return new JngEncoder();
+        }
+        throw new IllegalArgumentException("Unsupported encoding: " + encoding);
+    }
+
+    private void addPremultipyFileExt(EncodedImage encoded) {
+        ImageDefinitionBuilder def = encoded.getDef().builder();
+        String fn = def.getFilename();
+        def.setFilename(Filenames.replaceExt(fn, "pre." + Filenames.getExtension(fn)));
+        encoded.setDef(def.build());
+    }
+
+    private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
+        FilePath folder = inputPath.getParent();
+        return folder.resolve(outputFilename);
     }
 
     private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {

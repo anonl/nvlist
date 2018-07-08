@@ -4,6 +4,7 @@ import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
@@ -58,7 +59,7 @@ public class GuiLib extends LuaLib {
         // TODO: Consider moving this block of code to a named function
         LuaValue imageArg = args.arg(2);
         if (imageArg.isstring()) {
-            ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(imageArg);
+            ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(MediaType.IMAGE, imageArg);
             ButtonImageLoader imageLoader = new ButtonImageLoader(imageModule);
             imageLoader.loadImages(button, loadInfo);
         } else {

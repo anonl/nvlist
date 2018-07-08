@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.common.Rect;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
@@ -31,6 +32,7 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.impl.stats.FileLine;
 import nl.weeaboo.vn.impl.text.TextRenderer;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.INativeInput;
@@ -107,8 +109,8 @@ public final class Osd implements Disposable {
             return;
         }
 
-        IRenderEnv renderEnv = env.getRenderEnv();
-        final Dim vsize = renderEnv.getVirtualSize();
+        IRenderEnv renv = env.getRenderEnv();
+        final Dim vsize = renv.getVirtualSize();
         final int pad = Math.min(vsize.w, vsize.h) / 64;
         final int wrapWidth = vsize.w - pad * 2;
 
@@ -131,12 +133,15 @@ public final class Osd implements Disposable {
             IScriptContext scriptContext = active.getScriptContext();
             IScriptThread mainThread = scriptContext.getMainThread();
             if (mainThread != null) {
-                String srcloc = LuaScriptUtil.getNearestLvnSrcloc(mainThread.getStackTrace());
+                FileLine srcloc = LuaScriptUtil.getNearestLvnSrcloc(mainThread.getStackTrace());
                 if (srcloc != null) {
                     text.append("\n" + srcloc);
                 }
             }
         }
+
+        Rect rclip = renv.getRealClip();
+        text.append("\nResolution: [" + rclip.x + ", " + rclip.y + ", " + rclip.w + ", " + rclip.h + "]");
 
         IInput input = StaticEnvironment.INPUT.get();
         Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());

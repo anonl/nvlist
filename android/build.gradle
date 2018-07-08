@@ -13,7 +13,7 @@ dependencies {
     implementation deps.gdx_android
     implementation deps.gdx_android_natives
 
-    runtimeOnly deps.slf4j_android
+    runtimeOnly deps.slf4j_desktop
 }
 
 // called every time gradle gets executed, takes the native dependencies of

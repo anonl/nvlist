@@ -12,6 +12,7 @@ import nl.weeaboo.styledtext.ETextAttribute;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyleParseException;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
@@ -60,7 +61,7 @@ public final class LuaConvertUtil {
 
         if (luaValue.isstring()) {
             // Texture filename
-            ResourceLoadInfo loadInfo = getLoadInfo(luaValue);
+            ResourceLoadInfo loadInfo = getLoadInfo(MediaType.IMAGE, luaValue);
             return imageModule.getTexture(loadInfo, suppressLoadErrors);
         } else if (luaValue.isuserdata()) {
             // Texture or screenshot object
@@ -85,8 +86,8 @@ public final class LuaConvertUtil {
     /**
      * Converts a Lua value to {@link ResourceLoadInfo}.
      */
-    public static ResourceLoadInfo getLoadInfo(LuaValue luaValue) {
-        return LuaScriptUtil.createLoadInfo(getPath(luaValue));
+    public static ResourceLoadInfo getLoadInfo(MediaType mediaType, LuaValue luaValue) {
+        return LuaScriptUtil.createLoadInfo(mediaType, getPath(luaValue));
     }
 
     /**

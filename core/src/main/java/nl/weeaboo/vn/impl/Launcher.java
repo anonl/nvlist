@@ -13,16 +13,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.Preference;
@@ -32,18 +26,17 @@ import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.YDir;
-import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.gdx.input.GdxInputAdapter;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.vn.impl.core.Destructibles;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.LoggerNotifier;
 import nl.weeaboo.vn.impl.core.Novel;
@@ -60,6 +53,9 @@ import nl.weeaboo.vn.impl.input.Input;
 import nl.weeaboo.vn.impl.input.InputConfig;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.GLScreenRenderer;
+import nl.weeaboo.vn.impl.render.GdxViewports;
+import nl.weeaboo.vn.impl.render.HybridBackBuffer;
+import nl.weeaboo.vn.impl.render.IBackBuffer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.input.INativeInput;
@@ -74,17 +70,10 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private final IWritableFileSystem outputFileSystem;
 
     private @Nullable AssetManager assetManager;
-    private @Nullable FrameBuffer frameBuffer;
-    private Dim vsize = Dim.of(1280, 720);
-
-    private @Nullable FitViewport frameBufferViewport;
-    private @Nullable FitViewport screenViewport;
-    private @Nullable FitViewport scene2dViewport;
 
     private @Nullable Scene2dEnv sceneEnv;
     private @Nullable Osd osd;
     private @Nullable DebugControls debugControls;
-    private @Nullable SpriteBatch batch;
     private @Nullable GdxInputAdapter inputAdapter;
     private @Nullable PerformanceMetrics performanceMetrics;
 
@@ -93,6 +82,12 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable SimulationRateLimiter simulationRateLimiter;
     private @Nullable GLScreenRenderer renderer;
     private @Nullable DrawBuffer drawBuffer;
+    private @Nullable IBackBuffer backBuffer;
+    private @Nullable GdxTextureStore textureStore;
+    private @Nullable GdxMusicStore musicStore;
+    private @Nullable ShaderStore shaderStore;
+    private @Nullable GeneratedResourceStore generatedResourceStore;
+    private @Nullable GdxFontStore fontStore;
     private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
@@ -121,18 +116,14 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         if (prefs == null) {
             loadPreferences();
         }
-        vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
 
         performanceMetrics = new PerformanceMetrics();
 
-        frameBufferViewport = new FitViewport(vsize.w, vsize.h);
-        screenViewport = new FitViewport(vsize.w, vsize.h);
-        scene2dViewport = new FitViewport(vsize.w, vsize.h);
+        Dim vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
 
-        // TODO: Input adapter wants a transform from screen to world (y-down)
-        inputAdapter = new GdxInputAdapter(screenViewport);
-
-        batch = new SpriteBatch();
+        GdxViewports viewports = new GdxViewports(vsize);
+        backBuffer = new HybridBackBuffer(vsize, viewports);
+        inputAdapter = new GdxInputAdapter(viewports.getScreenViewport());
 
         try {
             initNovel(prefs);
@@ -143,7 +134,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         simulationRateLimiter = new SimulationRateLimiter();
         simulationRateLimiter.setSimulation(this, 60);
 
-        sceneEnv = new Scene2dEnv(resourceFileSystem, scene2dViewport);
+        sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
         osd = Osd.newInstance(resourceFileSystem, performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
@@ -172,11 +163,13 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         StaticEnvironment.SYSTEM_ENV.set(new SystemEnv(Gdx.app.getType()));
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
-        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem));
-        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
-        StaticEnvironment.SHADER_STORE.set(new ShaderStore());
-        StaticEnvironment.MUSIC_STORE.set(new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
-        StaticEnvironment.FONT_STORE.set(createFontStore());
+        StaticEnvironment.TEXTURE_STORE.set(textureStore =
+                new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem));
+        StaticEnvironment.GENERATED_RESOURCES.set(generatedResourceStore =
+                new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
+        StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
+        StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
+        StaticEnvironment.FONT_STORE.set(fontStore = createFontStore());
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
@@ -192,7 +185,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         });
     }
 
-    private IFontStore createFontStore() {
+    private GdxFontStore createFontStore() {
         GdxFontStore fontStore = new GdxFontStore();
         try {
             String fontFamily = "RobotoSlab";
@@ -205,7 +198,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 if (style.isItalic()) {
                     name += "Oblique";
                 }
-
 
                 MutableTextStyle ts = new MutableTextStyle();
                 ts.setFontName(name);
@@ -234,9 +226,14 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         }
 
         disposeRenderer();
-        disposeFrameBuffer();
+        backBuffer.dispose();
         osd = DisposeUtil.dispose(osd);
-        batch = DisposeUtil.dispose(batch);
+
+        textureStore = Destructibles.destroy(textureStore);
+        generatedResourceStore = Destructibles.destroy(generatedResourceStore);
+        shaderStore = Destructibles.destroy(shaderStore);
+        musicStore = Destructibles.destroy(musicStore);
+        fontStore = DisposeUtil.dispose(fontStore);
         assetManager = DisposeUtil.dispose(assetManager);
     }
 
@@ -245,18 +242,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             renderer.destroy();
             renderer = null;
         }
-    }
-
-    private void disposeFrameBuffer() {
-        frameBuffer = DisposeUtil.dispose(frameBuffer);
-    }
-
-    private void updateFrameBuffer() {
-        disposeFrameBuffer();
-
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, vsize.w, vsize.h, false);
-        GdxViewportUtil.setToOrtho(frameBufferViewport, vsize, true);
-        frameBufferViewport.update(vsize.w, vsize.h, true);
     }
 
     @Override
@@ -271,12 +256,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             onUncaughtException(re);
         }
 
-        frameBuffer.begin();
-        frameBufferViewport.apply();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Camera camera = frameBufferViewport.getCamera();
-        batch.setProjectionMatrix(camera.combined);
+        SpriteBatch batch = backBuffer.begin();
 
         try {
             renderScreen(batch);
@@ -284,7 +264,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             onUncaughtException(re);
         }
 
-        frameBuffer.end();
+        backBuffer.end();
 
         try {
             novel.updateInRenderThread();
@@ -292,19 +272,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             onUncaughtException(re);
         }
 
-        screenViewport.apply();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(screenViewport.getCamera().combined);
-
-        batch.begin();
-        batch.disableBlending();
-        try {
-            batch.draw(frameBuffer.getColorBufferTexture(), 0, 0, vsize.w, vsize.h);
-        } finally {
-            batch.enableBlending();
-            batch.end();
-        }
+        backBuffer.flip();
     }
 
     @Override
@@ -367,18 +335,11 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     }
 
     private void initWindow(int width, int height) {
-        LOG.info("Init window");
+        LOG.info("Init window ({}x{})", width, height);
 
-        GdxViewportUtil.setToOrtho(screenViewport, vsize, true);
-        screenViewport.update(width, height, true);
-
-        scene2dViewport.update(width, height, true);
-
-        IEnvironment env = novel.getEnv();
-        env.updateRenderEnv(Rect.of(0, 0, vsize.w, vsize.h), vsize);
-
+        backBuffer.setWindowSize(novel.getEnv(), Dim.of(width, height));
         disposeRenderer();
-        updateFrameBuffer();
+
         windowDirty = true;
     }
 

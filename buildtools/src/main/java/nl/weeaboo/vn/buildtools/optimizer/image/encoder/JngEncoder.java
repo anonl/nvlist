@@ -12,12 +12,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngWriter;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 
 public final class JngEncoder implements IImageEncoder {
 
@@ -47,19 +49,44 @@ public final class JngEncoder implements IImageEncoder {
 
         // Set alpha
         Pixmap alphaPixmap = extractAlpha(pixmap);
-        byte[] alphaData;
-        if (params.isAllowLossyAlpha()) {
-            alphaData = jpegEncoder.encode(alphaPixmap, newJpegParams(params.getJpegAlphaQuality()));
-        } else {
-            alphaData = pngEncoder.encode(alphaPixmap, new PngEncoderParams());
+        try {
+            if (!PixmapUtil.hasTranslucentPixel(alphaPixmap)) {
+                // If the image has no alpha, encode as JPEG instead
+                return encodeAsJpeg(image, colorData);
+            } else {
+                byte[] jpegAlpha = null;
+                if (params.isAllowLossyAlpha()) {
+                    jpegAlpha = jpegEncoder.encode(alphaPixmap, newJpegParams(params.getJpegAlphaQuality()));
+                }
+
+                byte[] pngAlpha = pngEncoder.encode(alphaPixmap, new PngEncoderParams());
+
+                // Pick smallest alpha encoding
+                if (jpegAlpha != null && jpegAlpha.length < pngAlpha.length) {
+                    writer.setAlphaInput(jpegAlpha);
+                } else {
+                    writer.setAlphaInput(pngAlpha);
+                }
+            }
+        } finally {
+            alphaPixmap.dispose();
         }
-        writer.setAlphaInput(alphaData);
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         writer.write(bout);
         IEncodedResource encoded = EncodedResource.fromBytes(bout.toByteArray());
 
-        return new EncodedImage(encoded, image.getDef());
+        ImageDefinitionBuilder imageDef = image.getDef().builder();
+        imageDef.setFilename(Filenames.replaceExt(imageDef.getFilename(), "jng"));
+        return new EncodedImage(encoded, imageDef.build());
+    }
+
+    private EncodedImage encodeAsJpeg(ImageWithDef image, byte[] jpegData) {
+        IEncodedResource encoded = EncodedResource.fromBytes(jpegData);
+
+        ImageDefinitionBuilder imageDef = image.getDef().builder();
+        imageDef.setFilename(Filenames.replaceExt(imageDef.getFilename(), "jpg"));
+        return new EncodedImage(encoded, imageDef.build());
     }
 
     private JpegEncoderParams newJpegParams(float jpegQuality) {
@@ -101,6 +128,7 @@ public final class JngEncoder implements IImageEncoder {
             final int limit = src.getWidth() * src.getHeight();
             for (int n = 0; n < limit; n++) {
                 int a = pixels.get(n) & 0xF;
+                a = (a << 4) | a; // 4 bpp -> 8 bpp
                 dstPixels.put((byte)a);
             }
         } break;
@@ -115,7 +143,8 @@ public final class JngEncoder implements IImageEncoder {
             throw new IllegalArgumentException("Pixmap with unsupported format: " + src.getFormat());
         }
 
-        dstPixels.flip();
+        dstPixels.rewind();
+
         return dst;
     }
 

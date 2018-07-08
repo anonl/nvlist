@@ -19,7 +19,7 @@ final class SoundDefinitionTestHelper {
     }
 
     public SoundDefinition createSoundDef(String id) {
-        return new SoundDefinition(id, id);
+        return new SoundDefinition(id);
     }
 
 }

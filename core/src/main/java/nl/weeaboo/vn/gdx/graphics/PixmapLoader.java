@@ -10,6 +10,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
+import nl.weeaboo.vn.gdx.graphics.jng.JngReaderOpts;
 
 public final class PixmapLoader {
 
@@ -43,7 +44,8 @@ public final class PixmapLoader {
      */
     public static Pixmap load(byte[] bytes, int offset, int length) throws IOException {
         if (JngReader.isJng(bytes, offset, length)) {
-            return JngReader.read(new ByteArrayInputStream(bytes, offset, length));
+            return JngReader.read(new ByteArrayInputStream(bytes, offset, length),
+                    new JngReaderOpts());
         }
         return new Pixmap(bytes, offset, length);
     }
