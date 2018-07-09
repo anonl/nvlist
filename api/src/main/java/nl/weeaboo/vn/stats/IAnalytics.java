@@ -11,6 +11,9 @@ import nl.weeaboo.vn.core.ResourceLoadInfo;
 
 public interface IAnalytics extends Serializable, IUpdateable {
 
+    /**
+     * This method is called when a resource is loaded.
+     */
     void logResourceLoad(ResourceId resourceId, ResourceLoadInfo info);
 
     /**

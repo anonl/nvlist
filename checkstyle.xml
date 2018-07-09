@@ -220,11 +220,7 @@ Changes:
         </module>
         <module name="MutableException" />
         <module name="SuppressWarningsHolder" />
-        
-        <!-- Make comments visible to suppression comment filter -->
-        <module name="FileContentsHolder"/>
     </module>
     
     <module name="SuppressWarningsFilter" />
-    <module name="SuppressionCommentFilter" />
 </module>

@@ -138,9 +138,6 @@ public final class DebugControls {
         }
 
         // Text
-        if (screen != null && alt && input.consumePress(KeyCode.T)) {
-            createText(screen.getRootLayer());
-        }
         if (screen != null && alt && input.consumePress(KeyCode.Y)) {
             createLongText(screen.getRootLayer());
         }
@@ -207,18 +204,6 @@ public final class DebugControls {
         button.setTexture(ButtonViewState.DEFAULT, getTestTexture(imageModule));
         button.setText("MgZx\nZxMg");
         button.setPos(800, 0);
-    }
-
-    private static void createText(ILayer layer) {
-        ComponentFactory entityHelper = new ComponentFactory();
-        ITextDrawable text = entityHelper.createText(layer);
-
-        text.setBounds(200, 200, 800, 200);
-        text.setZ((short)-1000);
-
-        // CHECKSTYLE:OFF
-        text.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-        // CHECKSTYLE:ON
     }
 
     private static void createLongText(ILayer layer) {
