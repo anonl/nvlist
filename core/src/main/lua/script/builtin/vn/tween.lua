@@ -11,9 +11,13 @@ local function doTween(image, tween, endTexture)
     else
         tween:setSize(endTexture:getWidth(), endTexture:getHeight());
     end
-        
+
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
+        -- Apply effect speed (if supported)
+        if tween.setSpeed ~= nil then
+            tween:setSpeed(getEffectSpeed())
+        end
         yield()
     end
     image:setTexture(endTexture)

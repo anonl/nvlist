@@ -15,6 +15,8 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
     private double time;
     private double duration;
 
+    private double speed = 1.0;
+
     protected AnimatedRenderable(double duration) {
         this.duration = Checks.checkRange(duration, "duration", 0);
     }
@@ -38,7 +40,7 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
         super.update();
 
         if (!isFinished()) {
-            setTime(time + 1);
+            setTime(time + speed);
 
             checkedPrepare();
             updateResources();
@@ -112,6 +114,11 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
      */
     public double getDuration() {
         return duration;
+    }
+
+    @Override
+    public void setSpeed(double s) {
+        this.speed = Checks.checkRange(s, "speed", 0.001);
     }
 
     @Override
