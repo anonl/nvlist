@@ -31,14 +31,15 @@ final class RunResourceOptimizer {
         ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("D:\\temp\\LoMa"), new File("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             ResourceOptimizerConfig config = new ResourceOptimizerConfig(dstFolder);
-            OptimizerContext context = new OptimizerContext(connection, config);
 
-            ImageResizerConfig resizerConfig = new ImageResizerConfig();
-            // resizerConfig.setScaleFactor(0.5);
-            context.setConfig(resizerConfig);
+            try (OptimizerContext context = new OptimizerContext(connection, config)) {
+                ImageResizerConfig resizerConfig = new ImageResizerConfig();
+                // resizerConfig.setScaleFactor(0.5);
+                context.setConfig(resizerConfig);
 
-            ResourceOptimizer optimizer = new ResourceOptimizer();
-            optimizer.optimizeResources(context);
+                ResourceOptimizer optimizer = new ResourceOptimizer();
+                optimizer.optimizeResources(context);
+            }
         }
     }
 

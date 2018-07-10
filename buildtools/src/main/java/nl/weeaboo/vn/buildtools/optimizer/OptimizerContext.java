@@ -1,11 +1,16 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
 import com.google.common.io.Files;
+import com.google.common.util.concurrent.MoreExecutors;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
@@ -13,6 +18,8 @@ import nl.weeaboo.vn.buildtools.file.TempFileProvider;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
 public final class OptimizerContext implements IOptimizerContext {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OptimizerContext.class);
 
     private final NvlistProjectConnection projectConnection;
 
@@ -37,7 +44,10 @@ public final class OptimizerContext implements IOptimizerContext {
 
     @Override
     public void close() {
-        executorService.shutdown();
+        if (!MoreExecutors.shutdownAndAwaitTermination(executorService, 10, TimeUnit.SECONDS)) {
+            LOG.error("Timeout while waiting for executor to shut down");
+        }
+        tempFileProvider.deleteAll();
     }
 
     @Override
