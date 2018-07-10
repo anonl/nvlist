@@ -6,7 +6,12 @@ import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 /**
  * This interface wraps all the services/helpers that are available to the various resource optimizers.
  */
-public interface IOptimizerContext {
+public interface IOptimizerContext extends AutoCloseable {
+
+    /**
+     * Use this {@link IParallelExecutor} to take advantage of multiple processor cores.
+     */
+    IParallelExecutor getExecutor();
 
     /**
      * Returns a {@link ITempFileProvider} that manages creation and deletion of temporary files.

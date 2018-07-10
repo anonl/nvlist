@@ -27,6 +27,7 @@ import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
+import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
@@ -43,6 +44,7 @@ public final class SoundOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SoundOptimizer.class);
 
+    private final IParallelExecutor executor;
     private final ResourceOptimizerConfig optimizerConfig;
     private final IOptimizerFileSet optimizerFileSet;
     private final ITempFileProvider tempFileProvider;
@@ -54,7 +56,9 @@ public final class SoundOptimizer {
     private final Map<FilePath, SoundDefinition> optimizedDefs = Maps.newHashMap();
     private boolean ffmpegAvailable;
 
+
     public SoundOptimizer(IOptimizerContext context) {
+        executor = context.getExecutor();
         optimizerConfig = context.getConfig();
         optimizerFileSet = context.getFileSet();
         tempFileProvider = context.getTempFileProvider();
@@ -71,16 +75,18 @@ public final class SoundOptimizer {
     }
 
     /**
-     * Runs the image optimizer.
+     * Runs the optimizer.
+     *
+     * @throws InterruptedException If the current thread is interrupted before the optimization is finished.
      */
-    public void optimizeResources() {
+    public void optimizeResources() throws InterruptedException {
         resetState();
 
         optimizeSounds();
         writeSoundDefinitions();
     }
 
-    private void optimizeSounds() {
+    private void optimizeSounds() throws InterruptedException {
         ImmutableList<FilePath> inputFiles;
         try {
             inputFiles = ImmutableList.copyOf(getSoundFiles());
@@ -89,7 +95,7 @@ public final class SoundOptimizer {
             return;
         }
 
-        inputFiles.parallelStream().forEach(inputFile -> {
+        executor.invokeAndWait(inputFiles, inputFile -> {
             try {
                 optimizeSound(inputFile);
             } catch (IOException | RuntimeException e) {

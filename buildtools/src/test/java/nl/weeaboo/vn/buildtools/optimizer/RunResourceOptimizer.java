@@ -15,7 +15,7 @@ final class RunResourceOptimizer {
     /**
      * Test runner for the image optimizer pipeline.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         InitConfig.init();
         HeadlessGdx.init();
 
@@ -28,7 +28,7 @@ final class RunResourceOptimizer {
         dstFolder.mkdirs();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("C:\\vn-project\\LoMa"), new File("."));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("D:\\temp\\LoMa"), new File("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             ResourceOptimizerConfig config = new ResourceOptimizerConfig(dstFolder);
             OptimizerContext context = new OptimizerContext(connection, config);

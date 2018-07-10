@@ -27,6 +27,7 @@ import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
+import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageEncoderConfig.EImageEncoding;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
@@ -46,6 +47,7 @@ public final class ImageOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageOptimizer.class);
 
+    private final IParallelExecutor executor;
     private final ResourceOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
     private final ImageEncoderConfig encoderConfig;
@@ -58,6 +60,7 @@ public final class ImageOptimizer {
     private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
 
     public ImageOptimizer(IOptimizerContext context) {
+        executor = context.getExecutor();
         optimizerConfig = context.getConfig();
         resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
         encoderConfig = context.getConfig(ImageEncoderConfig.class, new ImageEncoderConfig());
@@ -75,15 +78,16 @@ public final class ImageOptimizer {
 
     /**
      * Runs the image optimizer.
+     * @throws InterruptedException If the current thread is interrupted before the optimization is finished.
      */
-    public void optimizeResources() {
+    public void optimizeResources() throws InterruptedException {
         resetState();
 
         optimizeImages();
         writeImageDefinitions();
     }
 
-    private void optimizeImages() {
+    private void optimizeImages() throws InterruptedException {
         ImmutableList<FilePath> inputFiles;
         try {
             inputFiles = ImmutableList.copyOf(getImageFiles());
@@ -92,7 +96,7 @@ public final class ImageOptimizer {
             return;
         }
 
-        inputFiles.parallelStream().forEach(inputFile -> {
+        executor.invokeAndWait(inputFiles, inputFile -> {
             try {
                 optimizeImage(inputFile);
             } catch (IOException | RuntimeException e) {

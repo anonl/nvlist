@@ -39,14 +39,14 @@ deps.gdx_android_natives = [
     "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a",
     "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a",
     "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64",        
-    
+    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64",
+
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64",        
+    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64",
 ]
 
 deps.gdx_core = [

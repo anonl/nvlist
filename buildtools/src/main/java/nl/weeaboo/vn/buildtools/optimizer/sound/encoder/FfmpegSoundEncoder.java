@@ -1,8 +1,10 @@
 package nl.weeaboo.vn.buildtools.optimizer.sound.encoder;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +27,10 @@ import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionBuilder;
 public final class FfmpegSoundEncoder implements ISoundEncoder {
 
     private static final Logger LOG = LoggerFactory.getLogger(FfmpegSoundEncoder.class);
+
+    private static final String OUTPUT_EXT = "ogg";
+    private static final String AUDIO_CODEC = "libvorbis";
+    private static final String AUDIO_QUALITY = "3";
 
     private final ITempFileProvider tempFileProvider;
 
@@ -63,7 +69,7 @@ public final class FfmpegSoundEncoder implements ISoundEncoder {
         }
 
         SoundDefinitionBuilder soundDef = sound.getDef().builder();
-        soundDef.setFilename(Filenames.replaceExt(soundDef.getFilename(), "ogg"));
+        soundDef.setFilename(Filenames.replaceExt(soundDef.getFilename(), OUTPUT_EXT));
         return new EncodedSound(resultAudioData, soundDef.build());
     }
 
@@ -72,14 +78,27 @@ public final class FfmpegSoundEncoder implements ISoundEncoder {
 
         Process process = new ProcessBuilder()
                 .command(command)
-                .redirectOutput(Redirect.INHERIT)
                 .redirectErrorStream(true)
                 .start();
+
+        StringBuilder output = new StringBuilder();
         try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream(),
+                    StandardCharsets.UTF_8));
+            while (process.isAlive()) {
+                String line = in.readLine();
+
+                LOG.trace(line);
+
+                output.append(line);
+                output.append('\n');
+            }
+
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new IOException("Process terminated with an error: " + exitCode
-                        + "\ncommand: " + commandString);
+                        + "\ncommand: " + commandString
+                        + "\noutput: " + output);
             }
         } catch (InterruptedException e) {
             throw new IOException("Process interrupted", e);
@@ -102,9 +121,9 @@ public final class FfmpegSoundEncoder implements ISoundEncoder {
 
         // Audio codec
         command.add("-codec:a");
-        command.add("libvorbis");
+        command.add(AUDIO_CODEC);
         command.add("-qscale:a");
-        command.add("3");
+        command.add(AUDIO_QUALITY);
 
         // Output file
         command.add("-y"); // Overwrite output file (is usually an empty temp file)

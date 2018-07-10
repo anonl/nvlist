@@ -7,7 +7,7 @@ import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 public final class ResourceOptimizer implements IResourceOptimizer {
 
     @Override
-    public void optimizeResources(IOptimizerContext context) {
+    public void optimizeResources(IOptimizerContext context) throws InterruptedException {
         ImageOptimizer imageOptimizer = new ImageOptimizer(context);
         imageOptimizer.optimizeResources();
 

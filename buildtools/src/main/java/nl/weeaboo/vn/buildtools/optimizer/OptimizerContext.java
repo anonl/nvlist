@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
+import java.util.concurrent.ExecutorService;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
@@ -16,6 +18,8 @@ public final class OptimizerContext implements IOptimizerContext {
 
     private final ITempFileProvider tempFileProvider;
     private final IOptimizerFileSet fileSet;
+    private final ExecutorService executorService;
+    private final IParallelExecutor parallelExecutor;
     private final ClassToInstanceMap<IOptimizerConfig> configStore;
 
     public OptimizerContext(NvlistProjectConnection projectConnection, ResourceOptimizerConfig mainConfig) {
@@ -24,8 +28,16 @@ public final class OptimizerContext implements IOptimizerContext {
         tempFileProvider = new TempFileProvider(Files.createTempDir());
         fileSet = new OptimizerFileSet();
 
+        executorService = ParallelExecutor.newExecutorService();
+        parallelExecutor = new ParallelExecutor(executorService);
+
         configStore = MutableClassToInstanceMap.create();
         configStore.put(ResourceOptimizerConfig.class, mainConfig);
+    }
+
+    @Override
+    public void close() {
+        executorService.shutdown();
     }
 
     @Override
@@ -67,6 +79,11 @@ public final class OptimizerContext implements IOptimizerContext {
     @Override
     public IOptimizerFileSet getFileSet() {
         return fileSet;
+    }
+
+    @Override
+    public IParallelExecutor getExecutor() {
+        return parallelExecutor;
     }
 
 }
