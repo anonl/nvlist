@@ -85,7 +85,7 @@ public class EnvironmentFactory {
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
         env.videoModule = new VideoModule(env);
-        env.textModule = new TextModule();
+        env.textModule = new TextModule(env);
         env.systemModule = new SystemModule(env);
 
         // Init context

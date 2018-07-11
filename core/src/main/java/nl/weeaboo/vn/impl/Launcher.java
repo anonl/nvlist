@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl;
 
 import java.io.IOException;
-import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
@@ -12,7 +11,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import nl.weeaboo.common.Checks;
@@ -20,12 +18,6 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.Preference;
-import nl.weeaboo.styledtext.EFontStyle;
-import nl.weeaboo.styledtext.MutableTextStyle;
-import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
-import nl.weeaboo.styledtext.gdx.GdxFontInfo;
-import nl.weeaboo.styledtext.gdx.GdxFontStore;
-import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
@@ -58,8 +50,10 @@ import nl.weeaboo.vn.impl.render.HybridBackBuffer;
 import nl.weeaboo.vn.impl.render.IBackBuffer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
+import nl.weeaboo.vn.impl.text.LoadingFontStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter implements IUpdateable {
@@ -87,7 +81,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable GdxMusicStore musicStore;
     private @Nullable ShaderStore shaderStore;
     private @Nullable GeneratedResourceStore generatedResourceStore;
-    private @Nullable GdxFontStore fontStore;
+    private @Nullable ILoadingFontStore fontStore;
     private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
@@ -135,7 +129,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         simulationRateLimiter.setSimulation(this, 60);
 
         sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
-        osd = Osd.newInstance(resourceFileSystem, performanceMetrics);
+        osd = Osd.newInstance(performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -169,7 +163,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
-        StaticEnvironment.FONT_STORE.set(fontStore = createFontStore());
+        StaticEnvironment.FONT_STORE.set(fontStore = new LoadingFontStore(resourceFileSystem));
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
@@ -183,39 +177,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 onPrefsChanged();
             }
         });
-    }
-
-    private GdxFontStore createFontStore() {
-        GdxFontStore fontStore = new GdxFontStore();
-        try {
-            String fontFamily = "RobotoSlab";
-            int[] sizes = { 16, 32 };
-            for (EFontStyle style : EnumSet.of(EFontStyle.PLAIN, EFontStyle.BOLD, EFontStyle.ITALIC)) {
-                String name = fontFamily;
-                if (style.isBold()) {
-                    name += "Bold";
-                }
-                if (style.isItalic()) {
-                    name += "Oblique";
-                }
-
-                MutableTextStyle ts = new MutableTextStyle();
-                ts.setFontName(name);
-                ts.setFontStyle(style);
-
-                FileHandle fileHandle = resourceFileSystem.resolve("font/" + name + ".ttf");
-
-                GdxFontGenerator fontGenerator = new GdxFontGenerator();
-                fontGenerator.setYDir(YDir.DOWN);
-                GdxFontInfo[] fonts = fontGenerator.load(fileHandle, ts.immutableCopy(), sizes);
-                for (int n = 0; n < fonts.length; n++) {
-                    fontStore.registerFont(fonts[n]);
-                }
-            }
-        } catch (IOException ioe) {
-            LOG.warn("Unable to load font(s)", ioe);
-        }
-        return fontStore;
     }
 
     @Override
@@ -233,7 +194,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         generatedResourceStore = Destructibles.destroy(generatedResourceStore);
         shaderStore = Destructibles.destroy(shaderStore);
         musicStore = Destructibles.destroy(musicStore);
-        fontStore = DisposeUtil.dispose(fontStore);
+        fontStore = Destructibles.destroy(fontStore);
         assetManager = DisposeUtil.dispose(assetManager);
     }
 

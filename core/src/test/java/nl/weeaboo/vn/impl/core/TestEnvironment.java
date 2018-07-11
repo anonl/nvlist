@@ -86,7 +86,7 @@ public class TestEnvironment extends DefaultEnvironment {
         env.saveModule = new SaveModule(env);
         env.imageModule = new ImageModule(env);
         env.soundModule = new SoundModule(env);
-        env.textModule = new TextModule();
+        env.textModule = new TextModule(env);
         env.videoModule = new VideoModule(env);
         env.systemModule = new SystemModuleStub();
 

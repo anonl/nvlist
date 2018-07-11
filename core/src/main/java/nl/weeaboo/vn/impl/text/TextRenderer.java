@@ -15,7 +15,6 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.styledtext.layout.ITextElement;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
@@ -26,6 +25,7 @@ import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.scene.AbstractRenderable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
 public class TextRenderer extends AbstractRenderable implements ITextRenderer {
@@ -33,7 +33,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private static final long serialVersionUID = TextImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(TextRenderer.class);
 
-    private final StaticRef<IFontStore> fontStore = StaticEnvironment.FONT_STORE;
+    private final StaticRef<ILoadingFontStore> fontStore = StaticEnvironment.FONT_STORE;
 
     private StyledText stext = StyledText.EMPTY_STRING;
     private TextStyle defaultStyle = DEFAULT_STYLE;

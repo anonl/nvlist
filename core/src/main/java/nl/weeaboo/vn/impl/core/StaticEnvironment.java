@@ -8,7 +8,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceStore;
-import nl.weeaboo.styledtext.layout.IFontStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;
@@ -18,6 +17,7 @@ import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 /**
  * The static environment contains services and interfaces that connect to the external system. Static references aren't
@@ -61,8 +61,8 @@ public final class StaticEnvironment {
     public static final StaticRef<GdxMusicStore> MUSIC_STORE =
             StaticRef.from("store.music", GdxMusicStore.class);
 
-    public static final StaticRef<IFontStore> FONT_STORE =
-            StaticRef.from("store.font", IFontStore.class);
+    public static final StaticRef<ILoadingFontStore> FONT_STORE =
+            StaticRef.from("store.font", ILoadingFontStore.class);
 
     private static final StaticEnvironment INSTANCE = new StaticEnvironment();
 

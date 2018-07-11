@@ -1,12 +1,7 @@
 package nl.weeaboo.vn.impl.debug;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.base.Joiner;
@@ -21,15 +16,11 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
-import nl.weeaboo.styledtext.gdx.GdxFontStore;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
-import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.stats.FileLine;
@@ -47,9 +38,6 @@ import nl.weeaboo.vn.script.IScriptThread;
 
 public final class Osd implements Disposable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Osd.class);
-
-    private final String fontPath = "font/RobotoSlab.ttf";
     private final PerformanceMetrics performanceMetrics;
 
     private TextRenderer textRenderer;
@@ -60,32 +48,22 @@ public final class Osd implements Disposable {
     }
 
     /** Constructor function. */
-    public static Osd newInstance(GdxFileSystem fileSystem, PerformanceMetrics perfMetrics) {
+    public static Osd newInstance(PerformanceMetrics perfMetrics) {
         Osd osd = new Osd(perfMetrics);
-        osd.init(fileSystem);
+        osd.init();
         return osd;
     }
 
-    private void init(GdxFileSystem fileSystem) {
-        FileHandle fontFile = fileSystem.resolve(fontPath);
-
-        GdxFontStore fontStore = (GdxFontStore)StaticEnvironment.FONT_STORE.get();
+    private void init() {
         textRenderer = new TextRenderer();
 
-        GdxFontGenerator fontGenerator = new GdxFontGenerator();
-        fontGenerator.setYDir(YDir.DOWN);
-        try {
-            MutableTextStyle normalBuilder = new MutableTextStyle("normal", EFontStyle.PLAIN, 16);
-            normalBuilder.setShadowColor(0xFF000000);
-            normalBuilder.setShadowDx(.5f);
-            normalBuilder.setShadowDy(.5f);
-            TextStyle normal = normalBuilder.immutableCopy();
+        MutableTextStyle normalBuilder = new MutableTextStyle("normal", EFontStyle.PLAIN, 16);
+        normalBuilder.setShadowColor(0xFF000000);
+        normalBuilder.setShadowDx(.5f);
+        normalBuilder.setShadowDy(.5f);
+        TextStyle normal = normalBuilder.immutableCopy();
 
-            fontStore.registerFont(fontGenerator.load(fontFile, normal));
-            textRenderer.setDefaultStyle(normal);
-        } catch (IOException ioe) {
-            LOG.warn("Error loading 'normal' OSD font", ioe);
-        }
+        textRenderer.setDefaultStyle(normal);
     }
 
     @Override

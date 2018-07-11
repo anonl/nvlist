@@ -7,6 +7,7 @@ public enum MediaType {
     SOUND("snd/"),
     VIDEO("video/"),
     SCRIPT("script/"),
+    FONT("font/"),
     OTHER("");
 
     private final FilePath subFolder;
