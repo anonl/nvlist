@@ -35,27 +35,30 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public final class Osd implements Disposable {
 
+    private final ILoadingFontStore fontStore;
     private final PerformanceMetrics performanceMetrics;
 
     private TextRenderer textRenderer;
     private boolean visible = false;
 
-    private Osd(PerformanceMetrics perfMetrics) {
+    private Osd(ILoadingFontStore fontStore, PerformanceMetrics perfMetrics) {
+        this.fontStore = Checks.checkNotNull(fontStore);
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
     }
 
     /** Constructor function. */
-    public static Osd newInstance(PerformanceMetrics perfMetrics) {
-        Osd osd = new Osd(perfMetrics);
+    public static Osd newInstance(ILoadingFontStore fontStore, PerformanceMetrics perfMetrics) {
+        Osd osd = new Osd(fontStore, perfMetrics);
         osd.init();
         return osd;
     }
 
     private void init() {
-        textRenderer = new TextRenderer();
+        textRenderer = new TextRenderer(fontStore);
 
         MutableTextStyle normalBuilder = new MutableTextStyle("normal", EFontStyle.PLAIN, 16);
         normalBuilder.setShadowColor(0xFF000000);

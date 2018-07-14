@@ -9,6 +9,7 @@ import nl.weeaboo.vn.impl.text.TextRenderer;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ITextDrawable;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
 public class TextDrawable extends Transformable implements ITextDrawable {
@@ -19,8 +20,8 @@ public class TextDrawable extends Transformable implements ITextDrawable {
 
     private double textSpeed = 0;
 
-    public TextDrawable() {
-        this(new TextRenderer());
+    public TextDrawable(ILoadingFontStore fontStore) {
+        this(new TextRenderer(fontStore));
     }
 
     public TextDrawable(ITextRenderer renderer) {

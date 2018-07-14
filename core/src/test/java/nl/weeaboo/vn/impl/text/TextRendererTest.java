@@ -18,10 +18,10 @@ public class TextRendererTest {
 
     @Before
     public void before() {
-        StaticEnvironment.FONT_STORE.set(new TestFontStore());
-
         exTester = new ExceptionTester();
-        textRenderer = new TextRenderer();
+
+        TestFontStore fontStore = new TestFontStore();
+        textRenderer = new TextRenderer(fontStore);
     }
 
     @After

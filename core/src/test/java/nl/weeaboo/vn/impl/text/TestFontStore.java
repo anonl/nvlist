@@ -6,21 +6,11 @@ import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class TestFontStore implements ILoadingFontStore {
 
-    private boolean destroyed;
+    private static final long serialVersionUID = 1L;
 
     @Override
     public IFontMetrics getFontMetrics(TextStyle style) {
         return new BasicFontMetrics(style.getFontSize(), style.getFontSize());
-    }
-
-    @Override
-    public void destroy() {
-        destroyed = true;
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return destroyed;
     }
 
 }

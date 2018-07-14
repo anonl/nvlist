@@ -70,12 +70,12 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
     @Override
     public ITextDrawable createTextDrawable(ILayer layer) {
-        return entityHelper.createText(layer);
+        return entityHelper.createText(layer, env.getTextModule().getFontStore());
     }
 
     @Override
     public IButton createButton(ILayer layer, IScriptContext scriptContext) {
-        return entityHelper.createButton(layer, scriptContext);
+        return entityHelper.createButton(layer, scriptContext, env.getTextModule().getFontStore());
     }
 
     @Override

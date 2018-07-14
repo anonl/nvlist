@@ -20,8 +20,6 @@ import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.core.VerticalAlign;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.scene.AbstractRenderable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
@@ -33,7 +31,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private static final long serialVersionUID = TextImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(TextRenderer.class);
 
-    private final StaticRef<ILoadingFontStore> fontStore = StaticEnvironment.FONT_STORE;
+    private final ILoadingFontStore fontStore;
 
     private StyledText stext = StyledText.EMPTY_STRING;
     private TextStyle defaultStyle = DEFAULT_STYLE;
@@ -47,6 +45,10 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private transient @Nullable ITextLayout cachedLayout;
     private transient @Nullable ITextLayout cachedVisibleLayout;
 
+    public TextRenderer(ILoadingFontStore fontStore) {
+        this.fontStore = Checks.checkNotNull(fontStore);
+    }
+
     protected ITextLayout createLayout(int wrapWidth) {
         MutableStyledText newText = getText().mutableCopy();
         newText.setBaseStyle(getDefaultStyle());
@@ -55,7 +57,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
         layoutParams.ydir = 1;
         layoutParams.wrapWidth = wrapWidth;
         layoutParams.isRightToLeft = isRightToLeft();
-        return LayoutUtil.layout(fontStore.get(), newText.immutableCopy(), layoutParams);
+        return LayoutUtil.layout(fontStore, newText.immutableCopy(), layoutParams);
     }
 
     @Override

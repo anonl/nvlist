@@ -22,6 +22,7 @@ import nl.weeaboo.vn.scene.IButtonModel;
 import nl.weeaboo.vn.scene.IButtonRenderer;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class Button extends Transformable implements IButton {
 
@@ -37,8 +38,8 @@ public class Button extends Transformable implements IButton {
 
     private transient IEventListener rendererListener;
 
-    public Button(IScriptEventDispatcher eventDispatcher) {
-        this(eventDispatcher, new ButtonModel(), new ButtonRenderer());
+    public Button(IScriptEventDispatcher eventDispatcher, ILoadingFontStore fontStore) {
+        this(eventDispatcher, new ButtonModel(), new ButtonRenderer(fontStore));
     }
 
     public Button(IScriptEventDispatcher eventDispatcher, IButtonModel model, IButtonRenderer renderer) {

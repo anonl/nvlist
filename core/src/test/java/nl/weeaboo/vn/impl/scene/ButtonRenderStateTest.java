@@ -21,9 +21,9 @@ public class ButtonRenderStateTest {
     @Before
     public void before() {
         model = new ButtonModel();
-        renderer = new ButtonRenderer();
 
-        StaticEnvironment.FONT_STORE.set(new TestFontStore());
+        TestFontStore fontStore = new TestFontStore();
+        renderer = new ButtonRenderer(fontStore);
 
         button = new Button(new ScriptEventDispatcher(), model, renderer);
         button.setSize(100, 20);

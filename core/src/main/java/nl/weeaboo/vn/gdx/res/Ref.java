@@ -2,7 +2,7 @@ package nl.weeaboo.vn.gdx.res;
 
 import javax.annotation.Nullable;
 
-final class Ref<T> {
+public final class Ref<T> {
 
     private @Nullable T referent;
 

@@ -10,4 +10,6 @@ public interface ITextModule extends IModule {
 
     IResourceResolver getFontLoader();
 
+    ILoadingFontStore getFontStore();
+
 }

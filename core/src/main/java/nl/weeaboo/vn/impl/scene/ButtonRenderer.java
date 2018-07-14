@@ -20,6 +20,7 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButtonRenderer;
 import nl.weeaboo.vn.scene.IDrawable;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.IText;
 
 public class ButtonRenderer extends AbstractRenderable implements IButtonRenderer {
@@ -27,14 +28,16 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     private final NinePatchRenderer background = new NinePatchRenderer();
-    private final TextRenderer textRenderer = new TextRenderer();
+    private final TextRenderer textRenderer;
 
     private final Map<ButtonViewState, INinePatch> textures = Maps.newEnumMap(ButtonViewState.class);
 
     private ButtonViewState currentViewState = ButtonViewState.DEFAULT;
     private VerticalAlign verticalTextAlign = VerticalAlign.MIDDLE;
 
-    public ButtonRenderer() {
+    public ButtonRenderer(ILoadingFontStore fontStore) {
+        textRenderer = new TextRenderer(fontStore);
+
         MutableTextStyle mts = new MutableTextStyle(IText.DEFAULT_STYLE);
         mts.setAlign(ETextAlign.CENTER);
         textRenderer.setDefaultStyle(mts.immutableCopy());

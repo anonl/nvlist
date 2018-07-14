@@ -7,7 +7,7 @@ import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class RenderTextTest extends RenderIntegrationTest {
 
@@ -29,7 +29,9 @@ public class RenderTextTest extends RenderIntegrationTest {
         LayoutParameters layoutParams = new LayoutParameters();
         layoutParams.ydir = 1;
         layoutParams.wrapWidth = wrapWidth;
-        return LayoutUtil.layout(StaticEnvironment.FONT_STORE.get(), text, layoutParams);
+
+        ILoadingFontStore fontStore = env.getTextModule().getFontStore();
+        return LayoutUtil.layout(fontStore, text, layoutParams);
     }
 
 }

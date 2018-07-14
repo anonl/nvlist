@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 
-abstract class AbstractResourceStore implements IResourceStore {
+public abstract class AbstractResourceStore implements IResourceStore {
 
     private final Logger log;
 

@@ -53,6 +53,7 @@ import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public final class DebugControls {
 
@@ -138,13 +139,14 @@ public final class DebugControls {
         }
 
         // Text
+        ILoadingFontStore fontStore = env.getTextModule().getFontStore();
         if (screen != null && alt && input.consumePress(KeyCode.Y)) {
-            createLongText(screen.getRootLayer());
+            createLongText(screen.getRootLayer(), fontStore);
         }
 
         // Button
         if (screen != null && alt && input.consumePress(KeyCode.B)) {
-            createButton(screen.getRootLayer(), imageModule, scriptContext);
+            createButton(screen.getRootLayer(), imageModule, scriptContext, fontStore);
         }
 
         // Music
@@ -197,18 +199,20 @@ public final class DebugControls {
         image.setRenderer(renderer, Direction.CENTER);
     }
 
-    private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext) {
+    private static void createButton(ILayer layer, IImageModule imageModule, IScriptContext scriptContext,
+            ILoadingFontStore fontStore) {
+
         ComponentFactory entityHelper = new ComponentFactory();
-        IButton button = entityHelper.createButton(layer, scriptContext);
+        IButton button = entityHelper.createButton(layer, scriptContext, fontStore);
         button.setSize(150, 150);
         button.setTexture(ButtonViewState.DEFAULT, getTestTexture(imageModule));
         button.setText("MgZx\nZxMg");
         button.setPos(800, 0);
     }
 
-    private static void createLongText(ILayer layer) {
+    private static void createLongText(ILayer layer, ILoadingFontStore fontStore) {
         ComponentFactory entityHelper = new ComponentFactory();
-        ITextDrawable text = entityHelper.createText(layer);
+        ITextDrawable text = entityHelper.createText(layer, fontStore);
         text.setZ((short)1000);
         text.setBounds(0, 0, 1280, 720);
 

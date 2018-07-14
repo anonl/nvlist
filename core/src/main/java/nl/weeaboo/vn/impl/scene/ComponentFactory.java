@@ -7,6 +7,7 @@ import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class ComponentFactory implements Serializable {
 
@@ -24,8 +25,8 @@ public class ComponentFactory implements Serializable {
     /**
      * Creates a new text drawable and adds it to the specified layer.
      */
-    public ITextDrawable createText(ILayer layer) {
-        TextDrawable textDrawable = new TextDrawable();
+    public ITextDrawable createText(ILayer layer, ILoadingFontStore fontStore) {
+        TextDrawable textDrawable = new TextDrawable(fontStore);
         textDrawable.setSize(layer.getWidth(), layer.getHeight());
         layer.add(textDrawable);
         return textDrawable;
@@ -34,8 +35,8 @@ public class ComponentFactory implements Serializable {
     /**
      * Creates a new button drawable and adds it to the specified layer.
      */
-    public IButton createButton(ILayer layer, IScriptContext scriptContext) {
-        Button button = new Button(scriptContext.getEventDispatcher());
+    public IButton createButton(ILayer layer, IScriptContext scriptContext, ILoadingFontStore fontStore) {
+        Button button = new Button(scriptContext.getEventDispatcher(), fontStore);
         layer.add(button);
         return button;
     }

@@ -13,6 +13,7 @@ import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.script.ScriptFunctionStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
+import nl.weeaboo.vn.impl.text.TestFontStore;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
@@ -37,7 +38,8 @@ public class ButtonClickTest {
 
         eventDispatcher = new ScriptEventDispatcher();
         clickFunction = new ScriptFunctionStub();
-        button = new Button(eventDispatcher);
+        TestFontStore fontStore = new TestFontStore();
+        button = new Button(eventDispatcher, fontStore);
         button.setClickHandler(clickFunction);
         button.setSize(100, 20);
     }

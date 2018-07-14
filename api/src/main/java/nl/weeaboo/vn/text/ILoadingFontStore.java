@@ -1,8 +1,9 @@
 package nl.weeaboo.vn.text;
 
-import nl.weeaboo.styledtext.layout.IFontStore;
-import nl.weeaboo.vn.core.IDestructible;
+import java.io.Serializable;
 
-public interface ILoadingFontStore extends IDestructible, IFontStore {
+import nl.weeaboo.styledtext.layout.IFontStore;
+
+public interface ILoadingFontStore extends Serializable, IFontStore {
 
 }

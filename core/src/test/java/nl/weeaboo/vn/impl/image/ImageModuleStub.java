@@ -20,15 +20,19 @@ import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.TextDrawable;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.impl.text.TestFontStore;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     private static final long serialVersionUID = 1L;
+
+    private final ILoadingFontStore fontStore = new TestFontStore();
 
     @Override
     public @Nullable ResourceId resolveResource(FilePath filename) {
@@ -42,12 +46,12 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     @Override
     public ITextDrawable createTextDrawable(ILayer layer) {
-        return new TextDrawable();
+        return new TextDrawable(fontStore);
     }
 
     @Override
     public IButton createButton(ILayer layer, IScriptContext scriptContext) {
-        return new Button(scriptContext.getEventDispatcher());
+        return new Button(scriptContext.getEventDispatcher(), fontStore);
     }
 
     @Override

@@ -8,6 +8,8 @@ final class FontResourceLoader extends FileResourceLoader {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;
 
+    static final String DEFAULT_FONT_NAME = "default";
+
     public FontResourceLoader(IEnvironment env) {
         super(env, MediaType.FONT);
 

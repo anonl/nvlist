@@ -24,7 +24,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
-    private ResourceStoreCache<T> cache;
+    private ResourceStoreCache<FilePath, T> cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
         super(LoggerFactory.getLogger("LoadingResourceStore<" + type.getSimpleName() + ">"));
@@ -115,11 +115,11 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         cache = new Cache(config);
     }
 
-    protected final ResourceStoreCache<T> getCache() {
+    protected final ResourceStoreCache<FilePath, T> getCache() {
         return cache;
     }
 
-    private final class Cache extends ResourceStoreCache<T> {
+    private final class Cache extends ResourceStoreCache<FilePath, T> {
 
         public Cache(ResourceStoreCacheConfig<T> config) {
             super(config);
@@ -127,14 +127,12 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
 
         @Override
         public Ref<T> doLoad(FilePath absolutePath) {
-            T resource;
             try {
-                resource = loadResource(absolutePath);
+                return new Ref<>(loadResource(absolutePath));
             } catch (RuntimeException re) {
                 loadError(absolutePath, re);
-                resource = null;
+                throw re;
             }
-            return new Ref<>(resource);
         }
 
         @Override
@@ -143,7 +141,7 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         }
 
         @Override
-        protected void doUnload(FilePath absolutePath) {
+        protected void doUnload(FilePath absolutePath, @Nullable T value) {
             AssetManager am = assetManager.get();
             am.unload(absolutePath.toString());
         }

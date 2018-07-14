@@ -27,7 +27,7 @@ import nl.weeaboo.vn.impl.stats.PlayTimerStub;
 import nl.weeaboo.vn.impl.stats.StatsModule;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
-import nl.weeaboo.vn.impl.text.TestFontStore;
+import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.impl.text.TextModule;
 import nl.weeaboo.vn.impl.video.VideoModule;
 
@@ -71,7 +71,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.ASSET_MANAGER.set(new TestAssetManager(gdxFileSystem));
         StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, gdxFileSystem));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
-        StaticEnvironment.FONT_STORE.set(new TestFontStore());
+        StaticEnvironment.FONT_STORE.set(new GdxFontStore(gdxFileSystem));
 
         TestEnvironment env = new TestEnvironment(inputAdapter);
         env.renderEnv = CoreTestUtil.BASIC_ENV;

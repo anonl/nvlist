@@ -3,6 +3,8 @@ package nl.weeaboo.vn.gdx.res;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,19 +15,17 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.cache.Weigher;
 
-import nl.weeaboo.filesystem.FilePath;
-
-public abstract class ResourceStoreCache<T> {
+public abstract class ResourceStoreCache<K, V> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceStoreCache.class);
 
     private final int maximumWeight;
-    private final IWeigher<T> weigher;
+    private final IWeigher<V> weigher;
 
-    private final LoadingCache<FilePath, PreloadRef> preloadCache;
-    private final LoadingCache<FilePath, Ref<T>> cache;
+    private final LoadingCache<K, PreloadRef> preloadCache;
+    private final LoadingCache<K, Ref<V>> cache;
 
-    public ResourceStoreCache(ResourceStoreCacheConfig<T> config) {
+    public ResourceStoreCache(ResourceStoreCacheConfig<V> config) {
         maximumWeight = config.getMaximumWeight();
         weigher = config.getWeigher();
 
@@ -38,8 +38,8 @@ public abstract class ResourceStoreCache<T> {
      */
     public long estimateWeight() {
         long sum = 0L;
-        for (Ref<T> ref : cache.asMap().values()) {
-            T value = ref.get();
+        for (Ref<V> ref : cache.asMap().values()) {
+            V value = ref.get();
             if (value != null) {
                 sum += weigher.weigh(value);
             }
@@ -56,78 +56,81 @@ public abstract class ResourceStoreCache<T> {
         return maximumWeight;
     }
 
-    private LoadingCache<FilePath, PreloadRef> buildPreloadCache() {
+    private LoadingCache<K, PreloadRef> buildPreloadCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(1)
                 .expireAfterAccess(15, TimeUnit.SECONDS)
-                .removalListener(new RemovalListener<FilePath, PreloadRef>() {
+                .removalListener(new RemovalListener<K, PreloadRef>() {
                     @Override
-                    public void onRemoval(RemovalNotification<FilePath, PreloadRef> notification) {
-                        doUnload(notification.getKey());
+                    public void onRemoval(RemovalNotification<K, PreloadRef> notification) {
+                        doUnload(notification.getKey(), null);
                     }
                 })
-                .build(new CacheLoader<FilePath, PreloadRef>() {
+                .build(new CacheLoader<K, PreloadRef>() {
                     @Override
-                    public PreloadRef load(FilePath absolutePath) {
-                        doPreload(absolutePath);
+                    public PreloadRef load(K resourceKey) {
+                        doPreload(resourceKey);
                         return new PreloadRef();
                     }
                 });
     }
 
-    private LoadingCache<FilePath, Ref<T>> buildLoadCache() {
+    private LoadingCache<K, Ref<V>> buildLoadCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(1)
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .weigher(new RefWeigher<>(weigher))
                 .maximumWeight(maximumWeight)
-                .removalListener(new RemovalListener<FilePath, Ref<T>>() {
+                .removalListener(new RemovalListener<K, Ref<V>>() {
                     @Override
-                    public void onRemoval(RemovalNotification<FilePath, Ref<T>> notification) {
-                        notification.getValue().invalidate();
-                        doUnload(notification.getKey());
+                    public void onRemoval(RemovalNotification<K, Ref<V>> notification) {
+                        Ref<V> ref = notification.getValue();
+                        V value = ref.get();
+                        ref.invalidate();
+
+                        doUnload(notification.getKey(), value);
                     }
                 })
-                .build(new CacheLoader<FilePath, Ref<T>>() {
+                .build(new CacheLoader<K, Ref<V>>() {
                     @Override
-                    public Ref<T> load(FilePath absolutePath) {
-                        return doLoad(absolutePath);
+                    public Ref<V> load(K resourceKey) throws Exception {
+                        return doLoad(resourceKey);
                     }
                 });
     }
 
     /**
-     * Disposes/unloads the resource with the given path.
+     * Disposes/unloads the resource with the given key.
      */
-    protected abstract void doUnload(FilePath absolutePath);
+    protected abstract void doUnload(K resourceKey, @Nullable V value);
 
     /**
-     * Creates the resource with the given path.
+     * Creates the resource with the given key.
      */
-    protected abstract Ref<T> doLoad(FilePath absolutePath);
+    protected abstract Ref<V> doLoad(K resourceKey) throws Exception;
 
     /**
-     * Implements async preloading for the resource with the given path.
+     * Implements async preloading for the resource with the given key.
      *
-     * @param absolutePath The file path correspsonding to the resource.
+     * @param resourceKey The unique identifier correspsonding to the resource.
      */
-    protected void doPreload(FilePath absolutePath) {
+    protected void doPreload(K resourceKey) {
     }
 
-    protected Ref<T> getEntry(FilePath absolutePath) throws ExecutionException {
-        return cache.get(absolutePath);
+    public Ref<V> getEntry(K resourceKey) throws ExecutionException {
+        return cache.get(resourceKey);
     }
 
     /**
      * Triggers an async preload of the given resource.
      *
-     * @see #doPreload(FilePath)
+     * @see #doPreload(Object)
      */
-    public void preload(FilePath absolutePath) {
+    public void preload(K resourceKey) {
         try {
-            preloadCache.get(absolutePath);
+            preloadCache.get(resourceKey);
         } catch (ExecutionException e) {
-            LOG.warn("Preload failed: {}", absolutePath, e.getCause());
+            LOG.warn("Preload failed: {}", resourceKey, e.getCause());
         }
     }
 
@@ -142,17 +145,17 @@ public abstract class ResourceStoreCache<T> {
     private static final class PreloadRef {
     }
 
-    private static final class RefWeigher<T> implements Weigher<FilePath, Ref<T>> {
+    private static final class RefWeigher<K, V> implements Weigher<K, Ref<V>> {
 
-        private final IWeigher<T> weigher;
+        private final IWeigher<V> weigher;
 
-        public RefWeigher(IWeigher<T> weigher) {
+        public RefWeigher(IWeigher<V> weigher) {
             this.weigher = weigher;
         }
 
         @Override
-        public int weigh(FilePath key, Ref<T> ref) {
-            final T value = ref.get();
+        public int weigh(K key, Ref<V> ref) {
+            final V value = ref.get();
             if (value == null) {
                 return 0;
             }

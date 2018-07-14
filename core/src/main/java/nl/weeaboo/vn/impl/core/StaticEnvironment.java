@@ -16,8 +16,8 @@ import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
+import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.input.IInput;
-import nl.weeaboo.vn.text.ILoadingFontStore;
 
 /**
  * The static environment contains services and interfaces that connect to the external system. Static references aren't
@@ -61,8 +61,8 @@ public final class StaticEnvironment {
     public static final StaticRef<GdxMusicStore> MUSIC_STORE =
             StaticRef.from("store.music", GdxMusicStore.class);
 
-    public static final StaticRef<ILoadingFontStore> FONT_STORE =
-            StaticRef.from("store.font", ILoadingFontStore.class);
+    public static final StaticRef<GdxFontStore> FONT_STORE =
+            StaticRef.from("store.font", GdxFontStore.class);
 
     private static final StaticEnvironment INSTANCE = new StaticEnvironment();
 

@@ -50,10 +50,9 @@ import nl.weeaboo.vn.impl.render.HybridBackBuffer;
 import nl.weeaboo.vn.impl.render.IBackBuffer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
-import nl.weeaboo.vn.impl.text.LoadingFontStore;
+import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.IRenderEnv;
-import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.video.IVideo;
 
 public class Launcher extends ApplicationAdapter implements IUpdateable {
@@ -81,7 +80,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable GdxMusicStore musicStore;
     private @Nullable ShaderStore shaderStore;
     private @Nullable GeneratedResourceStore generatedResourceStore;
-    private @Nullable ILoadingFontStore fontStore;
+    private @Nullable GdxFontStore fontStore;
     private boolean windowDirty;
 
     public Launcher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
@@ -125,11 +124,13 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             throw new RuntimeException("Fatal error during init", e);
         }
 
+        final IEnvironment env = novel.getEnv();
+
         simulationRateLimiter = new SimulationRateLimiter();
         simulationRateLimiter.setSimulation(this, 60);
 
         sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
-        osd = Osd.newInstance(performanceMetrics);
+        osd = Osd.newInstance(env.getTextModule().getFontStore(), performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -163,7 +164,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
-        StaticEnvironment.FONT_STORE.set(fontStore = new LoadingFontStore(resourceFileSystem));
+        StaticEnvironment.FONT_STORE.set(fontStore = new GdxFontStore(resourceFileSystem));
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);

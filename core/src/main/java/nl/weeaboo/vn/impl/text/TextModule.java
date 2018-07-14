@@ -4,6 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.impl.core.AbstractModule;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextLog;
 import nl.weeaboo.vn.text.ITextModule;
 
@@ -13,6 +14,7 @@ public class TextModule extends AbstractModule implements ITextModule {
 
     private final ITextLog textLog;
     private final FontResourceLoader fontLoader;
+    private final ILoadingFontStore fontStore;
 
     public TextModule(IEnvironment env) {
         this(new TextLog(), new FontResourceLoader(env));
@@ -21,6 +23,7 @@ public class TextModule extends AbstractModule implements ITextModule {
     public TextModule(ITextLog textLog, FontResourceLoader fontLoader) {
         this.textLog = Checks.checkNotNull(textLog);
         this.fontLoader = Checks.checkNotNull(fontLoader);
+        this.fontStore = new LoadingFontStore(fontLoader);
     }
 
     @Override
@@ -31,6 +34,11 @@ public class TextModule extends AbstractModule implements ITextModule {
     @Override
     public IResourceResolver getFontLoader() {
         return fontLoader;
+    }
+
+    @Override
+    public ILoadingFontStore getFontStore() {
+        return fontStore;
     }
 
 }

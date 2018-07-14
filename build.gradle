@@ -22,7 +22,7 @@ plugins {
     // Google error-prone
     id 'net.ltgt.errorprone' version '0.0.13' apply false
 
-    // Plugin used for reporting on the licenses of third-part licenses
+    // Plugin used for reporting on the licenses of third-party dependencies
     id 'com.github.hierynomus.license' version '0.14.0'
 
     // Java Microbenchmark Harness plugin
