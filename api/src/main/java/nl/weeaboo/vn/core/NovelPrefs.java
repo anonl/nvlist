@@ -70,4 +70,10 @@ public final class NovelPrefs {
             1.0,
             "Master volume (between 0.0 and 1.0) for voice audio.");
 
+    public static final Preference<Integer> TEXTURE_CACHE_PAGES = newPreference("vn.texture.cacheSizePages",
+            "Texture cache size (pages)",
+            20,
+            "Texture cache size in number of pages. A page is equal to the texture memory required for a "
+            + "full screen, full color image.");
+
 }

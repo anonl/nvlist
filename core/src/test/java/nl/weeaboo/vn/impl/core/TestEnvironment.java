@@ -69,7 +69,8 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.SYSTEM_ENV.set(new TestSystemEnv());
 
         StaticEnvironment.ASSET_MANAGER.set(new TestAssetManager(gdxFileSystem));
-        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, gdxFileSystem));
+        StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE,
+                gdxFileSystem, prefs));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new GdxFontStore(gdxFileSystem));
 

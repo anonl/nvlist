@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.IWeigher;
@@ -23,18 +25,23 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
 
     private final ImageDefinitionCache cachedImageDefs;
 
-    public GdxTextureStore(StaticRef<GdxTextureStore> selfId, GdxFileSystem fileSystem) {
+    public GdxTextureStore(StaticRef<GdxTextureStore> selfId, GdxFileSystem fileSystem,
+            IPreferenceStore prefs) {
+
         super(selfId, Texture.class);
 
         cachedImageDefs = new ImageDefinitionCache(fileSystem);
 
-        setCacheConfig(createCacheConfig());
+        setCacheConfig(createCacheConfig(prefs));
     }
 
-    private static ResourceStoreCacheConfig<Texture> createCacheConfig() {
+    private static ResourceStoreCacheConfig<Texture> createCacheConfig(IPreferenceStore prefs) {
         ResourceStoreCacheConfig<Texture> config = new ResourceStoreCacheConfig<>();
-        // TODO: Make this configurable, and use a default value that's a multiple of the screen resolution
-        config.setMaximumWeight(256_000_000);
+
+        int pages = prefs.get(NovelPrefs.TEXTURE_CACHE_PAGES);
+        int cacheSizeBytes = pages * 4 * prefs.get(NovelPrefs.WIDTH) * prefs.get(NovelPrefs.HEIGHT); // 32bpp = 4 bytes
+        config.setMaximumWeight(cacheSizeBytes);
+
         config.setWeigher(new IWeigher<Texture>() {
             @Override
             public int weigh(Texture tex) {

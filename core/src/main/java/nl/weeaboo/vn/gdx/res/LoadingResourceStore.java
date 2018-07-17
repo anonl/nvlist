@@ -111,6 +111,8 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         // Clear existing cache
         cache.clear();
 
+        LOG.info("{}.setCacheConfig(maxWeight={})", getClass().getSimpleName(), config.getMaximumWeight());
+
         // Init a new cache with the new config
         cache = new Cache(config);
     }

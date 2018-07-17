@@ -159,7 +159,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(textureStore =
-                new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem));
+                new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem, prefs));
         StaticEnvironment.GENERATED_RESOURCES.set(generatedResourceStore =
                 new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
