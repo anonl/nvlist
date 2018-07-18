@@ -42,12 +42,23 @@ public final class GdxFontStore extends AbstractResourceStore {
 
         backing = new nl.weeaboo.styledtext.gdx.GdxFontStore();
         cache = new Cache(new ResourceStoreCacheConfig<>());
+    }
 
+    private void loadBuiltInFont() {
         try {
             loadFont(Gdx.files.classpath("builtin/font/default.ttf"),
                     new TextStyle(FontResourceLoader.DEFAULT_FONT_NAME, 16));
         } catch (IOException e) {
             LOG.warn("Error loading built-in font", e);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (!isDestroyed()) {
+            super.destroy();
+
+            backing.dispose();
         }
     }
 
@@ -71,6 +82,11 @@ public final class GdxFontStore extends AbstractResourceStore {
     }
 
     public IFontMetrics getFontMetrics(FilePath absoluteFontPath, TextStyle styleArg) {
+        // Add the default font if we didn't do that yet
+        if (backing.getFonts().isEmpty()) {
+            loadBuiltInFont();
+        }
+
         // Workaround for a bug in gdx-styledtext -- a null font name causes problems
         MutableTextStyle mts = styleArg.mutableCopy();
         if (styleArg.getFontName() == null) {

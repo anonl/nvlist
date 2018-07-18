@@ -9,7 +9,7 @@ ext.deps = [:]
 
 ext.errorProneVersion = '2.2.0'
 
-def gdxTestVersion = '2.0.0'
+def gdxTestVersion = '2.0.1'
 def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
 def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible

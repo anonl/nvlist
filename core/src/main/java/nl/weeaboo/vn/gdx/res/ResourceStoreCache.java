@@ -29,8 +29,8 @@ public abstract class ResourceStoreCache<K, V> {
         maximumWeight = config.getMaximumWeight();
         weigher = config.getWeigher();
 
-        preloadCache = buildPreloadCache();
         cache = buildLoadCache();
+        preloadCache = buildPreloadCache();
     }
 
     /**
@@ -63,7 +63,12 @@ public abstract class ResourceStoreCache<K, V> {
                 .removalListener(new RemovalListener<K, PreloadRef>() {
                     @Override
                     public void onRemoval(RemovalNotification<K, PreloadRef> notification) {
-                        doUnload(notification.getKey(), null);
+                        K key = notification.getKey();
+
+                        if (cache.getIfPresent(key) == null) {
+                            // Unload resource if it was contained only in the preload cache
+                            doUnload(notification.getKey(), null);
+                        }
                     }
                 })
                 .build(new CacheLoader<K, PreloadRef>() {
@@ -94,7 +99,12 @@ public abstract class ResourceStoreCache<K, V> {
                 .build(new CacheLoader<K, Ref<V>>() {
                     @Override
                     public Ref<V> load(K resourceKey) throws Exception {
-                        return doLoad(resourceKey);
+                        V resource = doLoad(resourceKey);
+
+                        // Remove resource from the preload cache because it's now fully loaded
+                        preloadCache.invalidate(resourceKey);
+
+                        return new Ref<>(resource);
                     }
                 });
     }
@@ -107,7 +117,7 @@ public abstract class ResourceStoreCache<K, V> {
     /**
      * Creates the resource with the given key.
      */
-    protected abstract Ref<V> doLoad(K resourceKey) throws Exception;
+    protected abstract V doLoad(K resourceKey) throws Exception;
 
     /**
      * Implements async preloading for the resource with the given key.
