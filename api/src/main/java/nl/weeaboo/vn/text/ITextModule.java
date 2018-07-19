@@ -8,8 +8,10 @@ public interface ITextModule extends IModule {
     /** Returns the global text log. */
     ITextLog getTextLog();
 
+    /** Resolves font files. */
     IResourceResolver getFontLoader();
 
+    /** Loads/caches fonts. */
     ILoadingFontStore getFontStore();
 
 }

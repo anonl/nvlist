@@ -127,6 +127,11 @@ public abstract class ResourceStoreCache<K, V> {
     protected void doPreload(K resourceKey) {
     }
 
+    /**
+     * Gets an entry from the cache, loading it if needed.
+     *
+     * @throws ExecutionException If a checked exception was thrown while loading the value.
+     */
     public Ref<V> getEntry(K resourceKey) throws ExecutionException {
         return cache.get(resourceKey);
     }

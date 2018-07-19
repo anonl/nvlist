@@ -128,9 +128,9 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         }
 
         @Override
-        public Ref<T> doLoad(FilePath absolutePath) {
+        public T doLoad(FilePath absolutePath) {
             try {
-                return new Ref<>(loadResource(absolutePath));
+                return loadResource(absolutePath);
             } catch (RuntimeException re) {
                 loadError(absolutePath, re);
                 throw re;

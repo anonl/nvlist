@@ -23,7 +23,9 @@ final class LoadingFontStore implements ILoadingFontStore {
         String fontName = style.getFontName(FontResourceLoader.DEFAULT_FONT_NAME);
         ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(fontName));
 
-        return StaticEnvironment.FONT_STORE.get().getFontMetrics(resourceId.getFilePath(), style);
+        FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
+
+        return StaticEnvironment.FONT_STORE.get().getFontMetrics(absolutePath, style);
     }
 
 }

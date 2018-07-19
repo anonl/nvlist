@@ -21,7 +21,6 @@ import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
 import nl.weeaboo.vn.gdx.res.AbstractResourceStore;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
-import nl.weeaboo.vn.gdx.res.Ref;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCacheConfig;
 import nl.weeaboo.vn.impl.core.LruSet;
@@ -81,6 +80,10 @@ public final class GdxFontStore extends AbstractResourceStore {
         return font;
     }
 
+    /**
+     * Returns a font object matching the given font file and text style. If loading fails, a different font
+     * may be returned instead.
+     */
     public IFontMetrics getFontMetrics(FilePath absoluteFontPath, TextStyle styleArg) {
         // Add the default font if we didn't do that yet
         if (backing.getFonts().isEmpty()) {
@@ -122,9 +125,9 @@ public final class GdxFontStore extends AbstractResourceStore {
         }
 
         @Override
-        public Ref<GdxFontInfo> doLoad(CacheKey key) throws IOException {
+        public GdxFontInfo doLoad(CacheKey key) throws IOException {
             try {
-                return new Ref<>(loadFont(key.absolutePath, key.style));
+                return loadFont(key.absolutePath, key.style);
             } catch (RuntimeException re) {
                 loadError(key.absolutePath, re);
                 throw re;
