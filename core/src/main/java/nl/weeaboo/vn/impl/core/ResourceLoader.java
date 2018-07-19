@@ -39,6 +39,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     private final IResourceLoadLog resourceLoadLog;
 
     private transient LruSet<FilePath> checkedRedundantFilenames;
+    private transient LruSet<FilePath> unresolvableFilenames;
     private transient @Nullable LoadingCache<FilePath, ResourceId> resolveCache;
 
     private @Nullable IPreloadHandler preloadHandler;
@@ -55,6 +56,7 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private void initTransients() {
         checkedRedundantFilenames = new LruSet<>(128);
+        unresolvableFilenames = new LruSet<>(128);
         resolveCache = buildResolveCache();
     }
 
@@ -79,7 +81,9 @@ public abstract class ResourceLoader implements IResourceResolver {
         try {
             return resolveCache.get(path);
         } catch (ExecutionException e) {
-            LOG.warn("Resource not found '{}' :: {}", path, String.valueOf(e.getCause()));
+            if (unresolvableFilenames.add(path)) {
+                LOG.warn("Resource not found '{}' :: {}", path, String.valueOf(e.getCause()));
+            }
             return null;
         }
     }

@@ -98,7 +98,7 @@ public final class GdxFontStore extends AbstractResourceStore {
         TextStyle style = mts.immutableCopy();
 
         // Only attempt to load each font once
-        if (!missingFonts.contains(absoluteFontPath)) {
+        if (!absoluteFontPath.equals(FilePath.empty()) && !missingFonts.contains(absoluteFontPath)) {
             // Load font (if needed)
             try {
                 cache.getEntry(new CacheKey(absoluteFontPath, style));

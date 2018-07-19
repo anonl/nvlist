@@ -20,12 +20,16 @@ final class LoadingFontStore implements ILoadingFontStore {
 
     @Override
     public IFontMetrics getFontMetrics(TextStyle style) {
+        final GdxFontStore fontStore = StaticEnvironment.FONT_STORE.get();
+
         String fontName = style.getFontName(FontResourceLoader.DEFAULT_FONT_NAME);
         ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(fontName));
+        if (resourceId == null) {
+            return fontStore.getFontMetrics(FilePath.empty(), style);
+        }
 
         FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
-
-        return StaticEnvironment.FONT_STORE.get().getFontMetrics(absolutePath, style);
+        return fontStore.getFontMetrics(absolutePath, style);
     }
 
 }
