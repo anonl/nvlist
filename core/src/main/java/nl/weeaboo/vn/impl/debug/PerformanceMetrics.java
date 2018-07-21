@@ -19,7 +19,10 @@ public final class PerformanceMetrics {
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceMetrics.class);
 
     private double logicFps;
+
     private boolean cpuLoadError;
+    private double cpuLoad;
+    private long lastCpuLoadCheck;
 
     public PerformanceMetrics() {
     }
@@ -55,25 +58,36 @@ public final class PerformanceMetrics {
      * @return The relative CPU load, or {@code -1} if not supported
      */
     public double getCpuLoad() {
-        if (!cpuLoadError) {
-            try {
-                // java.lang.management isn't supported on Android
-                @SuppressWarnings("LiteralClassName")
-                Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
-                Object osBean = managementFactory.getMethod("getOperatingSystemMXBean").invoke(null);
-                Method method = osBean.getClass().getMethod("getProcessCpuLoad");
-                method.setAccessible(true);
-                return ((Number)method.invoke(osBean)).doubleValue();
-            } catch (Exception e) {
-                // Method not supported
-                LOG.info("Error obtaining CPU load (method not supported): " + e);
-                cpuLoadError = true;
-            } catch (NoClassDefFoundError e) {
-                LOG.info("Error obtaining CPU load: Required method not implemented on this platform");
-                cpuLoadError = true;
-            }
+        if (cpuLoadError) {
+            return -1;
         }
-        return -1;
+
+        // Checking CPU load is slow, so rate limit the calls and return a cached result if called too often
+        long now = System.nanoTime();
+        if (now - lastCpuLoadCheck < 500_000_000L) {
+            return cpuLoad;
+        }
+
+        lastCpuLoadCheck = now;
+        try {
+            // java.lang.management isn't supported on Android
+            @SuppressWarnings("LiteralClassName")
+            Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
+            Object osBean = managementFactory.getMethod("getOperatingSystemMXBean").invoke(null);
+            Method method = osBean.getClass().getMethod("getProcessCpuLoad");
+            method.setAccessible(true);
+            cpuLoad = ((Number)method.invoke(osBean)).doubleValue();
+        } catch (Exception e) {
+            // Method not supported
+            LOG.info("Error obtaining CPU load (method not supported): " + e);
+            cpuLoadError = true;
+            cpuLoad = -1;
+        } catch (NoClassDefFoundError e) {
+            LOG.info("Error obtaining CPU load: Required method not implemented on this platform");
+            cpuLoadError = true;
+            cpuLoad = -1;
+        }
+        return cpuLoad;
     }
 
     /** Internal 'game logic' update rate */
