@@ -66,6 +66,10 @@ public abstract class ResourceLoader implements IResourceResolver {
         initTransients();
     }
 
+    private void resetUnresolvableFilenames() {
+        unresolvableFilenames.clear();
+    }
+
     private LoadingCache<FilePath, ResourceId> buildResolveCache() {
         return CacheBuilder.newBuilder()
             .expireAfterAccess(5, TimeUnit.MINUTES)
@@ -191,6 +195,7 @@ public abstract class ResourceLoader implements IResourceResolver {
      */
     public void setAutoFileExts(String... exts) {
         autoFileExts = exts.clone();
+        resetUnresolvableFilenames();
     }
 
     /** Sets the function that handles calls to {@link #preloadNormalized(nl.weeaboo.vn.core.ResourceId)}. */
