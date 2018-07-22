@@ -28,6 +28,7 @@ import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.core.Destructibles;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.LoggerNotifier;
@@ -54,6 +55,7 @@ import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
+import nl.weeaboo.vn.video.IVideoModule;
 
 public class Launcher extends ApplicationAdapter implements IUpdateable {
 
@@ -135,7 +137,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
 
-        initWindow(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        initWindow(Dim.of(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         LOG.info("Launcher.create() end");
     }
@@ -293,16 +295,24 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 width, height,
                 Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
 
-        initWindow(width, height);
+        initWindow(Dim.of(width, height));
     }
 
-    private void initWindow(int width, int height) {
-        LOG.info("Init window ({}x{})", width, height);
+    private void initWindow(Dim size) {
+        LOG.info("Init window ({}x{})", size.w, size.h);
 
-        backBuffer.setWindowSize(novel.getEnv(), Dim.of(width, height));
+        IEnvironment env = novel.getEnv();
+        backBuffer.setWindowSize(env, size);
         disposeRenderer();
 
         windowDirty = true;
+
+        // Select image/video folders base on resolution
+        IImageModule imageModule = env.getImageModule();
+        imageModule.setImageResolution(size);
+
+        IVideoModule videoModule = env.getVideoModule();
+        videoModule.setVideoResolution(size);
     }
 
     private void applyVSync() {

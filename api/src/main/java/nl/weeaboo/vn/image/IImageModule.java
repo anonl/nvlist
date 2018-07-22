@@ -80,7 +80,7 @@ public interface IImageModule extends IModule, IResourceResolver {
      * Changes the desired image resolution (width x height). Images are loaded from the resource folder that
      * most closely matches the desired size.
      */
-    void setImageResolution(Dim size);
+    void setImageResolution(Dim desiredSize);
 
     /**
      * Schedules a screenshot of the given layer. Use {@link IScreenshot#isAvailable()} and/or

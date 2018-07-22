@@ -30,9 +30,10 @@ public interface IVideoModule extends IModule, IResourceResolver {
     IVideo getBlocking();
 
     /**
-     * Sets the resource folder that videos are loaded from.
+     * Changes the desired video resolution (width x height). Videos are loaded from the resource folder that
+     * most closely matches the desired size.
      */
-    void setVideoFolder(FilePath videoFolder, Dim size);
+    void setVideoResolution(Dim desiredSize);
 
     /**
      * Returns the paths for all video files in the specified folder and its sub-folders.

@@ -14,10 +14,13 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
+import nl.weeaboo.vn.impl.image.ResolutionFolderSelector;
+import nl.weeaboo.vn.impl.image.ResolutionFolderSelector.ResolutionPath;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
@@ -35,7 +38,7 @@ public class VideoModule extends AbstractModule implements IVideoModule {
 
     private @Nullable IVideo fullscreenMovie;
     private FilePath videoFolder = DEFAULT_VIDEO_FOLDER;
-    private Dim videoResolution;
+    private Dim videoResolution = Dim.EMPTY;
 
     public VideoModule(DefaultEnvironment env) {
         this(env, new VideoResourceLoader(env), new NativeVideoFactory());
@@ -49,7 +52,7 @@ public class VideoModule extends AbstractModule implements IVideoModule {
         this.nativeVideoFactory = nativeVideoFactory;
 
         IRenderEnv renderEnv = env.getRenderEnv();
-        videoResolution = renderEnv.getVirtualSize();
+        setVideoResolution(renderEnv.getVirtualSize());
     }
 
     @Override
@@ -106,9 +109,6 @@ public class VideoModule extends AbstractModule implements IVideoModule {
         return resourceLoader.getMediaFiles(folder);
     }
 
-    protected void onVideoScaleChanged() {
-    }
-
     protected double getVideoScale() {
         IRenderEnv renderEnv = env.getRenderEnv();
         return Math.min(renderEnv.getWidth() / (double)videoResolution.w,
@@ -116,17 +116,12 @@ public class VideoModule extends AbstractModule implements IVideoModule {
     }
 
     @Override
-    public void setVideoFolder(FilePath folder, Dim size) {
-        Preconditions.checkNotNull(folder);
-        Preconditions.checkNotNull(size);
+    public final void setVideoResolution(Dim desiredSize) {
+        ResolutionFolderSelector folderSelector = new ResolutionFolderSelector(env, MediaType.VIDEO);
+        ResolutionPath selected = folderSelector.select(desiredSize);
 
-        if (!videoFolder.equals(folder) || !videoResolution.equals(size)) {
-            videoFolder = folder;
-            videoResolution = size;
-
-            resourceLoader.setResourceFolder(folder);
-            onVideoScaleChanged();
-        }
+        videoResolution = selected.resolution;
+        resourceLoader.setResourceFolder(selected.folder);
     }
 
 }

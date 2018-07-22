@@ -10,11 +10,11 @@ public interface IScreenshotBuffer extends Serializable {
      * @param ss The screenshot object to fill with the pixel data later.
      * @param clip Set to {@code false} to ignore the layer bounds while taking the screenshot.
      */
-    public void add(IWritableScreenshot ss, boolean clip);
+    void add(IWritableScreenshot ss, boolean clip);
 
     /**
      * @return {@code true} if no screenshots are currently buffered.
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
 }

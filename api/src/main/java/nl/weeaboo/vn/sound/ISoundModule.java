@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.sound;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.annotation.Nullable;
@@ -18,11 +16,8 @@ public interface ISoundModule extends IModule, IResourceResolver {
      *
      * @param stype The kind of sound to start playing (voice, sfx, music, ...)
      * @param loadInfo Filename of the requested resource and related metadata.
-     *
-     * @throws FileNotFoundException If no sound data could be found for the specified filename.
-     * @throws IOException If an I/O error occurs while opening the audio file for reading.
      */
-    @Nullable ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException;
+    @Nullable ISound createSound(SoundType stype, ResourceLoadInfo loadInfo);
 
     /**
      * Returns the human-readable name of a sound file.

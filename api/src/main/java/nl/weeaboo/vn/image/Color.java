@@ -16,6 +16,7 @@ public final class Color implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final Color WHITE = new Color(1, 1, 1, 1);
+    public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
     private final double r;
     private final double g;
@@ -74,6 +75,13 @@ public final class Color implements Serializable {
         in.defaultReadObject();
 
         initTransients();
+    }
+
+    /**
+     * Returns a copy of the color, but converted from premultiplied alpha back to unassociated alpha.
+     */
+    public Color unPremultiplied() {
+        return fromRGBA(r / a, g / a, b / a, a);
     }
 
     /**

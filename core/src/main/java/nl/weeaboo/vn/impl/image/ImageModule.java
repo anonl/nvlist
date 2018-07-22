@@ -23,6 +23,7 @@ import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
+import nl.weeaboo.vn.impl.image.ResolutionFolderSelector.ResolutionPath;
 import nl.weeaboo.vn.impl.scene.ComponentFactory;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
@@ -54,8 +55,11 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
         IRenderEnv renderEnv = env.getRenderEnv();
 
-        texManager = new TextureManager(resourceLoader, renderEnv.getVirtualSize());
+        Dim vsize = renderEnv.getVirtualSize();
+        texManager = new TextureManager(resourceLoader, vsize);
         resourceLoader.setPreloadHandler(texManager);
+
+        setImageResolution(vsize);
     }
 
     @Override
@@ -162,10 +166,12 @@ public class ImageModule extends AbstractModule implements IImageModule {
     }
 
     @Override
-    public void setImageResolution(Dim size) {
-        // TODO: Select the appropriate image folder and set it as the resourceLoader folder
+    public void setImageResolution(Dim desiredSize) {
+        ResolutionFolderSelector folderSelector = new ResolutionFolderSelector(env, MediaType.IMAGE);
+        ResolutionPath selected = folderSelector.select(desiredSize);
 
-        texManager.setImageResolution(size);
+        resourceLoader.setResourceFolder(selected.folder);
+        texManager.setImageResolution(selected.resolution);
     }
 
 }

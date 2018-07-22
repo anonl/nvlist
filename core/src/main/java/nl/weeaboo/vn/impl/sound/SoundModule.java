@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.sound;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.annotation.Nullable;
@@ -71,7 +70,7 @@ public class SoundModule extends AbstractModule implements ISoundModule {
     }
 
     @Override
-    public @Nullable ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) throws IOException {
+    public @Nullable ISound createSound(SoundType stype, ResourceLoadInfo loadInfo) {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 

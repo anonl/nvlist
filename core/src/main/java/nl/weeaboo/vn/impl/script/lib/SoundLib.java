@@ -1,11 +1,5 @@
 package nl.weeaboo.vn.impl.script.lib;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.MoreObjects;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
@@ -24,7 +18,6 @@ import nl.weeaboo.vn.sound.SoundType;
 public class SoundLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(SoundLib.class);
 
     private final IEnvironment env;
 
@@ -48,15 +41,12 @@ public class SoundLib extends LuaLib {
         SoundType stype = MoreObjects.firstNonNull(args.touserdata(2, SoundType.class), SoundType.SOUND);
 
         ISoundModule soundModule = env.getSoundModule();
-        try {
-            ISound sound = soundModule.createSound(stype, loadInfo);
-            return LuajavaLib.toUserdata(sound, ISound.class);
-        } catch (FileNotFoundException fnfe) {
-            LOG.warn("Error starting sound: {}", loadInfo, fnfe);
-        } catch (IOException ioe) {
-            LOG.warn("Error starting sound: {}", loadInfo, ioe);
+        ISound sound = soundModule.createSound(stype, loadInfo);
+        if (sound == null) {
+            return LuaNil.NIL;
         }
-        return LuaNil.NIL;
+
+        return LuajavaLib.toUserdata(sound, ISound.class);
     }
 
     /**

@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -104,7 +105,16 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
     public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
         List<FilePath> result = new ArrayList<>();
         FilePath prefix = opts.getPrefix();
-        getFilesImpl(result, prefix, opts, resolveExisting(prefix));
+
+        if (prefix.isFolder()) {
+            FileHandle baseFolder = resolveExisting(prefix);
+            getFilesImpl(result, prefix, opts, baseFolder);
+        } else {
+            FilePath parent = MoreObjects.firstNonNull(prefix.getParent(), FilePath.empty());
+            FileHandle baseFolder = resolveExisting(parent);
+            getFilesImpl(result, parent, opts, baseFolder);
+        }
+
         return result;
     }
 
@@ -112,6 +122,10 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
             FileHandle file) {
 
         for (FilePath childPath : list(path, file)) {
+            if (!childPath.startsWith(opts.getPrefix())) {
+                continue;
+            }
+
             if (childPath.isFolder()) {
                 if (opts.collectFolders) {
                     out.add(childPath);
