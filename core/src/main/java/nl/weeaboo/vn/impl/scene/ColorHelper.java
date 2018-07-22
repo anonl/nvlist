@@ -36,7 +36,8 @@ final class ColorHelper extends TransientListenerSupport {
     }
 
     public final void setColorRGB(int rgb) {
-        setColorARGB(rgb | 0xFF000000);
+        Color color = Color.fromARGB(rgb);
+        setColor(color.getRed(), color.getGreen(), color.getBlue(), getAlpha());
     }
 
     public final void setColorARGB(int argb) {

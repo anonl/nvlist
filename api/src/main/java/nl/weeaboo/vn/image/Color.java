@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-import com.google.errorprone.annotations.Immutable;
-
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.render.RenderUtil;
 
-@Immutable
 @CustomSerializable
 public final class Color implements Serializable {
 
