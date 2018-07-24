@@ -5,17 +5,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import nl.weeaboo.filesystem.FileCollectOptions;
@@ -25,6 +22,7 @@ import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
+import nl.weeaboo.vn.buildtools.file.OptimizerFileUtil;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
@@ -127,7 +125,7 @@ public final class SoundOptimizer {
 
     private Iterable<FilePath> getSoundFiles() throws IOException {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.SOUND.getSubFolder());
-        return filterByExts(resFileSystem.getFiles(filter), GdxMusicStore.getSupportedFileExts());
+        return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), GdxMusicStore.getSupportedFileExts());
     }
 
     private void optimizeSound(FilePath inputFile) throws IOException {
@@ -147,6 +145,8 @@ public final class SoundOptimizer {
 
         optimizedDefs.put(outputPath, encoded.getDef());
         optimizerFileSet.markOptimized(inputFile);
+
+        soundWithDef.dispose();
         encoded.dispose();
     }
 
@@ -172,14 +172,6 @@ public final class SoundOptimizer {
     private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
         FilePath folder = inputPath.getParent();
         return folder.resolve(outputFilename);
-    }
-
-    private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {
-        // Use a tree set so we can match in a case-insensitive way
-        TreeSet<String> validExtsSet = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
-        validExtsSet.addAll(validExts);
-
-        return Iterables.filter(files, path -> validExtsSet.contains(path.getExt()));
     }
 
 }

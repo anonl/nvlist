@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import nl.weeaboo.common.Dim;
@@ -25,6 +22,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.io.Filenames;
+import nl.weeaboo.vn.buildtools.file.OptimizerFileUtil;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
@@ -145,7 +143,7 @@ public final class ImageOptimizer {
 
     private Iterable<FilePath> getImageFiles() throws IOException {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.IMAGE.getSubFolder());
-        return filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
+        return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
     }
 
     private void optimizeImage(FilePath inputFile, Dim targetResolution) throws IOException {
@@ -210,14 +208,6 @@ public final class ImageOptimizer {
             folder = ResourceQualifiers.applyToRootFolder(folder, new SizeQualifier(targetResolution));
         }
         return folder.resolve(outputFilename);
-    }
-
-    private static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {
-        // Use a tree set so we can match in a case-insensitive way
-        TreeSet<String> validExtsSet = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
-        validExtsSet.addAll(validExts);
-
-        return Iterables.filter(files, path -> validExtsSet.contains(path.getExt()));
     }
 
 }

@@ -36,7 +36,6 @@ final class RunResourceOptimizer {
             try (OptimizerContext context = new OptimizerContext(connection, config)) {
                 ImageResizerConfig resizerConfig = new ImageResizerConfig();
                 resizerConfig.addTargetResolution(Dim.of(1280, 720));
-                resizerConfig.addTargetResolution(Dim.of(1024, 576));
                 context.setConfig(resizerConfig);
 
                 ResourceOptimizer optimizer = new ResourceOptimizer();

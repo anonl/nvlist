@@ -1,11 +1,13 @@
 package nl.weeaboo.vn.buildtools.optimizer.sound;
 
+import com.badlogic.gdx.utils.Disposable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
-public final class SoundWithDef {
+public final class SoundWithDef implements Disposable {
 
     private final IEncodedResource audioData;
     private final SoundDefinition def;
@@ -13,6 +15,11 @@ public final class SoundWithDef {
     public SoundWithDef(IEncodedResource audioData, ISoundDefinition def) {
         this.audioData = Checks.checkNotNull(audioData);
         this.def = SoundDefinition.from(def);
+    }
+
+    @Override
+    public void dispose() {
+        audioData.dispose();
     }
 
     /**
