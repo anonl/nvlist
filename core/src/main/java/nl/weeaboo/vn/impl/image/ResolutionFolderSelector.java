@@ -3,8 +3,6 @@ package nl.weeaboo.vn.impl.image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
@@ -18,6 +16,8 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
+import nl.weeaboo.vn.impl.core.ResourceQualifiers;
+import nl.weeaboo.vn.impl.core.SizeQualifier;
 
 /**
  * Selects a resource folder based on a desired resolution.
@@ -65,7 +65,7 @@ public final class ResolutionFolderSelector {
         } catch (IOException ioe) {
             LOG.warn("Error scanning resource folders", ioe);
         }
-        LOG.info("Best resolution: folder={}, score={}", best.folder, bestScore);
+        LOG.info("Best resolution: folder={}, resolution={}, score={}", best.folder, best.resolution, bestScore);
         return best;
     }
 
@@ -89,20 +89,13 @@ public final class ResolutionFolderSelector {
     }
 
     private @Nullable ResolutionPath tryParseResolution(FilePath folder) {
-        Pattern pattern = Pattern.compile(".*-(\\d+)x(\\d+)/?");
-        Matcher matcher = pattern.matcher(folder.toString());
-        if (!matcher.matches()) {
+        ResourceQualifiers qualifiers = ResourceQualifiers.fromPath(folder);
+        SizeQualifier sizeQualifier = qualifiers.findQualifier(SizeQualifier.class);
+        if (sizeQualifier == null) {
             return null;
         }
 
-        try {
-            int width = Integer.parseInt(matcher.group(1));
-            int height = Integer.parseInt(matcher.group(2));
-            Dim size = Dim.of(width, height);
-            return new ResolutionPath(folder, size);
-        } catch (RuntimeException e) {
-            return null;
-        }
+        return new ResolutionPath(folder, sizeQualifier.getSize());
     }
 
     public static final class ResolutionPath {

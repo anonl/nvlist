@@ -39,9 +39,7 @@ final class RunImageOptimizer {
             ImageWithDef imageWithDef = new ImageWithDef(pixmap, new ImageDefinition(filename,
                     Dim.of(pixmap.getWidth(), pixmap.getHeight())));
 
-            ImageResizerConfig config = new ImageResizerConfig();
-            config.setScaleFactor(0.5);
-            ImageResizer resizer = new ImageResizer(config);
+            ImageResizer resizer = new ImageResizer(Dim.of(1920, 1080), Dim.of(960, 540));
             ImageWithDef optimized = resizer.process(imageWithDef);
             System.out.println(optimized.getDef());
 

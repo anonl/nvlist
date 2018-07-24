@@ -34,10 +34,13 @@ import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.PremultUtil;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
+import nl.weeaboo.vn.impl.core.ResourceQualifiers;
+import nl.weeaboo.vn.impl.core.SizeQualifier;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
@@ -51,12 +54,14 @@ public final class ImageOptimizer {
     private final ResourceOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
     private final ImageEncoderConfig encoderConfig;
+    private final NvlistProjectConnection project;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
     private final ImageDefinitionCache imageDefCache;
 
     // --- State during optimization ---
     /** Definition per (optimized) image file */
+    private Dim baseResolution;
     private final Map<FilePath, ImageDefinition> optimizedDefs = Maps.newHashMap();
 
     public ImageOptimizer(IOptimizerContext context) {
@@ -67,13 +72,17 @@ public final class ImageOptimizer {
 
         optimizerFileSet = context.getFileSet();
 
-        NvlistProjectConnection project = context.getProject();
+        project = context.getProject();
         resFileSystem = project.getResFileSystem();
         imageDefCache = new ImageDefinitionCache(resFileSystem);
+
+        resetState();
     }
 
     private void resetState() {
         optimizedDefs.clear();
+
+        baseResolution = Dim.of(project.getPref(NovelPrefs.WIDTH), project.getPref(NovelPrefs.HEIGHT));
     }
 
     /**
@@ -83,11 +92,6 @@ public final class ImageOptimizer {
     public void optimizeResources() throws InterruptedException {
         resetState();
 
-        optimizeImages();
-        writeImageDefinitions();
-    }
-
-    private void optimizeImages() throws InterruptedException {
         ImmutableList<FilePath> inputFiles;
         try {
             inputFiles = ImmutableList.copyOf(getImageFiles());
@@ -96,16 +100,28 @@ public final class ImageOptimizer {
             return;
         }
 
+        for (Dim targetResolution : resizeConfig.getTargetResolutions(baseResolution)) {
+            optimizeImages(inputFiles, targetResolution);
+        }
+    }
+
+    private void optimizeImages(ImmutableList<FilePath> inputFiles, Dim targetResolution) throws InterruptedException {
+        LOG.info("Optimizing images for target resolution: {}", targetResolution);
+
+        optimizedDefs.clear();
+
         executor.invokeAndWait(inputFiles, inputFile -> {
             try {
-                optimizeImage(inputFile);
+                optimizeImage(inputFile, targetResolution);
             } catch (IOException | RuntimeException e) {
                 LOG.warn("Error optimizing file: {}", inputFile, e);
             }
         });
+
+        writeImageDefinitions(targetResolution);
     }
 
-    private void writeImageDefinitions() {
+    private void writeImageDefinitions(Dim targetResolution) {
         Multimap<FilePath, ImageDefinition> defsPerFolder = HashMultimap.create();
         for (Entry<FilePath, ImageDefinition> entry : optimizedDefs.entrySet()) {
             defsPerFolder.put(entry.getKey().getParent(), entry.getValue());
@@ -115,7 +131,8 @@ public final class ImageOptimizer {
             FilePath jsonRelativePath = folderEntry.getKey().resolve(IImageDefinition.IMG_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 
-            File outputF = new File(optimizerConfig.getOutputFolder(), jsonRelativePath.toString());
+            FilePath outputPath = getOutputPath(jsonRelativePath, targetResolution, jsonRelativePath.getName());
+            File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
 
             String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
             try {
@@ -131,7 +148,7 @@ public final class ImageOptimizer {
         return filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
     }
 
-    private void optimizeImage(FilePath inputFile) throws IOException {
+    private void optimizeImage(FilePath inputFile, Dim targetResolution) throws IOException {
         LOG.debug("Optimizing image: {}", inputFile);
 
         Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
@@ -148,7 +165,7 @@ public final class ImageOptimizer {
 
         ImageWithDef imageWithDef = new ImageWithDef(pixmap, imageDef);
 
-        ImageResizer resizer = new ImageResizer(resizeConfig);
+        ImageResizer resizer = new ImageResizer(baseResolution, targetResolution);
         ImageWithDef optimized = resizer.process(imageWithDef);
         pixmap.dispose();
 
@@ -160,7 +177,7 @@ public final class ImageOptimizer {
         if (premultiplyAlpha && encoded.hasAlpha()) {
             addPremultipyFileExt(encoded);
         }
-        FilePath outputPath = getOutputPath(inputFile, encoded.getDef().getFilename());
+        FilePath outputPath = getOutputPath(inputFile, targetResolution, encoded.getDef().getFilename());
 
         File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
         Files.createParentDirs(outputF);
@@ -187,8 +204,11 @@ public final class ImageOptimizer {
         encoded.setDef(def.build());
     }
 
-    private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
+    private FilePath getOutputPath(FilePath inputPath, Dim targetResolution, String outputFilename) {
         FilePath folder = inputPath.getParent();
+        if (!baseResolution.equals(targetResolution)) {
+            folder = ResourceQualifiers.applyToRootFolder(folder, new SizeQualifier(targetResolution));
+        }
         return folder.resolve(outputFilename);
     }
 

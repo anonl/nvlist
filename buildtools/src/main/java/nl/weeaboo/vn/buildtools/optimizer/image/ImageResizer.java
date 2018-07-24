@@ -16,10 +16,12 @@ import nl.weeaboo.vn.impl.image.desc.ImageSubRect;
 
 final class ImageResizer implements IImageOperation {
 
-    private final ImageResizerConfig config;
+    private final double scaleX;
+    private final double scaleY;
 
-    public ImageResizer(ImageResizerConfig config) {
-        this.config = config;
+    public ImageResizer(Dim baseResolution, Dim targetResolution) {
+        scaleX = targetResolution.w / (double)baseResolution.w;
+        scaleY = targetResolution.h / (double)baseResolution.h;
     }
 
     @Override
@@ -47,10 +49,10 @@ final class ImageResizer implements IImageOperation {
     private ImageSubRect scaleSubRect(Rect outerBounds, ImageSubRect rect) {
         Area originalArea = rect.getArea();
 
-        int scaledX0 = scaleCoord(outerBounds, originalArea.x);
-        int scaledY0 = scaleCoord(outerBounds, originalArea.y);
-        int scaledX1 = scaleCoord(outerBounds, originalArea.x + originalArea.w);
-        int scaledY1 = scaleCoord(outerBounds, originalArea.y + originalArea.h);
+        int scaledX0 = scaleXCoord(outerBounds, originalArea.x);
+        int scaledY0 = scaleYCoord(outerBounds, originalArea.y);
+        int scaledX1 = scaleXCoord(outerBounds, originalArea.x + originalArea.w);
+        int scaledY1 = scaleYCoord(outerBounds, originalArea.y + originalArea.h);
 
         int scaledW = (scaledX0 == scaledX1 ? (originalArea.w < 0 ? -1 : 1) : scaledX1 - scaledX0);
         int scaledH = (scaledY0 == scaledY1 ? (originalArea.h < 0 ? -1 : 1) : scaledY1 - scaledY0);
@@ -64,17 +66,24 @@ final class ImageResizer implements IImageOperation {
         return PixmapUtil.resizedCopy(original, scale(originalSize), Filter.BiLinear);
     }
 
-    private int scaleCoord(Rect bounds, int original) {
-        int scaled = scale(original);
-        return Math.max(bounds.x, Math.min(bounds.x + bounds.w, scaled));
+    private int scaleXCoord(Rect bounds, int original) {
+        return Math.max(bounds.x, Math.min(bounds.x + bounds.w, scaleX(original)));
     }
 
-    private int scale(int original) {
-        return Ints.checkedCast(Math.round(original * config.getScaleFactor()));
+    private int scaleYCoord(Rect bounds, int original) {
+        return Math.max(bounds.y, Math.min(bounds.y + bounds.h, scaleY(original)));
     }
 
-    private Dim scale(Dim original) {
-        return Dim.of(Math.max(1, scale(original.w)), Math.max(1, scale(original.h)));
+    private Dim scale(Dim originalSize) {
+        return Dim.of(scaleX(originalSize.w), scaleY(originalSize.h));
+    }
+
+    private int scaleX(int original) {
+        return Ints.checkedCast(Math.round(original * scaleX));
+    }
+
+    private int scaleY(int original) {
+        return Ints.checkedCast(Math.round(original * scaleY));
     }
 
 }

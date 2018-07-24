@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.badlogic.gdx.files.FileHandle;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageResizerConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
@@ -34,7 +35,8 @@ final class RunResourceOptimizer {
 
             try (OptimizerContext context = new OptimizerContext(connection, config)) {
                 ImageResizerConfig resizerConfig = new ImageResizerConfig();
-                // resizerConfig.setScaleFactor(0.5);
+                resizerConfig.addTargetResolution(Dim.of(1280, 720));
+                resizerConfig.addTargetResolution(Dim.of(1024, 576));
                 context.setConfig(resizerConfig);
 
                 ResourceOptimizer optimizer = new ResourceOptimizer();
