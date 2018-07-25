@@ -1,9 +1,10 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -36,21 +37,21 @@ public final class ResourceQualifiers implements Iterable<IResourceQualifier> {
     }
 
     private static Iterable<String> getPathSegments(FilePath path) {
-        LinkedList<String> stack = new LinkedList<>();
+        Deque<String> stack = new ArrayDeque<>();
         while (path != null) {
             String name = path.getName();
             if (name.endsWith("/")) {
                 // Strip trailing '/'
-                stack.addFirst(name.substring(0, name.length() - 1));
+                stack.push(name.substring(0, name.length() - 1));
             } else {
-                stack.addFirst(name);
+                stack.push(name);
             }
             path = path.getParent();
         }
         return stack;
     }
 
-    private static IResourceQualifier tryParseQualifier(String string) {
+    private static @Nullable IResourceQualifier tryParseQualifier(String string) {
         IResourceQualifier q;
 
         q = SizeQualifier.tryParse(string);

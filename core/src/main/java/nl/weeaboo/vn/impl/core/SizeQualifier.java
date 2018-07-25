@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,7 @@ public final class SizeQualifier implements IResourceQualifier {
         this.size = Checks.checkNotNull(size);
     }
 
-    static SizeQualifier tryParse(String string) {
+    static @Nullable SizeQualifier tryParse(String string) {
         Pattern pattern = Pattern.compile("(\\d+)x(\\d+)");
         Matcher matcher = pattern.matcher(string);
         if (!matcher.matches()) {
