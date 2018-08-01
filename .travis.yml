@@ -31,6 +31,7 @@ matrix:
     - os: osx
       language: java
       osx_image: xcode8.2
+      jdk: openjdk8
       before_install:
         # Download SDK
         - brew update
