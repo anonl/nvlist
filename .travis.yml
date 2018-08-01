@@ -29,8 +29,8 @@ matrix:
       after_success:      
         - bash <(curl -s https://codecov.io/bash)
     - os: osx
+      osx_image: xcode9.3
       language: java
-      osx_image: xcode8.2
       jdk: openjdk8
       before_install:
         # Download SDK
