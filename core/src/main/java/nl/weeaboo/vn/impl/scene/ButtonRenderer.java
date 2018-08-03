@@ -21,7 +21,6 @@ import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButtonRenderer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.text.ILoadingFontStore;
-import nl.weeaboo.vn.text.IText;
 
 public class ButtonRenderer extends AbstractRenderable implements IButtonRenderer {
 
@@ -38,7 +37,7 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     public ButtonRenderer(ILoadingFontStore fontStore) {
         textRenderer = new TextRenderer(fontStore);
 
-        MutableTextStyle mts = new MutableTextStyle(IText.DEFAULT_STYLE);
+        MutableTextStyle mts = new MutableTextStyle(fontStore.getDefaultStyle());
         mts.setAlign(ETextAlign.CENTER);
         textRenderer.setDefaultStyle(mts.immutableCopy());
 

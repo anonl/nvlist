@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.impl.text;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
@@ -10,9 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.io.Filenames;
+import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
@@ -67,8 +72,16 @@ public final class GdxFontStore extends AbstractResourceStore {
     }
 
     private GdxFontInfo loadFont(FilePath absoluteFontPath, TextStyle ts) throws IOException {
-        FileHandle fileHandle = resourceFileSystem.resolve(absoluteFontPath.toString());
-        return loadFont(fileHandle, ts);
+        for (FilePath variantPath : getStyleSpecificPaths(absoluteFontPath, ts.getFontStyle(EFontStyle.PLAIN))) {
+            FileHandle fileHandle = resourceFileSystem.resolve(variantPath.toString());
+            if (fileHandle.exists()) {
+                LOG.debug("Selected font variant to load: {}", variantPath);
+
+                return loadFont(fileHandle, ts);
+            }
+        }
+
+        throw new FileNotFoundException(absoluteFontPath.toString());
     }
 
     private GdxFontInfo loadFont(FileHandle file, TextStyle ts) throws IOException {
@@ -78,6 +91,27 @@ public final class GdxFontStore extends AbstractResourceStore {
         GdxFontInfo font = fontGenerator.load(file, ts);
         backing.registerFont(font);
         return font;
+    }
+
+    private List<FilePath> getStyleSpecificPaths(FilePath path, EFontStyle fontStyle) {
+        FilePath parent = path.getParent();
+        String baseName = Filenames.stripExtension(path.getName());
+        String ext = Filenames.getExtension(path.getName());
+
+        FilePath bold = parent.resolve(baseName + ".bold." + ext);
+        FilePath italic = parent.resolve(baseName + ".italic." + ext);
+        FilePath boldItalic = parent.resolve(baseName + ".bolditalic." + ext);
+
+        switch (fontStyle) {
+        case BOLD:
+            return ImmutableList.of(bold, path);
+        case ITALIC:
+            return ImmutableList.of(italic, path);
+        case BOLD_ITALIC:
+            return ImmutableList.of(boldItalic, bold, italic, path);
+        default:
+            return ImmutableList.of(path);
+        }
     }
 
     /**
@@ -96,6 +130,8 @@ public final class GdxFontStore extends AbstractResourceStore {
             mts.setFontName(FontResourceLoader.DEFAULT_FONT_NAME);
         }
         TextStyle style = mts.immutableCopy();
+
+        System.out.println(absoluteFontPath + " " + style);
 
         // Only attempt to load each font once
         if (!absoluteFontPath.equals(FilePath.empty()) && !missingFonts.contains(absoluteFontPath)) {

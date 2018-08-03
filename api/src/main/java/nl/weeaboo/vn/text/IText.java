@@ -5,8 +5,6 @@ import nl.weeaboo.styledtext.TextStyle;
 
 public interface IText {
 
-    TextStyle DEFAULT_STYLE = new TextStyle(null, 32);
-
     /**
      * @see #setText(StyledText)
      */

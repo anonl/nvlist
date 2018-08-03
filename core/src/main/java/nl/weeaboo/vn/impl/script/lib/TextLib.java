@@ -13,6 +13,7 @@ import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.compiler.LoadState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaFunction;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -33,6 +34,7 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
 public class TextLib extends LuaLib {
 
@@ -141,6 +143,25 @@ public class TextLib extends LuaLib {
             st = new StyledText(text, style);
         }
         return LuajavaLib.toUserdata(st, StyledText.class);
+    }
+
+    /**
+     * Sets the default text style for new text components (text, buttons, ...)
+     *
+     * @param args
+     *        <ol>
+     *        <li>table of text attributes
+     *        </ol>
+     * @throws ScriptException If the input parameters are invalid.
+     */
+    @ScriptFunction
+    public Varargs setDefaultTextStyle(Varargs args) throws ScriptException {
+        TextStyle textStyle = LuaConvertUtil.getTextStyleArg(args.arg(1));
+
+        ILoadingFontStore fontStore = env.getTextModule().getFontStore();
+        fontStore.setDefaultStyle(textStyle);
+
+        return LuaConstants.NONE;
     }
 
     /**

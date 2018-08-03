@@ -10,6 +10,10 @@ import nl.weeaboo.filesystem.FilePath;
 
 public final class OptimizerFileUtil {
 
+    /**
+     * Returns a filtered view of the files, containing only those files that match one of the given valid
+     * file extensions.
+     */
     public static Iterable<FilePath> filterByExts(Iterable<FilePath> files, Collection<String> validExts) {
         // Use a tree set so we can match in a case-insensitive way
         TreeSet<String> validExtsSet = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);

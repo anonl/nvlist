@@ -30,6 +30,10 @@ function textoff(...)
     getTextBox():hide(...)
 end
 
+function setDefaultTextStyle(style)
+    Text.setDefaultTextStyle(style)
+end
+
 ---Registry of textboxes
 -------------------------------------------------------------------------------------------------------------- @section registry
 

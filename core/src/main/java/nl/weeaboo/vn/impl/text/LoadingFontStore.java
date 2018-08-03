@@ -14,6 +14,8 @@ final class LoadingFontStore implements ILoadingFontStore {
 
     private final FontResourceLoader resourceLoader;
 
+    private TextStyle defaultTextStyle = new TextStyle(null, 32);
+
     public LoadingFontStore(FontResourceLoader resourceLoader) {
         this.resourceLoader = Checks.checkNotNull(resourceLoader);
     }
@@ -30,6 +32,16 @@ final class LoadingFontStore implements ILoadingFontStore {
 
         FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
         return fontStore.getFontMetrics(absolutePath, style);
+    }
+
+    @Override
+    public TextStyle getDefaultStyle() {
+        return defaultTextStyle;
+    }
+
+    @Override
+    public void setDefaultStyle(TextStyle style) {
+        this.defaultTextStyle = Checks.checkNotNull(style);
     }
 
 }

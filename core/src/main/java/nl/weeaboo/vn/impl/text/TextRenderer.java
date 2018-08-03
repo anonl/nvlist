@@ -34,7 +34,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
     private final ILoadingFontStore fontStore;
 
     private StyledText stext = StyledText.EMPTY_STRING;
-    private TextStyle defaultStyle = DEFAULT_STYLE;
+    private TextStyle defaultStyle;
     private double visibleGlyphs = ALL_GLYPHS_VISIBLE;
     private boolean rightToLeft;
 
@@ -47,6 +47,7 @@ public class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     public TextRenderer(ILoadingFontStore fontStore) {
         this.fontStore = Checks.checkNotNull(fontStore);
+        this.defaultStyle = fontStore.getDefaultStyle();
     }
 
     protected ITextLayout createLayout(int wrapWidth) {
