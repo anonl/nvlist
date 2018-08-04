@@ -27,7 +27,7 @@ function titlescreen()
 
     for i=1,3 do
         print("Show choice: ", i)
-        local selected = choice("one two three", "b", "Agh")
+        local selected = choice("one—two three", "b", "Agh")
         print("selected", selected)
     end
 

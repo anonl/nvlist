@@ -7,7 +7,7 @@ Showing sprite (left)
 Showing sprite (right)
 @local beta = imgf("testjng", "r")
 
-Removing sprites...
+{i}Removing sprites...{/i}
 @rmf(alpha)
 @rmf(beta)
 

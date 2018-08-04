@@ -1,0 +1,72 @@
+
+@@
+local Particle = {
+    image=nil
+}
+
+function Particle.new(self)
+    self = extend(Particle, self)
+    
+    self.image = img('particle')
+    self.image:setAlpha(0)
+    self.thread = newThread(function() self:animate() end)
+end
+
+function Particle:destroy()
+    self.image:destroy()
+    self.thread:destroy()
+end
+
+function Particle:reset()
+    self.x = math.random() * screenWidth / 4
+    self.y = math.random() * screenHeight / 2
+
+    local baseAngle = 0.5 -- Average angle for particle movement
+    local angleRange = 0.4 -- Particle angles are randomly varied +/- this amount
+    self.angle = baseAngle - angleRange + 2 * angleRange * math.random()
+    
+    local baseSpeed = 1.1 -- Average speed
+    local speedRange = 0.5 -- Randomly vary particle speed +/- this amount
+    self.speed = baseSpeed - speedRange + 2 * speedRange * math.random()
+    
+    local scale = 0.1 + 0.3 * math.random()
+    self.image:setScale(scale)
+    
+    self.lifetime = math.random(300, 600)
+    self.frame = 0
+end
+
+function Particle:animate()
+    self:reset()
+    while true do
+        self.x = self.x + math.cos(self.angle) * self.speed
+        self.y = self.y + math.sin(self.angle) * self.speed
+        self.image:setPos(self.x, self.y)
+        
+        self.frame = self.frame + 1
+        if self.frame < 120 then
+            self.image:setAlpha(self.frame / 120)
+        elseif self.frame > self.lifetime then
+            local alpha = (self.lifetime + 120 - self.frame) / 120
+            self.image:setAlpha(alpha)
+            if alpha <= 0 then
+                -- Reuse as a new particle
+                self:reset()
+            end
+        end
+        
+        yield()
+    end
+end
+
+bg('bg/hallway', {scale=1.0})
+local particles = {}
+for n=1,50 do
+    particles[n] = Particle.new()
+    yield(math.random(1, 17))
+end
+
+waitClick()
+
+destroyValues(particles)
+@@
