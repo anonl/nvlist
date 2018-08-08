@@ -66,15 +66,19 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
     }
 
     private void doRunGame() {
-        buildController.startRunTask();
+        buildController.startRun();
     }
 
     private void handleOtherTaskButtonPress() {
         JPopupMenu menu = new JPopupMenu();
 
-        JMenuItem item = new JMenuItem("Create release");
-        item.addActionListener(e -> buildController.startAssembleDistTask());
-        menu.add(item);
+        JMenuItem assembleDistitem = new JMenuItem("Create release");
+        assembleDistitem.addActionListener(e -> buildController.startAssembleDist());
+        menu.add(assembleDistitem);
+
+        JMenuItem checkForUpdatesitem = new JMenuItem("Check for updates");
+        checkForUpdatesitem.addActionListener(e -> buildController.startCheckForupdates());
+        menu.add(checkForUpdatesitem);
 
         menu.show(otherTaskButton, 0, 0);
     }

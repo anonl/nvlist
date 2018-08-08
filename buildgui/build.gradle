@@ -9,6 +9,7 @@ dependencies {
     implementation project(':nvlist-buildtools')
     implementation project(':nvlist-core')
     implementation deps.gradle_tooling_api
+    implementation deps.maven_resolver
     
     runtimeOnly deps.slf4j_desktop
 }

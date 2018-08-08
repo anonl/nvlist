@@ -26,6 +26,13 @@ deps.static_analysis_annotations = [
     "com.google.code.findbugs:jsr305:3.0.1"
 ]
 
+// Maven repository browser
+deps.maven_resolver = [
+    'org.apache.maven:maven-resolver-provider:3.5.4',
+    'org.apache.maven.resolver:maven-resolver-connector-basic:1.1.1',
+    'org.apache.maven.resolver:maven-resolver-transport-http:1.1.1',
+]
+
 deps.gdx_android = [
     "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
     "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion",

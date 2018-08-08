@@ -29,10 +29,14 @@ public final class GradleBuildController implements IBuildController {
 
     private static final Logger LOG = LoggerFactory.getLogger(GradleBuildController.class);
 
+    private static final String UNKNOWN_VERSION = "unknown";
+
     private final ITaskController taskController;
     private final GradleMonitor gradleMonitor;
 
     private final CopyOnWriteArrayList<IBuildLogListener> logListeners = new CopyOnWriteArrayList<>();
+
+    private String nvlistVersion = UNKNOWN_VERSION;
 
     public GradleBuildController(ITaskController taskController) {
         this.taskController = Objects.requireNonNull(taskController);
@@ -51,7 +55,7 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public ITask startInitProjectTask() {
+    public ITask startInitProject() {
         /*
          * TODO: Actually implement this task in the Gradle build (then make the create project button visible
          * again).
@@ -60,13 +64,21 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public ITask startRunTask() {
+    public ITask startRun() {
         return startTask("run");
     }
 
     @Override
-    public ITask startAssembleDistTask() {
+    public ITask startAssembleDist() {
         return startTask("assembleDist");
+    }
+
+    @Override
+    public ITask startCheckForupdates() {
+        CheckForUpdatesTask task = new CheckForUpdatesTask(nvlistVersion, logListeners);
+        taskController.setActiveTask(task);
+        task.start();
+        return task;
     }
 
     private GradleTask startTask(String taskName) {
@@ -78,6 +90,8 @@ public final class GradleBuildController implements IBuildController {
 
     @Override
     public void onProjectChanged(NvlistProjectConnection projectModel) {
+        nvlistVersion = projectModel.getBuildProperty("nvlistVersion", UNKNOWN_VERSION);
+
         try {
             gradleMonitor.open(projectModel.getFolderConfig());
         } catch (CheckedGradleException e) {

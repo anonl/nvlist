@@ -23,6 +23,7 @@ public final class NvlistProjectConnection implements AutoCloseable {
     private IFileSystem resFileSystem;
     private IWritableFileSystem outputFileSystem;
     private NovelPrefsStore preferences;
+    private BuildProperties buildProperties;
 
     private NvlistProjectConnection(ProjectFolderConfig folderConfig) {
         this.folderConfig = Objects.requireNonNull(folderConfig);
@@ -47,6 +48,12 @@ public final class NvlistProjectConnection implements AutoCloseable {
         } catch (IOException e) {
             LOG.warn("Unable to load preferences", e);
         }
+
+        try {
+            buildProperties = BuildProperties.fromFile(folderConfig.getBuildPropertiesFile());
+        } catch (IOException e) {
+            LOG.warn("Unable to load {}", folderConfig.getBuildPropertiesFile(), e);
+        }
     }
 
     @Override
@@ -68,6 +75,14 @@ public final class NvlistProjectConnection implements AutoCloseable {
      */
     public <T> T getPref(Preference<T> preferenceDefinition) {
         return preferences.get(preferenceDefinition);
+    }
+
+    /**
+     * Returns a property from the build-properties file.
+     * @see ProjectFolderConfig#getBuildPropertiesFile()
+     */
+    public String getBuildProperty(String key, String defaultValue) {
+        return buildProperties.getProperty(key, defaultValue);
     }
 
     /**

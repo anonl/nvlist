@@ -20,16 +20,21 @@ public interface IBuildController extends IProjectModelListener {
     /**
      * Creates an empty NVList project in the current project folder.
      */
-    ITask startInitProjectTask();
+    ITask startInitProject();
 
     /**
      * Runs the current NVList project.
      */
-    ITask startRunTask();
+    ITask startRun();
 
     /**
      * Builds a distribution of the current NVList project.
      */
-    ITask startAssembleDistTask();
+    ITask startAssembleDist();
+
+    /**
+     * Checks for updates to NVList.
+     */
+    ITask startCheckForupdates();
 
 }
