@@ -65,6 +65,9 @@ public abstract class AbstractNovel implements INovel {
         }
 
         getSaveModule().savePersistent();
+
+        // Stop all modules and clean up their resources
+        env.destroy();
     }
 
     @Override

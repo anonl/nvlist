@@ -69,7 +69,7 @@ public class Novel extends AbstractNovel {
         }
         isStarted = false;
 
-        super.stop();
+        super.stop(); // Note: destroys the env
     }
 
     @Override
