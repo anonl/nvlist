@@ -60,7 +60,11 @@ final class SwingImageUtil {
     }
 
     public static BufferedImage readImage(IFileSystem fileSystem, String path) throws IOException {
-        byte[] iconBytes = FileSystemUtil.readBytes(fileSystem, FilePath.of(path));
+        return readImage(fileSystem, FilePath.of(path));
+    }
+
+    public static BufferedImage readImage(IFileSystem fileSystem, FilePath path) throws IOException {
+        byte[] iconBytes = FileSystemUtil.readBytes(fileSystem, path);
         return ImageIO.read(new ByteArrayInputStream(iconBytes));
     }
 }
