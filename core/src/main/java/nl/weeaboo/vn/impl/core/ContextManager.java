@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
@@ -104,7 +103,12 @@ public final class ContextManager implements IContextManager {
 
     @Override
     public @Nullable IContext getPrimaryContext() {
-        return Iterables.get(getActiveContexts(), 0, null);
+        return contexts.findFirst(new Predicate<Context>() {
+            @Override
+            public boolean apply(Context context) {
+                return context.isActive();
+            }
+        });
     }
 
     @Override

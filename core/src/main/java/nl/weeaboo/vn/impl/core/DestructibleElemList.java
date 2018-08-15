@@ -4,12 +4,14 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -25,6 +27,8 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     // --- Note: Uses custom serialization ---
     private final List<T> elements = Lists.newArrayList();
     // --- Note: Uses custom serialization ---
+
+    private transient @Nullable ImmutableCollection<T> cachedSnapshot;
 
     /** A no-arg public constructor is required by the {@link Externalizable} interface */
     public DestructibleElemList() {
@@ -68,16 +72,19 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     /** Adds an element to the list. */
     public void add(T elem) {
         elements.add(elem);
+        invalidateCachedSnapshot();
     }
 
     /** Removes an element from the list. */
     public void remove(Object elem) {
         elements.remove(elem);
+        invalidateCachedSnapshot();
     }
 
     /** Removes all elements from the list. */
     public void clear() {
         elements.clear();
+        invalidateCachedSnapshot();
     }
 
     /** Destroys all elements, then clears the list. */
@@ -114,15 +121,20 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     /**
      * Returns a read-only snapshot of the elements in the list.
      */
-    public Collection<T> getSnapshot() {
-        return getSnapshot(Predicates.alwaysTrue());
+    public ImmutableCollection<T> getSnapshot() {
+        ImmutableCollection<T> result = cachedSnapshot;
+        if (result == null) {
+            result = getSnapshot(Predicates.alwaysTrue());
+            cachedSnapshot = result;
+        }
+        return result;
     }
 
     /**
      * Returns a read-only snapshot of the elements in the list.
      * @param predicate Only include elements that pass the predicate.
      */
-    public Collection<T> getSnapshot(Predicate<? super T> predicate) {
+    public ImmutableCollection<T> getSnapshot(Predicate<? super T> predicate) {
         removeDestroyedElements();
 
         ImmutableList.Builder<T> result = ImmutableList.builder();
@@ -132,6 +144,18 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
             }
         }
         return result.build();
+    }
+
+    /**
+     * Returns the first non-destroyed element matching the given predicate, or {@code null} if not found.
+     */
+    public @Nullable T findFirst(Predicate<? super T> predicate) {
+        for (T elem : elements) {
+            if (!elem.isDestroyed() && predicate.apply(elem)) {
+                return elem;
+            }
+        }
+        return null;
     }
 
     private void removeDestroyedElements() {
@@ -149,7 +173,12 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
         // Remove destroyed elements
         if (removed != null) {
             elements.removeAll(removed);
+            invalidateCachedSnapshot();
         }
+    }
+
+    private void invalidateCachedSnapshot() {
+        cachedSnapshot = null;
     }
 
 }

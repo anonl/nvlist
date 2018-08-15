@@ -33,7 +33,11 @@ public final class StaticRef<T> implements Serializable {
      * Returns the value that this reference points to, never {@code null}.
      */
     public final T get() {
-        return Checks.checkNotNull(getIfPresent(), "StaticRef." + id);
+        T value = getIfPresent();
+        if (value == null) {
+            throw new IllegalArgumentException("Invalid value for StaticRef." + id + ": null");
+        }
+        return value;
     }
 
     /**
