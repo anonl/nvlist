@@ -69,7 +69,7 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
         @Override
         public void onProgress(String message) {
             SwingUtilities.invokeLater(() -> {
-                messageLabel.setText(message);
+                messageLabel.setText(message.replace("\n", ", "));
             });
         }
 
@@ -78,7 +78,7 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
             SwingUtilities.invokeLater(() -> {
                 if (resultType == TaskResultType.FAILED) {
                     progressIndicator.setIcon(failedIcon);
-                    messageLabel.setText(message);
+                    messageLabel.setText(message.replace("\n", ", "));
                 } else {
                     progressIndicator.setIcon(null);
                     messageLabel.setText("");

@@ -23,6 +23,8 @@ import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildtools.task.AbstractTask;
@@ -30,6 +32,7 @@ import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 public final class CheckForUpdatesTask extends AbstractTask {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CheckForUpdatesTask.class);
     private static final String MAVEN_LAYOUT = "default";
 
     private final String nvlistVersion;
@@ -62,15 +65,14 @@ public final class CheckForUpdatesTask extends AbstractTask {
             rangeRequest.setRepositories(Arrays.asList(repo));
 
             VersionRangeResult result = repoSystem.resolveVersionRange(session, rangeRequest);
-            System.out.println(result);
+            LOG.debug("Version request finished: {}", result);
 
             message = "Current NVList version: " + nvlistVersion
                     + "\nHighest available NVList version: " + result.getHighestVersion();
             fireLogLine(message, LogStyles.INFO_COLOR);
             fireFinished(TaskResultType.SUCCESS, message);
         } catch (VersionRangeResolutionException | RuntimeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.warn("Error in check-for-updates task", e);
 
             message = e.toString();
             fireLogLine(message, LogStyles.ERROR_COLOR);

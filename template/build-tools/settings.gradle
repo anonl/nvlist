@@ -1,6 +1,30 @@
 
 rootProject.name = "NVList-project"
 
+// Loads a .properties file
+def loadProperties(String filename) {
+    def props = new Properties()
+    def propertiesFile = file(filename)
+    if (propertiesFile.canRead()) {
+        propertiesFile.withInputStream { instr ->
+            props.load(instr)
+        }
+    }
+    return props
+}
+
+logger.lifecycle("VN root parameter: " + vnRoot)
+
+def x = gradle.ext
+x.vnRootDir = new File(vnRoot).getCanonicalFile()
+x.vnResDir = new File(x.vnRootDir, "/res")
+x.buildResDir = new File(x.vnRootDir, "/build-res")
+x.buildToolsDir = rootProject.projectDir
+
+// Load user-defined build.properties file
+def settings = loadProperties("${x.buildResDir}/build.properties")
+x.settings = settings
+
 include "desktop"
 include "android"
 include "ios"

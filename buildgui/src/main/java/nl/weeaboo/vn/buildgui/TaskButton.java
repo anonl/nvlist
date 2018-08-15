@@ -76,9 +76,13 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
         assembleDistitem.addActionListener(e -> buildController.startAssembleDist());
         menu.add(assembleDistitem);
 
-        JMenuItem checkForUpdatesitem = new JMenuItem("Check for updates");
-        checkForUpdatesitem.addActionListener(e -> buildController.startCheckForupdates());
-        menu.add(checkForUpdatesitem);
+        JMenuItem optimizeResourcesItem = new JMenuItem("Optimize resources");
+        optimizeResourcesItem.addActionListener(e -> buildController.startResourceOptimizer());
+        menu.add(optimizeResourcesItem);
+
+        JMenuItem checkForUpdatesItem = new JMenuItem("Check for updates");
+        checkForUpdatesItem.addActionListener(e -> buildController.startCheckForUpdates());
+        menu.add(checkForUpdatesItem);
 
         menu.show(otherTaskButton, 0, 0);
     }

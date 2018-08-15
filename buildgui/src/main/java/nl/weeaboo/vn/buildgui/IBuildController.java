@@ -35,6 +35,11 @@ public interface IBuildController extends IProjectModelListener {
     /**
      * Checks for updates to NVList.
      */
-    ITask startCheckForupdates();
+    ITask startCheckForUpdates();
+
+    /**
+     * Runs the resource optimizer task of the current NVList project.
+     */
+    ITask startResourceOptimizer();
 
 }

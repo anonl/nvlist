@@ -3,45 +3,37 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+        maven { url "https://dl.bintray.com/anonl/nvlist/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-styledtext/" }
+        maven { url "https://dl.bintray.com/anonl/gdx-video/" }
+        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
+        maven { url "https://dl.bintray.com/anonl/tcommon/" }
     }
     dependencies {
         // Plugin for making a 'fat' JAR
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:3.0.1'
+        
+        // NVList build tools
+        classpath "nl.weeaboo.vn:nvlist-buildtools:${gradle.ext.settings.nvlistVersion}"
    }
 }
 
-// Loads a .properties file
-def loadProperties(String filename) {
-    def props = new Properties()
-    def propertiesFile = file(filename)
-    if (propertiesFile.canRead()) {
-        propertiesFile.withInputStream { instr ->
-            props.load(instr)
-        }
-    }
-    return props
-}
-
-logger.lifecycle("VN root parameter: " + vnRoot)
-
-// Standard folders
+// Copy properties from settings.gradle into project properties for convenience
 allprojects {
     ext {
-        vnRootDir = new File(vnRoot).getCanonicalFile()
-        vnResDir = new File(vnRootDir, "/res")
-        buildResDir = new File(vnRootDir, "/build-res")
-        buildToolsDir = rootProject.projectDir
+        vnRootDir = gradle.ext.vnRootDir
+        vnResDir = gradle.ext.vnResDir
+        buildResDir = gradle.ext.buildResDir
+        buildToolsDir = gradle.ext.buildToolsDir
     }
 }
+def settings = gradle.ext.settings
 
 logger.lifecycle("VN resource folder: " + vnResDir)
 logger.lifecycle("VN build-resource folder: " + buildResDir)
-
-// Load user-defined build.properties file
-def settings = loadProperties("${buildResDir}/build.properties")
 
 allprojects {
     apply plugin: 'eclipse'
@@ -147,4 +139,10 @@ project(':ios') {
     }
 
     ext.mainClassName = settings.iosMain
+}
+
+task optimizeResources {
+    doLast {
+        throw new GradleException("Not implemented yet");
+    }
 }

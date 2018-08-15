@@ -74,11 +74,16 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public ITask startCheckForupdates() {
+    public ITask startCheckForUpdates() {
         CheckForUpdatesTask task = new CheckForUpdatesTask(nvlistVersion, logListeners);
         taskController.setActiveTask(task);
         task.start();
         return task;
+    }
+
+    @Override
+    public ITask startResourceOptimizer() {
+        return startTask("optimizeResources");
     }
 
     private GradleTask startTask(String taskName) {
