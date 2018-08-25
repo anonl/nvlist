@@ -3,11 +3,11 @@ package nl.weeaboo.vn.buildtools.optimizer;
 import java.io.File;
 import java.util.Objects;
 
-public final class ResourceOptimizerConfig implements IOptimizerConfig {
+public final class MainOptimizerConfig implements IOptimizerConfig {
 
     private final File outputFolder;
 
-    public ResourceOptimizerConfig(File outputFolder) {
+    public MainOptimizerConfig(File outputFolder) {
         this.outputFolder = Objects.requireNonNull(outputFolder);
     }
 

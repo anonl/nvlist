@@ -20,7 +20,7 @@ public final class ResourceOptimizer implements IResourceOptimizer {
 
         // Any files that don't have a specific optimizer are copied to the output folder
         NvlistProjectConnection project = context.getProject();
-        ResourceOptimizerConfig config = context.getConfig();
+        MainOptimizerConfig config = context.getMainConfig();
         new UnoptimizedFileCopier().copyOtherResources(project.getResFileSystem(), context.getFileSet(),
                 config.getOutputFolder());
     }

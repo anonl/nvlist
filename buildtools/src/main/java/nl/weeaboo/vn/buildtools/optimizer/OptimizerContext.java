@@ -29,7 +29,7 @@ public final class OptimizerContext implements IOptimizerContext {
     private final IParallelExecutor parallelExecutor;
     private final ClassToInstanceMap<IOptimizerConfig> configStore;
 
-    public OptimizerContext(NvlistProjectConnection projectConnection, ResourceOptimizerConfig mainConfig) {
+    public OptimizerContext(NvlistProjectConnection projectConnection, MainOptimizerConfig mainConfig) {
         this.projectConnection = projectConnection;
 
         tempFileProvider = new TempFileProvider(Files.createTempDir());
@@ -39,7 +39,7 @@ public final class OptimizerContext implements IOptimizerContext {
         parallelExecutor = new ParallelExecutor(executorService);
 
         configStore = MutableClassToInstanceMap.create();
-        configStore.put(ResourceOptimizerConfig.class, mainConfig);
+        configStore.put(MainOptimizerConfig.class, mainConfig);
     }
 
     @Override
@@ -56,8 +56,8 @@ public final class OptimizerContext implements IOptimizerContext {
     }
 
     @Override
-    public ResourceOptimizerConfig getConfig() {
-        ResourceOptimizerConfig config = configStore.getInstance(ResourceOptimizerConfig.class);
+    public MainOptimizerConfig getMainConfig() {
+        MainOptimizerConfig config = configStore.getInstance(MainOptimizerConfig.class);
         Preconditions.checkState(config != null); // The ResourceOptimizerConfig should always be available
         return config;
     }

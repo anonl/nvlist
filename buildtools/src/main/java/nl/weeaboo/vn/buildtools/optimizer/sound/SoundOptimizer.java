@@ -26,7 +26,7 @@ import nl.weeaboo.vn.buildtools.file.OptimizerFileUtil;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
-import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.NoOpSoundEncoder;
@@ -43,7 +43,7 @@ public final class SoundOptimizer {
     private static final Logger LOG = LoggerFactory.getLogger(SoundOptimizer.class);
 
     private final IParallelExecutor executor;
-    private final ResourceOptimizerConfig optimizerConfig;
+    private final MainOptimizerConfig optimizerConfig;
     private final IOptimizerFileSet optimizerFileSet;
     private final ITempFileProvider tempFileProvider;
     private final IFileSystem resFileSystem;
@@ -57,7 +57,7 @@ public final class SoundOptimizer {
 
     public SoundOptimizer(IOptimizerContext context) {
         executor = context.getExecutor();
-        optimizerConfig = context.getConfig();
+        optimizerConfig = context.getMainConfig();
         optimizerFileSet = context.getFileSet();
         tempFileProvider = context.getTempFileProvider();
 

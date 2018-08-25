@@ -27,7 +27,7 @@ public interface IOptimizerContext extends AutoCloseable {
     /**
      * The main resource optimizer configuration.
      */
-    ResourceOptimizerConfig getConfig();
+    MainOptimizerConfig getMainConfig();
 
     /**
      * Returns the configuration of the given type. If no configuration of that type was explicitly

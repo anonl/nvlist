@@ -32,9 +32,6 @@ allprojects {
 }
 def settings = gradle.ext.settings
 
-logger.lifecycle("VN resource folder: " + vnResDir)
-logger.lifecycle("VN build-resource folder: " + buildResDir)
-
 allprojects {
     apply plugin: 'eclipse'
     
@@ -141,8 +138,32 @@ project(':ios') {
     ext.mainClassName = settings.iosMain
 }
 
-task optimizeResources {
-    doLast {
-        throw new GradleException("Not implemented yet");
+configurations {
+    buildtools {
     }
 }
+
+dependencies {
+    buildtools "ch.qos.logback:logback-classic:1.2.3"
+}
+
+task optimizeResources(type: JavaExec) {
+    // Optimizer config is stored in build-res/optimizer.json
+    def configFile = new File(buildResDir, 'optimizer.json')
+    inputs.file(configFile)
+    
+    def outputFolder = new File(vnRoot, 'res-optimized')
+    outputs.dir(outputFolder)
+
+    // Setup to launch the resource optimizer
+    classpath = configurations.buildtools + buildscript.configurations.classpath
+    main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
+    args = [configFile]
+    workingDir vnRoot
+    
+    doFirst {
+        // Delete the output folder first
+        delete(outputFolder)
+    }
+}
+

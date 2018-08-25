@@ -22,9 +22,14 @@ x.buildResDir = new File(x.vnRootDir, "/build-res")
 x.buildToolsDir = rootProject.projectDir
 
 // Load user-defined build.properties file
-def settings = loadProperties("${x.buildResDir}/build.properties")
-x.settings = settings
+x.settings = loadProperties("${x.buildResDir}/build.properties")
+
+logger.lifecycle("VN resource folder: " + x.vnResDir)
+logger.lifecycle("VN build-resource folder: " + x.buildResDir)
 
 include "desktop"
 include "android"
 include "ios"
+
+// Uncomment the following line to compile using a local NVList build instead of a released version
+// includeBuild "../.."

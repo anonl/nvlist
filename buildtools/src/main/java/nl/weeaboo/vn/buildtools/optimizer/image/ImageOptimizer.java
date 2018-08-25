@@ -26,7 +26,7 @@ import nl.weeaboo.vn.buildtools.file.OptimizerFileUtil;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
-import nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageEncoderConfig.EImageEncoding;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
@@ -49,7 +49,7 @@ public final class ImageOptimizer {
     private static final Logger LOG = LoggerFactory.getLogger(ImageOptimizer.class);
 
     private final IParallelExecutor executor;
-    private final ResourceOptimizerConfig optimizerConfig;
+    private final MainOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
     private final ImageEncoderConfig encoderConfig;
     private final NvlistProjectConnection project;
@@ -64,7 +64,7 @@ public final class ImageOptimizer {
 
     public ImageOptimizer(IOptimizerContext context) {
         executor = context.getExecutor();
-        optimizerConfig = context.getConfig();
+        optimizerConfig = context.getMainConfig();
         resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
         encoderConfig = context.getConfig(ImageEncoderConfig.class, new ImageEncoderConfig());
 
@@ -116,10 +116,10 @@ public final class ImageOptimizer {
             }
         });
 
-        writeImageDefinitions(targetResolution);
+        writeImageDefinitions();
     }
 
-    private void writeImageDefinitions(Dim targetResolution) {
+    private void writeImageDefinitions() {
         Multimap<FilePath, ImageDefinition> defsPerFolder = HashMultimap.create();
         for (Entry<FilePath, ImageDefinition> entry : optimizedDefs.entrySet()) {
             defsPerFolder.put(entry.getKey().getParent(), entry.getValue());
@@ -129,8 +129,7 @@ public final class ImageOptimizer {
             FilePath jsonRelativePath = folderEntry.getKey().resolve(IImageDefinition.IMG_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 
-            FilePath outputPath = getOutputPath(jsonRelativePath, targetResolution, jsonRelativePath.getName());
-            File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
+            File outputF = new File(optimizerConfig.getOutputFolder(), jsonRelativePath.toString());
 
             String serialized = ImageDefinitionIO.serialize(folderEntry.getValue());
             try {
