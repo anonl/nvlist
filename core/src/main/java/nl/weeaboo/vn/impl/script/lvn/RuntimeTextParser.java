@@ -11,6 +11,7 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import nl.weeaboo.collections.IntMap;
@@ -199,8 +200,10 @@ public class RuntimeTextParser implements Serializable {
         }
 
         if (raw.isuserdata(StyledText.class)) {
-            return raw.touserdata(StyledText.class);
+            StyledText userData = raw.touserdata(StyledText.class);
+            return MoreObjects.firstNonNull(userData, StyledText.EMPTY_STRING);
         }
+
         String str = raw.tojstring();
         return (str.equals("") ? StyledText.EMPTY_STRING : new StyledText(str));
     }

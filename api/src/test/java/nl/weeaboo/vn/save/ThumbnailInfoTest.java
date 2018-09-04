@@ -28,7 +28,7 @@ public class ThumbnailInfoTest {
     private void assertInvalidArg(FilePath path, Dim imageSize) {
         try {
             ThumbnailInfo info = new ThumbnailInfo(path, imageSize);
-            Assert.fail("Expected exception, got object: " + info);
+            Assert.fail("Expected exception, got object: " + info.getPath());
         } catch (IllegalArgumentException iae) {
             // This is expected
         }

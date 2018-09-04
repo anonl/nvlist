@@ -146,7 +146,7 @@ public final class LuaConvertUtil {
     /**
      * Converts a Lua value to a Java value compatible with the given text attribute type.
      */
-    public static Object parseTextAttribute(ETextAttribute attribute, LuaValue luaValue) {
+    public static @Nullable Object parseTextAttribute(ETextAttribute attribute, LuaValue luaValue) {
         if (luaValue.isstring() && !luaValue.isnumber()) {
             return attribute.valueFromString(luaValue.tojstring());
         } else {

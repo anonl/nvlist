@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 
 import nl.weeaboo.filesystem.FilePath;
@@ -70,7 +72,7 @@ public final class LuaTestUtil {
      * Returns the Lua userdata global with the given name, and extracts the Java object from it. If the Lua global
      * isn't userdata, returns {@code null}.
      */
-    public static <T> T getGlobal(String name, Class<T> type) {
+    public static @Nullable <T> T getGlobal(String name, Class<T> type) {
         return getGlobal(name).touserdata(type);
     }
 
