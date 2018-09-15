@@ -2,5 +2,6 @@
     "projectFolder": ".",
     "buildToolsFolder": "./build-tools",
     
-    "targetResolutions": ["960x540", "1280x720"]
+    "exclude": [],
+    "targetResolutions": ["960x540", "1280x720"],
 }

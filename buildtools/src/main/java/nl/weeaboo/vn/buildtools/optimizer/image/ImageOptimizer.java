@@ -142,10 +142,17 @@ public final class ImageOptimizer {
 
     private Iterable<FilePath> getImageFiles() throws IOException {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.IMAGE.getSubFolder());
-        return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), PixmapLoader.getSupportedImageExts());
+        Iterable<FilePath> files = resFileSystem.getFiles(filter);
+        files = OptimizerFileUtil.filterByExts(files, PixmapLoader.getSupportedImageExts());
+        return files;
     }
 
     private void optimizeImage(FilePath inputFile, Dim targetResolution) throws IOException {
+        if (!optimizerFileSet.requiresOptimize(inputFile)) {
+            LOG.debug("Skip image: {}", inputFile);
+            return;
+        }
+
         LOG.debug("Optimizing image: {}", inputFile);
 
         Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);

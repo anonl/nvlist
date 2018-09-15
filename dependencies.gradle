@@ -112,7 +112,7 @@ deps.junit = [
 ]
 
 deps.lua_core = [
-    "nl.weeaboo.luajpp2:luajpp2-core:3.0.0"
+    "nl.weeaboo.luajpp2:luajpp2-core:3.0.2"
 ]
 
 deps.slf4j_api = [

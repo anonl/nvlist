@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.buildtools.file.FilePathPattern;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageResizerConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
@@ -18,6 +19,9 @@ public final class OptimizerConfigJson {
 
     /** Screen resolutions formatted as width x height, e.g. "1280x720". */
     public List<String> targetResolutions = new ArrayList<>();
+
+    /** File exclusion patterns, see {@link OptimizerFileSet#exclude(nl.weeaboo.vn.buildtools.file.FilePathPattern)}. */
+    public List<String> exclude = new ArrayList<>();
 
     /**
      * Opens a connection to a NVList project using the settings from this config.
@@ -34,6 +38,11 @@ public final class OptimizerConfigJson {
         // Main config
         MainOptimizerConfig mainConfig = new MainOptimizerConfig(outputFolder);
         OptimizerContext context = new OptimizerContext(projectConnection, mainConfig);
+
+        // Exclusion patterns
+        for (String pattern : exclude) {
+            context.getFileSet().exclude(FilePathPattern.fromGlob(pattern));
+        }
 
         // Resizer config
         ImageResizerConfig resizerConfig = new ImageResizerConfig();

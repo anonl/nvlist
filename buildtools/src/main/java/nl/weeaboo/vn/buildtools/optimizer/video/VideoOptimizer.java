@@ -91,6 +91,11 @@ public final class VideoOptimizer {
     }
 
     private void optimizeVideo(FilePath inputFile) throws IOException {
+        if (!optimizerFileSet.requiresOptimize(inputFile)) {
+            LOG.debug("Skip video: {}", inputFile);
+            return;
+        }
+
         LOG.debug("Optimizing video: {}", inputFile);
 
         EncodedVideo input = loadInput(inputFile);

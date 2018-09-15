@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
 
         // Plugins for iOS

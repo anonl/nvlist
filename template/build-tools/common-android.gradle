@@ -20,8 +20,6 @@ android {
             assets.srcDirs = [vnResDir]
             jniLibs.srcDirs = ['libs']
         }
-
-        instrumentTest.setRoot('tests')
     }
 
     compileOptions {

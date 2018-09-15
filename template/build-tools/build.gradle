@@ -14,7 +14,7 @@ buildscript {
         // Plugin for making a 'fat' JAR
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         
         // NVList build tools
         classpath "nl.weeaboo.vn:nvlist-buildtools:${gradle.ext.settings.nvlistVersion}"

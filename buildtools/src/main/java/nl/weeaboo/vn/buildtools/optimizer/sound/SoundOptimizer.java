@@ -129,6 +129,11 @@ public final class SoundOptimizer {
     }
 
     private void optimizeSound(FilePath inputFile) throws IOException {
+        if (!optimizerFileSet.requiresOptimize(inputFile)) {
+            LOG.debug("Skip sound: {}", inputFile);
+            return;
+        }
+
         LOG.debug("Optimizing sound: {}", inputFile);
 
         SoundWithDef soundWithDef = loadInput(inputFile);
