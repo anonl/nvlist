@@ -6,15 +6,13 @@ module("vn.choice", package.seeall)
 ---Choice screen registry
 -------------------------------------------------------------------------------------------------------------- @section registry
 
-local choiceScreenRegistry = {
-    constructor = nil
-}
+local choiceScreenConstructor = nil
 
 ---Registers a choice screen creation function. When the choice function is called, the registered constructor
 -- function is called to create a new choice screen. The choice screen created must implement the standard
--- choice screen functions (choose, destroy, etc.)
-function registerChoiceScreen(choiceScreenConstructor)
-    choiceScreenRegistry.constructor = choiceScreenConstructor
+-- choice screen methods (see ChoiceScreen)
+function registerChoiceScreen(constructor)
+    choiceScreenConstructor = constructor
 end
 
 ---Choice functions
@@ -35,13 +33,12 @@ function choice2(uniqueChoiceId, ...)
     end
     
     local selected = 1
-    local choiceScreenConstr = choiceScreenRegistry.constructor
-    if choiceScreenConstr == nil then
+    if choiceScreenConstructor == nil then
         Log.warn("No choice screen registered")
     else
         Seen.registerChoice(uniqueChoiceId, #options)
     
-        local screen = choiceScreenConstr()
+        local screen = choiceScreenConstructor()
         selected = screen:choose(uniqueChoiceId, options)
         screen:destroy()
         

@@ -3,16 +3,30 @@
 -- 
 module("vn.savescreen", package.seeall)
 
--- Forward declarations
-local SaveScreen = {}
-local LoadScreen = {} 
-
-
 local KEY_SAVE_LAST = "vn.save.lastSaved" -- Property value gets set in onSave()
 local KEY_SAVE_PAGE = "vn.save.lastPage"
 
 local SCREENSHOT_WIDTH = 256
 local SCREENSHOT_HEIGHT = 144
+
+---Save/load screen registry
+-------------------------------------------------------------------------------------------------------------- @section registry
+
+-- Forward declarations
+local saveScreenConstructor = nil
+local loadScreenConstructor = nil 
+
+---Registers a save screen creation function. The save screen return by this function must implement the standard
+-- save screen methods (show, destroy)
+function registerSaveScreen(constructor)
+    saveScreenConstructor = constructor
+end
+
+---Registers a load screen creation function. The load screen return by this function must implement the standard
+-- load screen methods (show, destroy)
+function registerLoadScreen(constructor)
+    loadScreenConstructor = constructor
+end
 
 ---Global accessor functions
 -------------------------------------------------------------------------------------------------------------- @section globals
@@ -27,9 +41,9 @@ local function saveLoadScreen(isSave)
         local function showScreen()
             local screen = nil
             if isSave then
-                screen = SaveScreen.new()
+                screen = saveScreenConstructor()
             else
-                screen = LoadScreen.new()
+                screen = loadScreenConstructor()
             end
             slot, userData = screen:show()       
             screen:destroy()
@@ -468,10 +482,10 @@ function SaveLoadScreen:show()
     return self.selected, self.metaData
 end
 
-function SaveScreen.new(self)
-    return SaveLoadScreen.new(extend(self, {isSave=true}))
-end
+registerSaveScreen(function()
+    return SaveLoadScreen.new{isSave=true}
+end)
 
-function LoadScreen.new(self)
-    return SaveLoadScreen.new(extend(self, {isSave=false}))
-end
+registerLoadScreen(function()
+    return SaveLoadScreen.new{isSave=false}
+end)

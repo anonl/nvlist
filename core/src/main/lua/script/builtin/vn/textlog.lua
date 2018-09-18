@@ -3,7 +3,17 @@
 -- 
 module("vn.textlog", package.seeall)
 
-local TextLogScreen = nil -- Forward declaration 
+---Text log screen registry
+-------------------------------------------------------------------------------------------------------------- @section registry
+
+-- Forward declaration
+local textLogConstructor = nil 
+
+---Registers a text log screen creation function. The screen return by this function must implement the standard
+-- text log screen methods (show, destroy)
+function registerTextLogScreen(constructor)
+    textLogConstructor = constructor
+end
 
 ---Global accessor functions
 -------------------------------------------------------------------------------------------------------------- @section globals
@@ -13,7 +23,7 @@ function textLog()
     local oldContext = getCurrentContext()
 
     local newContext = createContext(function()
-        local screen = TextLogScreen.new()
+        local screen = textLogConstructor()
         screen:show()
         screen:destroy()
         setContextActive(oldContext, true)
@@ -99,4 +109,6 @@ function TextLogScreen:show()
         yield()
     end 
 end
-    
+
+-- Set as default text log screen
+registerTextLogScreen(TextLogScreen.new)
