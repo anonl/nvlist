@@ -271,7 +271,8 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
         try {
             ObjectDeserializer is = luaSerializer.openDeserializer(in);
-            is.setDepthWarnLimit(100);
+            is.setCollectStats(false);
+            is.setDepthWarnLimit(125);
             try {
                 novel.readAttributes(is);
             } catch (ClassNotFoundException e) {
@@ -317,7 +318,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ObjectSerializer os = luaSerializer.openSerializer(ProgressOutputStream.wrap(bout, pl));
         try {
-            os.setCollectStats(true);
+            os.setCollectStats(false);
             os.setPackageErrorLevel(ErrorLevel.NONE);
             novel.writeAttributes(os);
             os.flush();

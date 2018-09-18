@@ -203,6 +203,7 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
 
         LuaSerializer ls = new LuaSerializer();
         ObjectSerializer out = ls.openSerializer(sfw.newOutputStream(path, false));
+        out.setCollectStats(false);
         try {
             out.writeInt(VERSION);
 
@@ -234,6 +235,7 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
 
         LuaSerializer ls = new LuaSerializer();
         ObjectDeserializer in = ls.openDeserializer(sfw.newInputStream(path));
+        in.setCollectStats(false);
         try {
             int version = in.readInt();
             if (version != VERSION) {
