@@ -119,7 +119,7 @@ function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable)
 
     d:setAlign(0.5, 0.5)
     if clickIndicatorPos == ClickIndicatorPos.RIGHT then
-        d:setPos(tx + textDrawable:getWidth() - dw / 2, ty + textDrawable:getHeight() - dh / 2)
+        d:setPos(tx + textDrawable:getMaxWidth() - dw / 2, ty + textDrawable:getMaxHeight() - dh / 2)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_BOTTOM then
         ty = ty + textDrawable:getTextHeight()
         d:setPos(tx + dw / 2, ty + dh / 2)
@@ -174,9 +174,10 @@ function DefaultClickIndicator:show()
                 yield()
             end
         end)
-        -- Make sure the position is updated before the drawable is made visible
-        self.thread:update()
 	end
+
+    -- Make sure the position is updated before the drawable is made visible
+    self.thread:update()
 
     self.drawable:setVisible(true)
 end

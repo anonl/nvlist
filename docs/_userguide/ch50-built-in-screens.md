@@ -2,10 +2,28 @@
 title: Built-in screens
 ---
 
-  - List of built-in screens:
-   - titlescreen
+@@@ TODO : A number of screens are built-in
+
+To replace these built-in screens with your own, see ["Replacing built-in screens"]({{site.baseurl}}{% link _userguide/ch53-replacing-built-in-screens.md %})
+
+## Titlescreen
+
+- titlescreen (not actually built-in)
+
+## Text box
+
    - textbox (per textmode)
-   - choice
+
+@@@ Click indicator
+- image
+- position
+
+## Save/load
+
    - save/load
-   - text log (history)
- 
+
+## Choice
+
+   - choice
+
+## Text log
