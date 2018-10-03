@@ -49,3 +49,12 @@ task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
     failOnModification = true
     htmlOutputFile  = file("$buildDir/reports/japi.html")
 }
+
+javadoc {
+    options {
+        noDeprecatedList = true
+        noHelp = true
+        noIndex = true
+        noTimestamp = true
+    }
+}

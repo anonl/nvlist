@@ -25,6 +25,15 @@ task clean(type: Delete) {
     delete project.buildDir
 }
 
+task copyJavadoc(type: Copy) {
+    destinationDir = file("assets/javadoc")
+    from { project(':nvlist-api').tasks.javadoc }
+}
+
+task assemble {
+    dependsOn copyJavadoc
+}
+
 def jekyllTask(name, args) {
     return tasks.create(name, com.github.jrubygradle.JRubyExec) {
         if (args.startsWith('new')) {
@@ -33,6 +42,8 @@ def jekyllTask(name, args) {
         script 'jekyll'
         workingDir project.projectDir
         scriptArgs args.split()
+
+        dependsOn copyJavadoc
     }
 }
 
