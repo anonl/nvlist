@@ -6,7 +6,7 @@ public interface ISystemModule extends IModule {
     /**
      * Note: This method should only be used if {@code #canExit()} returns {@code true}.
      *
-     * @param force If {@core true}, skip the exit confirmation dialog.
+     * @param force If {@code true}, skip the exit confirmation dialog.
      * @see #canExit()
      */
     void exit(boolean force);

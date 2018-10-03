@@ -21,7 +21,7 @@ public abstract class FilePathPattern {
 
     /**
      * Matches paths using a simple glob-style pattern. The supported special characters are:
-     * <table>
+     * <table summary="Supported glob patterns">
      * <tr><td>*</td><td>Matches a sequence of zero or more characters excluding '/'</td></tr>
      * <tr><td>**</td><td>Matches a sequence of zero or more characters</td></tr>
      * </table>
