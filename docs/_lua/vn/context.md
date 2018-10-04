@@ -2,6 +2,9 @@
 id: vn/context.lua
 title: vn/context.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to the current script context
 -- 

@@ -2,6 +2,9 @@
 id: callbacks.lua
 title: callbacks.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 function main()
     return titlescreen()

@@ -2,6 +2,9 @@
 id: vn/anim.lua
 title: vn/anim.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="--- Animation helper functions.
 --  Using these Animators is usually not strictly necessary, it's usually possible to get away with just using
 --  Threads directly. Animators are convenient when you want to piece together more complex multi-step

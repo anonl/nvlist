@@ -54,6 +54,9 @@ task generateLuaPages {
 id: ${luaPath}
 title: ${luaPath}
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="${luaContent}" %}
                 """
             }

@@ -2,6 +2,9 @@
 id: vn/text.lua
 title: vn/text.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to text display.
 -- 

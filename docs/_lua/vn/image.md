@@ -2,6 +2,9 @@
 id: vn/image.lua
 title: vn/image.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="---Functions to show and manipulate images on the screen.
 --
 module(\"vn.image\", package.seeall)

@@ -2,6 +2,9 @@
 id: vn/video.lua
 title: vn/video.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="---Video support.
 -- 
 module(\"vn.video\", package.seeall)

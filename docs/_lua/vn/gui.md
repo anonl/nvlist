@@ -2,6 +2,9 @@
 id: vn/gui.lua
 title: vn/gui.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="---GUI components
 --
 module(\"vn.gui\", package.seeall)

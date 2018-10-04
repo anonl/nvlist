@@ -2,6 +2,9 @@
 id: vn.lua
 title: vn.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="--- Provides core functions for scripting visual novels.
 --  @module vn
 

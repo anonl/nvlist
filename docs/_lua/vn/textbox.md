@@ -2,6 +2,9 @@
 id: vn/textbox.lua
 title: vn/textbox.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to the main text box.
 -- 

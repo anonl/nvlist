@@ -2,6 +2,9 @@
 id: vn/system.lua
 title: vn/system.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="--- Contains functions related to the operating system and external environment.
 -- 
 module(\"vn.system\", package.seeall)

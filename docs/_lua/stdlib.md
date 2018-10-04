@@ -2,6 +2,9 @@
 id: stdlib.lua
 title: stdlib.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Standard library of utility functions
 -- @module stdlib

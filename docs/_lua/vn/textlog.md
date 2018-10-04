@@ -2,6 +2,9 @@
 id: vn/textlog.lua
 title: vn/textlog.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to the text history screen
 -- 

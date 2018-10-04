@@ -2,6 +2,9 @@
 id: vn/save.lua
 title: vn/save.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="--- Functionality related to saving/loading data
 -- 
 module(\"vn.save\", package.seeall)

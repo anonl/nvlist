@@ -14,8 +14,8 @@ theme: jekyll-theme-minimal
 sass:
   load_paths:
     - _sass
-plugins:
-  - jekyll-feed
+#plugins:
+#  - jekyll-feed
 
 # Site settings
 # These are used to personalize your new site. If you look in the HTML files,
@@ -57,10 +57,6 @@ defaults:
 header_pages:
   - userguide.html
   - lua.html
-
-feed:
-  collections:
-    - userguide
 
 # Exclude from processing.
 #exclude:

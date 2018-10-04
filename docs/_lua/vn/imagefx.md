@@ -2,6 +2,9 @@
 id: vn/imagefx.lua
 title: vn/imagefx.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="--- Functionality for manipulating textures and images.
 --  
 module(\"vn.imagefx\", package.seeall)

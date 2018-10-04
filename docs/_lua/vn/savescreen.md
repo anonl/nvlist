@@ -2,6 +2,9 @@
 id: vn/savescreen.lua
 title: vn/savescreen.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to the save/load screens
 -- 

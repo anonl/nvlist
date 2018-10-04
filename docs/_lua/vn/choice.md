@@ -2,6 +2,9 @@
 id: vn/choice.lua
 title: vn/choice.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Defines functions for allowing a user to select from a list of options
 -- 

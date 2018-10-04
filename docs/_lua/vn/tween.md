@@ -2,6 +2,9 @@
 id: vn/tween.lua
 title: vn/tween.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="---Defines some image transition functions (image 'tweens').
 -- 
 module(\"vn.tween\", package.seeall)

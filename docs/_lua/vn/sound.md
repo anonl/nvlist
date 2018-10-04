@@ -2,6 +2,9 @@
 id: vn/sound.lua
 title: vn/sound.lua
 ---
+
+<!--excerpt-->
+
 {% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="
 ---Functions related to audio playback (music, sound effects, voice clips)
 -- 
