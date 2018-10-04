@@ -4,8 +4,15 @@
       <h3>{{ section.title }}</h3>
       <ul>
         {% for item in section.items %}
+        
+          {% if item.relpath %}
+            {% capture relpath %}{{ item.relpath }}{% endcapture %}
+          {% else %}
+            {% capture relpath %}userguide/{{ item.id }}{% endcapture %}
+          {% endif %}
+          
           <li>
-            <a href="{{site.baseurl}}/userguide/{{item.id}}">{{ item.title }}</a>
+            <a href="{{site.baseurl}}/{{relpath}}">{{ item.title }}</a>
           </li>
         {% endfor %}
       </ul>

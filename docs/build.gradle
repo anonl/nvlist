@@ -16,22 +16,54 @@ repositories {
 
 dependencies {
     jrubyExec 'rubygems:bundler:1.5.2'
-    jrubyExec 'rubygems:jekyll-feed:0.9.2'
-    jrubyExec 'rubygems:jekyll:3.4.5'
-    jrubyExec 'rubygems:jekyll-theme-minimal:0.0.4'
+    jrubyExec 'rubygems:jekyll-feed:0.11.0'
+    jrubyExec 'rubygems:jekyll:3.8.2'
+    jrubyExec 'rubygems:jekyll-theme-minimal:0.1.1'
 }
 
 task clean(type: Delete) {
     delete project.buildDir
 }
 
-task copyJavadoc(type: Copy) {
-    destinationDir = file("assets/javadoc")
+task copyJavadoc(type: Sync) {
+    description = "Copies generated Javadoc to the /assets folder"
+
+    destinationDir = new File("assets/javadoc")
     from { project(':nvlist-api').tasks.javadoc }
+}
+
+task generateLuaPages {
+    def sourceDir = project(':nvlist-core').file('src/main/lua/script/builtin')
+    def destinationDir = file("_lua")
+
+    inputs.dir(sourceDir)
+    outputs.dir(destinationDir)
+
+    doLast {
+        def fileTree = fileTree(sourceDir)
+        fileTree.visit { details ->
+            def outputFile = new File(destinationDir, "${details.relativePath}".replace(".lua", ".md"))
+            if (details.isDirectory) {
+                outputFile.mkdirs()
+            } else {
+                def luaPath = "${details.relativePath}"
+                def luaContent = details.file.text
+                    .replace('"', '\\"')
+                    .replace('{', '&#123;')
+                outputFile.text = """---
+id: ${luaPath}
+title: ${luaPath}
+---
+{% include sourcecode.html id="textnotation" lang="lua" class="full-screen" content="${luaContent}" %}
+                """
+            }
+        }
+    }
 }
 
 task assemble {
     dependsOn copyJavadoc
+    dependsOn generateLuaPages
 }
 
 def jekyllTask(name, args) {
@@ -43,7 +75,7 @@ def jekyllTask(name, args) {
         workingDir project.projectDir
         scriptArgs args.split()
 
-        dependsOn copyJavadoc
+        dependsOn assemble
     }
 }
 

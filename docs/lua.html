@@ -1,0 +1,14 @@
+---
+id: lua
+title: Built-in Scripts
+---
+
+<ul>
+  {% for item in site.lua %}
+    {% capture relpath %}{{ item.id }}{% endcapture %}
+
+    <li>
+      <a href="{{site.baseurl}}{{relpath}}">{{ item.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

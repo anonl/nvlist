@@ -115,6 +115,20 @@ blockquote, pre.code-block {
     background-color: $tableBackground;
 }
 
+.full-screen {
+    position: fixed;
+    top: 100px;
+    left: 0px;
+    width: 100%;
+    height: calc(100% - 100px);
+}
+
+pre.code-block.full-screen {
+    width: calc(100% - 10px);
+    max-width: 100%;
+    max-height: calc(100% - 125px);
+}
+
 div.chapter-group {
     margin: 1em;
 }

@@ -10,7 +10,7 @@
 {% endif %}
 
 <textarea id="{{ id }}-source">{{ include.content }}</textarea>
-<pre id="{{ id }}" class="code-block cm-s-gedit" style="display: none;"></pre>
+<pre id="{{ id }}" class="code-block cm-s-gedit {{include.class}}" style="display: none;"></pre>
 <script>
   var id = "{{ id }}"
   var inputElement = document.getElementById(id + "-source");
