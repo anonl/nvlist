@@ -8,11 +8,21 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-minimal
+sass:
+  load_paths:
+    - _sass
+#plugins:
+#  - jekyll-feed
+
 # Site settings
 # These are used to personalize your new site. If you look in the HTML files,
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
+
 title: NVList documentation
 email: mail@weeaboo.nl
 description: ''
@@ -24,37 +34,30 @@ exclude: [build]
 collections:
   userguide:
     output: true
-    
+  lua:
+    output: true
+
 defaults:
   - scope:
-      path: ""
       type: "pages"
     values:
       layout: "default"
   - scope:
-      path: ""
       type: "userguide"
     values:
       layout: "chapter"
       index: "/userguide.html"
+  - scope:
+      type: "lua"
+    values:
+      layout: "chapter"
+      index: "/lua.html"
 
-# Build settings
-markdown: kramdown
-theme: jekyll-theme-minimal
-sass:
-  load_paths:
-    - _sass
-gems:
-  - jekyll-feed
+# These pages are linked in the header
+header_pages:
+  - userguide.html
+  - lua.html
 
 # Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+#exclude:
+#  - test.html

@@ -61,5 +61,7 @@
   items:
     - id: ch70-lua-environment
       title: Lua environment
-# TODO add link to Script functions API doc
-# TODO add link to NVList Javadoc
+    - relpath: lua.html
+      title: Built-in scripts
+    - relpath: javadoc.html
+      title: Engine API reference
