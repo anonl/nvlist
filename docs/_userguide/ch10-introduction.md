@@ -12,7 +12,9 @@ NVList projects can be exported to run on the following platforms:
 - Android
 - iOS (experimental)
 
-_TODO Add screenshots for every supported platform._
+![Windows]({{site.baseurl}}{% link assets/userguide/ch10-win10.jpg %})
+![Linux]({{site.baseurl}}{% link assets/userguide/ch10-ubuntu16.jpg %})
+![Android]({{site.baseurl}}{% link assets/userguide/ch10-android.jpg %})
 
 ## Scripting 
 Since visual novels consist mostly of text, the scripting language used by NVList was designed to make displaying text as convenient as possible. Take for example the following code:
@@ -20,7 +22,7 @@ Since visual novels consist mostly of text, the scripting language used by NVLis
 This is some example text.
 " %}
 
-The above is actually valid NVList script to show "This is some example text." on the screen. For a full introduction to scripting, please refer to [Script Introduction]({{site.baseurl}}{% link _userguide/ch20-script-intro.md %}).
+![Screenshot of the example script]({{site.baseurl}}{% link assets/userguide/ch10-example-script.jpg %})
 
-_TODO Add a screenshot of what it looks like._
+The above is actually valid NVList script to show "This is some example text." on the screen. For a full introduction to scripting, please refer to [Script Introduction]({{site.baseurl}}{% link _userguide/ch20-script-intro.md %}).
 

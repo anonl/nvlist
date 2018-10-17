@@ -10,67 +10,15 @@ function main()
 end
 
 function titlescreen()
-    print("titlescreen")
-    print(System.getEnv())
-
-    local i = img("test", 200, 200)
-    i:setAlign(0.5, 0.5)
-    
-    --[[
-    local slot = saveScreen()
-    Log.info("Saved in slot {}", slot)
-    loadScreen()
-    ]]
-    
-    --testTextLog()
-    --testGuiScreen()
-
-    for i=1,3 do
-        print("Show choice: ", i)
-        local selected = choice("one—two three", "b", "Agh")
-        print("selected", selected)
-    end
-
-    registerSpeaker("guy", "Mr. Guy")
-    registerSpeaker("man", Text.createStyledText("The Man", Text.createStyle{color=0xFFFF0000}))
-    
     setTextModeADV()
     texton()
     
-    local i = img("test", 200, 200)
-    i:setAlign(0.5, 0.5)
+    bg("bg/gate")
+    img("azathoth", "c")
 
-    local mergedTex = composite({
-        {tex="test"},
-        {tex="test", pos={100, 100}},
-    })
-    i = img(mergedTex, 400, 0)
-    
-    --[[
-    for level,t in ipairs(blurMultiple("testjng", 4, 8)) do
-        local i = img(t)
-        i:setPos(100 * level, 0)
-    end
-    ]]
-    
-    --[[
-    local prevBlurred = nil
-    for n=1,100,0.5 do
-        local blurred = img(blur("testjng", n))
-        
-        if prevBlurred ~= nil then
-            prevBlurred:destroy()
-        end
-        prevBlurred = blurred        
-        
-        blurred:setPos(screenWidth/2, screenHeight/2)
-        blurred:setAlign(0.5, 0.5)
-        yield(3)
-    end
-    ]]
+    text("Running on Android")
 
-    -- button("gui/button")
-    
+    -- button("gui/button")    
     --movie("test")
     call("images")    
     --call("speakers")

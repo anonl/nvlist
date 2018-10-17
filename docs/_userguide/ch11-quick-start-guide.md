@@ -6,13 +6,14 @@ title: Quick-start guide
 
 1. Download NVList from <http://nvlist.weeaboo.nl/>
 2. Extract the downloaded archive file (.zip/.7z) to a new folder.<br/>The result should look something like this:<br/>
-_TODO Add screenshot_
+
+![NVList install folder]({{site.baseurl}}{% link assets/userguide/ch11-nvlist-install-folder.png %})
 
 3. Start the build tool:<br/>
    - Windows: `nvlist-build.exe`
    - Other: `java -jar nvlist-build.jar`
 
-_TODO Add screenshot_
+![NVList build user interface screenshot]({{site.baseurl}}{% link assets/userguide/ch11-build-gui.png %})
 
 ## Creating a new visual novel project
 
@@ -40,7 +41,7 @@ $bob Hi, my name is Bob.
 
 The following section is an abridged version of the chapter ["Distribution"]({{site.baseurl}}{% link _userguide/ch32-distribution.md %})
 
-@@@ distribute (condensed version)
-@@@ TODO: Improve build tool to bundle/show packaged releases
+@@@ distribute (condensed version) -> arrow next to 'Run game' -> Create release
+
 
   
