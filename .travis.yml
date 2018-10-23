@@ -31,10 +31,9 @@ matrix:
       after_success:      
         - bash <(curl -s https://codecov.io/bash)
     - os: osx
+      # xcode 9.3 includes jdk8
       osx_image: xcode9.3
       language: java
-      # Preferably we'd use openjdk8, but it's no longer available :(
-      jdk: openjdk11
       before_install:
         # Download SDK
         - brew update
