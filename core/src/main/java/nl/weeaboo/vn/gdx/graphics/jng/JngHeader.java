@@ -5,7 +5,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 import nl.weeaboo.common.Dim;
 
@@ -28,7 +27,7 @@ final class JngHeader {
     public static JngHeader read(DataInput din) throws IOException, JngParseException {
         byte[] magicBytes = new byte[JngConstants.JNG_MAGIC.length];
         din.readFully(magicBytes);
-        if (!Arrays.equals(JngConstants.JNG_MAGIC, magicBytes)) {
+        if (!JngReader.isJng(magicBytes, 0, magicBytes.length)) {
             throw new JngParseException(JngInputUtil.toByteString(magicBytes));
         }
 

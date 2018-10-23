@@ -139,32 +139,34 @@ public final class JngReader {
 
         ByteBuffer colorPixels = result.getPixels();
         ByteBuffer alphaPixels = alpha.getPixels();
+        try {
+            int size = result.getWidth() * result.getHeight();
+            switch (result.getFormat()) {
+            case RGBA8888:
+                for (int n = 0; n < size; n++) {
+                    colorPixels.position(colorPixels.position() + 3); // Skip RGB
+                    colorPixels.put(alphaPixels.get()); // Overwrite A
+                }
+                break;
+            case RGBA4444:
+                // RGBA4444 is stored as shorts in native order (see Pixmap#getPixels)
+                colorPixels.order(ByteOrder.nativeOrder());
+                ShortBuffer colorPixelsShort = colorPixels.asShortBuffer();
+                for (int n = 0; n < size; n++) {
+                    int a = alphaPixels.get() & 0xFF;
+                    a = (a + 7) >> 4; // 8 bpp -> 4 bpp
 
-        int size = result.getWidth() * result.getHeight();
-        switch (result.getFormat()) {
-        case RGBA8888:
-            for (int n = 0; n < size; n++) {
-                colorPixels.position(colorPixels.position() + 3); // Skip RGB
-                colorPixels.put(alphaPixels.get()); // Overwrite A
+                    int rgba4 = (colorPixelsShort.get(n) & ~15) | a; // Replace alpha
+                    colorPixelsShort.put(n, (short)rgba4);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported result format: " + result.getFormat());
             }
-            break;
-        case RGBA4444:
-            // RGBA4444 is stored as shorts in native order (see Pixmap#getPixels)
-            colorPixels.order(ByteOrder.nativeOrder());
-            ShortBuffer colorPixelsShort = colorPixels.asShortBuffer();
-            for (int n = 0; n < size; n++) {
-                int a = alphaPixels.get() & 0xFF;
-                a = (a + 7) >> 4; // 8 bpp -> 4 bpp
-
-                int rgba4 = (colorPixelsShort.get(n) & ~3) | a; // Replace alpha
-                colorPixelsShort.put(n, (short)rgba4);
-            }
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported result format: " + result.getFormat());
+        } finally {
+            colorPixels.rewind();
+            alphaPixels.rewind();
         }
-
-        colorPixels.rewind();
     }
 
     private Format getResultFormat(boolean hasAlpha) {

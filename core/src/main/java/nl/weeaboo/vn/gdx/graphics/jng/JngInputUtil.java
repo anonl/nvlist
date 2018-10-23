@@ -67,7 +67,7 @@ final class JngInputUtil {
     }
 
     public static String toByteString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder("Invalid magic value: ");
+        StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
             sb.append(String.format("%02x ", b & 0xFF));
         }
