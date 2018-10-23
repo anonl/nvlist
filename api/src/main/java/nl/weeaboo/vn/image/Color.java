@@ -3,6 +3,9 @@ package nl.weeaboo.vn.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Locale;
+
+import com.google.errorprone.annotations.CheckReturnValue;
 
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.render.RenderUtil;
@@ -74,9 +77,25 @@ public final class Color implements Serializable {
         initTransients();
     }
 
+    @Override
+    public int hashCode() {
+        return argbInt;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Color)) {
+            return false;
+        }
+
+        Color c = (Color)obj;
+        return r == c.r && g == c.g && b == c.b && a == c.a;
+    }
+
     /**
      * Returns a copy of the color, but converted from premultiplied alpha back to unassociated alpha.
      */
+    @CheckReturnValue
     public Color unPremultiplied() {
         return fromRGBA(r / a, g / a, b / a, a);
     }
@@ -113,6 +132,11 @@ public final class Color implements Serializable {
     /** Returns the alpha component of the color in the range {@code [0.0, 1.0]} */
     public double getAlpha() {
         return a;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ROOT, "Color[%08x]", getARGB());
     }
 
 }
