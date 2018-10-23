@@ -128,7 +128,7 @@ public final class JngReader {
     /**
      * Merge alpha into result.
      */
-    private static void insertAlpha(Pixmap result, Pixmap alpha) {
+    static void insertAlpha(Pixmap result, Pixmap alpha) {
         switch (alpha.getFormat()) {
         case Alpha:
         case Intensity:

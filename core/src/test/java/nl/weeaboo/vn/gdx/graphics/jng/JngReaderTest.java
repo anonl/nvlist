@@ -1,4 +1,4 @@
-package nl.weeaboo.vn.gdx.graphics;
+package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.IOException;
 
