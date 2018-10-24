@@ -105,7 +105,7 @@ public final class PremultUtil {
         case RGB888:
             break; // Format doesn't have alpha, so nothing to do
         case Intensity:
-            break; // GDX treats incorrectly treats INTENSITY as ALPHA
+            break; // GDX incorrectly treats INTENSITY as ALPHA
         case Alpha:
             break; // Format only has alpha, so nothing to do
         case LuminanceAlpha: {
@@ -194,6 +194,7 @@ public final class PremultUtil {
         Pixmap pngPixmap = PixmapUtil.copy(premultPixmap);
         unpremultiplyAlpha(pngPixmap);
         PixmapIO.writePNG(fileHandle, pngPixmap);
+        pngPixmap.dispose();
     }
 
     /** Lookup table for alpha pre-multiplication (8bpp). */

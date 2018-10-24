@@ -2,8 +2,6 @@ package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,13 +16,13 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
-import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapTester;
 
 public class JngReaderTest {
 
     private static JngTestSuite testSuite;
 
-    private final List<Pixmap> allocated = new ArrayList<>();
+    private final PixmapTester pixmapTester = new PixmapTester();
     private final ExceptionTester exTester = new ExceptionTester();
 
     @BeforeClass
@@ -40,7 +38,7 @@ public class JngReaderTest {
 
     @After
     public void after() {
-        allocated.forEach(Pixmap::dispose);
+        pixmapTester.dispose();
     }
 
     @Test
@@ -83,16 +81,16 @@ public class JngReaderTest {
 
     @Test
     public void testInsertAlpha() {
-        Pixmap alpha = newPixmap(3, 3, Format.Alpha, new Color(1, 1, 1, 0));
+        Pixmap alpha = pixmapTester.newPixmap(Format.Alpha, new Color(1, 1, 1, 0));
 
         // Insert alpha into RGBA8888 image
-        Pixmap rgba8888 = newPixmap(3, 3, Format.RGBA8888, new Color(0x20406080));
+        Pixmap rgba8888 = pixmapTester.newPixmap(Format.RGBA8888, new Color(0x20406080));
         Assert.assertEquals("20406080", Integer.toHexString(rgba8888.getPixel(0, 0)));
         JngReader.insertAlpha(rgba8888, alpha);
         Assert.assertEquals("20406000", Integer.toHexString(rgba8888.getPixel(0, 0)));
 
         // Insert alpha into RGBA4444 image
-        Pixmap rgba4444 = newPixmap(3, 3, Format.RGBA4444, new Color(0x20406080));
+        Pixmap rgba4444 = pixmapTester.newPixmap(Format.RGBA4444, new Color(0x20406080));
         // Due to lack of precision in RGBA4444, the RGBA we read back is not what we put in
         Assert.assertEquals("22446688", Integer.toHexString(rgba4444.getPixel(0, 0)));
         JngReader.insertAlpha(rgba4444, alpha);
@@ -104,14 +102,14 @@ public class JngReaderTest {
      */
     @Test
     public void testInsertAlphaFormats() {
-        Pixmap rgba8888 = newPixmap(3, 3, Format.RGBA8888, Color.RED);
-        Pixmap intensity = newPixmap(3, 3, Format.Intensity, Color.RED);
+        Pixmap rgba8888 = pixmapTester.newPixmap(Format.RGBA8888, Color.RED);
+        Pixmap intensity = pixmapTester.newPixmap(Format.Intensity, Color.RED);
 
         ImmutableSet<Format> supportedAlphaFormats = ImmutableSet.of(Format.Alpha, Format.Intensity);
         ImmutableSet<Format> supportedColorFormats = ImmutableSet.of(Format.RGBA8888, Format.RGBA4444);
 
         for (Format alphaFormat : Format.values()) {
-            Pixmap alpha = newPixmap(3, 3, alphaFormat, Color.WHITE);
+            Pixmap alpha = pixmapTester.newPixmap(alphaFormat, Color.WHITE);
             if (supportedAlphaFormats.contains(alphaFormat)) {
                 JngReader.insertAlpha(rgba8888, alpha);
             } else {
@@ -120,7 +118,7 @@ public class JngReaderTest {
         }
 
         for (Format colorFormat : Format.values()) {
-            Pixmap color = newPixmap(3, 3, colorFormat, Color.WHITE);
+            Pixmap color = pixmapTester.newPixmap(colorFormat, Color.WHITE);
             if (supportedColorFormats.contains(colorFormat)) {
                 JngReader.insertAlpha(color, intensity);
             } else {
@@ -136,14 +134,6 @@ public class JngReaderTest {
     public void testReadInvalid() {
         ByteArrayInputStream in = new ByteArrayInputStream(new byte[32]);
         exTester.expect(JngParseException.class, () -> JngReader.read(in, new JngReaderOpts()));
-    }
-
-    private Pixmap newPixmap(int w, int h, Format format, Color fill) {
-        Pixmap pixmap = PixmapUtil.newUninitializedPixmap(w, h, format);
-        pixmap.setColor(fill);
-        pixmap.fill();
-        allocated.add(pixmap);
-        return pixmap;
     }
 
     private void assertImage(String path, int w, int h) throws IOException {

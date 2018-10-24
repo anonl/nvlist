@@ -31,10 +31,10 @@ import nl.weeaboo.io.ZipUtil;
 import nl.weeaboo.io.ZipUtil.Compression;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 
-public class DesktopGdxFileSystemTest {
+public final class DesktopGdxFileSystemTest {
 
     @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder();
 
     private ExceptionTester exTester;
     private DesktopGdxFileSystem fileSystem;
