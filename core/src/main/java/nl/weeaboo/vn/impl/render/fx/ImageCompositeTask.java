@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect2D;
@@ -51,7 +51,7 @@ public final class ImageCompositeTask extends OffscreenRenderTask {
             batch.begin();
             try {
                 for (TextureEntry entry : config.getEntries()) {
-                    Texture region = GdxTextureUtil.getTexture(entry.getTexture());
+                    TextureRegion region = GdxTextureUtil.getTextureRegion(entry.getTexture());
                     Rect2D r = entry.getBounds();
                     GLBlendMode.from(entry.getBlendMode()).apply(batch);
                     batch.draw(region, (float)r.x, (float)r.y, (float)r.w, (float)r.h);

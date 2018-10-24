@@ -10,15 +10,11 @@ import nl.weeaboo.vn.impl.test.integration.render.RenderIntegrationTest;
 
 public class BlurTaskTest extends RenderIntegrationTest {
 
-    private BlurTask blurTask;
     private ImageDrawable drawable;
 
     @Before
     public void before() {
-        generate = true;
-
         drawable = new ImageDrawable();
-        drawable.setSize(1280, 720);
     }
 
     @After
@@ -45,10 +41,12 @@ public class BlurTaskTest extends RenderIntegrationTest {
     }
 
     private void blur(double radius) {
-        blurTask = new BlurTask(env.getImageModule(), getTexture("a"), radius);
+        BlurTask blurTask = new BlurTask(env.getImageModule(), getTexture("a"), radius);
         blurTask.render();
 
         drawable.setTexture(blurTask.getResult());
+        drawable.setSize(1280, 720);
+
         drawable.draw(renderer.getDrawBuffer());
         renderer.render();
     }
