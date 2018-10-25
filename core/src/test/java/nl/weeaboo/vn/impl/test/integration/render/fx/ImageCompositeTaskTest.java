@@ -38,6 +38,8 @@ public class ImageCompositeTaskTest extends RenderIntegrationTest {
         b.setPos(320, 180);
         config.add(b);
 
+        config.setSize(640, 360);
+
         doRender(config);
 
         checkRenderResult("composite-000");
@@ -50,6 +52,7 @@ public class ImageCompositeTaskTest extends RenderIntegrationTest {
         ITexture tex = task.getResult();
         setFilterNearest(tex);
         drawable.setTexture(tex);
+        drawable.setBounds(0, 0, 1280, 720);
 
         drawable.draw(getDrawBuffer());
         render();
