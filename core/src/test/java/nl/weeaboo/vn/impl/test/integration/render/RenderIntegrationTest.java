@@ -29,7 +29,7 @@ import nl.weeaboo.vn.render.IDrawTransform;
 public abstract class RenderIntegrationTest extends IntegrationTest {
 
     // Allow a small difference in color to account for rounding errors
-    private static final int MAX_COLOR_DIFF = 4;
+    private static final int MAX_COLOR_DIFF = 2;
 
     protected boolean generate = false;
 
