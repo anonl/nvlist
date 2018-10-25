@@ -84,7 +84,7 @@ public class LuaPrefsAdapter {
                             }
 
                             cachedPrefs.put(key, pref);
-                            LOG.debug("Registered preference in Lua: {}", key);
+                            LOG.trace("Registered preference in Lua: {}", key);
                         }
                     } catch (ClassNotFoundException cnfe) {
                         LOG.warn("Error loading preference holder class: {}", className, cnfe);
