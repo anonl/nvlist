@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.BlendMode;
-import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig.TextureEntry;
@@ -20,7 +19,6 @@ public class ImageCompositeTaskTest extends RenderIntegrationTest {
     @Before
     public void before() {
         drawable = new ImageDrawable();
-        drawable.setSize(1280, 720);
     }
 
     @After
@@ -50,8 +48,10 @@ public class ImageCompositeTaskTest extends RenderIntegrationTest {
         task.render();
 
         ITexture tex = task.getResult();
-        drawable.setTexture(tex, Direction.CENTER);
-        drawable.draw(renderer.getDrawBuffer());
-        renderer.render();
+        setFilterNearest(tex);
+        drawable.setTexture(tex);
+
+        drawable.draw(getDrawBuffer());
+        render();
     }
 }

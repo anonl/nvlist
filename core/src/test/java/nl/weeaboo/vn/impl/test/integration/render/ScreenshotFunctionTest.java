@@ -13,12 +13,12 @@ public class ScreenshotFunctionTest extends RenderIntegrationTest {
         DrawBuffer drawBuffer = getDrawBuffer();
 
         novel.draw(drawBuffer);
-        renderer.render();
+        render();
         waitForAllThreads();
 
         drawBuffer.reset();
         novel.draw(drawBuffer);
-        renderer.render();
+        render();
         checkRenderResult("screenshot-function");
     }
 

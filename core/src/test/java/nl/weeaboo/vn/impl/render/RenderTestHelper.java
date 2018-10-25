@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.styledtext.layout.ITextLayout;
@@ -27,17 +28,16 @@ public class RenderTestHelper implements IDestructible {
     public RenderTestHelper(IRenderEnv renderEnv) {
         drawBuffer = new DrawBuffer();
 
-        FitViewport viewPort = createViewport(renderEnv);
+        Viewport viewPort = createViewport(renderEnv);
 
         renderer = new GLScreenRenderer(renderEnv, new RenderStats());
         renderer.setProjectionMatrix(viewPort.getCamera().combined);
     }
 
-    private static FitViewport createViewport(IRenderEnv renderEnv) {
-        FitViewport viewPort = new FitViewport(renderEnv.getWidth(), renderEnv.getHeight());
+    private static Viewport createViewport(IRenderEnv renderEnv) {
+        Viewport viewPort = new FitViewport(renderEnv.getWidth(), renderEnv.getHeight());
         GdxViewportUtil.setToOrtho(viewPort, renderEnv.getVirtualSize(), true);
-        viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-        viewPort.apply();
+        viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         return viewPort;
     }
 

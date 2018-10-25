@@ -12,11 +12,11 @@ import nl.weeaboo.vn.text.ILoadingFontStore;
 public class RenderTextTest extends RenderIntegrationTest {
 
     @Test
-    public void render() {
+    public void testRender() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        renderer.drawText(0, 0, layout);
-        renderer.render();
+        drawText(0, 0, layout);
+        render();
 
         checkRenderResult("text");
     }

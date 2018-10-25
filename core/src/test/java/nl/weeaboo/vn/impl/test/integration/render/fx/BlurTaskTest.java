@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.fx.BlurTask;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.test.integration.render.RenderIntegrationTest;
@@ -44,10 +45,12 @@ public class BlurTaskTest extends RenderIntegrationTest {
         BlurTask blurTask = new BlurTask(env.getImageModule(), getTexture("a"), radius);
         blurTask.render();
 
-        drawable.setTexture(blurTask.getResult());
-        drawable.setSize(1280, 720);
+        ITexture tex = blurTask.getResult();
+        setFilterNearest(tex);
+        drawable.setTexture(tex);
+        drawable.setBounds(0, 0, 1280, 720);
 
-        drawable.draw(renderer.getDrawBuffer());
-        renderer.render();
+        drawable.draw(getDrawBuffer());
+        render();
     }
 }

@@ -12,16 +12,19 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
+import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 import nl.weeaboo.gdx.test.pixmap.ScreenshotHelper;
+import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.RenderTestHelper;
 import nl.weeaboo.vn.impl.test.integration.IntegrationTest;
+import nl.weeaboo.vn.render.IDrawTransform;
 
 public abstract class RenderIntegrationTest extends IntegrationTest {
 
@@ -30,7 +33,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
 
     protected boolean generate = false;
 
-    protected RenderTestHelper renderer;
+    private RenderTestHelper renderer;
     private PixmapEquality pixmapEquals;
 
     @Before
@@ -57,11 +60,37 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
     protected @Nullable ITexture getTexture(String path) {
         ITexture texture = env.getImageModule().getTexture(FilePath.of(path));
         // Set filtering to nearest so we don't get trolled by slight interpolation differences on the build server
+        setFilterNearest(texture);
+        return texture;
+    }
+
+    protected static void setFilterNearest(ITexture texture) {
         Texture gdxTexture = GdxTextureUtil.getTexture(texture);
         if (gdxTexture != null) {
             gdxTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
         }
-        return texture;
+    }
+
+    protected void render() {
+        launcher.render();
+        renderer.render();
+    }
+
+
+    protected void drawQuad(ITexture tex, Area2D bounds) {
+        renderer.drawQuad(tex, bounds);
+    }
+
+    protected void drawQuad(ITexture tex, IDrawTransform transform, Area2D bounds) {
+        renderer.drawQuad(tex, transform, bounds);
+    }
+
+    protected void drawText(double dx, double dy, ITextLayout textLayout) {
+        renderer.drawText(dx, dy, textLayout);
+    }
+
+    protected void drawTriangleGrid(ITexture tex, Area2D bounds) {
+        renderer.drawTriangleGrid(tex, bounds);
     }
 
     /**

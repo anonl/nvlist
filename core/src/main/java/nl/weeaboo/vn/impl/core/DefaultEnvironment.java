@@ -115,7 +115,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         ISystemEnv systemEnv = StaticEnvironment.SYSTEM_ENV.get();
         renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize, systemEnv.isTouchScreen());
 
-        contextManager.setRenderEnv(getRenderEnv());
+        contextManager.setRenderEnv(renderEnv);
     }
 
 }

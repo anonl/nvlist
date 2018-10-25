@@ -20,9 +20,9 @@ public class RenderQuadTest extends RenderIntegrationTest {
     }
 
     @Test
-    public void render() {
-        renderer.drawQuad(tex, Area2D.of(0, 0, 1280, 720));
-        renderer.render();
+    public void testRender() {
+        drawQuad(tex, Area2D.of(0, 0, 1280, 720));
+        render();
 
         checkRenderResult("quad");
     }
@@ -32,8 +32,8 @@ public class RenderQuadTest extends RenderIntegrationTest {
         // The GL renderer only knows how to render TextureAdapters, not TextureStubs
         TextureStub invalidTex = new TextureStub(1, 1);
 
-        renderer.drawQuad(invalidTex, Area2D.of(0, 0, 1280, 720));
-        renderer.render();
+        drawQuad(invalidTex, Area2D.of(0, 0, 1280, 720));
+        render();
 
         checkRenderResult("quad-invalidtexture");
     }
@@ -45,8 +45,8 @@ public class RenderQuadTest extends RenderIntegrationTest {
         mm.translate(400, 0);
         mm.rotate(128); // Rotate right around (0,0) by a quarter turn
         dt.setTransform(mm.immutableCopy());
-        renderer.drawQuad(tex, dt, Area2D.of(0, 0, 640, 400));
-        renderer.render();
+        drawQuad(tex, dt, Area2D.of(0, 0, 640, 400));
+        render();
 
         checkRenderResult("quad-rotated");
     }

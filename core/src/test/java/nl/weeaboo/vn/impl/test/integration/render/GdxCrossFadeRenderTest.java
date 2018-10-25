@@ -74,7 +74,8 @@ public class GdxCrossFadeRenderTest extends RenderIntegrationTest {
     }
 
     private void doRender() {
-        drawable.draw(renderer.getDrawBuffer());
-        renderer.render();
+        drawable.draw(getDrawBuffer());
+        render();
     }
+
 }

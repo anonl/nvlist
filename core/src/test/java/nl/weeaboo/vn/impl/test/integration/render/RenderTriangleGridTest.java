@@ -17,12 +17,12 @@ public class RenderTriangleGridTest extends RenderIntegrationTest {
     }
 
     @Test
-    public void render() {
+    public void testRender() {
         // Render triangle grid on the left side
-        renderer.drawTriangleGrid(tex, Area2D.of(0, 0, 640, 720));
+        drawTriangleGrid(tex, Area2D.of(0, 0, 640, 720));
         // Render on the right side, mirrored in both axes
-        renderer.drawTriangleGrid(tex, Area2D.of(1280, 720, -640, -720));
-        renderer.render();
+        drawTriangleGrid(tex, Area2D.of(1280, 720, -640, -720));
+        render();
 
         checkRenderResult("trianglegrid");
     }
