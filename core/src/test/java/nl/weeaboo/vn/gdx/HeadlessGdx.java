@@ -25,11 +25,25 @@ public class HeadlessGdx {
         Gdx.app = new GdxAppStub();
         Gdx.files = new HeadlessFiles();
         Gdx.net = new HeadlessNet();
-        Gdx.graphics = new MockGraphics();
+        Gdx.graphics = new HeadlessGraphics();
         Gdx.gl20 = MockGL.newInstance();
         Gdx.gl = Gdx.gl20;
         Gdx.audio = new MockAudio();
         Gdx.input = new MockInput();
+    }
+
+    private static final class HeadlessGraphics extends MockGraphics {
+
+        @Override
+        public int getWidth() {
+            return 640;
+        }
+
+        @Override
+        public int getHeight() {
+            return 480;
+        }
+
     }
 
 }

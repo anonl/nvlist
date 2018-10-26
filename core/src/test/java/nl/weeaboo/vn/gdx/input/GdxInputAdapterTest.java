@@ -5,17 +5,41 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.reflect.ReflectUtil;
+import nl.weeaboo.vn.ApiTestUtil;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
+import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
+import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.math.Matrix;
+import nl.weeaboo.vn.math.Vec2;
 
 public class GdxInputAdapterTest {
+
+    private GdxInputAdapter adapter;
+
+    @Before
+    public void before() {
+        HeadlessGdx.init();
+
+        Viewport viewport = new FitViewport(640, 480);
+        GdxViewportUtil.setToOrtho(viewport, Dim.of(640, 480), true);
+        viewport.update(640, 480, false);
+
+        adapter = new GdxInputAdapter(viewport);
+    }
 
     @Test
     public void convertKeyboard() throws IllegalArgumentException, IllegalAccessException {
@@ -40,18 +64,76 @@ public class GdxInputAdapterTest {
 
     @Test
     public void convertMouse() throws IllegalArgumentException, IllegalAccessException {
-        Set<Integer> unmapped = Sets.newHashSet();
         Map<String, Integer> keyConstants = ReflectUtil.getConstants(Buttons.class, Integer.TYPE);
         for (Entry<String, Integer> entry : keyConstants.entrySet()) {
             int button = entry.getValue();
             KeyCode result = GdxInputAdapter.convertMouse(button);
-            if (result == KeyCode.UNKNOWN) {
-                unmapped.add(button);
-            }
+            Assert.assertNotEquals(KeyCode.UNKNOWN, result);
         }
 
-        Set<Integer> expectedUnsupported = ImmutableSet.of();
-        Assert.assertEquals(expectedUnsupported, unmapped);
+        Assert.assertEquals(KeyCode.UNKNOWN, GdxInputAdapter.convertMouse(12345));
+    }
+
+    @Test
+    public void handleMouseEvents() throws IllegalArgumentException {
+        final int pointer = 0;
+        final int button = Buttons.LEFT;
+
+        // Initially, nothing is pressed
+        adapter.touchDown(1, 2, pointer, button);
+        assertMousePos(1, 2);
+        assertPressed(KeyCode.MOUSE_LEFT);
+
+        adapter.touchDragged(3, 4, pointer);
+        assertMousePos(3, 4);
+        assertPressed(KeyCode.MOUSE_LEFT);
+
+        // Release the mouse button
+        adapter.touchUp(5, 6, pointer, button);
+        assertMousePos(5, 6);
+        assertPressed();
+
+        adapter.mouseMoved(7, 8);
+        assertMousePos(7, 8);
+
+        adapter.scrolled(42);
+        Assert.assertEquals(42, getInput().getPointerScroll());
+    }
+
+    @Test
+    public void handleKeyboardEvents() throws IllegalArgumentException {
+        assertPressed();
+
+        adapter.keyDown(Input.Keys.A);
+        assertPressed(KeyCode.A);
+
+        adapter.keyUp(Input.Keys.A);
+        assertPressed();
+
+        // 'keyTyped' events are ignored
+        adapter.keyTyped('a');
+        assertPressed();
+    }
+
+    private void assertMousePos(int x, int y) {
+        INativeInput input = getInput();
+        Vec2 pos = input.getPointerPos(Matrix.identityMatrix());
+        // Camera.unproject() seems to add +1 to the y-coordinate for some reason
+        ApiTestUtil.assertEquals(x, y + 1, pos, 1e-3);
+    }
+
+    private void assertPressed(KeyCode... expected) {
+        INativeInput input = getInput();
+
+        Set<KeyCode> expectedSet = ImmutableSet.copyOf(expected);
+        for (KeyCode key : KeyCode.values()) {
+            Assert.assertEquals(expectedSet.contains(key), input.isPressed(key, false));
+        }
+    }
+
+    private INativeInput getInput() {
+        adapter.update();
+        return adapter.getInput();
     }
 
 }
