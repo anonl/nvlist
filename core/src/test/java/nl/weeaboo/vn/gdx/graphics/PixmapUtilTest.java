@@ -1,22 +1,30 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
-import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
+import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
+import nl.weeaboo.vn.gdx.res.DisposeUtil;
 
 public class PixmapUtilTest {
 
-    private PixmapEquality pixmapEquals;
+    private PixmapTester pixmapTester;
 
     @Before
     public void before() {
         HeadlessGdx.init();
-        pixmapEquals = new PixmapEquality();
+        pixmapTester = new PixmapTester();
+    }
+
+    @After
+    public void after() {
+        DisposeUtil.dispose(pixmapTester);
     }
 
     @Test
@@ -30,10 +38,26 @@ public class PixmapUtilTest {
         expected.drawPixel(0, 2, 0xAABBCCDD);
         expected.drawPixel(1, 0, 0x11223344);
 
-        pixmapEquals.assertEquals(expected, flip);
+        pixmapTester.assertEquals(expected, flip);
 
         flip.dispose();
         expected.dispose();
+    }
+
+    @Test
+    public void testResizedCopy() {
+        Pixmap pixmap = pixmapTester.load("a.png");
+        checkResizeResult(pixmap, Filter.BiLinear, "bilinear");
+        checkResizeResult(pixmap, Filter.NearestNeighbour, "nearest");
+    }
+
+    private void checkResizeResult(Pixmap pixmap, Filter filter, String testName) {
+        Pixmap resized = PixmapUtil.resizedCopy(pixmap, Dim.of(720, 770), filter);
+        try {
+            pixmapTester.checkRenderResult("resize/" + testName, resized);
+        } finally {
+            resized.dispose();
+        }
     }
 
 }

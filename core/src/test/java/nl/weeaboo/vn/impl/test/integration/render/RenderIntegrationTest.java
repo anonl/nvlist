@@ -5,10 +5,7 @@ import javax.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
@@ -16,10 +13,10 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 import nl.weeaboo.gdx.test.pixmap.ScreenshotHelper;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapTester;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.RenderTestHelper;
@@ -34,15 +31,15 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
     protected boolean generate = false;
 
     private RenderTestHelper renderer;
-    private PixmapEquality pixmapEquals;
+    private PixmapTester pixmapTester;
 
     @Before
     public final void beforeRenderTest() {
         env.updateRenderEnv(Rect.of(0, 60, 640, 360), Dim.of(640, 480));
         renderer = new RenderTestHelper(env.getRenderEnv());
 
-        pixmapEquals = new PixmapEquality();
-        pixmapEquals.setMaxColorDiff(MAX_COLOR_DIFF);
+        pixmapTester = new PixmapTester();
+        pixmapTester.setMaxColorDiff(MAX_COLOR_DIFF);
     }
 
     @After
@@ -113,14 +110,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
     public void checkRenderResult(String testName, Rect glRect) {
         Pixmap actual = ScreenshotHelper.screenshot(glRect.x, glRect.y, glRect.w, glRect.h);
 
-        String outputPath = "src/test/resources/render/" + testName + ".png";
-        FileHandle fileHandle = Gdx.files.local(outputPath);
-        if (generate) {
-            PixmapIO.writePNG(fileHandle, actual);
-        } else {
-            Pixmap expected = new Pixmap(fileHandle);
-            pixmapEquals.assertEquals(expected, actual);
-        }
+        pixmapTester.checkRenderResult(testName, actual);
     }
 
 }
