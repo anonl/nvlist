@@ -129,6 +129,39 @@ public final class DesktopGdxFileSystemTest {
     }
 
     /**
+     * List directory contents using various overloads of {@code FileHandle.list()}.
+     */
+    @Test
+    public void testDirectoryListing() {
+        FileHandle root = fileSystem.resolve("");
+
+        // list(FilenameFilter)
+        for (FileHandle file : root.list((dir, name) -> name.equals("a"))) {
+            Assert.assertEquals("a", file.name());
+        }
+
+        // list(FileFilter)
+        for (FileHandle file : root.list(file -> file.getName().equals("a"))) {
+            Assert.assertEquals("a", file.name());
+        }
+
+        // list(String)
+        for (FileHandle file : root.list("a")) {
+            Assert.assertEquals("a", file.name());
+        }
+    }
+
+    /**
+     * Get the sibling of a file in a directory.
+     */
+    @Test
+    public void testSibling() {
+        FileHandle a = fileSystem.resolve("a");
+
+        Assert.assertEquals(a.sibling("b"), fileSystem.resolve("b"));
+    }
+
+    /**
      * If a file archive exists, but can't be opened, it's treated as if it were empty.
      */
     @Test
@@ -141,6 +174,29 @@ public final class DesktopGdxFileSystemTest {
         assertFile("d", "res2.nvl"); // res2.nvl can be opened
         assertInvalidFile("folder/2"); // Files that should be in res.nvl can no longer be opened
         assertFile("c", "res2.nvl"); // Files that would normally resolve to res.nvl, no resolve to res2.nvl
+    }
+
+    /**
+     * Files in a file archive can't be deleted.
+     */
+    @Test
+    public void testDelete() {
+        FileHandle file = fileSystem.resolve("c");
+
+        exTester.expect(GdxRuntimeException.class, () -> file.delete());
+        exTester.expect(GdxRuntimeException.class, () -> file.deleteDirectory());
+        exTester.expect(GdxRuntimeException.class, () -> file.emptyDirectory());
+    }
+
+    /**
+     * Files in a file archive can't be written to.
+     */
+    @Test
+    public void testWrite() {
+        FileHandle file = fileSystem.resolve("c");
+
+        exTester.expect(GdxRuntimeException.class, () -> file.write(false));
+        exTester.expect(GdxRuntimeException.class, () -> file.writer(false, "ASCII"));
     }
 
     private void assertChildren(String folderPath, String... expectedFilenames) {

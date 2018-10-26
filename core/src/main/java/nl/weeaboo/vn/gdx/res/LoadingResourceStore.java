@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.gdx.res;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
@@ -128,12 +129,12 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         }
 
         @Override
-        public T doLoad(FilePath absolutePath) {
+        public T doLoad(FilePath absolutePath) throws IOException {
             try {
                 return loadResource(absolutePath);
             } catch (RuntimeException re) {
                 loadError(absolutePath, re);
-                throw re;
+                throw new IOException("Error loading file: " + absolutePath, re);
             }
         }
 

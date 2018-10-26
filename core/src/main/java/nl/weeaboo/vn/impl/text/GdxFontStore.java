@@ -166,7 +166,7 @@ public final class GdxFontStore extends AbstractResourceStore {
                 return loadFont(key.absolutePath, key.style);
             } catch (RuntimeException re) {
                 loadError(key.absolutePath, re);
-                throw re;
+                throw new IOException("Error loading file: " + key.absolutePath, re);
             }
         }
 
