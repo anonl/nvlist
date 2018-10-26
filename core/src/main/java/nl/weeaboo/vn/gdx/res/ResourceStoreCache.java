@@ -73,7 +73,7 @@ public abstract class ResourceStoreCache<K, V> {
                 })
                 .build(new CacheLoader<K, PreloadRef>() {
                     @Override
-                    public PreloadRef load(K resourceKey) {
+                    public PreloadRef load(K resourceKey) throws Exception {
                         doPreload(resourceKey);
                         return new PreloadRef();
                     }
@@ -124,7 +124,7 @@ public abstract class ResourceStoreCache<K, V> {
      *
      * @param resourceKey The unique identifier correspsonding to the resource.
      */
-    protected void doPreload(K resourceKey) {
+    protected void doPreload(K resourceKey) throws Exception {
     }
 
     /**
