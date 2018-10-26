@@ -18,9 +18,9 @@ import com.google.common.collect.Sets;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.reflect.ReflectUtil;
-import nl.weeaboo.vn.ApiTestUtil;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
+import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.math.Matrix;
@@ -119,7 +119,7 @@ public class GdxInputAdapterTest {
         INativeInput input = getInput();
         Vec2 pos = input.getPointerPos(Matrix.identityMatrix());
         // Camera.unproject() seems to add +1 to the y-coordinate for some reason
-        ApiTestUtil.assertEquals(x, y + 1, pos, 1e-3);
+        CoreTestUtil.assertEquals(x, y + 1, pos, 1e-3);
     }
 
     private void assertPressed(KeyCode... expected) {
