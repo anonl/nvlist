@@ -62,10 +62,12 @@ public class GridPanel extends Panel implements IGridPanel {
     public void pack(Direction anchor) {
         anchor = MoreObjects.firstNonNull(anchor, Direction.CENTER);
 
-        double oldWidth = getWidth();
-        double oldHeight = getHeight();
+        final double oldWidth = getWidth();
+        final double oldHeight = getHeight();
+        final Rect2D oldChildLayoutBounds = layout.getChildLayoutBounds();
 
-        Rect2D oldChildLayoutBounds = layout.getChildLayoutBounds();
+        validateLayout();
+
         LayoutSize widthHint = LayoutSize.of(oldChildLayoutBounds.w);
         LayoutSize prefHeight = layout.calculateLayoutHeight(LayoutSizeType.PREF, widthHint);
         LayoutSize prefWidth = layout.calculateLayoutWidth(LayoutSizeType.PREF, prefHeight);
@@ -80,6 +82,9 @@ public class GridPanel extends Panel implements IGridPanel {
         double dx = AlignUtil.alignAnchorX(oldWidth, getWidth(), anchor);
         double dy = AlignUtil.alignAnchorY(oldHeight, getHeight(), anchor);
         translate(dx, dy);
+
+        // Update ILayoutElemPeer with the new bounds
+        getLayoutAdapter().setLayoutBounds(Rect2D.of(dx, dy, newLayoutWidth, newLayoutHeight));
     }
 
     @Override

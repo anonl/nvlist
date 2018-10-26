@@ -63,12 +63,14 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     private void addRow() {
         rows.add(new GridRow());
         rowFinished = false;
+        invalidateLayout();
     }
 
     @Override
     public void remove(ILayoutElem elem) {
         for (GridRow row : rows) {
             if (row.remove(elem)) {
+                invalidateLayout();
                 break;
             }
         }
@@ -256,6 +258,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         Checks.checkRange(amount, "amount", 0.0);
 
         rowSpacing = amount;
+        invalidateLayout();
     }
 
     @Override
@@ -263,6 +266,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
         Checks.checkRange(amount, "amount", 0.0);
 
         colSpacing = amount;
+        invalidateLayout();
     }
 
     private static double getTotalBreadth(TrackMetrics[] sizes) {

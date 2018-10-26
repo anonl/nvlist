@@ -288,7 +288,8 @@ public abstract class Transformable extends VisualElement implements ITransforma
     @Override
     public void setBounds(double x, double y, double w, double h) {
         setRotation(0);
-        setLayoutBounds(Rect2D.of(x, y, w, h));
+
+        getLayoutAdapter().setLayoutBounds(Rect2D.of(x, y, w, h));
     }
 
     @Override

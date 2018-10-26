@@ -42,7 +42,8 @@ public abstract class Panel extends Transformable implements IPanel {
 
     protected abstract ILayoutGroup getLayout();
 
-    protected void validateLayout() {
+    @Override
+    public void validateLayout() {
         ILayoutGroup layout = getLayout();
         if (!layout.isLayoutValid()) {
             layout.layout();

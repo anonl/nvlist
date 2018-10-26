@@ -80,6 +80,7 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     protected void setInsets(Insets2D i) {
         insets = Checks.checkNotNull(i);
+        invalidateLayout();
     }
 
 }

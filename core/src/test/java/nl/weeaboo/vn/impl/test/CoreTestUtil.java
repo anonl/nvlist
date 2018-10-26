@@ -41,10 +41,17 @@ public final class CoreTestUtil {
         return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
     }
 
-    /** Creates a new image drawable, initialized with a dummy texture. */
+    /**
+     * @see #newImage(int, int)
+     */
     public static ImageDrawable newImage() {
+        return newImage(2, 2);
+    }
+
+    /** Creates a new image drawable, initialized with a dummy texture. */
+    public static ImageDrawable newImage(int w, int h) {
         ImageDrawable image = new ImageDrawable();
-        image.setTexture(new TestTexture());
+        image.setTexture(new TestTexture(w, h));
         return image;
     }
 
