@@ -1,0 +1,8 @@
+@@
+
+require("builtin/vn")
+
+nilBlur = ImageFx.blur(nil)
+blur10 = ImageFx.blur("a", 10)
+
+@@

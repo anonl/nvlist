@@ -1,0 +1,8 @@
+@@
+
+require("builtin/vn")
+
+nilBrighten = ImageFx.brighten(nil)
+brighten = ImageFx.brighten("a", .5)
+
+@@

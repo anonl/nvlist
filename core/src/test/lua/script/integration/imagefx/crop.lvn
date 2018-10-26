@@ -1,0 +1,7 @@
+@@
+
+require("builtin/vn")
+
+cropped = ImageFx.crop("a", 460, 820, 360, 360)
+
+@@

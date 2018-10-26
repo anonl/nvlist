@@ -1,0 +1,12 @@
+@@
+
+require("builtin/vn")
+
+missingTexture = ImageFx.composite({{}})
+
+composite = ImageFx.composite({
+    {tex="a"},
+    {tex="b", pos={640, 360}}
+}, 1000, 500)
+
+@@

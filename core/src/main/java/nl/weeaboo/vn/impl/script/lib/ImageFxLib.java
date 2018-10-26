@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import nl.weeaboo.common.Area2D;
 import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
@@ -16,7 +13,6 @@ import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.ContextUtil;
@@ -56,32 +52,33 @@ public class ImageFxLib extends LuaLib {
      *        <li>texture or filename
      *        <li>(optional) number: crop top-left x
      *        <li>(optional) number: crop top-left y
-     *        <li>(optional) number: crop bottom-right x
-     *        <li>(optional) number: crop bottom-right y
+     *        <li>(optional) number: crop width
+     *        <li>(optional) number: crop height
      *        </ol>
      * @return A texture object, or {@code null} if the input texture was missing.
      * @throws ScriptException If the passed method arguments are illegal.
      */
     @ScriptFunction
     public Varargs crop(Varargs args) throws ScriptException {
-        IImageModule imageModule = env.getImageModule();
+        // IImageModule imageModule = env.getImageModule();
+        //
+        // ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
+        // if (tex == null) {
+        // return LuaNil.NIL;
+        // }
+        //
+        // double x = args.optdouble(2, 0.0);
+        // double y = args.optdouble(3, 0.0);
+        // double w = args.optdouble(4, tex.getWidth());
+        // double h = args.optdouble(5, tex.getHeight());
+        //
+        // TextureRegion cropped = GdxTextureUtil.getTextureRegion(tex, Area2D.of(x, y, w, h));
+        // if (cropped == null) {
+        // throw new ScriptException("Unsupported texture type: " + tex);
+        // }
 
-        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
-        if (tex == null) {
-            return LuaNil.NIL;
-        }
-
-        double x = args.optdouble(2, 0.0);
-        double y = args.optdouble(3, 0.0);
-        double w = args.optdouble(4, tex.getWidth());
-        double h = args.optdouble(5, tex.getHeight());
-
-        TextureRegion cropped = GdxTextureUtil.getTextureRegion(tex, Area2D.of(x, y, w, h));
-        if (cropped == null) {
-            throw new ScriptException("Unsupported texture type: " + tex);
-        }
-
-        return LuajavaLib.toUserdata(cropped, ITexture.class);
+        // TODO: Not implemented yet. Re-enable ImageFxLibTest.testCrop() afterwards
+        throw new ScriptException("crop isn't implemented yet");
     }
 
     private static Set<Direction> getDirectionsSet(Varargs args, int index, int defaultValue) {
