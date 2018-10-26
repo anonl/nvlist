@@ -33,10 +33,8 @@ public final class GridPanelTest {
         panel.add(a).grow();
         panel.add(b);
         panel.endRow();
-
         panel.add(c).growY();
         panel.add(d);
-        panel.endRow();
 
         panel.setBounds(0, 0, 100, 100);
         panel.validateLayout();
@@ -65,6 +63,30 @@ public final class GridPanelTest {
         panel.pack(5);
 
         assertLayout(panel, 45, 45, 10, 10);
+    }
+
+    /**
+     * Test whitespace-adding settings (insets and row/col spacing).
+     */
+    @Test
+    public void testSpacing() {
+        panel.setBounds(0, 0, 100, 100);
+        panel.setInsets(20, 10, 20, 10);
+        panel.setRowSpacing(4);
+        panel.setColSpacing(2);
+
+        panel.add(a).grow();
+        panel.add(b).grow();
+        panel.endRow();
+        panel.add(c).grow();
+        panel.add(d).grow();
+
+        panel.validateLayout();
+
+        assertLayout(a, 10, 20, 39, 28);
+        assertLayout(b, 51, 20, 39, 28);
+        assertLayout(c, 10, 52, 39, 28);
+        assertLayout(d, 51, 52, 39, 28);
     }
 
     private void assertLayout(IVisualElement elem, int x, int y, int w, int h) {
