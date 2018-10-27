@@ -1,15 +1,10 @@
 package nl.weeaboo.vn.impl.scene;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.core.TestInputAdapter;
-import nl.weeaboo.vn.impl.input.Input;
-import nl.weeaboo.vn.impl.input.InputConfig;
-import nl.weeaboo.vn.impl.input.NativeInput;
+import nl.weeaboo.vn.impl.input.MockInput;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.script.ScriptFunctionStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
@@ -23,18 +18,15 @@ public class ButtonClickTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
 
-    private Input input;
-    private TestInputAdapter inputAdapter;
+    private MockInput input;
 
     private ScriptEventDispatcher eventDispatcher;
     private ScriptFunctionStub clickFunction;
     private Button button;
 
     @Before
-    public void before() throws IOException {
-        NativeInput nativeInput = new NativeInput();
-        inputAdapter = new TestInputAdapter(nativeInput);
-        input = new Input(nativeInput, InputConfig.readDefaultConfig());
+    public void before() {
+        input = new MockInput();
 
         eventDispatcher = new ScriptEventDispatcher();
         clickFunction = new ScriptFunctionStub();
@@ -106,14 +98,14 @@ public class ButtonClickTest {
     @Test
     public void touchMargin() {
         Assert.assertEquals(0, button.getTouchMargin(), EPSILON);
-        inputAdapter.pointerMoved(-5, 0);
-        inputAdapter.mousePress();
+        input.pointerMoved(-5, 0);
+        input.mousePress();
         handleInput();
         assertButtonState(false, false, 0);
 
         // Increase touch margin so the mouse pointer now fall inside the collision shape
         button.setTouchMargin(10);
-        inputAdapter.mousePress();
+        input.mousePress();
         handleInput();
         assertButtonState(true, true, 0);
 
@@ -124,13 +116,13 @@ public class ButtonClickTest {
     }
 
     private void pressButton() {
-        inputAdapter.mouseFocus(button);
-        inputAdapter.mousePress();
+        input.mouseFocus(button);
+        input.mousePress();
         handleInput();
     }
 
     private void releaseButton() {
-        inputAdapter.mouseRelease();
+        input.mouseRelease();
         handleInput();
     }
 
@@ -145,7 +137,6 @@ public class ButtonClickTest {
     }
 
     private void handleInput() {
-        inputAdapter.updateInput();
         button.handleInput(Matrix.identityMatrix(), input);
 
         for (IScriptFunction func : eventDispatcher.retrieveWork()) {

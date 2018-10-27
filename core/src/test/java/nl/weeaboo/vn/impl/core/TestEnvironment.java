@@ -1,10 +1,5 @@
 package nl.weeaboo.vn.impl.core;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
@@ -14,9 +9,7 @@ import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.vn.gdx.res.TestAssetManager;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ImageModule;
-import nl.weeaboo.vn.impl.input.Input;
-import nl.weeaboo.vn.impl.input.InputConfig;
-import nl.weeaboo.vn.impl.input.NativeInput;
+import nl.weeaboo.vn.impl.input.MockInput;
 import nl.weeaboo.vn.impl.save.SaveModule;
 import nl.weeaboo.vn.impl.script.lib.BasicScriptInitializer;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
@@ -34,12 +27,11 @@ import nl.weeaboo.vn.impl.video.VideoModule;
 public class TestEnvironment extends DefaultEnvironment {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LoggerFactory.getLogger(TestEnvironment.class);
 
-    private final TestInputAdapter inputAdapter;
+    private final MockInput input;
 
-    public TestEnvironment(TestInputAdapter inputAdapter) {
-        this.inputAdapter = Checks.checkNotNull(inputAdapter);
+    public TestEnvironment(MockInput input) {
+        this.input = Checks.checkNotNull(input);
     }
 
     /** Creates a new test environment using the default settings */
@@ -49,17 +41,7 @@ public class TestEnvironment extends DefaultEnvironment {
         final MultiFileSystem fileSystem = TestFileSystem.newInstance();
         final GdxFileSystem gdxFileSystem = new InternalGdxFileSystem("");
         final NovelPrefsStore prefs = new NovelPrefsStore(fileSystem, fileSystem.getWritableFileSystem());
-
-        NativeInput nativeInput = new NativeInput();
-        final TestInputAdapter inputAdapter = new TestInputAdapter(nativeInput);
-        InputConfig inputConfig;
-        try {
-            inputConfig = InputConfig.readDefaultConfig();
-        } catch (IOException ioe) {
-            inputConfig = new InputConfig();
-            LOG.warn("Error reading input config", ioe);
-        }
-        final Input input = new Input(nativeInput, inputConfig);
+        final MockInput input = new MockInput();
 
         StaticEnvironment.NOTIFIER.set(notifier);
         StaticEnvironment.FILE_SYSTEM.set(fileSystem);
@@ -74,7 +56,7 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new GdxFontStore(gdxFileSystem));
 
-        TestEnvironment env = new TestEnvironment(inputAdapter);
+        TestEnvironment env = new TestEnvironment(input);
         env.renderEnv = CoreTestUtil.BASIC_ENV;
         env.statsModule = new StatsModule(env, new PlayTimerStub());
 
@@ -123,13 +105,13 @@ public class TestEnvironment extends DefaultEnvironment {
     /**
      * @return An input adapter that may be used to generate dummy input during testing.
      */
-    public TestInputAdapter getInputAdapter() {
-        return inputAdapter;
+    public MockInput getInput() {
+        return input;
     }
 
     /** Calls update on everything in the environment that needs it (contexts and input adapter). */
     public void update() {
-        inputAdapter.updateInput(100);
+        input.increaseTime(100);
 
         contextManager.update();
     }

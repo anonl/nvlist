@@ -1,16 +1,15 @@
-package nl.weeaboo.vn.impl.core;
+package nl.weeaboo.vn.impl.input;
 
-import nl.weeaboo.common.Rect2D;
-import nl.weeaboo.vn.impl.input.InputAccumulator;
 import nl.weeaboo.vn.impl.input.InputAccumulator.ButtonEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerPositionEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PointerScrollEvent;
 import nl.weeaboo.vn.impl.input.InputAccumulator.PressState;
-import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.input.KeyCode;
-import nl.weeaboo.vn.scene.IVisualElement;
 
-public class TestInputAdapter {
+/**
+ * @see MockInput
+ */
+final class TestInputAdapter {
 
     private final NativeInput input;
     private final InputAccumulator accum = new InputAccumulator();
@@ -74,20 +73,6 @@ public class TestInputAdapter {
         accum.addEvent(new ButtonEvent(getTime(), button, PressState.RELEASE));
     }
 
-    /**
-     * Adds events to the input buffer for the following sequence of events:
-     * <ol>
-     * <li>Move the pointer over the element.
-     * <li>Press the left mouse button.
-     * <li>Release the left mouse button.
-     * </ol>
-     */
-    public void click(IVisualElement elem) {
-        mouseFocus(elem);
-        mousePress();
-        mouseRelease();
-    }
-
     /** Adds a left mouse button press event to the input buffer. */
     public void mousePress() {
         buttonPressed(KeyCode.MOUSE_LEFT);
@@ -96,12 +81,6 @@ public class TestInputAdapter {
     /** Adds a left mouse button release event to the input buffer. */
     public void mouseRelease() {
         buttonReleased(KeyCode.MOUSE_LEFT);
-    }
-
-    /** Moves the mouse pointer over the specified element. */
-    public void mouseFocus(IVisualElement elem) {
-        Rect2D bounds = elem.getVisualBounds();
-        pointerMoved(bounds.x + bounds.w / 2, bounds.y + bounds.h / 2);
     }
 
 }

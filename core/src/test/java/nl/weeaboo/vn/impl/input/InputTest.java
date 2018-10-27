@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.core.TestInputAdapter;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.VKey;

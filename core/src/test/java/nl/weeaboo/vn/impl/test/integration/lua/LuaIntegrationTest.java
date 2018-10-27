@@ -12,8 +12,8 @@ import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.input.TestInputConfig;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -72,7 +72,7 @@ public abstract class LuaIntegrationTest {
     }
 
     protected void textContinue() {
-        env.getInputAdapter().buttonPressed(TestInputConfig.TEXT_CONTINUE);
+        env.getInput().buttonPressed(VKey.TEXT_CONTINUE);
         env.update();
     }
 

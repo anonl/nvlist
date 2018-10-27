@@ -135,7 +135,7 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
     }
 
     /** The rectangle within which the scroll offsets must remain. */
-    private Area2D getScrollBounds() {
+    Area2D getScrollBounds() {
         List<Rect2D> childBounds = Lists.newArrayList();
         for (IVisualElement child : getChildren()) {
             childBounds.add(child.getVisualBounds());
