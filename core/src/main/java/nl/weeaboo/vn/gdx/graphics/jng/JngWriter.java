@@ -11,7 +11,6 @@ import java.nio.ByteOrder;
 import java.util.zip.CRC32;
 
 import javax.annotation.Nullable;
-import javax.imageio.IIOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,22 +79,19 @@ public final class JngWriter {
 
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(jpegData));
 
-        byte[] magic = new byte[JpegHelper.JPEG_MAGIC.length];
-        din.readFully(magic);
-        if (!JpegHelper.isJpeg(magic, 0, magic.length)) {
-            throw new IIOException("Invalig JPEG magic: " + JngInputUtil.toByteString(magic));
-        }
+        // Skip JPEG magic (already checked that the jpegData start with the expected value)
+        din.readFully(new byte[JpegHelper.JPEG_MAGIC.length]);
 
         while (true) {
             byte preMarkerByte = din.readByte();
             if (preMarkerByte != (byte)0xFF) {
-                throw new IIOException(String.format("Marker not preceeded by 0xFF: 0x%02x", preMarkerByte));
+                throw new IOException(String.format("Marker not preceeded by 0xFF: 0x%02x", preMarkerByte));
             }
 
             int marker = din.readUnsignedByte();
 
             int length = din.readUnsignedShort();
-            if (marker >= 0xc0 && marker <= 0xcf && marker != 0xC4 && marker != 0xC8) {
+            if (marker >= 0xc0 && marker <= 0xcf) {
                 colorSampleDepth = din.readUnsignedByte();
                 int h = din.readUnsignedShort();
                 int w = din.readUnsignedShort();
@@ -176,11 +172,6 @@ public final class JngWriter {
         Checks.checkState(colorBytes != null, "Color input must be set first");
 
         JngColorType outputColorType = getOutputColorType();
-        if (outputColorType.hasAlpha()) {
-            // If the output needs alpha, check first if the alpha input has set before writing anything
-            Checks.checkState(alphaBytes != null,
-                    "Alpha input must be set first (colorType=" + outputColorType + ")");
-        }
 
         ColorSettings color = new ColorSettings();
         color.colorType = outputColorType;
