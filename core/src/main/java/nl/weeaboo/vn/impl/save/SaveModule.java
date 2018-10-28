@@ -46,18 +46,19 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     private static final long serialVersionUID = SaveImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SaveModule.class);
-    private static final FilePath SHARED_GLOBALS_PATH = FilePath.of("save-shared.bin");
-    private static final FilePath SEEN_LOG_PATH = FilePath.of("seen.bin");
-    private static final FilePath ANALYTICS_PATH = FilePath.of("analytics.bin");
+
     private static final int QUICK_SAVE_OFFSET = 800;
-    private static final int NUM_QUICK_SAVE_SLOTS = 100;
+    private static final int NUM_QUICK_SAVE_SLOTS = 99;
     private static final int AUTO_SAVE_OFFSET = 900;
-    private static final int NUM_AUTO_SAVE_SLOTS = 100;
+    private static final int NUM_AUTO_SAVE_SLOTS = 99;
 
     private final IEnvironment env;
 
     private transient IStorage sharedGlobals;
     private transient LuaSerializer luaSerializer;
+
+    // The list order determines the save order, the load order is the opposite
+    private transient ImmutableList<IPersistentSavePlugin> persistentSavePlugins;
 
     public SaveModule(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
@@ -67,9 +68,18 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     private void initTransients() {
         sharedGlobals = new Storage();
-        tryLoadSharedGlobals();
 
         luaSerializer = new LuaSerializer();
+
+        IStatsModule statsModule = env.getStatsModule();
+        persistentSavePlugins = ImmutableList.of(
+                new PlayTimerSavePlugin(statsModule.getPlayTimer(), sharedGlobals),
+                new SeenLogSavePlugin(statsModule.getSeenLog()),
+                new AnalyticsSavePlugin(statsModule.getAnalytics()),
+
+                // Save shared globals last (so other plugins can save their data in shared-globals)
+                new SharedGlobalsSavePlugin(sharedGlobals)
+        );
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -85,94 +95,29 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         savePersistent();
     }
 
-    protected final SecureFileWriter getSecureFileWriter() {
+    final SecureFileWriter getSecureFileWriter() {
         return new SecureFileWriter(getFileSystem());
     }
 
-    protected final IWritableFileSystem getFileSystem() {
+    final IWritableFileSystem getFileSystem() {
         return env.getOutputFileSystem();
     }
 
     @Override
     public void loadPersistent() {
-        tryLoadSharedGlobals();
+        SecureFileWriter writer = getSecureFileWriter();
 
-        IStatsModule statsModule = env.getStatsModule();
-
-        try {
-            statsModule.getPlayTimer().load(sharedGlobals);
-        } catch (IOException e) {
-            LOG.error("Unable to load play timer state from shared globals", e);
+        // Note: loads are in reverse order of saving
+        for (IPersistentSavePlugin plugin : Lists.reverse(persistentSavePlugins)) {
+            plugin.loadPersistent(writer);
         }
-
-        SecureFileWriter sfw = getSecureFileWriter();
-
-        try {
-            statsModule.getSeenLog().load(sfw, SEEN_LOG_PATH);
-        } catch (FileNotFoundException fnfe) {
-            // Seen log doesn't exist yet, not an error
-        } catch (IOException ioe) {
-            LOG.error("Error loading seen log", ioe);
-        }
-
-        try {
-            statsModule.getAnalytics().load(sfw, ANALYTICS_PATH);
-        } catch (FileNotFoundException fnfe) {
-            // Analytics file doesn't exist yet, not an error
-        } catch (IOException ioe) {
-            LOG.error("Error loading analytics", ioe);
-        }
-    }
-
-    private void tryLoadSharedGlobals() {
-        try {
-            // TODO LVN-017
-            // if (isVNDS()) {
-            //    sharedGlobals.set(VndsUtil.readVndsGlobalSav(fs));
-            // }
-            loadSharedGlobals();
-        } catch (FileNotFoundException fnfe) {
-            // Shared globals don't exist yet, not an error
-        } catch (IOException ioe) {
-            LOG.error("Error loading shared globals", ioe);
-        }
-    }
-
-    private void loadSharedGlobals() throws IOException {
-        SecureFileWriter sfw = getSecureFileWriter();
-        IStorage read = StorageIO.read(sfw, SHARED_GLOBALS_PATH);
-
-        sharedGlobals.clear();
-        sharedGlobals.addAll(read);
     }
 
     @Override
     public void savePersistent() {
-        IStatsModule statsModule = env.getStatsModule();
-        SecureFileWriter sfw = getSecureFileWriter();
-
-        try {
-            statsModule.getPlayTimer().save(sharedGlobals);
-        } catch (IOException e) {
-            LOG.error("Unable to save play timer state to shared globals", e);
-        }
-
-        try {
-            StorageIO.write(sharedGlobals, sfw, SHARED_GLOBALS_PATH);
-        } catch (IOException e) {
-            LOG.error("Unable to save shared globals", e);
-        }
-
-        try {
-            statsModule.getSeenLog().save(sfw, SEEN_LOG_PATH);
-        } catch (IOException e) {
-            LOG.error("Unable to save seen log", e);
-        }
-
-        try {
-            statsModule.getAnalytics().save(sfw, ANALYTICS_PATH);
-        } catch (IOException e) {
-            LOG.error("Unable to save analytics", e);
+        SecureFileWriter writer = getSecureFileWriter();
+        for (IPersistentSavePlugin plugin : persistentSavePlugins) {
+            plugin.savePersistent(writer);
         }
     }
 
@@ -373,7 +318,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     static boolean isQuickSaveSlot(int slot) {
-        return slot > QUICK_SAVE_OFFSET && slot < QUICK_SAVE_OFFSET + NUM_QUICK_SAVE_SLOTS;
+        return slot > QUICK_SAVE_OFFSET && slot <= QUICK_SAVE_OFFSET + NUM_QUICK_SAVE_SLOTS;
     }
 
     @Override
@@ -386,7 +331,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     static boolean isAutoSaveSlot(int slot) {
-        return slot > AUTO_SAVE_OFFSET && slot < AUTO_SAVE_OFFSET + NUM_AUTO_SAVE_SLOTS;
+        return slot > AUTO_SAVE_OFFSET && slot <= AUTO_SAVE_OFFSET + NUM_AUTO_SAVE_SLOTS;
     }
 
 }

@@ -51,6 +51,22 @@ public final class Duration implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return Long.hashCode(millis);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Duration)) {
+            return false;
+        }
+
+        Duration other = (Duration)obj;
+        return millis == other.millis;
+    }
+
+
+    @Override
     public String toString() {
         long seconds = toSeconds();
 

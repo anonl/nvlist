@@ -10,21 +10,26 @@ public class PlayTimerStub implements IPlayTimer {
 
     private static final long serialVersionUID = 1L;
 
+    private long playTimeSeconds;
+
     @Override
     public void update() {
+        playTimeSeconds++;
     }
 
     @Override
     public void load(IStorage storage) throws IOException {
+        playTimeSeconds = storage.getLong(PlayTimer.KEY_TOTAL, playTimeSeconds);
     }
 
     @Override
     public void save(IStorage storage) throws IOException {
+        storage.setLong(PlayTimer.KEY_TOTAL, playTimeSeconds);
     }
 
     @Override
     public Duration getTotalPlayTime() {
-        return Duration.ZERO;
+        return Duration.fromSeconds(playTimeSeconds);
     }
 
     @Override

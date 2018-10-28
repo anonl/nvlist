@@ -14,7 +14,7 @@ final class PlayTimer implements IPlayTimer {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String KEY_TOTAL = "vn.timer.total";
+    static final String KEY_TOTAL = "vn.timer.total";
 
     private static final StaticRef<IInput> inputRef = StaticEnvironment.INPUT;
 
@@ -70,12 +70,16 @@ final class PlayTimer implements IPlayTimer {
 
     @Override
     public Duration getTotalPlayTime() {
-        return Duration.fromDuration(totalNanos, TimeUnit.NANOSECONDS);
+        return Duration.fromDuration(nanosToMillis(totalNanos), TimeUnit.MILLISECONDS);
     }
 
     @Override
     public Duration getIdleTime() {
-        return Duration.fromDuration(idleNanos, TimeUnit.NANOSECONDS);
+        return Duration.fromDuration(nanosToMillis(idleNanos), TimeUnit.MILLISECONDS);
+    }
+
+    private long nanosToMillis(long nanos) {
+        return TimeUnit.NANOSECONDS.toMillis(nanos);
     }
 
 }

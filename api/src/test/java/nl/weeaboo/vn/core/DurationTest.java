@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.testing.EqualsTester;
 
 import nl.weeaboo.gdx.test.ExceptionTester;
 
@@ -65,6 +66,14 @@ public class DurationTest {
 
         // We never change to days or weeks, hours is the largest unit printed
         assertString("120:00:00", Duration.fromDuration(5, TimeUnit.DAYS));
+    }
+
+    @Test
+    public void testEquals() {
+        new EqualsTester()
+            .addEqualityGroup(Duration.ZERO, Duration.fromSeconds(0))
+            .addEqualityGroup(Duration.fromDuration(1000, TimeUnit.MILLISECONDS), Duration.fromSeconds(1))
+            .testEquals();
     }
 
     private void assertSeconds(long expected, Duration duration) {
