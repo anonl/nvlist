@@ -5,21 +5,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 
 public class TextRendererTest {
 
+    private final ExceptionTester exTester = new ExceptionTester();
+
     private TextRenderer textRenderer;
-    private ExceptionTester exTester;
 
     @Before
     public void before() {
-        exTester = new ExceptionTester();
-
         TestFontStore fontStore = new TestFontStore();
         textRenderer = new TextRenderer(fontStore);
     }
@@ -83,8 +84,10 @@ public class TextRendererTest {
         assertVisibleText(0, 1);
         textRenderer.increaseVisibleText(3);
         assertVisibleText(0, 4);
+        assertFinalLineFullyVisible(false);
         textRenderer.increaseVisibleText(999);
         assertVisibleText(0, 11); // Capped to number of glyphs in text
+        assertFinalLineFullyVisible(true);
         // Negative increases are ignored
         textRenderer.increaseVisibleText(-1);
         assertVisibleText(0, 11);
@@ -104,6 +107,36 @@ public class TextRendererTest {
         Assert.assertTrue(textRenderer.isRightToLeft());
     }
 
+    /**
+     * Calculate per-line visual bounds.
+     */
+    @Test
+    public void testLineBounds() {
+        textRenderer.setText("one\ntwo\nthree");
+
+        // Each glyph is 32x32
+        assertLineBounds(0, Rect2D.of(0,  0, 3 * 32, 32));
+        assertLineBounds(1, Rect2D.of(0, 32, 3 * 32, 32));
+        assertLineBounds(2, Rect2D.of(0, 64, 5 * 32, 32));
+        Assert.assertEquals(64.0, textRenderer.getTextHeight(1, 3), 0.0);
+
+        // Out-of-bounds line indices return an empty rect
+        assertLineBounds(-1, Rect2D.EMPTY);
+        Assert.assertEquals(3, textRenderer.getEndLine());
+        assertLineBounds(4, Rect2D.EMPTY);
+
+        // Empty text has empty bounds
+        textRenderer.setText("");
+        Assert.assertEquals(0.0, textRenderer.getNativeWidth(), 0.0);
+        Assert.assertEquals(0.0, textRenderer.getNativeHeight(), 0.0);
+        assertLineBounds(0, Rect2D.EMPTY);
+    }
+
+    private void assertLineBounds(int lineIndex, Rect2D expectedBounds) {
+        Rect2D actualBounds = textRenderer.getLineBounds(lineIndex);
+        RectAssert.assertEquals(expectedBounds, actualBounds, 0.0);
+    }
+
     private void assertOffsetY(int expected, VerticalAlign valign) {
         Assert.assertEquals(expected, TextRenderer.getOffsetY(textRenderer, valign), 0f);
     }
@@ -115,6 +148,10 @@ public class TextRendererTest {
     private void assertVisibleText(int expectedStartLine, double expectedVisibleText) {
         Assert.assertEquals(expectedStartLine, textRenderer.getStartLine());
         Assert.assertEquals(expectedVisibleText, textRenderer.getVisibleText(), 0.01);
+    }
+
+    private void assertFinalLineFullyVisible(boolean expected) {
+        Assert.assertEquals(expected, textRenderer.isFinalLineFullyVisible());
     }
 
 }

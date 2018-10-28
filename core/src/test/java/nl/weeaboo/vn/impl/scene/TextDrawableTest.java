@@ -90,4 +90,5 @@ public class TextDrawableTest {
         td.extendDefaultStyle(TextStyle.ITALIC);
         Assert.assertEquals(TextStyle.BOLD_ITALIC, r.getDefaultStyle());
     }
+
 }
