@@ -57,9 +57,6 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     private transient IStorage sharedGlobals;
     private transient LuaSerializer luaSerializer;
 
-    // The list order determines the save order, the load order is the opposite
-    private transient ImmutableList<IPersistentSavePlugin> persistentSavePlugins;
-
     public SaveModule(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
 
@@ -70,16 +67,6 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         sharedGlobals = new Storage();
 
         luaSerializer = new LuaSerializer();
-
-        IStatsModule statsModule = env.getStatsModule();
-        persistentSavePlugins = ImmutableList.of(
-                new PlayTimerSavePlugin(statsModule.getPlayTimer(), sharedGlobals),
-                new SeenLogSavePlugin(statsModule.getSeenLog()),
-                new AnalyticsSavePlugin(statsModule.getAnalytics()),
-
-                // Save shared globals last (so other plugins can save their data in shared-globals)
-                new SharedGlobalsSavePlugin(sharedGlobals)
-        );
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -95,6 +82,19 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         savePersistent();
     }
 
+    /** The list order determines the save order, the load order is the opposite */
+    private List<IPersistentSavePlugin> getPersistentSavePlugins() {
+        IStatsModule statsModule = env.getStatsModule();
+        return ImmutableList.of(
+                new PlayTimerSavePlugin(statsModule.getPlayTimer(), sharedGlobals),
+                new SeenLogSavePlugin(statsModule.getSeenLog()),
+                new AnalyticsSavePlugin(statsModule.getAnalytics()),
+
+                // Save shared globals last (so other plugins can save their data in shared-globals)
+                new SharedGlobalsSavePlugin(sharedGlobals)
+        );
+    }
+
     final SecureFileWriter getSecureFileWriter() {
         return new SecureFileWriter(getFileSystem());
     }
@@ -108,7 +108,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         SecureFileWriter writer = getSecureFileWriter();
 
         // Note: loads are in reverse order of saving
-        for (IPersistentSavePlugin plugin : Lists.reverse(persistentSavePlugins)) {
+        for (IPersistentSavePlugin plugin : Lists.reverse(getPersistentSavePlugins())) {
             plugin.loadPersistent(writer);
         }
     }
@@ -116,7 +116,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     @Override
     public void savePersistent() {
         SecureFileWriter writer = getSecureFileWriter();
-        for (IPersistentSavePlugin plugin : persistentSavePlugins) {
+        for (IPersistentSavePlugin plugin : getPersistentSavePlugins()) {
             plugin.savePersistent(writer);
         }
     }

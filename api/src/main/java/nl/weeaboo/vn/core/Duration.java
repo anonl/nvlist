@@ -3,6 +3,8 @@ package nl.weeaboo.vn.core;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.primitives.Longs;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 
@@ -52,7 +54,7 @@ public final class Duration implements Serializable {
 
     @Override
     public int hashCode() {
-        return Long.hashCode(millis);
+        return Longs.hashCode(millis);
     }
 
     @Override

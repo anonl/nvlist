@@ -8,7 +8,7 @@ import nl.weeaboo.vn.stats.IPlayTimer;
 
 public class PlayTimerStub implements IPlayTimer {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private long playTimeSeconds;
 
