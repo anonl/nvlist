@@ -40,8 +40,10 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
         lines.add(StringUtil.formatRoot("Memory use (non-heap): %s",
                 StringUtil.formatMemoryAmount(Gdx.app.getNativeHeap())));
 
-        GdxTextureStore texStore = StaticEnvironment.TEXTURE_STORE.get();
-        lines.add("Texture cache: " + texStore.getCacheStatus());
+        GdxTextureStore texStore = StaticEnvironment.TEXTURE_STORE.getIfPresent();
+        if (texStore != null) {
+            lines.add("Texture cache: " + texStore.getCacheStatus());
+        }
 
         return Joiner.on('\n').join(lines);
     }
