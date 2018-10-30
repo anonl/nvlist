@@ -51,7 +51,7 @@ public final class GdxFontStore extends AbstractResourceStore {
     private void loadBuiltInFont() {
         try {
             loadFont(Gdx.files.classpath("builtin/font/default.ttf"),
-                    new TextStyle(FontResourceLoader.DEFAULT_FONT_NAME, 16));
+                    new TextStyle(TextUtil.DEFAULT_FONT_NAME, 16));
         } catch (IOException e) {
             LOG.warn("Error loading built-in font", e);
         }
@@ -127,7 +127,7 @@ public final class GdxFontStore extends AbstractResourceStore {
         // Workaround for a bug in gdx-styledtext -- a null font name causes problems
         MutableTextStyle mts = styleArg.mutableCopy();
         if (styleArg.getFontName() == null) {
-            mts.setFontName(FontResourceLoader.DEFAULT_FONT_NAME);
+            mts.setFontName(TextUtil.DEFAULT_FONT_NAME);
         }
         TextStyle style = mts.immutableCopy();
 

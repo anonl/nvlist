@@ -6,6 +6,8 @@ import nl.weeaboo.styledtext.StyledText;
 
 public final class TextUtil {
 
+    public static final String DEFAULT_FONT_NAME = "default";
+
     private TextUtil() {
     }
 

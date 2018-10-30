@@ -24,7 +24,7 @@ final class LoadingFontStore implements ILoadingFontStore {
     public IFontMetrics getFontMetrics(TextStyle style) {
         final GdxFontStore fontStore = StaticEnvironment.FONT_STORE.get();
 
-        String fontName = style.getFontName(FontResourceLoader.DEFAULT_FONT_NAME);
+        String fontName = style.getFontName(TextUtil.DEFAULT_FONT_NAME);
         ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(fontName));
         if (resourceId == null) {
             return fontStore.getFontMetrics(FilePath.empty(), style);

@@ -15,7 +15,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
-import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -25,48 +25,38 @@ import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.stats.FileLine;
 import nl.weeaboo.vn.impl.text.TextRenderer;
+import nl.weeaboo.vn.impl.text.TextUtil;
 import nl.weeaboo.vn.input.IInput;
-import nl.weeaboo.vn.input.INativeInput;
-import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
-import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.text.ILoadingFontStore;
+import nl.weeaboo.vn.text.ITextRenderer;
 
 public final class Osd implements Disposable {
 
-    private final ILoadingFontStore fontStore;
-    private final PerformanceMetrics performanceMetrics;
+    private final IPerformanceMetrics performanceMetrics;
+    private final ITextRenderer textRenderer;
 
-    private TextRenderer textRenderer;
     private boolean visible = false;
 
-    private Osd(ILoadingFontStore fontStore, PerformanceMetrics perfMetrics) {
-        this.fontStore = Checks.checkNotNull(fontStore);
+    public Osd(ILoadingFontStore fontStore, IPerformanceMetrics perfMetrics) {
+        this(new TextRenderer(fontStore), perfMetrics);
+    }
+
+    public Osd(ITextRenderer textRenderer, IPerformanceMetrics perfMetrics) {
+        this.textRenderer = Checks.checkNotNull(textRenderer);
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
-    }
 
-    /** Constructor function. */
-    public static Osd newInstance(ILoadingFontStore fontStore, PerformanceMetrics perfMetrics) {
-        Osd osd = new Osd(fontStore, perfMetrics);
-        osd.init();
-        return osd;
-    }
-
-    private void init() {
-        textRenderer = new TextRenderer(fontStore);
-
-        MutableTextStyle normalBuilder = new MutableTextStyle("normal", EFontStyle.PLAIN, 16);
+        MutableTextStyle normalBuilder = new MutableTextStyle(TextUtil.DEFAULT_FONT_NAME, EFontStyle.PLAIN, 16);
         normalBuilder.setShadowColor(0xFF000000);
         normalBuilder.setShadowDx(.5f);
         normalBuilder.setShadowDy(.5f);
-        TextStyle normal = normalBuilder.immutableCopy();
-
-        textRenderer.setDefaultStyle(normal);
+        textRenderer.setDefaultStyle(normalBuilder.immutableCopy());
     }
 
     @Override
@@ -74,13 +64,13 @@ public final class Osd implements Disposable {
     }
 
     /** Handle input and update internal state. */
-    public void update(IEnvironment env, INativeInput input) {
+    public void update(IEnvironment env, IInput input) {
         if (!env.getPref(NovelPrefs.DEBUG)) {
             return; // Debug mode not enabled
         }
 
-        if (input.consumePress(KeyCode.F7)) {
-            visible = !visible;
+        if (input.consumePress(VKey.TOGGLE_OSD)) {
+            setVisible(!isVisible());
         }
     }
 
@@ -90,11 +80,21 @@ public final class Osd implements Disposable {
             return;
         }
 
-        IRenderEnv renv = env.getRenderEnv();
-        final Dim vsize = renv.getVirtualSize();
-        final int pad = Math.min(vsize.w, vsize.h) / 64;
-        final int wrapWidth = vsize.w - pad * 2;
+        Dim vsize = env.getRenderEnv().getVirtualSize();
+        int pad = Math.min(vsize.w, vsize.h) / 64;
+        int wrapWidth = vsize.w - pad * 2;
+        textRenderer.setMaxSize(wrapWidth, vsize.h - pad * 2);
+        textRenderer.setText(getOsdText(env));
 
+        batch.begin();
+        try {
+            GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, pad, -1);
+        } finally {
+            batch.end();
+        }
+    }
+
+    private StyledText getOsdText(IEnvironment env) {
         MutableStyledText text = new MutableStyledText();
         text.append(performanceMetrics.getPerformanceSummary());
 
@@ -121,22 +121,14 @@ public final class Osd implements Disposable {
             }
         }
 
-        Rect rclip = renv.getRealClip();
+        Rect rclip = env.getRenderEnv().getRealClip();
         text.append("\nResolution: [" + rclip.x + ", " + rclip.y + ", " + rclip.w + ", " + rclip.h + "]");
 
         IInput input = StaticEnvironment.INPUT.get();
         Vec2 pointerPos = input.getPointerPos(Matrix.identityMatrix());
         text.append("\nMouse: (" + Math.round(pointerPos.x) + ", " + Math.round(pointerPos.y) + ")");
 
-        textRenderer.setMaxSize(wrapWidth, vsize.h - pad * 2);
-        textRenderer.setText(text.immutableCopy());
-
-        batch.begin();
-        try {
-            GdxFontUtil.draw(batch, textRenderer.getVisibleLayout(), pad, pad, -1);
-        } finally {
-            batch.end();
-        }
+        return text.immutableCopy();
     }
 
     private static void printLayers(List<String> out, int indent, ILayer layer) {
@@ -147,6 +139,20 @@ public final class Osd implements Disposable {
         for (ILayer subLayer : layer.getSubLayers()) {
             printLayers(out, indent + 1, subLayer);
         }
+    }
+
+    /**
+     * @return {@code true} if visible.
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * Change visibility of the OSD overlay.
+     */
+    public void setVisible(boolean show) {
+        visible = show;
     }
 
 }

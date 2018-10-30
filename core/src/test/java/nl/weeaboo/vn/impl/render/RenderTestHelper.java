@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.impl.render;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -22,16 +25,18 @@ import nl.weeaboo.vn.render.IScreenRenderer;
 
 public class RenderTestHelper implements IDestructible {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RenderTestHelper.class);
+
     private final DrawBuffer drawBuffer;
+    private final Viewport viewport;
     private final GLScreenRenderer renderer;
 
     public RenderTestHelper(IRenderEnv renderEnv) {
         drawBuffer = new DrawBuffer();
-
-        Viewport viewPort = createViewport(renderEnv);
+        viewport = createViewport(renderEnv);
 
         renderer = new GLScreenRenderer(renderEnv, new RenderStats());
-        renderer.setProjectionMatrix(viewPort.getCamera().combined);
+        renderer.setProjectionMatrix(viewport.getCamera().combined);
     }
 
     private static Viewport createViewport(IRenderEnv renderEnv) {
@@ -119,5 +124,30 @@ public class RenderTestHelper implements IDestructible {
         });
     }
 
+    /**
+     * Runs some custom rendering code that needs direct access to a {@link SpriteBatch}.
+     */
+    public void renderCustom(ISpriteBatchConsumer renderOp) {
+        SpriteBatch batch = new SpriteBatch();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        try {
+            renderOp.render(batch);
+        } finally {
+            if (batch.isDrawing()) {
+                LOG.error("Custom render code forgot to end rendering");
+                batch.end();
+            }
+            batch.dispose();
+        }
+    }
 
+    public interface ISpriteBatchConsumer {
+
+        /**
+         * @param batch A sprite batch to render with. You must call {@link SpriteBatch#begin()} before you
+         *        start rendering.
+         */
+        void render(SpriteBatch batch);
+
+    }
 }

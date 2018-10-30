@@ -52,6 +52,7 @@ import nl.weeaboo.vn.impl.render.IBackBuffer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.impl.text.GdxFontStore;
+import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
@@ -132,7 +133,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         simulationRateLimiter.setSimulation(this, 60);
 
         sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
-        osd = Osd.newInstance(env.getTextModule().getFontStore(), performanceMetrics);
+        osd = new Osd(env.getTextModule().getFontStore(), performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -251,12 +252,12 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         novel.update();
     }
 
-    protected void handleInput(INativeInput input) {
-        debugControls.update(novel, input);
+    protected void handleInput(INativeInput nativeInput) {
+        debugControls.update(novel, nativeInput);
 
         IEnvironment env = novel.getEnv();
+        IInput input = StaticEnvironment.INPUT.get();
         osd.update(env, input);
-
     }
 
     protected void renderScreen(SpriteBatch batch) {

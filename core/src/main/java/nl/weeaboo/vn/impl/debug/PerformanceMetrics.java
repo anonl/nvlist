@@ -14,7 +14,7 @@ import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 
-public final class PerformanceMetrics {
+public final class PerformanceMetrics implements IPerformanceMetrics {
 
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceMetrics.class);
 
@@ -27,7 +27,8 @@ public final class PerformanceMetrics {
     public PerformanceMetrics() {
     }
 
-    String getPerformanceSummary() {
+    @Override
+    public String getPerformanceSummary() {
         List<String> lines = Lists.newArrayList();
         lines.add(StringUtil.formatRoot("FPS: %d (render)", Gdx.graphics.getFramesPerSecond()));
         if (logicFps > 0) {
@@ -54,12 +55,10 @@ public final class PerformanceMetrics {
         }
     }
 
-    /**
-     * @return The relative CPU load, or {@code -1} if not supported
-     */
+    @Override
     public double getCpuLoad() {
         if (cpuLoadError) {
-            return -1;
+            return Double.NaN;
         }
 
         // Checking CPU load is slow, so rate limit the calls and return a cached result if called too often
@@ -78,16 +77,18 @@ public final class PerformanceMetrics {
             method.setAccessible(true);
             cpuLoad = ((Number)method.invoke(osBean)).doubleValue();
         } catch (Exception e) {
-            // Method not supported
             LOG.info("Error obtaining CPU load (method not supported): " + e);
-            cpuLoadError = true;
-            cpuLoad = -1;
+            setCpuLoadError();
         } catch (NoClassDefFoundError e) {
             LOG.info("Error obtaining CPU load: Required method not implemented on this platform");
-            cpuLoadError = true;
-            cpuLoad = -1;
+            setCpuLoadError();
         }
         return cpuLoad;
+    }
+
+    private void setCpuLoadError() {
+        cpuLoadError = true;
+        cpuLoad = Double.NaN;
     }
 
     /** Internal 'game logic' update rate */

@@ -20,6 +20,7 @@ import nl.weeaboo.vn.gdx.graphics.PixmapTester;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 import nl.weeaboo.vn.impl.render.RenderTestHelper;
+import nl.weeaboo.vn.impl.render.RenderTestHelper.ISpriteBatchConsumer;
 import nl.weeaboo.vn.impl.test.integration.IntegrationTest;
 import nl.weeaboo.vn.render.IDrawTransform;
 
@@ -27,8 +28,6 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
 
     // Allow a small difference in color to account for rounding errors
     private static final int MAX_COLOR_DIFF = 2;
-
-    protected boolean generate = false;
 
     private RenderTestHelper renderer;
     private PixmapTester pixmapTester;
@@ -88,6 +87,10 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
 
     protected void drawTriangleGrid(ITexture tex, Area2D bounds) {
         renderer.drawTriangleGrid(tex, bounds);
+    }
+
+    protected void renderCustom(ISpriteBatchConsumer renderOp) {
+        renderer.renderCustom(renderOp);
     }
 
     /**
