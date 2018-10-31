@@ -41,6 +41,41 @@ public class ContextTest  {
         assertActiveContexts(alpha, beta);
     }
 
+    @Test
+    public void testContextListeners() {
+        ContextListenerStub ls = new ContextListenerStub();
+        alpha.addContextListener(ls);
+
+        alpha.setActive(true);
+        ls.consumeActivatedCount(1);
+
+        // An event is only triggered when the context becomes active, not when it's already active
+        alpha.setActive(true);
+        ls.consumeActivatedCount(0);
+
+        alpha.setActive(false);
+        ls.consumeDeactivatedCount(1);
+
+        // Like with activation, an event is only generated when the context isn't already deactivated
+        alpha.setActive(false);
+        ls.consumeDeactivatedCount(0);
+
+        // If the listener is removed, no further events are received
+        alpha.removeContextListener(ls);
+        alpha.setActive(true);
+
+        // Re-add listener for the next check
+        alpha.addContextListener(ls);
+
+        // Destroying the context also fires an event
+        alpha.destroy();
+        ls.consumeDestroyedCount(1);
+
+        // Double-destroy is a no-op
+        alpha.destroy();
+        ls.consumeDestroyedCount(0);
+    }
+
     private void assertActiveContexts(IContext... actives) {
         Set<IContext> activesSet = new HashSet<>();
         Collections.addAll(activesSet, actives);
