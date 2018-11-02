@@ -4,8 +4,11 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.AbstractList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.annotation.Nullable;
 
@@ -20,9 +23,7 @@ import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.vn.core.IDestructible;
 
 /** List implementation that automatically removes destroyed elements */
-public final class DestructibleElemList<T extends IDestructible> implements Iterable<T>, Externalizable {
-
-    private static final long serialVersionUID = 1L;
+public final class DestructibleElemList<T extends IDestructible> extends AbstractList<T> implements Externalizable {
 
     // --- Note: Uses custom serialization ---
     private final List<T> elements = Lists.newArrayList();
@@ -69,19 +70,63 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
         }
     }
 
-    /** Adds an element to the list. */
-    public void add(T elem) {
-        elements.add(elem);
+    @Override
+    public void add(int index, T elem) {
+        if (elem.isDestroyed()) {
+            return;
+        }
+
+        elements.add(index, elem);
         invalidateCachedSnapshot();
     }
 
-    /** Removes an element from the list. */
-    public void remove(Object elem) {
-        elements.remove(elem);
+    @Override
+    public T get(int index) {
+        return elements.get(index);
+    }
+
+    @Override
+    public T set(int index, T element) {
+        if (element == null) {
+            throw new NullPointerException();
+        }
+
+        T replaced = elements.set(index, element);
         invalidateCachedSnapshot();
+        return replaced;
+    }
+
+    @Override
+    public boolean remove(Object elem) {
+        boolean removed = elements.remove(elem);
+        invalidateCachedSnapshot();
+        return removed;
+    }
+
+    @Override
+    public T remove(int index) {
+        T removed = elements.remove(index);
+        invalidateCachedSnapshot();
+        return removed;
+    }
+
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean removed = elements.removeAll(c);
+        invalidateCachedSnapshot();
+        return removed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean removed = elements.retainAll(c);
+        invalidateCachedSnapshot();
+        return removed;
     }
 
     /** Removes all elements from the list. */
+    @Override
     public void clear() {
         elements.clear();
         invalidateCachedSnapshot();
@@ -100,6 +145,7 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     /**
      * @return {@code true} if the given element is stored one or more times in this list.
      */
+    @Override
     public boolean contains(Object elem) {
         removeDestroyedElements();
         return elements.contains(elem);
@@ -108,6 +154,7 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     /**
      * @return The number of non-destroyed elements in the list.
      */
+    @Override
     public int size() {
         removeDestroyedElements();
         return elements.size();
@@ -116,6 +163,11 @@ public final class DestructibleElemList<T extends IDestructible> implements Iter
     @Override
     public Iterator<T> iterator() {
         return getSnapshot().iterator();
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return getSnapshot().asList().listIterator(index);
     }
 
     /**
