@@ -112,9 +112,7 @@ public class EnvironmentFactory {
 
         try {
             scriptEnv.initEnv();
-        } catch (ScriptException e) {
-            throw new InitException(e);
-        } catch (RuntimeException e) {
+        } catch (ScriptException | RuntimeException e) {
             throw new InitException(e);
         }
     }

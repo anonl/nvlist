@@ -85,9 +85,7 @@ public abstract class ResourceLoader implements IResourceResolver {
         try {
             return resolveCache.get(path);
         } catch (ExecutionException e) {
-            if (unresolvableFilenames.add(path)) {
-                LOG.warn("Resource not found '{}' :: {}", path, String.valueOf(e.getCause()));
-            }
+            LOG.warn("Resource not found '{}' :: {}", path, String.valueOf(e.getCause()));
             return null;
         }
     }
@@ -95,33 +93,36 @@ public abstract class ResourceLoader implements IResourceResolver {
     /**
      * Logs a warning if the given resource path redundantly includes a file extension.
      */
-    public void checkRedundantFileExt(FilePath resourcePath) {
-        FilePath filePath = ResourceId.extractFilePath(resourcePath.toString());
-        if (filePath == null || !checkFileExt) {
-            return;
+    public EFileExtCheckResult checkRedundantFileExt(FilePath resourcePath) {
+        if (!checkFileExt) {
+            return EFileExtCheckResult.DISABLED;
         }
 
+        FilePath filePath = ResourceId.extractFilePath(resourcePath.toString());
         if (!checkedRedundantFilenames.add(filePath)) {
-            return;
+            return EFileExtCheckResult.ALREADY_CHECKED;
         }
 
         // If the file has an extension, isn't valid, but would be valid with a different extension...
-        if (!filePath.getExt().isEmpty() && !isValidFilename(filePath)) {
-            ResourceId resourceId = resolveResource(filePath);
-            if (resourceId != null && isValidFilename(resourceId.getFilePath())) {
-                LOG.warn("Incorrect file extension: {}", filePath);
+        ResourceId resourceId = resolveResource(filePath);
+        if (resourceId == null) {
+            return EFileExtCheckResult.INVALID;
+        }
+
+        if (!filePath.getExt().isEmpty() && !isValidFilename(filePath) && isValidFilename(resourceId.getFilePath())) {
+            LOG.warn("Incorrect file extension: {}", filePath);
+            return EFileExtCheckResult.INVALID;
+        }
+
+        // Check if a file extension in the default list has been specified.
+        for (String ext : autoFileExts) {
+            if (filePath.getName().endsWith("." + ext)) {
+                LOG.debug("You don't need to specify the file extension: {}", filePath);
+                return EFileExtCheckResult.REDUNDANT;
             }
         }
 
-        //Check if a file extension in the default list has been specified.
-        for (String ext : autoFileExts) {
-            if (filePath.getName().endsWith("." + ext)) {
-                if (isValidFilename(filePath)) {
-                    LOG.debug("You don't need to specify the file extension: {}", filePath);
-                }
-                break;
-            }
-        }
+        return EFileExtCheckResult.OK;
     }
 
     /**
@@ -203,6 +204,13 @@ public abstract class ResourceLoader implements IResourceResolver {
         this.preloadHandler = Checks.checkNotNull(preloadHandler);
     }
 
+    /**
+     * Toggles an automatic check for redundant/incorrect file extensions in filenames passed to this resource loader.
+     */
+    protected void setCheckFileExts(boolean check) {
+        checkFileExt = check;
+    }
+
     private final class FileResolveFunction extends CacheLoader<FilePath, ResourceId> {
 
         @Override
@@ -226,4 +234,13 @@ public abstract class ResourceLoader implements IResourceResolver {
         }
 
     }
+
+    public enum EFileExtCheckResult {
+        DISABLED,
+        ALREADY_CHECKED,
+        REDUNDANT,
+        INVALID,
+        OK
+    }
+
 }

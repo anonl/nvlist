@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.core;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -15,34 +16,29 @@ import com.google.common.collect.ImmutableSet;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.test.SerializeTester;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
+import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.impl.core.ResourceLoader.EFileExtCheckResult;
+import nl.weeaboo.vn.stats.IResourceSeenLog;
 
 public class FileResourceLoaderTest {
 
     private static final FilePath BASE_FOLDER = FilePath.of("base/");
 
-    private FileResourceLoader resourceLoader;
-    private @Nullable ResourceId lastPreload;
+    private TestEnvironment env;
+    private TestResourceLoader resourceLoader;
 
     @Before
     public void before() throws IOException {
-        TestEnvironment env = TestEnvironment.newInstance();
+        env = TestEnvironment.newInstance();
 
         IWritableFileSystem outputFileSystem = env.getOutputFileSystem();
         writeTestFiles(outputFileSystem);
 
-        resourceLoader = new FileResourceLoader(env, MediaType.OTHER, BASE_FOLDER) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void preloadNormalized(ResourceId resourceId) {
-                super.preloadNormalized(resourceId);
-
-                lastPreload = resourceId;
-            }
-        };
+        resourceLoader = new TestResourceLoader(env);
     }
 
     private void writeTestFiles(IWritableFileSystem fs) throws IOException {
@@ -94,6 +90,10 @@ public class FileResourceLoaderTest {
         assertValidFilename(false, "valid.jpg");
         assertValidFilename(true, "a.txt");
         assertFiles(Arrays.asList("a.txt", "b.txt"));
+
+        // Attempt to get the contents from an invalid folder (I/O exception causes the folder to be treated as empty)
+        resourceLoader.getFilesException = new IOException("test");
+        assertFiles(FilePath.of("invalidFolder"), ImmutableSet.of());
     }
 
     /** Check that the preload method calls preloadNormalized for any valid filename */
@@ -106,40 +106,123 @@ public class FileResourceLoaderTest {
         // Incorrect file ext is automatically fixed
         assertPreload("valid.png", "valid.txt");
         assertPreload("valid.png", "valid");
+
         assertPreload(null, "invalid");
+        // Further attempts to load an invalid resource still fail, but follow a slightly different code path
+        assertPreload(null, "invalid");
+
+        // Set a preload handler, check that it's called
+        PreloadHandlerStub preloadHandler = new PreloadHandlerStub();
+        resourceLoader.setPreloadHandler(preloadHandler);
+        assertPreload("valid.png", "valid");
+        preloadHandler.consumePreloaded(new ResourceId(MediaType.OTHER, FilePath.of("valid.png")));
+    }
+
+    @Test
+    public void testSerialize() {
+        FileResourceLoader reserialized = SerializeTester.reserialize(resourceLoader);
+
+        Assert.assertEquals(true, reserialized.isValidFilename(FilePath.of("valid.jpg")));
+    }
+
+    @Test
+    public void testCheckRedundantFileExt() {
+        resourceLoader.setCheckFileExts(false);
+        checkFileExt("valid.jpg", EFileExtCheckResult.DISABLED);
+
+        resourceLoader.setAutoFileExts("jpg");
+        resourceLoader.setCheckFileExts(true);
+        checkFileExt("valid.txt", EFileExtCheckResult.INVALID);
+        checkFileExt("valid.jpg", EFileExtCheckResult.REDUNDANT);
+        // As an optimization, each file path is only checked once
+        checkFileExt("valid.jpg", EFileExtCheckResult.ALREADY_CHECKED);
+        checkFileExt("valid", EFileExtCheckResult.OK);
+    }
+
+    @Test
+    public void testLogLoad() {
+        // Log a resource load
+        FilePath filePath = FilePath.of("valid.jpg");
+        ResourceId resourceId = resourceLoader.resolveResource(filePath);
+        resourceLoader.logLoad(resourceId, new ResourceLoadInfo(MediaType.OTHER, filePath));
+
+        // The resource load event is passed along to the stats module
+        IResourceSeenLog resourceLog = env.getStatsModule().getSeenLog().getResourceLog();
+        Assert.assertEquals(true, resourceLog.hasSeen(resourceId));
+    }
+
+    private void checkFileExt(@Nullable String inputFilename, EFileExtCheckResult expectedResult) {
+        Assert.assertEquals(expectedResult, resourceLoader.checkRedundantFileExt(toPath(inputFilename)));
     }
 
     private void assertPreload(String expectedNormalized, String inputFilename) {
-        lastPreload = null;
+        resourceLoader.lastPreload = null;
         resourceLoader.preload(FilePath.of(inputFilename));
-        String actual = (lastPreload != null ? lastPreload.getFilePath().toString() : null);
+
+        String actual = null;
+        if (resourceLoader.lastPreload != null) {
+            actual = resourceLoader.lastPreload.getFilePath().toString();
+        }
         Assert.assertEquals(expectedNormalized, actual);
     }
 
     private void assertFiles(Collection<String> expected) {
+        assertFiles(FilePath.empty(), expected);
+    }
+
+    private void assertFiles(FilePath folder, Collection<String> expected) {
         ImmutableSet.Builder<FilePath> expectedSet = ImmutableSet.builder();
         for (String exp : expected) {
             expectedSet.add(FilePath.of(exp));
         }
 
-        Assert.assertEquals(expectedSet.build(),
-                ImmutableSet.copyOf(resourceLoader.getMediaFiles(FilePath.empty())));
+        Assert.assertEquals(expectedSet.build(), ImmutableSet.copyOf(resourceLoader.getMediaFiles(folder)));
     }
 
     private void assertNormalizedFilename(String expectedNormalized, String inputFilename) {
-        ResourceId resourceId = resourceLoader.resolveResource(
-                inputFilename != null ? FilePath.of(inputFilename) : null);
+        ResourceId resourceId = resourceLoader.resolveResource(toPath(inputFilename));
         String actual = (resourceId != null ? resourceId.getFilePath().toString() : null);
         Assert.assertEquals(expectedNormalized, actual);
     }
 
+    private @Nullable FilePath toPath(@Nullable String inputFilename) {
+        return inputFilename != null ? FilePath.of(inputFilename) : null;
+    }
+
     private void assertValidFilename(boolean expectedValid, String path) {
         Assert.assertEquals(expectedValid, resourceLoader.isValidFilename(
-                path != null ? FilePath.of(path) : null));
+                toPath(path)));
     }
 
     private static void writeString(IWritableFileSystem fs, String path) throws IOException {
         FileSystemUtil.writeString(fs, FilePath.of(path), path);
     }
 
+    private static final class TestResourceLoader extends FileResourceLoader {
+
+        private static final long serialVersionUID = 1L;
+
+        private @Nullable ResourceId lastPreload;
+        private @Nullable IOException getFilesException;
+
+        public TestResourceLoader(IEnvironment env) {
+            super(env, MediaType.OTHER, BASE_FOLDER);
+        }
+
+        @Override
+        protected void preloadNormalized(ResourceId resourceId) {
+            super.preloadNormalized(resourceId);
+
+            lastPreload = resourceId;
+        }
+
+        @Override
+        protected List<FilePath> getFiles(FilePath folder) throws IOException {
+            if (getFilesException != null) {
+                throw getFilesException;
+            }
+            return super.getFiles(folder);
+        }
+
+    }
 }

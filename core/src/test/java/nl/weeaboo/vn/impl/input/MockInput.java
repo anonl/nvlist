@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.input;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,9 @@ import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.IVisualElement;
 
-public class MockInput implements IInput {
+public class MockInput implements IInput, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Map<VKey, ButtonState> buttonStates = new HashMap<>();
     private final Vec2 pointerPos = new Vec2();
