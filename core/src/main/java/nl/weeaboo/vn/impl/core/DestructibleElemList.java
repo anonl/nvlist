@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.lua2.io.DelayedReader;
@@ -175,7 +177,8 @@ public final class DestructibleElemList<T extends IDestructible> extends Abstrac
      */
     public ImmutableCollection<T> getSnapshot() {
         ImmutableCollection<T> result = cachedSnapshot;
-        if (result == null) {
+        if (result == null || Iterables.any(result, IDestructible::isDestroyed)) {
+            // If snapshot doesn't exist or is outdated (contains destroyed elements)
             result = getSnapshot(Predicates.alwaysTrue());
             cachedSnapshot = result;
         }
@@ -216,7 +219,7 @@ public final class DestructibleElemList<T extends IDestructible> extends Abstrac
         for (T elem : elements) {
             if (elem.isDestroyed()) {
                 if (removed == null) {
-                    removed = Lists.newArrayList();
+                    removed = new ArrayList<>();
                 }
                 removed.add(elem);
             }

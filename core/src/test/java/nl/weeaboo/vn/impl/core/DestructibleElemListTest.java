@@ -1,123 +1,78 @@
 package nl.weeaboo.vn.impl.core;
 
-import static com.google.common.collect.testing.testers.ListListIteratorTester.getListIteratorFullyModifiableMethod;
-import static com.google.common.collect.testing.testers.ListSubListTester.getSubListOriginalListSetAffectsSubListLargeListMethod;
-import static com.google.common.collect.testing.testers.ListSubListTester.getSubListOriginalListSetAffectsSubListMethod;
-import static com.google.common.collect.testing.testers.ListSubListTester.getSubListSubListRemoveAffectsOriginalLargeListMethod;
+import java.util.Arrays;
 
-import java.io.Serializable;
-import java.util.List;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.testing.ListTestSuiteBuilder;
-import com.google.common.collect.testing.SampleElements;
-import com.google.common.collect.testing.TestListGenerator;
-import com.google.common.collect.testing.features.CollectionFeature;
-import com.google.common.collect.testing.features.CollectionSize;
-import com.google.common.collect.testing.features.ListFeature;
-import com.google.common.collect.testing.testers.ListSubListTester;
-
-import junit.framework.TestSuite;
-import nl.weeaboo.vn.core.IDestructible;
+import com.google.common.base.Predicates;
 
 public final class DestructibleElemListTest {
 
+    private final MockDestructible d1 = new MockDestructible(1);
+    private final MockDestructible d2 = new MockDestructible(2);
+
+    private final DestructibleElemList<MockDestructible> list = new DestructibleElemList<>();
+
+    /**
+     * Destroyed elements are automatically removed from the list.
+     */
     @Test
-    public static TestSuite suite() throws NoSuchMethodException, SecurityException {
-        return ListTestSuiteBuilder.using(new TestGenerator())
-                .named("DestructibleElemList")
-                .withFeatures(
-                        ListFeature.SUPPORTS_SET,
-                        ListFeature.SUPPORTS_ADD_WITH_INDEX,
-                        ListFeature.SUPPORTS_REMOVE_WITH_INDEX,
-                        CollectionFeature.SERIALIZABLE,
-                        // CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
-                        CollectionSize.ANY)
-                .suppressing(
-                        // Skip various tests that assume iterator() returns a mutable view of the list
-                        getSubListOriginalListSetAffectsSubListMethod(),
-                        getSubListOriginalListSetAffectsSubListLargeListMethod(),
-                        getSubListSubListRemoveAffectsOriginalLargeListMethod(),
-                        getListIteratorFullyModifiableMethod(),
-                        ListSubListTester.class.getMethod("testSubList_subListClearAffectsOriginal"))
-                .createTestSuite();
+    public void testRemoveDestroyed() {
+        list.add(d1);
+        list.add(d2);
+
+        d1.destroy();
+        Assert.assertEquals(Arrays.asList(d2), list);
+        d2.destroy();
+        Assert.assertEquals(Arrays.asList(), list);
     }
 
-    private static final class SampleDestructibles extends SampleElements<Dummy> {
+    /**
+     * Find the first element matching a particular predicate.
+     */
+    @Test
+    public void testFindFirst() {
+        // Returns null if not found
+        Assert.assertSame(null, list.findFirst(Predicates.alwaysFalse()));
 
-        public SampleDestructibles() {
-            super(new Dummy(1), new Dummy(2), new Dummy(3), new Dummy(4), new Dummy(5));
-        }
+        MockDestructible d3a = new MockDestructible(3);
+        MockDestructible d3b = new MockDestructible(3);
 
+        list.add(d1);
+        list.add(d2);
+        list.add(d3a);
+        list.add(d3b);
+
+        Assert.assertSame(d3a, list.findFirst(elem -> elem.getId() == 3));
+
+        d3a.destroy();
+
+        Assert.assertSame(d3b, list.findFirst(elem -> elem.getId() == 3));
     }
 
-    private static final class TestGenerator implements TestListGenerator<Dummy> {
+    @Test
+    public void testDestroyAll() {
+        list.add(d1);
+        list.add(d2);
+        list.destroyAll();
 
-        @Override
-        public SampleElements<Dummy> samples() {
-            return new SampleDestructibles();
-        }
-
-        @Override
-        public Dummy[] createArray(int length) {
-            return new Dummy[length];
-        }
-
-        @Override
-        public Iterable<Dummy> order(List<Dummy> insertionOrder) {
-            return insertionOrder;
-        }
-
-        @Override
-        public DestructibleElemList<Dummy> create(Object... elements) {
-            DestructibleElemList<Dummy> list = new DestructibleElemList<>();
-            for (Object elem : elements) {
-                list.add((Dummy)elem);
-            }
-            return list;
-        }
+        // List is empty (all elements destroyed)
+        Assert.assertEquals(Arrays.asList(), list);
+        Assert.assertEquals(true, d1.isDestroyed());
+        Assert.assertEquals(true, d2.isDestroyed());
     }
 
-    private static final class Dummy implements IDestructible, Serializable {
+    /**
+     * Trying to add an already destroyed element is a no-op.
+     */
+    @Test
+    public void addAlreadyDestroyed() {
+        d1.destroy();
+        list.add(d1);
 
-        private static final long serialVersionUID = 1L;
-
-        private final int id;
-        private boolean destroyed;
-
-        private Dummy(int id) {
-            this.id = id;
-        }
-
-        @Override
-        public void destroy() {
-            destroyed = true;
-        }
-
-        @Override
-        public boolean isDestroyed() {
-            return destroyed;
-        }
-
-        @Override
-        public int hashCode() {
-            return id;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Dummy)) {
-                return false;
-            }
-            Dummy dummy = (Dummy)obj;
-            return id == dummy.id;
-        }
-
-        @Override
-        public String toString() {
-            return "Dummy [id=" + id + "]";
-        }
-
+        // List is still empty
+        Assert.assertEquals(true, list.isEmpty());
     }
+
 }
