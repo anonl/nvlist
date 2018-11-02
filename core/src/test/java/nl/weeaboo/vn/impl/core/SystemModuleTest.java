@@ -1,10 +1,17 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Sets;
+
 import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
 
@@ -14,13 +21,13 @@ public class SystemModuleTest {
     private final StaticRef<IPreferenceStore> prefsRef = StaticEnvironment.PREFS;
 
     private TestSystemEnv systemEnv;
-    private SystemModuleMock systemModule;
+    private TestSystemModule systemModule;
 
     @Before
     public void before() {
         TestEnvironment env = TestEnvironment.newInstance();
         systemEnv = env.getSystemEnv();
-        systemModule = new SystemModuleMock(env);
+        systemModule = new TestSystemModule(env);
     }
 
     @Test
@@ -68,6 +75,44 @@ public class SystemModuleTest {
         systemModule.onPrefsChanged(prefs);
         // The appropriate script function is called
         Assert.assertEquals(KnownScriptFunctions.ON_PREFS_CHANGE, systemModule.consumeLastCallled());
+    }
+
+    private static final class TestSystemModule extends SystemModule {
+
+        private static final long serialVersionUID = 1L;
+
+        private final AtomicInteger doExitCalled = new AtomicInteger();
+        private final AtomicReference<String> lastCalled = new AtomicReference<>();
+        private final Set<String> existingFunctions = Sets.newHashSet();
+
+        public TestSystemModule(IEnvironment env) {
+            super(env);
+        }
+
+        public void addFunction(String functionName) {
+            existingFunctions.add(functionName);
+        }
+
+        @Override
+        protected void doExit() {
+            doExitCalled.incrementAndGet();
+            super.doExit();
+        }
+
+        public int consumeDoExitCount() {
+            return doExitCalled.getAndSet(0);
+        }
+
+        @Override
+        protected boolean callFunction(String functionName) {
+            lastCalled.set(functionName);
+            return existingFunctions.contains(functionName);
+        }
+
+        public String consumeLastCallled() {
+            return lastCalled.getAndSet(null);
+        }
+
     }
 
 }

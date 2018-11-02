@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
@@ -41,7 +40,7 @@ public class SystemModule extends AbstractModule implements ISystemModule {
     public void exit(boolean force) {
         LOG.info("SystemEventHandler.exit({})", force);
 
-        if (force || !call(KnownScriptFunctions.ON_EXIT)) {
+        if (force || !callFunction(KnownScriptFunctions.ON_EXIT)) {
             doExit();
         }
     }
@@ -75,12 +74,15 @@ public class SystemModule extends AbstractModule implements ISystemModule {
 
         LOG.info("SystemEventHandler.onPrefsChanged()");
 
-        call(KnownScriptFunctions.ON_PREFS_CHANGE);
+        callFunction(KnownScriptFunctions.ON_PREFS_CHANGE);
     }
 
-    protected boolean call(String functionName) {
-        IContextManager contextManager = env.getContextManager();
-        IContext context = contextManager.getPrimaryContext();
+    protected boolean callFunction(String functionName) {
+        return callFunction(env, functionName);
+    }
+
+    static boolean callFunction(IEnvironment env, String functionName) {
+        IContext context = env.getContextManager().getPrimaryContext();
         try {
             LuaScriptUtil.callFunction(context, functionName);
             return true;

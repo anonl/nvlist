@@ -71,7 +71,7 @@ public class TestEnvironment extends DefaultEnvironment {
         env.soundModule = new SoundModule(env);
         env.textModule = new TextModule(env);
         env.videoModule = new VideoModule(env);
-        env.systemModule = new SystemModuleStub();
+        env.systemModule = new MockSystemModule(env);
 
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         env.contextManager = new ContextManager(contextFactory);

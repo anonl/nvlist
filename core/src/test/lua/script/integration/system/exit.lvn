@@ -1,0 +1,23 @@
+@@
+
+require("builtin/vn")
+
+exitOk = false
+exitError = false
+
+function onExit()
+    if not exitOk then
+        exitOk = true
+    else
+        exitError = true
+        error("test")
+    end
+end
+
+-- exitOk -> true
+System.exit()
+
+-- exitError -> true
+System.exit()
+
+@@

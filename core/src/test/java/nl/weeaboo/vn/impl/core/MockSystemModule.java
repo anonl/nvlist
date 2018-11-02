@@ -3,14 +3,21 @@ package nl.weeaboo.vn.impl.core;
 import com.badlogic.gdx.Application.ApplicationType;
 
 import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 
-public class SystemModuleStub implements ISystemModule {
+public class MockSystemModule implements ISystemModule {
 
     private static final long serialVersionUID = 1L;
 
+    private final IEnvironment env;
+
     private transient SystemEnv systemEnv;
+
+    public MockSystemModule(IEnvironment env) {
+        this.env = env;
+    }
 
     @Override
     public void destroy() {
@@ -22,6 +29,9 @@ public class SystemModuleStub implements ISystemModule {
 
     @Override
     public void exit(boolean force) {
+        if (!force) {
+            SystemModule.callFunction(env, KnownScriptFunctions.ON_EXIT);
+        }
     }
 
     @Override
