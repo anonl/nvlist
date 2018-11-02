@@ -4,7 +4,7 @@ import org.junit.Assert;
 
 import nl.weeaboo.vn.layout.LayoutSize;
 
-public final class LayoutSizeAssert {
+final class LayoutSizeAssert {
 
     private static final double EPSILON = .001;
 

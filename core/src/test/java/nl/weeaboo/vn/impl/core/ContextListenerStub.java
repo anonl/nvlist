@@ -7,7 +7,7 @@ import org.junit.Assert;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 
-public final class ContextListenerStub implements IContextListener {
+final class ContextListenerStub implements IContextListener {
 
     private static final long serialVersionUID = 1L;
 
