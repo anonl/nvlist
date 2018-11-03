@@ -154,6 +154,9 @@ public class MatrixTest {
             transform.transform(pts, 0, 1);
             ApiTestUtil.assertEquals(expected.x, expected.y, new Vec2(pts[0], pts[1]), EPSILON);
         }
+
+        // Transform zero points (does nothing, but check that it doesn't crash)
+        transform.transform(new float[0], 0, 0);
     }
 
     @Test

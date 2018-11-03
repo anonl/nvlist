@@ -45,7 +45,7 @@ public final class ResourceLoadInfo {
         String name = Filenames.stripExtension(filePath.toString()) + suffix;
         String ext = filePath.getExt();
         if (!Strings.isNullOrEmpty(ext)) {
-            name += ext;
+            name += "." + ext;
         }
 
         return withPath(ResourceId.toResourcePath(FilePath.of(name), getSubId()));

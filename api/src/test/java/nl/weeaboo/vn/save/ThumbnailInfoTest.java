@@ -12,7 +12,14 @@ public class ThumbnailInfoTest {
 
     @Test
     public void validArgs() {
-        ThumbnailInfo info = new ThumbnailInfo(PATH, Dim.of(23, 45));
+        // Size-only constructor
+        ThumbnailInfo info = new ThumbnailInfo(Dim.of(1, 2));
+        // This assert will break if default path accidentally changes
+        Assert.assertEquals(FilePath.of("thumbnail.jpg"), info.getPath());
+        Assert.assertEquals(Dim.of(1, 2), info.getImageSize());
+
+        // Path + size constructor
+        info = new ThumbnailInfo(PATH, Dim.of(23, 45));
         Assert.assertEquals(FilePath.of("path"), info.getPath());
         Assert.assertEquals(Dim.of(23, 45), info.getImageSize());
     }

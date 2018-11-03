@@ -43,12 +43,23 @@ public class ResourceLoadInfoTest {
 
     @Test
     public void testAppenders() {
-        ResourceLoadInfo info = new ResourceLoadInfo(MEDIA_TYPE, FilePath.of("x"));
-        assertPath("a", info.withPath(FilePath.of("a")));
-        assertPath("xy", info.withFileSuffix("y"));
-        assertPath("x#y", info.withSubId("y"));
-        assertPath("x#y", info.withAppendedSubId("y"));
-        assertPath("x#y-z", info.withSubId("y").withAppendedSubId("z"));
+        final ResourceLoadInfo x = loadInfo("x");
+        final ResourceLoadInfo xDash = loadInfo("x-");
+        final ResourceLoadInfo xSubYDash = loadInfo("x#y-");
+        final ResourceLoadInfo xWithExt = loadInfo("x.ext");
+
+        assertPath("a", x.withPath(FilePath.of("a")));
+        assertPath("xy", x.withFileSuffix("y"));
+        assertPath("xy.ext", xWithExt.withFileSuffix("y"));
+        assertPath("x#y", x.withSubId("y"));
+        assertPath("x#y", x.withAppendedSubId("y"));
+        assertPath("x-#y", xDash.withAppendedSubId("y"));
+        assertPath("x#y-z", xSubYDash.withAppendedSubId("z"));
+        assertPath("x#y-z", x.withSubId("y").withAppendedSubId("z"));
+    }
+
+    private ResourceLoadInfo loadInfo(String path) {
+        return new ResourceLoadInfo(MEDIA_TYPE, FilePath.of(path));
     }
 
     private void assertPath(String expected, ResourceLoadInfo loadInfo) {

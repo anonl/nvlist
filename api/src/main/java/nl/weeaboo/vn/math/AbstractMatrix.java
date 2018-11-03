@@ -36,7 +36,6 @@ abstract class AbstractMatrix implements Serializable {
         this(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12);
     }
 
-    //Functions
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeDouble(m00);
         out.writeDouble(m01);
