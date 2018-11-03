@@ -10,6 +10,9 @@ public class StoragePrimitiveTest {
     @Test
     public void testNull() {
         StoragePrimitive p = StoragePrimitive.fromJson("null");
+        Assert.assertEquals(false, p.isBoolean());
+        Assert.assertEquals(false, p.isDouble());
+        Assert.assertEquals(false, p.isString());
         assertBoolean(null, p);
         assertNumber(null, p);
         assertString(null, p);
@@ -18,6 +21,9 @@ public class StoragePrimitiveTest {
     @Test
     public void testBoolean() {
         StoragePrimitive p = StoragePrimitive.fromBoolean(true);
+        Assert.assertEquals(true, p.isBoolean());
+        Assert.assertEquals(false, p.isDouble());
+        Assert.assertEquals(false, p.isString());
         assertBoolean(true, p);
         assertNumber(null, p);
         assertString("true", p);
@@ -32,6 +38,9 @@ public class StoragePrimitiveTest {
     public void testNumber() {
         // Integer
         StoragePrimitive p = StoragePrimitive.fromDouble(-678);
+        Assert.assertEquals(false, p.isBoolean());
+        Assert.assertEquals(true, p.isDouble());
+        Assert.assertEquals(false, p.isString());
         assertBoolean(null, p);
         assertNumber(-678, p);
         assertString("-678", p);
@@ -46,6 +55,9 @@ public class StoragePrimitiveTest {
     @Test
     public void testString() {
         StoragePrimitive p = StoragePrimitive.fromString("test string");
+        Assert.assertEquals(false, p.isBoolean());
+        Assert.assertEquals(false, p.isDouble());
+        Assert.assertEquals(true, p.isString());
         assertBoolean(null, p);
         assertNumber(null, p);
         assertString("test string", p);
@@ -76,6 +88,9 @@ public class StoragePrimitiveTest {
         // Strings do not necessarily need to be quoted
         String unquoted = "for convenience, unquoted strings are also allowed";
         Assert.assertEquals("\"" + unquoted + "\"", StoragePrimitive.fromJson(unquoted).toJson());
+
+        // Strings that start with a double quote, but don't end with one are treated as unquoted
+        Assert.assertEquals("\"test", StoragePrimitive.fromJson("\"test").toString());
 
         // Unquoted strings may contain escape sequences
         String unquotedEscapes = "\\n \\r \\t \\f \\\\ \\' \\\"";
