@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.vm.LuaBoolean;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaDouble;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.LuaString;
@@ -39,16 +40,19 @@ public final class LuaStorage implements ILuaStorage {
 
     /** Converts a Lua value to its equivalent {@link StoragePrimitive}. */
     public static @Nullable StoragePrimitive luaToStorage(LuaValue lval) {
-        if (lval.isnil()) {
+        switch (lval.type()) {
+        case LuaConstants.TNIL:
             return null;
-        } else if (lval.isboolean()) {
+        case LuaConstants.TBOOLEAN:
             return StoragePrimitive.fromBoolean(lval.toboolean());
-        } else if (lval.isnumber()) {
+        case LuaConstants.TINT:
+        case LuaConstants.TNUMBER:
             return StoragePrimitive.fromDouble(lval.todouble());
-        } else if (lval.isstring()) {
+        case LuaConstants.TSTRING:
             return StoragePrimitive.fromString(lval.tojstring());
+        default:
+            throw new IllegalArgumentException("Unable to convert Lua type for storage: " + lval.typename());
         }
-        throw new IllegalArgumentException("Unable to convert Lua type for storage: " + lval.typename());
     }
 
     /** Converts a {@link StoragePrimitive} to its equivalent Lua value. */
@@ -59,10 +63,9 @@ public final class LuaStorage implements ILuaStorage {
             return LuaBoolean.valueOf(sval.toBoolean(false));
         } else if (sval.isDouble()) {
             return LuaDouble.valueOf(sval.toDouble(0.0));
-        } else if (sval.isString()) {
+        } else {
             return LuaString.valueOf(sval.toString(""));
         }
-        throw new IllegalArgumentException("Unable to convert storage primitive to Lua: " + sval.toJson());
     }
 
 }

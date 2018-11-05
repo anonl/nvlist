@@ -3,6 +3,8 @@ package nl.weeaboo.vn.save;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 /**
  * Provides general-purpose key/value storage. Storing null values isn't supported; any attempt to store a
  * null value will instead remove any existing value stored under that key.
@@ -110,7 +112,7 @@ public interface IStorage extends Serializable {
      * Stores a value under the given key. If {@code null}, removes any existing mapping for the given key
      * instead.
      */
-    void set(String key, StoragePrimitive val);
+    void set(String key, @Nullable StoragePrimitive val);
 
     /**
      * Stores a boolean value under the given key.
