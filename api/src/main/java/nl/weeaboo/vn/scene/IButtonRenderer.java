@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene;
 
+import javax.annotation.CheckForNull;
+
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
@@ -16,6 +18,12 @@ public interface IButtonRenderer extends IRenderable {
      * Sets the button label text.
      */
     void setText(StyledText stext);
+
+    /**
+     * Returns the background image for the button (if it exists).
+     */
+    @CheckForNull
+    INinePatch getTexture(ButtonViewState viewState);
 
     /**
      * Sets the button background to the supplied texture.

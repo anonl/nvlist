@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
 
 import nl.weeaboo.common.Area2D;
@@ -105,11 +107,15 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
     }
 
     @Override
-
     public void setText(StyledText stext) {
         textRenderer.setText(stext);
 
         pack();
+    }
+
+    @Override
+    public @Nullable INinePatch getTexture(ButtonViewState viewState) {
+        return textures.get(viewState);
     }
 
     @Override

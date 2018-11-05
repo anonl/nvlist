@@ -1,0 +1,7 @@
+@@
+
+require("builtin/vn")
+
+defaultViewport = Gui.createViewport()
+
+@@

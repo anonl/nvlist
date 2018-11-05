@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import java.util.EnumMap;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
@@ -9,6 +11,7 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.impl.image.NinePatch;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButtonRenderer;
@@ -72,7 +75,7 @@ public class ButtonRendererMock extends AbstractRenderable implements IButtonRen
      *
      * @see #setTexture(ButtonViewState, ITexture)
      */
-    public ITexture getRegularTexture(ButtonViewState viewState) {
+    public @Nullable ITexture getRegularTexture(ButtonViewState viewState) {
         return regularTextures.get(viewState);
     }
 
@@ -80,10 +83,26 @@ public class ButtonRendererMock extends AbstractRenderable implements IButtonRen
      * Returns the nine-patch associated with the given view state. If that state uses a texture, or no nine-patch was
      * set, {@code null} is returned instead.
      *
-     * @see #setTexture(ButtonViewState, INinePatch)
+     * @see #getTexture(ButtonViewState)
      */
-    public INinePatch getNinePatchTexture(ButtonViewState viewState) {
+    public @Nullable INinePatch getNinePatchTexture(ButtonViewState viewState) {
         return ninePatchTextures.get(viewState);
+    }
+
+
+    @Override
+    public @Nullable INinePatch getTexture(ButtonViewState viewState) {
+        INinePatch ninePatch = getNinePatchTexture(viewState);
+        if (ninePatch != null) {
+            return ninePatch;
+        }
+
+        ITexture texture = getRegularTexture(viewState);
+        if (texture != null) {
+            return new NinePatch(texture);
+        }
+
+        return null;
     }
 
     @Override

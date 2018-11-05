@@ -49,7 +49,7 @@ public class GuiLib extends LuaLib {
     public Varargs createButton(Varargs args) throws ScriptException {
         ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
         if (parentLayer == null) {
-            parentLayer = LuaScriptUtil.getRootLayer();
+            parentLayer = LuaScriptUtil.getActiveLayer();
         }
 
         IScriptContext scriptContext = LuaScriptUtil.getCurrentScriptContext();
@@ -88,7 +88,7 @@ public class GuiLib extends LuaLib {
     public Varargs createGridPanel(Varargs args) throws ScriptException {
         ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
         if (parentLayer == null) {
-            parentLayer = LuaScriptUtil.getRootLayer();
+            parentLayer = LuaScriptUtil.getActiveLayer();
         }
 
         GridPanel panel = new GridPanel();
@@ -112,7 +112,7 @@ public class GuiLib extends LuaLib {
     public Varargs createViewport(Varargs args) throws ScriptException {
         ILayer parentLayer = LuaConvertUtil.getLayerArg(args, 1);
         if (parentLayer == null) {
-            parentLayer = LuaScriptUtil.getRootLayer();
+            parentLayer = LuaScriptUtil.getActiveLayer();
         }
 
         Viewport viewport = new Viewport();

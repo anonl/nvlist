@@ -232,6 +232,11 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
+    public INinePatch getTexture(ButtonViewState viewState) {
+        return renderer.getTexture(viewState);
+    }
+
+    @Override
     public void setTexture(ButtonViewState viewState, ITexture tex) {
         renderer.setTexture(viewState, tex);
     }

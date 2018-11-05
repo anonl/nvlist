@@ -1,0 +1,11 @@
+@@
+
+require("builtin/vn")
+
+defaultButton = Gui.createButton()
+
+imageButton1 = Gui.createButton(nil, "button/button")
+
+imageButton2 = Gui.createButton(nil, tex("button/separate"))
+
+@@

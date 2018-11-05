@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene;
 
+import javax.annotation.CheckForNull;
+
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
@@ -93,6 +95,12 @@ public interface IButton extends ITransformable {
      * Sets the text displayed on top of this button.
      */
     public void setText(StyledText stext);
+
+    /**
+     * @see IButtonRenderer#getTexture(ButtonViewState)
+     */
+    @CheckForNull
+    INinePatch getTexture(ButtonViewState viewState);
 
     /**
      * @see IButtonRenderer#setTexture(ButtonViewState, ITexture)
