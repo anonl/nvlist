@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
+
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.LuaException;
@@ -231,7 +233,7 @@ public class TextLib extends LuaLib {
                 oldTableIndex = ipair.arg(1);
                 func = ipair.arg(2);
                 try {
-                    env = oldTriggers.getfenv();
+                    env = MoreObjects.firstNonNull(oldTriggers.getfenv(), env);
                 } catch (LuaException le) {
                     // This value has no fenv (not an error)
                     LOG.debug("No fenv for function embedded in text: #{}", oldTableIndex);

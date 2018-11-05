@@ -13,6 +13,7 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.impl.script.TestScriptExceptionHandler;
+import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 
@@ -57,6 +58,8 @@ public final class LuaTestUtil {
             Assert.assertEquals(val, global.toboolean());
         } else if (val instanceof String) {
             Assert.assertEquals(val, global.tojstring());
+        } else if (val instanceof Number) {
+            Assert.assertEquals(((Number)val).doubleValue(), global.todouble(), CoreTestUtil.EPSILON);
         } else {
             Assert.assertEquals(val, global.optuserdata(null));
         }

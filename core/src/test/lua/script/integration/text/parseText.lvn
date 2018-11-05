@@ -6,4 +6,6 @@ end
 
 oneText, oneTriggers = Text.parseText("abc [def()] ghi")
 
+twoText, twoTriggers = Text.parseText("abc [] ghi", {def})
+
 @@

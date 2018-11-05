@@ -161,7 +161,8 @@ public final class LuaConvertUtil {
         // Don't check upper bound -- otherwise varargs after an optional arg are annoying to use
         Checks.checkRange(luaStartIndex, "luaStartIndex", 1);
 
-        Object[] result = new Object[luaArgs.narg() + 1 - luaStartIndex];
+        int arrayLength = Math.max(0, luaArgs.narg() + 1 - luaStartIndex);
+        Object[] result = new Object[arrayLength];
         for (int n = 0; n < result.length; n++) {
             result[n] = CoerceLuaToJava.coerceArg(luaArgs.arg(luaStartIndex + n), Object.class);
         }

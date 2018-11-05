@@ -1,0 +1,22 @@
+
+@@
+
+require("builtin/vn")
+
+result = Text.format("Test {} {}", "abc", 123)
+
+formatStyled = Text.format(Text.createStyledText("Styled {}"), 123)
+
+missingFormat = Text.format()
+
+missingArg = "error"
+pcall(function()
+    missingArg = Text.format("Test {} {}", "abc")
+end)
+
+extraArg = "error"
+pcall(function()
+    extraArg = Text.format("Test {}", "abc", 123)
+end)
+
+@@

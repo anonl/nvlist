@@ -1,0 +1,14 @@
+
+@@
+
+require("builtin/vn")
+
+retNil = Text.parseLuaLiteral(nil)
+retTrue = Text.parseLuaLiteral('true')
+retFalse = Text.parseLuaLiteral('false')
+retStringDouble = Text.parseLuaLiteral('"string"')
+retStringSingle = Text.parseLuaLiteral("'string'")
+retNumber = Text.parseLuaLiteral("12.5")
+retNumberHex = Text.parseLuaLiteral("0xFEDC4321")
+
+@@

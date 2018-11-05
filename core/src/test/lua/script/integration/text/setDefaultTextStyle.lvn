@@ -1,0 +1,8 @@
+
+@@
+
+require("builtin/vn")
+
+Text.setDefaultTextStyle(Text.createStyle{fontName="test"})
+
+@@
