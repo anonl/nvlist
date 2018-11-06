@@ -15,6 +15,7 @@ import nl.weeaboo.vn.impl.script.lib.BasicScriptInitializer;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptLoader;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
+import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.impl.sound.SoundModule;
 import nl.weeaboo.vn.impl.stats.PlayTimerStub;
 import nl.weeaboo.vn.impl.stats.StatsModule;
@@ -55,6 +56,7 @@ public class TestEnvironment extends DefaultEnvironment {
                 gdxFileSystem, prefs));
         StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.FONT_STORE.set(new GdxFontStore(gdxFileSystem));
+        StaticEnvironment.MUSIC_STORE.set(new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
 
         TestEnvironment env = new TestEnvironment(input);
         env.renderEnv = CoreTestUtil.BASIC_ENV;

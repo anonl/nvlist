@@ -17,13 +17,13 @@ import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.AbstractModule;
-import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
+import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
 public class SoundModule extends AbstractModule implements ISoundModule {
 
@@ -32,21 +32,15 @@ public class SoundModule extends AbstractModule implements ISoundModule {
 
     private final StaticRef<GdxMusicStore> musicStore = StaticEnvironment.MUSIC_STORE;
 
-    protected final IEnvironment env;
-    protected final SoundResourceLoader resourceLoader;
-
+    private final SoundResourceLoader resourceLoader;
     private final ISoundController soundController;
 
     public SoundModule(IEnvironment env) {
-        this(env, new SoundResourceLoader(env), new SoundController());
+        this(new SoundResourceLoader(env), new SoundController());
     }
 
-    public SoundModule(IEnvironment env, SoundResourceLoader resourceLoader,
-            ISoundController soundController) {
-
-        this.env = env;
+    public SoundModule(SoundResourceLoader resourceLoader, ISoundController soundController) {
         this.resourceLoader = resourceLoader;
-
         this.soundController = soundController;
     }
 
@@ -74,20 +68,22 @@ public class SoundModule extends AbstractModule implements ISoundModule {
         FilePath path = loadInfo.getPath();
         resourceLoader.checkRedundantFileExt(path);
 
-        ResourceId resourceId = resourceLoader.resolveResource(path);
+        ResourceId resourceId = resolveResource(path);
         if (resourceId == null) {
-            LOG.debug("Unable to find sound file: " + path);
+            LOG.debug("Unable to find audio file: {}", path);
             return null;
         }
 
-        INativeAudio audio = createNativeAudio(resourceLoader, resourceId);
-        if (audio == null) {
-            LOG.debug("Unable to create native sound: " + path);
+        FilePath filename = resourceLoader.getAbsolutePath(resourceId.getFilePath());
+        IResource<Music> resource = musicStore.get().get(filename);
+        if (resource == null) {
+            LOG.warn("Error loading audio file: {}", path);
             return null;
         }
 
         resourceLoader.logLoad(resourceId, loadInfo);
-        return new Sound(soundController, stype, resourceId.getFilePath(), audio);
+
+        return new Sound(soundController, stype, resourceId.getFilePath(), new NativeAudio(resource));
     }
 
     /**
@@ -95,23 +91,17 @@ public class SoundModule extends AbstractModule implements ISoundModule {
      */
     @Override
     public @Nullable String getDisplayName(FilePath filename) {
-        ResourceId resourceId = resourceLoader.resolveResource(filename);
+        ResourceId resourceId = resolveResource(filename);
         if (resourceId == null) {
             return null;
         }
-        return "";
-    }
 
-    private @Nullable INativeAudio createNativeAudio(FileResourceLoader loader, ResourceId resourceId) {
-        FilePath filename = resourceId.getFilePath();
-        filename = loader.getAbsolutePath(filename);
-
-        IResource<Music> resource = musicStore.get().get(filename);
-        if (resource == null) {
+        ISoundDefinition def = resourceLoader.getSoundDef(resourceId.getFilePath());
+        if (def == null) {
             return null;
         }
 
-        return new NativeAudio(resource);
+        return def.getDisplayName();
     }
 
     @Override

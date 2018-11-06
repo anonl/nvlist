@@ -17,7 +17,7 @@ import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
-public class SoundController implements ISoundController {
+final class SoundController implements ISoundController {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
@@ -27,7 +27,7 @@ public class SoundController implements ISoundController {
 
     private boolean paused;
 
-    protected SoundController() {
+    SoundController() {
         masterVolume = new EnumMap<>(SoundType.class);
         for (SoundType type : SoundType.values()) {
             masterVolume.put(type, 1.0);

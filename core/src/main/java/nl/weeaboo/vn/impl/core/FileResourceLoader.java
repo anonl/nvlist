@@ -73,11 +73,16 @@ public class FileResourceLoader extends ResourceLoader {
     }
 
     /** Sets the base folder. Resource paths are resolved relative to this folder. */
-    public void setResourceFolder(FilePath folder) {
+    public final void setResourceFolder(FilePath folder) {
         if (!resourceFolder.equals(folder)) {
-            cachedFileSystemView = null;
             resourceFolder = folder;
+
+            onResourceFolderChanged();
         }
+    }
+
+    protected void onResourceFolderChanged() {
+        cachedFileSystemView = null;
     }
 
 }

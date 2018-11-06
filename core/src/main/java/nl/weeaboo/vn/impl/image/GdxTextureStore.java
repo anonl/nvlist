@@ -52,7 +52,7 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
     }
 
     /**
-     * Returns the image defintion corresponding to the specified image file, or {@code null} if the image
+     * Returns the image definition corresponding to the specified image file, or {@code null} if the image
      * doesn't exist or doesn't have an image definition..
      */
     @CheckForNull
