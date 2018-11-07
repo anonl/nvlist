@@ -30,6 +30,7 @@ import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
+import nl.weeaboo.vn.save.SaveFormatException;
 
 public class ImageDefinitionIOTest {
 
@@ -65,6 +66,24 @@ public class ImageDefinitionIOTest {
         Assert.assertEquals(GLTilingMode.REPEAT, def.getTilingModeY());
     }
 
+    /**
+     * Attempts to load an image definition file with an unsupported version result in an exception.
+     */
+    @Test(expected = SaveFormatException.class)
+    public void testInvalidVersion() throws IOException {
+        load("invalid-version.json");
+    }
+
+    /**
+     * Invalid entries are skipped, and the rest of the file is parsed as normal.
+     */
+    @Test
+    public void testInvalidEntry() throws IOException {
+        Collection<ImageDefinition> defs = load("invalid-entry.json");
+        // The valid entry is returned, but the invalid entry is skipped
+        Assert.assertEquals(1, defs.size());
+    }
+
     @Test
     public void subrectMinimal() throws IOException {
         ImageDefinition def = Iterables.getOnlyElement(load("subrects1.json"));
@@ -98,6 +117,7 @@ public class ImageDefinitionIOTest {
         writeDef(wfs, "img.json", "a");
         writeDef(wfs, "1/img.json", "b");
         writeDef(wfs, "1/2/img.json", "c");
+        FileSystemUtil.writeString(wfs, FilePath.of("3/3.txt"), "3");
 
         assertFileSystemContents(fileSystem, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
 

@@ -23,6 +23,7 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.vn.impl.test.TestFileSystem;
+import nl.weeaboo.vn.save.SaveFormatException;
 
 public class SoundDefinitionIOTest {
 
@@ -48,6 +49,23 @@ public class SoundDefinitionIOTest {
         Assert.assertEquals("MyDisplayName", def.getDisplayName());
     }
 
+    /**
+     * Attempts to load a sound definition file with an unsupported version result in an exception.
+     */
+    @Test(expected = SaveFormatException.class)
+    public void testInvalidVersion() throws IOException {
+        load("invalid-version.json");
+    }
+
+    /**
+     * Invalid entries are skipped, and the rest of the file is parsed as normal.
+     */
+    @Test
+    public void testInvalidEntry() throws IOException {
+        Collection<SoundDefinition> defs = load("invalid-entry.json");
+        // The valid entry is returned, but the invalid entry is skipped
+        Assert.assertEquals(1, defs.size());
+    }
 
     @Test
     public void testSerialize() throws IOException {
@@ -73,9 +91,9 @@ public class SoundDefinitionIOTest {
         writeDef(wfs, "snd.json", "a");
         writeDef(wfs, "1/snd.json", "b");
         writeDef(wfs, "1/2/snd.json", "c");
+        FileSystemUtil.writeString(wfs, FilePath.of("3/3.txt"), "3");
 
         assertFileSystemContents(fileSystem, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
-
     }
 
     private void assertFileSystemContents(IFileSystem fileSystem, FilePath rootFolder,
