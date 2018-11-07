@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.image.desc;
 import org.junit.Assert;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
 final class ImageDefinitionTestHelper {
@@ -16,7 +17,7 @@ final class ImageDefinitionTestHelper {
         throw new AssertionError("Not found: " + filename);
     }
 
-    public void assertEquals(ImageDefinition expected, ImageDefinition actual) {
+    public void assertEquals(IImageDefinition expected, IImageDefinition actual) {
         Assert.assertEquals(expected.getFilename(), actual.getFilename());
         Assert.assertEquals(expected.getSize(), actual.getSize());
         Assert.assertEquals(expected.getMinifyFilter(), actual.getMinifyFilter());
