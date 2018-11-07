@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.sound.desc;
 
 import org.junit.Assert;
 
+import nl.weeaboo.vn.sound.desc.ISoundDefinition;
+
 final class SoundDefinitionTestHelper {
 
     public SoundDefinition findDefById(Iterable<SoundDefinition> available, String filename) {
@@ -13,7 +15,7 @@ final class SoundDefinitionTestHelper {
         throw new AssertionError("Not found: " + filename);
     }
 
-    public void assertEquals(SoundDefinition expected, SoundDefinition actual) {
+    public void assertEquals(ISoundDefinition expected, ISoundDefinition actual) {
         Assert.assertEquals(expected.getFilename(), actual.getFilename());
         Assert.assertEquals(expected.getDisplayName(), actual.getDisplayName());
     }

@@ -3,12 +3,14 @@ package nl.weeaboo.vn.impl.sound.desc;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
+import com.google.errorprone.annotations.Immutable;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+@Immutable
 public final class SoundDefinition implements ISoundDefinition {
 
     // --- Also update SoundDefinitionJson when changing attributes ---

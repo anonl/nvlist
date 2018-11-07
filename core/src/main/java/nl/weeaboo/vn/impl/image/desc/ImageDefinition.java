@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
+import com.google.errorprone.annotations.Immutable;
 
 import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Checks;
@@ -23,6 +24,7 @@ import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
+@Immutable
 public final class ImageDefinition implements IImageDefinition {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageDefinition.class);

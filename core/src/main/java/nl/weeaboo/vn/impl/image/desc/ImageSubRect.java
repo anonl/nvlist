@@ -1,10 +1,13 @@
 package nl.weeaboo.vn.impl.image.desc;
 
+import com.google.errorprone.annotations.Immutable;
+
 import nl.weeaboo.common.Area;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
+@Immutable
 public final class ImageSubRect implements IImageSubRect {
 
     private static final long serialVersionUID = 1L;
