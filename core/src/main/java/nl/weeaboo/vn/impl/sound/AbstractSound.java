@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.impl.sound;
 
+import static nl.weeaboo.vn.sound.ISoundController.MAX_CHANNEL;
+import static nl.weeaboo.vn.sound.ISoundController.MIN_CHANNEL;
+
 import java.io.IOException;
 
 import com.google.common.base.Preconditions;
@@ -104,8 +107,7 @@ public abstract class AbstractSound implements ISound {
 
     @Override
     public void setPreferredChannel(int ch) {
-        Preconditions.checkArgument(ch == -1
-                || (ch >= ISoundController.MIN_CHANNEL && ch <= ISoundController.MAX_CHANNEL));
+        Preconditions.checkArgument(ch == -1 || (ch >= MIN_CHANNEL && ch <= MAX_CHANNEL));
 
         preferredChannel = ch;
     }

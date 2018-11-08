@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.Assert;
 
-import nl.weeaboo.vn.sound.ISound;
+import nl.weeaboo.vn.core.IStreamingMedia;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
@@ -30,8 +30,8 @@ final class SoundTestHelper {
         return sound;
     }
 
-    public void assertPlaying(ISound... sounds) {
-        for (ISound sound : sounds) {
+    public void assertPlaying(IStreamingMedia... sounds) {
+        for (IStreamingMedia sound : sounds) {
             String message = sound.toString();
             Assert.assertEquals(message, true, sound.isPlaying());
             Assert.assertEquals(message, false, sound.isPaused());
@@ -39,8 +39,8 @@ final class SoundTestHelper {
         }
     }
 
-    public void assertPaused(ISound... sounds) {
-        for (ISound sound : sounds) {
+    public void assertPaused(IStreamingMedia... sounds) {
+        for (IStreamingMedia sound : sounds) {
             String message = sound.toString();
             Assert.assertEquals(message, true, sound.isPlaying());
             Assert.assertEquals(message, true, sound.isPaused());
@@ -48,8 +48,8 @@ final class SoundTestHelper {
         }
     }
 
-    public void assertStopped(ISound... sounds) {
-        for (ISound sound : sounds) {
+    public void assertStopped(IStreamingMedia... sounds) {
+        for (IStreamingMedia sound : sounds) {
             String message = sound.toString();
             Assert.assertEquals(message, false, sound.isPlaying());
             Assert.assertEquals(message, false, sound.isPaused());

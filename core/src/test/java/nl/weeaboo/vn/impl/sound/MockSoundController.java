@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import org.junit.Assert;
 
+import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
@@ -20,6 +21,7 @@ class MockSoundController implements ISoundController {
     private final AtomicInteger stopAllCount = new AtomicInteger();
 
     private final Map<SoundType, Double> masterVolume = new EnumMap<>(SoundType.class);
+    private final IntMap<ISound> playing = new IntMap<>();
 
     @Override
     public void update() {
@@ -33,6 +35,7 @@ class MockSoundController implements ISoundController {
     @Override
     public void stopAll() {
         stopAllCount.incrementAndGet();
+        playing.clear();
     }
 
     void consumeStopAllCount(int expected) {
@@ -41,15 +44,17 @@ class MockSoundController implements ISoundController {
 
     @Override
     public void stop(int channel) {
+        stop(channel, 0);
     }
 
     @Override
     public void stop(int channel, int fadeOutMillis) {
+        playing.remove(channel);
     }
 
     @Override
     public @Nullable ISound get(int channel) {
-        return null;
+        return playing.get(channel);
     }
 
     @Override
@@ -69,6 +74,7 @@ class MockSoundController implements ISoundController {
 
     @Override
     public void set(int channel, ISound sound) {
+        playing.put(channel, sound);
     }
 
     @Override
