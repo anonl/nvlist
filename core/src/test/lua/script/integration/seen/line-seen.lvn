@@ -1,0 +1,15 @@
+@@
+
+require("builtin/vn")
+
+local file = "integration/seen/line-seen.lvn"
+
+Seen.markLineSeen(file, 2)
+
+luaAssertEquals(false, Seen.hasSeenLine(file, 1))
+luaAssertEquals(true, Seen.hasSeenLine(file, 2))
+
+@@
+
+dummy1
+dummy2

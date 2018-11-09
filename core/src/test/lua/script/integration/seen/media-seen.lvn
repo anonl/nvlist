@@ -1,0 +1,9 @@
+@@
+
+require("builtin/vn")
+
+seenImage = Seen.hasSeenImage("a")
+seenSound = Seen.hasSeenSound("alpha")
+seenVideo = Seen.hasSeenVideo("blank")
+
+@@

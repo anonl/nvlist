@@ -1,0 +1,16 @@
+@@
+
+require("builtin/vn")
+
+local id = "myChoice"
+Seen.registerChoice(id, 2)
+
+luaAssertEquals(false, Seen.hasSelectedChoice(id, 1))
+luaAssertEquals(false, Seen.hasSelectedChoice(id, 2))
+
+Seen.markChoiceSelected(id, 1)
+
+luaAssertEquals(true, Seen.hasSelectedChoice(id, 1))
+luaAssertEquals(false, Seen.hasSelectedChoice(id, 2))
+
+@@
