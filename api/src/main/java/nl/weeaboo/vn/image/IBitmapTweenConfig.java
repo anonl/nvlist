@@ -7,6 +7,11 @@ import nl.weeaboo.vn.core.IInterpolator;
 public interface IBitmapTweenConfig extends Serializable {
 
     /**
+     * @return The duration (in frames).
+     */
+    double getDuration();
+
+    /**
      * Sets the width of the semi-transparent part of the transition.
      */
     void setRange(double range);

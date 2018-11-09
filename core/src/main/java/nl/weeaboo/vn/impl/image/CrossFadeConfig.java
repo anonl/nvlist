@@ -37,9 +37,7 @@ public final class CrossFadeConfig implements ICrossFadeConfig {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
 
-    /**
-     * @return The duration (in frames).
-     */
+    @Override
     public double getDuration() {
         return duration;
     }

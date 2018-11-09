@@ -72,7 +72,7 @@ public class TweenLib extends LuaLib {
      *        <ol>
      *        <li>duration (in frames)
      *        <li>control image (a texture)
-     *        <li>tile control image (boolean)
+     *        <li>(optional) tile control image (boolean)
      *        </ol>
      * @return A new {@link IBitmapTweenConfig} object.
      * @throws ScriptException If the input parameters are invalid.

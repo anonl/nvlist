@@ -1,0 +1,8 @@
+@@
+
+require("builtin/vn")
+
+config = Tween.bitmapTweenConfig(123, tex("a"))
+tween = Tween.bitmapTween(config)
+
+@@

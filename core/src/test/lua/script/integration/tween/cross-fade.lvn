@@ -1,0 +1,8 @@
+@@
+
+require("builtin/vn")
+
+config = Tween.crossFadeConfig(123)
+fade = Tween.crossFade(config)
+
+@@

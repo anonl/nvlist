@@ -56,9 +56,7 @@ public final class BitmapTweenConfig implements IBitmapTweenConfig {
         this.interpolator = Checks.checkNotNull(interpolator);
     }
 
-    /**
-     * @return The duration (in frames).
-     */
+    @Override
     public double getDuration() {
         return duration;
     }
