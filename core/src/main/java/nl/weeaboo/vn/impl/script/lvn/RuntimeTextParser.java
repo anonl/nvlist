@@ -10,8 +10,11 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import com.google.common.base.MoreObjects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 
 import nl.weeaboo.collections.IntMap;
@@ -22,6 +25,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 
 @CustomSerializable
@@ -32,6 +36,9 @@ public class RuntimeTextParser implements Serializable {
     public static final LuaValue F_STRINGIFY = valueOf("stringify");
     public static final LuaValue F_TAG_OPEN  = valueOf("textTagOpen");
     public static final LuaValue F_TAG_CLOSE = valueOf("textTagClose");
+
+    private static final Logger LOG = LoggerFactory.getLogger(RuntimeTextParser.class);
+    private static final Pattern TAG_REGEX = Pattern.compile("[A-Za-z]+");
 
     private final LuaValue globals;
 
@@ -67,10 +74,15 @@ public class RuntimeTextParser implements Serializable {
         MutableStyledText mts = new MutableStyledText();
         boolean lastCharCollapsible = true;
         for (Object obj : processed) {
-            if (obj instanceof StyledText) {
+            if (obj instanceof Token) {
+                Token token = (Token)obj;
+                if (token.getType() == TextParser.ETokenType.COMMAND) {
+                    commandMap.put(mts.length(), token.getText());
+                }
+            } else {
                 StyledText stext = (StyledText)obj;
 
-                //Append to result string
+                // Append to result string
                 for (int n = 0; n < stext.length(); n++) {
                     char c = stext.charAt(n);
                     if (ParserUtil.isCollapsibleSpace(c)) {
@@ -82,11 +94,6 @@ public class RuntimeTextParser implements Serializable {
                         lastCharCollapsible = false;
                     }
                     mts.append(c, stext.getStyle(n));
-                }
-            } else if (obj instanceof Token) {
-                Token token = (Token)obj;
-                if (token.getType() == TextParser.ETokenType.COMMAND) {
-                    commandMap.put(mts.length(), token.getText());
                 }
             }
         }
@@ -124,21 +131,23 @@ public class RuntimeTextParser implements Serializable {
                 isOpenTag = false;
             }
 
+            if (!TAG_REGEX.matcher(tag).matches()) {
+                LOG.warn("Invalid tag: {}", tag);
+                break;
+            }
+
             List<String> args = new ArrayList<>();
             if (isOpenTag) {
-                //Parse list of values aaa,bbb,ccc
-                int start = itr.getIndex();
-                while (start < itr.getEndIndex()) {
+                // Parse list of values aaa,bbb,ccc
+                while (itr.getIndex() < itr.getEndIndex()) {
+                    int start = itr.getIndex();
                     int end = ParserUtil.findBlockEnd(itr, ',', sb);
-                    if (end <= start) {
-                        break;
+                    if (end > start) {
+                        String arg = unescape(sb.toString().trim());
+                        sb.delete(0, sb.length());
+                        args.add(arg);
                     }
-
-                    String arg = unescape(sb.toString().trim());
-                    sb.delete(0, sb.length());
-                    args.add(arg);
-
-                    start = end + 1;
+                    itr.next();
                 }
             }
 
@@ -165,7 +174,7 @@ public class RuntimeTextParser implements Serializable {
         }
 
         Varargs result = func.invoke(valueOf(str));
-        return optStyledText(result, 1);
+        return LuaConvertUtil.getStyledTextArg(result.arg(1));
     }
 
     private StyledText processTextTag(String tag, boolean isOpenTag, String[] args, StyleStack styleStack) {
@@ -190,22 +199,7 @@ public class RuntimeTextParser implements Serializable {
             styleStack.popWithTag(tag);
         }
 
-        return optStyledText(result, 1);
-    }
-
-    private static StyledText optStyledText(Varargs args, int index) {
-        LuaValue raw = args.arg(index);
-        if (raw.isnil()) {
-            return StyledText.EMPTY_STRING;
-        }
-
-        if (raw.isuserdata(StyledText.class)) {
-            StyledText userData = raw.touserdata(StyledText.class);
-            return MoreObjects.firstNonNull(userData, StyledText.EMPTY_STRING);
-        }
-
-        String str = raw.tojstring();
-        return (str.equals("") ? StyledText.EMPTY_STRING : new StyledText(str));
+        return LuaConvertUtil.getStyledTextArg(result.arg(1));
     }
 
     public static final class ParseResult {

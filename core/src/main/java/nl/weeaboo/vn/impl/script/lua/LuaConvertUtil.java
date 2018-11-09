@@ -11,6 +11,7 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.styledtext.ETextAttribute;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyleParseException;
+import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
@@ -102,6 +103,21 @@ public final class LuaConvertUtil {
      */
     public static FilePath getPath(LuaValue luaValue) {
         return FilePath.of(luaValue.checkjstring());
+    }
+
+    public static StyledText getStyledTextArg(LuaValue val) {
+        if (val.isnil()) {
+            return StyledText.EMPTY_STRING;
+        } else if (val.isuserdata(StyledText.class)) {
+            return val.checkuserdata(StyledText.class);
+        } else {
+            String str = val.tojstring();
+            if (str.equals("")) {
+                return StyledText.EMPTY_STRING;
+            } else {
+                return new StyledText(str);
+            }
+        }
     }
 
     /**
