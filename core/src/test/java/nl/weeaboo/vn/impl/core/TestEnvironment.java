@@ -111,6 +111,11 @@ public class TestEnvironment extends DefaultEnvironment {
         return input;
     }
 
+    @Override
+    public MockSystemModule getSystemModule() {
+        return (MockSystemModule)super.getSystemModule();
+    }
+
     /** Calls update on everything in the environment that needs it (contexts and input adapter). */
     public void update() {
         input.increaseTime(100);

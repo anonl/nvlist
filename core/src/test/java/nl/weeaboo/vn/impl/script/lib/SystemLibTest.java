@@ -9,6 +9,8 @@ public class SystemLibTest extends AbstractLibTest {
 
     @Override
     protected void addInitializers(LuaScriptEnv scriptEnv) {
+        super.addInitializers(scriptEnv);
+
         scriptEnv.addInitializer(new SystemLib(env));
     }
 
@@ -19,8 +21,42 @@ public class SystemLibTest extends AbstractLibTest {
     public void testExit() {
         loadScript("integration/system/exit");
 
+        LuaTestUtil.assertGlobal("canExit", env.getSystemModule().canExit());
         LuaTestUtil.assertGlobal("exitOk", true);
         LuaTestUtil.assertGlobal("exitError", true);
+    }
+
+    @Test
+    public void testCompareVersion() {
+        loadScript("integration/system/compare-version");
+    }
+
+    @Test
+    public void testGetTimer() {
+        loadScript("integration/system/timer");
+
+        LuaTestUtil.assertGlobal("timer", env.getStatsModule().getPlayTimer());
+    }
+
+    @Test
+    public void testGetSystemEnv() {
+        loadScript("integration/system/system-env");
+
+        LuaTestUtil.assertGlobal("systemEnv", env.getSystemModule().getSystemEnv());
+    }
+
+    @Test
+    public void testRestartCount() {
+        loadScript("integration/system/restart");
+
+        env.getSystemModule().consumeRestartCount(1);
+    }
+
+    @Test
+    public void testOpenWebsite() {
+        loadScript("integration/system/open-website");
+
+        env.getSystemModule().consumeOpenedWebsites("http://example.com");
     }
 
 }

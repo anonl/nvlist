@@ -1,0 +1,15 @@
+@@
+
+require("builtin/vn")
+
+luaAssertEquals(0, System.compareVersion("1", "1"))
+luaAssertEquals(-1, System.compareVersion("1", "2"))
+luaAssertEquals(1, System.compareVersion("2", "1"))
+
+luaAssertEquals(-1, System.compareVersion("1.2", "2.1"))
+
+luaAssertEquals(-1, System.compareVersion("1.2.3", "3.2.1"))
+
+luaAssert(not pcall(function() System.compareVersion("invalid") end))
+
+@@

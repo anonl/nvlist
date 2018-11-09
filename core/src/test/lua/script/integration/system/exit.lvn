@@ -2,6 +2,8 @@
 
 require("builtin/vn")
 
+canExit = System.canExit()
+
 exitOk = false
 exitError = false
 

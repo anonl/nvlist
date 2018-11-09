@@ -1,0 +1,7 @@
+@@
+
+require("builtin/vn")
+
+System.openWebsite("http://example.com")
+
+@@
