@@ -105,6 +105,9 @@ public final class LuaConvertUtil {
         return FilePath.of(luaValue.checkjstring());
     }
 
+    /**
+     * Converts a Lua value to {@link StyledText}.
+     */
     public static StyledText getStyledTextArg(LuaValue val) {
         if (val.isnil()) {
             return StyledText.EMPTY_STRING;
