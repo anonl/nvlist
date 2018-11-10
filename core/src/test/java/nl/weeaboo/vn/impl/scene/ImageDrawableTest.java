@@ -16,6 +16,8 @@ public class ImageDrawableTest {
 
     private static final double E = CoreTestUtil.EPSILON;
 
+    private final ImageDrawable image = new ImageDrawable();
+
     @Test
     public void transform() {
         int x = -50;
@@ -23,48 +25,61 @@ public class ImageDrawableTest {
         int w = 100;
         int h = 100;
 
-        ImageDrawable image = new ImageDrawable();
         image.setTexture(new TestTexture(w, h));
 
         // Bounds
         image.setBounds(x, y, w, h);
-        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
+        assertVisualBounds(x, y, w, h);
 
         image.setPos(100, 100);
-        RectAssert.assertEquals(Rect2D.of(100, 100, w, h), image.getVisualBounds(), E);
+        assertVisualBounds(100, 100, w, h);
         image.setSize(200, 200);
-        RectAssert.assertEquals(Rect2D.of(100, 100, 200, 200), image.getVisualBounds(), E);
+        assertVisualBounds(100, 100, 200, 200);
 
         image.setBounds(1, 2, 3, 4);
-        RectAssert.assertEquals(Rect2D.of(1, 2, 3, 4), image.getVisualBounds(), E);
+        assertVisualBounds(1, 2, 3, 4);
+
+        image.translate(1, 2);
+        assertVisualBounds(2, 4, 3, 4);
 
         image.setX(x);
         image.setY(y);
         image.setWidth(w);
         image.setHeight(h);
-        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
+        assertVisualBounds(x, y, w, h);
 
         // Rotated bounds
         image.setRotation(64); // Rotate 1/8th circle clockwise around top-left
         final double diagonal = Math.sqrt(w * w + h * h);
-        RectAssert.assertEquals(Rect2D.of(x - diagonal / 2, y, diagonal, diagonal), image.getVisualBounds(), E);
+        assertVisualBounds(x - diagonal / 2, y, diagonal, diagonal);
+
+        image.rotate(64);
+        assertVisualBounds(x - h, y, w, h);
 
         // Scaled
         image.setRotation(0);
+
+        image.setScale(2);
+        assertVisualBounds(x, y, w * 2, h * 2);
+
         image.setScale(0.5, 2);
-        RectAssert.assertEquals(Rect2D.of(x, y, w * .5, h * 2), image.getVisualBounds(), E);
+        assertVisualBounds(x, y, w * .5, h * 2);
+
+        image.scale(2);
+        assertVisualBounds(x, y, w, h * 4);
+
+        image.scale(2, -1);
+        assertVisualBounds(x, y - h * 4, w * 2, h * 4);
 
         // Align
         image.setPos(0, 0);
         image.setScale(1, 1);
         image.setAlign(0.5, 0.5);
-        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
+        assertVisualBounds(x, y, w, h);
     }
 
     @Test
     public void drawableColor() {
-        ImageDrawable image = CoreTestUtil.newImage();
-
         // Getters/setters using doubles
         double alpha = 0.35;
 
@@ -77,7 +92,14 @@ public class ImageDrawableTest {
         Assert.assertEquals(.6, image.getBlue(), E);
         Assert.assertEquals(alpha, image.getAlpha(), E);
 
+        image.setColor(.2, .4, .6, .8);
+        Assert.assertEquals(.2, image.getRed(), E);
+        Assert.assertEquals(.4, image.getGreen(), E);
+        Assert.assertEquals(.6, image.getBlue(), E);
+        Assert.assertEquals(.8, image.getAlpha(), E);
+
         // Getters/setters using ints
+        image.setAlpha(alpha);
         image.setColorRGB(0xA0806040);
         Assert.assertEquals(alpha, image.getAlpha(), E);
         Assert.assertEquals(0x806040, image.getColorRGB());
@@ -89,8 +111,6 @@ public class ImageDrawableTest {
 
     @Test
     public void drawableAttributes() {
-        ImageDrawable image = CoreTestUtil.newImage();
-
         // Z
         Assert.assertEquals(0, image.getZ());
         image.setZ(Short.MAX_VALUE);
@@ -119,8 +139,6 @@ public class ImageDrawableTest {
 
     @Test
     public void imageAttributes() {
-        ImageDrawable image = CoreTestUtil.newImage();
-
         final ITexture alpha = new TextureStub(50, 50);
         final ITexture beta = new TextureStub(100, 100);
 
@@ -129,7 +147,40 @@ public class ImageDrawableTest {
         Assert.assertEquals(0, image.getY(), E);
 
         image.setTexture(alpha, Direction.CENTER);
-        RectAssert.assertEquals(Rect2D.of(25, 25, 50, 50), image.getVisualBounds(), E);
+        assertVisualBounds(25, 25, 50, 50);
+    }
+
+    /**
+     * Hit-test using the collision shape.
+     */
+    @Test
+    public void testCollision() {
+        int x = 50;
+        int y = 50;
+        int w = 100;
+        int h = 100;
+        image.setBounds(x, y, w, h);
+
+        assertContains(49, 75, false);
+        assertContains(151, 75, false);
+        assertContains(75, 49, false);
+        assertContains(75, 151, false);
+
+        assertContains(75, 75, true);
+
+        // Rotate 1/8th turn around the top-left coordinate
+        image.rotate(64);
+        final double diagonal = Math.sqrt(w * w + h * h);
+        assertContains(x, y + 1, true);
+        assertContains(x, y + diagonal - 1, true);
+    }
+
+    private void assertContains(double x, double y, boolean expected) {
+        Assert.assertEquals(expected, image.contains(x, y));
+    }
+
+    private void assertVisualBounds(double x, double y, double w, double h) {
+        RectAssert.assertEquals(Rect2D.of(x, y, w, h), image.getVisualBounds(), E);
     }
 
 }
