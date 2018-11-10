@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import static nl.weeaboo.vn.impl.text.TextUtil.toStyledText;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -16,7 +18,7 @@ public class ScreenTextState implements IScreenTextState {
     private double baseTextSpeed;
     private StyledText stext = toStyledText("");
     private ITextLog textLog;
-    private ITextDrawable textDrawable;
+    private @Nullable ITextDrawable textDrawable;
 
     public ScreenTextState(ITextLog textLog) {
         this.textLog = Checks.checkNotNull(textLog);
@@ -40,7 +42,7 @@ public class ScreenTextState implements IScreenTextState {
     }
 
     @Override
-    public ITextDrawable getTextDrawable() {
+    public @Nullable ITextDrawable getTextDrawable() {
         return textDrawable;
     }
 

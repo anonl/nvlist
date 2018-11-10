@@ -2,6 +2,8 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.text.ITextLog;
@@ -11,7 +13,7 @@ public interface IScreenTextState extends Serializable, IUpdateable {
     /**
      * @return The main text drawable.
      */
-    ITextDrawable getTextDrawable();
+    @Nullable ITextDrawable getTextDrawable();
 
     /**
      * Sets the main text drawable.

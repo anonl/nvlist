@@ -55,11 +55,13 @@ public class MockTextRenderer implements ITextRenderer {
 
     @Override
     public void setVisibleText(double visibleGlyphs) {
-
+        visibleText = visibleGlyphs;
     }
 
     @Override
     public void setVisibleText(int startLine, double visibleGlyphs) {
+        this.startLine = startLine;
+        this.visibleText = visibleGlyphs;
     }
 
     @Override
@@ -131,6 +133,7 @@ public class MockTextRenderer implements ITextRenderer {
     @Override
     public void setText(StyledText stext) {
         this.text = Checks.checkNotNull(stext);
+        maxVisibleText = text.length();
     }
 
     @Override
