@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.image;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.scene.IRenderable;
 
@@ -8,7 +10,7 @@ public interface ITextureRenderer extends IRenderable {
     /**
      * Returns the texture used to render this image, or {@code null} if no texture is currently set.
      */
-    ITexture getTexture();
+    @Nullable ITexture getTexture();
 
     /**
      * Returns the UV rectangle used for texture mapping.
@@ -19,7 +21,7 @@ public interface ITextureRenderer extends IRenderable {
     /**
      * Changes the texture used to render this image.
      */
-    void setTexture(ITexture i);
+    void setTexture(@Nullable ITexture i);
 
     /**
      * Changes the UV width/height used for texture mapping.

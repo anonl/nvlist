@@ -17,7 +17,7 @@ import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 
 public final class PixmapTester implements Disposable {
 
-    private boolean generate = true;
+    private boolean generate = false;
 
     private final PixmapEquality pixmapEquals = new PixmapEquality();
     private final List<Pixmap> allocatedPixmaps = new ArrayList<>();

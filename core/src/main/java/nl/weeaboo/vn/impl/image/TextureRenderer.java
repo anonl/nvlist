@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.image;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.image.ITexture;
@@ -12,8 +14,7 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
-    /** May be null */
-    private ITexture texture;
+    private @Nullable ITexture texture;
 
     private Area2D uv = ITexture.DEFAULT_UV;
 
@@ -21,10 +22,7 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
         this(null);
     }
 
-    /**
-     * @param tex May be null
-     */
-    public TextureRenderer(ITexture tex) {
+    public TextureRenderer(@Nullable ITexture tex) {
         this.texture = tex;
 
         pack();
@@ -41,7 +39,7 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
     }
 
     @Override
-    public ITexture getTexture() {
+    public @Nullable ITexture getTexture() {
         return texture;
     }
 
@@ -63,7 +61,7 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
     }
 
     @Override
-    public void setTexture(ITexture newTexture) {
+    public void setTexture(@Nullable ITexture newTexture) {
         if (texture != newTexture) {
             texture = newTexture;
 
