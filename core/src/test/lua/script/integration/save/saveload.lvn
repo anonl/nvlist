@@ -1,6 +1,8 @@
 @@
 
-Save.save(1)
+userData = {key = 'value'}
+
+Save.save(1, userData, {screenshot=screenshot, width=100, height=100})
 Save.load(1)
 
 @@

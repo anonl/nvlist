@@ -1,0 +1,5 @@
+@@
+
+sharedGlobals = Save.getSharedGlobals()
+
+@@

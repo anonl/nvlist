@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
@@ -36,6 +37,8 @@ public abstract class IntegrationTest {
 
     @Before
     public final void beforeIntegration() throws ScriptException {
+        Lwjgl3NativesLoader.load();
+
         launcher = new Launcher(new InternalGdxFileSystem(""), new InMemoryFileSystem(false));
         launcher.create();
 

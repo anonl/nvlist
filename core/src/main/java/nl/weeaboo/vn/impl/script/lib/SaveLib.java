@@ -39,7 +39,7 @@ import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
-public class SaveLib extends LuaLib {
+public final class SaveLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
 
@@ -121,6 +121,10 @@ public class SaveLib extends LuaLib {
         Dim targetSize = Dim.of(ssTable.get("width").checkint(), ssTable.get("height").checkint());
 
         Pixmap original = GdxScreenshotUtil.getPixels(screenshot);
+        if (original == null) {
+            LOG.warn("Screenshot pixels are missing: {}", screenshot);
+            return;
+        }
 
         byte[] pngBytes;
         Pixmap resized = PixmapUtil.resizedCopy(original, targetSize, Filter.BiLinear);

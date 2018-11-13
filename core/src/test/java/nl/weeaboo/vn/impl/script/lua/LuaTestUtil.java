@@ -7,6 +7,7 @@ import org.junit.Assert;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
@@ -77,6 +78,25 @@ public final class LuaTestUtil {
      */
     public static @Nullable <T> T getGlobal(String name, Class<T> type) {
         return getGlobal(name).touserdata(type);
+    }
+
+    /**
+     * Sets a Lua global. Automatically converts the given Java value to an equivalent Lua value.
+     *
+     * @see #setGlobal(String, LuaValue)
+     */
+    public static void setGlobal(String name, Object javaObject) {
+        setGlobal(name, CoerceJavaToLua.coerce(javaObject));
+    }
+
+    /**
+     * Sets a Lua global.
+     *
+     * @see #setGlobal(String, Object)
+     */
+    public static void setGlobal(String name, LuaValue value) {
+        LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
+        globals.set(name, value);
     }
 
     /**

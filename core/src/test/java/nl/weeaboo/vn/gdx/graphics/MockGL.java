@@ -17,6 +17,7 @@ public class MockGL extends GL20Interceptor {
     private int textureId;
     private int shaderId;
     private int programId;
+    private int frameBufferId;
 
     private MockGL() {
         super(new GLProfiler(Gdx.graphics), null);
@@ -82,6 +83,16 @@ public class MockGL extends GL20Interceptor {
     @Override
     public int glGetError() {
         return GL20.GL_NO_ERROR;
+    }
+
+    @Override
+    public int glGenFramebuffer() {
+        return ++frameBufferId;
+    }
+
+    @Override
+    public int glCheckFramebufferStatus(int target) {
+        return GL20.GL_FRAMEBUFFER_COMPLETE;
     }
 
     private static final class MockGLInvocationHandler implements InvocationHandler {

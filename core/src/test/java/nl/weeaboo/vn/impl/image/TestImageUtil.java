@@ -8,16 +8,11 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.PixmapIO.PNG;
 
 import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.render.RenderUtil;
 
 public final class TestImageUtil {
-
-    static {
-        HeadlessGdx.init();
-    }
 
     private TestImageUtil() {
     }

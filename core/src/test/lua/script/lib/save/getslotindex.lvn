@@ -1,0 +1,6 @@
+@@
+
+quickSave10 = Save.getQuickSaveSlot(10)
+autoSave10 = Save.getAutoSaveSlot(10)
+
+@@
