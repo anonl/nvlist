@@ -11,6 +11,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.TestTexture;
 import nl.weeaboo.vn.impl.image.TextureStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
+import nl.weeaboo.vn.math.Matrix;
 
 public class ImageDrawableTest {
 
@@ -173,6 +174,20 @@ public class ImageDrawableTest {
         final double diagonal = Math.sqrt(w * w + h * h);
         assertContains(x, y + 1, true);
         assertContains(x, y + diagonal - 1, true);
+    }
+
+    @Test
+    public void testBaseTransform() {
+        Matrix matrix = Matrix.rotationMatrix(64);
+        image.setBaseTransform( matrix);
+
+        Assert.assertEquals(matrix, image.getBaseTransform());
+        Assert.assertEquals(matrix, image.getTransform());
+
+        image.rotate(64);
+
+        Assert.assertEquals(matrix, image.getBaseTransform());
+        Assert.assertNotEquals(matrix, image.getTransform());
     }
 
     private void assertContains(double x, double y, boolean expected) {
