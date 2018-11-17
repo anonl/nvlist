@@ -1,9 +1,17 @@
 package nl.weeaboo.vn.impl.image;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import org.junit.Assert;
+
+import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
@@ -33,6 +41,8 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
     private static final long serialVersionUID = 1L;
 
     private final ILoadingFontStore fontStore = new TestFontStore();
+
+    private final List<FilePath> preloadCalls = new ArrayList<>();
 
     @Override
     public @Nullable ResourceId resolveResource(FilePath filename) {
@@ -103,6 +113,18 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     @Override
     public void preload(FilePath filename) {
+        preloadCalls.add(filename);
+    }
+
+    public void consumePreloaded(String... expected) {
+        Assert.assertEquals(Stream.of(expected).map(FilePath::of).collect(Collectors.toList()),
+                consumePreloaded());
+    }
+
+    public List<FilePath> consumePreloaded() {
+        List<FilePath> result = ImmutableList.copyOf(preloadCalls);
+        preloadCalls.clear();
+        return result;
     }
 
 }

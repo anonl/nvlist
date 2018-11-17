@@ -13,6 +13,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -27,10 +28,12 @@ import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.stats.IAnalytics;
@@ -43,13 +46,20 @@ final class Analytics implements IAnalytics {
     private static final int VERSION = 1;
     private static final int LOOKAHEAD_LINES = 20;
 
-    private final IEnvironment env;
+    private final IContextManager contextManager;
+    private final IImageModule imageModule;
 
     // Transient because the actual state is stored in a separate (shared) file
     private transient Map<FileLine, LineStats> loadsPerLine;
 
     public Analytics(IEnvironment env) {
-        this.env = Checks.checkNotNull(env);
+        this(env.getContextManager(), env.getImageModule());
+    }
+
+    @VisibleForTesting
+    Analytics(IContextManager contextManager, IImageModule imageModule) {
+        this.contextManager = Checks.checkNotNull(contextManager);
+        this.imageModule = Checks.checkNotNull(imageModule);
 
         initTransients();
     }
@@ -67,23 +77,22 @@ final class Analytics implements IAnalytics {
     @Override
     public void update() {
         // Handle preloads for every active thread
-        for (IContext active : env.getContextManager().getActiveContexts()) {
+        for (IContext active : contextManager.getActiveContexts()) {
             for (IScriptThread thread : active.getScriptContext().getThreads()) {
-                handlePreloadsForThread(thread);
+                List<String> stackTrace = thread.getStackTrace();
+                FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(stackTrace);
+                if (lvnLine != null) {
+                    handlePreloads(lvnLine);
+                }
             }
         }
     }
 
-    private void handlePreloadsForThread(IScriptThread thread) {
-        List<String> stackTrace = thread.getStackTrace();
-        FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(stackTrace);
-        if (lvnLine == null) {
-            return;
-        }
-
+    @VisibleForTesting
+    void handlePreloads(FileLine lvnLine) {
         for (LineStats lineStats : getUpcomingLines(lvnLine)) {
             for (FilePath imagePath : lineStats.imagesLoaded) {
-                env.getImageModule().preload(imagePath);
+                imageModule.preload(imagePath);
             }
         }
     }
@@ -192,11 +201,6 @@ final class Analytics implements IAnalytics {
             if (info.getMediaType() == MediaType.IMAGE) {
                 imagesLoaded.add(path);
             }
-        }
-
-        @Override
-        public String toString() {
-            return imagesLoaded.toString();
         }
 
         @Override
