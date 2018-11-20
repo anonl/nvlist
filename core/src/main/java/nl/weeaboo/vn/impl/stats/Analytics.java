@@ -28,12 +28,10 @@ import nl.weeaboo.lua2.io.LuaSerializer;
 import nl.weeaboo.lua2.io.ObjectDeserializer;
 import nl.weeaboo.lua2.io.ObjectSerializer;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.stats.IAnalytics;
@@ -46,20 +44,20 @@ final class Analytics implements IAnalytics {
     private static final int VERSION = 1;
     private static final int LOOKAHEAD_LINES = 20;
 
-    private final IContextManager contextManager;
-    private final IImageModule imageModule;
+    private final IEnvironment env;
+    private final IAnalyticsPreloader preloader;
 
     // Transient because the actual state is stored in a separate (shared) file
     private transient Map<FileLine, LineStats> loadsPerLine;
 
     public Analytics(IEnvironment env) {
-        this(env.getContextManager(), env.getImageModule());
+        this(env, new AnalyticsPreloader(env));
     }
 
     @VisibleForTesting
-    Analytics(IContextManager contextManager, IImageModule imageModule) {
-        this.contextManager = Checks.checkNotNull(contextManager);
-        this.imageModule = Checks.checkNotNull(imageModule);
+    Analytics(IEnvironment env, IAnalyticsPreloader preloader) {
+        this.env = Checks.checkNotNull(env);
+        this.preloader = Checks.checkNotNull(preloader);
 
         initTransients();
     }
@@ -77,7 +75,7 @@ final class Analytics implements IAnalytics {
     @Override
     public void update() {
         // Handle preloads for every active thread
-        for (IContext active : contextManager.getActiveContexts()) {
+        for (IContext active : env.getContextManager().getActiveContexts()) {
             for (IScriptThread thread : active.getScriptContext().getThreads()) {
                 List<String> stackTrace = thread.getStackTrace();
                 FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(stackTrace);
@@ -92,7 +90,7 @@ final class Analytics implements IAnalytics {
     void handlePreloads(FileLine lvnLine) {
         for (LineStats lineStats : getUpcomingLines(lvnLine)) {
             for (FilePath imagePath : lineStats.imagesLoaded) {
-                imageModule.preload(imagePath);
+                preloader.preloadImage(imagePath);
             }
         }
     }
