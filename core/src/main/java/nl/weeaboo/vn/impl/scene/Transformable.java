@@ -375,6 +375,12 @@ public abstract class Transformable extends VisualElement implements ITransforma
     }
 
     @Override
+    public void scaleToFit(double w, double h) {
+        double s = Math.min(w / getWidth(), h / getHeight());
+        setSize(s * getWidth(), s * getHeight());
+    }
+
+    @Override
     public final void setScale(double s) {
         setScale(s, s);
     }

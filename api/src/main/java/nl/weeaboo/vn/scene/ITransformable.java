@@ -91,6 +91,12 @@ public interface ITransformable extends IDrawable {
     void scale(double sx, double sy);
 
     /**
+     * Adjusts the scale to fit inside the given maximum width/height. The scaling applies is proportional --
+     * scaling both width and height by the same factor.
+     */
+    void scaleToFit(double w, double h);
+
+    /**
      * Sets the horizontal and vertical scale factors to the same value.
      *
      * @see #setScale(double, double)
