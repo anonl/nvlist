@@ -85,5 +85,20 @@
                 { "id": "newSave",         "rect": [  1,833, 62, 30] },
             ]
         },
+        {   
+            "file": "imagegallery.png",
+            "width": 512,
+            "height": 512,
+            "subRects": [
+                { "id": "locked",   "rect": [  1,  1,254,190] },
+                { "id": "pageButton-normal",   "rect": [  1,193, 61, 61] },
+                { "id": "pageButton-rollover", "rect": [ 65,193, 61, 61] },
+                { "id": "pageButton-pressed",  "rect": [129,193, 61, 61] },
+                { "id": "pageButton-disabled", "rect": [193,193, 61, 61] },
+                { "id": "fade-top",        "rect": [257,193, 62, 62] },
+                { "id": "fade-bottom",     "rect": [321,193, 62, 62] },
+                { "id": "white",           "rect": [385,193, 62, 62] },
+            ]
+        }
     ]
 }
