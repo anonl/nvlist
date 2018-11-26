@@ -2,9 +2,11 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import com.google.common.collect.Iterables;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaNil;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
@@ -253,4 +255,27 @@ public class ImageLib extends LuaLib {
         return LuajavaLib.toUserdata(tex, ITexture.class);
     }
 
+    /**
+     * Returns the paths for all image files in the specified folder and its sub-folders.
+     *
+     * @param args
+     *        <ol>
+     *        <li>(optional) folder to search
+     *        </ol>
+     * @return A texture.
+     */
+    @ScriptFunction
+    public Varargs getImageFiles(Varargs args) {
+        FilePath folder = FilePath.of(args.optjstring(1, ""));
+
+        IImageModule imageModule = env.getImageModule();
+
+        LuaTable result = new LuaTable();
+        int i = 1;
+        for (FilePath path : imageModule.getImageFiles(folder)) {
+            result.rawset(i, path.toString());
+            i++;
+        }
+        return result;
+    }
 }
