@@ -58,11 +58,13 @@ public final class GridPanelTest {
      */
     @Test
     public void testPack() {
-        panel.setBounds(0, 0, 100, 100);
+        final int x = 100;
+        final int y = 200;
+        panel.setBounds(x, y, 100, 100);
         panel.add(a);
         panel.pack(5);
 
-        assertLayout(panel, 45, 45, 10, 10);
+        assertLayout(panel, x + 45, y + 45, 10, 10);
     }
 
     /**

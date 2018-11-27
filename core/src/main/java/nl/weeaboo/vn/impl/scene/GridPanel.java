@@ -79,12 +79,15 @@ public class GridPanel extends Panel implements IGridPanel {
         double newLayoutHeight = insets.getVertical() + prefHeight.value(oldChildLayoutBounds.h);
         setUnscaledSize(newLayoutWidth, newLayoutHeight);
 
+        double oldX = getX();
+        double oldY = getY();
+
         double dx = AlignUtil.alignAnchorX(oldWidth, getWidth(), anchor);
         double dy = AlignUtil.alignAnchorY(oldHeight, getHeight(), anchor);
         translate(dx, dy);
 
         // Update ILayoutElemPeer with the new bounds
-        getLayoutAdapter().setLayoutBounds(Rect2D.of(dx, dy, newLayoutWidth, newLayoutHeight));
+        getLayoutAdapter().setLayoutBounds(Rect2D.of(oldX + dx, oldY + dy, newLayoutWidth, newLayoutHeight));
     }
 
     @Override
