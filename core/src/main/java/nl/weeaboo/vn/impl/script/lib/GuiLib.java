@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lib;
 
+import static nl.weeaboo.lua2.vm.LuaConstants.NONE;
+
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
@@ -19,6 +21,7 @@ import nl.weeaboo.vn.scene.IGridPanel;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IViewport;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
@@ -120,6 +123,25 @@ public class GuiLib extends LuaLib {
         parentLayer.add(viewport);
 
         return LuajavaLib.toUserdata(viewport, IViewport.class);
+    }
+
+    /**
+     * Sets the click handler function for a button
+     *
+     * @param args
+     *        <ol>
+     *        <li>Button
+     *        <li>Lua function
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs setClickHandler(Varargs args) {
+        IButton button = args.checkuserdata(1, IButton.class);
+        IScriptFunction function = LuaScriptUtil.toScriptFunction(args, 2);
+
+        button.setClickHandler(function);
+
+        return NONE;
     }
 
 }

@@ -1,0 +1,14 @@
+@@
+
+require("builtin/vn")
+
+clickCount = 0
+
+function clickHandler()
+    clickCount = clickCount + 1
+end
+
+button = Gui.createButton()
+Gui.setClickHandler(button, clickHandler)
+
+@@

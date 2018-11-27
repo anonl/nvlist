@@ -74,6 +74,19 @@ public final class GuiLibTest extends AbstractLibTest {
         RectAssert.assertEquals(activeLayer.getVisualBounds(), defaultGrid.getVisualBounds(), CoreTestUtil.EPSILON);
     }
 
+    @Test
+    public void testSetClickHandler() throws ScriptException {
+        loadScript("integration/gui/clickhandler");
+
+        IButton button = LuaTestUtil.getGlobal("button", IButton.class);
+        LuaTestUtil.assertGlobal("clickCount", 0);
+
+        // Check that the click handler set on the button is the Lua function that we supplied
+        button.getClickHandler().call();
+
+        LuaTestUtil.assertGlobal("clickCount", 1);
+    }
+
     private void assertParentLayer(IVisualElement button, ILayer expected) {
         Assert.assertEquals(true, expected.contains(button));
     }
