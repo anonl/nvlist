@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.styledtext.ETextAlign;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
@@ -85,12 +86,16 @@ public class ButtonRenderer extends AbstractRenderable implements IButtonRendere
 
     @Override
     public double getNativeWidth() {
-        return Math.max(background.getNativeWidth(), textRenderer.getNativeWidth());
+        Insets2D insets = background.getInsets();
+        return Math.max(background.getNativeWidth(),
+                insets.left + insets.right + textRenderer.getNativeWidth());
     }
 
     @Override
     public double getNativeHeight() {
-        return Math.max(background.getNativeHeight(), textRenderer.getNativeHeight());
+        Insets2D insets = background.getInsets();
+        return Math.max(background.getNativeHeight(),
+                insets.top + insets.bottom + textRenderer.getNativeHeight());
     }
 
     @Override
