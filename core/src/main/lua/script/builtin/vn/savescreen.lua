@@ -37,7 +37,7 @@ local function saveLoadScreen(isSave)
     
     local slot = nil
     local userData = nil
-    local newContext = createContext(function()        
+    local newContext = createContext(function()
         local function showScreen()
             local screen = nil
             if isSave then
@@ -45,20 +45,20 @@ local function saveLoadScreen(isSave)
             else
                 screen = loadScreenConstructor()
             end
-            slot, userData = screen:show()       
+            slot, userData = screen:show()
             screen:destroy()
         end
-        
+
         showScreen()
         setContextActive(oldContext, true)
-        
+
         if slot > 0 then
             if isSave then
                 -- Take a screenshot to add to the save file
                 local ss = screenshot(getRootLayer(), -32768)
                 ss:markTransient()
                 local screenshotInfo = {screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
-                
+
                 Save.save(slot, userData, screenshotInfo)
                 setSharedGlobal(KEY_SAVE_LAST, slot)
             else
@@ -69,7 +69,7 @@ local function saveLoadScreen(isSave)
     setContextActive(newContext, true)
     setContextActive(oldContext, false)
     yield()
-    
+
     return slot
 end
 
@@ -113,10 +113,7 @@ function SaveSlot.new(self)
     button:setEnabled(self.isSave or not self.empty)
     
     local label = textimg(self.label)
-    --label:setBackgroundColorARGB(0xA0000000)
     label:setZ(button:getZ() - 10)
-    --label:setPadding(8)
-    --label:extendDefaultStyle(createStyle{anchor=2})
     
     local i = nil   
     local newI = nil
@@ -311,7 +308,7 @@ function SaveLoadScreen:layout()
         
         local col = 0
         for _,component in ipairs(components) do
-            component:setBounds(x + ipad, y + ipad, cw - ipad, ch - ipad)
+            component:setBounds(x + ipad, y + ipad, cw - ipad * 2, ch - ipad * 2)
         
             col = col + 1
             if col >= cols then
