@@ -16,8 +16,9 @@ function titlescreen()
     bg("bg/gate")
     img("azathoth", "c")
 
-    text("Running on Android")
-
+    --require("gallery")
+    --imageGallery("bg")
+    
     -- button("gui/button")    
     --movie("test")
     call("images")    
