@@ -83,6 +83,30 @@ allprojects {
             options.encoding = 'UTF-8'
         }
 
+        /* 
+         * Create a testlib to allow sub-projects to depend on each-others test code.
+         * It would be cleaner to put the reusable testcode in a library, but that technique is incompatible with the
+         * current version of buildship (Gradle<->Eclipse integration). The dependency from
+         * core.main -> testlib.main -> core.test is flattened to a circular dependency between core and testlib.
+         */
+        configurations {
+            testlib {
+                extendsFrom testImplementation
+            }
+        }
+
+        task testJar(type: Jar, dependsOn: testClasses) {
+            classifier = 'testlib'
+            from (sourceSets.test.output) {
+                include '**/*.class' // Only include code, no resources
+                exclude '**/*Test' // Exclude unit tests, try to only include stubs/mocks/etc.
+            }
+        }
+
+        artifacts {
+            testlib testJar
+        }
+
         sourceSets {
             main {
                 resources {
