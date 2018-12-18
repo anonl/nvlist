@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.buildtools.optimizer.image;
 
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
@@ -35,13 +37,20 @@ public final class BufferedImageHelper {
         final int ih = pixmap.getHeight();
 
         BufferedImage result = new BufferedImage(iw, ih, bufferedImageType);
-        if (pixmap.getFormat() == Format.Alpha) {
-            // Pixmap Alpha matches BufferedImage Gray, which requires treating alpha as color
+        if (result.getColorModel().getColorSpace().getType() == ColorSpace.TYPE_GRAY) {
+            /*
+             * Java uses linear gamma for grayscale images, but the setRGB() convenience methods consume sRGB
+             * (gamma ~2.2). This means we can't use those convenience methods or we'll run face-first into a
+             * lossy colorspace conversion.
+             */
             ByteBuffer alphaBytes = pixmap.getPixels();
+            WritableRaster raster = result.getRaster();
+            byte[] pixel = {0};
             for (int y = 0; y < ih; y++) {
                 for (int x = 0; x < iw; x++) {
                     int alpha = alphaBytes.get() & 0xFF;
-                    result.setRGB(x, y, (alpha << 24) | (alpha << 16) | (alpha << 8) | alpha);
+                    pixel[0] = (byte)alpha;
+                    raster.setDataElements(x, y, pixel);
                 }
             }
             alphaBytes.rewind();

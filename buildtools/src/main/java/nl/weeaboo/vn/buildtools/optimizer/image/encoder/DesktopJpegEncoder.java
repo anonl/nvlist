@@ -13,6 +13,7 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.collect.Iterators;
 
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
@@ -25,15 +26,15 @@ final class DesktopJpegEncoder implements IJpegEncoder {
 
     @Override
     public byte[] encode(Pixmap pixmap, JpegEncoderParams params) throws IOException {
-        // Use an explicit image type to flatten any alpha in the source pixmap
         BufferedImage image;
         switch (pixmap.getFormat()) {
         case Alpha:
         case Intensity:
-            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_BYTE_GRAY);
+            image = BufferedImageHelper.toBufferedImage(pixmap);
             break;
         default:
-            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImage.TYPE_3BYTE_BGR);
+            // Flatten any alpha in the source image by requesting the image type for RGB888
+            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImageHelper.toBufferedImageType(Format.RGB888));
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
