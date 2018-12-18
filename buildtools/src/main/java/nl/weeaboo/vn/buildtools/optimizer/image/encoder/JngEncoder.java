@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.google.common.annotations.VisibleForTesting;
 
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
@@ -95,7 +96,8 @@ public final class JngEncoder implements IImageEncoder {
         return result;
     }
 
-    private static @Nullable Pixmap extractAlpha(Pixmap src) {
+    @VisibleForTesting
+    static @Nullable Pixmap extractAlpha(Pixmap src) {
         Pixmap dst = PixmapUtil.newUninitializedPixmap(src.getWidth(), src.getHeight(), Format.Alpha);
 
         final ByteBuffer srcPixels = src.getPixels();
