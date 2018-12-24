@@ -19,13 +19,16 @@ public final class OptimizerContextStub implements IOptimizerContext {
     private final ClassToInstanceMap<IOptimizerConfig> configStore;
     private final IOptimizerFileSet fileSet = new OptimizerFileSet();
 
-    public OptimizerContextStub(ProjectFolderConfig projectFolders, File tempRoot) {
+    public OptimizerContextStub(ProjectFolderConfig projectFolders, File outputFolder) {
         projectConnection = NvlistProjectConnection.openProject(projectFolders);
-        tempFileProvider = new TempFileProvider(new File(tempRoot, "temp"));
+
+        File tempFolder = new File(outputFolder, "temp");
+        tempFolder.mkdirs();
+        tempFileProvider = new TempFileProvider(tempFolder);
 
         configStore = MutableClassToInstanceMap.create();
 
-        MainOptimizerConfig mainConfig = new MainOptimizerConfig(new File(tempRoot, "out"));
+        MainOptimizerConfig mainConfig = new MainOptimizerConfig(new File(outputFolder, "out"));
         configStore.put(MainOptimizerConfig.class, mainConfig);
     }
 
