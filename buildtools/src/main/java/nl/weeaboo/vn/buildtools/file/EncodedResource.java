@@ -16,6 +16,9 @@ import nl.weeaboo.filesystem.IFileSystem;
 
 public final class EncodedResource {
 
+    private EncodedResource() {
+    }
+
     /**
      * Note: the array is *not* copied.
      */

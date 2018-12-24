@@ -36,7 +36,7 @@ public abstract class FfmpegEncoder {
      */
     public static boolean isAvailable() {
         try {
-            runProcess(Arrays.asList("ffmpeg", "-h"));
+            doRunProcess(Arrays.asList("ffmpeg", "-h"));
             LOG.debug("ffmpeg is available");
             return true;
         } catch (IOException e) {
@@ -63,7 +63,11 @@ public abstract class FfmpegEncoder {
         return resultAudioData;
     }
 
-    private static void runProcess(List<String> command) throws IOException {
+    protected void runProcess(List<String> command) throws IOException {
+        doRunProcess(command);
+    }
+
+    private static void doRunProcess(List<String> command) throws IOException {
         String commandString = Joiner.on(' ').join(command);
 
         Process process = new ProcessBuilder()
