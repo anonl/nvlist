@@ -3,8 +3,6 @@ package nl.weeaboo.vn.buildtools.optimizer;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -54,7 +52,7 @@ public final class FfmpegEncoderTest {
         /**
          * @param expected Null values in the array cause the equality comparison to be skipped.
          */
-        public void assertProcessArgs(@Nullable String... expected) {
+        public void assertProcessArgs(String... expected) {
             Assert.assertEquals(expected.length, lastProcessArgs.size());
             for (int n = 0; n < expected.length; n++) {
                 if (expected[n] != null) {
