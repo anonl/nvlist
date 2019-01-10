@@ -18,10 +18,10 @@ matrix:
           - tools
           - build-tools-27.0.3
           - platform-tools
-          - android-25
+          - android-27
       before_script:
         # Install the SDK
-        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-25"
+        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-27"
         # Start virtual frame buffer
         - "export DISPLAY=:99.0"
         - "/sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
@@ -39,7 +39,7 @@ matrix:
         - brew update
         - brew cask install android-sdk
         # Install the SDK
-        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-25"
+        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-27"
         - export ANDROID_HOME=/usr/local/share/android-sdk
       script:
         ./gradlew robovmArchive
