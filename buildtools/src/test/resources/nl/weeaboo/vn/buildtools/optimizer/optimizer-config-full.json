@@ -1,0 +1,6 @@
+{
+    "projectFolder": "projectFolder",
+    "buildToolsFolder": "buildToolsFolder",
+    "targetResolutions": ["1x2", "3x4"],
+    "exclude": ["a*", "b.png"]
+}
