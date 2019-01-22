@@ -29,19 +29,19 @@ public final class PixmapTester implements Disposable {
     }
 
     /**
-     * Loads a pixmap from the /img test resource folder.
+     * Loads a pixmap from a resource file.
      * <p>
      * You don't need to dispose the pixmap itself as long as you call {@link PixmapTester#dispose()} at the
      * end of the test.
      */
-    public Pixmap load(String filename) {
+    public Pixmap load(Class<?> context, String resourceName) {
         try {
-            byte[] bytes = Resources.toByteArray(getClass().getResource("/img/" + filename));
+            byte[] bytes = Resources.toByteArray(context.getResource(resourceName));
             Pixmap loaded = PixmapLoader.load(bytes, 0, bytes.length);
             allocatedPixmaps.add(loaded);
             return loaded;
         } catch (IOException ioe) {
-            throw new AssertionError("Error loading pixmap: " + filename, ioe);
+            throw new AssertionError("Error loading pixmap: " + resourceName, ioe);
         }
     }
 

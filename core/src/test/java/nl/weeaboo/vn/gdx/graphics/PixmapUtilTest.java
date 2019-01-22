@@ -52,7 +52,7 @@ public class PixmapUtilTest {
 
     @Test
     public void testResizedCopy() {
-        Pixmap pixmap = pixmapTester.load("a.png");
+        Pixmap pixmap = pixmapTester.load(getClass(), "/img/a.png");
         checkResizeResult(pixmap, Filter.BiLinear, "bilinear");
         checkResizeResult(pixmap, Filter.NearestNeighbour, "nearest");
     }
