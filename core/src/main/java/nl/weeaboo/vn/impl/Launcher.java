@@ -300,7 +300,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     }
 
     private void initWindow(Dim size) {
-        LOG.info("Init window ({}x{})", size.w, size.h);
+        LOG.debug("Init window ({}x{})", size.w, size.h);
 
         IEnvironment env = novel.getEnv();
         backBuffer.setWindowSize(env, size);

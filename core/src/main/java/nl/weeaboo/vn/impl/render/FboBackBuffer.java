@@ -94,10 +94,15 @@ public final class FboBackBuffer implements IBackBuffer {
 
     @Override
     public void setWindowSize(IEnvironment env, Dim windowSize) {
-        disposeFrameBuffer();
-
         Dim fboSize = vsize;
-        env.updateRenderEnv(Rect.of(0, 0, fboSize.w, fboSize.h), fboSize);
+
+        // Init framebuffer if needed
+        if (frameBuffer == null) {
+            frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, fboSize.w, fboSize.h, false);
+
+            GdxViewportUtil.setToOrtho(frameBufferViewport, fboSize, true);
+            frameBufferViewport.update(fboSize.w, fboSize.h, true);
+        }
 
         // Update viewports
         Viewport screenViewport = viewports.getScreenViewport();
@@ -107,10 +112,8 @@ public final class FboBackBuffer implements IBackBuffer {
         Viewport scene2dViewport = viewports.getScene2dViewport();
         scene2dViewport.update(windowSize.w, windowSize.h, true);
 
-        // (Re)init screensize-related resources
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, fboSize.w, fboSize.h, false);
-        GdxViewportUtil.setToOrtho(frameBufferViewport, fboSize, true);
-        frameBufferViewport.update(fboSize.w, fboSize.h, true);
+        // Notify others of the changed resolution
+        env.updateRenderEnv(Rect.of(0, 0, fboSize.w, fboSize.h), fboSize);
     }
 
 }
