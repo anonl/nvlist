@@ -190,6 +190,15 @@ public class ImageDrawableTest {
         Assert.assertNotEquals(matrix, image.getTransform());
     }
 
+    @Test
+    public void testScaleToFit() {
+        image.setTexture(new TestTexture(10, 5));
+
+        image.scaleToFit(20, 20);
+        // scaleToFit scales uniformly to the largest size that fits entirely within the given bounds
+        assertVisualBounds(0, 0, 20, 10);
+    }
+
     private void assertContains(double x, double y, boolean expected) {
         Assert.assertEquals(expected, image.contains(x, y));
     }
