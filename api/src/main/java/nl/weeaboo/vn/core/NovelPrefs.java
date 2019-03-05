@@ -29,11 +29,6 @@ public final class NovelPrefs {
             false,
             "Enables developer mode, unlocking various debugging features.");
 
-    public static final Preference<Boolean> SCRIPT_DEBUG = newConstPreference("vn.scriptDebug",
-            "Script Debug",
-            false,
-            "Certain functions detect and warn about additional errors when script debug is turned on.");
-
     public static final Preference<String> ENGINE_MIN_VERSION = newConstPreference("vn.engineMinVersion",
             "Engine Minimum Version",
             "4.0",
