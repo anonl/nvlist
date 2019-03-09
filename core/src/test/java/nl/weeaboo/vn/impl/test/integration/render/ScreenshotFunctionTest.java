@@ -1,9 +1,12 @@
 package nl.weeaboo.vn.impl.test.integration.render;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
 
+@Category(GdxUiTest.class)
 public class ScreenshotFunctionTest extends RenderIntegrationTest {
 
     @Test

@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.experimental.categories.Category;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.gdx.test.pixmap.ScreenshotHelper;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
@@ -24,6 +26,7 @@ import nl.weeaboo.vn.impl.render.RenderTestHelper.ISpriteBatchConsumer;
 import nl.weeaboo.vn.impl.test.integration.IntegrationTest;
 import nl.weeaboo.vn.render.IDrawTransform;
 
+@Category(GdxUiTest.class)
 public abstract class RenderIntegrationTest extends IntegrationTest {
 
     // Allow a small difference in color to account for rounding errors

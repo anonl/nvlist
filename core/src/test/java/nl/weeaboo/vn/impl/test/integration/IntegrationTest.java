@@ -37,6 +37,11 @@ public abstract class IntegrationTest {
 
     @Before
     public final void beforeIntegration() throws ScriptException {
+        if (getClass().getAnnotation(Category.class) == null) {
+            throw new IllegalStateException("pitest doesn't support category inheritance, so a category annotation"
+                    + "must be repeated on every test class");
+        }
+
         Lwjgl3NativesLoader.load();
 
         launcher = new Launcher(new InternalGdxFileSystem(""), new InMemoryFileSystem(false));

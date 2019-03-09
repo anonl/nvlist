@@ -1,0 +1,21 @@
+
+apply plugin: 'info.solidsoft.pitest'
+
+pitest {
+    // verbose = true
+ 
+    pitestVersion = '1.2.5'
+    threads = Runtime.getRuntime().availableProcessors()
+
+    // Exclude UI tests from mutation testing (slow, fragile)
+    excludedGroups = ['nl.weeaboo.gdx.test.junit.GdxUiTest']
+
+    // This filter is needed to avoid running tests from guava_testlib
+    targetClasses = ["nl.weeaboo.vn.*"]
+    targetTests = ["nl.weeaboo.vn.*"]
+    // excludedTests = ["com.*"] // Doesn't work yet in the pitest plugin (v1.4.0)
+    excludedClasses = [
+        "com.*",
+        "*DestructibleElemListCollectionTest", // Confuses pitest into running guava_testlib tests
+    ]
+}

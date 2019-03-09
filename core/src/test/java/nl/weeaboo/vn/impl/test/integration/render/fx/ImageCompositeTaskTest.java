@@ -3,7 +3,9 @@ package nl.weeaboo.vn.impl.test.integration.render.fx;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig;
@@ -12,6 +14,7 @@ import nl.weeaboo.vn.impl.render.fx.ImageCompositeTask;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.test.integration.render.RenderIntegrationTest;
 
+@Category(GdxUiTest.class)
 public class ImageCompositeTaskTest extends RenderIntegrationTest {
 
     private ImageDrawable drawable;

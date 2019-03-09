@@ -4,12 +4,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.fx.BlurTask;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.test.integration.render.RenderIntegrationTest;
 
+@Category(GdxUiTest.class)
 public class BlurTaskTest extends RenderIntegrationTest {
 
     private ImageDrawable drawable;

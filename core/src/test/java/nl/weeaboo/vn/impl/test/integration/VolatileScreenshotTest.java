@@ -2,10 +2,12 @@ package nl.weeaboo.vn.impl.test.integration;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
 import nl.weeaboo.vn.impl.image.VolatileTextureData;
@@ -13,6 +15,7 @@ import nl.weeaboo.vn.impl.image.WritableScreenshot;
 import nl.weeaboo.vn.impl.render.GLScreenRenderer;
 import nl.weeaboo.vn.impl.render.RenderStats;
 
+@Category(GdxUiTest.class)
 public class VolatileScreenshotTest extends IntegrationTest {
 
     @Test

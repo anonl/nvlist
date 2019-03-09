@@ -33,6 +33,9 @@ plugins {
 
     // Public API change detection
     id 'me.champeau.gradle.japicmp' version '0.2.5'
+
+    // Mutation testing
+    id 'info.solidsoft.pitest' version '1.4.0' apply false
 }
 
 apply from: 'dependencies.gradle'
@@ -150,19 +153,8 @@ allprojects {
         }
 
         project.apply from: rootProject.file('errorprone.gradle')
-
-        // Apply JMH plugin
-        if (file('src/jmh/java').exists()) {
-            // Only apply JMH if there are any tests (otherwise the task fails)
-            project.apply plugin: "me.champeau.gradle.jmh"
-
-            jmh {
-                fork = 1
-                jvmArgs = ['-Djmh.separateClasspathJAR=true']
-            }
-
-            configurations.jmh.extendsFrom configurations.implementation
-        }
+        project.apply from: rootProject.file('pitest.gradle')
+        project.apply from: rootProject.file('jmh.gradle')
     }
 
     bintray {

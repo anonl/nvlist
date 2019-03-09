@@ -4,15 +4,18 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.gdx.input.GdxInputRobot;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.impl.test.integration.IntegrationTest;
 
+@Category(GdxUiTest.class)
 public class LuaConsoleTest extends IntegrationTest {
 
     private LuaConsole console;

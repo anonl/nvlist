@@ -1,0 +1,14 @@
+
+if (!file('src/jmh/java').exists()) {
+    // Only apply JMH if there are any tests (otherwise the task fails)
+    return
+}
+
+apply plugin: "me.champeau.gradle.jmh"
+
+jmh {
+    fork = 1
+    jvmArgs = ['-Djmh.separateClasspathJAR=true']
+}
+
+configurations.jmh.extendsFrom configurations.implementation

@@ -2,11 +2,14 @@ package nl.weeaboo.vn.impl.test.integration.render;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.image.ITexture;
 
+@Category(GdxUiTest.class)
 public class RenderTriangleGridTest extends RenderIntegrationTest {
 
     private ITexture tex;

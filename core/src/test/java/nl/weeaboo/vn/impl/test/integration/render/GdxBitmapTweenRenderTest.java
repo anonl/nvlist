@@ -3,13 +3,16 @@ package nl.weeaboo.vn.impl.test.integration.render;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.gdx.graphics.GdxBitmapTweenRenderer;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 
+@Category(GdxUiTest.class)
 public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
 
     private BitmapTweenConfig tweenConfig;

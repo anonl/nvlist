@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
 import nl.weeaboo.vn.impl.image.TestImageUtil;
 import nl.weeaboo.vn.impl.image.TestScreenshot;
@@ -15,6 +17,7 @@ import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
+@Category(GdxUiTest.class)
 public final class SaveIntegrationTest extends IntegrationTest {
 
     @Test

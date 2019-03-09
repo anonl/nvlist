@@ -1,7 +1,9 @@
 package nl.weeaboo.vn.impl.test.integration.render;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
@@ -9,6 +11,7 @@ import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
+@Category(GdxUiTest.class)
 public class RenderTextTest extends RenderIntegrationTest {
 
     @Test
