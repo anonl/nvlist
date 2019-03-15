@@ -6,18 +6,35 @@ require("builtin/vn")
 
 function main()
     print("main")
-    return titlescreen()
+    --return titlescreen()
+    return start()
 end
 
 function titlescreen()
+    local panel = gridPanel()
+
+    local b = button("gui/button")
+    panel:add(b)
+    b:setText("Start")
+    Gui.setClickHandler(b, function()
+        panel:destroy()
+        start()
+    end)
+    
+    -- Center the panel's contents in the bottom center
+    panel:setInsets(100, 100, 100, 100)
+    panel:pack(2)
+end
+
+function start()
     setTextModeADV()
     texton()
-    
+
     bg("bg/gate")
     img("azathoth", "c")
 
-    --require("gallery")
-    --imageGallery("bg")
+    -- require("gallery")
+    -- imageGallery("bg")
     
     -- button("gui/button")    
     --movie("test")
