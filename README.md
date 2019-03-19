@@ -4,5 +4,7 @@
 
 Cross-platform visual novel engine with a Lua-based scripting language
 
-<http://nvlist.weeaboo.nl>
-
+## Documentation
+- [Manual](https://anonl.github.io/nvlist/userguide)
+  - [Quick-start guide](https://anonl.github.io/nvlist/userguide/ch11-quick-start-guide)
+- [Built-in scripts (reference)](https://anonl.github.io/nvlist/lua)

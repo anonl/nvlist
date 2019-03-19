@@ -27,40 +27,16 @@ function titlescreen()
 end
 
 function start()
+    
     setTextModeADV()
     texton()
+@@
 
-    bg("bg/gate")
-    img("azathoth", "c")
-
-    -- require("gallery")
-    -- imageGallery("bg")
-    
-    -- button("gui/button")    
-    --movie("test")
-    call("images")    
-    --call("speakers")
-end
-
-function testTextLog()
-    for n=1,10 do
-        appendTextLog("If your decorators include information that is expensive to compute or potentially distracting, you may want to contribute your own preferences that allow the user to further fine-tune the decorator once it is on.", true)
-    end
-
-    textLog()
-end
-
-function testGuiScreen()
-    local panel = gridPanel()
-    
-    panel:add(img("test")):grow()
-    
-    panel:add(img("test"))
-    panel:endRow()
-    panel:add(img("test")):growY()
-    panel:add(img("test"))
-
-    waitClick()
-end
+# Insert your code here
+@registerSpeaker("aza", "Azathoth")
+@bgf("bg/gate")
+@imgf("azathoth", "c")
+$aza Hello there
 
 @@
+end
