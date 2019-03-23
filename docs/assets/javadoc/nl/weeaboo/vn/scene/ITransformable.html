@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,34 +184,41 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IDrawable.html" title="interfac
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#scaleToFit-double-double-">scaleToFit</a></span>(double&nbsp;w,
+          double&nbsp;h)</code>
+<div class="block">Adjusts the scale to fit inside the given maximum width/height.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setAlign-double-double-">setAlign</a></span>(double&nbsp;xFrac,
         double&nbsp;yFrac)</code>
 <div class="block">Changes the display position of this transformable relative to its X/Y
  coordinates.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setBaseTransform-nl.weeaboo.vn.math.Matrix-">setBaseTransform</a></span>(<a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a>&nbsp;transform)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setRotation-double-">setRotation</a></span>(double&nbsp;rot)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setScale-double-">setScale</a></span>(double&nbsp;s)</code>
 <div class="block">Sets the horizontal and vertical scale factors to the same value.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setScale-double-double-">setScale</a></span>(double&nbsp;sx,
         double&nbsp;sy)</code>
 <div class="block">Sets the horizontal and vertical scaling factors for this transformable.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setUnscaledSize-double-double-">setUnscaledSize</a></span>(double&nbsp;w,
                double&nbsp;h)</code>
@@ -488,6 +495,18 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IDrawable.html" title="interfac
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../nl/weeaboo/vn/scene/ITransformable.html#setScale-double-double-"><code>setScale(double, double)</code></a></dd>
 </dl>
+</li>
+</ul>
+<a name="scaleToFit-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scaleToFit</h4>
+<pre>void&nbsp;scaleToFit(double&nbsp;w,
+                double&nbsp;h)</pre>
+<div class="block">Adjusts the scale to fit inside the given maximum width/height. The scaling applies is proportional --
+ scaling both width and height by the same factor.</div>
 </li>
 </ul>
 <a name="setScale-double-">

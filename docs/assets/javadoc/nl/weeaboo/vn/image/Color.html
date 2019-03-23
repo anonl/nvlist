@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -157,12 +157,16 @@ implements java.io.Serializable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#fromARGB-int-">fromARGB</a></span>(int&nbsp;argb)</code>
 <div class="block">Creates a color from a packed 32-bit integer in ARGB format.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#fromRGB-double-double-double-">fromRGB</a></span>(double&nbsp;r,
        double&nbsp;g,
@@ -170,13 +174,13 @@ implements java.io.Serializable</pre>
 <div class="block">Creates a color from three separate R/G/B values in the range <code>[0.0, 1.0]</code>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#fromRGB-int-">fromRGB</a></span>(int&nbsp;rgb)</code>
 <div class="block">Creates a color from a packed 24-bit integer in RGB format with the alpha value set to fully opaque.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#fromRGBA-double-double-double-double-">fromRGBA</a></span>(double&nbsp;r,
         double&nbsp;g,
@@ -185,43 +189,51 @@ implements java.io.Serializable</pre>
 <div class="block">Creates a color from four separate R/G/B/A values in the range <code>[0.0, 1.0]</code>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getAlpha--">getAlpha</a></span>()</code>
 <div class="block">Returns the alpha component of the color in the range <code>[0.0, 1.0]</code></div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getARGB--">getARGB</a></span>()</code>
 <div class="block">Returns the color as a packed 32-bit integer in ARGB order.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getBlue--">getBlue</a></span>()</code>
 <div class="block">Returns the blue component of the color in the range <code>[0.0, 1.0]</code></div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getGreen--">getGreen</a></span>()</code>
 <div class="block">Returns the green component of the color in the range <code>[0.0, 1.0]</code></div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getRed--">getRed</a></span>()</code>
 <div class="block">Returns the red component of the color in the range <code>[0.0, 1.0]</code></div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#getRGB--">getRGB</a></span>()</code>
 <div class="block">Returns the color as a packed 24-bit integer in RGB order.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#toString--">toString</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/Color.html#unPremultiplied--">unPremultiplied</a></span>()</code>
 <div class="block">Returns a copy of the color, but converted from premultiplied alpha back to unassociated alpha.</div>
@@ -233,7 +245,7 @@ implements java.io.Serializable</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -320,13 +332,40 @@ implements java.io.Serializable</pre>
 <div class="block">Creates a color from four separate R/G/B/A values in the range <code>[0.0, 1.0]</code>.</div>
 </li>
 </ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(java.lang.Object&nbsp;obj)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
 <a name="unPremultiplied--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>unPremultiplied</h4>
-<pre>public&nbsp;<a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a>&nbsp;unPremultiplied()</pre>
+<pre>@CheckReturnValue
+public&nbsp;<a href="../../../../nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image">Color</a>&nbsp;unPremultiplied()</pre>
 <div class="block">Returns a copy of the color, but converted from premultiplied alpha back to unassociated alpha.</div>
 </li>
 </ul>
@@ -383,11 +422,24 @@ implements java.io.Serializable</pre>
 <a name="getAlpha--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getAlpha</h4>
 <pre>public&nbsp;double&nbsp;getAlpha()</pre>
 <div class="block">Returns the alpha component of the color in the range <code>[0.0, 1.0]</code></div>
+</li>
+</ul>
+<a name="toString--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;toString()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
 </li>
 </ul>
 </li>

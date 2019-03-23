@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":9};
+var methods = {"i0":10,"i1":10,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,24 +155,17 @@ implements <a href="../../../../nl/weeaboo/vn/math/IShape.html" title="interface
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static nl.weeaboo.common.Rect2D</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Polygon.html#calculateBounds-double:A-double:A-">calculateBounds</a></span>(double[]&nbsp;pointsX,
-               double[]&nbsp;pointsY)</code>
-<div class="block">Calculates the bounding box for the given set of input points.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Polygon.html#contains-double-double-">contains</a></span>(double&nbsp;x,
         double&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>nl.weeaboo.common.Rect2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Polygon.html#getBoundingRect--">getBoundingRect</a></span>()</code>
 <div class="block">Returns the bounding rectangle that completely encompasses this shape.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/math/Polygon.html" title="class in nl.weeaboo.vn.math">Polygon</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Polygon.html#transformedRect-nl.weeaboo.vn.math.Matrix-nl.weeaboo.common.Rect2D-">transformedRect</a></span>(<a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a>&nbsp;transform,
                nl.weeaboo.common.Rect2D&nbsp;r)</code>
@@ -240,22 +233,6 @@ implements <a href="../../../../nl/weeaboo/vn/math/IShape.html" title="interface
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A polygon representatopn of the transformed rectangle.</dd>
-</dl>
-</li>
-</ul>
-<a name="calculateBounds-double:A-double:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>calculateBounds</h4>
-<pre>public static&nbsp;nl.weeaboo.common.Rect2D&nbsp;calculateBounds(double[]&nbsp;pointsX,
-                                                       double[]&nbsp;pointsY)</pre>
-<div class="block">Calculates the bounding box for the given set of input points.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pointsX</code> - X-coordinates for the points.</dd>
-<dd><code>pointsY</code> - Y-coordinates for the points.</dd>
 </dl>
 </li>
 </ul>

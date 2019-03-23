@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -140,42 +140,48 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IRenderable.html" title="interf
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#getText--">getText</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/image/INinePatch.html" title="interface in nl.weeaboo.vn.image">INinePatch</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#getTexture-nl.weeaboo.vn.scene.ButtonViewState-">getTexture</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a>&nbsp;viewState)</code>
+<div class="block">Returns the background image for the button (if it exists).</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/core/VerticalAlign.html" title="enum in nl.weeaboo.vn.core">VerticalAlign</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#getVerticalAlign--">getVerticalAlign</a></span>()</code>
 <div class="block">Returns the vertical alignment of the button label.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#getViewState--">getViewState</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#setText-nl.weeaboo.styledtext.StyledText-">setText</a></span>(nl.weeaboo.styledtext.StyledText&nbsp;stext)</code>
 <div class="block">Sets the button label text.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#setTexture-nl.weeaboo.vn.scene.ButtonViewState-nl.weeaboo.vn.image.INinePatch-">setTexture</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a>&nbsp;viewState,
           <a href="../../../../nl/weeaboo/vn/image/INinePatch.html" title="interface in nl.weeaboo.vn.image">INinePatch</a>&nbsp;tex)</code>
 <div class="block">Sets the button background to the supplied nine-patch.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#setTexture-nl.weeaboo.vn.scene.ButtonViewState-nl.weeaboo.vn.image.ITexture-">setTexture</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a>&nbsp;viewState,
           <a href="../../../../nl/weeaboo/vn/image/ITexture.html" title="interface in nl.weeaboo.vn.image">ITexture</a>&nbsp;tex)</code>
 <div class="block">Sets the button background to the supplied texture.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#setVerticalAlign-nl.weeaboo.vn.core.VerticalAlign-">setVerticalAlign</a></span>(<a href="../../../../nl/weeaboo/vn/core/VerticalAlign.html" title="enum in nl.weeaboo.vn.core">VerticalAlign</a>&nbsp;align)</code>
 <div class="block">Sets the vertical alignment of the button label.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IButtonRenderer.html#setViewState-nl.weeaboo.vn.scene.ButtonViewState-">setViewState</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a>&nbsp;viewState)</code>
 <div class="block">Sets the button state.</div>
@@ -231,6 +237,17 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IRenderable.html" title="interf
 <h4>setText</h4>
 <pre>void&nbsp;setText(nl.weeaboo.styledtext.StyledText&nbsp;stext)</pre>
 <div class="block">Sets the button label text.</div>
+</li>
+</ul>
+<a name="getTexture-nl.weeaboo.vn.scene.ButtonViewState-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTexture</h4>
+<pre>@CheckForNull
+<a href="../../../../nl/weeaboo/vn/image/INinePatch.html" title="interface in nl.weeaboo.vn.image">INinePatch</a>&nbsp;getTexture(<a href="../../../../nl/weeaboo/vn/scene/ButtonViewState.html" title="enum in nl.weeaboo.vn.scene">ButtonViewState</a>&nbsp;viewState)</pre>
+<div class="block">Returns the background image for the button (if it exists).</div>
 </li>
 </ul>
 <a name="setTexture-nl.weeaboo.vn.scene.ButtonViewState-nl.weeaboo.vn.image.ITexture-">

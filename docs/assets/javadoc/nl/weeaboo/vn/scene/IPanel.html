@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,6 +143,12 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IVisualGroup.html" title="inter
 <div class="block">Sets the padding for the sides of the panel's layout.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IPanel.html#validateLayout--">validateLayout</a></span>()</code>
+<div class="block">Applies the panel's layout to its children (if needed).</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.scene.IVisualGroup">
@@ -250,11 +256,21 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IVisualGroup.html" title="inter
 <a name="setInsets-nl.weeaboo.common.Insets2D-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setInsets</h4>
 <pre>void&nbsp;setInsets(nl.weeaboo.common.Insets2D&nbsp;insets)</pre>
 <div class="block">Sets the padding for the sides of the panel's layout.</div>
+</li>
+</ul>
+<a name="validateLayout--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>validateLayout</h4>
+<pre>void&nbsp;validateLayout()</pre>
+<div class="block">Applies the panel's layout to its children (if needed).</div>
 </li>
 </ul>
 </li>
