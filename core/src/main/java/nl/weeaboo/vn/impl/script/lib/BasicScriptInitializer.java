@@ -13,7 +13,6 @@ import nl.weeaboo.vn.impl.script.lua.LuaPrefsAdapter;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.IRenderEnv;
-import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.sound.SoundType;
 
 public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
@@ -27,7 +26,7 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
     }
 
     @Override
-    public void initEnv(LuaScriptEnv scriptEnv) throws ScriptException {
+    public void initEnv(LuaScriptEnv scriptEnv) {
         LuaTable globals = scriptEnv.getGlobals();
 
         ScriptLoader.loadFile("builtin/stdlib").arg1().call();

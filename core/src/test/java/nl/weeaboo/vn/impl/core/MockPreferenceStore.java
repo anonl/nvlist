@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.core;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +20,11 @@ public final class MockPreferenceStore implements IPreferenceStore {
     }
 
     @Override
-    public void loadVariables() throws IOException {
+    public void loadVariables() {
     }
 
     @Override
-    public void saveVariables() throws IOException {
+    public void saveVariables() {
     }
 
     @Override

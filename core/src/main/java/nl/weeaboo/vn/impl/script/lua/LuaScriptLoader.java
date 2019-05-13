@@ -177,14 +177,14 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 
         return new LuaResource(pathString) {
             @Override
-            public InputStream open() throws IOException {
+            public InputStream open() {
                 return new ByteArrayInputStream(fileData);
             }
         };
     }
 
     @Override
-    public void loadScript(IScriptThread thread, FilePath filename) throws IOException, ScriptException {
+    public void loadScript(IScriptThread thread, FilePath filename) throws ScriptException {
         LuaScriptThread luaThread = (LuaScriptThread)thread;
 
         Varargs loadResult = ScriptLoader.loadFile(filename.toString());

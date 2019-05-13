@@ -47,7 +47,7 @@ public class VideoTest {
     }
 
     @Test
-    public void delegatePrepare() throws IOException {
+    public void delegatePrepare() {
         assertPrepared(false);
         video.prepare();
         assertPrepared(true);

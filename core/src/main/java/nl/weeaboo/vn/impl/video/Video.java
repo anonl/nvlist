@@ -25,7 +25,7 @@ public class Video implements IVideo {
     }
 
     @Override
-    public void prepare() throws IOException {
+    public void prepare() {
         videoAdapter.prepare();
     }
 

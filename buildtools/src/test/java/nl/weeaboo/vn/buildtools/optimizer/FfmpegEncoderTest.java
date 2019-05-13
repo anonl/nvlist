@@ -45,7 +45,7 @@ public final class FfmpegEncoderTest {
         }
 
         @Override
-        protected void runProcess(List<String> command) throws IOException {
+        protected void runProcess(List<String> command) {
             lastProcessArgs = ImmutableList.copyOf(command);
         }
 

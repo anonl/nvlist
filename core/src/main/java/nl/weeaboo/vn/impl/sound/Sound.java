@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.sound;
 
-import java.io.IOException;
-
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISoundController;
@@ -20,7 +18,7 @@ public class Sound extends AbstractSound {
     }
 
     @Override
-    protected void play(int loops) throws IOException {
+    protected void play(int loops) {
         nativeAudio.setVolume(getVolume());
         nativeAudio.play(loops);
     }

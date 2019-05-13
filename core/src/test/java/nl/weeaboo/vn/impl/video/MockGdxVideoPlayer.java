@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.video;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.video.VideoPlayer;
 
@@ -47,7 +45,7 @@ public class MockGdxVideoPlayer implements VideoPlayer {
     }
 
     @Override
-    public boolean play(FileHandle file) throws IOException {
+    public boolean play(FileHandle file) {
         this.file = file;
 
         playing = true;

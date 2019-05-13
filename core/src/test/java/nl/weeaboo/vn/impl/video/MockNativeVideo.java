@@ -1,9 +1,6 @@
 package nl.weeaboo.vn.impl.video;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.vn.render.IRenderEnv;
 
@@ -25,7 +22,7 @@ public class MockNativeVideo implements INativeVideo {
     }
 
     @Override
-    public void play() throws VideoPlayerInitException, IOException {
+    public void play() {
         playing = true;
     }
 

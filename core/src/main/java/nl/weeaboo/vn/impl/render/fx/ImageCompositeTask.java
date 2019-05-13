@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.render.fx;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +33,7 @@ public final class ImageCompositeTask extends OffscreenRenderTask {
     }
 
     @Override
-    protected Pixmap render(RenderContext context) throws IOException {
+    protected Pixmap render(RenderContext context) {
         Dim outerSize = context.outerSize;
         if (outerSize.w <= 0 || outerSize.h <= 0) {
             LOG.info("Skip {}, outerSize is empty: {}", getClass().getSimpleName(), outerSize);

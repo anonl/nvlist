@@ -36,7 +36,7 @@ public final class Vec2 implements Externalizable {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         x = in.readDouble();
         y = in.readDouble();
     }

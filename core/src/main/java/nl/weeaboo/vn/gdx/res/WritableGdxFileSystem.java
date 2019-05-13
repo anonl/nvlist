@@ -28,7 +28,7 @@ public abstract class WritableGdxFileSystem extends GdxFileSystem implements IWr
     }
 
     @Override
-    public OutputStream openOutputStream(FilePath path, boolean append) throws IOException {
+    public OutputStream openOutputStream(FilePath path, boolean append) {
         return resolve(path).write(append);
     }
 

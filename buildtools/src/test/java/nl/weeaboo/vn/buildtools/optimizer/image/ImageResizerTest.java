@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.buildtools.optimizer.image;
 
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,7 +45,7 @@ public final class ImageResizerTest {
      * sub-rects in the output should correspond to the new scaled coordinates as well.
      */
     @Test
-    public void testScaleWithSubRects() throws IOException {
+    public void testScaleWithSubRects() {
         ImageWithDef resized = resizer.process(imageA);
 
         // Check that the resized pixmap was correctly rendered

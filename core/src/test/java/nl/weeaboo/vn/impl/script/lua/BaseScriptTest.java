@@ -71,7 +71,7 @@ public class BaseScriptTest {
 
     /** Simple hello world script */
     @Test
-    public void helloWorld() throws IOException, ScriptException {
+    public void helloWorld() throws ScriptException {
         LuaScriptContext context = new LuaScriptContext(scriptEnv);
         IScriptThread mainThread = context.getMainThread();
 
@@ -80,7 +80,7 @@ public class BaseScriptTest {
 
     /** Test behavior of yield function */
     @Test
-    public void yield() throws IOException, ScriptException {
+    public void yield() throws ScriptException {
         LuaScriptContext context = new LuaScriptContext(scriptEnv);
         IScriptThread mainThread = context.getMainThread();
 
@@ -99,7 +99,7 @@ public class BaseScriptTest {
     }
 
     @Test
-    public void createContext() throws IOException, ScriptException {
+    public void createContext() throws ScriptException {
         TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
         final ContextManager contextManager = new ContextManager(contextFactory);
 

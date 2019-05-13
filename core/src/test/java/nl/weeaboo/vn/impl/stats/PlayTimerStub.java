@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.stats;
 
-import java.io.IOException;
-
 import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.stats.IPlayTimer;
@@ -18,12 +16,12 @@ public class PlayTimerStub implements IPlayTimer {
     }
 
     @Override
-    public void load(IStorage storage) throws IOException {
+    public void load(IStorage storage) {
         playTimeSeconds = storage.getLong(PlayTimer.KEY_TOTAL, playTimeSeconds);
     }
 
     @Override
-    public void save(IStorage storage) throws IOException {
+    public void save(IStorage storage) {
         storage.setLong(PlayTimer.KEY_TOTAL, playTimeSeconds);
     }
 

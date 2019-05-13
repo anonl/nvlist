@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.script.lua;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
-import nl.weeaboo.vn.script.ScriptException;
 
 public class LuaScriptFunctionStub extends LuaScriptFunction {
 
@@ -20,12 +19,12 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
     }
 
     @Override
-    public void call() throws ScriptException {
+    public void call() {
         callCount++;
     }
 
     @Override
-    public LuaScriptThread callInNewThread() throws ScriptException {
+    public LuaScriptThread callInNewThread() {
         return new ThreadStub(this);
     }
 
@@ -58,12 +57,12 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
         }
 
         @Override
-        public void call(LuaClosure func) throws ScriptException {
+        public void call(LuaClosure func) {
             func.invoke();
         }
 
         @Override
-        public void update() throws ScriptException {
+        public void update() {
             function.call();
         }
 

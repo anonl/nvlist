@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.sound;
 
-import java.io.IOException;
-
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
@@ -19,7 +17,7 @@ public class MockSound extends AbstractSound {
     }
 
     @Override
-    protected void play(int loops) throws IOException {
+    protected void play(int loops) {
         nativeAudio.play(loops);
     }
 

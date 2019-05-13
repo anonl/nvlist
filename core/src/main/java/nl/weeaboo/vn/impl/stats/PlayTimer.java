@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.stats;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import nl.weeaboo.vn.core.Duration;
@@ -55,12 +54,12 @@ final class PlayTimer implements IPlayTimer {
     }
 
     @Override
-    public void load(IStorage storage) throws IOException {
+    public void load(IStorage storage) {
         totalNanos = storage.getLong(KEY_TOTAL, totalNanos);
     }
 
     @Override
-    public void save(IStorage storage) throws IOException {
+    public void save(IStorage storage) {
         storage.setLong(KEY_TOTAL, totalNanos);
     }
 

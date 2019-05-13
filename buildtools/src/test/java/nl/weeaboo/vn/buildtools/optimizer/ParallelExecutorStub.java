@@ -11,7 +11,7 @@ import com.google.common.util.concurrent.Futures;
 public final class ParallelExecutorStub implements IParallelExecutor {
 
     @Override
-    public <T> List<Future<T>> invokeAndWait(Collection<Callable<T>> tasks) throws InterruptedException {
+    public <T> List<Future<T>> invokeAndWait(Collection<Callable<T>> tasks) {
         List<Future<T>> futures = new ArrayList<>();
         for (Callable<T> task : tasks) {
             try {

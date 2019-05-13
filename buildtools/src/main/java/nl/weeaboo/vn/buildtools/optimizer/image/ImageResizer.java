@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.buildtools.optimizer.image;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.google.common.primitives.Ints;
@@ -25,7 +23,7 @@ final class ImageResizer implements IImageOperation {
     }
 
     @Override
-    public ImageWithDef process(ImageWithDef original) throws IOException {
+    public ImageWithDef process(ImageWithDef original) {
         ImageDefinition originalDef = original.getDef();
 
         // Scale the image definition

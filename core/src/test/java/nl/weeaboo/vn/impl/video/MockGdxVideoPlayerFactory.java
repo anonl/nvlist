@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.video;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.video.VideoPlayer;
-import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.filesystem.FilePath;
 
@@ -15,7 +14,7 @@ final class MockGdxVideoPlayerFactory implements IGdxVideoPlayerFactory {
     }
 
     @Override
-    public VideoPlayer createVideoPlayer() throws VideoPlayerInitException {
+    public VideoPlayer createVideoPlayer() {
         return new MockGdxVideoPlayer();
     }
 
