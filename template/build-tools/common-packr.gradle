@@ -26,9 +26,15 @@ class PackrExtension {
     ].asImmutable()
     
     private final CopySpec resources;
+    private final def outputFolder
     
     PackrExtension(project) {
         resources = project.copySpec()
+        outputFolder = project.file("${project.buildDir}/packr")
+    }
+    
+    public File getOutputFolder() {
+        return outputFolder;
     }
     
     public CopySpec getResources() {
@@ -42,18 +48,25 @@ class PackrExtension {
 
 extensions.create('packr', PackrExtension, project)
 
+class PackrTask extends Copy {
+}
+
 packr.platforms.each{ platform ->
     def platformId = platform.toString().toLowerCase(Locale.ROOT)
 
-    task "packr${platform}"(type: Copy) {
+    task "packr${platform}"(type: PackrTask) {
+        group 'dist'
+
         dependsOn shadowJar
         inputs.files shadowJar.outputs.files
 
+        destinationDir = file("${packr.outputFolder}/$platformId")
+
         doFirst {
-            file("$buildDir/packr/$platformId").mkdirs();
-        
+            getDestinationDir().mkdirs();
+
             def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
-            
+
             def vmArgs = []
             vmArgs += applicationDefaultJvmArgs            
             if (platform == PackrConfig.Platform.MacOS) {
@@ -74,12 +87,11 @@ packr.platforms.each{ platform ->
             config.jdk = jrePath
             config.minimizeJre = new File(buildToolsDir, 'minimize-jre.json')
             config.vmArgs = vmArgs
-            
+
             new Packr().pack(config);
         }
-        
+
         with packr.resources
-        into "$buildDir/packr/$platformId"
     }
     packrAll.dependsOn "packr${platform}"
 }

@@ -3,9 +3,14 @@ package nl.weeaboo.vn.buildtools.task;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Nullable;
+
 public abstract class AbstractTask implements ITask {
 
     private final CopyOnWriteArrayList<IProgressListener> progressListeners = new CopyOnWriteArrayList<>();
+
+    private @Nullable TaskResultType resultType;
+    private String resultMessage = "";
 
     @Override
     public void cancel() {
@@ -14,6 +19,10 @@ public abstract class AbstractTask implements ITask {
     @Override
     public final void addProgressListener(IProgressListener listener) {
         progressListeners.add(Objects.requireNonNull(listener));
+
+        if (resultType != null) {
+            listener.onFinished(resultType, resultMessage);
+        }
     }
 
     @Override
@@ -26,6 +35,9 @@ public abstract class AbstractTask implements ITask {
     }
 
     protected final void fireFinished(TaskResultType resultType, String message) {
+        this.resultType = Objects.requireNonNull(resultType);
+        this.resultMessage = Objects.requireNonNull(message);
+
         progressListeners.forEach(ls -> ls.onFinished(resultType, message));
     }
 

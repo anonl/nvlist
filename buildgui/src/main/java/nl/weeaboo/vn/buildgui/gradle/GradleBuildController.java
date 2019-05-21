@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.buildgui.gradle;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -8,9 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProgressEvent;
-import org.gradle.tooling.ProgressListener;
 import org.gradle.tooling.ResultHandler;
+import org.gradle.tooling.events.ProgressEvent;
+import org.gradle.tooling.events.ProgressListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ import nl.weeaboo.vn.buildgui.IBuildController;
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
+import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.task.AbstractTask;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
@@ -36,6 +38,7 @@ public final class GradleBuildController implements IBuildController {
 
     private final CopyOnWriteArrayList<IBuildLogListener> logListeners = new CopyOnWriteArrayList<>();
 
+    private ProjectFolderConfig folderConfig = new ProjectFolderConfig();
     private String nvlistVersion = UNKNOWN_VERSION;
 
     public GradleBuildController(ITaskController taskController) {
@@ -69,8 +72,8 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public ITask startAssembleDist() {
-        return startTask("assembleDist");
+    public ITask startCreateRelease() {
+        return startTask("cleanArtifacts", "archiveArtifacts");
     }
 
     @Override
@@ -86,15 +89,16 @@ public final class GradleBuildController implements IBuildController {
         return startTask("optimizeResources");
     }
 
-    private GradleTask startTask(String taskName) {
+    private GradleTask startTask(String... taskNames) {
         GradleTask task = new GradleTask(gradleMonitor, logListeners);
         taskController.setActiveTask(task);
-        task.start(taskName);
+        task.start(taskNames);
         return task;
     }
 
     @Override
     public void onProjectChanged(NvlistProjectConnection projectModel) {
+        folderConfig = projectModel.getFolderConfig();
         nvlistVersion = projectModel.getBuildProperty("nvlistVersion", UNKNOWN_VERSION);
 
         try {
@@ -102,6 +106,11 @@ public final class GradleBuildController implements IBuildController {
         } catch (CheckedGradleException e) {
             LOG.error("Error connecting to Gradle build");
         }
+    }
+
+    @Override
+    public File getBuildToolsFolder() {
+        return folderConfig.getBuildToolsFolder();
     }
 
     private static final class GradleTask extends AbstractTask {
@@ -123,18 +132,19 @@ public final class GradleBuildController implements IBuildController {
             super.cancel();
         }
 
-        void start(String taskName) {
+        void start(String... taskNames) {
             Preconditions.checkState(cancelTokenSource == null, "Task is already running");
 
             cancelTokenSource = GradleConnector.newCancellationTokenSource();
 
-            gradleMonitor.buildLauncher(taskName)
+            gradleMonitor.buildLauncher(taskNames)
                     .setStandardOutput(new OutputToLogAdapter(this::fireLogLine))
                     .setStandardError(new OutputToLogAdapter(this::fireLogLine))
                     .addProgressListener(new ProgressListener() {
                         @Override
                         public void statusChanged(ProgressEvent event) {
-                            String message = event.getDescription();
+                            String message = event.getDisplayName();
+
                             LOG.debug("[gradle] {}", message);
 
                             fireLogLine(message, LogStyles.DEBUG_COLOR);

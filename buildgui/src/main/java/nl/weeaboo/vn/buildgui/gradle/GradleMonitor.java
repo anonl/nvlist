@@ -81,13 +81,13 @@ public final class GradleMonitor implements AutoCloseable {
             .withArguments(getDefaultArguments());
     }
 
-    BuildLauncher buildLauncher(String taskName) {
+    BuildLauncher buildLauncher(String... taskNames) {
         if (connection == null) {
             throw new IllegalStateException("closed");
         }
 
         return connection.newBuild()
-            .forTasks(taskName)
+            .forTasks(taskNames)
             .setStandardOutput(System.out)
             .setStandardError(System.err)
             .withArguments(getDefaultArguments());

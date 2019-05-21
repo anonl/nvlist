@@ -1,11 +1,19 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.io.File;
+
+import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.task.ITask;
 
 /**
  * Interface for starting build tasks.
  */
 public interface IBuildController extends IProjectModelListener {
+
+    /**
+     * @see ProjectFolderConfig#getBuildToolsFolder()
+     */
+    File getBuildToolsFolder();
 
     /**
      * Adds a listener to track build progress.
@@ -30,7 +38,7 @@ public interface IBuildController extends IProjectModelListener {
     /**
      * Builds a distribution of the current NVList project.
      */
-    ITask startAssembleDist();
+    ITask startCreateRelease();
 
     /**
      * Checks for updates to NVList.

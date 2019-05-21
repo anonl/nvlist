@@ -11,7 +11,8 @@ public interface ITask {
     void cancel();
 
     /**
-     * Adds a task progress listener.
+     * Adds a task progress listener. If the task has already finished before the progress listener was added,
+     * the newly added listener will (retroactively) receive the finish event.
      */
     void addProgressListener(IProgressListener listener);
 

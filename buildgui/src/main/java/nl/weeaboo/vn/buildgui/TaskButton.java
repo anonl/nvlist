@@ -1,7 +1,10 @@
 package nl.weeaboo.vn.buildgui;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -14,11 +17,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
+import nl.weeaboo.vn.buildtools.task.IProgressListener;
 import nl.weeaboo.vn.buildtools.task.ITask;
+import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 @SuppressWarnings("serial")
 final class TaskButton extends JPanel implements IActiveTaskListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TaskButton.class);
 
     private final IBuildController buildController;
     private final JButton cancelButton;
@@ -73,7 +83,7 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
         JPopupMenu menu = new JPopupMenu();
 
         JMenuItem assembleDistitem = new JMenuItem("Create release");
-        assembleDistitem.addActionListener(e -> buildController.startAssembleDist());
+        assembleDistitem.addActionListener(e -> createRelease());
         menu.add(assembleDistitem);
 
         JMenuItem optimizeResourcesItem = new JMenuItem("Optimize resources");
@@ -85,6 +95,30 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
         menu.add(checkForUpdatesItem);
 
         menu.show(otherTaskButton, 0, 0);
+    }
+
+    private void createRelease() {
+        ITask task = buildController.startCreateRelease();
+        task.addProgressListener(new IProgressListener() {
+            @Override
+            public void onFinished(TaskResultType resultType, String message) {
+                if (resultType != TaskResultType.SUCCESS) {
+                    return;
+                }
+
+                File releaseFolder = new File(buildController.getBuildToolsFolder(), "build/release");
+                if (!releaseFolder.isDirectory()) {
+                    return;
+                }
+
+                // Show releases folder
+                try {
+                    Desktop.getDesktop().open(releaseFolder);
+                } catch (IOException e) {
+                    LOG.warn("Unable to show build folder", e);
+                }
+            }
+        });
     }
 
     @Override
