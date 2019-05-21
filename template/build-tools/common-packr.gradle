@@ -95,3 +95,34 @@ packr.platforms.each{ platform ->
     }
     packrAll.dependsOn "packr${platform}"
 }
+
+def releaseDir = file("$buildDir/release")
+
+task cleanArtifacts(type: Delete) {
+    delete releaseDir
+}
+
+task archiveWindows64(type: Zip) {
+    destinationDir = releaseDir
+    archiveName = "${rootProject.name}-${version}-windows64.zip"
+    from tasks['packrWindows64']
+}
+
+task archiveLinux64(type: Tar) {
+    destinationDir = releaseDir
+    archiveName = "${rootProject.name}-${version}-linux64.tgz"
+    compression = Compression.GZIP
+    from tasks['packrLinux64']
+}
+
+task archiveMacOS(type: Copy) {
+    destinationDir = file("$releaseDir/${rootProject.name}-${version}.app")
+    from tasks['packrMacOS']
+}
+
+task archiveArtifacts {
+    dependsOn archiveWindows64
+    dependsOn archiveLinux64
+    dependsOn archiveMacOS
+}
+assembleDist.dependsOn archiveArtifacts

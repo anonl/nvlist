@@ -166,33 +166,3 @@ task optimizeResources(type: JavaExec) {
         delete(outputFolder)
     }
 }
-
-def releaseDir = file("$buildDir/release")
-
-task cleanArtifacts(type: Delete) {
-    delete releaseDir
-}
-
-task archiveWindows64(type: Zip) {
-    destinationDir = releaseDir
-    archiveName = "${rootProject.name}-${settings.appVersion}-windows64.zip"
-    from project(':desktop').tasks['packrWindows64']
-}
-
-task archiveLinux64(type: Tar) {
-    destinationDir = releaseDir
-    archiveName = "${rootProject.name}-${settings.appVersion}-linux64.tgz"
-    compression = Compression.GZIP
-    from project(':desktop').tasks['packrLinux64']
-}
-
-task archiveMacOS(type: Copy) {
-    destinationDir = file("$releaseDir/${rootProject.name}-${settings.appVersion}.app")
-    from project(':desktop').tasks['packrMacOS']
-}
-
-task archiveArtifacts {
-    dependsOn archiveWindows64
-    dependsOn archiveLinux64
-    dependsOn archiveMacOS
-}

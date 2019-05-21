@@ -38,7 +38,9 @@ bintray {
     publications = ['buildgui']
 }
 
-tasks.distTar.enabled = false // Don't bother generating a .tar distribution
+// Disable dist tasks from 'distribution' plugin (we use packr instead)
+tasks.distZip.enabled = false
+tasks.distTar.enabled = false
 
 // Generate a native executable
 apply from: "${buildToolsDir}/common-packr.gradle"
