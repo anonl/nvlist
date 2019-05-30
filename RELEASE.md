@@ -1,7 +1,8 @@
 
 # Release procedure
 
-- Set version number in build.gradle.
+- Set version number in `build.gradle`
+- Update version number in `template/build-res/build.properties`
 - Update the [changelog](CHANGELOG.md)
 - Merge changes to upstream master branch.
 - Wait for the [CI build](https://travis-ci.org/anonl/nvlist) to finish successfully.
