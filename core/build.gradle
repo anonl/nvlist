@@ -11,12 +11,11 @@ dependencies {
     implementation deps.lua_core
     implementation deps.styled_text_impl
 
+    testImplementation deps.gdx_desktop
     testImplementation deps.gdx_headless
     testImplementation deps.gdx_test
     testImplementation deps.tcommon_logging
     testImplementation deps.tcommon_test
-
-    testRuntimeOnly deps.gdx_desktop
     testRuntimeOnly deps.slf4j_desktop
 }
 

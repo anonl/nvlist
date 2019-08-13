@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:3.4.2'
-        // classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
 
         // Plugins for iOS
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.2'
@@ -29,7 +28,7 @@ plugins {
     id 'me.champeau.gradle.jmh' version '0.4.6' apply false
 
     // Plugin for making a 'fat' JAR
-    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
 
     // Public API change detection
     id 'me.champeau.gradle.japicmp' version '0.2.5'
