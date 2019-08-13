@@ -1,14 +1,6 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:+"
-    }
+plugins {
+    id 'com.github.jruby-gradle.base' version '1.6.0'
 }
-
-apply plugin: 'com.github.jruby-gradle.base'
 
 repositories {
     jcenter()

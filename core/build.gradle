@@ -9,7 +9,6 @@ dependencies {
     api deps.tcommon_prefsstore
     
     implementation deps.lua_core
-    implementation deps.slf4j_api
     implementation deps.styled_text_impl
 
     testImplementation deps.gdx_headless

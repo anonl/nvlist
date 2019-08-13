@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         // Plugin for making a 'fat' JAR
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:3.1.2'
         

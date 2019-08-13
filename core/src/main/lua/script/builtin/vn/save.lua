@@ -5,8 +5,7 @@ module("vn.save", package.seeall)
 ---Access to global storage
 -------------------------------------------------------------------------------------------------------------- @section globals
 
----Sets a shared global variable. Similar to <code>setGlobal</code>, except all
--- save slots have access to the same set of <em>shared</em> globals. Shared
+---Sets a shared global variable. All save slots have access to the same set of <em>shared</em> globals. Shared
 -- globals are often used to mark routes as cleared or unlocked.
 -- @string name The name of the shared global. Names starting with
 --        <code>vn.</code> are reserved for use by NVList.
