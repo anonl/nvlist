@@ -53,4 +53,4 @@ The following section is an abridged version of the chapter ["Distribution"]({{s
 
 When you want to share your creation with others, you can use the build tool to create a packaged release. The package contains your visual novel, together with all the files needed to run it (you don't need to install NVList to run it).
 
-To create a packaged release with the build tool, press the arrow button next to `Run Game`, then select `Create release` from the drop-down menu. Building the release will take several minutes. Once it finishes, you can find the releases in `build-tools` -> `desktop` -> `build` -> `packr`.
+To create a packaged release with the build tool, press the arrow button next to `Run Game`, then select `Create release` from the drop-down menu. Building the release will take several minutes. Once it finishes, a file browser window showing the created files will automatically pop up.
