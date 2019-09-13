@@ -56,5 +56,8 @@ javadoc {
         noHelp = true
         noIndex = true
         noTimestamp = true
+
+        // Don't include the version number (causes too many unrelated changes)
+        title = 'NVList'
     }
 }
