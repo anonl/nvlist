@@ -146,7 +146,11 @@ public class LoadingResourceStore<T> extends AbstractResourceStore {
         @Override
         protected void doUnload(FilePath absolutePath, @Nullable T value) {
             AssetManager am = assetManager.get();
-            am.unload(absolutePath.toString());
+
+            String pathString = absolutePath.toString();
+            if (am.isLoaded(pathString)) {
+                am.unload(pathString);
+            }
         }
     }
 
