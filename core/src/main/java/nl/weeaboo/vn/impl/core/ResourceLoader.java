@@ -85,7 +85,7 @@ public abstract class ResourceLoader implements IResourceResolver {
         try {
             return resolveCache.get(path);
         } catch (ExecutionException e) {
-            LOG.warn("Resource not found '{}' :: {}", path, String.valueOf(e.getCause()));
+            LOG.warn("Resource ({}) not found '{}'", mediaType, path, new IOException(e.getCause()));
             return null;
         }
     }
