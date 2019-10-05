@@ -3,8 +3,6 @@ package nl.weeaboo.vn.layout;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.omg.CORBA.UNKNOWN;
-
 import com.google.common.primitives.Doubles;
 
 /** Wrapper around a layout-related size value. Makes encoding of infinite values more explicit. */
@@ -118,7 +116,7 @@ public final class LayoutSize implements Serializable {
      * Returns the smallest of two layout sizes.
      * <p>
      * Unlike {@link Math#min(double, double)} if one of the values is {@link #UNKNOWN}, the other value is returned and
-     * not necessarily {@link UNKNOWN}.
+     * not necessarily {@link LayoutSize#UNKNOWN}.
      */
     public static LayoutSize min(LayoutSize a, LayoutSize b) {
         if (a.isUnknown()) {
@@ -138,7 +136,7 @@ public final class LayoutSize implements Serializable {
      * Returns the largest of two layout sizes.
      * <p>
      * Unlike {@link Math#max(double, double)} if one of the values is {@link #UNKNOWN}, the other value is returned and
-     * not necessarily {@link UNKNOWN}.
+     * not necessarily {@link LayoutSize#UNKNOWN}.
      */
     public static LayoutSize max(LayoutSize a, LayoutSize b) {
         if (a.isUnknown()) {

@@ -3,11 +3,11 @@ configurations { natives }
 
 android {
     buildToolsVersion '28.0.3'
-    compileSdkVersion 25
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
     }
 
     sourceSets {

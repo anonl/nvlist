@@ -18,7 +18,7 @@ matrix:
           - tools
           - build-tools-28.0.3
           - platform-tools
-          - android-27
+          - android-28
       before_script:
         # Install the SDK
         - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-27"

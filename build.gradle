@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.5.0'
 
         // Plugins for iOS
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.2'
@@ -49,7 +49,7 @@ allprojects {
     group = 'nl.weeaboo.vn'
     version = '4.0.0-beta1'
     ext {
-        javaVersion = JavaVersion.VERSION_1_8
+        javaVersion = 8
 
         vnRootDir = templateDir
         vnResDir = new File(vnRootDir, 'res')
