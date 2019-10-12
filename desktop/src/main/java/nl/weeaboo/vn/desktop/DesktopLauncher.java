@@ -49,9 +49,13 @@ public final class DesktopLauncher {
      * @throws InitException If a fatal error occurs during initialization.
      */
     public static void main(String[] args) throws InitException {
-        InitConfig.init();
+        try {
+            InitConfig.init();
 
-        new DesktopLauncher(args).start();
+            new DesktopLauncher(args).start();
+        } catch (Exception e) {
+            LOG.error("Fatal error during init", e);
+        }
     }
 
     /**

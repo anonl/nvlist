@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.impl.script.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
@@ -8,6 +9,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -86,6 +88,30 @@ public class CoreLib extends LuaLib {
         IScriptThread thread = scriptContext.createThread(func);
 
         return LuajavaLib.toUserdata(thread, IScriptThread.class);
+    }
+
+    /**
+     * Enqueues a single-shot task to be executed on the main thread. See
+     * {@link IScriptEventDispatcher#addEvent(IScriptFunction)}.
+     *
+     * @param args
+     *        <ol>
+     *        <li>Function
+     *        <li>Function args
+     *        </ol>
+     * @throws ScriptException If event creation fails.
+     */
+    @ScriptFunction
+    public Varargs scheduleEvent(Varargs args) throws ScriptException {
+        IContext context = ContextUtil.getCurrentContext();
+        if (context == null) {
+            throw new ScriptException("No context is current");
+        }
+
+        IScriptFunction func = LuaScriptUtil.toScriptFunction(args, 1);
+        context.getScriptContext().getEventDispatcher().addEvent(func);
+
+        return LuaConstants.NONE;
     }
 
 }

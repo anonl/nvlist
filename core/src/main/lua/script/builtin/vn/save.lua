@@ -22,6 +22,17 @@ function getSharedGlobal(name)
     return Save.getSharedGlobals():get(name)
 end
 
+---Quicksave
+-------------------------------------------------------------------------------------------------------------- @section Autosave
+
+function quickSave(slot, userdata, screenshot)
+    return Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)
+end
+
+function quickLoad(slot)
+    return Save.load(Save.getQuickSaveSlot(slot))
+end
+
 ---Autosave
 -------------------------------------------------------------------------------------------------------------- @section Autosave
 
