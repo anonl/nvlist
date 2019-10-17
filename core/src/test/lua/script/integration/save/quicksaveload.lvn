@@ -1,0 +1,9 @@
+@@
+
+x = 1
+quickSave(5)
+
+x = 2
+quickLoad(5)
+
+@@

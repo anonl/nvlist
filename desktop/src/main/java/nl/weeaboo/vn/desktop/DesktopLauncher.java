@@ -46,15 +46,15 @@ public final class DesktopLauncher {
 
     /**
      * Main entry point for desktop platforms (Windows, Linux, MacOS).
-     * @throws InitException If a fatal error occurs during initialization.
      */
-    public static void main(String[] args) throws InitException {
+    public static void main(String[] args) {
         try {
             InitConfig.init();
 
             new DesktopLauncher(args).start();
         } catch (Exception e) {
             LOG.error("Fatal error during init", e);
+            System.exit(1);
         }
     }
 

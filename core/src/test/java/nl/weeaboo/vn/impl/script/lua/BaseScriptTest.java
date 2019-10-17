@@ -84,7 +84,7 @@ public class BaseScriptTest {
         LuaScriptContext context = new LuaScriptContext(scriptEnv);
         IScriptThread mainThread = context.getMainThread();
 
-        scriptLoader.loadScript(mainThread, LuaTestUtil.SCRIPT_YIELD);
+        scriptLoader.loadScript(mainThread, FilePath.of("yield.lvn"));
         LuaTestUtil.assertGlobal("count", 0); // Stop at yield(1)
         mainThread.update();
         LuaTestUtil.assertGlobal("count", 1); // Stop at yield(2)
@@ -117,7 +117,7 @@ public class BaseScriptTest {
         Assert.assertEquals(1, contextManager.getActiveContexts().size());
 
         // Run a script that creates and activates a context
-        scriptLoader.loadScript(mainThread, LuaTestUtil.SCRIPT_CREATECONTEXT);
+        scriptLoader.loadScript(mainThread, FilePath.of("createcontext.lvn"));
         Assert.assertEquals(2, contextManager.getActiveContexts().size());
 
         LuaTestUtil.waitForAllThreads(contextManager);

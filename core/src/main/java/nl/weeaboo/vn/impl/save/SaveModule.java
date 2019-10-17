@@ -75,13 +75,6 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         initTransients();
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-
-        savePersistent();
-    }
-
     /** The list order determines the save order, the load order is the opposite */
     private List<IPersistentSavePlugin> getPersistentSavePlugins() {
         IStatsModule statsModule = env.getStatsModule();
@@ -212,6 +205,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
                 fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
 
         // Clean up resources for current environment before we start loading a new one
+        novel.getEnv().getSaveModule().savePersistent();
         novel.getEnv().destroy();
 
         try {
@@ -220,6 +214,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
             is.setDepthWarnLimit(125);
             try {
                 novel.readAttributes(is);
+                env.getSaveModule().loadPersistent();
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
             } finally {
@@ -232,6 +227,9 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     @Override
     public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException {
+        // This seems to be a good time to flush other values to disk as well
+        savePersistent();
+
         IWritableFileSystem fs = getFileSystem();
 
         FilePath savePath = getSavePath(slot);

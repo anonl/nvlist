@@ -21,10 +21,7 @@ import nl.weeaboo.vn.script.IScriptThread;
 public final class LuaTestUtil {
 
     public static final FilePath SCRIPT_HELLOWORLD = FilePath.of("helloworld.lvn");
-    public static final FilePath SCRIPT_YIELD = FilePath.of("yield.lvn");
-    public static final FilePath SCRIPT_CREATECONTEXT = FilePath.of("createcontext.lvn");
     public static final FilePath SCRIPT_SCRIPTLIB = FilePath.of("scriptlib.lvn");
-    public static final FilePath SCRIPT_SETMODE = FilePath.of("setmode.lvn");
 
     private LuaTestUtil() {
     }

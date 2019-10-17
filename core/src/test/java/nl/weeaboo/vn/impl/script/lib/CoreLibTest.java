@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lib;
 
+import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.impl.image.desc.XmlImageDescImporter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,11 +34,21 @@ public class CoreLibTest extends AbstractLibTest {
 
     @Test
     public void setMode() {
-        loadScript(LuaTestUtil.SCRIPT_SETMODE);
+        loadScript("setmode.lvn");
 
         Assert.assertEquals(2, env.getContextManager().getContexts().size());
         LuaTestUtil.assertGlobal("oldContextTrigger", false);
         LuaTestUtil.assertGlobal("newContextTrigger", true);
+    }
+
+    @Test
+    public void testScheduleEvent() {
+        loadScript("lib/core/schedule-event.lvn");
+        LuaTestUtil.assertGlobal("finished", false);
+
+        // The scheduled event runs on the next frame
+        contextManager.update();
+        LuaTestUtil.assertGlobal("finished", true);
     }
 
 }
