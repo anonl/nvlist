@@ -155,7 +155,6 @@ function SaveSlot:setBounds(x, y, w, h)
     local i = self.image
 
     local fontSize = math.ceil(w * .065)
-    Log.debug("SaveSlot fontSize={}", fontSize)
     l:extendDefaultStyle(Text.createStyle{align="center", fontSize=fontSize})
 
     if i ~= nil then

@@ -1,7 +1,5 @@
 package nl.weeaboo.vn.impl.script.lib;
 
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.impl.image.desc.XmlImageDescImporter;
 import org.junit.Assert;
 import org.junit.Test;
 

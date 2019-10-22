@@ -130,11 +130,16 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
     public void registerScriptFile(ResourceId resourceId, int numTextLines) {
         FilePath filePath = resourceId.getFilePath();
         IndexBasedSeen seen = scriptSeen.get(filePath);
-        if (seen != null && seen.getMaxIndex() == numTextLines) {
-            return; // ScriptSeen exists and is up-to-date
+        if (seen == null) {
+            LOG.debug("Registered previously unseen script file: {} ({} lines)", resourceId, numTextLines);
+        } else {
+            if (seen.getMaxIndex() == numTextLines) {
+                return; // ScriptSeen exists and is up-to-date
+            } else {
+                LOG.debug("Reset seen lines for changed script file: {} ({} lines)", resourceId, numTextLines);
+            }
         }
 
-        LOG.debug("Registered script file: {}", resourceId);
 
         seen = new IndexBasedSeen(numTextLines);
         scriptSeen.put(filePath, seen);
@@ -273,6 +278,8 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
         } finally {
             in.close();
         }
+
+        LOG.debug("Finished loading seen log: {}, scripts={}", path, scriptSeen.keySet());
     }
 
     @LuaSerializable

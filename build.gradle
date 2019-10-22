@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
 
         // Plugins for iOS
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.2'

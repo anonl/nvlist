@@ -205,7 +205,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
                 fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
 
         // Clean up resources for current environment before we start loading a new one
-        novel.getEnv().getSaveModule().savePersistent();
+        savePersistent();
         novel.getEnv().destroy();
 
         try {
@@ -214,7 +214,12 @@ public class SaveModule extends AbstractModule implements ISaveModule {
             is.setDepthWarnLimit(125);
             try {
                 novel.readAttributes(is);
-                env.getSaveModule().loadPersistent();
+
+                /*
+                 * Note: be very careful here. We've just recreated the env in novel, but we're still running
+                 * in the SaveModule of the previous env.
+                 */
+                novel.getEnv().getSaveModule().loadPersistent();
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
             } finally {

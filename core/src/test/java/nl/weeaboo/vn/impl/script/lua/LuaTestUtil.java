@@ -115,7 +115,7 @@ public final class LuaTestUtil {
      */
     public static void waitForAllThreads(IContextManager contextManager) {
         int iteration = 0;
-        while (iteration < 10_000) {
+        while (iteration++ < 10_000) {
             boolean anyRunnableThreads = false;
 
             for (IContext context : contextManager.getActiveContexts()) {
