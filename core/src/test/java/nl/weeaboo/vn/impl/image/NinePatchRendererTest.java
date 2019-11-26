@@ -94,6 +94,7 @@ public class NinePatchRendererTest {
 
     private void assertRenderBounds(AreaId area, Area2D expected) {
         QuadRenderCommand command = findCommand(drawBuffer.getCommands(), area);
+        Assert.assertNotNull(command);
         RectAssert.assertEquals(expected, command.bounds, EPSILON);
     }
 

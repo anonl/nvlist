@@ -60,7 +60,7 @@ public final class InputConfig implements Json.Serializable {
     /**
      * Returns a list of physical key combinations mapped to the supplied virtual key.
      */
-    public Collection<KeyCombination> get(VKey vkey) {
+    public List<KeyCombination> get(VKey vkey) {
         return keyMapping.get(vkey);
     }
 

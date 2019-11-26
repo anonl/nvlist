@@ -45,7 +45,7 @@ public final class FboBackBuffer implements IBackBuffer {
 
     @Override
     public SpriteBatch begin() {
-        checkFboExists();
+        FrameBuffer frameBuffer = checkFboExists();
 
         frameBuffer.begin();
         frameBufferViewport.apply();
@@ -59,14 +59,14 @@ public final class FboBackBuffer implements IBackBuffer {
 
     @Override
     public void end() {
-        checkFboExists();
+        FrameBuffer frameBuffer = checkFboExists();
 
         frameBuffer.end();
     }
 
     @Override
     public void flip() {
-        checkFboExists();
+        FrameBuffer frameBuffer = checkFboExists();
 
         Viewport screenViewport = viewports.getScreenViewport();
         screenViewport.apply();
@@ -84,8 +84,11 @@ public final class FboBackBuffer implements IBackBuffer {
         }
     }
 
-    private void checkFboExists() {
-        Checks.checkState(frameBuffer != null, "FrameBuffer doesn't exist; call setWindowSize() first");
+    private FrameBuffer checkFboExists() {
+        if (frameBuffer == null) {
+            throw new IllegalStateException("FrameBuffer doesn't exist; call setWindowSize() first");
+        }
+        return frameBuffer;
     }
 
     private void disposeFrameBuffer() {

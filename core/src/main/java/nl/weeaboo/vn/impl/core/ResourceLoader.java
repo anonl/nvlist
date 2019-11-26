@@ -40,7 +40,7 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     private transient LruSet<FilePath> checkedRedundantFilenames;
     private transient LruSet<FilePath> unresolvableFilenames;
-    private transient @Nullable LoadingCache<FilePath, ResourceId> resolveCache;
+    private transient LoadingCache<FilePath, ResourceId> resolveCache;
 
     private @Nullable IPreloadHandler preloadHandler;
 
@@ -180,7 +180,7 @@ public abstract class ResourceLoader implements IResourceResolver {
                     filtered.add(file);
                 }
             }
-            return filtered;
+            return Collections.unmodifiableList(filtered);
         } catch (IOException ioe) {
             LOG.warn("Folder doesn't exist or can't be read: {}", folder, ioe);
             return Collections.emptyList();

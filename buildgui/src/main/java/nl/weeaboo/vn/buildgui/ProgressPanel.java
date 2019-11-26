@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +30,7 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
     private final JLabel messageLabel;
 
     private final IProgressListener progressListener = new ProgressListener();
-    private ITask currentTask;
+    private @Nullable ITask currentTask;
 
     public ProgressPanel() {
         progressIcon = new ImageIcon(getClass().getResource("task-progress.gif"));
@@ -55,12 +56,13 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
             currentTask.removeProgressListener(progressListener);
         }
 
-        currentTask = task.orElse(null);
+        ITask newTask = task.orElse(null);
+        currentTask = newTask;
 
-        if (currentTask != null) {
+        if (newTask != null) {
             progressIndicator.setIcon(progressIcon);
             messageLabel.setText("");
-            currentTask.addProgressListener(progressListener);
+            newTask.addProgressListener(progressListener);
         }
     }
 

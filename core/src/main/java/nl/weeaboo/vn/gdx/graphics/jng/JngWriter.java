@@ -209,7 +209,7 @@ public final class JngWriter {
         crc.update((chunkType >> 24) & 0xFF);
         crc.update((chunkType >> 16) & 0xFF);
         crc.update((chunkType >> 8 ) & 0xFF);
-        crc.update((chunkType      ) & 0xFF);
+        crc.update( chunkType        & 0xFF);
         dout.writeInt(chunkType);
 
         crc.update(data, 0, data.length);

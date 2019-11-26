@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +111,7 @@ public class SystemModuleTest {
             return existingFunctions.contains(functionName);
         }
 
-        public String consumeLastCallled() {
+        public @Nullable String consumeLastCallled() {
             return lastCalled.getAndSet(null);
         }
 

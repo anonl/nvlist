@@ -24,6 +24,7 @@ public class TweenLibTest extends AbstractLibTest {
         loadScript("integration/tween/cross-fade");
 
         ICrossFadeConfig config = LuaTestUtil.getGlobal("config", ICrossFadeConfig.class);
+        Assert.assertNotNull(config);
         Assert.assertEquals(123, config.getDuration(), 1e-3);
 
         ICrossFadeRenderer fade = LuaTestUtil.getGlobal("fade", ICrossFadeRenderer.class);
@@ -35,6 +36,7 @@ public class TweenLibTest extends AbstractLibTest {
         loadScript("integration/tween/bitmap-tween");
 
         IBitmapTweenConfig config = LuaTestUtil.getGlobal("config", IBitmapTweenConfig.class);
+        Assert.assertNotNull(config);
         Assert.assertEquals(123, config.getDuration(), 1e-3);
 
         IBitmapTweenRenderer tween = LuaTestUtil.getGlobal("tween", IBitmapTweenRenderer.class);

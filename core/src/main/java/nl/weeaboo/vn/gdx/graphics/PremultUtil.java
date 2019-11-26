@@ -51,7 +51,7 @@ public final class PremultUtil {
             int abgr = pixels.getInt(n);
             int a = abgr >>> 24;
             int b = lut[((abgr >> 8) & 0xFF00) | a] & 0xFF;
-            int g = lut[((abgr     ) & 0xFF00) | a] & 0xFF;
+            int g = lut[( abgr       & 0xFF00) | a] & 0xFF;
             int r = lut[((abgr << 8) & 0xFF00) | a] & 0xFF;
             pixels.putInt(n, (a << 24) | (b << 16) | (g << 8) | r);
         }
@@ -72,7 +72,7 @@ public final class PremultUtil {
             int r = (rgba16 >> 12) & 0xF;
             int g = (rgba16 >> 8 ) & 0xF;
             int b = (rgba16 >> 4 ) & 0xF;
-            int a = (rgba16      ) & 0xF;
+            int a =  rgba16        & 0xF;
 
             r = (a * r + 7) / 15;
             g = (a * g + 7) / 15;
@@ -138,7 +138,7 @@ public final class PremultUtil {
                 int r = (rgba16 >> 12) & 0xF;
                 int g = (rgba16 >> 8 ) & 0xF;
                 int b = (rgba16 >> 4 ) & 0xF;
-                int a = (rgba16      ) & 0xF;
+                int a =  rgba16       & 0xF;
 
                 if (a == 0) {
                     r = 0;

@@ -266,13 +266,16 @@ end
 
 function createStyledText(text, style)
     deprecated(\"4.0\")
-
     return Text.createStyledText(text or \"\", style)
+end
+
+function style(style)
+    deprecated(\"4.0\")
+    return Text.createStyle(style)
 end
 
 function createStyle(style)
     deprecated(\"4.0\")
-
     return Text.createStyle(style)
 end
 
@@ -300,7 +303,7 @@ end
 function stringify(word, level)
     level = level or 3
 
-    local value = stringifiers[word]    
+    local value = stringifiers[word]
     if value == nil then
         value = getDeepField(getLocalVars(level + 1), word) or getDeepField(getfenv(level), word)
     end

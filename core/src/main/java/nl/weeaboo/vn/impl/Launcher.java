@@ -58,12 +58,14 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
 
+@SuppressWarnings("NullableDereference") // TODO: Fix later
 public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
     private final GdxFileSystem resourceFileSystem;
     private final IWritableFileSystem outputFileSystem;
+    private NovelPrefsStore prefs;
 
     private @Nullable AssetManager assetManager;
 
@@ -74,7 +76,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable PerformanceMetrics performanceMetrics;
 
     private @Nullable Novel novel;
-    private @Nullable NovelPrefsStore prefs;
     private @Nullable SimulationRateLimiter simulationRateLimiter;
     private @Nullable GLScreenRenderer renderer;
     private @Nullable DrawBuffer drawBuffer;
@@ -93,14 +94,17 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     /** Note: This method may be called at any time, even before {@link #create()} */
     public NovelPrefsStore loadPreferences() {
-        NovelPrefsStore prefsStore = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
-        try {
-            prefsStore.loadVariables();
-        } catch (IOException ioe) {
-            LOG.warn("Unable to load variables", ioe);
+        NovelPrefsStore result = prefs;
+        if (result == null) {
+            result = new NovelPrefsStore(resourceFileSystem, outputFileSystem);
+            try {
+                result.loadVariables();
+            } catch (IOException ioe) {
+                LOG.warn("Unable to load variables", ioe);
+            }
+            prefs = result;
         }
-        this.prefs = prefsStore;
-        return prefsStore;
+        return result;
     }
 
     @Override
@@ -109,10 +113,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         assetManager = new GdxAssetManager(resourceFileSystem);
 
-        if (prefs == null) {
-            loadPreferences();
-        }
-
+        NovelPrefsStore prefs = loadPreferences();
         performanceMetrics = new PerformanceMetrics();
 
         Dim vsize = Dim.of(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
@@ -121,8 +122,9 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         backBuffer = new HybridBackBuffer(vsize, viewports);
         inputAdapter = new GdxInputAdapter(viewports.getScreenViewport());
 
+        Novel novel;
         try {
-            initNovel(prefs);
+            novel = initNovel(prefs, createInput(inputAdapter));
         } catch (InitException e) {
             throw new RuntimeException("Fatal error during init", e);
         }
@@ -143,7 +145,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         LOG.info("Launcher.create() end");
     }
 
-    private void initNovel(NovelPrefsStore prefs) throws InitException {
+    private static Input createInput(GdxInputAdapter inputAdapter) {
         InputConfig inputConfig;
         try {
             inputConfig = InputConfig.readDefaultConfig();
@@ -151,8 +153,10 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             inputConfig = new InputConfig();
             LOG.warn("Error reading input config", ioe);
         }
-        final Input input = new Input(inputAdapter.getInput(), inputConfig);
+        return new Input(inputAdapter.getInput(), inputConfig);
+    }
 
+    private Novel initNovel(NovelPrefsStore prefs, Input input) throws InitException {
         StaticEnvironment.NOTIFIER.set(new LoggerNotifier());
         StaticEnvironment.FILE_SYSTEM.set(resourceFileSystem);
         StaticEnvironment.OUTPUT_FILE_SYSTEM.set(outputFileSystem);
@@ -171,7 +175,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
-
         novel.start("main");
 
         // Attach listener to static environment
@@ -181,6 +184,8 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
                 onPrefsChanged();
             }
         });
+
+        return novel;
     }
 
     @Override
@@ -191,7 +196,7 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         }
 
         disposeRenderer();
-        backBuffer.dispose();
+        backBuffer = DisposeUtil.dispose(backBuffer);
         osd = DisposeUtil.dispose(osd);
 
         textureStore = Destructibles.destroy(textureStore);
@@ -325,7 +330,10 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
      * Returns the global novel object.
      */
     public Novel getNovel() {
-        return Checks.checkNotNull(novel);
+        if (novel == null) {
+            throw new IllegalStateException("Launcher isn't running");
+        }
+        return novel;
     }
 
     private void onUncaughtException(RuntimeException re) {
@@ -355,7 +363,10 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
     /** Returns the global scene2D environment. */
     public Scene2dEnv getSceneEnv() {
-        return Checks.checkNotNull(sceneEnv);
+        if (sceneEnv == null) {
+            throw new IllegalStateException("Launcher isn't running");
+        }
+        return sceneEnv;
     }
 
 }

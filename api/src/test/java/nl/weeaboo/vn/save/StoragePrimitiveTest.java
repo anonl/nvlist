@@ -10,6 +10,7 @@ public class StoragePrimitiveTest {
     @Test
     public void testNull() {
         StoragePrimitive p = StoragePrimitive.fromJson("null");
+        Assert.assertNotNull(p);
         Assert.assertEquals(false, p.isBoolean());
         Assert.assertEquals(false, p.isDouble());
         Assert.assertEquals(false, p.isString());
@@ -87,15 +88,14 @@ public class StoragePrimitiveTest {
 
         // Strings do not necessarily need to be quoted
         String unquoted = "for convenience, unquoted strings are also allowed";
-        Assert.assertEquals("\"" + unquoted + "\"", StoragePrimitive.fromJson(unquoted).toJson());
+        jsonConversionRoundtrip(unquoted, "\"" + unquoted + "\"");
 
         // Strings that start with a double quote, but don't end with one are treated as unquoted
-        Assert.assertEquals("\"test", StoragePrimitive.fromJson("\"test").toString());
+        jsonConversionRoundtrip("\"test", "\"\\\"test\"");
 
         // Unquoted strings may contain escape sequences
         String unquotedEscapes = "\\n \\r \\t \\f \\\\ \\' \\\"";
-        Assert.assertEquals("\"" + unquotedEscapes + "\"",
-                StoragePrimitive.fromJson(unquotedEscapes).toJson());
+        jsonConversionRoundtrip(unquotedEscapes, "\"" + unquotedEscapes + "\"");
 
         // undefined becomes null
         Assert.assertEquals(null, StoragePrimitive.fromJson("undefined"));
@@ -132,7 +132,13 @@ public class StoragePrimitiveTest {
     }
 
     private static void jsonConversionRoundtrip(String json) {
-        Assert.assertEquals(json, StoragePrimitive.fromJson(json).toJson());
+        jsonConversionRoundtrip(json, json);
+    }
+
+    private static void jsonConversionRoundtrip(String input, String expectedOutput) {
+        StoragePrimitive sp = StoragePrimitive.fromJson(input);
+        Assert.assertNotNull(sp);
+        Assert.assertEquals(expectedOutput, sp.toJson());
     }
 
     private static void assertBoolean(Boolean expected, StoragePrimitive p) {

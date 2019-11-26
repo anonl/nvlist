@@ -34,9 +34,6 @@ final class BuildGuiPrefs {
     private static BuildGuiPrefs load(String jsonString, String[] commandLineArgs) {
         // Load storage from JSON
         Storage storage = JsonUtil.fromJson(Storage.class, jsonString);
-        if (storage == null) {
-            storage = new Storage();
-        }
 
         // Override certain properties with command-line overrides
         if (commandLineArgs.length >= 1) {

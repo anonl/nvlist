@@ -1,11 +1,11 @@
 package nl.weeaboo.vn.impl.save;
 
-import javax.annotation.CheckForNull;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
+
+import nl.weeaboo.common.Checks;
 
 public final class JsonUtil {
 
@@ -20,7 +20,6 @@ public final class JsonUtil {
     /**
      * Deserializes some JSON to a Java object of the specified type.
      */
-    @CheckForNull
     public static <T> T fromJson(Class<T> type, String json) {
         return fromJson(type, parse(json));
     }
@@ -28,10 +27,9 @@ public final class JsonUtil {
     /**
      * Deserializes some JSON to a Java object of the specified type.
      */
-    @CheckForNull
     public static <T> T fromJson(Class<T> type, JsonValue value) {
         Json json = newJson();
-        return json.readValue(type, value);
+        return Checks.checkNotNull(json.readValue(type, value));
     }
 
     /**

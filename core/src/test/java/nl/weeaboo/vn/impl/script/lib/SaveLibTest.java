@@ -45,6 +45,7 @@ public class SaveLibTest extends AbstractLibTest {
         loadScript("lib/save/sharedglobals.lvn");
 
         ILuaStorage actual = LuaTestUtil.getGlobal("sharedGlobals", ILuaStorage.class);
+        Assert.assertNotNull(actual);
         Assert.assertEquals(LuaInteger.valueOf(123), actual.get("test"));
     }
 

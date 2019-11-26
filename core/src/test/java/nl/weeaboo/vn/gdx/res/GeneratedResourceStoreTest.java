@@ -31,14 +31,17 @@ public class GeneratedResourceStoreTest {
         createResource(1);
         garbageCollect(0); // Unreferences resources get collected
 
+        invalidateGCSub();
+
+        garbageCollect(0); // alpha can now be garbage collected
+    }
+
+    private void invalidateGCSub() {
         IResource<Dummy> alpha = createResource(2);
         LOG.info(String.valueOf(alpha.get()));
         createResource(3);
 
         garbageCollect(1); // We're still holding a reference to alpha
-
-        alpha = null;
-        garbageCollect(0); // alpha can now be garbage collected
     }
 
     private IResource<Dummy> createResource(int id) {

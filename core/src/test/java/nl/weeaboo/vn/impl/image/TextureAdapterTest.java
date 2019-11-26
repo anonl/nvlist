@@ -61,6 +61,7 @@ public class TextureAdapterTest {
         res.set(new TextureRegion(tex, 0, 0, 10, 10));
 
         TextureRegion subRegion = adapter.getTextureRegion(Area2D.of(.2, .3, .4, .5));
+        Assert.assertNotNull(subRegion);
         Assert.assertEquals(.2, subRegion.getU(), EPSILON);
         Assert.assertEquals(.2 + .4, subRegion.getU2(), EPSILON);
         Assert.assertEquals(.3, subRegion.getV(), EPSILON);

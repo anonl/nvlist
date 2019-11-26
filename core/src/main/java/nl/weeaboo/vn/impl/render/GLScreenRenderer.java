@@ -285,7 +285,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         int a = (argb >> 24) & 0xFF;
         int r = (argb >> 16) & 0xFF;
         int g = (argb >> 8) & 0xFF;
-        int b = (argb) & 0xFF;
+        int b = argb & 0xFF;
 
         spriteBatch.setColor(Color.toFloatBits(r, g, b, a));
     }

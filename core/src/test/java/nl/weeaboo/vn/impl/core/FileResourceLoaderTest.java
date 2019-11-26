@@ -160,8 +160,9 @@ public class FileResourceLoaderTest {
         resourceLoader.preload(FilePath.of(inputFilename));
 
         String actual = null;
-        if (resourceLoader.lastPreload != null) {
-            actual = resourceLoader.lastPreload.getFilePath().toString();
+        ResourceId lastPreload = resourceLoader.lastPreload;
+        if (lastPreload != null) {
+            actual = lastPreload.getFilePath().toString();
         }
         Assert.assertEquals(expectedNormalized, actual);
     }

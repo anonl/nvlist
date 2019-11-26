@@ -72,6 +72,7 @@ public final class SoundModuleTest {
 
         // Create a valid sound
         ISound sound = createSound("dummy.ogg");
+        Assert.assertNotNull(sound);
         Assert.assertEquals(FilePath.of("dummy.ogg"), sound.getFilename());
     }
 

@@ -60,7 +60,7 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
     @Override
     public FileHandle resolve(String subPath) {
-        return new DesktopFileHandle(FilePath.of(subPath));
+        return new DesktopFileHandle(this, FilePath.of(subPath));
     }
 
     private IFileSystem resolveFileSystem(FilePath path) {
@@ -166,18 +166,20 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
         return result;
     }
 
-    private final class DesktopFileHandle extends NonFileGdxFileHandle {
+    private static final class DesktopFileHandle extends NonFileGdxFileHandle {
 
+        private final DesktopGdxFileSystem fileSystem;
         private final FilePath path;
 
-        public DesktopFileHandle(FilePath path) {
+        public DesktopFileHandle(DesktopGdxFileSystem fileSystem, FilePath path) {
             super(path.toString(), FileType.Internal);
 
+            this.fileSystem = Checks.checkNotNull(fileSystem);
             this.path = Checks.checkNotNull(path);
         }
 
         private IFileSystem resolveFileSystem() {
-            return DesktopGdxFileSystem.this.resolveFileSystem(path);
+            return fileSystem.resolveFileSystem(path);
         }
 
         @Override
@@ -191,21 +193,21 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
         @Override
         public FileHandle child(String name) {
-            return new DesktopFileHandle(path.resolve(name));
+            return new DesktopFileHandle(fileSystem, path.resolve(name));
         }
 
         @Override
         public FileHandle parent() {
             FilePath parent = MoreObjects.firstNonNull(path.getParent(), FilePath.empty());
-            return new DesktopFileHandle(parent);
+            return new DesktopFileHandle(fileSystem, parent);
         }
 
         @Override
         public Iterable<FileHandle> listChildren() {
-            return Iterables.transform(getChildren(path), new Function<FilePath, DesktopFileHandle>() {
+            return Iterables.transform(fileSystem.getChildren(path), new Function<FilePath, DesktopFileHandle>() {
                 @Override
                 public DesktopFileHandle apply(FilePath childPath) {
-                    return new DesktopFileHandle(childPath);
+                    return new DesktopFileHandle(fileSystem, childPath);
                 }
             });
         }

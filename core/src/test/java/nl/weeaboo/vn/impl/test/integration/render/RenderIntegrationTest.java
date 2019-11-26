@@ -1,8 +1,7 @@
 package nl.weeaboo.vn.impl.test.integration.render;
 
-import javax.annotation.Nullable;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
@@ -56,8 +55,9 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         return renderer.getDrawBuffer();
     }
 
-    protected @Nullable ITexture getTexture(String path) {
+    protected ITexture getTexture(String path) {
         ITexture texture = env.getImageModule().getTexture(FilePath.of(path));
+        Assert.assertNotNull(texture);
         // Set filtering to nearest so we don't get trolled by slight interpolation differences on the build server
         setFilterNearest(texture);
         return texture;

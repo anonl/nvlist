@@ -65,6 +65,7 @@ public final class DesktopLauncher {
         DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("."));
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
+        final DesktopLauncher desktopLauncher = this;
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override
             public void create() {
@@ -87,7 +88,7 @@ public final class DesktopLauncher {
             protected void handleInput(INativeInput input) {
                 super.handleInput(input);
 
-                DesktopLauncher.this.handleInput(input);
+                desktopLauncher.handleInput(input);
             }
         };
 
