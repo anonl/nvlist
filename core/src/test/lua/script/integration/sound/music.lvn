@@ -1,0 +1,12 @@
+
+@@
+
+require("builtin/vn")
+
+music("dummy.ogg")
+luaAssertNotEquals("dummy.ogg", Sound.findByChannel(9000):getFilename())
+
+musicStop(0)
+luaAssertEquals(nil, Sound.findByChannel(9000))
+
+@@

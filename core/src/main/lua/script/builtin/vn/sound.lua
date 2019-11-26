@@ -13,6 +13,8 @@ local function tosound(soundOrChannel)
     return soundOrChannel
 end
 
+local MUSIC_CHANNEL = 9000
+
 ---Global declarations
 -------------------------------------------------------------------------------------------------------------- @section globals
 
@@ -25,7 +27,7 @@ end
 -- @number[opt=1.0] volume Loudness of the music between <code>0.0</code> and <code>1.0</code>.
 -- @see sound
 function music(filename, volume)
-    return sound(filename, -1, volume or 1.0, 9000, SoundType.MUSIC)
+    return sound(filename, -1, volume or 1.0, MUSIC_CHANNEL, SoundType.MUSIC)
 end
 
 ---Stops background music started with the <code>music</code> function.
@@ -33,7 +35,7 @@ end
 --         stopping playback immediately.
 -- @see music
 function musicStop(fadeTimeFrames)
-    soundStop(0, fadeTimeFrames)
+    soundStop(MUSIC_CHANNEL, fadeTimeFrames)
 end
 
 ---Voice functions
@@ -83,27 +85,30 @@ function sound(filename, loops, volume, channel, type)
 end
 
 ---Stops a playing sound.
--- @param sound The Sound object or audio channel to change the volume of.
+-- @param soundOrChannel The Sound object or audio channel to change the volume of.
 -- @number fadeTimeFrames Optional argument specifying the duration (in frames)
 --         of a slow fade-out instead of stopping playback immediately.
 -- @see sound
-function soundStop(sound, fadeTimeFrames)
-    sound = tosound(sound)    
+function soundStop(soundOrChannel, fadeTimeFrames)
+    local sound = tosound(soundOrChannel)    
     if sound == nil then
+        Log.warn("Attempt to stop invalid sound effect or music: {}", soundOrChannel)
         return
     end
 
     sound:stop(fadeTimeFrames)
+    yield() -- Wait for a frame here so to allow the stopped sound/music to be removed by the sound module
 end
 
 ---Changes the volume of playing sound/music/voice.
--- @param sound The Sound object or audio channel to change the volume of.
+-- @param soundOrChannel The Sound object or audio channel to change the volume of.
 -- @number[opt=1.0] targetVolume The target volume for the Sound.
 -- @number[opt=0] durationFrames If specified, the number of frames over which to gradually change the sound's
 --                volume to the <code>targetVolume</code>.
-function changeVolume(sound, targetVolume, durationFrames)
-    sound = tosound(sound)    
+function changeVolume(soundOrChannel, targetVolume, durationFrames)
+    local sound = tosound(soundOrChannel)    
     if sound == nil then
+        Log.warn("Attempt to change volume of invalid sound effect or music: {}", soundOrChannel)
         return
     end
 

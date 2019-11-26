@@ -116,16 +116,15 @@ public final class LuaTestUtil {
     public static void waitForAllThreads(IContextManager contextManager) {
         int iteration = 0;
         while (iteration++ < 10_000) {
-            boolean anyRunnableThreads = false;
+            contextManager.update();
 
+            boolean anyRunnableThreads = false;
             for (IContext context : contextManager.getActiveContexts()) {
-                IScriptContext scriptContext = context.getScriptContext();
-                if (hasRunnableThreads(scriptContext)) {
+                if (hasRunnableThreads(context.getScriptContext())) {
                     anyRunnableThreads = true;
-                    scriptContext.updateThreads(context, TestScriptExceptionHandler.INSTANCE);
+                    break;
                 }
             }
-
             if (!anyRunnableThreads) {
                 return;
             }
