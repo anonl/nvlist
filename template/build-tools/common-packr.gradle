@@ -106,6 +106,7 @@ task archiveWindows64(type: Zip) {
     destinationDir = releaseDir
     archiveName = "${rootProject.name}-${version}-windows64.zip"
     from tasks['packrWindows64']
+    into "${rootProject.name}-${version}"
 }
 
 task archiveLinux64(type: Tar) {
@@ -113,6 +114,7 @@ task archiveLinux64(type: Tar) {
     archiveName = "${rootProject.name}-${version}-linux64.tgz"
     compression = Compression.GZIP
     from tasks['packrLinux64']
+    into "${rootProject.name}-${version}"
 }
 
 task archiveMacOS(type: Copy) {
