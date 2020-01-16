@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import static nl.weeaboo.vn.impl.text.TextUtil.toStyledText;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.styledtext.StyledText;
@@ -232,7 +234,7 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
-    public INinePatch getTexture(ButtonViewState viewState) {
+    public @Nullable INinePatch getTexture(ButtonViewState viewState) {
         return renderer.getTexture(viewState);
     }
 

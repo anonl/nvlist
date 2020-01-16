@@ -426,6 +426,6 @@ end
 function setImageLayer(layer)
     deprecated(\"4.0\")
 
-    return setActiveLayer(layer)
+    return setActiveLayer(layer or getRootLayer())
 end" %}
                 

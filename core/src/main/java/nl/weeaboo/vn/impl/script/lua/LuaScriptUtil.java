@@ -48,9 +48,8 @@ public final class LuaScriptUtil {
 
     /** Converts a {@link LuaException} to a {@link ScriptException} */
     public static ScriptException toScriptException(String message, LuaException e) {
-        ScriptException se = new ScriptException(message + ": " + e.getMessage());
+        ScriptException se = new ScriptException(message + ": " + e.getMessage(), e.getCause());
         se.setStackTrace(e.getStackTrace());
-        se.initCause(e.getCause());
         return se;
     }
 

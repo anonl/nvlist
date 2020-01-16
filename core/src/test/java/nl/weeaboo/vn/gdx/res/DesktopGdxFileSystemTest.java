@@ -254,7 +254,7 @@ public final class DesktopGdxFileSystemTest {
 
         exTester.expect(FileNotFoundException.class, () -> fileSystem.openInputStream(path));
         // libGDX throws a runtime exception instead of an IOException
-        exTester.expect(GdxRuntimeException.class, () -> Assert.assertEquals(0L, handle.readString()));
+        exTester.expect(GdxRuntimeException.class, () -> handle.readString());
     }
 
     private void writeZipFile(String zipFileName, String... files) throws IOException {

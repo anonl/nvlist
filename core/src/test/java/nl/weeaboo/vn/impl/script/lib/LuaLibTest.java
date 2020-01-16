@@ -148,8 +148,9 @@ public class LuaLibTest {
             throw args.checkuserdata(1, Exception.class);
         }
 
+        @SuppressWarnings("unused")
         @ScriptFunction
-        private void privateMethod(@SuppressWarnings("unused") Varargs args) {
+        private void privateMethod(Varargs args) {
         }
 
     }

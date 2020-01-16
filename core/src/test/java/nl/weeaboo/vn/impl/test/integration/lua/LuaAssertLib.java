@@ -49,4 +49,23 @@ public class LuaAssertLib extends LuaLib {
         Assert.assertTrue(message, expected.eq_b(actual));
     }
 
+
+    /**
+     * Throws an assertion error if the two values are equal according to Lua's equality operator.
+     *
+     * @param args
+     *        <ol>
+     *        <li>not expected value
+     *        <li>actual value
+     *        </ol>
+     */
+    @ScriptFunction
+    public void luaAssertNotEquals(Varargs args) {
+        LuaValue expected = args.arg(1);
+        LuaValue actual = args.arg(2);
+
+        String message = StringUtil.formatRoot("Expected not '%s', Actual: '%s'", expected, actual);
+        Assert.assertFalse(message, expected.eq_b(actual));
+    }
+
 }

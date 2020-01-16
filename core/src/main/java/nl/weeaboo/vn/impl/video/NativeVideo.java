@@ -69,7 +69,11 @@ final class NativeVideo implements INativeVideo {
             VideoPlayerResource res = new VideoPlayerResource(videoPlayerFactory);
             videoPlayerRef = resourceStore.get().register(res);
         }
-        videoPlayerRef.get().initVideoPlayer();
+
+        VideoPlayerResource videoPlayerResource = videoPlayerRef.get();
+        if (videoPlayerResource != null) {
+            videoPlayerResource.initVideoPlayer();
+        }
     }
 
     @Override
@@ -143,7 +147,13 @@ final class NativeVideo implements INativeVideo {
         if (videoPlayerRef == null) {
             return null;
         }
-        return videoPlayerRef.get().getVideoPlayer();
+
+        VideoPlayerResource videoPlayerResource = videoPlayerRef.get();
+        if (videoPlayerResource == null) {
+            return null;
+        }
+
+        return videoPlayerResource.getVideoPlayer();
     }
 
     @Override

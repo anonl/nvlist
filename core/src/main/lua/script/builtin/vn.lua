@@ -15,7 +15,7 @@ function deprecated(deprecatedSince)
     if deprecatedSince ~= nil and targetVersion ~= nil
             and System.compareVersion(deprecatedSince, targetVersion) <= 0
     then
-        local info = debug.getinfo(3, 'n')
+        local info = debug.getinfo(2, 'n')
         Log.warn("Warning: Deprecated function used ({})", info.name)
     end
 end

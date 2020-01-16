@@ -1,17 +1,12 @@
 package nl.weeaboo.vn.impl.render;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
 
-public interface IBackBuffer {
-
-    /**
-     * Disposes the native resources held by this object. No further methods may be called on the object
-     * afterwards.
-     */
-    void dispose();
+public interface IBackBuffer extends Disposable {
 
     /**
      * Set up the rendering state for rendering to this back buffer.

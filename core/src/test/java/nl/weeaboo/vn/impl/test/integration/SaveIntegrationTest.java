@@ -55,4 +55,10 @@ public final class SaveIntegrationTest extends IntegrationTest {
         waitForAllThreads();
     }
 
+    @Test
+    public void testQuickSaveLoad() {
+        loadScript("integration/save/quicksaveload.lvn");
+        LuaTestUtil.assertGlobal("x", 1);
+    }
+
 }

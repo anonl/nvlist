@@ -2,8 +2,6 @@ package nl.weeaboo.vn.impl.video;
 
 import java.io.IOException;
 
-import javax.annotation.Nullable;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -93,8 +91,10 @@ public class NativeVideoTest {
         Assert.assertEquals((float)expected, getVideoPlayer().getVolume(), 0.001f);
     }
 
-    private @Nullable MockGdxVideoPlayer getVideoPlayer() {
-        return (MockGdxVideoPlayer)nativeVideo.getVideoPlayer();
+    private MockGdxVideoPlayer getVideoPlayer() {
+        MockGdxVideoPlayer result = (MockGdxVideoPlayer)nativeVideo.getVideoPlayer();
+        Assert.assertNotNull(result);
+        return result;
     }
 
 }

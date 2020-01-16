@@ -59,6 +59,7 @@ public final class ImageResizerTest {
 
     private void assertSubRect(ImageWithDef imageWithDef, String subRectId, Area expectedArea) {
         IImageSubRect subRect = imageWithDef.getDef().findSubRect(subRectId);
+        Assert.assertNotNull(subRect);
         Assert.assertEquals(expectedArea, subRect.getArea());
     }
 

@@ -55,7 +55,7 @@ public final class Color implements Serializable {
         int ai = (argb >> 24) & 0xFF;
         int ri = (argb >> 16) & 0xFF;
         int gi = (argb >> 8) & 0xFF;
-        int bi = (argb) & 0xFF;
+        int bi = argb & 0xFF;
 
         return fromRGBA(ri / 255.0, gi / 255.0, bi / 255.0, ai / 255.0);
     }
@@ -89,7 +89,7 @@ public final class Color implements Serializable {
         }
 
         Color c = (Color)obj;
-        return r == c.r && g == c.g && b == c.b && a == c.a;
+        return argbInt == c.argbInt && r == c.r && g == c.g && b == c.b && a == c.a;
     }
 
     /**

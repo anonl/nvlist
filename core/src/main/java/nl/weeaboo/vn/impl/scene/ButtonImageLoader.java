@@ -26,9 +26,9 @@ public final class ButtonImageLoader {
      * Attempts to load the various images used by a button.
      */
     public void loadImages(IButton button, ResourceLoadInfo basePath) {
-        if (!loadImage(button, ButtonViewState.DEFAULT, basePath, "")) {
-            // Fallback if the previous image doesn't exist
-            loadImage(button, ButtonViewState.DEFAULT, basePath, "normal");
+        // Fallback if the previous image doesn't exist
+        if (!loadImage(button, ButtonViewState.DEFAULT, basePath, "normal")) {
+            loadImage(button, ButtonViewState.DEFAULT, basePath, "");
         }
 
         // TODO: Support either different images, or putting all sub-rects in the same image with a subid prefix

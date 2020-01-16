@@ -79,12 +79,12 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
     local panel = gridPanel()
     local pad = 100
     panel:setBounds(pad, pad, screenWidth - pad*2, screenHeight - pad*2)
-    
+
     local buttons = {}
     for i,option in ipairs(options) do
         local b = button("gui/button")
         b:setZ(-1000)
-        
+
         local styledText = option
         if Seen.hasSelectedChoice(uniqueChoiceId, i) then
             --Apply a custom text style if the user has selected this choice before
@@ -92,12 +92,12 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
         end
         b:setText(styledText)
         buttons[i] = b
-        
+
         panel:add(b):growX()
         panel:endRow()
     end
     panel:pack()
-    
+
     local selected = 0
     while selected == 0 do
         for i,b in ipairs(buttons) do

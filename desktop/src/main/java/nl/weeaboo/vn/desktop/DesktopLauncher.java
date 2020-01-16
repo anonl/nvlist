@@ -46,12 +46,16 @@ public final class DesktopLauncher {
 
     /**
      * Main entry point for desktop platforms (Windows, Linux, MacOS).
-     * @throws InitException If a fatal error occurs during initialization.
      */
-    public static void main(String[] args) throws InitException {
-        InitConfig.init();
+    public static void main(String[] args) {
+        try {
+            InitConfig.init();
 
-        new DesktopLauncher(args).start();
+            new DesktopLauncher(args).start();
+        } catch (Exception e) {
+            LOG.error("Fatal error during init", e);
+            System.exit(1);
+        }
     }
 
     /**
@@ -61,6 +65,7 @@ public final class DesktopLauncher {
         DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("."));
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
+        final DesktopLauncher desktopLauncher = this;
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override
             public void create() {
@@ -83,7 +88,7 @@ public final class DesktopLauncher {
             protected void handleInput(INativeInput input) {
                 super.handleInput(input);
 
-                DesktopLauncher.this.handleInput(input);
+                desktopLauncher.handleInput(input);
             }
         };
 

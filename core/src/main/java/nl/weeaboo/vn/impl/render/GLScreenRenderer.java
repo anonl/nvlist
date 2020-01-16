@@ -130,15 +130,19 @@ public class GLScreenRenderer extends BaseScreenRenderer {
     public void renderText(TextRenderCommand trc) {
         flushQuadBatch();
 
-        final int dx = (int)Math.round(trc.dx);
-        final int dy = (int)Math.round(trc.dy);
-
         // Temporarily change the blend mode for non-premultiplied alpha
         GLBlendMode.DEFAULT.apply(spriteBatch);
 
         matrixStack.pushMatrix();
         matrixStack.multiply(trc.transform);
-        GdxFontUtil.draw(spriteBatch, trc.textLayout, dx, dy, (float)trc.visibleGlyphs);
+
+        if (!trc.transform.hasShear()) {
+            // For non-rotated text, snap to int coordinates for sharper rendering
+            matrixStack.translate((trc.dx + trc.transform.getTranslationX()) % -1.0,
+                    (trc.dy + trc.transform.getTranslationY()) % -1.0);
+        }
+
+        GdxFontUtil.draw(spriteBatch, trc.textLayout, (float)trc.dx, (float)trc.dy, (float)trc.visibleGlyphs);
         matrixStack.popMatrix();
 
         // Restore previous blend mode
@@ -285,7 +289,7 @@ public class GLScreenRenderer extends BaseScreenRenderer {
         int a = (argb >> 24) & 0xFF;
         int r = (argb >> 16) & 0xFF;
         int g = (argb >> 8) & 0xFF;
-        int b = (argb) & 0xFF;
+        int b = argb & 0xFF;
 
         spriteBatch.setColor(Color.toFloatBits(r, g, b, a));
     }

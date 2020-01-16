@@ -103,7 +103,7 @@ public final class LayoutSize implements Serializable {
         } else if (isInfinite()) {
             return other.isInfinite();
         } else {
-            return value() == other.value(Double.NaN);
+            return value(Double.NaN) == other.value(Double.NaN);
         }
     }
 

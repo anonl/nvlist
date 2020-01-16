@@ -33,7 +33,6 @@ import nl.weeaboo.vn.impl.sound.SoundModule;
 import nl.weeaboo.vn.impl.stats.StatsModule;
 import nl.weeaboo.vn.impl.text.TextModule;
 import nl.weeaboo.vn.impl.video.VideoModule;
-import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.ScriptException;
 
 public class EnvironmentFactory {
@@ -107,8 +106,7 @@ public class EnvironmentFactory {
         //     novel.setBootstrapScripts("builtin/vnds/main.lua");
         // }
 
-        ISaveModule saveModule = env.getSaveModule();
-        saveModule.loadPersistent();
+        env.getSaveModule().loadPersistent();
 
         try {
             scriptEnv.initEnv();

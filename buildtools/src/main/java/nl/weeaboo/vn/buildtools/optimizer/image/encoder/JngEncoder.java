@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
-import javax.annotation.Nullable;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -97,7 +95,7 @@ public final class JngEncoder implements IImageEncoder {
     }
 
     @VisibleForTesting
-    static @Nullable Pixmap extractAlpha(Pixmap src) {
+    static Pixmap extractAlpha(Pixmap src) {
         Pixmap dst = PixmapUtil.newUninitializedPixmap(src.getWidth(), src.getHeight(), Format.Alpha);
 
         final ByteBuffer srcPixels = src.getPixels();

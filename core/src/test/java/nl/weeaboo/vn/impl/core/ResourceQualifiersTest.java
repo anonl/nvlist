@@ -65,7 +65,9 @@ public final class ResourceQualifiersTest {
         if (expected == null) {
             Assert.assertEquals(null, qualifiers.findQualifier(type));
         } else {
-            Assert.assertEquals(expected.toPathString(), qualifiers.findQualifier(type).toPathString());
+            T qualifier = qualifiers.findQualifier(type);
+            Assert.assertNotNull(qualifier);
+            Assert.assertEquals(expected.toPathString(), qualifier.toPathString());
         }
     }
 

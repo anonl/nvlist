@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.scene;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -178,7 +177,7 @@ public class LayerTest {
         }
     }
 
-    private static void assertSubLayers(Collection<? extends ILayer> expected, ILayer parentLayer) {
+    private static void assertSubLayers(List<? extends ILayer> expected, ILayer parentLayer) {
         Assert.assertEquals(expected, ImmutableList.copyOf(parentLayer.getSubLayers()));
     }
 

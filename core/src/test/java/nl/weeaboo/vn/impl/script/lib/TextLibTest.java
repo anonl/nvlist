@@ -42,9 +42,11 @@ public class TextLibTest extends AbstractLibTest {
         Assert.assertNotNull(fullDefault);
 
         ITextDrawable plainText = LuaTestUtil.getGlobal("plainText", ITextDrawable.class);
+        Assert.assertNotNull(plainText);
         Assert.assertEquals(new StyledText("abc"), plainText.getText());
 
         ITextDrawable styledText = LuaTestUtil.getGlobal("styledText", ITextDrawable.class);
+        Assert.assertNotNull(styledText);
         Assert.assertEquals(new StyledText("def"), styledText.getText());
     }
 
@@ -71,11 +73,13 @@ public class TextLibTest extends AbstractLibTest {
         loadScript("integration/text/parseText");
 
         StyledText oneText = LuaTestUtil.getGlobal("oneText", StyledText.class);
+        Assert.assertNotNull(oneText);
         LuaTable oneTriggers = LuaTestUtil.getGlobal("oneTriggers").opttable(null);
         Assert.assertEquals("abc ghi", oneText.toString());
         assertTrigger(oneTriggers, 4, "def");
 
         StyledText twoText = LuaTestUtil.getGlobal("twoText", StyledText.class);
+        Assert.assertNotNull(twoText);
         LuaTable twoTriggers = LuaTestUtil.getGlobal("twoTriggers").opttable(null);
         Assert.assertEquals("abc ghi", twoText.toString());
         assertTrigger(twoTriggers, 4, "def");

@@ -14,7 +14,7 @@ class BaseRenderCommand extends RenderCommand {
     protected BaseRenderCommand(byte id, short z, boolean clipEnabled,
             BlendMode blendMode, int argb, byte privateField) {
 
-        super(id, ((-(1 + z))                << 16) //We have to be careful, -Short.MIN_VALUE == Short.MIN_VALUE!!!
+        super(id, (reverseZ(z)               << 16) //We have to be careful, -Short.MIN_VALUE == Short.MIN_VALUE!!!
                 | ((clipEnabled ? 1 : 0)     << 15)
                 | ((blendMode.ordinal() & 7) << 12)
                 | ((id & 15)                 << 8 )
@@ -24,6 +24,10 @@ class BaseRenderCommand extends RenderCommand {
         this.clipEnabled = clipEnabled;
         this.blendMode = blendMode;
         this.argb = argb;
+    }
+
+    private static int reverseZ(short z) {
+        return -(1 + z);
     }
 
     protected BaseRenderCommand(byte id, short z, boolean clipEnabled, byte privateField) {

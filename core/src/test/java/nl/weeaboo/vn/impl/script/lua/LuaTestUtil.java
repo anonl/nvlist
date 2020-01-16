@@ -21,10 +21,7 @@ import nl.weeaboo.vn.script.IScriptThread;
 public final class LuaTestUtil {
 
     public static final FilePath SCRIPT_HELLOWORLD = FilePath.of("helloworld.lvn");
-    public static final FilePath SCRIPT_YIELD = FilePath.of("yield.lvn");
-    public static final FilePath SCRIPT_CREATECONTEXT = FilePath.of("createcontext.lvn");
     public static final FilePath SCRIPT_SCRIPTLIB = FilePath.of("scriptlib.lvn");
-    public static final FilePath SCRIPT_SETMODE = FilePath.of("setmode.lvn");
 
     private LuaTestUtil() {
     }
@@ -118,17 +115,16 @@ public final class LuaTestUtil {
      */
     public static void waitForAllThreads(IContextManager contextManager) {
         int iteration = 0;
-        while (iteration < 10_000) {
-            boolean anyRunnableThreads = false;
+        while (iteration++ < 10_000) {
+            contextManager.update();
 
+            boolean anyRunnableThreads = false;
             for (IContext context : contextManager.getActiveContexts()) {
-                IScriptContext scriptContext = context.getScriptContext();
-                if (hasRunnableThreads(scriptContext)) {
+                if (hasRunnableThreads(context.getScriptContext())) {
                     anyRunnableThreads = true;
-                    scriptContext.updateThreads(context, TestScriptExceptionHandler.INSTANCE);
+                    break;
                 }
             }
-
             if (!anyRunnableThreads) {
                 return;
             }

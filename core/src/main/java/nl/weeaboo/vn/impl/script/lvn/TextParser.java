@@ -9,12 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 final class TextParser {
 
-    private @Nullable List<Token> tokens;
-    private @Nullable CharacterIterator input;
+    private List<Token> tokens;
+    private CharacterIterator input;
 
     public TextParser() {
         reset();
@@ -26,8 +24,8 @@ final class TextParser {
     }
 
     private void reset() {
-        input = null;
-        tokens = null;
+        input = new StringCharacterIterator("");
+        tokens = Collections.emptyList();
     }
 
     public Collection<Token> tokenize(String str) {

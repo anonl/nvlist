@@ -24,6 +24,19 @@ public class RenderTextTest extends RenderIntegrationTest {
         checkRenderResult("text");
     }
 
+    /**
+     * Text is rendered at integer coordinates to improve sharpness.
+     */
+    @Test
+    public void testSnapToGrid() {
+        ITextLayout layout = createLayout(styledText("---"), -1);
+
+        drawText(0, 0.5, layout);
+        render();
+
+        checkRenderResult("text-snap-to-grid");
+    }
+
     private StyledText styledText(String string) {
         return new StyledText(string, new TextStyle("RobotoSlab", 16));
     }

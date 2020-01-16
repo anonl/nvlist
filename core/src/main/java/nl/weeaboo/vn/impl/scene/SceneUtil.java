@@ -19,10 +19,13 @@ public final class SceneUtil {
      * Finds the root (most distant ancestor) of a visual element.
      */
     public static IVisualElement getRoot(IVisualElement elem) {
-        while (elem.getParent() != null) {
-            elem = elem.getParent();
+        while (true) {
+            IVisualGroup parent = elem.getParent();
+            if (parent == null) {
+                return elem;
+            }
+            elem = parent;
         }
-        return elem;
     }
 
     /**
@@ -31,13 +34,15 @@ public final class SceneUtil {
      * @return The parent layer, or {@code null} if no parent layer was found.
      */
     public static @Nullable ILayer getParentLayer(IVisualElement elem) {
-        while (elem.getParent() != null) {
-            elem = elem.getParent();
-            if (elem instanceof ILayer) {
-                return (ILayer)elem;
+        while (true) {
+            IVisualGroup parent = elem.getParent();
+            if (parent == null) {
+                return null;
+            } else if (parent instanceof ILayer) {
+                return (ILayer)parent;
             }
+            elem = parent;
         }
-        return null;
     }
 
     /**

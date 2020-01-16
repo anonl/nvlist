@@ -30,11 +30,17 @@ function setMainTextDrawable(textDrawable)
 end
 
 function texton(...)
-    getTextBox():show(...)
+    local textBox = getTextBox()
+    if textBox ~= nil then
+        getTextBox():show(...)
+    end
 end
 
 function textoff(...)
-    getTextBox():hide(...)
+    local textBox = getTextBox()
+    if textBox ~= nil then
+        textBox:hide(...)
+    end
 end
 
 function setDefaultTextStyle(style)
@@ -386,7 +392,7 @@ function AdvTextBox:getTextDrawable()
 end
 
 function AdvTextBox:setSpeaker(speaker)
-    if speaker == nil then
+    if speaker == nil or speaker == \"\" then
         self.nameLabel:setText(\"\")
         self.nameBox:setVisible(false)
     else

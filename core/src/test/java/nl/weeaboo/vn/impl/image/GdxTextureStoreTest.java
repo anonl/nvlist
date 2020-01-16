@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
@@ -39,7 +40,9 @@ public final class GdxTextureStoreTest {
     public void testLoadParams() {
         FilePath imagePath = FilePath.of("img/loadparams/loadparams.png");
 
-        Texture tex = texStore.get(imagePath).get();
+        IResource<Texture> texResource = texStore.get(imagePath);
+        Assert.assertNotNull(texResource);
+        Texture tex = texResource.get();
         Assert.assertNotNull(tex);
 
         Assert.assertEquals(TextureFilter.MipMapLinearLinear, tex.getMinFilter());

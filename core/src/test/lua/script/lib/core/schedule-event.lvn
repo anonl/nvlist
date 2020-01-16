@@ -1,0 +1,8 @@
+@@
+
+finished = false
+scheduleEvent(function()
+    finished = true
+end)
+
+@@

@@ -43,7 +43,7 @@ public class ButtonImageLoaderTest {
         imageLoader.loadImages(button, imageLoadInfo("button/separate"));
 
         // Check that the expected textures were loaded
-        assertTexture(ButtonViewState.DEFAULT, "button/separate");
+        assertTexture(ButtonViewState.DEFAULT, "button/separate-normal");
         assertTexture(ButtonViewState.ROLLOVER, "button/separate-rollover");
         assertTexture(ButtonViewState.PRESSED, "button/separate-pressed");
         assertTexture(ButtonViewState.DISABLED, "button/separate-disabled");

@@ -27,6 +27,7 @@ public class ImageFxLibTest extends AbstractLibTest {
         loadScript("integration/imagefx/crop");
 
         ITexture cropped = LuaTestUtil.getGlobal("cropped").touserdata(ITexture.class);
+        Assert.assertNotNull(cropped);
         Assert.assertEquals(Area2D.of(0, 0, 0, 0), cropped.getUV());
     }
 

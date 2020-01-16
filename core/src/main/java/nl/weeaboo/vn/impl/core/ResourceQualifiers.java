@@ -52,14 +52,7 @@ public final class ResourceQualifiers implements Iterable<IResourceQualifier> {
     }
 
     private static @Nullable IResourceQualifier tryParseQualifier(String string) {
-        IResourceQualifier q;
-
-        q = SizeQualifier.tryParse(string);
-        if (q != null) {
-            return q;
-        }
-
-        return null;
+        return SizeQualifier.tryParse(string);
     }
 
     /**

@@ -54,8 +54,8 @@ public final class RenderUtil {
         int a = interpolateColor((c0 >> 24) & 0xFF, (c1 >> 24) & 0xFF, w);
         int r = interpolateColor((c0 >> 16) & 0xFF, (c1 >> 16) & 0xFF, w);
         int g = interpolateColor((c0 >> 8 ) & 0xFF, (c1 >> 8 ) & 0xFF, w);
-        int b = interpolateColor((c0      ) & 0xFF, (c1      ) & 0xFF, w);
-        return (a << 24) | (r << 16) | (g << 8) | (b);
+        int b = interpolateColor( c0        & 0xFF,  c1        & 0xFF, w);
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     private static int interpolateColor(int a, int b, float w) {
@@ -71,8 +71,8 @@ public final class RenderUtil {
         int a = (argb >> 24) & 0xFF;
         int r = (a * ((argb >> 16) & 0xFF) + 127) / 255;
         int g = (a * ((argb >>  8) & 0xFF) + 127) / 255;
-        int b = (a * ((argb      ) & 0xFF) + 127) / 255;
-        return (a << 24) | (r << 16) | (g << 8) | (b);
+        int b = (a * ( argb        & 0xFF) + 127) / 255;
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     /**
@@ -89,8 +89,8 @@ public final class RenderUtil {
         int round = a / 2;
         int r = (255 * ((argb >> 16) & 0xFF) + round) / a;
         int g = (255 * ((argb >> 8 ) & 0xFF) + round) / a;
-        int b = (255 * ((argb      ) & 0xFF) + round) / a;
-        return (a << 24) | (r << 16) | (g << 8) | (b);
+        int b = (255 * ( argb        & 0xFF) + round) / a;
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     /**
@@ -115,7 +115,7 @@ public final class RenderUtil {
         int gi = Math.max(0, Math.min(255, (int)Math.round(g * 255)));
         int bi = Math.max(0, Math.min(255, (int)Math.round(b * 255)));
         int ai = Math.max(0, Math.min(255, (int)Math.round(a * 255)));
-        return (ai << 24) | (ri << 16) | (gi << 8) | (bi);
+        return (ai << 24) | (ri << 16) | (gi << 8) | bi;
     }
 
 }
