@@ -1,7 +1,7 @@
 
 paragraph.start("test", 1); paragraph.append("Simple text"); paragraph.finish()
 
-paragraph.start("test", 2); paragraph.append("Text with\tescape\ncodes[ ] \\"); paragraph.finish()
+paragraph.start("test", 2); paragraph.append("Text with\tescape\ncodes[*] \\"); paragraph.finish()
 
 paragraph.start("test", 3); paragraph.append("Text with \"quotes\""); paragraph.finish()
 paragraph.start("test", 4); paragraph.append("Text with "); paragraph.stringify("stringifier"); paragraph.append("and "); paragraph.stringify("longStringifier"); paragraph.append(" embedded."); paragraph.finish()

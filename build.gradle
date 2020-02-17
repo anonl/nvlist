@@ -16,7 +16,7 @@ buildscript {
 plugins {
     // Plugin for uploading to bintray
     // Note: Causes a classpath conflict for org.apache.tools.zip
-    id 'com.jfrog.bintray' version '1.8.0'
+    id 'com.jfrog.bintray' version '1.8.4'
 
     // Google error-prone
     id 'net.ltgt.errorprone' version '0.0.16' apply false

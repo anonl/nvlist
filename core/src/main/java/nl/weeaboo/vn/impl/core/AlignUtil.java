@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.core;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
@@ -40,6 +41,8 @@ public final class AlignUtil {
      * {@code anchor} as its alignment.
      */
     public static double alignAnchorX(double outer, double inner, Direction anchor) {
+        Checks.checkArgument(anchor != Direction.NONE, "Invalid anchor: " + anchor);
+
         switch (anchor) {
         case TOP:
         case CENTER:
@@ -59,6 +62,8 @@ public final class AlignUtil {
      * {@code anchor} as its alignment.
      */
     public static double alignAnchorY(double outer, double inner, Direction anchor) {
+        Checks.checkArgument(anchor != Direction.NONE, "Invalid anchor: " + anchor);
+
         switch (anchor) {
         case LEFT:
         case CENTER:

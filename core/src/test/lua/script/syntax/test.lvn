@@ -1,7 +1,7 @@
 
 Simple text
 
-Text with\tescape\ncodes\[ \] \\
+Text with\tescape\ncodes\[*\] \\
 
 Text with "quotes"
 Text with $stringifier and ${longStringifier} embedded.

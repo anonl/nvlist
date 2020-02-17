@@ -1,8 +1,5 @@
 package nl.weeaboo.vn.impl.script.lvn;
 
-import static nl.weeaboo.lua2.LuaUtil.escape;
-import static nl.weeaboo.lua2.LuaUtil.unescape;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 
 class LvnParser4 implements ILvnParser {
@@ -135,8 +133,6 @@ class LvnParser4 implements ILvnParser {
             return; //Empty line
         }
 
-        line = unescape(line);
-
         List<String> triggers = new ArrayList<>(4);
         for (Token token : textParser.tokenize(line)) {
             if (token.getType() == TextParser.ETokenType.COMMAND) {
@@ -144,7 +140,7 @@ class LvnParser4 implements ILvnParser {
             }
         }
 
-        out.append("text(\"").append(escape(line)).append("\"");
+        out.append("text(\"").append(escapeText(line)).append("\"");
 
         if (triggers.isEmpty()) {
             out.append(", nil");
@@ -156,7 +152,7 @@ class LvnParser4 implements ILvnParser {
             out.append("}");
         }
         out.append(", {");
-        out.append("filename=\"").append(escape(filename.toString())).append("\", ");
+        out.append("filename=\"").append(LuaUtil.escape(filename.toString())).append("\", ");
         out.append("line=").append(textLineNum).append(",");
         out.append("}");
 
@@ -167,4 +163,43 @@ class LvnParser4 implements ILvnParser {
         return line.trim();
     }
 
+    /**
+     * Escapes an LVN text line for use in a Lua String literal.
+     * <p>
+     * Conveniently, LVN and Lua strings use almost the same escape sequences.
+     */
+    private static String escapeText(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (int n = 0; n < str.length(); n++) {
+            char c = str.charAt(n);
+            if (c == '\\') {
+                sb.append('\\');
+                n++;
+
+                if (n < str.length()) {
+                    c = str.charAt(n);
+
+                    /*
+                     * Some characters are only special to NVList, we need to double-escape those since Lua
+                     * will unescape the contents of the string during parsing.
+                     */
+                    switch (c) {
+                    case '$':
+                    case '[':
+                    case ']':
+                    case '{':
+                    case '}':
+                        sb.append('\\');
+                    }
+                    sb.append(c);
+                }
+            } else if (c == '"') {
+                // Escape double quotes
+                sb.append('\\').append(c);
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }
