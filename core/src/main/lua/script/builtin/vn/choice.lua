@@ -82,7 +82,9 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
 
     local panel = gridPanel()
     local pad = 100
-    panel:setBounds(pad, pad, screenWidth - pad*2, screenHeight - pad*2)
+    -- Limit choice button width (looks nicer)
+    local width = math.min(screenWidth, screenHeight * 1.25) - pad * 2
+    panel:setBounds((screenWidth - width) / 2, pad, width, screenHeight - pad * 2)
 
     local buttons = {}
     for i,option in ipairs(options) do
