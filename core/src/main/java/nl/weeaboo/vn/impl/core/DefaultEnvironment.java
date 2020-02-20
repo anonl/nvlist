@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ISystemEnv;
@@ -45,6 +46,11 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         }
 
         ContextUtil.setCurrentContext(null);
+
+        LuaRunState lrs = LuaRunState.getCurrent();
+        if (lrs != null) {
+            lrs.destroy();
+        }
     }
 
     @Override
