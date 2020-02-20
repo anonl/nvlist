@@ -20,6 +20,13 @@ function deprecated(deprecatedSince)
     end
 end
 
+local function preJump(filename)
+    if getSkipMode() == SkipMode.SCENE then
+        stopSkipping()
+    end
+    savepoint(filename)
+end
+
 ---Executes the script with the given filename. When the called script
 -- completes, resumes executing the current script. Use
 -- <code>jump("some-script.lvn")</code> when you don't want/need to
@@ -27,7 +34,7 @@ end
 -- @string filename Path to the script, relative to the <code>res/script</code>
 --         folder.
 function call(filename)
-    savepoint(filename)
+    preJump(filename)
     return dofile(filename)
 end
 
@@ -37,7 +44,7 @@ end
 -- @string filename Path to the script, relative to the <code>res/script</code>
 --         folder.
 function jump(filename)
-    savepoint(filename)
+    preJump(filename)
     return Thread.jump(filename)
 end
 

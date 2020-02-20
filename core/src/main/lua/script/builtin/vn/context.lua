@@ -33,7 +33,11 @@ end
 function getEffectSpeed()
     local speed = prefs.effectSpeed or 1
     if isSkipping() then
-        speed = speed * 4
+        if getSkipMode() == SkipMode.SCENE then
+            speed = speed * 16
+        else
+            speed = speed * 4
+        end
     end
     return speed
 end

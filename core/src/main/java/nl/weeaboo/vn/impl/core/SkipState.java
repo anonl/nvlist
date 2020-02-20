@@ -52,6 +52,12 @@ public final class SkipState implements ISkipState {
     public void handleInput(IInput input) {
         SkipMode skipMode = getSkipMode();
 
+        if (input.isPressed(VKey.SCENE_SKIP, false)) {
+            LOG.debug("Start skipping (scene)");
+            skipUnread = true;
+            setSkipMode(SkipMode.SCENE);
+        }
+
         if (input.isPressed(VKey.SKIP, false) && !input.isPressed(VKey.ALT_SKIP, false)) {
             if (skipMode == SkipMode.NONE) {
                 LOG.debug("Start skipping (regular)");

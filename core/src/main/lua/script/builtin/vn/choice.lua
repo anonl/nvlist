@@ -31,7 +31,11 @@ function choice2(uniqueChoiceId, ...)
     if options == nil or #options == 0 then
         options = {"Genuflect"}
     end
-    
+
+    if getSkipMode() == SkipMode.SCENE then
+        stopSkipping()
+    end
+
     local selected = 1
     if choiceScreenConstructor == nil then
         Log.warn("No choice screen registered")

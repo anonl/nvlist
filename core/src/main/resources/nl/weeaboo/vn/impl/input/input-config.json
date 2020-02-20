@@ -8,7 +8,8 @@
     "textContinue": ["ENTER", "MOUSE_LEFT", "DOWN", "RIGHT"],
     "skip": ["CONTROL_LEFT", "CONTROL_RIGHT"],
     "altSkip": ["SHIFT_LEFT+CONTROL_LEFT", "SHIFT_RIGHT+CONTROL_RIGHT"],
+    "sceneSkip": ["PAGE_DOWN+CONTROL_LEFT", "PAGE_DOWN+CONTROL_RIGHT"],
     "mouseLeft": ["MOUSE_LEFT"],
-    
+
     "toggleOsd": ["F7"]
 }
