@@ -25,11 +25,12 @@ public class VKeyTest {
         assertId("textContinue", VKey.TEXT_CONTINUE);
         assertId("skip", VKey.SKIP);
         assertId("altSkip", VKey.ALT_SKIP);
+        assertId("sceneSkip", VKey.SCENE_SKIP);
 
         assertId("mouseLeft", VKey.MOUSE_LEFT);
 
         // Ensure we've checked all standard key mappings
-        Assert.assertEquals(10, Iterables.size(VKey.getStandardKeys()));
+        Assert.assertEquals(11, Iterables.size(VKey.getStandardKeys()));
     }
 
     @Test
