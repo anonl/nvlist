@@ -51,7 +51,7 @@ allprojects {
     ext {
         javaVersion = 8
 
-        vnRootDir = templateDir
+        vnRootDir = rootProject.file(project.findProperty('vnRoot') ?: templateDir)
         vnResDir = new File(vnRootDir, 'res')
         buildToolsDir = new File(templateDir, 'build-tools') 
 
