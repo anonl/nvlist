@@ -55,17 +55,17 @@ afterEvaluate {
         publishing {
             publications {
                 android(MavenPublication) {
-                    // Manually configure artifact and dependencies (Android plugin doesn't supply a component)            
+                    // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
                     artifact project.tasks.bundleReleaseAar
-    
-                    pom.withXml {                
+
+                    pom.withXml {
                         // Gather dependencies
                         def projectDeps = [].toSet()
                         projectDeps += configurations.implementation.allDependencies
                         // projectDeps += configurations.natives.allDependencies
-    
+
                         def root = asNode()
-    
+
                         // Append dependencies to POM
                         def depsNode = root.appendNode('dependencies')
                         projectDeps.each {
@@ -74,16 +74,16 @@ afterEvaluate {
                             depNode.appendNode('artifactId', it.name)
                             depNode.appendNode('version', it.version)
                         }
-    
+
                         // Append license info
                         root = root.children().last() + pomLicenseConfig
                     }
-    
+
                     artifactId 'nvlist-android'
                 }
             }
         }
-    
+
         bintray {
             publications = ['android']
         }

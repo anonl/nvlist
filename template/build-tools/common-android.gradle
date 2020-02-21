@@ -48,7 +48,7 @@ android {
                     assetList <<= "\n"
                 }
 
-                def outputFile = new File(outputDir, "assets.list")
+                def outputFile = outputDir.file("assets.list").get().asFile
                 outputFile.text = assetList
 
                 logger.info("Wrote assets list to {}", outputFile)
