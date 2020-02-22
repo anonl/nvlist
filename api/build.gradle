@@ -34,9 +34,18 @@ configurations {
         transitive = false
     }
 }
-
 dependencies {
     oldApi "nl.weeaboo.vn:nvlist-api:4.0.0-alpha10"
+}
+
+// Workaround for https://github.com/gradle/gradle/issues/7706
+// Prevents Gradle from replacing oldApi with the current version
+def oldGroup = project.group
+try {
+    project.group = 'fake-group'
+    configurations.oldApi.files // Resolve oldApi while our project is renamed and therefore not a valid replacement
+} finally {
+    project.group = oldGroup
 }
 
 task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {

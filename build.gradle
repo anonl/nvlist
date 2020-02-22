@@ -75,6 +75,7 @@ allprojects {
         maven { url 'https://dl.bintray.com/anonl/gdx-styledtext/' }
         maven { url 'https://dl.bintray.com/anonl/gdx-video/' }
         maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
+        maven { url 'https://dl.bintray.com/anonl/nvlist/' }
         maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
 
