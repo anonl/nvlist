@@ -39,10 +39,10 @@ public class DurationTest {
     @Test
     public void unacceptableUnits() {
         exTester.expect(IllegalArgumentException.class,
-                () -> Duration.fromDuration(1_000_000, TimeUnit.MICROSECONDS));
+            () -> Duration.fromDuration(1_000_000, TimeUnit.MICROSECONDS));
 
         exTester.expect(IllegalArgumentException.class,
-                () -> Duration.fromDuration(1_000_000, TimeUnit.NANOSECONDS));
+            () -> Duration.fromDuration(1_000_000, TimeUnit.NANOSECONDS));
     }
 
     @Test

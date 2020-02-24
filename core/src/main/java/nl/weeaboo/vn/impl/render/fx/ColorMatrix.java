@@ -43,10 +43,10 @@ public final class ColorMatrix implements Serializable {
     public float[] getGLMatrix() {
         // OpenGL by convention uses column-major matrices
         return new float[] {
-                (float)mul[0], (float)mul[4], (float)mul[8], (float)mul[12],
-                (float)mul[1], (float)mul[5], (float)mul[9], (float)mul[13],
-                (float)mul[2], (float)mul[6], (float)mul[10], (float)mul[14],
-                (float)mul[3], (float)mul[7], (float)mul[11], (float)mul[15],
+            (float)mul[0], (float)mul[4], (float)mul[8], (float)mul[12],
+            (float)mul[1], (float)mul[5], (float)mul[9], (float)mul[13],
+            (float)mul[2], (float)mul[6], (float)mul[10], (float)mul[14],
+            (float)mul[3], (float)mul[7], (float)mul[11], (float)mul[15],
         };
     }
 
@@ -57,7 +57,7 @@ public final class ColorMatrix implements Serializable {
      */
     public float[] getGLOffset() {
         return new float[] {
-                (float)off[0], (float)off[1], (float)off[2], (float)off[3],
+            (float)off[0], (float)off[1], (float)off[2], (float)off[3],
         };
     }
 

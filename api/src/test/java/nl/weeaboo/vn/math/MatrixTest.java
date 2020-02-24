@@ -234,10 +234,10 @@ public class MatrixTest {
 
         // GL matrices are 4x4 and column-major
         Assert.assertArrayEquals(new float[] {
-                11, 44, 0, 0,
-                22, 55, 0, 0,
-                0,  0,  1, 0,
-                33, 66, 0, 1
+            11, 44, 0, 0,
+            22, 55, 0, 0,
+            0,  0,  1, 0,
+            33, 66, 0, 1
         }, glMatrix, GL_EPSILON);
 
         // Generated GL matrices are cached (implementation detail, but important to know if that ever changes)

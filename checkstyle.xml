@@ -48,6 +48,8 @@ Changes:
  * Removed FileContentsHolder element (no longer supported by Checkstyle)
  [2018-05-01]
  * Allow suppression using @SuppressWarnings annotation
+ [2020-02-24]
+ * Update for Checkstyle 8.28
 -->
 
 <module name = "Checker">
@@ -72,10 +74,6 @@ Changes:
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
-        </module>
-        <module name="LineLength">
-            <property name="max" value="120"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
         </module>
         <module name="AvoidStarImport"/>
         <module name="OneTopLevelClass"/>
@@ -167,8 +165,9 @@ Changes:
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent" value="0"/>
             <property name="throwsIndent" value="4"/>
-            <property name="lineWrappingIndentation" value="8"/>
+            <property name="lineWrappingIndentation" value="4"/>
             <property name="arrayInitIndent" value="4"/>
+            <property name="forceStrictCondition" value="false"/>
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="VariableDeclarationUsageDistance"/>
@@ -195,7 +194,6 @@ Changes:
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowedAnnotations" value="Override, Test, Before, After, BeforeClass, AfterClass"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
             <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF"/>
         </module>
         <module name="MethodName">
@@ -221,6 +219,10 @@ Changes:
         <module name="MutableException" />
         <module name="SuppressWarningsHolder" />
     </module>
-    
+
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
     <module name="SuppressWarningsFilter" />
 </module>

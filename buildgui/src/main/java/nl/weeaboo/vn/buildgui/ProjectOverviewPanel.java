@@ -217,9 +217,9 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
 
                 try {
                     FileCollectOptions imageFilter = FileCollectOptions.files(
-                            MediaType.IMAGE.getSubFolder().resolve("bg"));
+                        MediaType.IMAGE.getSubFolder().resolve("bg"));
                     imagePaths = ImmutableList.copyOf(Iterables.filter(fileSystem.getFiles(imageFilter),
-                            path -> "jpg".equalsIgnoreCase(path.getExt())));
+                        path -> "jpg".equalsIgnoreCase(path.getExt())));
 
                     loadRandomImage();
                 } catch (IOException e) {
