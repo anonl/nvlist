@@ -35,7 +35,7 @@ end
 --         stopping playback immediately.
 -- @see music
 function musicStop(fadeTimeFrames)
-    soundStop(MUSIC_CHANNEL, fadeTimeFrames)
+    soundStop(MUSIC_CHANNEL, fadeTimeFrames or 60)
 end
 
 ---Voice functions
@@ -96,6 +96,7 @@ function soundStop(soundOrChannel, fadeTimeFrames)
         return
     end
 
+    fadeTimeFrames = fadeTimeFrames or 0
     sound:stop(fadeTimeFrames)
     yield() -- Wait for a frame here so to allow the stopped sound/music to be removed by the sound module
 end

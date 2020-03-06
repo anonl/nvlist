@@ -22,8 +22,8 @@ public class MockSound extends AbstractSound {
     }
 
     @Override
-    public void stop(int fadeOutMillis) {
-        nativeAudio.stop(fadeOutMillis);
+    public void stop(int fadeOutFrames) {
+        nativeAudio.stop();
     }
 
     @Override
@@ -34,6 +34,10 @@ public class MockSound extends AbstractSound {
     @Override
     public void resume() {
         nativeAudio.resume();
+    }
+
+    @Override
+    public void update() {
     }
 
     @Override

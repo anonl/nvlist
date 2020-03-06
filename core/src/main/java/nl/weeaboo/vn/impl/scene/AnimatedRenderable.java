@@ -1,8 +1,8 @@
 package nl.weeaboo.vn.impl.scene;
 
 import nl.weeaboo.common.Area2D;
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEventListener;
+import nl.weeaboo.vn.impl.core.Animation;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IAnimatedRenderable;
 import nl.weeaboo.vn.scene.IDrawable;
@@ -11,14 +11,12 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
-    private boolean prepared;
-    private double time;
-    private double duration;
+    private final Animation animation;
 
-    private double speed = 1.0;
+    private boolean prepared;
 
     protected AnimatedRenderable(double duration) {
-        this.duration = Checks.checkRange(duration, "duration", 0);
+        animation = new Animation(duration);
     }
 
     @Override
@@ -40,7 +38,7 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
         super.update();
 
         if (!isFinished()) {
-            setTime(time + speed);
+            animation.update();
 
             checkedPrepare();
             updateResources();
@@ -79,46 +77,40 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
 
     @Override
     public boolean isFinished() {
-        return getNormalizedTime() >= 1.0;
+        return animation.isFinished();
     }
 
     /**
-     * @return The current time, normalized to the range {@code [0.0, 1.0]}.
+     * @see Animation#getNormalizedTime()
      */
-    public double getNormalizedTime() {
-        double duration = getDuration();
-        if (duration <= 0) {
-            return 1.0;
-        }
-        return getTime() / duration;
+    public final double getNormalizedTime() {
+        return animation.getTime();
     }
 
     /**
-     * @return The current time in the range {@code [0.0, duration]}.
-     * @see #getDuration()
+     * @see Animation#getTime()
      */
-    public double getTime() {
-        return time;
+    public final double getTime() {
+        return animation.getTime();
     }
 
     /**
-     * Changes the current time.
-     * @see #getTime()
+     * @see Animation#setTime(double)
      */
     public void setTime(double newTime) {
-        time = Math.min(getDuration(), newTime);
+        animation.setTime(newTime);
     }
 
     /**
-     * @return The total duration of the animation (in frames).
+     * @see Animation#getDuration()
      */
     public double getDuration() {
-        return duration;
+        return animation.getDuration();
     }
 
     @Override
     public void setSpeed(double s) {
-        this.speed = Checks.checkRange(s, "speed", 0.001);
+        animation.setSpeed(s);
     }
 
     @Override

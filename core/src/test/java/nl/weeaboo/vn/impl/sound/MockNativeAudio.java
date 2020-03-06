@@ -25,11 +25,6 @@ public class MockNativeAudio implements INativeAudio {
 
     @Override
     public void stop() {
-        stop(0);
-    }
-
-    @Override
-    public void stop(int fadeOutMillis) {
         loopsLeft = 0;
         paused = false;
     }

@@ -78,6 +78,31 @@ public final class SoundTest {
     }
 
     /**
+     * Stop sound with gradual fade-out.
+     */
+    @Test
+    public void stopWithFadeOut() throws IOException {
+        sound.start();
+        sound.stop(2);
+
+        // The sound is still considered to be playing until it finishes fading out
+        Assert.assertEquals(1.0, nativeAudio.getVolume(), VOLUME_EPSILON);
+        assertPlaying();
+
+        sound.update();
+        Assert.assertEquals(0.5, nativeAudio.getVolume(), VOLUME_EPSILON);
+        assertPlaying();
+
+        sound.update();
+        Assert.assertEquals(0.0, nativeAudio.getVolume(), VOLUME_EPSILON);
+        assertPlaying();
+
+        // Fade out completed, sound is stopped
+        sound.update();
+        assertStopped();
+    }
+
+    /**
      * The sound can have a preferred audio channel. If a preferred channel is set, starting the sound will
      * cause it to start playing in that channel, overwriting any sound currently playing in that channel in
      * the sound controller.

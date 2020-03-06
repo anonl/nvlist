@@ -40,7 +40,7 @@ public class NativeAudioTest {
         Assert.assertEquals(6, nativeAudio.getLoopsLeft());
         assertPlaying();
 
-        nativeAudio.stop(0);
+        nativeAudio.stop();
         assertStopped();
     }
 
@@ -108,7 +108,7 @@ public class NativeAudioTest {
         assertStopped(); // Play failed
         nativeAudio.pause();
         nativeAudio.resume();
-        nativeAudio.stop(1_000);
+        nativeAudio.stop();
         nativeAudio.setVolume(0.5);
     }
 

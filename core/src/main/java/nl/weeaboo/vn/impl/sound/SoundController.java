@@ -40,6 +40,7 @@ final class SoundController implements ISoundController {
         while (itr.hasNext()) {
             Entry<Integer, ISound> entry = itr.next();
             ISound s = entry.getValue();
+            s.update();
             if (s.isStopped()) {
                 pausedList.remove(s);
                 itr.remove();

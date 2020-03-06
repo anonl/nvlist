@@ -5,8 +5,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IStreamingMedia;
+import nl.weeaboo.vn.core.IUpdateable;
 
-public interface ISound extends Serializable, IStreamingMedia {
+public interface ISound extends Serializable, IStreamingMedia, IUpdateable {
 
     /**
      * @throws IOException If an I/O error occurs while attempting to set up a stream from the audio source file to the
@@ -32,10 +33,11 @@ public interface ISound extends Serializable, IStreamingMedia {
 
     /**
      * Stops playing the sound.
-     * @param fadeOutMillis Instead of stopping the sound immediately, fade it
-     *        out slowly over the course of <code>fadeOutMillis</code>.
+     *
+     * @param fadeOutFrames Instead of stopping the sound immediately, fade it
+     *        out slowly over the course of <code>fadeOutFrames</code>.
      */
-    void stop(int fadeOutMillis);
+    void stop(int fadeOutFrames);
 
     /**
      * @return The path of the audio source file.

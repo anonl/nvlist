@@ -13,14 +13,6 @@ public interface INativeAudio extends Serializable, IStreamingMedia {
     void play(int loops);
 
     /**
-     * Stops audio playback.
-     *
-     * @param fadeOutMillis Instead of stopping the sound immediately, fade it out slowly over the course of
-     *        <code>fadeOutMillis</code>.
-     */
-    void stop(int fadeOutMillis);
-
-    /**
      * @return The number of playback loops remaining, or {@code -1} when looping infinitely.
      * @see #play(int)
      */

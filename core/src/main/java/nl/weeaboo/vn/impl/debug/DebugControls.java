@@ -17,6 +17,8 @@ import nl.weeaboo.vn.impl.script.lua.LuaConsole;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.save.ISaveModule;
+import nl.weeaboo.vn.sound.ISound;
+import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 
 public final class DebugControls {
@@ -70,7 +72,12 @@ public final class DebugControls {
         // Music
         ISoundModule soundModule = env.getSoundModule();
         if (alt && input.consumePress(KeyCode.PERIOD)) {
-            soundModule.getSoundController().stopAll();
+            ISoundController soundController = soundModule.getSoundController();
+
+            ISound music = soundController.get(9000);
+            if (music != null) {
+                music.stop(60);
+            }
         }
 
         // Lua console
