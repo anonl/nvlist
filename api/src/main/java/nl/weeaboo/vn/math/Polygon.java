@@ -5,6 +5,9 @@ import java.io.Serializable;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Polygon shape.
+ */
 public class Polygon implements IShape, Serializable {
 
     private static final long serialVersionUID = 1L;

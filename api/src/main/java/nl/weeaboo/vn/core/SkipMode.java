@@ -2,6 +2,11 @@ package nl.weeaboo.vn.core;
 
 import com.google.common.collect.Ordering;
 
+/**
+ * Used when skipping.
+ *
+ * @see ISkipState
+ */
 public enum SkipMode {
 
     /** Not skipping. */

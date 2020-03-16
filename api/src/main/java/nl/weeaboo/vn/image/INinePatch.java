@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Insets2D;
 
+/**
+ * Represents a group of textures, forming a nine patch.
+ *
+ * @see "https://developer.android.com/reference/android/graphics/NinePatch"
+ */
 public interface INinePatch extends Serializable {
 
     /** Named regions of the 9-patch. */

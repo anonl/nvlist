@@ -6,6 +6,9 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Exposes properties of the main render target (screen size, etc.)
+ */
 public interface IRenderEnv extends Serializable {
 
     /**
@@ -48,10 +51,5 @@ public interface IRenderEnv extends Serializable {
      *         coordinates, ignoring any offset or clipping.
      */
     public Rect2D getGLScreenVirtualBounds();
-
-    /**
-     * @return {@code true} when running on a touchscreen device.
-     */
-    public boolean isTouchScreen();
 
 }

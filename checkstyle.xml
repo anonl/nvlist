@@ -50,13 +50,15 @@ Changes:
  * Allow suppression using @SuppressWarnings annotation
  [2020-02-24]
  * Update for Checkstyle 8.28
+ [2020-03-13]
+ * Require Javadoc for public types 
 -->
 
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="info"/>
     <property name="fileExtensions" value="java, properties, xml"/>
-    
+
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
     <module name="FileTabCharacter">
@@ -165,8 +167,8 @@ Changes:
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent" value="0"/>
             <property name="throwsIndent" value="4"/>
-            <property name="lineWrappingIndentation" value="4"/>
-            <property name="arrayInitIndent" value="4"/>
+            <property name="lineWrappingIndentation" value="8"/>
+            <property name="arrayInitIndent" value="8"/>
             <property name="forceStrictCondition" value="false"/>
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
@@ -216,6 +218,7 @@ Changes:
         <module name="ParameterNumber">
             <property name="max" value="6"/>
         </module>
+        <module name="MissingJavadocType" />
         <module name="MutableException" />
         <module name="SuppressWarningsHolder" />
     </module>
@@ -225,4 +228,8 @@ Changes:
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
     <module name="SuppressWarningsFilter" />
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="MissingJavadocType"/>
+        <property name="files" value=".*Test.java"/> <!-- Don't require class Javadoc for unit tests -->
+    </module>
 </module>

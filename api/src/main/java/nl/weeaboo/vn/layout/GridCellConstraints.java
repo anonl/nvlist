@@ -2,6 +2,9 @@ package nl.weeaboo.vn.layout;
 
 import java.io.Serializable;
 
+/**
+ * Constraints for a single cell in a {@link IGridLayout}.
+ */
 public final class GridCellConstraints implements Serializable {
 
     private static final long serialVersionUID = 1L;

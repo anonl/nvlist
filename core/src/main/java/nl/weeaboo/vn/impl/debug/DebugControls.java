@@ -57,13 +57,13 @@ public final class DebugControls {
         int slot = saveModule.getQuickSaveSlot(99);
         if (input.consumePress(KeyCode.PLUS)) {
             try {
-                saveModule.save(novel, slot, new SaveParams(), null);
+                saveModule.save(novel, slot, new SaveParams());
             } catch (IOException e) {
                 LOG.warn("Save error", e);
             }
         } else if (input.consumePress(KeyCode.MINUS)) {
             try {
-                saveModule.load(novel, slot, null);
+                saveModule.load(novel, slot);
             } catch (IOException e) {
                 LOG.warn("Load error", e);
             }

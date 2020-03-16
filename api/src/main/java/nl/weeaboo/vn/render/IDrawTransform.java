@@ -4,6 +4,9 @@ import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IVisualElement;
 
+/**
+ * Common properties for a draw call.
+ */
 public interface IDrawTransform {
 
     /**

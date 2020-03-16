@@ -2,6 +2,9 @@ package nl.weeaboo.vn.render;
 
 import nl.weeaboo.vn.core.IDestructible;
 
+/**
+ * Main entrypoint of the renderer.
+ */
 public interface IScreenRenderer<D extends IDrawBuffer> extends IDestructible {
 
     /**

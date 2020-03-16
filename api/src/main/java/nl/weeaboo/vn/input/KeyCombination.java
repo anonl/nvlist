@@ -5,6 +5,9 @@ import java.util.Collection;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+/**
+ * Key combination of zero or more {@link KeyCode}.
+ */
 public final class KeyCombination {
 
     private final ImmutableSet<KeyCode> keys;

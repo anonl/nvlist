@@ -51,9 +51,4 @@ public class RenderEnvStub implements IRenderEnv {
         return Rect2D.of(0, 0, getWidth(), getHeight());
     }
 
-    @Override
-    public boolean isTouchScreen() {
-        return false;
-    }
-
 }

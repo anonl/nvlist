@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Finds the accompanying resource for a file path.
+ */
 public interface IResourceResolver extends Serializable {
 
     /**

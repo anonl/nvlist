@@ -7,7 +7,6 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IModule;
-import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
@@ -118,8 +117,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     @Override
     public void updateRenderEnv(Rect realClip, Dim realScreenSize) {
         IRenderEnv old = getRenderEnv();
-        ISystemEnv systemEnv = StaticEnvironment.SYSTEM_ENV.get();
-        renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize, systemEnv.isTouchScreen());
+        renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize);
 
         contextManager.setRenderEnv(renderEnv);
     }

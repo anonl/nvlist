@@ -5,6 +5,9 @@ import javax.annotation.Nullable;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.scene.IRenderable;
 
+/**
+ * Renders a {@link ITexture}.
+ */
 public interface ITextureRenderer extends IRenderable {
 
     /**

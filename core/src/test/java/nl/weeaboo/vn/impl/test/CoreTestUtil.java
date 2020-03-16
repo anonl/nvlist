@@ -26,7 +26,7 @@ public final class CoreTestUtil {
 
     public static final double EPSILON = 0.001;
     public static final IRenderEnv BASIC_ENV = new RenderEnv(Dim.of(1280, 720), Rect.of(0, 75, 800, 450),
-            Dim.of(800, 600), false);
+            Dim.of(800, 600));
 
     private static final Logger LOG = LoggerFactory.getLogger(CoreTestUtil.class);
 

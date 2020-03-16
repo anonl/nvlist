@@ -10,6 +10,9 @@ import com.google.common.math.DoubleMath;
 
 import nl.weeaboo.common.StringUtil;
 
+/**
+ * Mutable 2-component vector.
+ */
 public final class Vec2 implements Externalizable {
 
     public double x;

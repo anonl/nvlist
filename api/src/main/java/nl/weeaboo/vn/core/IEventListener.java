@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * General-purpose no-arg event listener.
+ */
 public interface IEventListener {
 
     /**

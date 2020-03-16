@@ -6,6 +6,9 @@ import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 
+/**
+ * Batches draw calls for efficient rendering.
+ */
 public interface IDrawBuffer {
 
     /**

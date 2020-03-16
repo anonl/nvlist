@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * Shows notifications to the player.
+ */
 public interface INotifier {
 
     /**

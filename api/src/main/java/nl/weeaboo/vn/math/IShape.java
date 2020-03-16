@@ -2,6 +2,9 @@ package nl.weeaboo.vn.math;
 
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Base interface for a hit-detection shape.
+ */
 public interface IShape {
 
     /**

@@ -63,7 +63,7 @@ public class EnvironmentFactory {
      */
     protected void initEnvironment(DefaultEnvironment env) throws InitException {
         final Dim vsize = Dim.of(getPref(WIDTH), getPref(HEIGHT));
-        RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize, false);
+        RenderEnv renderEnv = RenderEnv.newDefaultInstance(vsize);
 
         env.renderEnv = renderEnv;
         env.statsModule = new StatsModule(env);

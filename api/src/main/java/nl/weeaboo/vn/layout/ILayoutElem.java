@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Element which can be sized/positioned by a layout algorithm.
+ */
 public interface ILayoutElem extends Serializable {
 
     /**

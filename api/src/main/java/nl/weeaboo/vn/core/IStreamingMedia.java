@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * Shared interface for streaming media (audio, video).
+ */
 public interface IStreamingMedia {
 
     /**

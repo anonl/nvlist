@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * Exposes properties of the system environment we're running in.
+ */
 public interface ISystemEnv {
 
     /**

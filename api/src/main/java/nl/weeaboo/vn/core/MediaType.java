@@ -2,6 +2,9 @@ package nl.weeaboo.vn.core;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Resource type.
+ */
 public enum MediaType {
     IMAGE("img/"),
     SOUND("snd/"),

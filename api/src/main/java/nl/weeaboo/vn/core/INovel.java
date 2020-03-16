@@ -6,6 +6,9 @@ import java.io.ObjectOutput;
 
 import nl.weeaboo.vn.render.IDrawBuffer;
 
+/**
+ * Top-level class for controlling the game.
+ */
 public interface INovel extends IUpdateable {
 
     /**

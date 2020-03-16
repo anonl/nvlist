@@ -2,6 +2,9 @@ package nl.weeaboo.vn.image;
 
 import java.io.Serializable;
 
+/**
+ * A buffer for pending screenshots. Screenshots requests queued in this buffer will be fullfilled at some later time.
+ */
 public interface IScreenshotBuffer extends Serializable {
 
     /**

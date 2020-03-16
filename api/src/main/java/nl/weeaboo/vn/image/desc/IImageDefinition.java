@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.common.Dim;
 
+/**
+ * Image and associated sub-resource definition for a single image file.
+ */
 public interface IImageDefinition {
 
     /**

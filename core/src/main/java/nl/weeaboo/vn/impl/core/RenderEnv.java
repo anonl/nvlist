@@ -14,7 +14,6 @@ public final class RenderEnv implements IRenderEnv {
     private final Dim virtualSize;
     private final Rect realClip;
     private final Dim realScreenSize;
-    private final boolean isTouchScreen;
 
     private final double scale;
     private final Rect glClip;
@@ -26,11 +25,10 @@ public final class RenderEnv implements IRenderEnv {
      * @param rscreen Physical size of the entire rendering viewport in which the clipping rectangle is
      *        contained.
      */
-    public RenderEnv(Dim vsize, Rect rclip, Dim rscreen, boolean isTouchScreen) {
+    public RenderEnv(Dim vsize, Rect rclip, Dim rscreen) {
         this.virtualSize = vsize;
         this.realClip = rclip;
         this.realScreenSize = rscreen;
-        this.isTouchScreen = isTouchScreen;
 
         this.scale = Math.min(rclip.w / (double)vsize.w, rclip.h / (double)vsize.h);
         this.glClip = Rect.of(rclip.x, rscreen.h - rclip.y - rclip.h, rclip.w, rclip.h);
@@ -41,10 +39,10 @@ public final class RenderEnv implements IRenderEnv {
     /**
      * Convenience constructor. Sets the clip/screen sizes to the vsize.
      */
-    public static RenderEnv newDefaultInstance(Dim vsize, boolean isTouchScreen) {
+    public static RenderEnv newDefaultInstance(Dim vsize) {
         Rect rclip = Rect.of(0, 0, vsize.w, vsize.h);
         Dim rscreen = Dim.of(vsize.w, vsize.h);
-        return new RenderEnv(vsize, rclip, rscreen, isTouchScreen);
+        return new RenderEnv(vsize, rclip, rscreen);
     }
 
     /**
@@ -106,11 +104,6 @@ public final class RenderEnv implements IRenderEnv {
     @Override
     public Rect2D getGLScreenVirtualBounds() {
         return glScreenVirtualBounds;
-    }
-
-    @Override
-    public boolean isTouchScreen() {
-        return isTouchScreen;
     }
 
 }

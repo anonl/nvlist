@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.render.IRenderEnv;
 
+/**
+ * Factory for {@link IContext} objects.
+ */
 public interface IContextFactory<C extends IContext> extends Serializable {
 
     /**

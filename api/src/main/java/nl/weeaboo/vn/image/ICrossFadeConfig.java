@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IInterpolator;
 
+/**
+ * Settings for {@link ICrossFadeRenderer}.
+ */
 public interface ICrossFadeConfig extends Serializable {
 
     /**

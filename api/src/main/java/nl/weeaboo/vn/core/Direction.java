@@ -7,6 +7,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
+/**
+ * General-purpose relative direction.
+ */
 public enum Direction {
 
     NONE(0),

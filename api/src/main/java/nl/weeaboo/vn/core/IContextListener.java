@@ -2,6 +2,9 @@ package nl.weeaboo.vn.core;
 
 import java.io.Serializable;
 
+/**
+ * Event listener for {@link IContext}.
+ */
 public interface IContextListener extends Serializable {
 
     /** Called when a context becomes active. */

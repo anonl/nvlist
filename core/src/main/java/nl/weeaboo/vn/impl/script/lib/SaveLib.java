@@ -105,7 +105,7 @@ public final class SaveLib extends LuaLib {
         final LuaThread thread = lrs.getRunningThread();
         Varargs result = thread.yield(LuaConstants.NONE);
         try {
-            saveModule.save(novel, slot, saveParams, null);
+            saveModule.save(novel, slot, saveParams);
         } catch (IOException e) {
             throw new ScriptException("Error saving to slot " + slot, e);
         }
@@ -161,7 +161,7 @@ public final class SaveLib extends LuaLib {
         Varargs result = thread.yield(LuaConstants.NONE);
         lrs.destroy();
         try {
-            saveModule.load(novel, slot, null);
+            saveModule.load(novel, slot);
         } catch (IOException e) {
             throw new ScriptException("Error loading save slot: " + slot, e);
         }

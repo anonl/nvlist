@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.render;
 
+/**
+ * Custom rendering logic.
+ */
 public interface IRenderLogic {
 
     /**

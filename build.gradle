@@ -19,7 +19,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.4'
 
     // Google error-prone
-    id 'net.ltgt.errorprone' version '0.0.16' apply false
+    id 'net.ltgt.errorprone' version '1.1.1' apply false
 
     // Plugin used for reporting on the licenses of third-party dependencies
     id 'com.github.hierynomus.license' version '0.14.0'
