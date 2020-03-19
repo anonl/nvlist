@@ -9,14 +9,11 @@ dependencies {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs += [
-        '-Werror',
-        '-XepExcludedPaths:.*/generated/.*',
-
-        '-Xep:FieldMissingNullable:WARN',
-        '-Xep:ParameterNotNullable:WARN',
-        '-Xep:ReturnMissingNullable:WARN',
-        '-Xep:NullableDereference:WARN',
-    ]
+    options.compilerArgs += ['-Werror']
+    options.errorprone {
+        warn('FieldMissingNullable')
+        warn('ParameterNotNullable')
+        warn('ReturnMissingNullable')
+        warn('NullableDereference')
+    }
 }
-
