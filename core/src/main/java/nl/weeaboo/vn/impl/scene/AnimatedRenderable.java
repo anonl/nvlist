@@ -88,7 +88,7 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
      * @see Animation#getNormalizedTime()
      */
     public final double getNormalizedTime() {
-        return animation.getTime();
+        return animation.getNormalizedTime();
     }
 
     /**
@@ -119,6 +119,8 @@ public abstract class AnimatedRenderable extends AbstractRenderable implements I
 
     @Override
     protected final void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds) {
+        System.out.println(getNormalizedTime());
+
         if (isFinished()) {
             renderEnd(drawBuffer, parent, bounds);
         } else if (getNormalizedTime() <= 0) {
