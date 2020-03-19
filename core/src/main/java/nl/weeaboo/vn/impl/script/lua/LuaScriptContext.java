@@ -23,6 +23,9 @@ import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Default implementation of {@link IScriptContext}
+ */
 public class LuaScriptContext implements IScriptContext {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;

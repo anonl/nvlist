@@ -18,6 +18,9 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
+/**
+ * Default implementation of {@link ILayer}.
+ */
 public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.layout;
 
 import nl.weeaboo.vn.layout.ILayoutElem;
 
+/**
+ * No-op layout.
+ */
 public final class NullLayout extends LayoutGroup {
 
     private static final long serialVersionUID = 1L;

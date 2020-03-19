@@ -14,6 +14,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.res.IResource;
 
+/**
+ * Default implementation of {@link INativeAudio}.
+ */
 @CustomSerializable
 public class NativeAudio implements INativeAudio {
 

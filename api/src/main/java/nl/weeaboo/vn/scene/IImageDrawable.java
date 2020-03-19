@@ -6,6 +6,9 @@ import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureRenderer;
 
+/**
+ * Simple renderable element.
+ */
 public interface IImageDrawable extends ITransformable {
 
     /**

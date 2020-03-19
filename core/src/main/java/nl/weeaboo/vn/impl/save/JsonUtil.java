@@ -7,6 +7,9 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 import nl.weeaboo.common.Checks;
 
+/**
+ * Utility functions for (de)serializing JSON data.
+ */
 public final class JsonUtil {
 
     private JsonUtil() {

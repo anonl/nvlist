@@ -23,6 +23,9 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 
+/**
+ * Various utility functions for unit testing the rendering system.
+ */
 public class RenderTestHelper implements IDestructible {
 
     private static final Logger LOG = LoggerFactory.getLogger(RenderTestHelper.class);
@@ -110,7 +113,7 @@ public class RenderTestHelper implements IDestructible {
     private void drawTriangleGrid(TriangleGrid grid, ITexture tex) {
         drawBuffer.drawCustom(new DrawTransform(), 0xFFFFFFFF, new IRenderLogic() {
             @Override
-            public void render(IScreenRenderer<?> r) {
+            public void render(IScreenRenderer r) {
                 ShaderProgram shader = SpriteBatch.createDefaultShader();
                 shader.begin();
                 try {
@@ -141,6 +144,9 @@ public class RenderTestHelper implements IDestructible {
         }
     }
 
+    /**
+     * Rendering operation.
+     */
     public interface ISpriteBatchConsumer {
 
         /**

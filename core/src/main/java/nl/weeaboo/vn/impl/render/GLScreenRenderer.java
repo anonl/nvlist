@@ -23,6 +23,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.BlendMode;
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.gdx.graphics.GLBlendMode;
 import nl.weeaboo.vn.gdx.graphics.GLMatrixStack;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
@@ -34,7 +35,10 @@ import nl.weeaboo.vn.impl.image.VolatileTextureData;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.RenderUtil;
 
-public class GLScreenRenderer extends BaseScreenRenderer {
+/**
+ * OpenGL-based renderer.
+ */
+public class GLScreenRenderer extends BaseScreenRenderer implements IDestructible {
 
     private static final Logger LOG = LoggerFactory.getLogger(GLScreenRenderer.class);
 

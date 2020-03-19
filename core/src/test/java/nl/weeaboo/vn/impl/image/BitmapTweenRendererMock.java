@@ -6,11 +6,11 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 
-public class TestBitmapTweenRenderer extends BitmapTweenRenderer {
+public class BitmapTweenRendererMock extends BitmapTweenRenderer {
 
     private static final long serialVersionUID = 1L;
 
-    public TestBitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
+    public BitmapTweenRendererMock(IImageModule imageModule, BitmapTweenConfig config) {
         super(imageModule, config);
     }
 

@@ -8,6 +8,9 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.impl.script.lib.LuaLib;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Makes various assert functions available to Lua.
+ */
 public class LuaAssertLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

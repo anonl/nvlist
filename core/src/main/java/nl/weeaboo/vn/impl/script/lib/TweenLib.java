@@ -21,6 +21,9 @@ import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Tween" library.
+ */
 public class TweenLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

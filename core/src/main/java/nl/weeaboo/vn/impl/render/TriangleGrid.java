@@ -14,15 +14,21 @@ import com.google.common.collect.Lists;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 
+/**
+ * Rectangular mesh
+ */
 public final class TriangleGrid implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Texture wrapping settings.
+     */
     public enum TextureWrap {
-        CLAMP,
-        REPEAT_X,
-        REPEAT_Y,
-        REPEAT_BOTH;
+            CLAMP,
+            REPEAT_X,
+            REPEAT_Y,
+            REPEAT_BOTH;
     }
 
     private final int verticesPerRow;
@@ -196,6 +202,9 @@ public final class TriangleGrid implements Serializable {
         return new VertexAttributes(list.toArray(new VertexAttribute[list.size()]));
     }
 
+    /**
+     * Sub-layer of a {@link TriangleGrid}.
+     */
     public static class TriangleGridLayer {
 
         public final Area2D bounds;

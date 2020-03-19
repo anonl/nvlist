@@ -20,12 +20,12 @@ public class LoadingResourceStoreTest {
     private static final FilePath ERROR_FILENAME = FilePath.of("img/invalid.png");
 
     private StaticRef<PixmapResourceStore> testId = StaticRef.from("test", PixmapResourceStore.class);
-    private TestAssetManager assetManager;
+    private AssetManagerMock assetManager;
     private PixmapResourceStore cam;
 
     @Before
     public void init() {
-        assetManager = new TestAssetManager();
+        assetManager = new AssetManagerMock();
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         testId.set(cam = new PixmapResourceStore(testId));
     }

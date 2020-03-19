@@ -24,6 +24,9 @@ import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.text.ITextRenderer;
 
+/**
+ * Default implementation of {@link IScreen}.
+ */
 @CustomSerializable
 public class Screen implements IScreen {
 

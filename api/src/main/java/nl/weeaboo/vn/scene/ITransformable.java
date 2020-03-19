@@ -2,6 +2,9 @@ package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.vn.math.Matrix;
 
+/**
+ * Sub-interface of {@link IDrawable} which allows arbitrary matrix-based transformations.
+ */
 public interface ITransformable extends IDrawable {
 
     /**

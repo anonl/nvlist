@@ -11,6 +11,9 @@ import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 
+/**
+ * Default implementation of {@link IInput}.
+ */
 public final class Input implements IInput {
 
     private final INativeInput delegate;

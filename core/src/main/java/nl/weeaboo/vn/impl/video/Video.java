@@ -9,6 +9,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 
+/**
+ * Default implementation of {@link IVideo}.
+ */
 public class Video implements IVideo {
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;

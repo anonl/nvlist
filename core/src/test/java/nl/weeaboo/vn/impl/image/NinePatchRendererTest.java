@@ -39,7 +39,7 @@ public class NinePatchRendererTest {
 
         textures = new ITexture[9];
         for (int n = 0; n < textures.length; n++) {
-            textures[n] = new TestTexture();
+            textures[n] = new TextureMock();
         }
     }
 

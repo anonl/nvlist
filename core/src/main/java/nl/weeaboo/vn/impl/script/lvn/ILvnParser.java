@@ -5,6 +5,9 @@ import java.io.InputStream;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Parses ".lvn" files.
+ */
 public interface ILvnParser {
 
     /**

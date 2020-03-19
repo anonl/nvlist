@@ -26,10 +26,10 @@ public final class KeyCombinationTest {
     @Test
     public void testEquals() {
         new EqualsTester()
-            .addEqualityGroup(empty)
-            .addEqualityGroup(shl, combo(KeyCode.SHIFT_LEFT), shl2)
-            .addEqualityGroup(shr)
-            .testEquals();
+                .addEqualityGroup(empty)
+                .addEqualityGroup(shl, combo(KeyCode.SHIFT_LEFT), shl2)
+                .addEqualityGroup(shr)
+                .testEquals();
     }
 
     private static KeyCombination combo(KeyCode... keys) {

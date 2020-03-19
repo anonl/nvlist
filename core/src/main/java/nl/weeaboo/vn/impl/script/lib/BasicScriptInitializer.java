@@ -15,6 +15,9 @@ import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.sound.SoundType;
 
+/**
+ * Registers some basic types and functionality within Lua.
+ */
 public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
 
     private static final long serialVersionUID = 1L;

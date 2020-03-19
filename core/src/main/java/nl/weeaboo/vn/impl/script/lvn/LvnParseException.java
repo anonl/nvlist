@@ -3,6 +3,9 @@ package nl.weeaboo.vn.impl.script.lvn;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Indicates a problem trying to process a ".lvn" file.
+ */
 public final class LvnParseException extends Exception {
 
     private static final long serialVersionUID = 1L;

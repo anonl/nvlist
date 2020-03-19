@@ -10,6 +10,9 @@ import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.signal.ISignal;
 
+/**
+ * Utility functions related to scenes and visual elements.
+ */
 public final class SceneUtil {
 
     private SceneUtil() {

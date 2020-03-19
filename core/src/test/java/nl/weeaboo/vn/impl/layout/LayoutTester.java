@@ -8,6 +8,9 @@ import nl.weeaboo.vn.layout.ILayoutGroup;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
+/**
+ * Various functions for testing layout algorithms.
+ */
 public final class LayoutTester {
 
     private static final double EPSILON = 0.001;

@@ -29,7 +29,7 @@ import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
-import nl.weeaboo.vn.impl.test.TestFileSystem;
+import nl.weeaboo.vn.impl.test.FileSystemMock;
 import nl.weeaboo.vn.save.SaveFormatException;
 
 public class ImageDefinitionIOTest {
@@ -112,7 +112,7 @@ public class ImageDefinitionIOTest {
 
     @Test
     public void fromFileSystem() throws IOException {
-        MultiFileSystem fileSystem = TestFileSystem.newInstance();
+        MultiFileSystem fileSystem = FileSystemMock.newInstance();
         IWritableFileSystem wfs = fileSystem.getWritableFileSystem();
         writeDef(wfs, "img.json", "a");
         writeDef(wfs, "1/img.json", "b");

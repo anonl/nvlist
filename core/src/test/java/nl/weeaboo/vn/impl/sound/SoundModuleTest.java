@@ -14,7 +14,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.impl.core.MockPreferenceStore;
+import nl.weeaboo.vn.impl.core.PreferenceStoreMock;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
@@ -51,7 +51,7 @@ public final class SoundModuleTest {
         soundController.consumeUpdateCount(1);
 
         // General NVList preferences for audio volume are forwarded to the sound controller
-        MockPreferenceStore prefsStore = new MockPreferenceStore();
+        PreferenceStoreMock prefsStore = new PreferenceStoreMock();
         prefsStore.set(NovelPrefs.MUSIC_VOLUME, .1);
         prefsStore.set(NovelPrefs.SOUND_EFFECT_VOLUME, .2);
         prefsStore.set(NovelPrefs.VOICE_VOLUME, .3);

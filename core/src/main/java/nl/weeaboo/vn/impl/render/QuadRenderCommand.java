@@ -6,6 +6,9 @@ import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Matrix;
 
+/**
+ * Draw command for a quad.
+ */
 public final class QuadRenderCommand extends BaseRenderCommand {
 
     public static final byte ID = ID_QUAD_RENDER_COMMAND;

@@ -32,6 +32,9 @@ import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 
+/**
+ * Main entrypoint for desktop operating systems (Windows, Mac, Linux).
+ */
 public final class DesktopLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);

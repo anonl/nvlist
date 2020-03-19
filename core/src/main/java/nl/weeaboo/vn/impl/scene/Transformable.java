@@ -16,6 +16,9 @@ import nl.weeaboo.vn.math.Polygon;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITransformable;
 
+/**
+ * Base implementation of {@link ITransformable}.
+ */
 public abstract class Transformable extends VisualElement implements ITransformable, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

@@ -67,12 +67,12 @@ public class LayoutSizeTest {
     @Test
     public void testEquals() {
         new EqualsTester()
-            .addEqualityGroup(s0, LayoutSize.ZERO)
-            .addEqualityGroup(s1, LayoutSize.of(1.0))
-            .addEqualityGroup(s2)
-            .addEqualityGroup(si, LayoutSize.INFINITE)
-            .addEqualityGroup(su, LayoutSize.UNKNOWN)
-            .testEquals();
+                .addEqualityGroup(s0, LayoutSize.ZERO)
+                .addEqualityGroup(s1, LayoutSize.of(1.0))
+                .addEqualityGroup(s2)
+                .addEqualityGroup(si, LayoutSize.INFINITE)
+                .addEqualityGroup(su, LayoutSize.UNKNOWN)
+                .testEquals();
     }
 
     @Test

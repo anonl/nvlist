@@ -13,6 +13,9 @@ import nl.weeaboo.vn.stats.IResourceSeenLog;
 import nl.weeaboo.vn.stats.IScriptSeenLog;
 import nl.weeaboo.vn.stats.ISeenLogHolder;
 
+/**
+ * Lua "Seen" library.
+ */
 public class SeenLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

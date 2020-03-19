@@ -8,6 +8,10 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
 
+/**
+ * Hybrid {@link IBackBuffer} implementation which switches between {@link FboBackBuffer} and
+ * {@link DirectBackBuffer} based on the current environment (screen size, performance).
+ */
 public final class HybridBackBuffer implements IBackBuffer {
 
     private final Dim vsize;

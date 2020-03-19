@@ -14,7 +14,7 @@ import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
-import nl.weeaboo.vn.impl.core.TestContextFactory;
+import nl.weeaboo.vn.impl.core.ContextFactoryMock;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
@@ -100,7 +100,7 @@ public class BaseScriptTest {
 
     @Test
     public void createContext() throws ScriptException {
-        TestContextFactory contextFactory = new TestContextFactory(scriptEnv);
+        ContextFactoryMock contextFactory = new ContextFactoryMock(scriptEnv);
         final ContextManager contextManager = new ContextManager(contextFactory);
 
         // Make context manager available to the script environment

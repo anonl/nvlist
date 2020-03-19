@@ -12,6 +12,9 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.text.ITextLog;
 
+/**
+ * Default implementation of {@link ITextLog}.
+ */
 public class TextLog implements ITextLog {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;

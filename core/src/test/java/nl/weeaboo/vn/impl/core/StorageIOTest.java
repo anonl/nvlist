@@ -11,7 +11,7 @@ import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.impl.save.Storage;
 import nl.weeaboo.vn.impl.save.StorageIO;
-import nl.weeaboo.vn.impl.test.TestFileSystem;
+import nl.weeaboo.vn.impl.test.FileSystemMock;
 import nl.weeaboo.vn.save.IStorage;
 
 public class StorageIOTest {
@@ -26,7 +26,7 @@ public class StorageIOTest {
     @Before
     public void before() {
         testHelper = new StorageTestHelper();
-        fileSystem = TestFileSystem.newInstance();
+        fileSystem = FileSystemMock.newInstance();
 
         testData = testHelper.createTestData();
     }

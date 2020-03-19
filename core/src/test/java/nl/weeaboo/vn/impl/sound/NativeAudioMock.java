@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.impl.sound;
 
-public class MockNativeAudio implements INativeAudio {
+public class NativeAudioMock implements INativeAudio {
 
     private static final long serialVersionUID = 1L;
 

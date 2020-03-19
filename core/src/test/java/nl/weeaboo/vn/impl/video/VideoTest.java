@@ -13,12 +13,12 @@ public class VideoTest {
 
     private static final FilePath VIDEO_FILE = FilePath.of("test.webm");
 
-    private MockNativeVideo nativeVideo;
+    private NativeVideoMock nativeVideo;
     private Video video;
 
     @Before
     public void before() {
-        nativeVideo = new MockNativeVideo();
+        nativeVideo = new NativeVideoMock();
         video = new Video(VIDEO_FILE, nativeVideo);
 
         Assert.assertEquals(VIDEO_FILE, video.getFilename());

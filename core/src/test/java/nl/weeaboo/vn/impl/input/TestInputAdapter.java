@@ -7,7 +7,7 @@ import nl.weeaboo.vn.impl.input.InputAccumulator.PressState;
 import nl.weeaboo.vn.input.KeyCode;
 
 /**
- * @see MockInput
+ * @see InputMock
  */
 final class TestInputAdapter {
 

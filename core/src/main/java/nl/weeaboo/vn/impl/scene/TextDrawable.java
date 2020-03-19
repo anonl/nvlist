@@ -12,6 +12,9 @@ import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
+/**
+ * Default implementation of {@link ITextDrawable}
+ */
 public class TextDrawable extends Transformable implements ITextDrawable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

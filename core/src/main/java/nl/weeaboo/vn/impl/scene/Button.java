@@ -26,6 +26,9 @@ import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
+/**
+ * Default implementation of {@link IButton}.
+ */
 public class Button extends Transformable implements IButton {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

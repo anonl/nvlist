@@ -10,6 +10,9 @@ import com.badlogic.gdx.backends.headless.mock.input.MockInput;
 
 import nl.weeaboo.vn.gdx.graphics.MockGL;
 
+/**
+ * Initializes global libGDX state for use in a headless (test) environment.
+ */
 public class HeadlessGdx {
 
     /**

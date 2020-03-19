@@ -21,6 +21,9 @@ import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
+/**
+ * Default implementation of {@link IGridLayout}.
+ */
 public class GridLayout extends LayoutGroup implements IGridLayout {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;

@@ -12,7 +12,7 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
 
-public class MockTextRenderer implements ITextRenderer {
+public class TextRendererMock implements ITextRenderer {
 
     private static final long serialVersionUID = 1L;
 

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.layout;
 
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Associated visual element for a {@link ILayoutElemPeer}.
+ */
 public interface ILayoutElemPeer {
 
     /**

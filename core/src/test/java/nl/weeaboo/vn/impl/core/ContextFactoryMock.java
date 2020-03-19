@@ -8,11 +8,11 @@ import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 
 @SuppressWarnings("serial")
-public class TestContextFactory implements IContextFactory<Context> {
+public class ContextFactoryMock implements IContextFactory<Context> {
 
     public final LuaScriptEnv scriptEnv;
 
-    public TestContextFactory(LuaScriptEnv scriptEnv) {
+    public ContextFactoryMock(LuaScriptEnv scriptEnv) {
         this.scriptEnv = scriptEnv;
     }
 

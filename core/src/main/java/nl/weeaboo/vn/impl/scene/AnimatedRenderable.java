@@ -1,13 +1,17 @@
 package nl.weeaboo.vn.impl.scene;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.vn.core.IAnimation;
 import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.impl.core.Animation;
 import nl.weeaboo.vn.render.IDrawBuffer;
-import nl.weeaboo.vn.scene.IAnimatedRenderable;
 import nl.weeaboo.vn.scene.IDrawable;
+import nl.weeaboo.vn.scene.IRenderable;
 
-public abstract class AnimatedRenderable extends AbstractRenderable implements IAnimatedRenderable {
+/**
+ * Base implementation for classes implementing both {@link IRenderable} and {@link IAnimation}.
+ */
+public abstract class AnimatedRenderable extends AbstractRenderable implements IAnimation {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 

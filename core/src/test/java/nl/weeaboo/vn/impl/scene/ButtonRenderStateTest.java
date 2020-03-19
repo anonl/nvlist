@@ -8,7 +8,7 @@ import org.junit.Test;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
-import nl.weeaboo.vn.impl.text.TestFontStore;
+import nl.weeaboo.vn.impl.text.FontStoreMock;
 import nl.weeaboo.vn.scene.ButtonViewState;
 
 /** Test passing of information between {@link Button} and {@link ButtonRenderer} */
@@ -22,7 +22,7 @@ public class ButtonRenderStateTest {
     public void before() {
         model = new ButtonModel();
 
-        TestFontStore fontStore = new TestFontStore();
+        FontStoreMock fontStore = new FontStoreMock();
         renderer = new ButtonRenderer(fontStore);
 
         button = new Button(new ScriptEventDispatcher(), model, renderer);

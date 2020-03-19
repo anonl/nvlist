@@ -4,16 +4,16 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
-public class MockSound extends AbstractSound {
+public class SoundMock extends AbstractSound {
 
     private static final long serialVersionUID = 1L;
 
-    private final MockNativeAudio nativeAudio;
+    private final NativeAudioMock nativeAudio;
 
-    public MockSound(ISoundController sctrl, SoundType soundType) {
+    public SoundMock(ISoundController sctrl, SoundType soundType) {
         super(sctrl, soundType, FilePath.of("test.snd"));
 
-        nativeAudio = new MockNativeAudio();
+        nativeAudio = new NativeAudioMock();
     }
 
     @Override

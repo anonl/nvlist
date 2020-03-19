@@ -5,12 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.SkipMode;
-import nl.weeaboo.vn.impl.input.MockInput;
+import nl.weeaboo.vn.impl.input.InputMock;
 import nl.weeaboo.vn.input.VKey;
 
 public final class SkipStateTest {
 
-    private final MockInput input = new MockInput();
+    private final InputMock input = new InputMock();
 
     private SkipState skipState;
 

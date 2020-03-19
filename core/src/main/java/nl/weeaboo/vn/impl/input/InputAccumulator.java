@@ -9,6 +9,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.IRenderEnv;
 
+/**
+ * Collects use input events.
+ */
 public final class InputAccumulator {
 
     private final List<Event> inputEvents = Lists.newArrayList();
@@ -25,10 +28,16 @@ public final class InputAccumulator {
         return result;
     }
 
+    /**
+     * Button press state.
+     */
     public enum PressState {
         PRESS, RELEASE;
     }
 
+    /**
+     * Base class for input events.
+     */
     public static class Event {
 
         public long timestampMs;
@@ -39,6 +48,9 @@ public final class InputAccumulator {
 
     }
 
+    /**
+     * Button input event.
+     */
     public static class ButtonEvent extends Event {
 
         public final KeyCode key;
@@ -53,6 +65,9 @@ public final class InputAccumulator {
 
     }
 
+    /**
+     * Mouse/touch position event.
+     */
     public static class PointerPositionEvent extends Event {
 
         public final double x;
@@ -74,6 +89,9 @@ public final class InputAccumulator {
 
     }
 
+    /**
+     * Scroll wheel input event.
+     */
     public static class PointerScrollEvent extends Event {
 
         public final int scrollAmount;

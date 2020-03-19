@@ -5,9 +5,13 @@ import javax.annotation.Nullable;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.Animation;
+import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
+/**
+ * Default implementation of {@link ISound}.
+ */
 public class Sound extends AbstractSound {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;

@@ -25,6 +25,9 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
 
+/**
+ * Sub-module for playing video.
+ */
 public class VideoModule extends AbstractModule implements IVideoModule {
 
     protected static final FilePath DEFAULT_VIDEO_FOLDER = FilePath.of("video/");

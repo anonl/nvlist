@@ -24,7 +24,9 @@ import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.impl.image.ResolutionFolderSelector.ResolutionPath;
-import nl.weeaboo.vn.impl.scene.ComponentFactory;
+import nl.weeaboo.vn.impl.scene.Button;
+import nl.weeaboo.vn.impl.scene.ImageDrawable;
+import nl.weeaboo.vn.impl.scene.TextDrawable;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IButton;
@@ -40,7 +42,6 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
     protected final IEnvironment env;
     protected final FileResourceLoader resourceLoader;
-    protected final ComponentFactory entityHelper;
 
     private final TextureManager texManager;
 
@@ -51,7 +52,6 @@ public class ImageModule extends AbstractModule implements IImageModule {
     public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader) {
         this.env = env;
         this.resourceLoader = resourceLoader;
-        this.entityHelper = new ComponentFactory();
 
         IRenderEnv renderEnv = env.getRenderEnv();
 
@@ -69,17 +69,24 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
     @Override
     public IImageDrawable createImage(ILayer layer) {
-        return entityHelper.createImage(layer);
+        ImageDrawable image = new ImageDrawable();
+        layer.add(image);
+        return image;
     }
 
     @Override
     public ITextDrawable createTextDrawable(ILayer layer) {
-        return entityHelper.createText(layer, env.getTextModule().getFontStore());
+        TextDrawable textDrawable = new TextDrawable(env.getTextModule().getFontStore());
+        textDrawable.setSize(layer.getWidth(), layer.getHeight());
+        layer.add(textDrawable);
+        return textDrawable;
     }
 
     @Override
     public IButton createButton(ILayer layer, IScriptContext scriptContext) {
-        return entityHelper.createButton(layer, scriptContext, env.getTextModule().getFontStore());
+        Button button = new Button(scriptContext.getEventDispatcher(), env.getTextModule().getFontStore());
+        layer.add(button);
+        return button;
     }
 
     @Override

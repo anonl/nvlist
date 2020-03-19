@@ -210,8 +210,8 @@ Changes:
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
-        
-<!-- Additional checks -->        
+
+<!-- Additional checks -->
         <module name="IllegalCatch">
             <property name="illegalClassNames" value="java.lang.Throwable"/>
         </module>
@@ -230,6 +230,8 @@ Changes:
     <module name="SuppressWarningsFilter" />
     <module name="SuppressionSingleFilter">
         <property name="checks" value="MissingJavadocType"/>
-        <property name="files" value=".*Test.java"/> <!-- Don't require class Javadoc for unit tests -->
+
+         <!-- Don't require class Javadoc for unit tests, test doubles -->
+        <property name="files" value=".*(Test|Mock|Stub).java"/>
     </module>
 </module>

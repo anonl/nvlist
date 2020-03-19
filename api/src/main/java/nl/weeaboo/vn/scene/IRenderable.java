@@ -7,6 +7,9 @@ import nl.weeaboo.vn.core.IEventListener;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 
+/**
+ * Rendering logic for a {@link IDrawable}.
+ */
 public interface IRenderable extends Serializable, IUpdateable {
 
     /**

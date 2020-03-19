@@ -11,6 +11,9 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
+/**
+ * Video module
+ */
 public interface IVideoModule extends IModule, IResourceResolver {
 
     /**

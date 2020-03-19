@@ -11,6 +11,9 @@ import nl.weeaboo.vn.scene.signal.VisualElementDestroySignal;
 import nl.weeaboo.vn.signal.ISignal;
 import nl.weeaboo.vn.signal.ISignalHandler;
 
+/**
+ * Collection of children for a {@link IVisualGroup}.
+ */
 public final class ChildCollection implements Serializable, ISignalHandler {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

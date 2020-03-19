@@ -2,6 +2,9 @@ package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 
+/**
+ * Group of visual elements.
+ */
 public interface ILayer extends IAxisAlignedContainer {
 
     @Override

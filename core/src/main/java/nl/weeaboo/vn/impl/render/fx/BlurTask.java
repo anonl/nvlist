@@ -19,6 +19,9 @@ import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTask;
 import nl.weeaboo.vn.math.Vec2;
 
+/**
+ * Generates a blurred version of the input texture.
+ */
 public final class BlurTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;

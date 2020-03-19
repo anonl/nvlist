@@ -22,6 +22,9 @@ import nl.weeaboo.vn.impl.save.Storage;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Helper functions for converting data from/to Lua.
+ */
 public final class LuaConvertUtil {
 
     /**

@@ -8,6 +8,9 @@ import nl.weeaboo.vn.stats.IPlayTimer;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 import nl.weeaboo.vn.stats.IStatsModule;
 
+/**
+ * Sub-module for analytics and statistics.
+ */
 public class StatsModule extends AbstractModule implements IStatsModule {
 
     private static final long serialVersionUID = StatsImpl.serialVersionUID;

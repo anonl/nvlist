@@ -27,7 +27,7 @@ public class NinePatchTest {
     /** Call a bunch of setters to see if they work */
     @Test
     public void setters() {
-        TestTexture testTexture = new TestTexture();
+        TextureMock testTexture = new TextureMock();
 
         NinePatch ninePatch = new NinePatch(testTexture);
         Assert.assertEquals(testTexture, ninePatch.getTexture(AreaId.CENTER));

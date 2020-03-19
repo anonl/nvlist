@@ -7,6 +7,9 @@ import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.core.TransientListenerSupport;
 import nl.weeaboo.vn.scene.IPositionable;
 
+/**
+ * Stores bounds (x/y/width/height).
+ */
 public final class BoundsHelper extends TransientListenerSupport implements IPositionable {
 
     private static final long serialVersionUID = 1L;

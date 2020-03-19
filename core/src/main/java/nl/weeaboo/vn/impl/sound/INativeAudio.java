@@ -3,7 +3,13 @@ package nl.weeaboo.vn.impl.sound;
 import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IStreamingMedia;
+import nl.weeaboo.vn.sound.ISound;
 
+/**
+ * Low-level interface for audio.
+ *
+ * @see ISound
+ */
 public interface INativeAudio extends Serializable, IStreamingMedia {
 
     /**

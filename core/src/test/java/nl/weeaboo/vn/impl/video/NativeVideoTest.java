@@ -26,7 +26,7 @@ public class NativeVideoTest {
         env = TestEnvironment.newInstance();
         renderEnv = env.getRenderEnv();
 
-        nativeVideo = new NativeVideo(new MockGdxVideoPlayerFactory(), videoPath, renderEnv);
+        nativeVideo = new NativeVideo(new GdxVideoPlayerFactoryMock(), videoPath, renderEnv);
     }
 
     @After
@@ -91,8 +91,8 @@ public class NativeVideoTest {
         Assert.assertEquals((float)expected, getVideoPlayer().getVolume(), 0.001f);
     }
 
-    private MockGdxVideoPlayer getVideoPlayer() {
-        MockGdxVideoPlayer result = (MockGdxVideoPlayer)nativeVideo.getVideoPlayer();
+    private GdxVideoPlayerMock getVideoPlayer() {
+        GdxVideoPlayerMock result = (GdxVideoPlayerMock)nativeVideo.getVideoPlayer();
         Assert.assertNotNull(result);
         return result;
     }

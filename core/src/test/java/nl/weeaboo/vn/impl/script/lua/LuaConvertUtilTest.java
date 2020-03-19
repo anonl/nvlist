@@ -12,8 +12,8 @@ import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.ImageModuleStub;
-import nl.weeaboo.vn.impl.image.TestScreenshot;
-import nl.weeaboo.vn.impl.image.TestTexture;
+import nl.weeaboo.vn.impl.image.ScreenshotMock;
+import nl.weeaboo.vn.impl.image.TextureMock;
 import nl.weeaboo.vn.impl.scene.Layer;
 import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.script.ScriptException;
@@ -45,7 +45,7 @@ public class LuaConvertUtilTest {
 
     @Test
     public void getTextureArg() throws ScriptException {
-        final ITexture dummyTexture = new TestTexture();
+        final ITexture dummyTexture = new TextureMock();
 
         assertTextureArg(dummyTexture, 1);
         // Different indices work
@@ -57,7 +57,7 @@ public class LuaConvertUtilTest {
         assertTextureArgNotNull(7, 1);
 
         // Screenshots throw an exception if not available
-        TestScreenshot screenshot = new TestScreenshot();
+        ScreenshotMock screenshot = new ScreenshotMock();
         assertTextureArgException(screenshot, 1);
         // Screenshots work if they are available
         screenshot.setPixels(10, 10);

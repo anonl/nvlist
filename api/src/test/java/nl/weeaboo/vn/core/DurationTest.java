@@ -39,10 +39,10 @@ public class DurationTest {
     @Test
     public void unacceptableUnits() {
         exTester.expect(IllegalArgumentException.class,
-            () -> Duration.fromDuration(1_000_000, TimeUnit.MICROSECONDS));
+                () -> Duration.fromDuration(1_000_000, TimeUnit.MICROSECONDS));
 
         exTester.expect(IllegalArgumentException.class,
-            () -> Duration.fromDuration(1_000_000, TimeUnit.NANOSECONDS));
+                () -> Duration.fromDuration(1_000_000, TimeUnit.NANOSECONDS));
     }
 
     @Test
@@ -71,9 +71,9 @@ public class DurationTest {
     @Test
     public void testEquals() {
         new EqualsTester()
-            .addEqualityGroup(Duration.ZERO, Duration.fromSeconds(0))
-            .addEqualityGroup(Duration.fromDuration(1000, TimeUnit.MILLISECONDS), Duration.fromSeconds(1))
-            .testEquals();
+                .addEqualityGroup(Duration.ZERO, Duration.fromSeconds(0))
+                .addEqualityGroup(Duration.fromDuration(1000, TimeUnit.MILLISECONDS), Duration.fromSeconds(1))
+                .testEquals();
     }
 
     private void assertSeconds(long expected, Duration duration) {

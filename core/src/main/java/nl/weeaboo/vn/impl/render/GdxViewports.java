@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import nl.weeaboo.common.Dim;
 
+/**
+ * Model-view transformation matrices.
+ */
 public final class GdxViewports {
 
     private final Viewport screenViewport;

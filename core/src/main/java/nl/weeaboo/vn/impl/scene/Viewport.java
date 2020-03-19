@@ -19,6 +19,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IViewport;
 import nl.weeaboo.vn.scene.IVisualElement;
 
+/**
+ * Default implementation of {@link IViewport}.
+ */
 public class Viewport extends AxisAlignedContainer implements IViewport, ILayoutElemPeer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

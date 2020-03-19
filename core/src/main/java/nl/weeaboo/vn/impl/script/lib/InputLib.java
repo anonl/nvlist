@@ -12,6 +12,9 @@ import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Input" library.
+ */
 public class InputLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

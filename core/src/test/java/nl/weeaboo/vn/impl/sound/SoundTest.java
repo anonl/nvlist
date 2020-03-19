@@ -17,14 +17,14 @@ public final class SoundTest {
 
     private MockSoundController soundController;
     private SoundTestHelper soundTester;
-    private MockNativeAudio nativeAudio;
+    private NativeAudioMock nativeAudio;
     private Sound sound;
 
     @Before
     public void before() {
         soundController = new MockSoundController();
         soundTester = new SoundTestHelper(soundController);
-        nativeAudio = new MockNativeAudio();
+        nativeAudio = new NativeAudioMock();
         sound = new Sound(soundController, SOUND_TYPE, FILENAME, nativeAudio);
     }
 
@@ -109,7 +109,7 @@ public final class SoundTest {
      */
     @Test
     public void testPreferredChannel() throws IOException {
-        MockSound otherSound = new MockSound(soundController, SoundType.VOICE);
+        SoundMock otherSound = new SoundMock(soundController, SoundType.VOICE);
         soundController.set(3, otherSound);
         Assert.assertEquals(otherSound, soundController.get(3));
 

@@ -38,6 +38,9 @@ import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
+/**
+ * Lua "Text" library.
+ */
 public class TextLib extends LuaLib {
 
     private static final Logger LOG = LoggerFactory.getLogger(TextLib.class);

@@ -25,6 +25,9 @@ import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Sub-module for audio.
+ */
 public class SoundModule extends AbstractModule implements ISoundModule {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;

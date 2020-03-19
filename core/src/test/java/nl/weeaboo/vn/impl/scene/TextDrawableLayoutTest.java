@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.impl.layout.LayoutTester;
-import nl.weeaboo.vn.impl.text.TestFontStore;
+import nl.weeaboo.vn.impl.text.FontStoreMock;
 import nl.weeaboo.vn.impl.text.TextRenderer;
 import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
@@ -21,7 +21,7 @@ public final class TextDrawableLayoutTest {
 
     @Before
     public void before() {
-        TestFontStore fontStore = new TestFontStore();
+        FontStoreMock fontStore = new FontStoreMock();
 
         td = new TextDrawable(new TextRenderer(fontStore));
         td.setText("a b c");

@@ -1,7 +1,11 @@
 package nl.weeaboo.vn.impl.render;
 
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.scene.ILayer;
 
+/**
+ * Draw command to render a {@link ILayer}.
+ */
 public final class LayerRenderCommand extends BaseRenderCommand {
 
     public static final byte ID = ID_LAYER_RENDER_COMMAND;

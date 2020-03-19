@@ -13,7 +13,7 @@ import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
-public abstract class AbstractSound implements ISound {
+abstract class AbstractSound implements ISound {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 

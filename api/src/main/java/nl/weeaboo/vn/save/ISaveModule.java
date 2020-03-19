@@ -6,6 +6,9 @@ import java.util.Collection;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 
+/**
+ * Save module.
+ */
 public interface ISaveModule extends IModule {
 
     /** Load persistent storage. */

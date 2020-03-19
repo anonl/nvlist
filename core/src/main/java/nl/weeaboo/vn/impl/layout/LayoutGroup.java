@@ -8,6 +8,9 @@ import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.layout.ILayoutGroup;
 
+/**
+ * Default implementation of {@link ILayoutGroup}.
+ */
 public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;

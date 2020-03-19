@@ -15,14 +15,14 @@ public class BitmapTweenRendererTest {
     public void before() {
         imageModule = new ImageModuleStub();
 
-        TestTexture controlTex = new TestTexture();
+        TextureMock controlTex = new TextureMock();
         defaultConfig = new BitmapTweenConfig(30, new ControlImage(controlTex, false));
     }
 
     /** Basic flow for animated renderer: attach, update until finish, detach */
     @Test(timeout = 5000)
     public void basicFlow() {
-        TestBitmapTweenRenderer btr = new TestBitmapTweenRenderer(imageModule, defaultConfig);
+        BitmapTweenRendererMock btr = new BitmapTweenRendererMock(imageModule, defaultConfig);
         btr.onAttached(null);
         while (!btr.isFinished()) {
             btr.update();

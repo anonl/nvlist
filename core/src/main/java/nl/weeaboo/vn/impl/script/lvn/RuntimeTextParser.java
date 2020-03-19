@@ -28,6 +28,9 @@ import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 
+/**
+ * Processes text lines of a ".lvn" file.
+ */
 @CustomSerializable
 public class RuntimeTextParser implements Serializable {
 
@@ -202,6 +205,9 @@ public class RuntimeTextParser implements Serializable {
         return LuaConvertUtil.getStyledTextArg(result.arg(1));
     }
 
+    /**
+     * Parsed text line.
+     */
     public static final class ParseResult {
 
         private StyledText stext;

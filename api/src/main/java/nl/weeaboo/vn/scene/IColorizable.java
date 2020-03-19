@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.scene;
 
+/**
+ * Interface for objects which can be tinted with a color.
+ */
 public interface IColorizable {
 
     /**

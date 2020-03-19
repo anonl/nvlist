@@ -3,7 +3,7 @@ package nl.weeaboo.vn.impl.script;
 import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptThread;
 
-public enum TestScriptExceptionHandler implements IScriptExceptionHandler {
+public enum ScriptExceptionHandlerMock implements IScriptExceptionHandler {
 
     INSTANCE;
 

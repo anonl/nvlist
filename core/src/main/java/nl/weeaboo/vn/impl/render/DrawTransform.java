@@ -6,6 +6,9 @@ import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawTransform;
 import nl.weeaboo.vn.scene.IVisualElement;
 
+/**
+ * Default implementation of {@link IDrawTransform}.
+ */
 public final class DrawTransform implements IDrawTransform {
 
     private short z;

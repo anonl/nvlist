@@ -25,6 +25,9 @@ import nl.weeaboo.vn.scene.IVisualGroup;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Image" library.
+ */
 public class ImageLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

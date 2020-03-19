@@ -21,7 +21,7 @@ public class TextRendererTest {
 
     @Before
     public void before() {
-        TestFontStore fontStore = new TestFontStore();
+        FontStoreMock fontStore = new FontStoreMock();
         textRenderer = new TextRenderer(fontStore);
     }
 

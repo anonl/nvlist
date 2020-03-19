@@ -13,8 +13,8 @@ public class NovelPrefsStoreTest {
 
     @Test
     public void testGetDeclaredPrefs() {
-        List<Preference<?>> declared = NovelPrefsStore.getDeclaredPrefs(TestPrefsHolder.class);
-        Assert.assertEquals(TestPrefsHolder.getAllPrefs(), ImmutableSet.copyOf(declared));
+        List<Preference<?>> declared = NovelPrefsStore.getDeclaredPrefs(PrefsHolderMock.class);
+        Assert.assertEquals(PrefsHolderMock.getAllPrefs(), ImmutableSet.copyOf(declared));
     }
 
 }

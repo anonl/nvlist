@@ -12,6 +12,9 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.scene.IButton;
 
+/**
+ * Loads images sets for {@link IButton}.
+ */
 public final class ButtonImageLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ButtonImageLoader.class);

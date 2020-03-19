@@ -3,6 +3,9 @@ package nl.weeaboo.vn.scene;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.layout.GridCellConstraints;
 
+/**
+ * Panel with grid layout.
+ */
 public interface IGridPanel extends IPanel {
 
     /**

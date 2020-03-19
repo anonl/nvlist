@@ -4,6 +4,9 @@ import com.google.common.base.Strings;
 
 import nl.weeaboo.styledtext.StyledText;
 
+/**
+ * Utility functions related to text.
+ */
 public final class TextUtil {
 
     public static final String DEFAULT_FONT_NAME = "default";

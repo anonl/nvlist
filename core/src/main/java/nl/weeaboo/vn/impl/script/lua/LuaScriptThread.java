@@ -15,6 +15,9 @@ import nl.weeaboo.vn.impl.core.Indirect;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Default implementation of {@link IScriptThread}.
+ */
 public class LuaScriptThread implements IScriptThread {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;

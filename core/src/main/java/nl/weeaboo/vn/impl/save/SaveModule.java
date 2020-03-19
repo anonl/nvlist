@@ -40,6 +40,9 @@ import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.stats.IStatsModule;
 
+/**
+ * Sub-module for saving/loading.
+ */
 @CustomSerializable
 public class SaveModule extends AbstractModule implements ISaveModule {
 

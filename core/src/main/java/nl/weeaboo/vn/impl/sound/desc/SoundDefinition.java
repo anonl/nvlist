@@ -10,6 +10,9 @@ import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Default implementation of {@link ISoundDefinition}.
+ */
 @Immutable
 public final class SoundDefinition implements ISoundDefinition {
 

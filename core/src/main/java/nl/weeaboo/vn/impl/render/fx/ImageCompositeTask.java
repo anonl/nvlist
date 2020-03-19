@@ -19,6 +19,9 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTask;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig.TextureEntry;
 
+/**
+ * Composes multiple images into a single texture.
+ */
 public final class ImageCompositeTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;

@@ -21,7 +21,7 @@ public class VideoModuleTest {
     @Before
     public void before() {
         TestEnvironment env = TestEnvironment.newInstance();
-        videoModule = new VideoModule(env, new VideoResourceLoader(env), new MockNativeVideoFactory());
+        videoModule = new VideoModule(env, new VideoResourceLoader(env), new NativeVideoFactoryMock());
     }
 
     @Test

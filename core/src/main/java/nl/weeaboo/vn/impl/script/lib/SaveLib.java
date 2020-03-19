@@ -39,6 +39,9 @@ import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Save" library.
+ */
 public final class SaveLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

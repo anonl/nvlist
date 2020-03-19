@@ -3,6 +3,9 @@ package nl.weeaboo.vn.impl.layout;
 import nl.weeaboo.common.Dim2D;
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Empty {@link ILayoutElemPeer}.
+ */
 public class DummyLayoutElemPeer implements ILayoutElemPeer {
 
     private Dim2D size = Dim2D.of(10, 10);

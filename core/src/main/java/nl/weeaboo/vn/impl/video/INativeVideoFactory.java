@@ -6,6 +6,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.render.IRenderEnv;
 
+/**
+ * Creates {@link INativeVideo} instances.
+ */
 public interface INativeVideoFactory extends Serializable {
 
     /** Creates a new {@link INativeVideo} instance. */

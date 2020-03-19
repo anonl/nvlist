@@ -12,6 +12,9 @@ import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.stats.IPlayTimer;
 
+/**
+ * Lua "System" library.
+ */
 public class SystemLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

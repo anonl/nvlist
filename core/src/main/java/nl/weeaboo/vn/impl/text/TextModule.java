@@ -8,6 +8,9 @@ import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextLog;
 import nl.weeaboo.vn.text.ITextModule;
 
+/**
+ * Default implementation of {@link ITextModule}.
+ */
 public class TextModule extends AbstractModule implements ITextModule {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;

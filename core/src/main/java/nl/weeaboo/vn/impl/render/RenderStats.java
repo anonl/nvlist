@@ -13,6 +13,9 @@ import com.google.common.base.Joiner;
 
 import nl.weeaboo.common.StringUtil;
 
+/**
+ * Rendering statistics.
+ */
 public class RenderStats {
 
     private static final Logger LOG = LoggerFactory.getLogger(RenderStats.class);

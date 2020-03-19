@@ -19,10 +19,10 @@ public final class ColorTest {
     @Test
     public void testEquals() {
         new EqualsTester()
-            .addEqualityGroup(Color.WHITE, Color.fromRGB(0xffffff), Color.fromRGBA(1., 1., 1., 1.))
-            .addEqualityGroup(Color.TRANSPARENT, Color.fromRGBA(0., 0., 0., 0.))
-            .addEqualityGroup(Color.fromRGBA(1., 1., 1., 0.))
-            .testEquals();
+                .addEqualityGroup(Color.WHITE, Color.fromRGB(0xffffff), Color.fromRGBA(1., 1., 1., 1.))
+                .addEqualityGroup(Color.TRANSPARENT, Color.fromRGBA(0., 0., 0., 0.))
+                .addEqualityGroup(Color.fromRGBA(1., 1., 1., 0.))
+                .testEquals();
     }
 
     @Test

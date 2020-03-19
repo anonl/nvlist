@@ -24,6 +24,9 @@ import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Various utility functions for working with Lua scripts.
+ */
 public final class LuaScriptUtil {
 
     private static final String LVN_PATTERN = ".lvn:";

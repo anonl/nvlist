@@ -7,6 +7,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IStreamingMedia;
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
 
+/**
+ * Playable video file.
+ */
 public interface IVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
 
     /**

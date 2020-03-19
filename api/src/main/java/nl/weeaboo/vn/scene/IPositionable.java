@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.scene;
 
+/**
+ * Interface for manipulating bounds (x, y, width, height).
+ */
 public interface IPositionable {
 
     /**

@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.test.RectAssert;
-import nl.weeaboo.vn.impl.input.MockInput;
+import nl.weeaboo.vn.impl.input.InputMock;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IImageDrawable;
@@ -18,7 +18,7 @@ public final class ViewportTest {
 
     private static final double EPSILON = 0.001;
 
-    private MockInput input = new MockInput();
+    private InputMock input = new InputMock();
     private Viewport viewport;
 
     @Before

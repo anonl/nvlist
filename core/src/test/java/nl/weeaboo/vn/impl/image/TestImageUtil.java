@@ -12,6 +12,9 @@ import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.render.RenderUtil;
 
+/**
+ * Various functions for creating and working with test images.
+ */
 public final class TestImageUtil {
 
     private TestImageUtil() {

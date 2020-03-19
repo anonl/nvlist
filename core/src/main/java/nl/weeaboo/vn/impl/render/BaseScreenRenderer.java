@@ -15,7 +15,10 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.IScreenRenderer;
 import nl.weeaboo.vn.render.RenderUtil;
 
-public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> {
+/**
+ * Base implementation of IScreenRenderer.
+ */
+public abstract class BaseScreenRenderer implements IScreenRenderer {
 
     protected final IRenderEnv renderEnv;
     protected final RenderStats renderStats;
@@ -39,7 +42,6 @@ public abstract class BaseScreenRenderer implements IScreenRenderer<DrawBuffer> 
         foreground = 0xFFFFFFFF;
     }
 
-    @Override
     public void render(DrawBuffer d) {
         renderStats.startRender();
         try {

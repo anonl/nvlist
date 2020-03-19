@@ -22,7 +22,7 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.impl.test.TestFileSystem;
+import nl.weeaboo.vn.impl.test.FileSystemMock;
 import nl.weeaboo.vn.save.SaveFormatException;
 
 public class SoundDefinitionIOTest {
@@ -86,7 +86,7 @@ public class SoundDefinitionIOTest {
 
     @Test
     public void fromFileSystem() throws IOException {
-        MultiFileSystem fileSystem = TestFileSystem.newInstance();
+        MultiFileSystem fileSystem = FileSystemMock.newInstance();
         IWritableFileSystem wfs = fileSystem.getWritableFileSystem();
         writeDef(wfs, "snd.json", "a");
         writeDef(wfs, "1/snd.json", "b");
