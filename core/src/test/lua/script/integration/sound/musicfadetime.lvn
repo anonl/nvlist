@@ -11,6 +11,7 @@ local frameCountThread = newThread(function()
         yield()
     end
 end)
+yield()
 
 local alpha = music("alpha")
 
@@ -19,6 +20,12 @@ local beta = music("beta")
 
 -- Default fade-out time is 300 frames
 luaAssertEquals(300, frameCount)
+
+-- The default fade-out time can be modified
+setDefaultMusicFadeTime(12)
+alpha = music("alpha")
+luaAssertEquals(312, frameCount)
+
 finished = true
 
 @@

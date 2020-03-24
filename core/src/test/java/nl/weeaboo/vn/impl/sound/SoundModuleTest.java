@@ -30,7 +30,7 @@ public final class SoundModuleTest {
     public void before() {
         env = TestEnvironment.newInstance();
         soundController = new MockSoundController();
-        module = new SoundModule(new SoundResourceLoader(env), soundController);
+        module = new SoundModule(new SoundResourceLoader(env), soundController, new NativeAudioFactory());
     }
 
     @After

@@ -129,7 +129,6 @@ function soundStop(soundOrChannel, fadeTimeFrames)
 
     fadeTimeFrames = fadeTimeFrames or 0
     sound:stop(fadeTimeFrames)
-    yield() -- Wait for a frame here so to allow the stopped sound/music to be removed by the sound module
     return sound
 end
 

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.sound;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.annotation.Nullable;
@@ -7,18 +8,13 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.audio.Music;
-
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
-import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.AbstractModule;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
@@ -33,18 +29,20 @@ public class SoundModule extends AbstractModule implements ISoundModule {
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SoundModule.class);
 
-    private final StaticRef<GdxMusicStore> musicStore = StaticEnvironment.MUSIC_STORE;
-
     private final SoundResourceLoader resourceLoader;
     private final ISoundController soundController;
+    private final INativeAudioFactory nativeAudioFactory;
 
     public SoundModule(IEnvironment env) {
-        this(new SoundResourceLoader(env), new SoundController());
+        this(new SoundResourceLoader(env), new SoundController(), new NativeAudioFactory());
     }
 
-    public SoundModule(SoundResourceLoader resourceLoader, ISoundController soundController) {
+    public SoundModule(SoundResourceLoader resourceLoader, ISoundController soundController,
+            INativeAudioFactory nativeAudioFactory) {
+
         this.resourceLoader = resourceLoader;
         this.soundController = soundController;
+        this.nativeAudioFactory = nativeAudioFactory;
     }
 
     @Override
@@ -77,16 +75,17 @@ public class SoundModule extends AbstractModule implements ISoundModule {
             return null;
         }
 
-        FilePath filename = resourceLoader.getAbsolutePath(resourceId.getFilePath());
-        IResource<Music> resource = musicStore.get().get(filename);
-        if (resource == null) {
+        FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
+        INativeAudio nativeAudio;
+        try {
+            nativeAudio = nativeAudioFactory.createNativeAudio(absolutePath);
+        } catch (IOException e) {
             LOG.warn("Error loading audio file: {}", path);
             return null;
         }
 
         resourceLoader.logLoad(resourceId, loadInfo);
-
-        return new Sound(soundController, stype, resourceId.getFilePath(), new NativeAudio(resource));
+        return new Sound(soundController, stype, resourceId.getFilePath(), nativeAudio);
     }
 
     /**
