@@ -17,7 +17,8 @@ abstract class AbstractSound implements ISound {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
 
-    private final ISoundController soundController;
+    protected final ISoundController soundController;
+
     private final SoundType soundType;
     private final FilePath filename;
 

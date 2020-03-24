@@ -15,6 +15,9 @@ end
 
 local MUSIC_CHANNEL = 9000
 
+--Default fade-out time when stopping music, can be changed using setDefaultMusicFadeTime()
+local defaultMusicStopFrames = 300
+
 ---Global declarations
 -------------------------------------------------------------------------------------------------------------- @section globals
 
@@ -27,6 +30,7 @@ local MUSIC_CHANNEL = 9000
 -- @number[opt=1.0] volume Loudness of the music between <code>0.0</code> and <code>1.0</code>.
 -- @see sound
 function music(filename, volume)
+    musicStopAndWait()
     return sound(filename, -1, volume or 1.0, MUSIC_CHANNEL, SoundType.MUSIC)
 end
 
@@ -34,8 +38,34 @@ end
 -- @number fadeTimeFrames Optional argument specifying the duration (in frames) of a slow fade-out instead of
 --         stopping playback immediately.
 -- @see music
+-- @see musicStopAndWait
 function musicStop(fadeTimeFrames)
-    soundStop(MUSIC_CHANNEL, fadeTimeFrames or 60)
+    local s = tosound(MUSIC_CHANNEL)
+    if s == nil then
+        return
+    end
+    return soundStop(s, fadeTimeFrames or defaultMusicStopFrames)
+end
+
+---Stops background music started with the <code>music</code> function, blocking until the music has finished stopping.
+-- @number[opt=defaultMusicStopFrames] fadeTimeFrames Optional argument specifying the duration (in frames) of a slow
+--                                     fade-out instead of stopping playback immediately.
+-- @see music
+-- @see musicStop
+function musicStopAndWait(fadeTimeFrames)
+    fadeTimeFrames = fadeTimeFrames or defaultMusicStopFrames
+
+    local s = musicStop(fadeTimeFrames)
+    if s ~= nil and fadeTimeFrames > 0 then
+        -- Wait for music top finish stopping
+        yield(fadeTimeFrames)
+    end
+end
+
+---Sets the default fade-out time when music is stopped.
+-- @see musicStop
+function setDefaultMusicFadeTime(fadeTimeFrames)
+	defaultMusicStopFrames = fadeTimeFrames or 0
 end
 
 ---Voice functions
@@ -88,6 +118,7 @@ end
 -- @param soundOrChannel The Sound object or audio channel to change the volume of.
 -- @number fadeTimeFrames Optional argument specifying the duration (in frames)
 --         of a slow fade-out instead of stopping playback immediately.
+-- @return The sound which had stopped, or is now in the process of stopping
 -- @see sound
 function soundStop(soundOrChannel, fadeTimeFrames)
     local sound = tosound(soundOrChannel)    
@@ -99,6 +130,7 @@ function soundStop(soundOrChannel, fadeTimeFrames)
     fadeTimeFrames = fadeTimeFrames or 0
     sound:stop(fadeTimeFrames)
     yield() -- Wait for a frame here so to allow the stopped sound/music to be removed by the sound module
+    return sound
 end
 
 ---Changes the volume of playing sound/music/voice.

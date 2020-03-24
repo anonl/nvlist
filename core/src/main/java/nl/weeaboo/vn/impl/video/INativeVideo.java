@@ -14,7 +14,7 @@ import nl.weeaboo.vn.video.IVideo;
  *
  * @see IVideo
  */
-public interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
+interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
 
     /**
      * Preloads some data structures so {@link #play()} needs to do less work. Calling this method entirely optional.

@@ -9,7 +9,7 @@ import nl.weeaboo.vn.render.IRenderEnv;
 /**
  * Creates {@link INativeVideo} instances.
  */
-public interface INativeVideoFactory extends Serializable {
+interface INativeVideoFactory extends Serializable {
 
     /** Creates a new {@link INativeVideo} instance. */
     INativeVideo createNativeVideo(FileResourceLoader resourceLoader, FilePath filePath,

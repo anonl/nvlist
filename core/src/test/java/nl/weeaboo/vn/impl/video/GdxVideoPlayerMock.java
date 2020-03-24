@@ -5,7 +5,7 @@ import com.badlogic.gdx.video.VideoPlayer;
 
 import nl.weeaboo.common.Dim;
 
-public class GdxVideoPlayerMock implements VideoPlayer {
+final class GdxVideoPlayerMock implements VideoPlayer {
 
     private boolean playing;
     private boolean paused;

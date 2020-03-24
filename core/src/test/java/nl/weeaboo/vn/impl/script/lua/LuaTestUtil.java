@@ -11,7 +11,6 @@ import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.impl.script.ScriptExceptionHandlerMock;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
@@ -116,13 +115,13 @@ public final class LuaTestUtil {
      * Runs all threads in all active contexts, until those contexts no longer contain any runnable threads.
      * @see #hasRunnableThreads(IScriptContext)
      */
-    public static void waitForAllThreads(IContextManager contextManager) {
+    public static void waitForAllThreads(IEnvironment env) {
         int iteration = 0;
         while (iteration++ < 10_000) {
-            contextManager.update();
+            env.update();
 
             boolean anyRunnableThreads = false;
-            for (IContext context : contextManager.getActiveContexts()) {
+            for (IContext context : env.getContextManager().getActiveContexts()) {
                 if (hasRunnableThreads(context.getScriptContext())) {
                     anyRunnableThreads = true;
                     break;

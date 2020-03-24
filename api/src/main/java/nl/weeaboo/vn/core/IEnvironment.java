@@ -19,7 +19,7 @@ import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
 /** Wrapper object that contains global engine state. */
-public interface IEnvironment extends IDestructible {
+public interface IEnvironment extends IDestructible, IUpdateable {
 
     /** The filesystem used for reading resources. */
     IFileSystem getFileSystem();

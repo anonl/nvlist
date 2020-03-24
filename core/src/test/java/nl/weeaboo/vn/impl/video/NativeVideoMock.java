@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.weeaboo.vn.render.IRenderEnv;
 
-public class NativeVideoMock implements INativeVideo {
+final class NativeVideoMock implements INativeVideo {
 
     private static final long serialVersionUID = 1L;
 

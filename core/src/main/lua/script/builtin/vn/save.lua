@@ -23,7 +23,7 @@ function getSharedGlobal(name)
 end
 
 ---Quicksave
--------------------------------------------------------------------------------------------------------------- @section Autosave
+-------------------------------------------------------------------------------------------------------------- @section Quicksave
 
 function quickSave(slot, userdata, screenshot)
     return Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)

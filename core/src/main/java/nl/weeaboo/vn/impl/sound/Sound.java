@@ -46,6 +46,8 @@ public class Sound extends AbstractSound {
             stopping = false;
             nativeAudio.stop();
         }
+
+        soundController.checkSounds();
     }
 
     @Override
@@ -55,6 +57,7 @@ public class Sound extends AbstractSound {
         }
 
         nativeAudio.pause();
+        soundController.checkSounds();
     }
 
     @Override
@@ -64,6 +67,7 @@ public class Sound extends AbstractSound {
         }
 
         nativeAudio.resume();
+        soundController.checkSounds();
     }
 
     @Override
@@ -91,7 +95,7 @@ public class Sound extends AbstractSound {
     @Override
     public double getVolume() {
         double volume = super.getVolume();
-        if (stopping) {
+        if (stopping && stoppingFadeOut != null) {
             volume *= 1.0 - stoppingFadeOut.getNormalizedTime();
         }
         return volume;

@@ -1,0 +1,24 @@
+
+@@
+
+require("builtin/vn")
+
+local finished = false
+local frameCount = 0
+local frameCountThread = newThread(function()
+    while not finished do
+        frameCount = frameCount + 1
+        yield()
+    end
+end)
+
+local alpha = music("alpha")
+
+-- Start playing beta instead. This causes the playing sound (alpha) to fade out slowly.
+local beta = music("beta")
+
+-- Default fade-out time is 300 frames
+luaAssertEquals(300, frameCount)
+finished = true
+
+@@

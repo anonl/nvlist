@@ -10,7 +10,7 @@ import nl.weeaboo.vn.sound.ISound;
  *
  * @see ISound
  */
-public interface INativeAudio extends Serializable, IStreamingMedia {
+interface INativeAudio extends Serializable, IStreamingMedia {
 
     /**
      * Starts audio playback.

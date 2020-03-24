@@ -2,10 +2,12 @@ package nl.weeaboo.vn.core;
 
 import java.io.Serializable;
 
+import nl.weeaboo.vn.script.IScriptExceptionHandler;
+
 /**
  * Event listener for {@link IContext}.
  */
-public interface IContextListener extends Serializable {
+public interface IContextListener extends Serializable, IScriptExceptionHandler {
 
     /** Called when a context becomes active. */
     void onContextActivated(IContext context);

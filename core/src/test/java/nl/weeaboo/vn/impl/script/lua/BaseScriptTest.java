@@ -14,7 +14,6 @@ import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
-import nl.weeaboo.vn.impl.core.ContextFactoryMock;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
@@ -24,12 +23,13 @@ import nl.weeaboo.vn.script.ScriptException;
 
 public class BaseScriptTest {
 
+    private TestEnvironment env;
     private LuaScriptLoader scriptLoader;
     private LuaScriptEnv scriptEnv;
 
     @Before
     public void init() throws ScriptException {
-        TestEnvironment env = TestEnvironment.newInstance();
+        env = TestEnvironment.newInstance();
         scriptLoader = (LuaScriptLoader)env.getScriptEnv().getScriptLoader();
         scriptEnv = env.getScriptEnv();
         scriptEnv.initEnv();
@@ -100,8 +100,7 @@ public class BaseScriptTest {
 
     @Test
     public void createContext() throws ScriptException {
-        ContextFactoryMock contextFactory = new ContextFactoryMock(scriptEnv);
-        final ContextManager contextManager = new ContextManager(contextFactory);
+        ContextManager contextManager = env.getContextManager();
 
         // Make context manager available to the script environment
         LuaTable globals = scriptEnv.getGlobals();
@@ -120,7 +119,7 @@ public class BaseScriptTest {
         scriptLoader.loadScript(mainThread, FilePath.of("createcontext.lvn"));
         Assert.assertEquals(2, contextManager.getActiveContexts().size());
 
-        LuaTestUtil.waitForAllThreads(contextManager);
+        LuaTestUtil.waitForAllThreads(env);
 
         LuaTestUtil.assertGlobal("fooCalled", 1); // Spawned thread was executed
         LuaTestUtil.assertGlobal("waitFrames", 6); // It took 5+1 frames for spawned thread to die

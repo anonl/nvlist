@@ -71,15 +71,6 @@ public abstract class AbstractNovel implements INovel {
     }
 
     @Override
-    public void update() {
-        for (IModule module : env.getModules()) {
-            module.update();
-        }
-
-        getContextManager().update();
-    }
-
-    @Override
     public IEnvironment getEnv() {
         return env;
     }

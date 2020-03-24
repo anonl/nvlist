@@ -18,7 +18,7 @@ import nl.weeaboo.vn.gdx.res.IResource;
  * Default implementation of {@link INativeAudio}.
  */
 @CustomSerializable
-public class NativeAudio implements INativeAudio {
+final class NativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(NativeAudio.class);

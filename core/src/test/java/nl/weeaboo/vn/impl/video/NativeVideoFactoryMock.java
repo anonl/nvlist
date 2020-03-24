@@ -4,7 +4,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.render.IRenderEnv;
 
-public class NativeVideoFactoryMock implements INativeVideoFactory {
+final class NativeVideoFactoryMock implements INativeVideoFactory {
 
     private static final long serialVersionUID = 1L;
 

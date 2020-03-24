@@ -78,7 +78,7 @@ public abstract class LuaIntegrationTest {
     }
 
     protected void waitForAllThreads() {
-        LuaTestUtil.waitForAllThreads(env.getContextManager());
+        LuaTestUtil.waitForAllThreads(env);
     }
 
 }

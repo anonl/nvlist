@@ -1,11 +1,13 @@
 package nl.weeaboo.vn.impl.core;
 
+import nl.weeaboo.vn.core.ContextListener;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.script.IScriptThread;
 
 @SuppressWarnings("serial")
 public class ContextFactoryMock implements IContextFactory<Context> {
@@ -23,7 +25,14 @@ public class ContextFactoryMock implements IContextFactory<Context> {
         contextArgs.screen = newScreen();
         contextArgs.scriptContext = newScriptContext();
 
-        return new Context(contextArgs);
+        Context context = new Context(contextArgs);
+        context.addContextListener(new ContextListener() {
+            @Override
+            public void onScriptException(IScriptThread thread, Exception exception) {
+                throw new AssertionError("Error in script: " + thread, exception);
+            }
+        });
+        return context;
     }
 
     protected Screen newScreen() {

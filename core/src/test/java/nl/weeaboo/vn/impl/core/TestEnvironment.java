@@ -4,10 +4,10 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.gdx.res.AssetManagerMock;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
-import nl.weeaboo.vn.gdx.res.AssetManagerMock;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ImageModule;
 import nl.weeaboo.vn.impl.input.InputMock;
@@ -121,10 +121,11 @@ public class TestEnvironment extends DefaultEnvironment {
     }
 
     /** Calls update on everything in the environment that needs it (contexts and input adapter). */
+    @Override
     public void update() {
         input.increaseTime(100);
 
-        contextManager.update();
+        super.update();
     }
 
 }

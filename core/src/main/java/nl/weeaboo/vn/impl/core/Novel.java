@@ -76,7 +76,7 @@ public class Novel extends AbstractNovel {
     public void update() {
         getScriptEnv().registerOnThread(); // Required after deserialization
 
-        super.update();
+        getEnv().update();
     }
 
     @Override

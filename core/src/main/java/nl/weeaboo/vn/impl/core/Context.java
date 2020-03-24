@@ -12,12 +12,13 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
-import nl.weeaboo.vn.impl.script.DummyScriptExceptionHandler;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreen;
+import nl.weeaboo.vn.script.IScriptExceptionHandler;
+import nl.weeaboo.vn.script.IScriptThread;
 
 public class Context implements IContext {
 
@@ -102,7 +103,14 @@ public class Context implements IContext {
 
     @Override
     public void updateScripts() {
-        scriptContext.updateThreads(this, DummyScriptExceptionHandler.INSTANCE);
+        scriptContext.updateThreads(this, new IScriptExceptionHandler() {
+            @Override
+            public void onScriptException(IScriptThread thread, Exception exception) {
+                for (IScriptExceptionHandler ls : contextListeners) {
+                    ls.onScriptException(thread, exception);
+                }
+            }
+        });
     }
 
     @Override
