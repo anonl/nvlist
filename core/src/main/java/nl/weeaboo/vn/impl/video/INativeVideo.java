@@ -7,8 +7,14 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.vn.core.IStreamingMedia;
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
+import nl.weeaboo.vn.video.IVideo;
 
-public interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
+/**
+ * Low-level interface for playing a video file.
+ *
+ * @see IVideo
+ */
+interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
 
     /**
      * Preloads some data structures so {@link #play()} needs to do less work. Calling this method entirely optional.

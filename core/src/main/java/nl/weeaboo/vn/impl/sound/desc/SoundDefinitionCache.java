@@ -9,6 +9,9 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.impl.core.ResourceMetaDataCache;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Cache for {@link ISoundDefinition}.
+ */
 public final class SoundDefinitionCache extends ResourceMetaDataCache<ISoundDefinition> {
 
     private final IFileSystem fileSystem;

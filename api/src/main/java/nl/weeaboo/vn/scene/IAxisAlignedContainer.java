@@ -2,6 +2,9 @@ package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Layout group which transforms its children with an x/y offset, but no rotation.
+ */
 public interface IAxisAlignedContainer extends IVisualGroup, IPositionable {
 
     @Override

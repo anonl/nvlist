@@ -7,7 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.gdx.res.WritableGdxFileSystem;
 
-public final class DesktopOutputFileSystem extends WritableGdxFileSystem {
+final class DesktopOutputFileSystem extends WritableGdxFileSystem {
 
     private final FileType fileType;
     private final String prefix;

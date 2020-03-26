@@ -158,21 +158,28 @@ function SaveSlot:setBounds(x, y, w, h)
     l:extendDefaultStyle(Text.createStyle{align="center", fontSize=fontSize})
 
     if i ~= nil then
-        local iw = w * 224 / 254
-        local ih = h * 126 / 190
+        local scale = math.min(w / 256, h / 192)
+        b:setScale(scale)
+        x = x + (w - b:getWidth()) / 2
+        y = y + (h - b:getHeight()) / 2
+        w = b:getWidth()
+        h = b:getHeight()
+        b:setPos(x, y)
+
+        local iw = 224 * scale
+        local ih = 126 * scale
         local ipad = (w - iw) / 2
         i:setBounds(x + ipad, y + ipad, iw, ih)
-        
+
         local lh = h - ih - ipad
         l:setSize(iw, lh)
-        l:setPos(math.ceil(x), math.ceil(y + h - (lh + l:getTextHeight()) / 2))
+        l:setPos(math.ceil(i:getX()), math.ceil(y + h - (lh + l:getTextHeight()) / 2))
     else
+        b:setBounds(x, y, w, h)
         l:setSize(w, h)
         l:setPos(math.ceil(x), math.ceil(y + (h - l:getTextHeight()) / 2))
-    end 
-    
-    b:setBounds(x, y, w, h)
-    
+    end
+
     local newI = self.newImage
     if newI ~= nil then
         if i ~= nil then    

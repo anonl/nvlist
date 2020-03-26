@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IInterpolator;
 
+/**
+ * Settings for {@link IBitmapTweenRenderer}.
+ */
 public interface IBitmapTweenConfig extends Serializable {
 
     /**

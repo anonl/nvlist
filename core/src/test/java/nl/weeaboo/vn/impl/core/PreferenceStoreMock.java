@@ -7,7 +7,7 @@ import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
 
-public final class MockPreferenceStore implements IPreferenceStore {
+public final class PreferenceStoreMock implements IPreferenceStore {
 
     private final Map<String, String> values = new HashMap<>();
 

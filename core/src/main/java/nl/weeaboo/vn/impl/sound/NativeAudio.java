@@ -14,8 +14,11 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.res.IResource;
 
+/**
+ * Default implementation of {@link INativeAudio}.
+ */
 @CustomSerializable
-public class NativeAudio implements INativeAudio {
+final class NativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(NativeAudio.class);
@@ -93,13 +96,6 @@ public class NativeAudio implements INativeAudio {
 
     @Override
     public void stop() {
-        stop(0);
-    }
-
-    @Override
-    public void stop(int fadeOutMillis) {
-        // TODO Implement fade out time
-
         Music music = musicRef.get();
         if (music != null) {
             music.stop();
@@ -151,7 +147,7 @@ public class NativeAudio implements INativeAudio {
             int left = loopsLeft.decrementAndGet();
             if (left <= 0) {
                 LOG.debug("Music all loops finished");
-                stop(0);
+                stop();
             } else {
                 LOG.debug("Decrease music loops -> {}", left);
             }

@@ -3,6 +3,9 @@ package nl.weeaboo.vn.impl.layout;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
+/**
+ * Empty layout element.
+ */
 public final class DummyLayoutElem extends LayoutElem {
 
     private static final long serialVersionUID = 1L;

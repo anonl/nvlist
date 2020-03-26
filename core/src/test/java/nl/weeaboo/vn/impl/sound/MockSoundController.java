@@ -26,7 +26,14 @@ class MockSoundController implements ISoundController {
     @Override
     public void update() {
         updateCount.incrementAndGet();
+
+        checkSounds();
     }
+
+    @Override
+    public void checkSounds() {
+    }
+
 
     void consumeUpdateCount(int expected) {
         Assert.assertEquals(expected, updateCount.getAndSet(0));

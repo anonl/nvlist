@@ -6,6 +6,9 @@ import com.badlogic.gdx.utils.Disposable;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.core.IEnvironment;
 
+/**
+ * Rendering target.
+ */
 public interface IBackBuffer extends Disposable {
 
     /**

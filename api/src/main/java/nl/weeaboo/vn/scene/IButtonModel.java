@@ -2,6 +2,9 @@ package nl.weeaboo.vn.scene;
 
 import java.io.Serializable;
 
+/**
+ * State for button-like objects.
+ */
 public interface IButtonModel extends Serializable {
 
     /**

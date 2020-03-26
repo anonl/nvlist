@@ -4,11 +4,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.impl.input.MockInput;
+import nl.weeaboo.vn.impl.input.InputMock;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
 import nl.weeaboo.vn.impl.script.ScriptFunctionStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
-import nl.weeaboo.vn.impl.text.TestFontStore;
+import nl.weeaboo.vn.impl.text.FontStoreMock;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
@@ -18,7 +18,7 @@ public class ButtonClickTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
 
-    private MockInput input;
+    private InputMock input;
 
     private ScriptEventDispatcher eventDispatcher;
     private ScriptFunctionStub clickFunction;
@@ -26,11 +26,11 @@ public class ButtonClickTest {
 
     @Before
     public void before() {
-        input = new MockInput();
+        input = new InputMock();
 
         eventDispatcher = new ScriptEventDispatcher();
         clickFunction = new ScriptFunctionStub();
-        TestFontStore fontStore = new TestFontStore();
+        FontStoreMock fontStore = new FontStoreMock();
         button = new Button(eventDispatcher, fontStore);
         button.setClickHandler(clickFunction);
         button.setSize(100, 20);

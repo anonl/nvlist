@@ -5,6 +5,9 @@ import java.io.Serializable;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Unique identifier for a resolved resource (canonical path + type).
+ */
 public final class ResourceId implements Serializable {
 
     private static final long serialVersionUID = 1L;

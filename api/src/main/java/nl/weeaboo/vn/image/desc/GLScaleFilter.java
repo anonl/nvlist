@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Texture filter mode.
+ */
 public enum GLScaleFilter {
     NEAREST("nearest", 0x2600, false),
     LINEAR("linear", 0x2601, false),

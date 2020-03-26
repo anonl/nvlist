@@ -5,6 +5,9 @@ import static nl.weeaboo.prefsstore.Preference.newPreference;
 
 import nl.weeaboo.prefsstore.Preference;
 
+/**
+ * Defines global settings.
+ */
 public final class NovelPrefs {
 
     public static final Preference<String> TITLE = newConstPreference("title",

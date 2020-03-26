@@ -1,6 +1,9 @@
-package nl.weeaboo.vn.scene;
+package nl.weeaboo.vn.core;
 
-public interface IAnimatedRenderable extends IRenderable {
+/**
+ * Animated effect.
+ */
+public interface IAnimation {
 
     /**
      * @return {@code true} if the animation is finished.
@@ -8,7 +11,7 @@ public interface IAnimatedRenderable extends IRenderable {
     boolean isFinished();
 
     /**
-     * Changes the relative speed of the animation, where {@code 1.0} is normal and {@code 0.5} is hald-speed.
+     * Changes the relative speed of the animation, where {@code 1.0} is normal and {@code 0.5} is half-speed.
      *
      * @param s The new speed (must be positive).
      */

@@ -135,10 +135,10 @@ abstract class AbstractMatrix implements Serializable {
 
     public float[] toGLMatrix() {
         return new float[] {
-            (float)m00, (float)m10, 0f, 0f,
-            (float)m01, (float)m11, 0f, 0f,
-            0f,         0f,         1f, 0f,
-            (float)m02, (float)m12, 0f, 1f
+                (float)m00, (float)m10, 0f, 0f,
+                (float)m01, (float)m11, 0f, 0f,
+                0f,         0f,         1f, 0f,
+                (float)m02, (float)m12, 0f, 1f
         };
     }
 

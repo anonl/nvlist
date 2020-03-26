@@ -14,7 +14,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 
-public class MockSystemModule extends AbstractModule implements ISystemModule {
+public class SystemModuleMock extends AbstractModule implements ISystemModule {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class MockSystemModule extends AbstractModule implements ISystemModule {
 
     private transient SystemEnv systemEnv;
 
-    public MockSystemModule(IEnvironment env) {
+    public SystemModuleMock(IEnvironment env) {
         this.env = env;
     }
 

@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.lua2.vm.LuaValue;
 
+/**
+ * Lua-accessible generic key/value store.
+ */
 public interface ILuaStorage extends Serializable {
 
     /**

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.image;
 
 import nl.weeaboo.common.Dim;
 
+/**
+ * Mutable {@link IScreenshot}.
+ */
 public interface IWritableScreenshot extends IScreenshot {
 
     /**

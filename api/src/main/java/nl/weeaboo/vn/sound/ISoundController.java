@@ -10,6 +10,11 @@ public interface ISoundController extends Serializable, IUpdateable {
     int MAX_CHANNEL = 9999;
 
     /**
+     * Update internal bookkeeping. This method is automatically called as part of {@link #update()}.
+     */
+    void checkSounds();
+
+    /**
      * Stops all sounds.
      */
     void stopAll();
@@ -23,10 +28,10 @@ public interface ISoundController extends Serializable, IUpdateable {
      * Stops the sound playing in the specified channel.
      *
      * @param channel The sound channel to stop.
-     * @param fadeOutMillis Instead of stopping the sound immediately, fade it out slowly over the course of
-     *        {@code fadeOutMillis}.
+     * @param fadeOutFrames Instead of stopping the sound immediately, fade it out slowly over the course of
+     *        {@code fadeOutFrames}.
      */
-    void stop(int channel, int fadeOutMillis);
+    void stop(int channel, int fadeOutFrames);
 
     /**
      * @param channel The channel to request the contents of.

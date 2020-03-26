@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * Represents a fatal error during startup or initialisation.
+ */
 public class InitException extends Exception {
 
     private static final long serialVersionUID = 1L;

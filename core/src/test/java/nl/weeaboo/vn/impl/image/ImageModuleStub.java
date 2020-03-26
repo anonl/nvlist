@@ -20,7 +20,7 @@ import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.TextDrawable;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
-import nl.weeaboo.vn.impl.text.TestFontStore;
+import nl.weeaboo.vn.impl.text.FontStoreMock;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.ILayer;
@@ -32,7 +32,7 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     private static final long serialVersionUID = 1L;
 
-    private final ILoadingFontStore fontStore = new TestFontStore();
+    private final ILoadingFontStore fontStore = new FontStoreMock();
 
     @Override
     public @Nullable ResourceId resolveResource(FilePath filename) {
@@ -61,7 +61,7 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     @Override
     public ITexture getTexture(ResourceLoadInfo info, boolean suppressErrors) {
-        return new TestTexture();
+        return new TextureMock();
     }
 
     @Override
@@ -77,12 +77,12 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
 
     @Override
     public ITexture createTexture(ITextureData texData, double scaleX, double scaleY) {
-        return new TestTexture(texData);
+        return new TextureMock(texData);
     }
 
     @Override
     public ITexture createTexture(IScreenshot ss) {
-        return new TestTexture(ss.getPixels());
+        return new TextureMock(ss.getPixels());
     }
 
     @Override

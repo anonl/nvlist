@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.save;
 
+/**
+ * Header of a {@link ISaveFile}.
+ */
 public interface ISaveFileHeader {
 
     /**

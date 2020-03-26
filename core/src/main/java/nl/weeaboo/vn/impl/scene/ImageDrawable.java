@@ -19,6 +19,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IImageDrawable;
 import nl.weeaboo.vn.scene.IRenderable;
 
+/**
+ * Default implementation of {@link IImageDrawable}.
+ */
 @CustomSerializable
 public class ImageDrawable extends Transformable implements IImageDrawable {
 

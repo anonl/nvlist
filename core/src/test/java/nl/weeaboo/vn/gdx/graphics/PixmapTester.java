@@ -15,6 +15,9 @@ import com.google.common.io.Resources;
 
 import nl.weeaboo.gdx.test.pixmap.PixmapEquality;
 
+/**
+ * {@link Pixmap} related test functions.
+ */
 public final class PixmapTester implements Disposable {
 
     private boolean generate = false;

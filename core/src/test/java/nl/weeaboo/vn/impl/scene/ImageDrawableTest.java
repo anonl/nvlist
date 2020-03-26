@@ -8,7 +8,7 @@ import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.core.BlendMode;
 import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
-import nl.weeaboo.vn.impl.image.TestTexture;
+import nl.weeaboo.vn.impl.image.TextureMock;
 import nl.weeaboo.vn.impl.image.TextureStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.math.Matrix;
@@ -26,7 +26,7 @@ public class ImageDrawableTest {
         int w = 100;
         int h = 100;
 
-        image.setTexture(new TestTexture(w, h));
+        image.setTexture(new TextureMock(w, h));
 
         // Bounds
         image.setBounds(x, y, w, h);
@@ -192,7 +192,7 @@ public class ImageDrawableTest {
 
     @Test
     public void testScaleToFit() {
-        image.setTexture(new TestTexture(10, 5));
+        image.setTexture(new TextureMock(10, 5));
 
         image.scaleToFit(20, 20);
         // scaleToFit scales uniformly to the largest size that fits entirely within the given bounds

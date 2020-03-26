@@ -11,6 +11,9 @@ import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextLog;
 
+/**
+ * Default implementation of {@link IScreenTextState}.
+ */
 public class ScreenTextState implements IScreenTextState {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

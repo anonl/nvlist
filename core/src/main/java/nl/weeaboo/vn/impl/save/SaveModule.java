@@ -28,7 +28,6 @@ import nl.weeaboo.lua2.io.ObjectSerializer;
 import nl.weeaboo.lua2.io.ObjectSerializer.ErrorLevel;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
-import nl.weeaboo.vn.core.IProgressListener;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.image.EmptyScreenshot;
@@ -41,6 +40,9 @@ import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.stats.IStatsModule;
 
+/**
+ * Sub-module for saving/loading.
+ */
 @CustomSerializable
 public class SaveModule extends AbstractModule implements ISaveModule {
 
@@ -134,10 +136,10 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     @Override
-    public void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException {
+    public void load(INovel novel, int slot) throws SaveFormatException, IOException {
         IFileSystem arc = openSaveArchive(slot);
         try {
-            readSaveData(arc, novel, pl);
+            readSaveData(arc, novel);
         } finally {
             arc.close();
         }
@@ -200,9 +202,8 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         return new PixmapDecodingScreenshot(bytes);
     }
 
-    private void readSaveData(IFileSystem fs, INovel novel, IProgressListener pl) throws IOException {
-        InputStream in = ProgressInputStream.wrap(fs.openInputStream(SaveFileConstants.SAVEDATA_PATH),
-                fs.getFileSize(SaveFileConstants.SAVEDATA_PATH), pl);
+    private void readSaveData(IFileSystem fs, INovel novel) throws IOException {
+        InputStream in = fs.openInputStream(SaveFileConstants.SAVEDATA_PATH);
 
         // Clean up resources for current environment before we start loading a new one
         savePersistent();
@@ -231,7 +232,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     @Override
-    public void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException {
+    public void save(INovel novel, int slot, ISaveParams params) throws IOException {
         // This seems to be a good time to flush other values to disk as well
         savePersistent();
 
@@ -254,7 +255,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
             }
 
             // Save data
-            writeSaveData(zout, novel, pl);
+            writeSaveData(zout, novel);
         } finally {
             zout.close();
         }
@@ -262,9 +263,9 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         LOG.info("Save written: {}", StringUtil.formatMemoryAmount(fs.getFileSize(savePath)));
     }
 
-    private void writeSaveData(ZipOutputStream zout, INovel novel, IProgressListener pl) throws IOException {
+    private void writeSaveData(ZipOutputStream zout, INovel novel) throws IOException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectSerializer os = luaSerializer.openSerializer(ProgressOutputStream.wrap(bout, pl));
+        ObjectSerializer os = luaSerializer.openSerializer(bout);
         try {
             os.setCollectStats(false);
             os.setPackageErrorLevel(ErrorLevel.NONE);

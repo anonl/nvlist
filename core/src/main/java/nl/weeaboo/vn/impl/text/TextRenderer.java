@@ -26,7 +26,10 @@ import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
-public class TextRenderer extends AbstractRenderable implements ITextRenderer {
+/**
+ * Default implementation of {@link ITextRenderer}.
+ */
+public final class TextRenderer extends AbstractRenderable implements ITextRenderer {
 
     private static final long serialVersionUID = TextImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(TextRenderer.class);

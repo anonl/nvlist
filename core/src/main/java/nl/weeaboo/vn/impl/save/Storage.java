@@ -26,6 +26,9 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.StoragePrimitive;
 
+/**
+ * Default implementation of {@link IStorage}.
+ */
 @CustomSerializable
 public class Storage implements IStorage, Json.Serializable {
 

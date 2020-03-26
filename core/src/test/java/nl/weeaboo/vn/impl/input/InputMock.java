@@ -11,7 +11,7 @@ import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.scene.IVisualElement;
 
-public class MockInput implements IInput, Serializable {
+public class InputMock implements IInput, Serializable {
 
     private static final long serialVersionUID = 1L;
 

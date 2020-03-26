@@ -11,4 +11,10 @@ public class LuaSoundTest extends LuaIntegrationTest {
         waitForAllThreads();
     }
 
+    @Test
+    public void testMusicFadeTime() {
+        loadScript("integration/sound/musicfadetime");
+        waitForAllThreads();
+    }
+
 }

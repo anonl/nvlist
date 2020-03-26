@@ -16,6 +16,9 @@ import nl.weeaboo.vn.layout.LayoutSizeType;
 import nl.weeaboo.vn.scene.IGridPanel;
 import nl.weeaboo.vn.scene.IVisualElement;
 
+/**
+ * Default implementation of {@link IGridPanel}.
+ */
 public class GridPanel extends Panel implements IGridPanel {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridPanel.class);

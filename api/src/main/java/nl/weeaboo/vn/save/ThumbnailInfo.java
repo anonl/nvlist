@@ -4,6 +4,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Save file thumbnail image metadata.
+ */
 public final class ThumbnailInfo {
 
     public static final FilePath DEFAULT_THUMBNAIL_PATH = FilePath.of("thumbnail.jpg");

@@ -4,6 +4,9 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Various useful functions related to rendering.
+ */
 public final class RenderUtil {
 
     private RenderUtil() {

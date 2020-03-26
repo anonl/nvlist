@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Performs the initial setup for the {@link LuaScriptEnv}.
+ */
 public interface ILuaScriptEnvInitializer extends Serializable {
 
     /**

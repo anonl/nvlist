@@ -13,6 +13,9 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.vn.impl.Launcher;
 
+/**
+ * Main entrypoint for iOS applications.
+ */
 public final class IosLauncher extends IOSApplication.Delegate {
 
     @Override

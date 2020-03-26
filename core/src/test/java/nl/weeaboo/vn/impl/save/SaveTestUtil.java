@@ -6,6 +6,9 @@ import java.util.zip.ZipOutputStream;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 
+/**
+ * Various utility functions for unit testing the save system.
+ */
 public final class SaveTestUtil {
 
     private SaveTestUtil() {

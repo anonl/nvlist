@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.render;
 
 import nl.weeaboo.vn.image.IWritableScreenshot;
 
+/**
+ * Draw command for capturing a screenshot.
+ */
 public final class ScreenshotRenderCommand extends BaseRenderCommand {
 
     public static final byte ID = ID_SCREENSHOT_RENDER_COMMAND;

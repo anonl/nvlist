@@ -17,6 +17,9 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.ZipFileArchive;
 import nl.weeaboo.io.RandomAccessUtil;
 
+/**
+ * Provides access to the JNG test images.
+ */
 public final class JngTestSuite implements Disposable {
 
     private static final Logger LOG = LoggerFactory.getLogger(JngTestSuite.class);

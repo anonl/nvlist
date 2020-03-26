@@ -7,6 +7,9 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
+/**
+ * Assertions related to {@link NinePatch}.
+ */
 public class NinePatchAssert {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;

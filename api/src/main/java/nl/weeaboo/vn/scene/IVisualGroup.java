@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.scene;
 
+/**
+ * Group of visual elements.
+ */
 public interface IVisualGroup extends IVisualElement {
 
     /**

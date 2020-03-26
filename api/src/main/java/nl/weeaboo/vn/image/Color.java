@@ -10,6 +10,9 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.render.RenderUtil;
 
+/**
+ * RGBA color
+ */
 @CustomSerializable
 public final class Color implements Serializable {
 

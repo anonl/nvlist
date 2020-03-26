@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.script.lvn;
 
 import nl.weeaboo.common.VersionNumber;
 
+/**
+ * Factory for {@link ILvnParser}.
+ */
 public final class LvnParserFactory {
 
     /**

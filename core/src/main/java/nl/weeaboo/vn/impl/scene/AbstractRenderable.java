@@ -8,6 +8,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.scene.IRenderable;
 
+/**
+ * Base implementation of {@link IRenderable}.
+ */
 public abstract class AbstractRenderable implements IRenderable {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

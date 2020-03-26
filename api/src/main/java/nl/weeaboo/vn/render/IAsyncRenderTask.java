@@ -2,6 +2,9 @@ package nl.weeaboo.vn.render;
 
 import java.io.Serializable;
 
+/**
+ * Queued rendering task.
+ */
 public interface IAsyncRenderTask extends Serializable {
 
     /**

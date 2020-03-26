@@ -7,19 +7,19 @@ import org.junit.Test;
 import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.impl.text.MockTextRenderer;
+import nl.weeaboo.vn.impl.text.TextRendererMock;
 import nl.weeaboo.vn.text.ITextRenderer;
 
 public class TextDrawableTest {
 
     private final ExceptionTester extest = new ExceptionTester();
 
-    private MockTextRenderer r;
+    private TextRendererMock r;
     private TextDrawable td;
 
     @Before
     public void before() {
-        r = new MockTextRenderer();
+        r = new TextRendererMock();
         td = new TextDrawable(r);
     }
 

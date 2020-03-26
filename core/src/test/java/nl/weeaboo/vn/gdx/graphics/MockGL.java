@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.profiling.GL20Interceptor;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 
+/**
+ * Test double for {@link GL20}.
+ */
 public class MockGL extends GL20Interceptor {
 
     private int textureId;

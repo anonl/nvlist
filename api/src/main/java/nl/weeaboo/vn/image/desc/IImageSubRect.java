@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Area;
 
+/**
+ * Named sub-rectable of an {@link IImageDefinition}.
+ */
 public interface IImageSubRect extends Serializable {
 
     /** Sub-rect identifier. Unique within the {@link IImageDefinition}. */

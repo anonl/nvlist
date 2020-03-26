@@ -10,6 +10,9 @@ import java.util.List;
 import nl.weeaboo.vn.script.IScriptEventDispatcher;
 import nl.weeaboo.vn.script.IScriptFunction;
 
+/**
+ * Default implementation of {@link IScriptEventDispatcher}.
+ */
 public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
     private static final long serialVersionUID = ScriptImpl.serialVersionUID;

@@ -39,6 +39,9 @@ import nl.weeaboo.vn.save.ThumbnailInfo;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Save" library.
+ */
 public final class SaveLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
@@ -105,7 +108,7 @@ public final class SaveLib extends LuaLib {
         final LuaThread thread = lrs.getRunningThread();
         Varargs result = thread.yield(LuaConstants.NONE);
         try {
-            saveModule.save(novel, slot, saveParams, null);
+            saveModule.save(novel, slot, saveParams);
         } catch (IOException e) {
             throw new ScriptException("Error saving to slot " + slot, e);
         }
@@ -161,7 +164,7 @@ public final class SaveLib extends LuaLib {
         Varargs result = thread.yield(LuaConstants.NONE);
         lrs.destroy();
         try {
-            saveModule.load(novel, slot, null);
+            saveModule.load(novel, slot);
         } catch (IOException e) {
             throw new ScriptException("Error loading save slot: " + slot, e);
         }

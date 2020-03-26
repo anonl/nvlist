@@ -5,6 +5,9 @@ import java.io.Serializable;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.IFontStore;
 
+/**
+ * Loads font resources.
+ */
 public interface ILoadingFontStore extends Serializable, IFontStore {
 
     /**

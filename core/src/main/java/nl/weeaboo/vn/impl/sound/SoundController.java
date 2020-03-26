@@ -36,10 +36,16 @@ final class SoundController implements ISoundController {
 
     @Override
     public void update() {
+        checkSounds();
+    }
+
+    @Override
+    public void checkSounds() {
         Iterator<Entry<Integer, ISound>> itr = sounds.entrySet().iterator();
         while (itr.hasNext()) {
             Entry<Integer, ISound> entry = itr.next();
             ISound s = entry.getValue();
+            s.update();
             if (s.isStopped()) {
                 pausedList.remove(s);
                 itr.remove();
@@ -60,12 +66,13 @@ final class SoundController implements ISoundController {
     }
 
     @Override
-    public void stop(int channel, int fadeOutMillis) {
+    public void stop(int channel, int fadeOutFrames) {
         ISound sound = sounds.remove(channel);
         if (sound != null) {
-            pausedList.remove(sound);
-            sound.stop(fadeOutMillis);
+            sound.stop(fadeOutFrames);
         }
+
+        checkSounds();
     }
 
     @Override
@@ -117,6 +124,8 @@ final class SoundController implements ISoundController {
         double mvol = getMasterVolume(sound.getSoundType());
         sound.setMasterVolume(mvol);
         sounds.put(channel, sound);
+
+        checkSounds();
     }
 
     @Override
@@ -145,6 +154,8 @@ final class SoundController implements ISoundController {
             }
             pausedList.clear();
         }
+
+        checkSounds();
     }
 
 }

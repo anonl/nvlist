@@ -6,7 +6,7 @@ import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 
-public final class TestFileSystem {
+public final class FileSystemMock {
 
     static {
         HeadlessGdx.init();

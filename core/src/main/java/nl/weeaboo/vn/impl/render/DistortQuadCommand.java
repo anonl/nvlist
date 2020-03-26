@@ -7,6 +7,9 @@ import nl.weeaboo.vn.core.DistortGrid;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Matrix;
 
+/**
+ * Renders a quad using a configurable distortion grid.
+ */
 public final class DistortQuadCommand extends BaseRenderCommand {
 
     public static final byte ID = ID_DISTORT_QUAD_COMMAND;

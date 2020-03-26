@@ -41,6 +41,9 @@ import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.stats.ISeenLogHolder;
 
+/**
+ * Default implementation of {@link IScriptLoader}.
+ */
 @CustomSerializable
 public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 

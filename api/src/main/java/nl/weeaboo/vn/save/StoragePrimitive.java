@@ -6,6 +6,11 @@ import com.google.common.base.Objects;
 
 import nl.weeaboo.common.StringUtil;
 
+/**
+ * Basic storeable value.
+ *
+ * @see IStorage
+ */
 public final class StoragePrimitive {
 
     private static final String[] stringEscapeFrom = { "\\", "\n", "\r", "\f", "\t", "\"", "\'" };

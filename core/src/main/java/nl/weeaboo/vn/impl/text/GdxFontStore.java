@@ -29,7 +29,13 @@ import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCacheConfig;
 import nl.weeaboo.vn.impl.core.LruSet;
+import nl.weeaboo.vn.text.ILoadingFontStore;
 
+/**
+ * Low-level font resource loader.
+ *
+ * @see ILoadingFontStore
+ */
 public final class GdxFontStore extends AbstractResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);

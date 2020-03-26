@@ -45,7 +45,7 @@ public class GLScreenRendererTest {
         DrawTransform dt = new DrawTransform();
         drawBuffer.drawCustom(dt, 0xFFFFFFFF, new IRenderLogic() {
             @Override
-            public void render(IScreenRenderer<?> renderer) {
+            public void render(IScreenRenderer renderer) {
                 renderCalled.set(true);
             }
         });

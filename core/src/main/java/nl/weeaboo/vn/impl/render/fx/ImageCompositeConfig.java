@@ -68,6 +68,9 @@ public final class ImageCompositeConfig implements Serializable {
         explicitSize = Dim.of(w, h);
     }
 
+    /**
+     * Texture configuration of {@link ImageCompositeConfig}.
+     */
     public static final class TextureEntry implements Serializable {
 
         private static final long serialVersionUID = 1L;

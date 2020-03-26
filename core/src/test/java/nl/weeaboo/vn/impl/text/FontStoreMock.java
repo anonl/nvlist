@@ -5,7 +5,7 @@ import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
-public class TestFontStore implements ILoadingFontStore {
+public class FontStoreMock implements ILoadingFontStore {
 
     private static final long serialVersionUID = 1L;
 

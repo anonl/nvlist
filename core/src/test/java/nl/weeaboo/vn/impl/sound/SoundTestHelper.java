@@ -16,12 +16,12 @@ final class SoundTestHelper {
         this.soundController = sctrl;
     }
 
-    public MockSound start() {
+    public SoundMock start() {
         return start(SoundType.SOUND);
     }
 
-    public MockSound start(SoundType stype) {
-        MockSound sound = new MockSound(soundController, stype);
+    public SoundMock start(SoundType stype) {
+        SoundMock sound = new SoundMock(soundController, stype);
         try {
             sound.start();
         } catch (IOException e) {

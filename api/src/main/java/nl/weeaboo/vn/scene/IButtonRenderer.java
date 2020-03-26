@@ -7,6 +7,9 @@ import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Renderer for {@link IButton}.
+ */
 public interface IButtonRenderer extends IRenderable {
 
     /**

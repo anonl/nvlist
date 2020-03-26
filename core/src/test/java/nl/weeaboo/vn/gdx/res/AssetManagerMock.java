@@ -5,17 +5,17 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 
-public class TestAssetManager extends GdxAssetManager {
+public class AssetManagerMock extends GdxAssetManager {
 
     static {
         HeadlessGdx.init();
     }
 
-    public TestAssetManager() {
+    public AssetManagerMock() {
         this(new ClasspathFileHandleResolver());
     }
 
-    public TestAssetManager(FileHandleResolver resolver) {
+    public AssetManagerMock(FileHandleResolver resolver) {
         super(resolver);
     }
 

@@ -56,4 +56,13 @@ abstract class AbstractEnvironment implements IEnvironment {
             getSaveModule()); // Destroy save module last, so other modules can still save during destroy()
     }
 
+    @Override
+    public void update() {
+        for (IModule module : getModules()) {
+            module.update();
+        }
+
+        getContextManager().update();
+    }
+
 }

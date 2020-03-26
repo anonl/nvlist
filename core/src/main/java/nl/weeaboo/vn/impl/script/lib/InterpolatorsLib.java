@@ -20,6 +20,9 @@ import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Interpolators" library.
+ */
 public class InterpolatorsLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

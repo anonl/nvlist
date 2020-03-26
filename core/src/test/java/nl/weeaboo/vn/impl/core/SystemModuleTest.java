@@ -22,7 +22,7 @@ public class SystemModuleTest {
     private final StaticRef<INovel> novelRef = StaticEnvironment.NOVEL;
     private final StaticRef<IPreferenceStore> prefsRef = StaticEnvironment.PREFS;
 
-    private TestSystemEnv systemEnv;
+    private SystemEnvMock systemEnv;
     private TestSystemModule systemModule;
 
     @Before

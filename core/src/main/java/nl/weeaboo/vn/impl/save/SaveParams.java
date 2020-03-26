@@ -4,6 +4,9 @@ import nl.weeaboo.vn.save.ISaveParams;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
+/**
+ * Parameter object for creating a save file.
+ */
 public final class SaveParams implements ISaveParams {
 
     private final IStorage userData = new Storage();

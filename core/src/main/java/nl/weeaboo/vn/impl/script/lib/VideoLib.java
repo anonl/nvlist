@@ -16,6 +16,9 @@ import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
 
+/**
+ * Lua "Video" library.
+ */
 public class VideoLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

@@ -14,13 +14,13 @@ import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.input.MockInput;
-import nl.weeaboo.vn.impl.text.MockTextRenderer;
+import nl.weeaboo.vn.impl.input.InputMock;
+import nl.weeaboo.vn.impl.text.TextRendererMock;
 import nl.weeaboo.vn.input.VKey;
 
 public final class OsdTest {
 
-    private final MockTextRenderer textRenderer = new MockTextRenderer();
+    private final TextRendererMock textRenderer = new TextRendererMock();
     private final PerformanceMetricsStub perfMetrics = new PerformanceMetricsStub();
 
     private TestEnvironment env;
@@ -73,7 +73,7 @@ public final class OsdTest {
         // Entry debug mode and press the magic button
         env.getPrefStore().set(NovelPrefs.DEBUG, true);
 
-        MockInput input = env.getInput();
+        InputMock input = env.getInput();
         input.buttonPressed(VKey.TOGGLE_OSD);
         osd.update(env, input);
 

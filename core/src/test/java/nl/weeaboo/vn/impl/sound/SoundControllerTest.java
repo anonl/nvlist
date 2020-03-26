@@ -23,8 +23,8 @@ public class SoundControllerTest {
 
     @Test
     public void pauseResume() {
-        MockSound alpha = testHelper.start();
-        MockSound beta = testHelper.start();
+        SoundMock alpha = testHelper.start();
+        SoundMock beta = testHelper.start();
         testHelper.assertPlaying(alpha, beta);
 
         // Pause beta manually
@@ -57,9 +57,9 @@ public class SoundControllerTest {
 
     @Test
     public void stopAll() {
-        final MockSound alpha = testHelper.start();
+        final SoundMock alpha = testHelper.start();
 
-        final MockSound beta = testHelper.start();
+        final SoundMock beta = testHelper.start();
         beta.pause();
 
         sc.setPaused(true); // Pauses alpha
@@ -80,9 +80,9 @@ public class SoundControllerTest {
      */
     @Test
     public void masterVolume() {
-        final MockSound sound = testHelper.start(SoundType.SOUND);
-        final MockSound music = testHelper.start(SoundType.MUSIC);
-        final MockSound voice = testHelper.start(SoundType.VOICE);
+        final SoundMock sound = testHelper.start(SoundType.SOUND);
+        final SoundMock music = testHelper.start(SoundType.MUSIC);
+        final SoundMock voice = testHelper.start(SoundType.VOICE);
 
         sc.setMasterVolume(SoundType.SOUND, 0.125);
         sc.setMasterVolume(SoundType.MUSIC, 0.250);
@@ -93,15 +93,15 @@ public class SoundControllerTest {
         Assert.assertEquals(0.500, voice.getMasterVolume(), 0.0);
 
         // When a new sound is started, it's also given the current master volume
-        MockSound newVoice = testHelper.start(SoundType.VOICE);
+        SoundMock newVoice = testHelper.start(SoundType.VOICE);
         Assert.assertEquals(0.500, newVoice.getMasterVolume(), 0.0);
     }
 
     /** {@link ISoundController#update()} must be periodically called to clean up stopped sounds. */
     @Test
     public void testUpdate() {
-        MockSound alpha = testHelper.start();
-        MockSound beta = testHelper.start();
+        SoundMock alpha = testHelper.start();
+        SoundMock beta = testHelper.start();
 
         sc.update();
         testHelper.assertPlaying(alpha, beta);

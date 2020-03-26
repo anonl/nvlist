@@ -25,6 +25,9 @@ import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Gui" library.
+ */
 public class GuiLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.impl.sound;
 
-public class MockNativeAudio implements INativeAudio {
+class NativeAudioMock implements INativeAudio {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,11 +25,6 @@ public class MockNativeAudio implements INativeAudio {
 
     @Override
     public void stop() {
-        stop(0);
-    }
-
-    @Override
-    public void stop(int fadeOutMillis) {
         loopsLeft = 0;
         paused = false;
     }

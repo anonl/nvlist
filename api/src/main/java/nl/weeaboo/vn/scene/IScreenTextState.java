@@ -8,6 +8,9 @@ import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.text.ITextLog;
 
+/**
+ * Global textbox-related state for a {@link IScreen}.
+ */
 public interface IScreenTextState extends Serializable, IUpdateable {
 
     /**

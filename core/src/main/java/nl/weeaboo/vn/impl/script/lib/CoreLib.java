@@ -15,6 +15,9 @@ import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Library of global functions.
+ */
 public class CoreLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

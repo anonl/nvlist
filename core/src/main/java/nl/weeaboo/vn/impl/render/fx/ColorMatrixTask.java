@@ -15,6 +15,9 @@ import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTask;
 
+/**
+ * Generates an output texture by applying a color matrix to the input.
+ */
 public final class ColorMatrixTask extends OffscreenRenderTask {
 
     private static final long serialVersionUID = 1L;

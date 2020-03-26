@@ -5,6 +5,9 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.save.ISaveFile;
 import nl.weeaboo.vn.save.ISaveFileHeader;
 
+/**
+ * Default implementation of {@link ISaveFile}.
+ */
 public final class SaveFile implements ISaveFile {
 
     private final int slot;

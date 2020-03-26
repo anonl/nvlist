@@ -11,6 +11,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.render.IOffscreenRenderTask;
 import nl.weeaboo.vn.render.IOffscreenRenderTaskBuffer;
 
+/**
+ * Default implementation of {@link IOffscreenRenderTaskBuffer}.
+ */
 public final class OffscreenRenderTaskBuffer implements IOffscreenRenderTaskBuffer {
 
     private static final long serialVersionUID = RenderImpl.serialVersionUID;

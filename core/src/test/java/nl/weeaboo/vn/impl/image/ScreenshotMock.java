@@ -4,11 +4,11 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 
-public class TestScreenshot extends AbstractScreenshot implements IWritableScreenshot {
+public class ScreenshotMock extends AbstractScreenshot implements IWritableScreenshot {
 
     private static final long serialVersionUID = 1L;
 
-    public TestScreenshot() {
+    public ScreenshotMock() {
         super((short)0, false);
     }
 

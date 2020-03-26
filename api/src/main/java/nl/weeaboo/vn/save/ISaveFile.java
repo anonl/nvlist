@@ -2,6 +2,9 @@ package nl.weeaboo.vn.save;
 
 import nl.weeaboo.vn.image.IScreenshot;
 
+/**
+ * Represents a save file.
+ */
 public interface ISaveFile {
 
     /**

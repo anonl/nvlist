@@ -32,11 +32,11 @@ public class DistortGridTest {
         fill(grid, 1f, 1f);
 
         final int[] indices = {
-            -1, 1,
-            1, -1,
-            w, 0,
-            0, h,
-            Integer.MIN_VALUE, 1
+                -1, 1,
+                1, -1,
+                w, 0,
+                0, h,
+                Integer.MIN_VALUE, 1
         };
 
         for (int n = 0; n < indices.length; n += 2) {
@@ -58,11 +58,11 @@ public class DistortGridTest {
     @Test
     public void invalidDimensions() {
         final int[] dims = {
-            -1, 1,
-            1, -1,
-            0, 1,
-            1, 0,
-            Integer.MIN_VALUE, 1
+                -1, 1,
+                1, -1,
+                0, 1,
+                1, 0,
+                Integer.MIN_VALUE, 1
         };
 
         for (int n = 0; n < dims.length; n += 2) {

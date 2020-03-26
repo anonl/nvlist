@@ -10,6 +10,9 @@ import nl.weeaboo.vn.script.IScriptEnv;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Default implementation of {@link IScriptEnv}.
+ */
 public class LuaScriptEnv implements IScriptEnv {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;

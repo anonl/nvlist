@@ -4,6 +4,9 @@ import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.render.IDrawTransform;
 
+/**
+ * Draw command for rendering text.
+ */
 public final class TextRenderCommand extends BaseRenderCommand {
 
     public static final byte ID = ID_TEXT_RENDER_COMMAND;

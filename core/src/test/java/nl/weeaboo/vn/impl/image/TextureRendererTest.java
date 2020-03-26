@@ -18,7 +18,7 @@ public final class TextureRendererTest {
 
     @Before
     public void before() {
-        renderer = new TextureRenderer(new TestTexture(100, 100));
+        renderer = new TextureRenderer(new TextureMock(100, 100));
         renderer.onAttached(eventListener);
     }
 
@@ -50,7 +50,7 @@ public final class TextureRendererTest {
 
     @Test
     public void testChangeTexture() {
-        TestTexture newTexture = new TestTexture(50, 50);
+        TextureMock newTexture = new TextureMock(50, 50);
 
         renderer.setTexture(newTexture);
         RectAssert.assertEquals(Rect2D.of(0, 0, 50, 50), renderer.getVisualBounds(), EPSILON);

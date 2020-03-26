@@ -4,14 +4,14 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.FileResourceLoader;
 import nl.weeaboo.vn.render.IRenderEnv;
 
-public class MockNativeVideoFactory implements INativeVideoFactory {
+final class NativeVideoFactoryMock implements INativeVideoFactory {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public INativeVideo createNativeVideo(FileResourceLoader resourceLoader, FilePath filePath,
             IRenderEnv renderEnv) {
-        return new MockNativeVideo();
+        return new NativeVideoMock();
     }
 
 }

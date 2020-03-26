@@ -15,7 +15,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 
 @CustomSerializable
-public class TestTexture implements ITexture {
+public class TextureMock implements ITexture {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,15 +29,15 @@ public class TestTexture implements ITexture {
 
     private transient Pixmap image;
 
-    public TestTexture() {
+    public TextureMock() {
         this(2, 2);
     }
 
-    public TestTexture(ITextureData pixels) {
+    public TextureMock(ITextureData pixels) {
         this(pixels.getWidth(), pixels.getHeight());
     }
 
-    public TestTexture(int w, int h) {
+    public TextureMock(int w, int h) {
         Checks.checkRange(w, "w", 1);
         Checks.checkRange(h, "h", 1);
 

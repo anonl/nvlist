@@ -15,6 +15,9 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
 
+/**
+ * Module for images and rendering.
+ */
 public interface IImageModule extends IModule, IResourceResolver {
 
     /**

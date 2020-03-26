@@ -2,6 +2,9 @@ package nl.weeaboo.vn.save;
 
 import java.io.IOException;
 
+/**
+ * Unreadable save file (damaged or incompatible format).
+ */
 public final class SaveFormatException extends IOException {
 
     private static final long serialVersionUID = 1L;
@@ -13,5 +16,5 @@ public final class SaveFormatException extends IOException {
     public SaveFormatException(String message) {
         super(message);
     }
-    
+
 }

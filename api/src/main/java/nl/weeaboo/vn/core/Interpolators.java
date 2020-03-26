@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.core;
 
+/**
+ * Defines various implementations of {@link IInterpolator}.
+ */
 public final class Interpolators {
 
     public static final IInterpolator LINEAR = new LinearInterpolator();

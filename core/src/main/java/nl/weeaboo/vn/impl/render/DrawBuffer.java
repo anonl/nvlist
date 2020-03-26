@@ -15,6 +15,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IDrawTransform;
 import nl.weeaboo.vn.render.IRenderLogic;
 
+/**
+ * Default implementation of {@link IDrawBuffer}.
+ */
 public final class DrawBuffer implements IDrawBuffer {
 
     private final Array<BaseRenderCommand> contents = Array.of(BaseRenderCommand.class);

@@ -5,8 +5,10 @@ import java.util.Collection;
 
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
-import nl.weeaboo.vn.core.IProgressListener;
 
+/**
+ * Save module.
+ */
 public interface ISaveModule extends IModule {
 
     /** Load persistent storage. */
@@ -28,13 +30,13 @@ public interface ISaveModule extends IModule {
      * @throws IOException If an I/O error occurs while reading data from the save file.
      * @throws SaveFormatException If the stored save data is in an incompatible format.
      */
-    void load(INovel novel, int slot, IProgressListener pl) throws SaveFormatException, IOException;
+    void load(INovel novel, int slot) throws SaveFormatException, IOException;
 
     /**
      * Saves the current state to the specified save slot.
      * @throws IOException If an I/O error occurs while writing data to the save file.
      */
-    void save(INovel novel, int slot, ISaveParams params, IProgressListener pl) throws IOException;
+    void save(INovel novel, int slot, ISaveParams params) throws IOException;
 
     /**
      * Returns the index of a currently unused save slot.

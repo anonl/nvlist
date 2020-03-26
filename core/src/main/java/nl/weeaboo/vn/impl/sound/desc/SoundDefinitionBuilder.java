@@ -5,6 +5,9 @@ import javax.annotation.Nullable;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Builder for {@link SoundDefinition}.
+ */
 public final class SoundDefinitionBuilder implements ISoundDefinition {
 
     private String filename;

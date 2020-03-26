@@ -8,6 +8,9 @@ import nl.weeaboo.vn.layout.ILayoutElem;
 import nl.weeaboo.vn.layout.LayoutSize;
 import nl.weeaboo.vn.layout.LayoutSizeType;
 
+/**
+ * Default implementation of {@link ILayoutElem}.
+ */
 public class LayoutElem implements ILayoutElem {
 
     private static final long serialVersionUID = LayoutImpl.serialVersionUID;

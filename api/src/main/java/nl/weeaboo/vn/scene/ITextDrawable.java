@@ -2,6 +2,9 @@ package nl.weeaboo.vn.scene;
 
 import nl.weeaboo.vn.text.ITextRenderState;
 
+/**
+ * Drawable text element.
+ */
 public interface ITextDrawable extends ITransformable, ITextRenderState {
 
     /**

@@ -18,6 +18,10 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 
+/**
+ * Implementation of {@link IBackBuffer} which first renders to a fixed-size frame buffer object (FBO), then
+ * blits the result to the back buffer. This reduces scaling artifacts compared to {@link DirectBackBuffer}.
+ */
 public final class FboBackBuffer implements IBackBuffer {
 
     private final Dim vsize;

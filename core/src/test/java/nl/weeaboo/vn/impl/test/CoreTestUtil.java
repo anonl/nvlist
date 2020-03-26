@@ -14,19 +14,22 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.impl.core.RenderEnv;
 import nl.weeaboo.vn.impl.core.SkipState;
-import nl.weeaboo.vn.impl.image.TestTexture;
+import nl.weeaboo.vn.impl.image.TextureMock;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
 import nl.weeaboo.vn.impl.scene.Screen;
-import nl.weeaboo.vn.impl.text.TestTextBoxState;
+import nl.weeaboo.vn.impl.text.TextBoxStateMock;
 import nl.weeaboo.vn.math.Vec2;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreenTextState;
 
+/**
+ * Test helper functions for nvlist-core.
+ */
 public final class CoreTestUtil {
 
     public static final double EPSILON = 0.001;
     public static final IRenderEnv BASIC_ENV = new RenderEnv(Dim.of(1280, 720), Rect.of(0, 75, 800, 450),
-            Dim.of(800, 600), false);
+            Dim.of(800, 600));
 
     private static final Logger LOG = LoggerFactory.getLogger(CoreTestUtil.class);
 
@@ -36,7 +39,7 @@ public final class CoreTestUtil {
     /** Creates a new dummy screen. */
     public static Screen newScreen() {
         Dim vsize = BASIC_ENV.getVirtualSize();
-        IScreenTextState textBoxState = new TestTextBoxState();
+        IScreenTextState textBoxState = new TextBoxStateMock();
         SkipState skipState = new SkipState();
         return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
     }
@@ -51,7 +54,7 @@ public final class CoreTestUtil {
     /** Creates a new image drawable, initialized with a dummy texture. */
     public static ImageDrawable newImage(int w, int h) {
         ImageDrawable image = new ImageDrawable();
-        image.setTexture(new TestTexture(w, h));
+        image.setTexture(new TextureMock(w, h));
         return image;
     }
 

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.core;
 
 import nl.weeaboo.prefsstore.IPreferenceStore;
 
+/**
+ * Event listener for {@link IPreferenceStore}.
+ */
 public interface IPrefsChangeListener {
 
     /**

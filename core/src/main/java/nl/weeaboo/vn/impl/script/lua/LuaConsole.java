@@ -26,6 +26,9 @@ import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dUtil;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Interactive Lua terminal/REPL
+ */
 public class LuaConsole {
 
     private static final Logger LOG = LoggerFactory.getLogger(LuaConsole.class);

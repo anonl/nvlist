@@ -27,10 +27,10 @@ public final class PerformanceMetricsTest {
     @Test
     public void testPerformanceSummary() {
         new StringTester()
-            .withSubString("FPS")
-            .withSubString("CPU")
-            .withSubString("Memory use")
-            .test(metrics.getPerformanceSummary());
+                .withSubString("FPS")
+                .withSubString("CPU")
+                .withSubString("Memory use")
+                .test(metrics.getPerformanceSummary());
 
         metrics.setLogicFps(12.3456789);
         StringTester.assertContains(metrics.getPerformanceSummary(), "FPS: 12.35 (logic)");

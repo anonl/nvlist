@@ -20,6 +20,9 @@ import nl.weeaboo.vn.signal.ISignalHandler;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 
+/**
+ * Base implementation of {@link IVisualElement}.
+ */
 public abstract class VisualElement implements IVisualElement {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

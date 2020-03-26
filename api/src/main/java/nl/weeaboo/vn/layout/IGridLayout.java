@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.common.Insets2D;
 
+/**
+ * Grid-based layout algorithm.
+ */
 public interface IGridLayout extends Serializable {
 
     /**

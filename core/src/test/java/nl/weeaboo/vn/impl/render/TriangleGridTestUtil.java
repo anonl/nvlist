@@ -6,8 +6,14 @@ import org.junit.Assert;
 
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
+/**
+ * Various functions for unit testing {@link TriangleGrid}.
+ */
 public final class TriangleGridTestUtil {
 
+    /**
+     * Vertex attribute.
+     */
     public enum DataType {
         VERTEX, TEX1, TEX2, TEX3;
     }

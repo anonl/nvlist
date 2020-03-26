@@ -103,7 +103,7 @@ public class GdxCrossFadeRenderer extends CrossFadeRenderer {
         }
 
         @Override
-        public void render(IScreenRenderer<?> renderer) {
+        public void render(IScreenRenderer renderer) {
             GLScreenRenderer rr = (GLScreenRenderer)renderer;
 
             ShaderProgram shader = getShader();

@@ -25,6 +25,9 @@ import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
+/**
+ * Lua accessor for global preferences.
+ */
 public class LuaPrefsAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(LuaPrefsAdapter.class);

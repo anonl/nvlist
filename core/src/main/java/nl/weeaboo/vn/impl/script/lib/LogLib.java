@@ -12,6 +12,9 @@ import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "Log" library.
+ */
 public class LogLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

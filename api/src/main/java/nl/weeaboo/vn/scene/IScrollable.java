@@ -1,5 +1,10 @@
 package nl.weeaboo.vn.scene;
 
+/**
+ * Scrollable element.
+ *
+ * @see IViewport
+ */
 public interface IScrollable {
 
     /**

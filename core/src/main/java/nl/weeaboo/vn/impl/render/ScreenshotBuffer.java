@@ -9,6 +9,9 @@ import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.render.IDrawBuffer;
 
+/**
+ * Default implementation of {@link IScreenshotBuffer}.
+ */
 public class ScreenshotBuffer implements IScreenshotBuffer {
 
     private static final long serialVersionUID = RenderImpl.serialVersionUID;

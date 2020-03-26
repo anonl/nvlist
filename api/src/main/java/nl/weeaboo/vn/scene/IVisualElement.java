@@ -12,6 +12,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.signal.ISignalHandler;
 
+/**
+ * Renderable element.
+ */
 public interface IVisualElement extends Serializable, IDestructible, ISignalHandler, IInputHandler {
 
     /**

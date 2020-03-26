@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.script.lvn;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Represents a .lvn file.
+ */
 public interface ICompiledLvnFile {
 
     /**

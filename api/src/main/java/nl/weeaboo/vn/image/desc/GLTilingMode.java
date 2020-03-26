@@ -2,6 +2,9 @@ package nl.weeaboo.vn.image.desc;
 
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Texture tiling mode.
+ */
 public enum GLTilingMode {
     CLAMP("clamp", 0x812f),   // GL_CLAMP_TO_EDGE
     REPEAT("repeat", 0x2901); // GL_REPEAT

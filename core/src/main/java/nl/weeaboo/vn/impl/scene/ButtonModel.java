@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.vn.scene.IButtonModel;
 
+/**
+ * Default implementation of {@link IButtonModel}.
+ */
 public class ButtonModel implements IButtonModel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

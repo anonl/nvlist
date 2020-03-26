@@ -10,6 +10,9 @@ import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IPanel;
 import nl.weeaboo.vn.scene.IVisualElement;
 
+/**
+ * Base implementation for {@link IPanel}.
+ */
 public abstract class Panel extends Transformable implements IPanel {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

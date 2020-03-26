@@ -6,6 +6,9 @@ import com.google.common.collect.ImmutableSet;
 import nl.weeaboo.vn.gdx.res.LoadingResourceStore;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
+/**
+ * Low-level resource loader for music.
+ */
 public final class GdxMusicStore extends LoadingResourceStore<Music> {
 
     public GdxMusicStore(StaticRef<GdxMusicStore> selfId) {

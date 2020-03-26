@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.input;
 
+/**
+ * Platform-specific input.
+ */
 public enum KeyCode {
     UNKNOWN,
 

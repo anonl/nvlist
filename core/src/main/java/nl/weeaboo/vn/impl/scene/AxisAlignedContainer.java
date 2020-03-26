@@ -11,6 +11,9 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.scene.IVisualGroup;
 
+/**
+ * Base implementation for {@link IAxisAlignedContainer}.
+ */
 public abstract class AxisAlignedContainer extends VisualElement implements IAxisAlignedContainer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;

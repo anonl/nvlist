@@ -4,6 +4,9 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 
+/**
+ * No-op renderer.
+ */
 public final class NullRenderer extends AbstractRenderable {
 
     private static final long serialVersionUID = 1L;

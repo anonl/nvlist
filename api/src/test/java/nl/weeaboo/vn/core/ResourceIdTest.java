@@ -19,11 +19,11 @@ public class ResourceIdTest {
         ResourceId imageB2 = new ResourceId(MediaType.IMAGE, FilePath.of("b"), "2");
 
         new EqualsTester()
-            .addEqualityGroup(scriptA1, scriptA2)
-            .addEqualityGroup(imageA1)
-            .addEqualityGroup(imageB1)
-            .addEqualityGroup(imageB2)
-            .testEquals();
+                .addEqualityGroup(scriptA1, scriptA2)
+                .addEqualityGroup(imageA1)
+                .addEqualityGroup(imageB1)
+                .addEqualityGroup(imageB2)
+                .testEquals();
     }
 
     @Test

@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.prefsstore.Preference;
 
-public class TestPrefsHolder {
+public class PrefsHolderMock {
 
     public static final Preference<String> strPref = newPreference("str", "str", "value", "");
     public static final Preference<Integer> intPref = newPreference("int", "int", 111, "");

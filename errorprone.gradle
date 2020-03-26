@@ -3,18 +3,17 @@
 apply plugin: 'net.ltgt.errorprone'
 
 dependencies {
+    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+
     errorprone "com.google.errorprone:error_prone_core:$errorProneVersion"
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs += [
-        '-Werror',
-        '-XepExcludedPaths:.*/generated/.*',
-
-        '-Xep:FieldMissingNullable:WARN',
-        '-Xep:ParameterNotNullable:WARN',
-        '-Xep:ReturnMissingNullable:WARN',
-        '-Xep:NullableDereference:WARN',
-    ]
+    options.compilerArgs += ['-Werror']
+    options.errorprone {
+        warn('FieldMissingNullable')
+        warn('ParameterNotNullable')
+        warn('ReturnMissingNullable')
+        warn('NullableDereference')
+    }
 }
-

@@ -2,6 +2,11 @@ package nl.weeaboo.vn.math;
 
 import nl.weeaboo.common.FastMath;
 
+/**
+ * Mutable transformation matrix.
+ *
+ * @see Matrix
+ */
 public final class MutableMatrix extends AbstractMatrix {
 
     private static final long serialVersionUID = 1L;

@@ -11,13 +11,15 @@ import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.impl.script.TestScriptExceptionHandler;
+import nl.weeaboo.vn.impl.script.ScriptExceptionHandlerMock;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 
+/**
+ * Various test test functions related to Lua.
+ */
 public final class LuaTestUtil {
 
     public static final FilePath SCRIPT_HELLOWORLD = FilePath.of("helloworld.lvn");
@@ -113,13 +115,13 @@ public final class LuaTestUtil {
      * Runs all threads in all active contexts, until those contexts no longer contain any runnable threads.
      * @see #hasRunnableThreads(IScriptContext)
      */
-    public static void waitForAllThreads(IContextManager contextManager) {
+    public static void waitForAllThreads(IEnvironment env) {
         int iteration = 0;
         while (iteration++ < 10_000) {
-            contextManager.update();
+            env.update();
 
             boolean anyRunnableThreads = false;
-            for (IContext context : contextManager.getActiveContexts()) {
+            for (IContext context : env.getContextManager().getActiveContexts()) {
                 if (hasRunnableThreads(context.getScriptContext())) {
                     anyRunnableThreads = true;
                     break;
@@ -140,7 +142,7 @@ public final class LuaTestUtil {
         int iteration = 0;
         IScriptContext scriptContext = context.getScriptContext();
         while (hasRunnableThreads(scriptContext)) {
-            scriptContext.updateThreads(context, TestScriptExceptionHandler.INSTANCE);
+            scriptContext.updateThreads(context, ScriptExceptionHandlerMock.INSTANCE);
 
             if (++iteration >= 10_000) {
                 throw new AssertionError("One or more threads refuse to die");

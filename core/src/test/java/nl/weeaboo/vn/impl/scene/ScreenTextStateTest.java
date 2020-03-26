@@ -7,7 +7,7 @@ import org.junit.Test;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
-import nl.weeaboo.vn.impl.text.MockTextRenderer;
+import nl.weeaboo.vn.impl.text.TextRendererMock;
 import nl.weeaboo.vn.impl.text.TextLog;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -19,7 +19,7 @@ public final class ScreenTextStateTest {
 
     @Before
     public void before() {
-        textDrawable = new TextDrawable(new MockTextRenderer());
+        textDrawable = new TextDrawable(new TextRendererMock());
 
         textState = new ScreenTextState(new TextLog());
     }

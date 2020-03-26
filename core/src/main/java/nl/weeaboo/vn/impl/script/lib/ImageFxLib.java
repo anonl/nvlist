@@ -28,6 +28,9 @@ import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 
+/**
+ * Lua "ImageFx" library.
+ */
 public class ImageFxLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

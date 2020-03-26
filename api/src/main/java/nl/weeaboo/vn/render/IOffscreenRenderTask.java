@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Async render-to-texture.
+ */
 public interface IOffscreenRenderTask extends IAsyncRenderTask {
 
     /**

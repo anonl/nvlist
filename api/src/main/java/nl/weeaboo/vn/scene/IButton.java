@@ -8,6 +8,9 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.script.IScriptFunction;
 
+/**
+ * Clickable button.
+ */
 public interface IButton extends ITransformable {
 
     /**

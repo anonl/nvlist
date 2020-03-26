@@ -6,6 +6,12 @@ import nl.weeaboo.vn.render.IRenderEnvConsumer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 
+/**
+ * High-level container of state. In a more general-purpose game engine this concept is usually called
+ * 'scene', 'stage' or 'level'.
+ *
+ * @see IContextManager
+ */
 public interface IContext extends Serializable, IDestructible, IRenderEnvConsumer {
 
     /** Adds a context listener. */

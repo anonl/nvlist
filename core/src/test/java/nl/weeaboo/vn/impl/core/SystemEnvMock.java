@@ -2,7 +2,7 @@ package nl.weeaboo.vn.impl.core;
 
 import nl.weeaboo.vn.core.ISystemEnv;
 
-public class TestSystemEnv implements ISystemEnv {
+public class SystemEnvMock implements ISystemEnv {
 
     private boolean canExit;
     private boolean isTouchScreen;

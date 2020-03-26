@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.render;
 
 import nl.weeaboo.vn.render.IAsyncRenderTask;
 
+/**
+ * Base implementation of {@link IAsyncRenderTask}.
+ */
 public abstract class AsyncRenderTask implements IAsyncRenderTask {
 
     private static final long serialVersionUID = RenderImpl.serialVersionUID;

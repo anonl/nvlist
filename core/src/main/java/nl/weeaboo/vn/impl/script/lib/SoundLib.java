@@ -15,6 +15,9 @@ import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.sound.SoundType;
 
+/**
+ * Lua "Sound" library.
+ */
 public class SoundLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;

@@ -3,7 +3,14 @@ package nl.weeaboo.vn.image;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.vn.scene.IImageDrawable;
 
+/**
+ * Renderable image data.
+ *
+ * @see IImageDrawable#setTexture(ITexture)
+ * @see ITextureData
+ */
 public interface ITexture extends Serializable {
 
     public static Area2D DEFAULT_UV = Area2D.of(0, 0, 1, 1);

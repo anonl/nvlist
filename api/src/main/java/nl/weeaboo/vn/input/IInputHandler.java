@@ -2,6 +2,9 @@ package nl.weeaboo.vn.input;
 
 import nl.weeaboo.vn.math.Matrix;
 
+/**
+ * Receives input events.
+ */
 public interface IInputHandler {
 
     /**

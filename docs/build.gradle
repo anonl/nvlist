@@ -35,7 +35,7 @@ task generateLuaPages {
         def fileTree = fileTree(sourceDir)
         fileTree.visit { details ->
             def outputFile = new File(destinationDir, "${details.relativePath}".replace(".lua", ".md"))
-            if (details.isDirectory) {
+            if (details.directory) {
                 outputFile.mkdirs()
             } else {
                 def luaPath = "${details.relativePath}"

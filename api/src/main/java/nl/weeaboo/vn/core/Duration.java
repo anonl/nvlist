@@ -8,6 +8,9 @@ import com.google.common.primitives.Longs;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 
+/**
+ * An amount of time. We can't use {@code java.time.Duration} because it's not available on older versions of Android.
+ */
 public final class Duration implements Serializable {
 
     private static final long serialVersionUID = 1L;

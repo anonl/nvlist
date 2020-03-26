@@ -25,7 +25,10 @@ import nl.weeaboo.vn.scene.IButtonRenderer;
 import nl.weeaboo.vn.scene.IDrawable;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
-public class ButtonRenderer extends AbstractRenderable implements IButtonRenderer {
+/**
+ * Default implementation of {@link IButtonRenderer}.
+ */
+public final class ButtonRenderer extends AbstractRenderable implements IButtonRenderer {
 
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
