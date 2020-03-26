@@ -36,7 +36,7 @@ matrix:
       language: java
       before_install:
         # Download SDK
-        - brew update
+        - brew update --quiet
         - brew cask install android-sdk
         # Install the SDK
         - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-28"
