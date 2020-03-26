@@ -12,6 +12,9 @@ import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
 import nl.weeaboo.vn.impl.scene.AnimatedRenderable;
 
+/**
+ * Base implementation of {@link ICrossFadeRenderer}.
+ */
 public abstract class CrossFadeRenderer extends AnimatedRenderable implements ICrossFadeRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

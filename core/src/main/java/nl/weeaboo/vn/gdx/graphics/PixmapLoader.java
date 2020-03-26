@@ -12,6 +12,9 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReaderOpts;
 
+/**
+ * Loads {@link Pixmap} files.
+ */
 public final class PixmapLoader {
 
     private PixmapLoader() {

@@ -24,6 +24,9 @@ import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
+/**
+ * Default implementation of {@link IImageDefinition}.
+ */
 @Immutable
 public final class ImageDefinition implements IImageDefinition {
 

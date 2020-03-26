@@ -17,6 +17,9 @@ import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
 import nl.weeaboo.vn.buildtools.file.TempFileProvider;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
+/**
+ * Default implementation of {@link IOptimizerContext}.
+ */
 public final class OptimizerContext implements IOptimizerContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptimizerContext.class);

@@ -11,6 +11,9 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.impl.render.AsyncRenderTask;
 
+/**
+ * Base implementation of {@link IScreenshot}.
+ */
 @CustomSerializable
 public abstract class AbstractScreenshot extends AsyncRenderTask implements IScreenshot {
 

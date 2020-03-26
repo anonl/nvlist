@@ -5,6 +5,11 @@ import java.util.UUID;
 
 import nl.weeaboo.common.Checks;
 
+/**
+ * Reference to a global variable.
+ *
+ * @see StaticEnvironment
+ */
 public final class StaticRef<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

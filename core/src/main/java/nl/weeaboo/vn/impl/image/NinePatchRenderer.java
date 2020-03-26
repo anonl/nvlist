@@ -9,6 +9,9 @@ import nl.weeaboo.vn.impl.scene.AbstractRenderable;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.scene.IDrawable;
 
+/**
+ * Default implementation of {@link INinePatchRenderer}.
+ */
 public class NinePatchRenderer extends AbstractRenderable implements INinePatchRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

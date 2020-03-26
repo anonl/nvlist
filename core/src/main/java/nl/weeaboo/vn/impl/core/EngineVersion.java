@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.core;
 
 import nl.weeaboo.common.VersionNumber;
 
+/**
+ * Game engine version.
+ */
 public final class EngineVersion {
 
     private static final int VERSION_MAJOR = 4;

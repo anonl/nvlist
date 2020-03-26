@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Build-specific settings.
+ */
 public final class BuildProperties {
 
     private final Properties properties;

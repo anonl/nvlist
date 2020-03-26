@@ -2,6 +2,9 @@ package nl.weeaboo.vn.stats;
 
 import nl.weeaboo.vn.core.IModule;
 
+/**
+ * Statistics and analytics module.
+ */
 public interface IStatsModule extends IModule {
 
     /** The global resource loading log. */

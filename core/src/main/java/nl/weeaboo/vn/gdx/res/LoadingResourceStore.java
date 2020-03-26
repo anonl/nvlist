@@ -17,7 +17,10 @@ import nl.weeaboo.vn.impl.core.DurationLogger;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
-public class LoadingResourceStore<T> extends AbstractResourceStore {
+/**
+ * Resource stores which loads pre-existing resources using an {@link AssetManager}.
+ */
+public class LoadingResourceStore<T> extends ResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoadingResourceStore.class);
 

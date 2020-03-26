@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
+/**
+ * Optimizes resource files.
+ */
 public interface IResourceOptimizer {
 
     /**

@@ -27,6 +27,9 @@ import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.impl.video.NativeVideoFactory;
 
+/**
+ * Video file optimizer.
+ */
 public final class VideoOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(VideoOptimizer.class);

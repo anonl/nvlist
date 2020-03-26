@@ -15,6 +15,9 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 
+/**
+ * Gradle tooling API connection.
+ */
 public final class GradleMonitor implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GradleMonitor.class);

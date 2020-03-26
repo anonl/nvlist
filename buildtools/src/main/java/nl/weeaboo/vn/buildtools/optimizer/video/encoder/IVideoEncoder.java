@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import nl.weeaboo.vn.buildtools.optimizer.video.EncodedVideo;
 
+/**
+ * Video encoder.
+ */
 public interface IVideoEncoder {
 
     /**

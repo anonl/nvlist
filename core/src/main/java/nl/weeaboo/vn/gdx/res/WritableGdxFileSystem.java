@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 
+/**
+ * {@link GdxFileSystem} which allows files to be modified.
+ */
 public abstract class WritableGdxFileSystem extends GdxFileSystem implements IWritableFileSystem {
 
     public WritableGdxFileSystem() {

@@ -18,6 +18,9 @@ import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
+/**
+ * Loads shader resources.
+ */
 public final class ShaderStore implements IDestructible {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShaderStore.class);

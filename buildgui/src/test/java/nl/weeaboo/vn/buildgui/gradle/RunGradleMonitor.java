@@ -5,7 +5,7 @@ import java.io.File;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.impl.InitConfig;
 
-public final class RunGradleMonitor {
+final class RunGradleMonitor {
 
     /**
      * Tests {@link GradleMonitor} by connecting it to the NVList build.

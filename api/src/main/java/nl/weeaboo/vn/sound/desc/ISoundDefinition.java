@@ -2,6 +2,9 @@ package nl.weeaboo.vn.sound.desc;
 
 import javax.annotation.Nullable;
 
+/**
+ * Audio file metadata.
+ */
 public interface ISoundDefinition {
 
     /**

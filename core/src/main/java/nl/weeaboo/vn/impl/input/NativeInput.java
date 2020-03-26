@@ -17,6 +17,9 @@ import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 
+/**
+ * Provides low-level access to user input events.
+ */
 public final class NativeInput implements INativeInput {
 
     private static final Logger LOG = LoggerFactory.getLogger(NativeInput.class);

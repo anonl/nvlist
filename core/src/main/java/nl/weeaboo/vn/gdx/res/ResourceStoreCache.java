@@ -15,6 +15,9 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.cache.Weigher;
 
+/**
+ * In-memory cache of a {@link LoadingResourceStore}.
+ */
 public abstract class ResourceStoreCache<K, V> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceStoreCache.class);

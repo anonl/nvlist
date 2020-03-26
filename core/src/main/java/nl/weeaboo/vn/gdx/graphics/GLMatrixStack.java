@@ -9,6 +9,9 @@ import com.google.common.collect.Queues;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.math.Matrix;
 
+/**
+ * Stack of transformation matrices.
+ */
 public final class GLMatrixStack {
 
     private static final int MAX_POOL_SIZE = 8;

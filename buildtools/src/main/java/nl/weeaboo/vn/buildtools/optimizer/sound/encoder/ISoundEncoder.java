@@ -5,6 +5,9 @@ import java.io.IOException;
 import nl.weeaboo.vn.buildtools.optimizer.sound.EncodedSound;
 import nl.weeaboo.vn.buildtools.optimizer.sound.SoundWithDef;
 
+/**
+ * Audio encoder.
+ */
 public interface ISoundEncoder {
 
     /**

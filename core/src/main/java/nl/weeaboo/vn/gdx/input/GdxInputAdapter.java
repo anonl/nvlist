@@ -21,6 +21,9 @@ import nl.weeaboo.vn.impl.input.NativeInput;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 
+/**
+ * Forwards GDX input events to {@link INativeInput}.
+ */
 public final class GdxInputAdapter implements IUpdateable, InputProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxInputAdapter.class);

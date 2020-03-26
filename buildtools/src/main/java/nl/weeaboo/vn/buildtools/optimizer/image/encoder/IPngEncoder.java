@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
+/**
+ * PNG image file encoder.
+ */
 public interface IPngEncoder extends IImageEncoder {
 
     /**

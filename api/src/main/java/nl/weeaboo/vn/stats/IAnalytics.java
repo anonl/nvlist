@@ -1,20 +1,15 @@
 package nl.weeaboo.vn.stats;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.core.IUpdateable;
-import nl.weeaboo.vn.core.ResourceId;
-import nl.weeaboo.vn.core.ResourceLoadInfo;
 
-public interface IAnalytics extends Serializable, IUpdateable {
-
-    /**
-     * This method is called when a resource is loaded.
-     */
-    void logResourceLoad(ResourceId resourceId, ResourceLoadInfo info);
+/**
+ * Logs interesting events for later analysis.
+ */
+public interface IAnalytics extends IUpdateable, IResourceLoadLog {
 
     /**
      * Loads analytics log from a file.

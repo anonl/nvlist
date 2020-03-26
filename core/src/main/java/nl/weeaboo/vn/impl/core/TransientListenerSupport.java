@@ -7,6 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEventListener;
 
+/**
+ * A collection of listeners which aren't persisted when this class is serialized.
+ */
 public class TransientListenerSupport implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IInterpolator;
+import nl.weeaboo.vn.image.IBitmapTweenRenderer;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -32,6 +33,9 @@ import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 import nl.weeaboo.vn.scene.IDrawable;
 
+/**
+ * Default implementation of {@link IBitmapTweenRenderer}.
+ */
 public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
 
     private static final long serialVersionUID = 1L;

@@ -7,6 +7,9 @@ import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
+/**
+ * Encoded image resource.
+ */
 public final class EncodedImage implements IEncodedResource {
 
     private final IEncodedResource encodedImage;

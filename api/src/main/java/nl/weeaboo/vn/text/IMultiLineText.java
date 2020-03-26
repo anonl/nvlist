@@ -2,6 +2,9 @@ package nl.weeaboo.vn.text;
 
 import nl.weeaboo.common.Rect2D;
 
+/**
+ * Text which supports multiple lines.
+ */
 public interface IMultiLineText extends IText {
 
     /**

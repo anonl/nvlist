@@ -1,11 +1,14 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.utils.BufferUtils;
 
@@ -13,6 +16,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 
+/**
+ * Various functions related to {@link Pixmap}.
+ */
 public final class PixmapUtil {
 
     private PixmapUtil() {
@@ -202,4 +208,22 @@ public final class PixmapUtil {
         throw new IllegalArgumentException("Unsupported format: " + format);
     }
 
+    /**
+     * @see Pixmap#Pixmap(byte[], int, int)
+     * @throws IOException If an internal error occurs in the PNG encoder.
+     */
+    public static byte[] encodePng(Pixmap pixmap) throws IOException {
+        PixmapIO.PNG encoder = new PixmapIO.PNG();
+        encoder.setFlipY(false);
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        try {
+            encoder.write(bout, pixmap);
+        } finally {
+            bout.close();
+            encoder.dispose();
+        }
+
+        return bout.toByteArray();
+    }
 }

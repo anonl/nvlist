@@ -14,8 +14,11 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
-import nl.weeaboo.vn.impl.image.TextureAdapter;
+import nl.weeaboo.vn.impl.image.GdxTexture;
 
+/**
+ * Various functions related to GDX texture objects.
+ */
 public final class GdxTextureUtil {
 
     private GdxTextureUtil() {
@@ -26,8 +29,8 @@ public final class GdxTextureUtil {
      * texture.
      */
     public static @Nullable Texture getTexture(ITexture tex) {
-        if (tex instanceof TextureAdapter) {
-            return ((TextureAdapter)tex).getTexture();
+        if (tex instanceof GdxTexture) {
+            return ((GdxTexture)tex).getTexture();
         } else {
             return null;
         }
@@ -45,8 +48,8 @@ public final class GdxTextureUtil {
      * extract a valid texture.
      */
     public static @Nullable TextureRegion getTextureRegion(ITexture tex, Area2D uv) {
-        if (tex instanceof TextureAdapter) {
-            return ((TextureAdapter)tex).getTextureRegion(uv);
+        if (tex instanceof GdxTexture) {
+            return ((GdxTexture)tex).getTextureRegion(uv);
         } else {
             return null;
         }

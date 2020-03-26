@@ -5,6 +5,9 @@ import java.io.IOException;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 
+/**
+ * Image file encoder.
+ */
 public interface IImageEncoder {
 
     /**

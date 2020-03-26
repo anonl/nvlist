@@ -26,6 +26,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.ZipFileArchive;
 
+/**
+ * File system implementation for desktop operating systems (Windows, Mac, Linux).
+ */
 public final class DesktopGdxFileSystem extends GdxFileSystem {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopGdxFileSystem.class);

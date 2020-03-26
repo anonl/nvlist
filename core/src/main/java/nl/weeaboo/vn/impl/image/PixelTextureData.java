@@ -12,6 +12,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 
+/**
+ * Pixmap-backed {@link IGdxTextureData}.
+ */
 @CustomSerializable
 public final class PixelTextureData implements IGdxTextureData {
 

@@ -27,6 +27,9 @@ import nl.weeaboo.vn.buildtools.task.AbstractTask;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
+/**
+ * Default implementation of {@link IBuildController}.
+ */
 public final class GradleBuildController implements IBuildController {
 
     private static final Logger LOG = LoggerFactory.getLogger(GradleBuildController.class);

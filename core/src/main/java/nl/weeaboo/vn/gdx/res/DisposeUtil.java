@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * Various functions related to {@link Disposable}.
+ */
 public final class DisposeUtil {
 
     private DisposeUtil() {

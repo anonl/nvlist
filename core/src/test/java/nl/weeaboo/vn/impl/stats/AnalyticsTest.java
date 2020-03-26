@@ -44,8 +44,8 @@ public final class AnalyticsTest {
 
     @Test
     public void testSaveLoad() throws IOException {
-        logResourceLoad(IMAGE, Arrays.asList("x.lvn:2"));
-        logResourceLoad(SOUND, Arrays.asList("x.lvn:3"));
+        logLoad(IMAGE, Arrays.asList("x.lvn:2"));
+        logLoad(SOUND, Arrays.asList("x.lvn:3"));
 
         FilePath savePath = FilePath.of("savePath");
         InMemoryFileSystem fileSystem = new InMemoryFileSystem(false);
@@ -63,8 +63,8 @@ public final class AnalyticsTest {
                 preloader.consumePreloadedImages());
     }
 
-    private void logResourceLoad(ResourceId id, List<String> stackTrace) {
-        analytics.logResourceLoad(id, new ResourceLoadInfo(id.getType(), id.getFilePath(), stackTrace));
+    private void logLoad(ResourceId id, List<String> stackTrace) {
+        analytics.logLoad(id, new ResourceLoadInfo(id.getType(), id.getFilePath(), stackTrace));
     }
 
 }

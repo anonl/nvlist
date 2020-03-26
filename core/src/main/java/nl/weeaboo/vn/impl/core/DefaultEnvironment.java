@@ -6,6 +6,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContextManager;
+import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.image.IImageModule;
@@ -17,6 +18,9 @@ import nl.weeaboo.vn.stats.IStatsModule;
 import nl.weeaboo.vn.text.ITextModule;
 import nl.weeaboo.vn.video.IVideoModule;
 
+/**
+ * Default implementation of {@link IEnvironment}.
+ */
 public class DefaultEnvironment extends AbstractEnvironment implements Serializable {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

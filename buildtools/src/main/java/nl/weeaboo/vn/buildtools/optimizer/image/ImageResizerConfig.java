@@ -11,6 +11,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerConfig;
 
+/**
+ * Configuration related to image resizing.
+ */
 public final class ImageResizerConfig implements IOptimizerConfig {
 
     private final Set<Dim> targetResolutions = Sets.newHashSet();

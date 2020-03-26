@@ -21,6 +21,9 @@ import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
 
+/**
+ * Activates special functionality only available in debug mode (see {@link NovelPrefs#DEBUG}).
+ */
 public final class DebugControls {
 
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);

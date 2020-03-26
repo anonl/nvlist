@@ -21,6 +21,9 @@ import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.FfmpegVideoEncoder;
 
+/**
+ * Resource encoder using ffmpeg.
+ */
 public abstract class FfmpegEncoder {
 
     private static final Logger LOG = LoggerFactory.getLogger(FfmpegVideoEncoder.class);

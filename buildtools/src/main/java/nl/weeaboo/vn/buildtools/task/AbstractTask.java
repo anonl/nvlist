@@ -5,6 +5,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.Nullable;
 
+/**
+ * Base implementation of {@link ITask}.
+ */
 public abstract class AbstractTask implements ITask {
 
     private final CopyOnWriteArrayList<IProgressListener> progressListeners = new CopyOnWriteArrayList<>();

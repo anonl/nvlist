@@ -7,6 +7,9 @@ import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Audio data with associated metadata ({@link SoundDefinition}).
+ */
 public final class SoundWithDef implements Disposable {
 
     private final IEncodedResource audioData;

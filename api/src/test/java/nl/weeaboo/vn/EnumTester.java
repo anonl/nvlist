@@ -5,6 +5,9 @@ import java.util.List;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
+/**
+ * General purpose assertions for testing enums.
+ */
 public class EnumTester {
 
     /**

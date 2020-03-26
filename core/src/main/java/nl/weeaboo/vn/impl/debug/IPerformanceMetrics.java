@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.impl.debug;
 
+/**
+ * Provides access to performance-related statistics and messages.
+ */
 public interface IPerformanceMetrics {
 
     /**

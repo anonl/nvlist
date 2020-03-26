@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.script;
 
+/**
+ * Handles exceptions from script code.
+ */
 public interface IScriptExceptionHandler {
 
     /**

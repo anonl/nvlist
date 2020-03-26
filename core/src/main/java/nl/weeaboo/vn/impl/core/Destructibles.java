@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.vn.core.IDestructible;
 
+/**
+ * Various useful functions related to {@link IDestructible}.
+ */
 public final class Destructibles {
 
     private Destructibles() {

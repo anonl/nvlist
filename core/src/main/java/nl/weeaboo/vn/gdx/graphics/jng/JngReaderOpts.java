@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
+/**
+ * Settings for {@link JngReader}.
+ */
 public final class JngReaderOpts {
 
     /**

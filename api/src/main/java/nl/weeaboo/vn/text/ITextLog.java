@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.styledtext.StyledText;
 
+/**
+ * Stores the recently displayed lines of text.
+ */
 public interface ITextLog extends Serializable {
 
     /**

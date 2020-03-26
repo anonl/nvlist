@@ -21,7 +21,7 @@ public class TextureAdapterTest {
     @Test
     public void nullResource() {
         ResourceStub<TextureRegion> res = new ResourceStub<>();
-        TextureAdapter adapter = new TextureAdapter(res, 2, 3);
+        GdxTexture adapter = new GdxTexture(res, 2, 3);
 
         Assert.assertEquals(0, adapter.getHandle());
         Assert.assertEquals(null, adapter.getTexture());
@@ -35,7 +35,7 @@ public class TextureAdapterTest {
     @Test
     public void textureRegion() {
         ResourceStub<TextureRegion> res = new ResourceStub<>();
-        TextureAdapter adapter = new TextureAdapter(res, 1, 1);
+        GdxTexture adapter = new GdxTexture(res, 1, 1);
 
         Texture tex = GdxGraphicsTestUtil.createTestTexture(20, 40);
         TextureRegion region = new TextureRegion(tex, 1, 2, 4, 8);
@@ -51,11 +51,11 @@ public class TextureAdapterTest {
         assertSize(adapter, 2 * 4, 2 * 8);
     }
 
-    /** {@link TextureAdapter#getTextureRegion(Area2D)} */
+    /** {@link GdxTexture#getTextureRegion(Area2D)} */
     @Test
     public void getSubRegion() {
         ResourceStub<TextureRegion> res = new ResourceStub<>();
-        TextureAdapter adapter = new TextureAdapter(res, 1, 1);
+        GdxTexture adapter = new GdxTexture(res, 1, 1);
 
         Texture tex = GdxGraphicsTestUtil.createTestTexture(10, 10);
         res.set(new TextureRegion(tex, 0, 0, 10, 10));
@@ -68,17 +68,17 @@ public class TextureAdapterTest {
         Assert.assertEquals(.3 + .5, subRegion.getV2(), EPSILON);
     }
 
-    private static void assertSize(TextureAdapter adapter, double w, double h) {
+    private static void assertSize(GdxTexture adapter, double w, double h) {
         Assert.assertEquals(w, adapter.getWidth(), EPSILON);
         Assert.assertEquals(h, adapter.getHeight(), EPSILON);
     }
 
-    private static void assertPixelSize(TextureAdapter adapter, int w, int h) {
+    private static void assertPixelSize(GdxTexture adapter, int w, int h) {
         Assert.assertEquals(w, adapter.getPixelWidth());
         Assert.assertEquals(h, adapter.getPixelHeight());
     }
 
-    private static void assertScale(TextureAdapter adapter, double w, double h) {
+    private static void assertScale(GdxTexture adapter, double w, double h) {
         Assert.assertEquals(w, adapter.getScaleX(), EPSILON);
         Assert.assertEquals(h, adapter.getScaleY(), EPSILON);
     }

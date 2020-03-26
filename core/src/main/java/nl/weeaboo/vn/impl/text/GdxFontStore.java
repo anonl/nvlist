@@ -24,7 +24,7 @@ import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
-import nl.weeaboo.vn.gdx.res.AbstractResourceStore;
+import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCacheConfig;
@@ -36,7 +36,7 @@ import nl.weeaboo.vn.text.ILoadingFontStore;
  *
  * @see ILoadingFontStore
  */
-public final class GdxFontStore extends AbstractResourceStore {
+public final class GdxFontStore extends ResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);
 

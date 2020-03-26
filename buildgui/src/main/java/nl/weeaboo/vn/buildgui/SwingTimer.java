@@ -26,7 +26,7 @@ final class SwingTimer {
             animation.start();
         }
 
-        SwingHelper.registerVisibilityChangeListener(component, () -> {
+        SwingUtil.registerVisibilityChangeListener(component, () -> {
             if (component.isShowing()) {
                 animation.start();
             } else {

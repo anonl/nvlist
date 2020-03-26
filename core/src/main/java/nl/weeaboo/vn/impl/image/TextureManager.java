@@ -157,7 +157,7 @@ final class TextureManager implements IPreloadHandler {
     }
 
     private static ITexture newTexture(IResource<TextureRegion> tr, double sx, double sy) {
-        return new TextureAdapter(tr, sx, sy);
+        return new GdxTexture(tr, sx, sy);
     }
 
     private static class RegionResource extends TransformedResource<Texture, TextureRegion> {

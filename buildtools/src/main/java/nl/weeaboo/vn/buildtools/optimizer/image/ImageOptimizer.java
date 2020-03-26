@@ -44,6 +44,9 @@ import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionIO;
 
+/**
+ * Image resource optimizer.
+ */
 public final class ImageOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageOptimizer.class);

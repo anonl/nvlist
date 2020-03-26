@@ -20,6 +20,9 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.AlphaSettings;
 import nl.weeaboo.vn.gdx.graphics.jng.JngHeader.ColorSettings;
 
+/**
+ * Writes JNG images.
+ */
 public final class JngWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JngWriter.class);

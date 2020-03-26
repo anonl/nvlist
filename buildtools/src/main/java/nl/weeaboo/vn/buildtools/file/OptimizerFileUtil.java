@@ -8,6 +8,9 @@ import com.google.common.collect.Sets;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * Various functions for working with files.
+ */
 public final class OptimizerFileUtil {
 
     /**

@@ -11,9 +11,13 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemView;
+import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 
+/**
+ * Resource loader backed by a {@link IFileSystem}.
+ */
 public class FileResourceLoader extends ResourceLoader {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

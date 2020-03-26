@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Checks;
 
+/**
+ * Texture data stored in volatile memory (typically VRAM).
+ */
 public final class VolatileTextureData implements IGdxTextureData {
 
     private static final long serialVersionUID = 1L;

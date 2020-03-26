@@ -21,6 +21,9 @@ import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionCache;
 
+/**
+ * Loads texture resources.
+ */
 public final class GdxTextureStore extends LoadingResourceStore<Texture> {
 
     private final ImageDefinitionCache cachedImageDefs;

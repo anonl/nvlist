@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.signal;
 
+/**
+ * Event handler
+ */
 public interface ISignalHandler {
 
     /**

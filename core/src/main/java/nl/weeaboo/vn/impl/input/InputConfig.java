@@ -21,6 +21,9 @@ import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.input.KeyCombination;
 import nl.weeaboo.vn.input.VKey;
 
+/**
+ * Input configuration, containing the mapping between virtual keys ({@link VKey}) and physical keyboard/mouse buttons.
+ */
 public final class InputConfig implements Json.Serializable {
 
     // --- Uses manual serialization ---

@@ -20,6 +20,9 @@ import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptThread;
 
+/**
+ * Default implementation of {@link IContext}.
+ */
 public class Context implements IContext {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

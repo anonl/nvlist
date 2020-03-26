@@ -6,11 +6,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.SwingUtilities;
 
-import nl.weeaboo.vn.buildgui.SwingHelper;
+import nl.weeaboo.vn.buildgui.SwingUtil;
 import nl.weeaboo.vn.buildtools.task.IProgressListener;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
+/**
+ * Default implementation of {@link ITaskController}.
+ */
 public final class TaskController implements ITaskController {
 
     private final CopyOnWriteArrayList<IActiveTaskListener> activeTaskListeners = new CopyOnWriteArrayList<>();
@@ -35,7 +38,7 @@ public final class TaskController implements ITaskController {
 
     @Override
     public void setActiveTask(ITask task) {
-        SwingHelper.assertIsEdt();
+        SwingUtil.assertIsEdt();
 
         if (activeTask != null) {
             activeTask.removeProgressListener(taskFinishListener);

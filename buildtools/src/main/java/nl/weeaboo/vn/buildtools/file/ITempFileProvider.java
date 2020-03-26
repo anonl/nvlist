@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import javax.annotation.concurrent.ThreadSafe;
 
+/**
+ * Manages temp files.
+ */
 @ThreadSafe
 public interface ITempFileProvider {
 

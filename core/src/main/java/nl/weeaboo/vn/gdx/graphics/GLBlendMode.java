@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import nl.weeaboo.vn.core.BlendMode;
 
+/**
+ * OpenGL blend mode.
+ */
 public enum GLBlendMode {
 
     DEFAULT(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA), // libGDX doesn't use premultiplied alpha!

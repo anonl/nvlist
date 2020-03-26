@@ -18,6 +18,9 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
+/**
+ * Reads JNG image data.
+ */
 public final class JngReader {
 
     private final JngReaderOpts opts;

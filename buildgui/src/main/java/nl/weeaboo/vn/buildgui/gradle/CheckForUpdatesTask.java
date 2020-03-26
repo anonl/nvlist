@@ -30,6 +30,9 @@ import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildtools.task.AbstractTask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
+/**
+ * Checks for updates to NVList.
+ */
 public final class CheckForUpdatesTask extends AbstractTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(CheckForUpdatesTask.class);

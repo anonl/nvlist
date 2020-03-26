@@ -9,6 +9,9 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IResourceResolver;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
+/**
+ * Audio module.
+ */
 public interface ISoundModule extends IModule, IResourceResolver {
 
     /**

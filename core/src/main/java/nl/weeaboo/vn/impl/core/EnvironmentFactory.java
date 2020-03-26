@@ -35,6 +35,9 @@ import nl.weeaboo.vn.impl.text.TextModule;
 import nl.weeaboo.vn.impl.video.VideoModule;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Creates the {@link IEnvironment}.
+ */
 public class EnvironmentFactory {
 
     /**

@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 
+/**
+ * Size (width x height) resource qualifier.
+ */
 public final class SizeQualifier implements IResourceQualifier {
 
     private static final Logger LOG = LoggerFactory.getLogger(SizeQualifier.class);

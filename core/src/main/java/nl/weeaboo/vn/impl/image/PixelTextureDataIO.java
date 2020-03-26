@@ -8,7 +8,7 @@ import java.io.OutputStream;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
-import nl.weeaboo.vn.gdx.graphics.PngUtil;
+import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
 final class PixelTextureDataIO {
 
@@ -16,7 +16,7 @@ final class PixelTextureDataIO {
     }
 
     public static void serialize(Pixmap pixmap, OutputStream out) throws IOException {
-        byte[] bytes = PngUtil.encodePng(pixmap);
+        byte[] bytes = PixmapUtil.encodePng(pixmap);
 
         DataOutputStream dout = new DataOutputStream(out);
         dout.writeInt(bytes.length);

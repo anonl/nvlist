@@ -13,7 +13,7 @@ import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.text.ITextModule;
 
-public class ContextFactory implements IContextFactory<Context> {
+class ContextFactory implements IContextFactory<Context> {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
 

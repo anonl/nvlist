@@ -37,6 +37,9 @@ import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
+/**
+ * On-screen display for debug mode (see {@link NovelPrefs#DEBUG}).
+ */
 public final class Osd implements Disposable {
 
     private final IPerformanceMetrics performanceMetrics;

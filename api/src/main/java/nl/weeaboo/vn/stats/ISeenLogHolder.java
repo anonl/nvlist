@@ -6,6 +6,9 @@ import java.io.Serializable;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 
+/**
+ * Combines the various seen logs.
+ */
 public interface ISeenLogHolder extends Serializable {
 
     /** Returns the log for tracking which resource files were 'seen' by the user */

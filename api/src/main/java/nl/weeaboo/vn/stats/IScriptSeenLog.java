@@ -3,6 +3,9 @@ package nl.weeaboo.vn.stats;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.ResourceId;
 
+/**
+ * Marks (parts of) script files as seen by the player.
+ */
 public interface IScriptSeenLog {
 
     /**

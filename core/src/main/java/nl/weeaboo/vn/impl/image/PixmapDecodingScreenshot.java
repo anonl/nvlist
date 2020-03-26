@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Dim;
 
+/**
+ * Screenshot which initially stores its pixel data in a compressed format, then decodes the binary data using
+ * {@link Pixmap} if needed.
+ */
 public class PixmapDecodingScreenshot extends DecodingScreenshot {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

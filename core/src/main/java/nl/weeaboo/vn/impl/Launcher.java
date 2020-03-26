@@ -58,6 +58,9 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
 
+/**
+ * Cross-platform entry point of the application.
+ */
 @SuppressWarnings("NullableDereference") // TODO: Fix later
 public class Launcher extends ApplicationAdapter implements IUpdateable {
 

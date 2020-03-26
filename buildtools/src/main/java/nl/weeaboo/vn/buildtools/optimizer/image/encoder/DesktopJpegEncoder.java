@@ -18,7 +18,7 @@ import com.google.common.collect.Iterators;
 
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
-import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageHelper;
+import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageUtil;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 
@@ -30,11 +30,11 @@ final class DesktopJpegEncoder implements IJpegEncoder {
         switch (pixmap.getFormat()) {
         case Alpha:
         case Intensity:
-            image = BufferedImageHelper.toBufferedImage(pixmap);
+            image = BufferedImageUtil.toBufferedImage(pixmap);
             break;
         default:
             // Flatten any alpha in the source image by requesting the image type for RGB888
-            image = BufferedImageHelper.toBufferedImage(pixmap, BufferedImageHelper.toBufferedImageType(Format.RGB888));
+            image = BufferedImageUtil.toBufferedImage(pixmap, BufferedImageUtil.toBufferedImageType(Format.RGB888));
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();

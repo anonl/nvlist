@@ -17,6 +17,9 @@ import nl.weeaboo.vn.impl.render.TriangleGrid.TextureWrap;
 import nl.weeaboo.vn.impl.render.TriangleGrid.TriangleGridLayer;
 import nl.weeaboo.vn.impl.scene.AnimatedRenderable;
 
+/**
+ * Base implementation of {@link IBitmapTweenRenderer}.
+ */
 public abstract class BitmapTweenRenderer extends AnimatedRenderable implements IBitmapTweenRenderer {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

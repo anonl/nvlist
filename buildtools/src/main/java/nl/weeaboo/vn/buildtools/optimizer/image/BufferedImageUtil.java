@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 
 import nl.weeaboo.vn.render.RenderUtil;
 
-public final class BufferedImageHelper {
+/**
+ * Various functions for working with {@link BufferedImage}.
+ */
+public final class BufferedImageUtil {
 
-    private BufferedImageHelper() {
+    private BufferedImageUtil() {
     }
 
     /**
@@ -23,7 +26,7 @@ public final class BufferedImageHelper {
      * @see #toBufferedImageType(Format)
      */
     public static BufferedImage toBufferedImage(Pixmap pixmap) {
-        return toBufferedImage(pixmap, BufferedImageHelper.toBufferedImageType(pixmap.getFormat()));
+        return toBufferedImage(pixmap, BufferedImageUtil.toBufferedImageType(pixmap.getFormat()));
     }
 
     /**

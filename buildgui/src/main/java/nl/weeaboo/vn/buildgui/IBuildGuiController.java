@@ -2,7 +2,10 @@ package nl.weeaboo.vn.buildgui;
 
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 
-public interface IBuildGuiController {
+/**
+ * Controller for the {@link BuildGui}.
+ */
+interface IBuildGuiController {
 
     /**
      * Returns the non-GUI build controller.

@@ -7,6 +7,9 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.render.IRenderEnv;
 
+/**
+ * Default implementation of {@link IRenderEnv}.
+ */
 public final class RenderEnv implements IRenderEnv {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

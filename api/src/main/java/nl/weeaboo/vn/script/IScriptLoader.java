@@ -8,6 +8,9 @@ import java.util.Collection;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IResourceResolver;
 
+/**
+ * Loads script resources.
+ */
 public interface IScriptLoader extends IResourceResolver {
 
     /**

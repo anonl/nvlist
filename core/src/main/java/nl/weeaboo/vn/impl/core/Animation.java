@@ -6,6 +6,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IAnimation;
 import nl.weeaboo.vn.core.IUpdateable;
 
+/**
+ * Default implementation of {@link IAnimation}.
+ */
 public final class Animation implements IAnimation, IUpdateable, Serializable {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

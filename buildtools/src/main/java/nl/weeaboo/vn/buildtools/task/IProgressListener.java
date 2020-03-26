@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.buildtools.task;
 
+/**
+ * Progress listener.
+ */
 public interface IProgressListener {
 
     /**

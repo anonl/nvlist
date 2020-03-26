@@ -2,6 +2,9 @@ package nl.weeaboo.vn.script;
 
 import java.io.Serializable;
 
+/**
+ * Java wrapper around a script function.
+ */
 public interface IScriptFunction extends Serializable {
 
     /**

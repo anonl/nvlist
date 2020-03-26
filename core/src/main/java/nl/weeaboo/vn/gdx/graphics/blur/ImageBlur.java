@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.base.Preconditions;
 
+/**
+ * Applies a blur to a pixmap.
+ */
 public final class ImageBlur {
 
     /** Division lookup table */

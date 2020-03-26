@@ -4,6 +4,9 @@ import org.junit.Assert;
 
 import nl.weeaboo.vn.math.Vec2;
 
+/**
+ * General purpose assertions.
+ */
 public final class ApiTestUtil {
 
     public static final double EPSILON = 0.001;

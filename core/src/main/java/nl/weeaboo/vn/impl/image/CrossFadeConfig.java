@@ -7,6 +7,9 @@ import nl.weeaboo.vn.core.Interpolators;
 import nl.weeaboo.vn.image.ICrossFadeConfig;
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Default implementation of {@link ICrossFadeConfig}.
+ */
 public final class CrossFadeConfig implements ICrossFadeConfig {
 
     private static final long serialVersionUID = 1L;

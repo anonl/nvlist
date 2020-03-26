@@ -3,6 +3,9 @@ package nl.weeaboo.vn.text;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 
+/**
+ * Styled text.
+ */
 public interface IText {
 
     /**

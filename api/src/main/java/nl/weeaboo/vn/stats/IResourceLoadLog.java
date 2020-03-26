@@ -5,6 +5,9 @@ import java.io.Serializable;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 
+/**
+ * Logs resource load events.
+ */
 public interface IResourceLoadLog extends Serializable {
 
     /**

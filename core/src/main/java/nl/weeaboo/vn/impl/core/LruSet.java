@@ -6,6 +6,9 @@ import java.util.LinkedHashSet;
 
 import nl.weeaboo.common.Checks;
 
+/**
+ * Cache with bounded size, evicting items in LRU (least recently used) order.
+ */
 public final class LruSet<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

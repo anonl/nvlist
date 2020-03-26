@@ -35,6 +35,9 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.script.IScriptContext;
 
+/**
+ * Default implementation of {@link IImageModule}.
+ */
 public class ImageModule extends AbstractModule implements IImageModule {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

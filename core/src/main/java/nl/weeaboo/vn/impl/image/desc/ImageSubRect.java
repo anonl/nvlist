@@ -7,6 +7,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
+/**
+ * Default implementation of {@link IImageSubRect}.
+ */
 @Immutable
 public final class ImageSubRect implements IImageSubRect {
 

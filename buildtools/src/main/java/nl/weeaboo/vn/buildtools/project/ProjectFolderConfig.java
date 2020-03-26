@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Project and engine folders.
+ */
 public final class ProjectFolderConfig {
 
     private final File projectFolder;

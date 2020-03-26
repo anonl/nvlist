@@ -11,7 +11,10 @@ import nl.weeaboo.vn.buildgui.task.TaskController;
 import nl.weeaboo.vn.buildtools.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.InitConfig;
 
-public final class BuildGuiLauncher {
+/**
+ * Main entry point of the application.
+ */
+final class BuildGuiLauncher {
 
     /**
      * Launches the NVList build user interface as a stand-alone window.
@@ -21,7 +24,7 @@ public final class BuildGuiLauncher {
 
         InitConfig.init();
         HeadlessGdx.init();
-        SwingHelper.setDefaultLookAndFeel();
+        SwingUtil.setDefaultLookAndFeel();
 
         BuildGuiPrefs prefs = BuildGuiPrefs.load(argsArray);
 

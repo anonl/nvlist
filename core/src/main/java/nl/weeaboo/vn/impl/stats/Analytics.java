@@ -116,7 +116,7 @@ final class Analytics implements IAnalytics {
     }
 
     @Override
-    public void logResourceLoad(ResourceId resourceId, ResourceLoadInfo info) {
+    public void logLoad(ResourceId resourceId, ResourceLoadInfo info) {
         FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(info.getCallStackTrace());
         if (lvnLine == null) {
             return;

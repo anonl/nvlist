@@ -3,6 +3,9 @@ package nl.weeaboo.vn.buildtools.optimizer;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.buildtools.file.FilePathPattern;
 
+/**
+ * Represents a collection of input files for the optimizer.
+ */
 public interface IOptimizerFileSet {
 
     /**

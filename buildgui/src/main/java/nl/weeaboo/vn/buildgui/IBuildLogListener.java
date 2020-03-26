@@ -2,6 +2,9 @@ package nl.weeaboo.vn.buildgui;
 
 import java.awt.Color;
 
+/**
+ * Listener for logging events.
+ */
 public interface IBuildLogListener {
 
     /**

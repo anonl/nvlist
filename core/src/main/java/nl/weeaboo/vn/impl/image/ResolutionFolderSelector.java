@@ -98,6 +98,9 @@ public final class ResolutionFolderSelector {
         return new ResolutionPath(folder, sizeQualifier.getSize());
     }
 
+    /**
+     * Resource folder with its associated screen resolution.
+     */
     public static final class ResolutionPath {
 
         public final FilePath folder;

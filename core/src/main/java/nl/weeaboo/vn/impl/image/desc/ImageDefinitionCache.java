@@ -9,6 +9,9 @@ import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.ResourceMetaDataCache;
 
+/**
+ * Cache for {@link IImageDefinition}.
+ */
 public final class ImageDefinitionCache extends ResourceMetaDataCache<IImageDefinition> {
 
     private final IFileSystem fileSystem;

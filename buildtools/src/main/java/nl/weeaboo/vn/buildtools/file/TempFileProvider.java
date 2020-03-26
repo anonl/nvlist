@@ -9,6 +9,9 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.google.common.collect.Sets;
 
+/**
+ * Default implementation of {@link ITempFileProvider}.
+ */
 @ThreadSafe
 public final class TempFileProvider implements ITempFileProvider {
 

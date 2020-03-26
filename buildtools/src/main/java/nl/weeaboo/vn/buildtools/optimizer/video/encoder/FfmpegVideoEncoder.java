@@ -10,6 +10,9 @@ import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
 import nl.weeaboo.vn.buildtools.optimizer.FfmpegEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.EncodedVideo;
 
+/**
+ * Video encoder using ffmpeg.
+ */
 public final class FfmpegVideoEncoder extends FfmpegEncoder implements IVideoEncoder {
 
     private static final String OUTPUT_EXT = "webm";

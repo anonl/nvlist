@@ -38,6 +38,9 @@ import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionCache;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionIO;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Audio file optimizer.
+ */
 public final class SoundOptimizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SoundOptimizer.class);

@@ -1,5 +1,10 @@
 package nl.weeaboo.vn.impl.image;
 
+import nl.weeaboo.vn.image.IScreenshot;
+
+/**
+ * Empty {@link IScreenshot}.
+ */
 public final class EmptyScreenshot extends AbstractScreenshot {
 
     private static final long serialVersionUID = 1L;

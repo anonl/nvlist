@@ -2,6 +2,9 @@ package nl.weeaboo.vn.gdx.graphics.jng;
 
 import java.io.IOException;
 
+/**
+ * Unable to parse JNG data.
+ */
 public final class JngParseException extends IOException {
 
     private static final long serialVersionUID = 1L;

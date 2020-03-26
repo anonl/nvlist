@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * Represents an encoded resource file.
+ */
 public interface IEncodedResource extends Disposable {
 
     /**

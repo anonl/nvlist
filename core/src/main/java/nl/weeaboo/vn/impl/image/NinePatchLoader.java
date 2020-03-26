@@ -11,6 +11,9 @@ import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Loads {@link INinePatch} resources.
+ */
 public final class NinePatchLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(NinePatchLoader.class);

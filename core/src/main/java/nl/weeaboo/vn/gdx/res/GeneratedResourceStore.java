@@ -20,7 +20,7 @@ import nl.weeaboo.vn.impl.core.StaticRef;
  * returns an indirect reference to the resource. Once this reference object is garbage collected, the
  * referenced resource will be disposed.
  */
-public class GeneratedResourceStore extends AbstractResourceStore {
+public class GeneratedResourceStore extends ResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeneratedResourceStore.class);
 

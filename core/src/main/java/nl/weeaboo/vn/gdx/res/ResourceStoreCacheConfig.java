@@ -2,6 +2,9 @@ package nl.weeaboo.vn.gdx.res;
 
 import nl.weeaboo.common.Checks;
 
+/**
+ * Settings for {@link ResourceStoreCache}.
+ */
 public final class ResourceStoreCacheConfig<T> {
 
     private IWeigher<T> weigher = new DefaultWeigher<>();

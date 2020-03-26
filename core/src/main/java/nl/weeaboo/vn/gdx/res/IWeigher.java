@@ -2,6 +2,9 @@ package nl.weeaboo.vn.gdx.res;
 
 import com.google.common.cache.Weigher;
 
+/**
+ * Estimates relative cache weight for a resource.
+ */
 public interface IWeigher<T> {
 
     /**

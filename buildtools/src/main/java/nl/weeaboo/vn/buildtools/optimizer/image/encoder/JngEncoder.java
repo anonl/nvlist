@@ -20,6 +20,9 @@ import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.graphics.jng.JngWriter;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 
+/**
+ * JNG image file encoder.
+ */
 public final class JngEncoder implements IImageEncoder {
 
     private final JngEncoderParams params = new JngEncoderParams();

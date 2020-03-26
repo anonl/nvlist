@@ -6,6 +6,9 @@ import nl.weeaboo.vn.core.Direction;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.math.Vec2;
 
+/**
+ * Various useful functions for aligning rectangles.
+ */
 public final class AlignUtil {
 
     private AlignUtil() {

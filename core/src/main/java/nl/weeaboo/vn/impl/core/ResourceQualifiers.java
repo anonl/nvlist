@@ -13,6 +13,9 @@ import com.google.common.base.Splitter;
 
 import nl.weeaboo.filesystem.FilePath;
 
+/**
+ * A resource file name may be tagged with zero or more resource qualifiers.
+ */
 public final class ResourceQualifiers implements Iterable<IResourceQualifier> {
 
     private final List<IResourceQualifier> qualifiers = new ArrayList<>();

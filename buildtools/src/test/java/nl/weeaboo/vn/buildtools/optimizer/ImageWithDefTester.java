@@ -9,6 +9,9 @@ import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 import nl.weeaboo.vn.impl.image.desc.ImageSubRect;
 
+/**
+ * Test helper functions for {@link ImageWithDef}.
+ */
 public final class ImageWithDefTester {
 
     private ImageWithDefTester() {

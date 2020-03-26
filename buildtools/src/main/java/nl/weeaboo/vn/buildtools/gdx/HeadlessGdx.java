@@ -8,6 +8,9 @@ import com.badlogic.gdx.backends.headless.mock.audio.MockAudio;
 import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
 import com.badlogic.gdx.backends.headless.mock.input.MockInput;
 
+/**
+ * Initialized GDX global state to headless/mock implementations.
+ */
 public final class HeadlessGdx {
 
     /**

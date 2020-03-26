@@ -7,6 +7,9 @@ import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.save.IStorage;
 
+/**
+ * Play duration timer.
+ */
 public interface IPlayTimer extends IUpdateable, Serializable {
 
     /**

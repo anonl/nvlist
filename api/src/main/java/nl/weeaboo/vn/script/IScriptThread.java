@@ -5,6 +5,9 @@ import java.util.List;
 
 import nl.weeaboo.vn.core.IDestructible;
 
+/**
+ * Java wrapper around a script thread.
+ */
 public interface IScriptThread extends Serializable, IDestructible {
 
     /**

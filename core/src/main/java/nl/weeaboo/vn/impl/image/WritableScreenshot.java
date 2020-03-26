@@ -4,6 +4,9 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 
+/**
+ * Default implementation of {@link IWritableScreenshot}.
+ */
 public class WritableScreenshot extends AbstractScreenshot implements IWritableScreenshot {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

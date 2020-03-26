@@ -29,7 +29,7 @@ final class ResourceLoadLog implements IResourceLoadLog {
 
         seen.getResourceLog().markSeen(resourceId);
 
-        analytics.logResourceLoad(resourceId, info);
+        analytics.logLoad(resourceId, info);
     }
 
 }

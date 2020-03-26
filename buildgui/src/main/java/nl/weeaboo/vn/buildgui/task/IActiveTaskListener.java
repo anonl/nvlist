@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import nl.weeaboo.vn.buildtools.task.ITask;
 
+/**
+ * Listener for changes to the active task.
+ */
 public interface IActiveTaskListener {
 
     /**

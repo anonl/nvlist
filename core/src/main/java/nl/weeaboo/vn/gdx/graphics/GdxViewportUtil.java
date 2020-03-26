@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import nl.weeaboo.common.Dim;
 
+/**
+ * Various functions related to {@link Viewport}.
+ */
 public final class GdxViewportUtil {
 
     private GdxViewportUtil() {

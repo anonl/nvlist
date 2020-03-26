@@ -4,7 +4,10 @@ import java.util.Objects;
 
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 
-public final class BuildGuiController implements IBuildGuiController {
+/**
+ * Default implementation of {@link IBuildGuiController}.
+ */
+final class BuildGuiController implements IBuildGuiController {
 
     private final IBuildController buildController;
     private final ITaskController taskController;

@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Various functions related to shaders.
+ */
 public final class GdxShaderUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxShaderUtil.class);

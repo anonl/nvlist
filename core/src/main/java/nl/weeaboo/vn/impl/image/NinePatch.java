@@ -10,6 +10,9 @@ import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 
+/**
+ * Default implementation of {@link INinePatch}.
+ */
 public final class NinePatch implements INinePatch {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;

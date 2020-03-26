@@ -11,6 +11,9 @@ import nl.weeaboo.vn.image.IBitmapTweenConfig;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.AlignUtil;
 
+/**
+ * Default implementation of {@link IBitmapTweenConfig}.
+ */
 public final class BitmapTweenConfig implements IBitmapTweenConfig {
 
     private static final long serialVersionUID = 1L;

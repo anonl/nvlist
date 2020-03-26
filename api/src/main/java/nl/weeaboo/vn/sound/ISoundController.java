@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IUpdateable;
 
+/**
+ * Controls audio playback.
+ */
 public interface ISoundController extends Serializable, IUpdateable {
 
     int MIN_CHANNEL = 1;

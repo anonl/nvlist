@@ -28,6 +28,9 @@ import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
+/**
+ * Base implementation for resource loaders.
+ */
 @CustomSerializable
 public abstract class ResourceLoader implements IResourceResolver {
 
@@ -239,6 +242,9 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     }
 
+    /**
+     * Result of a file extension check.
+     */
     public enum EFileExtCheckResult {
         DISABLED,
         ALREADY_CHECKED,

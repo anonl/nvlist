@@ -14,6 +14,9 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 
+/**
+ * Represents a NVList project.
+ */
 public final class NvlistProjectConnection implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(NvlistProjectConnection.class);

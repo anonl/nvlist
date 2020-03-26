@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.script;
 
+/**
+ * Exception thrown by a script.
+ */
 public class ScriptException extends Exception {
 
     private static final long serialVersionUID = 1L;

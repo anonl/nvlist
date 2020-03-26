@@ -23,10 +23,10 @@ import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
 @BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class ImageBlurBenchmark {
+class ImageBlurBenchmark {
 
     @State(Scope.Thread)
-    public static class Input {
+    static class Input {
 
         public Pixmap pixmap;
 

@@ -10,6 +10,9 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
 
+/**
+ * Various low-level functions related to screenshots.
+ */
 public final class GdxScreenshotUtil {
 
     private GdxScreenshotUtil() {

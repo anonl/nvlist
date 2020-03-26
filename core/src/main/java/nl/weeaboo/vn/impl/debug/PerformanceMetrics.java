@@ -14,6 +14,9 @@ import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 
+/**
+ * Default implementation of {@link IPerformanceMetrics}.
+ */
 public final class PerformanceMetrics implements IPerformanceMetrics {
 
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceMetrics.class);

@@ -14,11 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public final class SwingHelper {
+/**
+ * Various functions for working with Java Swing.
+ */
+public final class SwingUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SwingHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SwingUtil.class);
 
-    private SwingHelper() {
+    private SwingUtil() {
     }
 
     /**

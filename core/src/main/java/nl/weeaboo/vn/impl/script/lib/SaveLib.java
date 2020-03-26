@@ -24,7 +24,6 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
-import nl.weeaboo.vn.gdx.graphics.PngUtil;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
@@ -133,7 +132,7 @@ public final class SaveLib extends LuaLib {
         Pixmap resized = PixmapUtil.resizedCopy(original, targetSize, Filter.BiLinear);
         try {
             try {
-                pngBytes = PngUtil.encodePng(resized);
+                pngBytes = PixmapUtil.encodePng(resized);
             } catch (IOException e) {
                 LOG.warn("Error encoding thumbnail for save slot", e);
                 return;

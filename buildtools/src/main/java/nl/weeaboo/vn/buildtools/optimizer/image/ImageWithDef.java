@@ -7,6 +7,9 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.image.desc.ImageDefinition;
 
+/**
+ * Image with associated metadata ({@link ImageDefinition}).
+ */
 public final class ImageWithDef implements Disposable {
 
     private final Pixmap pixmap;

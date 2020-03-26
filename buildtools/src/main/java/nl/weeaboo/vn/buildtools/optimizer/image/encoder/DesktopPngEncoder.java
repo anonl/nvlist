@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
-import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageHelper;
+import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageUtil;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
 
@@ -18,7 +18,7 @@ final class DesktopPngEncoder implements IPngEncoder {
 
     @Override
     public byte[] encode(Pixmap pixmap, PngEncoderParams params) throws IOException {
-        BufferedImage image = BufferedImageHelper.toBufferedImage(pixmap);
+        BufferedImage image = BufferedImageUtil.toBufferedImage(pixmap);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(image, "png", out);

@@ -15,6 +15,9 @@ import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 
+/**
+ * Default implementation of {@link ISystemModule}.
+ */
 public class SystemModule extends AbstractModule implements ISystemModule {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

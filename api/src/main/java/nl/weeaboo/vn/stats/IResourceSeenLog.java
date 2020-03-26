@@ -4,6 +4,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 
+/**
+ * Marks resource files as seen by the player.
+ */
 public interface IResourceSeenLog {
 
     /**

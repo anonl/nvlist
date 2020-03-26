@@ -12,6 +12,9 @@ import nl.weeaboo.vn.buildtools.optimizer.image.ImageResizerConfig;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 
+/**
+ * JSON representation of optimizer configuration.
+ */
 public final class OptimizerConfigJson {
 
     public String projectFolder;

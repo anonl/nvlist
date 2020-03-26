@@ -1,5 +1,8 @@
 package nl.weeaboo.vn.stats;
 
+/**
+ * Stores seen/selected choices.
+ */
 public interface IChoiceSeenLog {
 
     /**

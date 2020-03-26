@@ -5,6 +5,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Performs basic initialization of global state.
+ */
 public final class InitConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(InitConfig.class);

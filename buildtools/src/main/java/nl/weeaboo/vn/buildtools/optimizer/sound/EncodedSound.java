@@ -6,6 +6,9 @@ import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 
+/**
+ * Encoded audio resource.
+ */
 public final class EncodedSound implements IEncodedResource {
 
     private final IEncodedResource encodedSound;

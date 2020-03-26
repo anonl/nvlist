@@ -7,6 +7,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IStreamingMedia;
 import nl.weeaboo.vn.core.IUpdateable;
 
+/**
+ * Represents playable audio.
+ */
 public interface ISound extends Serializable, IStreamingMedia, IUpdateable {
 
     /**

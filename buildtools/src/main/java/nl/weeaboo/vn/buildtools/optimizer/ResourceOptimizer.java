@@ -5,6 +5,9 @@ import nl.weeaboo.vn.buildtools.optimizer.sound.SoundOptimizer;
 import nl.weeaboo.vn.buildtools.optimizer.video.VideoOptimizer;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
+/**
+ * Default implementation of {@link IResourceOptimizer}.
+ */
 public final class ResourceOptimizer implements IResourceOptimizer {
 
     @Override

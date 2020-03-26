@@ -16,7 +16,11 @@ import com.google.common.collect.Lists;
 import nl.weeaboo.filesystem.AbstractFileSystem;
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.filesystem.IFileSystem;
 
+/**
+ * Adapter between {@link IFileSystem} and {@link FileHandleResolver}.
+ */
 public abstract class GdxFileSystem extends AbstractFileSystem implements FileHandleResolver {
 
     private final boolean isReadOnly;

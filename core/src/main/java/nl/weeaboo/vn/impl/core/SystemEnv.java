@@ -7,6 +7,9 @@ import com.badlogic.gdx.Application.ApplicationType;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.ISystemEnv;
 
+/**
+ * Default implementation of {@link ISystemEnv}.
+ */
 public class SystemEnv implements ISystemEnv {
 
     private final ApplicationType appType;

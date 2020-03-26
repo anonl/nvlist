@@ -4,6 +4,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.scene.IVisualElement;
 import nl.weeaboo.vn.signal.AbstractSignal;
 
+/**
+ * Event generated when a visual element is destroyed.
+ */
 public final class VisualElementDestroySignal extends AbstractSignal {
 
     private final IVisualElement destroyedElement;

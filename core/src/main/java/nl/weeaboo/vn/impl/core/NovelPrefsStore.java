@@ -24,6 +24,9 @@ import nl.weeaboo.reflect.ReflectUtil;
 import nl.weeaboo.settings.PropertiesUtil;
 import nl.weeaboo.vn.core.NovelPrefs;
 
+/**
+ * Provides access to global preferences.
+ */
 public final class NovelPrefsStore extends AbstractPreferenceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(NovelPrefsStore.class);

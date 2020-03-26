@@ -3,7 +3,11 @@ package nl.weeaboo.vn.text;
 import java.io.Serializable;
 
 import nl.weeaboo.styledtext.layout.ITextLayout;
+import nl.weeaboo.vn.scene.ITextDrawable;
 
+/**
+ * Shared functionality between {@link ITextRenderer} and {@link ITextDrawable}.
+ */
 public interface ITextRenderState extends IMultiLineText, Serializable {
 
     final double ALL_GLYPHS_VISIBLE = 999999;

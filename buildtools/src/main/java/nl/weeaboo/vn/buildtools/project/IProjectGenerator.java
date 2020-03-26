@@ -3,6 +3,9 @@ package nl.weeaboo.vn.buildtools.project;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Creates the folder structure for a new project.
+ */
 public interface IProjectGenerator {
 
     /**

@@ -65,7 +65,7 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
         return StringUtil.formatRoot("%08x.color", argb);
     }
 
-    public static class Parameters extends AssetLoaderParameters<Texture> {
+    static class Parameters extends AssetLoaderParameters<Texture> {
     }
 
 }

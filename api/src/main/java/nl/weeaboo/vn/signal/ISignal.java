@@ -1,5 +1,10 @@
 package nl.weeaboo.vn.signal;
 
+/**
+ * Consumable event.
+ *
+ * @see ISignalHandler
+ */
 public interface ISignal {
 
     /**

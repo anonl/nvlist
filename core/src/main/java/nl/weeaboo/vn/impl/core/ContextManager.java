@@ -18,6 +18,9 @@ import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
 
+/**
+ * Default implementation of {@link IContextManager}.
+ */
 public final class ContextManager implements IContextManager {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;

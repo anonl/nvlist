@@ -3,6 +3,9 @@ package nl.weeaboo.vn.impl.core;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IInterpolator;
 
+/**
+ * Implementation of {@link IInterpolator} using a LUT (lookup table) to guarantee reasonable performance.
+ */
 public final class LUTInterpolator implements IInterpolator {
 
     private static final long serialVersionUID = 1L;

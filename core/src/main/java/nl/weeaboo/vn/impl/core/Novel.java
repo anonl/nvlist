@@ -7,37 +7,59 @@ import java.io.ObjectOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.prefsstore.IPreferenceStore;
+import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.IModule;
+import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IDrawBuffer;
 
-public class Novel extends AbstractNovel {
+/**
+ * Default implementation of {@link INovel}.
+ */
+public class Novel implements INovel {
 
     private static final Logger LOG = LoggerFactory.getLogger(Novel.class);
 
     // --- Note: This class uses manual serialization ---
+    private EnvironmentFactory envFactory;
+    private IEnvironment env;
     private transient boolean isStarted;
     // --- Note: This class uses manual serialization ---
 
     public Novel(EnvironmentFactory envFactory) {
-        super(envFactory);
+        this.envFactory = Checks.checkNotNull(envFactory);
     }
 
     @Override
     public void readAttributes(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        super.readAttributes(in);
+        env = (IEnvironment)in.readObject();
     }
 
     @Override
     public void writeAttributes(ObjectOutput out) throws IOException {
-        super.writeAttributes(out);
+        out.writeObject(env);
     }
 
     @Override
     public void start(String mainFunctionName) throws InitException {
-        super.start(mainFunctionName);
+        StaticEnvironment.NOVEL.set(this);
+
+        // Building the environment also (re)loads persistent data
+        env = envFactory.build();
+
+        String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
+        String engineTargetVersion = env.getPref(NovelPrefs.ENGINE_TARGET_VERSION);
+        try {
+            EngineVersion.checkVersion(engineMinVersion, engineTargetVersion);
+        } catch (UnsupportedVersionException e) {
+            throw new InitException("Incompatible script/engine versions", e);
+        }
 
         isStarted = true;
 
@@ -69,7 +91,16 @@ public class Novel extends AbstractNovel {
         }
         isStarted = false;
 
-        super.stop(); // Note: destroys the env
+        try {
+            env.getPrefStore().saveVariables();
+        } catch (Exception e) {
+            LOG.warn("Error saving preferences", e);
+        }
+
+        env.getSaveModule().savePersistent();
+
+        // Stop all modules and clean up their resources
+        env.destroy();
     }
 
     @Override
@@ -91,13 +122,25 @@ public class Novel extends AbstractNovel {
         }
     }
 
-    protected LuaScriptEnv getScriptEnv() {
-        return (LuaScriptEnv)getEnv().getScriptEnv();
+    @Override
+    public IEnvironment getEnv() {
+        return env;
     }
 
-    @Override
+    /** Called when the global preferences change. */
+    public void onPrefsChanged() {
+        IPreferenceStore prefsStore = env.getPrefStore();
+        for (IModule module : env.getModules()) {
+            module.onPrefsChanged(prefsStore);
+        }
+    }
+
     protected ContextManager getContextManager() {
-        return (ContextManager)super.getContextManager();
+        return (ContextManager)env.getContextManager();
+    }
+
+    protected LuaScriptEnv getScriptEnv() {
+        return (LuaScriptEnv)getEnv().getScriptEnv();
     }
 
 }

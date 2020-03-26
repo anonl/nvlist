@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import nl.weeaboo.vn.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.vn.gdx.graphics.PremultTextureLoader;
 
+/**
+ * Implementation of {@link AssetManager} which installs additional functionality.
+ */
 public class GdxAssetManager extends AssetManager {
 
     public GdxAssetManager(FileHandleResolver fileHandleResolver) {

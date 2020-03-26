@@ -5,6 +5,9 @@ import javax.annotation.Nullable;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.scene.IScreen;
 
+/**
+ * Various functions related to {@link IContext}.
+ */
 public final class ContextUtil {
 
     private static final ThreadLocal<IContext> currentContext = new ThreadLocal<>();

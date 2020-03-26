@@ -3,6 +3,9 @@ package nl.weeaboo.vn.buildtools.optimizer;
 import java.io.File;
 import java.util.Objects;
 
+/**
+ * Global resource optimizer configuration not related to any particular resource type.
+ */
 public final class MainOptimizerConfig implements IOptimizerConfig {
 
     private final File outputFolder;

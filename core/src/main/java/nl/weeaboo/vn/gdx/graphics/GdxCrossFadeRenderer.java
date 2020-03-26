@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Area2D;
+import nl.weeaboo.vn.image.ICrossFadeRenderer;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -27,6 +28,9 @@ import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 import nl.weeaboo.vn.scene.IDrawable;
 
+/**
+ * Default implementation of {@link ICrossFadeRenderer}.
+ */
 public class GdxCrossFadeRenderer extends CrossFadeRenderer {
 
     private static final long serialVersionUID = 1L;

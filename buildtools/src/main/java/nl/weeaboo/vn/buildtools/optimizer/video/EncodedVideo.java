@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 
+/**
+ * Encoded video resource.
+ */
 public final class EncodedVideo implements IEncodedResource {
 
     private final String filename;

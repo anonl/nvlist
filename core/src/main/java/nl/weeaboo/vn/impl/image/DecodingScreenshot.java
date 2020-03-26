@@ -9,6 +9,9 @@ import javax.annotation.Nullable;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.image.ITextureData;
 
+/**
+ * Screenshot which initially stores its data as a compressed image file, decoding the image when needed.
+ */
 @CustomSerializable
 public abstract class DecodingScreenshot extends AbstractScreenshot {
 

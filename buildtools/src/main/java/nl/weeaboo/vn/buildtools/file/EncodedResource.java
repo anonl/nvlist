@@ -14,6 +14,9 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 
+/**
+ * Creates {@link IEncodedResource} instances.
+ */
 public final class EncodedResource {
 
     private EncodedResource() {

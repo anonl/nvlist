@@ -12,6 +12,9 @@ import nl.weeaboo.vn.buildtools.optimizer.sound.EncodedSound;
 import nl.weeaboo.vn.buildtools.optimizer.sound.SoundWithDef;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionBuilder;
 
+/**
+ * Audio encoder using ffmpeg.
+ */
 public final class FfmpegSoundEncoder extends FfmpegEncoder implements ISoundEncoder {
 
     private static final String OUTPUT_EXT = "ogg";

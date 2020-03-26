@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.vn.buildtools.task.ITask;
 
+/**
+ * Changes/inspects running tasks.
+ */
 public interface ITaskController {
 
     /**

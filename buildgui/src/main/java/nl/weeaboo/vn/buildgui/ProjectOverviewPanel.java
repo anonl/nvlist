@@ -103,7 +103,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             try {
                 missingIcon = ImageIO.read(getClass().getResource("missing-icon.png"));
             } catch (IOException ioe) {
-                missingIcon = SwingHelper.newBufferedImage(1, 1);
+                missingIcon = SwingUtil.newBufferedImage(1, 1);
             }
             this.missingIcon = missingIcon;
 

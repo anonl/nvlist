@@ -12,7 +12,10 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.image.ITexture;
 
-public class TextureAdapter implements ITexture {
+/**
+ * Implementation of {@link ITexture} using a {@link TextureRegion} internally.
+ */
+public class GdxTexture implements ITexture {
 
     private static final long serialVersionUID = ImageImpl.serialVersionUID;
 
@@ -20,7 +23,7 @@ public class TextureAdapter implements ITexture {
     private double scaleX;
     private double scaleY;
 
-    public TextureAdapter(IResource<TextureRegion> region, double scaleX, double scaleY) {
+    public GdxTexture(IResource<TextureRegion> region, double scaleX, double scaleY) {
         this.res = Checks.checkNotNull(region);
         this.scaleX = scaleX;
         this.scaleY = scaleY;

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.buildgui;
 
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 
+/**
+ * Listener for changes to the currently selected project.
+ */
 public interface IProjectModelListener {
 
     /**

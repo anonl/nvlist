@@ -16,6 +16,9 @@ import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 
+/**
+ * Builder for {@link ImageDefinition}.
+ */
 public final class ImageDefinitionBuilder implements IImageDefinition {
 
     private String filename;

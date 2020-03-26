@@ -14,6 +14,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 
+/**
+ * Global GDX scene2d state.
+ */
 public class Scene2dEnv implements Disposable {
 
     private static final Logger LOG = LoggerFactory.getLogger(Scene2dEnv.class);

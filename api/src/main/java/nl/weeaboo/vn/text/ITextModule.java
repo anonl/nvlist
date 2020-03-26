@@ -3,6 +3,9 @@ package nl.weeaboo.vn.text;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.IResourceResolver;
 
+/**
+ * Text module.
+ */
 public interface ITextModule extends IModule {
 
     /** Returns the global text log. */
