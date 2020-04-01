@@ -29,34 +29,40 @@ bintray {
     publications = ['api']
 }
 
-configurations {
-    oldApi {
-        transitive = false
+// Check to see if we're API-compatible with a previous release
+// To release a breaking change, set compatibleVersion to version
+def compatibleVersion = '4.0.0'
+if (version != compatibleVersion) {
+    configurations {
+        oldApi {
+            transitive = false
+        }
     }
-}
-dependencies {
-    oldApi "nl.weeaboo.vn:nvlist-api:4.0.0-alpha10"
-}
+    dependencies {
+        oldApi 'nl.weeaboo.vn:nvlist-api:' + compatibleVersion
+    }
 
-// Workaround for https://github.com/gradle/gradle/issues/7706
-// Prevents Gradle from replacing oldApi with the current version
-def oldGroup = project.group
-try {
-    project.group = 'fake-group'
-    configurations.oldApi.files // Resolve oldApi while our project is renamed and therefore not a valid replacement
-} finally {
-    project.group = oldGroup
-}
+    // Workaround for https://github.com/gradle/gradle/issues/7706
+    // Prevents Gradle from replacing oldApi with the current version
+    def oldGroup = project.group
+    try {
+        project.group = 'fake-group'
+        configurations.oldApi.files // Resolve oldApi while our project is renamed and therefore not a valid replacement
+    } finally {
+        project.group = oldGroup
+    }
 
-task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
-    group = 'verification'
+    task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
+        group = 'verification'
 
-    oldClasspath = files(configurations.oldApi)
-    newClasspath = files(jar)
-    ignoreMissingClasses = true
-    onlyModified = true
-    failOnModification = true
-    htmlOutputFile  = file("$buildDir/reports/japi.html")
+        oldClasspath = files(configurations.oldApi)
+        newClasspath = files(jar)
+        ignoreMissingClasses = true
+        onlyModified = true
+        failOnModification = true
+        htmlOutputFile  = file("$buildDir/reports/japi.html")
+    }
+    check.dependsOn japicmp
 }
 
 javadoc {
