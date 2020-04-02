@@ -1,6 +1,4 @@
 
-rootProject.name = "NVList-project"
-
 // Loads a .properties file
 def loadProperties(String filename) {
     def props = new Properties()
@@ -23,6 +21,7 @@ x.buildToolsDir = rootProject.projectDir
 
 // Load user-defined build.properties file
 x.settings = loadProperties("${x.buildResDir}/build.properties")
+rootProject.name = x.settings.getProperty("appShortName", "NVList-project")
 
 logger.lifecycle("VN resource folder: " + x.vnResDir)
 logger.lifecycle("VN build-resource folder: " + x.buildResDir)
