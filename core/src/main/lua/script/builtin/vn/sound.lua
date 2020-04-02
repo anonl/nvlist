@@ -16,7 +16,7 @@ end
 local MUSIC_CHANNEL = 9000
 
 --Default fade-out time when stopping music, can be changed using setDefaultMusicFadeTime()
-local defaultMusicStopFrames = 300
+local defaultMusicStopFrames = 60
 
 ---Global declarations
 -------------------------------------------------------------------------------------------------------------- @section globals
