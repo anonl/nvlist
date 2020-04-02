@@ -106,16 +106,16 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
     }
 
     @Override
-    public Iterable<FilePath> getFiles(FileCollectOptions opts) throws IOException {
+    public Iterable<FilePath> getFiles(FileCollectOptions opts) {
         List<FilePath> result = new ArrayList<>();
         FilePath prefix = opts.getPrefix();
 
         if (prefix.isFolder()) {
-            FileHandle baseFolder = resolveExisting(prefix);
+            FileHandle baseFolder = resolve(prefix);
             getFilesImpl(result, prefix, opts, baseFolder);
         } else {
             FilePath parent = MoreObjects.firstNonNull(prefix.getParent(), FilePath.empty());
-            FileHandle baseFolder = resolveExisting(parent);
+            FileHandle baseFolder = resolve(parent);
             getFilesImpl(result, parent, opts, baseFolder);
         }
 
