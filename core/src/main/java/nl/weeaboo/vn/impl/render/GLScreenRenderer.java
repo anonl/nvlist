@@ -142,15 +142,26 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
 
         if (!trc.transform.hasShear()) {
             // For non-rotated text, snap to int coordinates for sharper rendering
-            matrixStack.translate((trc.dx + trc.transform.getTranslationX()) % -1.0,
-                    (trc.dy + trc.transform.getTranslationY()) % -1.0);
+            double tx = getSnapOffset(trc.dx, trc.transform.getTranslationX());
+            double ty = getSnapOffset(trc.dy, trc.transform.getTranslationY());
+            matrixStack.translate(tx, ty);
+            GdxFontUtil.draw(spriteBatch, trc.textLayout, 0, 0, (float)trc.visibleGlyphs);
+        } else {
+            GdxFontUtil.draw(spriteBatch, trc.textLayout, (float)trc.dx, (float)trc.dy, (float)trc.visibleGlyphs);
         }
 
-        GdxFontUtil.draw(spriteBatch, trc.textLayout, (float)trc.dx, (float)trc.dy, (float)trc.visibleGlyphs);
         matrixStack.popMatrix();
 
         // Restore previous blend mode
         applyRenderState();
+    }
+
+    private static double getSnapOffset(double x, double transformX) {
+        /*
+         * Round up/down based on the final calculated coordinate, then adjust for the fractional part of the
+         * parent transform.
+         */
+        return Math.round(x + transformX) - (transformX % 1.0);
     }
 
     @Override

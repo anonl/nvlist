@@ -5,6 +5,7 @@
 - To avoid cross-platform issues, all resource loading now treats the file system as case-sensitive, regardless of operating system.
 - fix: `FileNotFoundException` at `ResolutionFolderSelector.getOptions():82` when all resources are stored in a .nvl archive, and therefore no `res/img` folder exists.
 - fix: Unable to load font files with uppercase characters from a .nvl file (font names in were automatically converted to lowercase)
+- fix: Fuzzy text when using fractional x/y coordinates. An internal snap-to-grid function intended to prevent this didn't work due to a double-rounding bug in the implementation.
 
 # v4.0.0
 Release date: 2020-04-01

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.test.integration.render;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -9,16 +10,27 @@ import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
+import nl.weeaboo.vn.impl.render.DrawTransform;
+import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
 @Category(GdxUiTest.class)
 public class RenderTextTest extends RenderIntegrationTest {
 
+    private DrawTransform transform;
+
+    @Before
+    public void before() {
+        // Render tests by default run at 50% scale, use a transform to render at 100% scale
+        transform = new DrawTransform();
+        transform.setTransform(Matrix.scaleMatrix(2, 2));
+    }
+
     @Test
     public void testRender() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        drawText(0, 0, layout);
+        drawText(transform, 0, 0, layout);
         render();
 
         checkRenderResult("text");
@@ -31,7 +43,7 @@ public class RenderTextTest extends RenderIntegrationTest {
     public void testSnapToGrid() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        drawText(0, 0.5, layout);
+        drawText(transform, 0, 0.5, layout);
         render();
 
         checkRenderResult("text-snap-to-grid");

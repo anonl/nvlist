@@ -88,6 +88,10 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
         renderer.drawText(dx, dy, textLayout);
     }
 
+    protected void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout) {
+        renderer.drawText(transform, dx, dy, textLayout);
+    }
+
     protected void drawTriangleGrid(ITexture tex, Area2D bounds) {
         renderer.drawTriangleGrid(tex, bounds);
     }
