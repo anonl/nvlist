@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.text;
 
+import java.io.FileNotFoundException;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.styledtext.TextStyle;
@@ -25,8 +27,10 @@ final class LoadingFontStore implements ILoadingFontStore {
         final GdxFontStore fontStore = StaticEnvironment.FONT_STORE.get();
 
         String fontName = style.getFontName(TextUtil.DEFAULT_FONT_NAME);
-        ResourceId resourceId = resourceLoader.resolveResource(FilePath.of(fontName));
+        FilePath relativePath = FilePath.of(fontName);
+        ResourceId resourceId = resourceLoader.resolveResource(relativePath);
         if (resourceId == null) {
+            fontStore.loadError(relativePath, new FileNotFoundException("Unable to find font file: " + relativePath));
             return fontStore.getFontMetrics(FilePath.empty(), style);
         }
 

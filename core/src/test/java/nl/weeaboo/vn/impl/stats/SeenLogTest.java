@@ -12,7 +12,6 @@ import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
-import nl.weeaboo.vn.impl.stats.SeenLog;
 
 public class SeenLogTest {
 
