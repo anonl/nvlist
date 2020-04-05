@@ -16,8 +16,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableList;
 
-import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 
 /**
@@ -27,37 +27,42 @@ public final class InternalGdxFileSystem extends GdxFileSystem {
 
     private static final Logger LOG = LoggerFactory.getLogger(InternalGdxFileSystem.class);
 
-    private final String prefix;
+    private final ImmutableList<String> prefixes;
 
-    public InternalGdxFileSystem(String prefix) {
+    public InternalGdxFileSystem(String... prefixes) {
         super(true);
 
-        this.prefix = Checks.checkNotNull(prefix);
+        this.prefixes = ImmutableList.copyOf(prefixes);
     }
 
     @Override
     public FileHandle resolve(String fileName) {
-        FilePath fullPath = FilePath.of(prefix + fileName);
-        FileHandle fileHandle = Gdx.files.internal(fullPath.toString());
+        for (String prefix : prefixes) {
+            FilePath fullPath = FilePath.of(prefix + fileName);
+            FileHandle fileHandle = Gdx.files.internal(fullPath.toString());
 
-        File backingFile = fileHandle.file();
-        if (!backingFile.exists()) {
-            return new InvalidFileHandle(FilePath.of(fileName), FileType.Internal);
-        }
-
-        // Make file system always act as case-sensitive; pretend file doesn't exist if case-sensitivity matters
-        try {
-            FilePath canonicalPath = FilePath.of(backingFile.getCanonicalPath());
-            if (!canonicalPath.endsWith(fullPath)) {
-                LOG.warn("Attempted to access file using the wrong name: given={}, actual={}",
-                        fullPath, canonicalPath);
-                fileHandle = new InvalidFileHandle(FilePath.of(fileName), FileType.Internal);
+            File backingFile = fileHandle.file();
+            if (!backingFile.exists()) {
+                continue;
             }
-        } catch (IOException ioe) {
-            LOG.warn("Unable to resolve canonical path for: {}", backingFile, ioe);
+
+            // Make file system always act as case-sensitive; pretend file doesn't exist if case-sensitivity matters
+            try {
+                FilePath canonicalPath = FilePath.of(backingFile.getCanonicalPath());
+                if (!canonicalPath.endsWith(fullPath)) {
+                    LOG.warn("Attempted to access file using the wrong name: given={}, actual={}",
+                            fullPath, canonicalPath);
+                    continue;
+                }
+            } catch (IOException ioe) {
+                LOG.warn("Unable to resolve canonical path for: {}", backingFile, ioe);
+                continue;
+            }
+
+            return fileHandle;
         }
 
-        return fileHandle;
+        return new InvalidFileHandle(FilePath.of(fileName), FileType.Internal);
     }
 
     private final class InvalidFileHandle extends NonFileGdxFileHandle {

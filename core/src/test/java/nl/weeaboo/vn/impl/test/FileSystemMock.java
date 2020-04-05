@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.test;
 
-import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
@@ -14,15 +13,12 @@ public final class FileSystemMock {
 
     /** Creates a new dummy filesystem to use in unit tests */
     public static MultiFileSystem newInstance() {
-        IFileSystem resourcesFileSystem = newGdxFileSystem();
-        IFileSystem luaFileSystem = new InternalGdxFileSystem("src/test/lua/");
-        IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
-        return new MultiFileSystem(resourcesFileSystem, luaFileSystem, inMemoryFileSystem);
+        return new MultiFileSystem(newGdxFileSystem(), new InMemoryFileSystem(false));
     }
 
     /** Creates a GDX file system to use in unit tests */
     public static InternalGdxFileSystem newGdxFileSystem() {
-        return new InternalGdxFileSystem("src/test/resources/");
+        return new InternalGdxFileSystem("src/test/resources/", "src/test/lua/");
     }
 
 }

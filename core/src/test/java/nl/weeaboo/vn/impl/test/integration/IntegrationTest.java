@@ -17,13 +17,13 @@ import nl.weeaboo.gdx.test.junit.GdxLwjgl3TestRunner;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.Novel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
+import nl.weeaboo.vn.impl.test.FileSystemMock;
 import nl.weeaboo.vn.impl.test.integration.lua.LuaAssertLib;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -44,7 +44,7 @@ public abstract class IntegrationTest {
 
         Lwjgl3NativesLoader.load();
 
-        launcher = new Launcher(new InternalGdxFileSystem(""), new InMemoryFileSystem(false));
+        launcher = new Launcher(FileSystemMock.newGdxFileSystem(), new InMemoryFileSystem(false));
         launcher.create();
 
         novel = launcher.getNovel();
