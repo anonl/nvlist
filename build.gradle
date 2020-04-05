@@ -135,6 +135,10 @@ allprojects {
         }
 
         test {
+            testLogging {
+                showStandardStreams true
+            }
+
             def uiTest = project.hasProperty('uiTest')
             inputs.property('uiTest', uiTest) // Re-execute task if uiTest property changes
             useJUnit {
