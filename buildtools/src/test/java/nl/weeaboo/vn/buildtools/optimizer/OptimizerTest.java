@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -18,6 +20,8 @@ import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.project.TemplateProjectGenerator;
 
 public abstract class OptimizerTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OptimizerTest.class);
 
     @Rule
     public final TemporaryFolder tempFolder = new TemporaryFolder();
@@ -37,8 +41,8 @@ public abstract class OptimizerTest {
         TemplateProjectGenerator projectGenerator = new TemplateProjectGenerator();
         projectGenerator.createNewProject(projectFolder);
 
-        File temp = tempFolder.newFolder("temp");
-        context = new OptimizerContextStub(folderConfig, temp);
+        File outputFolder = tempFolder.newFolder("out");
+        context = new OptimizerContextStub(folderConfig, outputFolder);
     }
 
     @After
@@ -48,6 +52,7 @@ public abstract class OptimizerTest {
 
     protected void extractResource(String resourcePath, String targetPath) throws IOException {
         byte[] contents = Resources.toByteArray(getClass().getResource(resourcePath));
+        LOG.debug("Extracting resource {} to {}", resourcePath, targetPath);
         writeResource(targetPath, contents);
     }
 
