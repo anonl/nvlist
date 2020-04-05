@@ -41,7 +41,7 @@ public abstract class OptimizerTest {
         TemplateProjectGenerator projectGenerator = new TemplateProjectGenerator();
         projectGenerator.createNewProject(projectFolder);
 
-        File outputFolder = tempFolder.newFolder("out");
+        File outputFolder = tempFolder.newFolder("optimizer-out");
         context = new OptimizerContextStub(folderConfig, outputFolder);
     }
 
@@ -52,7 +52,7 @@ public abstract class OptimizerTest {
 
     protected void extractResource(String resourcePath, String targetPath) throws IOException {
         byte[] contents = Resources.toByteArray(getClass().getResource(resourcePath));
-        LOG.debug("Extracting resource {} to {}", resourcePath, targetPath);
+        LOG.debug("Extracting resource {} to {}/{}", resourcePath, folderConfig.getResFolder(), targetPath);
         writeResource(targetPath, contents);
     }
 
