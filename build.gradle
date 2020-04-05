@@ -136,7 +136,7 @@ allprojects {
 
         test {
             testLogging {
-                showStandardStreams true
+                // showStandardStreams true
             }
 
             def uiTest = project.hasProperty('uiTest')
