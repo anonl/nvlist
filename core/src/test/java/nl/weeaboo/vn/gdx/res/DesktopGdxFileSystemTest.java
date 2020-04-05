@@ -1,53 +1,29 @@
 package nl.weeaboo.vn.gdx.res;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.common.StringUtil;
-import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.FileSystemUtil;
-import nl.weeaboo.gdx.test.ExceptionTester;
 import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.io.ZipUtil;
 import nl.weeaboo.io.ZipUtil.Compression;
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 
-public final class DesktopGdxFileSystemTest {
+public final class DesktopGdxFileSystemTest extends AbstractGdxFileSystemTest {
 
-    @Rule
-    public final TemporaryFolder tempFolder = new TemporaryFolder();
-
-    private ExceptionTester exTester;
     private DesktopGdxFileSystem fileSystem;
-
-    @BeforeClass
-    public static void beforeAll() {
-        HeadlessGdx.init();
-    }
 
     @Before
     public void before() throws IOException {
-        exTester = new ExceptionTester();
-
         /*
          * Generate filesystem contents
          *
@@ -72,6 +48,11 @@ public final class DesktopGdxFileSystemTest {
         if (fileSystem != null) {
             fileSystem.close();
         }
+    }
+
+    @Override
+    protected GdxFileSystem getFileSystem() {
+        return fileSystem;
     }
 
     /** Test basic file operations (read, length, exists) */
@@ -183,9 +164,9 @@ public final class DesktopGdxFileSystemTest {
     public void testDelete() {
         FileHandle file = fileSystem.resolve("c");
 
-        exTester.expect(GdxRuntimeException.class, () -> file.delete());
-        exTester.expect(GdxRuntimeException.class, () -> file.deleteDirectory());
-        exTester.expect(GdxRuntimeException.class, () -> file.emptyDirectory());
+        Assert.assertThrows(GdxRuntimeException.class, () -> file.delete());
+        Assert.assertThrows(GdxRuntimeException.class, () -> file.deleteDirectory());
+        Assert.assertThrows(GdxRuntimeException.class, () -> file.emptyDirectory());
     }
 
     /**
@@ -195,67 +176,10 @@ public final class DesktopGdxFileSystemTest {
     public void testWrite() {
         FileHandle file = fileSystem.resolve("c");
 
-        exTester.expect(GdxRuntimeException.class, () -> file.write(false));
-        exTester.expect(GdxRuntimeException.class, () -> file.writer(false, "ASCII"));
+        Assert.assertThrows(GdxRuntimeException.class, () -> file.write(false));
+        Assert.assertThrows(GdxRuntimeException.class, () -> file.writer(false, "ASCII"));
     }
 
-    private void assertChildren(String folderPath, String... expectedFilenames) {
-        FileHandle folderHandle = fileSystem.resolve(folderPath);
-
-        Set<String> actualNames = Arrays.asList(folderHandle.list())
-                .stream()
-                .map(FileHandle::name)
-                .collect(Collectors.toSet());
-        Assert.assertEquals(ImmutableSet.copyOf(expectedFilenames), actualNames);
-    }
-
-    private void assertFile(String filename, String expectedContents) {
-        FilePath path = FilePath.of(filename);
-        byte[] utf8 = StringUtil.toUTF8(expectedContents);
-
-        // libGDX-compatible FileHandle subclass
-        FileHandle handle = fileSystem.resolve(filename);
-
-        Assert.assertEquals(true, fileSystem.getFileExists(path));
-        Assert.assertEquals(true, handle.exists());
-
-        try {
-            Assert.assertEquals(utf8.length, fileSystem.getFileSize(path));
-            Assert.assertEquals(utf8.length, handle.length());
-
-            Assert.assertEquals(expectedContents, FileSystemUtil.readString(fileSystem, path));
-            Assert.assertEquals(expectedContents, handle.readString());
-
-            /*
-             * The modified time depends on the timestamp of the external system running the test, but we
-             * should at least get the same result from both fileSystem and handle.
-             */
-            Assert.assertEquals(handle.lastModified(), fileSystem.getFileModifiedTime(path));
-        } catch (IOException ioe) {
-            throw new AssertionError(ioe);
-        }
-    }
-
-    private void assertInvalidFile(String filename) {
-        FilePath path = FilePath.of(filename);
-
-        // libGDX-compatible FileHandle subclass
-        FileHandle handle = fileSystem.resolve(filename);
-
-        Assert.assertEquals(false, fileSystem.getFileExists(path));
-        Assert.assertEquals(false, handle.exists());
-
-        // Attempting to access file attributes or its contents should fail if the file doesn't exist
-        exTester.expect(FileNotFoundException.class, () -> fileSystem.getFileSize(path));
-        Assert.assertEquals(0L, handle.length());
-
-        exTester.expect(FileNotFoundException.class, () -> fileSystem.getFileModifiedTime(path));
-        Assert.assertEquals(0L, handle.lastModified());
-
-        exTester.expect(FileNotFoundException.class, () -> fileSystem.openInputStream(path));
-        // libGDX throws a runtime exception instead of an IOException
-        exTester.expect(GdxRuntimeException.class, () -> handle.readString());
-    }
 
     private void writeZipFile(String zipFileName, String... files) throws IOException {
         File zipFile = tempFolder.newFile(zipFileName);
@@ -265,24 +189,6 @@ public final class DesktopGdxFileSystemTest {
                 ZipUtil.writeFileEntry(zout, filename, data, 0, data.length, Compression.NONE);
             }
         }
-    }
-
-    private void writeFiles(String... paths) throws IOException {
-        for (String path : paths) {
-            // Write "file" to each of the specified files
-            String parentPath = new File(path).getParent();
-            if (!Strings.isNullOrEmpty(parentPath)) {
-                tempFolder.newFolder(parentPath);
-            }
-
-            File file = tempFolder.newFile(path);
-            FileUtil.writeUtf8(file, "file");
-        }
-    }
-
-    private void assertIsDirectory(String path, boolean expectedResult) {
-        FileHandle handle = fileSystem.resolve(path);
-        Assert.assertEquals(expectedResult, handle.isDirectory());
     }
 
 }

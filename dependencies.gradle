@@ -106,7 +106,7 @@ deps.jopt_simple = [
 ]
 
 deps.junit = [
-    "junit:junit:4.12"
+    "junit:junit:4.13"
 ]
 
 deps.lua_core = [
