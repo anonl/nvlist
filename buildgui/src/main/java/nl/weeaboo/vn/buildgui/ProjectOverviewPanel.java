@@ -215,16 +215,12 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             if (projectModel != null) {
                 fileSystem = projectModel.getResFileSystem();
 
-                try {
-                    FileCollectOptions imageFilter = FileCollectOptions.files(
-                            MediaType.IMAGE.getSubFolder().resolve("bg"));
-                    imagePaths = ImmutableList.copyOf(Iterables.filter(fileSystem.getFiles(imageFilter),
-                            path -> "jpg".equalsIgnoreCase(path.getExt())));
+                FileCollectOptions imageFilter = FileCollectOptions.files(
+                        MediaType.IMAGE.getSubFolder().resolve("bg"));
+                imagePaths = ImmutableList.copyOf(Iterables.filter(fileSystem.getFiles(imageFilter),
+                        path -> "jpg".equalsIgnoreCase(path.getExt())));
 
-                    loadRandomImage();
-                } catch (IOException e) {
-                    LOG.warn("Unable to list image files in project", e);
-                }
+                loadRandomImage();
             }
         }
 

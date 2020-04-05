@@ -24,7 +24,7 @@ final class NvlArchiver implements IArchiver {
         final Compression compression = Compression.NONE;
         try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(outputFile))) {
             for (FilePath path : fileSystem.getFiles(collectOpts)) {
-                if (path.isFolder()) {
+                if (fileSystem.isFolder(path)) {
                     ZipUtil.writeFolderEntry(zout, path.toString());
                 } else {
                     try (InputStream entryIn = fileSystem.openInputStream(path)) {

@@ -88,14 +88,7 @@ public final class SoundOptimizer {
     }
 
     private void optimizeSounds() throws InterruptedException {
-        ImmutableList<FilePath> inputFiles;
-        try {
-            inputFiles = ImmutableList.copyOf(getSoundFiles());
-        } catch (IOException ioe) {
-            LOG.warn("Unable to read folder", ioe);
-            return;
-        }
-
+        ImmutableList<FilePath> inputFiles = ImmutableList.copyOf(getSoundFiles());
         executor.invokeAndWait(inputFiles, inputFile -> {
             try {
                 optimizeSound(inputFile);
@@ -126,7 +119,7 @@ public final class SoundOptimizer {
         }
     }
 
-    private Iterable<FilePath> getSoundFiles() throws IOException {
+    private Iterable<FilePath> getSoundFiles() {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.SOUND.getSubFolder());
         return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), GdxMusicStore.getSupportedFileExts());
     }

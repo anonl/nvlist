@@ -93,14 +93,7 @@ public final class ImageOptimizer {
     public void optimizeResources() throws InterruptedException {
         resetState();
 
-        ImmutableList<FilePath> inputFiles;
-        try {
-            inputFiles = ImmutableList.copyOf(getImageFiles());
-        } catch (IOException ioe) {
-            LOG.warn("Unable to read folder", ioe);
-            return;
-        }
-
+        ImmutableList<FilePath> inputFiles = ImmutableList.copyOf(getImageFiles());
         for (Dim targetResolution : resizeConfig.getTargetResolutions(baseResolution)) {
             optimizeImages(inputFiles, targetResolution);
         }
@@ -143,7 +136,7 @@ public final class ImageOptimizer {
         }
     }
 
-    private Iterable<FilePath> getImageFiles() throws IOException {
+    private Iterable<FilePath> getImageFiles() {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.IMAGE.getSubFolder());
         Iterable<FilePath> files = resFileSystem.getFiles(filter);
         files = OptimizerFileUtil.filterByExts(files, PixmapLoader.getSupportedImageExts());

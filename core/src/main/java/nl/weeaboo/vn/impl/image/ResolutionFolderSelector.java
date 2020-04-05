@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.image;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,18 +51,14 @@ public final class ResolutionFolderSelector {
     public ResolutionPath select(Dim desiredResolution) {
         ResolutionPath best = new ResolutionPath(basePath, vsize);
         double bestScore = score(desiredResolution, best);
-        try {
-            for (ResolutionPath option : getOptions()) {
-                double optionScore = score(desiredResolution, option);
-                LOG.debug("Possible resolution: folder={}, score={}", option.folder, optionScore);
+        for (ResolutionPath option : getOptions()) {
+            double optionScore = score(desiredResolution, option);
+            LOG.debug("Possible resolution: folder={}, score={}", option.folder, optionScore);
 
-                if (optionScore > bestScore) {
-                    best = option;
-                    bestScore = optionScore;
-                }
+            if (optionScore > bestScore) {
+                best = option;
+                bestScore = optionScore;
             }
-        } catch (IOException ioe) {
-            LOG.warn("Error scanning resource folders", ioe);
         }
         LOG.info("Best resolution: folder={}, resolution={}, score={}", best.folder, best.resolution, bestScore);
         return best;
@@ -75,9 +70,9 @@ public final class ResolutionFolderSelector {
         return Math.min(widthScore, heightScore);
     }
 
-    private List<ResolutionPath> getOptions() throws IOException {
+    private List<ResolutionPath> getOptions() {
         List<ResolutionPath> options = new ArrayList<>();
-        FileCollectOptions collectOpts = FileCollectOptions.folders(basePath);
+        FileCollectOptions collectOpts = FileCollectOptions.subFolders(basePath);
         collectOpts.recursive = false;
         for (FilePath folder : fileSystem.getFiles(collectOpts)) {
             ResolutionPath rp = tryParseResolution(folder);

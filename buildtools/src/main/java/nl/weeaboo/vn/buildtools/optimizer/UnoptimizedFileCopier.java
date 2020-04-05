@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 
@@ -29,7 +28,7 @@ final class UnoptimizedFileCopier {
 
             // File wasn't processed by an optimizer, so just copy it.
             File dstFile = new File(dstFolder, path.toString());
-            if (path.isFolder()) {
+            if (resFileSystem.isFolder(path)) {
                 if (!dstFile.isDirectory() && !dstFile.mkdirs()) {
                     LOG.warn("Unable to create folder: {}", dstFile);
                 }
@@ -53,12 +52,7 @@ final class UnoptimizedFileCopier {
     private Iterable<FilePath> getAllFilesAndFolders(IFileSystem resFileSystem) {
         FileCollectOptions opts = new FileCollectOptions();
         opts.collectFolders = true;
-        try {
-            return resFileSystem.getFiles(opts);
-        } catch (IOException e) {
-            LOG.error("Error reading resource files", e);
-            return ImmutableList.of();
-        }
+        return resFileSystem.getFiles(opts);
     }
 
 }

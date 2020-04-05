@@ -248,7 +248,7 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
         }
 
         @Override
-        protected List<FilePath> getFiles(FilePath folder) throws IOException {
+        protected List<FilePath> getFiles(FilePath folder) {
             FileCollectOptions opts = FileCollectOptions.files(folder);
             return ImmutableList.copyOf(getFileSystem().getFiles(opts));
         }

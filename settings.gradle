@@ -19,3 +19,5 @@ subProjects.each { proj ->
     include "nvlist-$proj"
     project(":nvlist-$proj").projectDir = new File(proj)
 }
+
+// includeBuild '../tcommon'

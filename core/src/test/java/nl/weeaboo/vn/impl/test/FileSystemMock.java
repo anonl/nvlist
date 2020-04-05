@@ -14,9 +14,15 @@ public final class FileSystemMock {
 
     /** Creates a new dummy filesystem to use in unit tests */
     public static MultiFileSystem newInstance() {
-        IFileSystem readFileSystem = new InternalGdxFileSystem("");
+        IFileSystem resourcesFileSystem = newGdxFileSystem();
+        IFileSystem luaFileSystem = new InternalGdxFileSystem("src/test/lua/");
         IFileSystem inMemoryFileSystem = new InMemoryFileSystem(false);
-        return new MultiFileSystem(readFileSystem, inMemoryFileSystem);
+        return new MultiFileSystem(resourcesFileSystem, luaFileSystem, inMemoryFileSystem);
+    }
+
+    /** Creates a GDX file system to use in unit tests */
+    public static InternalGdxFileSystem newGdxFileSystem() {
+        return new InternalGdxFileSystem("src/test/resources/");
     }
 
 }

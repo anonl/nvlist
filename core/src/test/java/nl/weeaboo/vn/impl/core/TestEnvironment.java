@@ -7,7 +7,6 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.res.AssetManagerMock;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
-import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ImageModule;
 import nl.weeaboo.vn.impl.input.InputMock;
@@ -44,7 +43,7 @@ public class TestEnvironment extends DefaultEnvironment {
         LoggerNotifier notifier = new LoggerNotifier();
 
         final MultiFileSystem fileSystem = FileSystemMock.newInstance();
-        final GdxFileSystem gdxFileSystem = new InternalGdxFileSystem("");
+        final GdxFileSystem gdxFileSystem = FileSystemMock.newGdxFileSystem();
         final NovelPrefsStore prefs = new NovelPrefsStore(fileSystem, fileSystem.getWritableFileSystem());
         final InputMock input = new InputMock();
 

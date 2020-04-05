@@ -139,25 +139,14 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
     }
 
     private Set<FilePath> getChildren(FilePath path) {
-        if (!path.isFolder()) {
-            // Normalize path
-            path = FilePath.of(path.toString() + "/");
-        }
-
-        FileCollectOptions collectOpts = new FileCollectOptions();
-        collectOpts.setPrefix(path);
+        FileCollectOptions collectOpts = FileCollectOptions.files(path);
         collectOpts.collectFolders = true;
-        collectOpts.collectFiles = true;
         collectOpts.recursive = false;
 
         Set<FilePath> result = Sets.newHashSet();
         Iterables.addAll(result, internalFileSystem.getFiles(collectOpts));
         for (ZipFileArchive arc : getFileArchives()) {
-            try {
-                Iterables.addAll(result, arc.getFiles(collectOpts));
-            } catch (IOException e) {
-                LOG.warn("Error retrieving file list {}({}) :: {}", arc, path, e.toString());
-            }
+            Iterables.addAll(result, arc.getFiles(collectOpts));
         }
         return result;
     }
@@ -200,7 +189,8 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
         @Override
         public Iterable<FileHandle> listChildren() {
-            return Iterables.transform(fileSystem.getChildren(path), new Function<FilePath, DesktopFileHandle>() {
+            Set<FilePath> children = fileSystem.getChildren(path);
+            return Iterables.transform(children, new Function<FilePath, DesktopFileHandle>() {
                 @Override
                 public DesktopFileHandle apply(FilePath childPath) {
                     return new DesktopFileHandle(fileSystem, childPath);
@@ -210,7 +200,7 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
 
         @Override
         public boolean isDirectory() {
-            return path.isFolder();
+            return resolveFileSystem().isFolder(path);
         }
 
         @Override

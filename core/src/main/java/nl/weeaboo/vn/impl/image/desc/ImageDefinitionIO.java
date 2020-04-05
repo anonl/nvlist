@@ -62,9 +62,9 @@ public final class ImageDefinitionIO {
         return result;
     }
 
-    private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) throws IOException {
+    private static Iterable<FilePath> getFolders(IFileSystem fileSystem, FilePath rootFolder) {
         return Iterables.concat(ImmutableList.of(rootFolder),
-                fileSystem.getFiles(FileCollectOptions.folders(rootFolder)));
+                fileSystem.getFiles(FileCollectOptions.subFolders(rootFolder)));
     }
 
     /**

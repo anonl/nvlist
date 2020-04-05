@@ -23,13 +23,12 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.filesystem.MultiFileSystem;
+import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.image.desc.IImageSubRect;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
-import nl.weeaboo.vn.impl.test.FileSystemMock;
 import nl.weeaboo.vn.save.SaveFormatException;
 
 public class ImageDefinitionIOTest {
@@ -112,14 +111,13 @@ public class ImageDefinitionIOTest {
 
     @Test
     public void fromFileSystem() throws IOException {
-        MultiFileSystem fileSystem = FileSystemMock.newInstance();
-        IWritableFileSystem wfs = fileSystem.getWritableFileSystem();
+        IWritableFileSystem wfs = new InMemoryFileSystem(false);
         writeDef(wfs, "img.json", "a");
         writeDef(wfs, "1/img.json", "b");
         writeDef(wfs, "1/2/img.json", "c");
         FileSystemUtil.writeString(wfs, FilePath.of("3/3.txt"), "3");
 
-        assertFileSystemContents(fileSystem, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
+        assertFileSystemContents(wfs, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
 
     }
 

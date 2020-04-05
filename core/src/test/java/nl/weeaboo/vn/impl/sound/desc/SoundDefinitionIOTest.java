@@ -21,8 +21,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.impl.test.FileSystemMock;
+import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.vn.save.SaveFormatException;
 
 public class SoundDefinitionIOTest {
@@ -86,14 +85,13 @@ public class SoundDefinitionIOTest {
 
     @Test
     public void fromFileSystem() throws IOException {
-        MultiFileSystem fileSystem = FileSystemMock.newInstance();
-        IWritableFileSystem wfs = fileSystem.getWritableFileSystem();
+        InMemoryFileSystem wfs = new InMemoryFileSystem(false);
         writeDef(wfs, "snd.json", "a");
         writeDef(wfs, "1/snd.json", "b");
         writeDef(wfs, "1/2/snd.json", "c");
         FileSystemUtil.writeString(wfs, FilePath.of("3/3.txt"), "3");
 
-        assertFileSystemContents(fileSystem, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
+        assertFileSystemContents(wfs, FilePath.empty(), ImmutableSet.of("a", "1/b", "1/2/c"));
     }
 
     private void assertFileSystemContents(IFileSystem fileSystem, FilePath rootFolder,

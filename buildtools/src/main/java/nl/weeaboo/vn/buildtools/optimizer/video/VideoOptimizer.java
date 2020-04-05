@@ -70,14 +70,7 @@ public final class VideoOptimizer {
     }
 
     private void optimizeVideos() throws InterruptedException {
-        ImmutableList<FilePath> inputFiles;
-        try {
-            inputFiles = ImmutableList.copyOf(getVideoFiles());
-        } catch (IOException ioe) {
-            LOG.warn("Unable to read folder", ioe);
-            return;
-        }
-
+        ImmutableList<FilePath> inputFiles = ImmutableList.copyOf(getVideoFiles());
         executor.invokeAndWait(inputFiles, inputFile -> {
             try {
                 optimizeVideo(inputFile);
@@ -87,7 +80,7 @@ public final class VideoOptimizer {
         });
     }
 
-    private Iterable<FilePath> getVideoFiles() throws IOException {
+    private Iterable<FilePath> getVideoFiles() {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.VIDEO.getSubFolder());
         return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter),
                 NativeVideoFactory.getSupportedFileExts());

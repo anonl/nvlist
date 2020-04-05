@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import nl.weeaboo.filesystem.FilePath;
@@ -88,7 +87,6 @@ public final class SoundModuleTest {
         assertDisplayName("alpha.ogg", "Alpha");
     }
 
-    @Ignore // This test doesn't work yet due to a bug in FileSystemView
     @Test
     public void testGetSoundFiles() {
         Collection<FilePath> files = module.getSoundFiles(FilePath.empty());

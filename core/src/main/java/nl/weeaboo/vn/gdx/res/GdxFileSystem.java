@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -36,6 +35,12 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
 
     @Override
     protected void closeImpl() {
+    }
+
+    @Override
+    public boolean isFolder(FilePath path) {
+        FileHandle handle = resolve(path);
+        return handle != null && handle.isDirectory();
     }
 
     /**
@@ -108,38 +113,24 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
     @Override
     public Iterable<FilePath> getFiles(FileCollectOptions opts) {
         List<FilePath> result = new ArrayList<>();
-        FilePath prefix = opts.getPrefix();
-
-        if (prefix.isFolder()) {
-            FileHandle baseFolder = resolve(prefix);
-            getFilesImpl(result, prefix, opts, baseFolder);
-        } else {
-            FilePath parent = MoreObjects.firstNonNull(prefix.getParent(), FilePath.empty());
-            FileHandle baseFolder = resolve(parent);
-            getFilesImpl(result, parent, opts, baseFolder);
-        }
-
+        FilePath baseFolderPath = opts.getBaseFolder();
+        getFilesImpl(result, baseFolderPath, opts, resolve(baseFolderPath));
         return result;
     }
 
-    private void getFilesImpl(Collection<FilePath> out, FilePath path, FileCollectOptions opts,
-            FileHandle file) {
-
-        for (FilePath childPath : list(path, file)) {
-            if (!childPath.startsWith(opts.getPrefix())) {
-                continue;
-            }
-
-            if (childPath.isFolder()) {
-                if (opts.collectFolders) {
-                    out.add(childPath);
-                }
-
-                if (opts.recursive) {
-                    getFilesImpl(out, childPath, opts, resolve(childPath.toString()));
+    private void getFilesImpl(Collection<FilePath> out, FilePath folder, FileCollectOptions opts, FileHandle file) {
+        for (FilePath childPath : list(folder, file)) {
+            if (isFolder(childPath)) {
+                if (opts.isValid(childPath)) {
+                    if (opts.collectFolders) {
+                        out.add(childPath);
+                    }
+                    if (opts.recursive) {
+                        getFilesImpl(out, childPath, opts, resolve(childPath.toString()));
+                    }
                 }
             } else {
-                if (opts.collectFiles) {
+                if (opts.collectFiles && opts.isValid(childPath)) {
                     out.add(childPath);
                 }
             }

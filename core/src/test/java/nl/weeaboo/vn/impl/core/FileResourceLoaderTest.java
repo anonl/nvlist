@@ -3,7 +3,6 @@ package nl.weeaboo.vn.impl.core;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -90,10 +89,6 @@ public class FileResourceLoaderTest {
         assertValidFilename(false, "valid.jpg");
         assertValidFilename(true, "a.txt");
         assertFiles(Arrays.asList("a.txt", "b.txt"));
-
-        // Attempt to get the contents from an invalid folder (I/O exception causes the folder to be treated as empty)
-        resourceLoader.getFilesException = new IOException("test");
-        assertFiles(FilePath.of("invalidFolder"), ImmutableSet.of());
     }
 
     /** Check that the preload method calls preloadNormalized for any valid filename */
@@ -204,7 +199,6 @@ public class FileResourceLoaderTest {
         private static final long serialVersionUID = 1L;
 
         private @Nullable ResourceId lastPreload;
-        private @Nullable IOException getFilesException;
 
         public TestResourceLoader(IEnvironment env) {
             super(env, MediaType.OTHER, BASE_FOLDER);
@@ -215,14 +209,6 @@ public class FileResourceLoaderTest {
             super.preloadNormalized(resourceId);
 
             lastPreload = resourceId;
-        }
-
-        @Override
-        protected List<FilePath> getFiles(FilePath folder) throws IOException {
-            if (getFilesException != null) {
-                throw getFilesException;
-            }
-            return super.getFiles(folder);
         }
 
     }
