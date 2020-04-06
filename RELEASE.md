@@ -9,5 +9,4 @@
 - Tag the commit with the version number (i.e. `v1.2.3`)
 - Upload the release to bintray: `./gradlew bintrayUpload`
 - Create a distribution of nvlist-buildgui: `./gradlew :nvlist-buildgui:assembleDist`
-  Releases are created in ./buildgui/build/release
 - Upload the buildgui distributions (`buildgui/build/release`) as a GitHub release.
