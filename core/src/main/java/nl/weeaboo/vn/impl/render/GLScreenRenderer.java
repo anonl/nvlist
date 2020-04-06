@@ -157,11 +157,8 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     }
 
     private static double getSnapOffset(double x, double transformX) {
-        /*
-         * Round up/down based on the final calculated coordinate, then adjust for the fractional part of the
-         * parent transform.
-         */
-        return Math.round(x + transformX) - (transformX % 1.0);
+        // Round up/down based on the fractional part of the final calculated coordinate
+        return Math.round(x + transformX) - transformX;
     }
 
     @Override
