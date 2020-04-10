@@ -32,14 +32,6 @@ public class SystemModule extends AbstractModule implements ISystemModule {
     }
 
     @Override
-    public void destroy() {
-    }
-
-    @Override
-    public void update() {
-    }
-
-    @Override
     public void exit(boolean force) {
         LOG.info("SystemEventHandler.exit({})", force);
 
