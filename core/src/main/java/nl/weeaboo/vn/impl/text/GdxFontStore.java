@@ -24,8 +24,8 @@ import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
-import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
+import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCacheConfig;
 import nl.weeaboo.vn.impl.core.LruSet;
@@ -104,17 +104,20 @@ public final class GdxFontStore extends ResourceStore {
         String baseName = Filenames.stripExtension(path.getName());
         String ext = Filenames.getExtension(path.getName());
 
-        FilePath bold = parent.resolve(baseName + ".bold." + ext);
-        FilePath italic = parent.resolve(baseName + ".italic." + ext);
-        FilePath boldItalic = parent.resolve(baseName + ".bolditalic." + ext);
+        FilePath bold = parent.resolve(baseName + "-bold." + ext);
+        FilePath boldOld = parent.resolve(baseName + ".bold." + ext);
+        FilePath italic = parent.resolve(baseName + "-italic." + ext);
+        FilePath italicOld = parent.resolve(baseName + ".italic." + ext);
+        FilePath boldItalic = parent.resolve(baseName + "-bolditalic." + ext);
+        FilePath boldItalicOld = parent.resolve(baseName + ".bolditalic." + ext);
 
         switch (fontStyle) {
         case BOLD:
-            return ImmutableList.of(bold, path);
+            return ImmutableList.of(boldOld, bold, path);
         case ITALIC:
-            return ImmutableList.of(italic, path);
+            return ImmutableList.of(italicOld, italic, path);
         case BOLD_ITALIC:
-            return ImmutableList.of(boldItalic, bold, italic, path);
+            return ImmutableList.of(boldItalicOld, boldItalic, boldOld, bold, italicOld, italic, path);
         default:
             return ImmutableList.of(path);
         }
