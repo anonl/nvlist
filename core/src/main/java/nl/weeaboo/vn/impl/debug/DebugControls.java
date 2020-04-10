@@ -29,9 +29,11 @@ public final class DebugControls {
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);
 
     private final LuaConsole luaConsole;
+    private final ScreenshotTaker screenshotTaker;
 
     public DebugControls(Scene2dEnv sceneEnv) {
         this.luaConsole = new LuaConsole(sceneEnv);
+        this.screenshotTaker = new ScreenshotTaker();
     }
 
     /**
@@ -39,11 +41,14 @@ public final class DebugControls {
      */
     public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
+        screenshotTaker.update(env, input);
+
         if (!env.getPref(NovelPrefs.DEBUG)) {
             return; // Debug mode not enabled
         }
 
         final boolean alt = input.isPressed(KeyCode.ALT_LEFT, true);
+        final IContext activeContext = env.getContextManager().getPrimaryContext();
 
         // Reset
         ISystemModule systemModule = env.getSystemModule();
@@ -84,7 +89,6 @@ public final class DebugControls {
         }
 
         // Lua console
-        IContext activeContext = env.getContextManager().getPrimaryContext();
         luaConsole.setActiveContext(activeContext);
         if (input.consumePress(KeyCode.F1)) {
             // TODO: LuaConsole needs to intercept the F1 key in order to hide itself

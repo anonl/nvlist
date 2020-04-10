@@ -1,6 +1,7 @@
 
 # v4.2.0
 - Style-specific font files (i.e. bold, italic) can now be named in the style `fontName-bold.ttf` to be more consistent with other, similar systems such as button images. Previously, the name had to be `fontName.bold.ttf`.
+- When in debug mode (`-Pdebug=true`), you can now press `F12` to take a screenshot (it will be stored as a file in the `save` folder).
 
 # v4.1.1
 - fix: Invisible text due to double-applied transform

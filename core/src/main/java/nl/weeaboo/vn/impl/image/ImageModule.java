@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
@@ -156,6 +157,16 @@ public class ImageModule extends AbstractModule implements IImageModule {
         double sy = renderEnv.getHeight() / (double)ss.getScreenSize().h;
         ITextureData pixels = ss.getPixels();
         return createTexture(pixels, sx, sy);
+    }
+
+    @Override
+    public IScreenshot screenshot() {
+        IContext context = env.getContextManager().getPrimaryContext();
+        if (context == null) {
+            LOG.warn("Unable to take screenshot, no context is active");
+            return EmptyScreenshot.getInstance();
+        }
+        return screenshot(context.getScreen().getRootLayer(), Short.MIN_VALUE, false, true);
     }
 
     @Override

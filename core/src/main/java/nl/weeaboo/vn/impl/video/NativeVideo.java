@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.video.VideoPlayer;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 import com.google.common.annotations.VisibleForTesting;
@@ -16,6 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -172,21 +172,27 @@ final class NativeVideo implements INativeVideo {
         this.renderEnv = Checks.checkNotNull(renderEnv);
     }
 
-    private static final class VideoPlayerResource implements Serializable, Disposable {
+    private static final class VideoPlayerResource implements Serializable, IDestructible {
 
         private static final long serialVersionUID = VideoImpl.serialVersionUID;
 
         private final IGdxVideoPlayerFactory videoPlayerFactory;
-        private transient VideoPlayer player;
+        private transient @Nullable VideoPlayer player;
 
         public VideoPlayerResource(IGdxVideoPlayerFactory videoPlayerFactory) {
             this.videoPlayerFactory = Checks.checkNotNull(videoPlayerFactory);
         }
 
         @Override
-        public void dispose() {
+        public boolean isDestroyed() {
+            return player != null;
+        }
+
+        @Override
+        public void destroy() {
             if (player != null) {
                 player.dispose();
+                player = null;
             }
         }
 
@@ -196,7 +202,7 @@ final class NativeVideo implements INativeVideo {
             }
         }
 
-        public VideoPlayer getVideoPlayer() {
+        public @Nullable VideoPlayer getVideoPlayer() {
             return player;
         }
 

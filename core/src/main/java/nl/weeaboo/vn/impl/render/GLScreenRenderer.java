@@ -135,7 +135,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
         flushQuadBatch();
 
         // Temporarily change the blend mode for non-premultiplied alpha
-        GLBlendMode.DEFAULT.apply(spriteBatch);
+        // GLBlendMode.DEFAULT.apply(spriteBatch);
 
         matrixStack.pushMatrix();
         matrixStack.multiply(trc.transform);
@@ -153,7 +153,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
         matrixStack.popMatrix();
 
         // Restore previous blend mode
-        applyRenderState();
+        // applyRenderState();
     }
 
     private static double getSnapOffset(double x, double transformX) {

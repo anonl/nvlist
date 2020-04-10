@@ -8,10 +8,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.utils.Disposable;
 import com.google.common.testing.GcFinalization;
 import com.google.common.testing.GcFinalization.FinalizationPredicate;
 
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 public class GeneratedResourceStoreTest {
@@ -61,23 +61,28 @@ public class GeneratedResourceStoreTest {
     }
 
     private static void assertNotDisposed(Dummy dummy) {
-        Assert.assertFalse(dummy.disposed);
+        Assert.assertFalse(dummy.destroyed);
     }
 
-    private static class Dummy implements Serializable, Disposable {
+    private static class Dummy implements Serializable, IDestructible {
 
         private static final long serialVersionUID = 1L;
 
         public final int id;
-        public boolean disposed;
+        public boolean destroyed;
 
         public Dummy(int id) {
             this.id = id;
         }
 
         @Override
-        public void dispose() {
-            disposed = true;
+        public boolean isDestroyed() {
+            return destroyed;
+        }
+
+        @Override
+        public void destroy() {
+            destroyed = true;
         }
 
         @Override

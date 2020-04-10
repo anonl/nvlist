@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 /**
@@ -40,7 +40,7 @@ public class GeneratedResourceStore extends ResourceStore {
      * Registers a new generated resource. The resource is disposed when the returned {@link IResource} wrapper is no
      * longer referenced.
      */
-    public <T extends Serializable & Disposable> IResource<T> register(T value) {
+    public <T extends Serializable & IDestructible> IResource<T> register(T value) {
         cleanUp();
 
         GeneratedResource<T> resource = new GeneratedResource<>(selfId, value);
@@ -84,18 +84,18 @@ public class GeneratedResourceStore extends ResourceStore {
 
     private static class ResourceRef<T> extends WeakReference<GeneratedResource<? extends T>> {
 
-        private final Disposable disposeFunction;
+        private final IDestructible destroyFunction;
 
-        public ResourceRef(GeneratedResource<? extends T> referent, Disposable disposeFunction,
+        public ResourceRef(GeneratedResource<? extends T> referent, IDestructible destroyFunction,
                 ReferenceQueue<? super GeneratedResource<? extends T>> q) {
 
             super(referent, q);
 
-            this.disposeFunction = Checks.checkNotNull(disposeFunction);
+            this.destroyFunction = Checks.checkNotNull(destroyFunction);
         }
 
         public void dispose() {
-            disposeFunction.dispose();
+            destroyFunction.destroy();
         }
 
     }

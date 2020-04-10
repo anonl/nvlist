@@ -95,6 +95,11 @@ public class ImageModuleStub extends AbstractModule implements IImageModule {
     }
 
     @Override
+    public IScreenshot screenshot() {
+        return EmptyScreenshot.getInstance();
+    }
+
+    @Override
     public IScreenshot screenshot(ILayer layer, short z, boolean isVolatile, boolean clipEnabled) {
         WritableScreenshot screenshot = new WritableScreenshot(z, isVolatile);
         screenshot.cancel();

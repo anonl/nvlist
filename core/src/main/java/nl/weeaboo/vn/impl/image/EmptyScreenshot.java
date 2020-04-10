@@ -13,6 +13,7 @@ public final class EmptyScreenshot extends AbstractScreenshot {
 
     private EmptyScreenshot() {
         super((short)0, false);
+        cancel();
     }
 
     /** Constructor function. */

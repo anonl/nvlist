@@ -86,6 +86,14 @@ public interface IImageModule extends IModule, IResourceResolver {
     void setImageResolution(Dim desiredSize);
 
     /**
+     * Schedules a screenshot of the root layer for the active context. Use {@link IScreenshot#isAvailable()} and/or
+     * {@link IScreenshot#isFailed()} to find out the state of the returned screenshot object.
+     *
+     * @see #screenshot(ILayer, short, boolean, boolean)
+     */
+    IScreenshot screenshot();
+
+    /**
      * Schedules a screenshot of the given layer. Use {@link IScreenshot#isAvailable()} and/or
      * {@link IScreenshot#isFailed()} to find out the state of the returned screenshot object.
      *
