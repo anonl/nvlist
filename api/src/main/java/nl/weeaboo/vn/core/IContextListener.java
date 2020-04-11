@@ -18,4 +18,7 @@ public interface IContextListener extends Serializable, IScriptExceptionHandler 
     /** Called when a context is destroyed. */
     void onContextDestroyed(IContext context);
 
+    /** Called when the main thread finishes execution. */
+    void onMainThreadFinished(IContext context);
+
 }

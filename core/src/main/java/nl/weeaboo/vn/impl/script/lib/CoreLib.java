@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
@@ -53,6 +54,26 @@ public class CoreLib extends LuaLib {
         IContext context = contextManager.createContext(func);
 
         return LuajavaLib.toUserdata(context, IContext.class);
+    }
+
+    /**
+     * Calls the given function in a temporary context. The current context is paused until the function
+     * returns. When the function returns, the temporary context is destroyed.
+     *
+     * @param args
+     *        <ol>
+     *        <li>Function
+     *        <li>(optional) Function args
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs callInContext(Varargs args) {
+        IContextManager contextManager = env.getContextManager();
+
+        IScriptFunction func = LuaScriptUtil.toScriptFunction(args, 1);
+        contextManager.callInContext(func);
+
+        return LuaThread.getRunning().yield(LuaConstants.NONE);
     }
 
     /**

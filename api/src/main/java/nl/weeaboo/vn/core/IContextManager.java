@@ -25,6 +25,12 @@ public interface IContextManager extends Serializable, IUpdateable, IRenderEnvCo
     IContext createContext(IScriptFunction func);
 
     /**
+     * Calls the given function in a temporary context. The current context is paused until the function
+     * returns. When the function returns, the temporary context is destroyed.
+     */
+    IContext callInContext(IScriptFunction func);
+
+    /**
      * Returns a read-only collection containing the registered contexts.
      */
     Collection<? extends IContext> getContexts();

@@ -33,11 +33,10 @@ end
 
 ---Shows the save or load screen.
 local function saveLoadScreen(isSave)
-    local oldContext = getCurrentContext()
-    
     local slot = nil
     local userData = nil
-    local newContext = createContext(function()
+
+    callInContext(function()
         local function showScreen()
             local screen = nil
             if isSave then
@@ -50,25 +49,21 @@ local function saveLoadScreen(isSave)
         end
 
         showScreen()
-        setContextActive(oldContext, true)
-
-        if slot > 0 then
-            if isSave then
-                -- Take a screenshot to add to the save file
-                local ss = screenshot(getRootLayer(), -32768)
-                ss:markTransient()
-                local screenshotInfo = {screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
-
-                Save.save(slot, userData, screenshotInfo)
-                setSharedGlobal(KEY_SAVE_LAST, slot)
-            else
-                Save.load(slot)
-            end
-        end
     end)
-    setContextActive(newContext, true)
-    setContextActive(oldContext, false)
-    yield()
+
+    if slot > 0 then
+        if isSave then
+            -- Take a screenshot to add to the save file
+            local ss = screenshot(getRootLayer(), -32768)
+            ss:markTransient()
+            local screenshotInfo = {screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
+
+            Save.save(slot, userData, screenshotInfo)
+            setSharedGlobal(KEY_SAVE_LAST, slot)
+        else
+            Save.load(slot)
+        end
+    end
 
     return slot
 end

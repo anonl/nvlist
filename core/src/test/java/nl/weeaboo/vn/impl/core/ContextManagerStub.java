@@ -34,6 +34,11 @@ public final class ContextManagerStub implements IContextManager {
     }
 
     @Override
+    public IContext callInContext(IScriptFunction func) {
+        return createContext();
+    }
+
+    @Override
     public Collection<? extends IContext> getContexts() {
         return ImmutableList.of();
     }

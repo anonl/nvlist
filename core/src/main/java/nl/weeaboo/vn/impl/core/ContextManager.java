@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 
+import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.ContextListener;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
@@ -51,6 +53,24 @@ public final class ContextManager implements IContextManager {
         }
 
         register(context);
+        return context;
+    }
+
+    @Override
+    public final IContext callInContext(IScriptFunction func) {
+        // Create new context
+        Context context = createContext(func);
+
+        // Pause current context
+        Context currentContext = (Context)ContextUtil.getCurrentContext();
+        Checks.checkNotNull(currentContext, "No context is currently active");
+        setContextActive(currentContext, false);
+
+        // When the new context ends, the old context should reactivate
+        context.addContextListener(new ChainContextListener(currentContext));
+
+        // Activate new context
+        setContextActive(context, true);
         return context;
     }
 
@@ -129,4 +149,24 @@ public final class ContextManager implements IContextManager {
         }
     }
 
+    private static final class ChainContextListener extends ContextListener {
+
+        private static final long serialVersionUID = 1L;
+
+        private final Context nextContext;
+
+        ChainContextListener(Context nextContext) {
+            this.nextContext = nextContext;
+        }
+
+        @Override
+        public void onMainThreadFinished(IContext context) {
+            // Destroy current context
+            context.destroy();
+
+            // Activate next context
+            nextContext.setActive(true);
+        }
+
+    }
 }

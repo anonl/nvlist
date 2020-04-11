@@ -4,11 +4,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
+import nl.weeaboo.vn.core.ContextListener;
 import nl.weeaboo.vn.core.IContext;
-import nl.weeaboo.vn.core.IContextListener;
-import nl.weeaboo.vn.script.IScriptThread;
 
-final class ContextListenerStub implements IContextListener {
+final class ContextListenerStub extends ContextListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,10 +40,6 @@ final class ContextListenerStub implements IContextListener {
 
     public void consumeDestroyedCount(int expected) {
         Assert.assertEquals(expected, destroyedCount.getAndSet(0));
-    }
-
-    @Override
-    public void onScriptException(IScriptThread thread, Exception exception) {
     }
 
 }

@@ -18,14 +18,12 @@ function onExit()
         return System.exit(true)
     end
 
-    local ctxt = createContext(function()
+    callInContext(function()
         if exitFunction() then
             System.exit(true)
             return
         end
-        getCurrentContext():destroy()
     end)
-    setContextActive(ctxt, true)
 end
 
 -- ----------------------------------------------------------------------------

@@ -25,4 +25,8 @@ public class ContextListener implements IContextListener {
     public void onContextDestroyed(IContext context) {
     }
 
+    @Override
+    public void onMainThreadFinished(IContext context) {
+    }
+
 }
