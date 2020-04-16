@@ -3,17 +3,28 @@ buildscript {
     repositories {
         jcenter()
         google()
-
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/nvlist/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            content {
+                // RoboVM 2.3.8 no longer works (see https://github.com/MobiVM/robovm/pull/452)
+                // Use a snapshot version until 2.3.9 is released
+                includeGroup 'com.mobidevelop.robovm'
+            }
+        }
     }
     dependencies {
         // Plugin for making a 'fat' JAR
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+
         // Plugins for Android
         classpath 'com.android.tools.build:gradle:3.1.2'
-        
+
+        // Plugins for iOS
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.9-SNAPSHOT'
+
         // NVList build tools
         classpath "nl.weeaboo.vn:nvlist-buildtools:${gradle.ext.settings.nvlistVersion}"
    }
@@ -126,7 +137,7 @@ project(':ios') {
     }
 
     apply from: "${buildToolsDir}/common-ios.gradle"
-    
+
     dependencies {
         compile "nl.weeaboo.vn:nvlist-desktop:$nvlistVersion"
     }
@@ -147,7 +158,7 @@ task optimizeResources(type: JavaExec) {
     // Optimizer config is stored in build-res/optimizer.json
     def configFile = new File(buildResDir, 'optimizer.json')
     inputs.file(configFile)
-    
+
     def outputFolder = new File(vnRoot, 'res-optimized')
     outputs.dir(outputFolder)
 
