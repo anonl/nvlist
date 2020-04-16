@@ -45,6 +45,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
 
     @After
     public final void afterRenderTest() {
+        pixmapTester.dispose();
         renderer.destroy();
     }
 
