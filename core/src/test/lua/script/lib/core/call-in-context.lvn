@@ -1,0 +1,21 @@
+@@
+
+require("builtin/vn")
+
+print(luaAssert)
+
+x = 1
+
+-- Call a function in a new context, pausing the current context until it returns
+callInContext(function()
+    luaAssertEquals(1, x)
+    x = 2
+
+    yield()
+    x = 3
+end)
+
+-- Current context resumes after the yield
+luaAssertEquals(3, x)
+
+@@

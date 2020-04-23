@@ -49,4 +49,11 @@ public class CoreLibTest extends AbstractLibTest {
         LuaTestUtil.assertGlobal("finished", true);
     }
 
+	@Ignore // Finish implementing this test
+    @Test
+    public void testCallInContext() {
+        loadScript("lib/core/call-in-context.lvn");
+        waitForAllThreads();
+    }
+
 }
