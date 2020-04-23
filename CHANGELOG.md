@@ -1,6 +1,7 @@
 
-# v4.x
+# v4.2.1
 - Changed RoboVM plugin to v2.3.9-snapshot (2.3.8 doesn't work anymore)
+- fix: Revert change change to blend mode used for text rendering
 
 # v4.2.0
 - Style-specific font files (i.e. bold, italic) can now be named in the style `fontName-bold.ttf` to be more consistent with other, similar systems such as button images. Previously, the name had to be `fontName.bold.ttf`.
