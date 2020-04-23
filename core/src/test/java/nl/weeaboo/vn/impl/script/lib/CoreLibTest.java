@@ -1,18 +1,19 @@
 package nl.weeaboo.vn.impl.script.lib;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
+import nl.weeaboo.vn.impl.test.integration.lua.LuaAssertLib;
 
 public class CoreLibTest extends AbstractLibTest {
 
     @Override
     protected void addInitializers(LuaScriptEnv scriptEnv) {
         scriptEnv.addInitializer(new CoreLib(env));
+        scriptEnv.addInitializer(new LuaAssertLib());
     }
 
     @Test
@@ -50,7 +51,6 @@ public class CoreLibTest extends AbstractLibTest {
         LuaTestUtil.assertGlobal("finished", true);
     }
 
-	@Ignore // Finish implementing this test
     @Test
     public void testCallInContext() {
         loadScript("lib/core/call-in-context.lvn");
