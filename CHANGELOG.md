@@ -1,4 +1,7 @@
 
+# v4.2.2
+- fix: t was possible to load an empty save slot using the default load screen. Doing so resulted in a crash.
+
 # v4.2.1
 - Changed RoboVM plugin to v2.3.9-snapshot (2.3.8 doesn't work anymore)
 - fix: Revert change to blend mode used for text rendering (caused text to render as white rectangles on some systems, depending on the OS and/or video card)
