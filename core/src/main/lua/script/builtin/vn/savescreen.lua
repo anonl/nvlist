@@ -105,7 +105,7 @@ function SaveSlot.new(self)
     
     local button = button(buttonImagePath)
     button:setToggle(true)
-    button:setEnabled(self.isSave or not self.empty)
+    button:setEnabled(self.isSave or not self.isEmpty)
     
     local label = textimg(self.label)
     label:setZ(button:getZ() - 10)
@@ -115,14 +115,12 @@ function SaveSlot.new(self)
     if not self.compact then
         if self.screenshot ~= nil then
             i = img(self.screenshot)
-        elseif not self.empty then
+        else
             i = img("gui/savescreen#noImage")
         end
-        if i ~= nil then
-            i:setZ(button:getZ() - button:getWidth()/2)   
-        end
-        
-        if self.isNew and not self.empty then
+        i:setZ(button:getZ() - button:getWidth()/2)   
+
+        if self.isNew and not self.isEmpty then
             newI = img("gui/savescreen#newSave")
             newI:setZ(i:getZ() - 1)
         end
@@ -463,7 +461,7 @@ function SaveLoadScreen:show()
                 break
             end
         end
-        
+
         self.okButton:setEnabled(self.selected ~= 0)
         if self.okButton:consumePress() then
             break
@@ -471,12 +469,12 @@ function SaveLoadScreen:show()
             self.selected = 0
             break
         end
-        
+
         yield()
     end
-    
+
     setSharedGlobal(KEY_SAVE_PAGE, self:getPage())
-    
+
     return self.selected, self.metaData
 end
 
