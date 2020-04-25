@@ -38,7 +38,6 @@ local ImageSlot = {
     thumbnail=nil,
     fullpaths=nil,
     button=nil,
-    label=nil,
     x=0,
     y=0,
     w=nil,
@@ -59,9 +58,8 @@ function ImageSlot.new(self)
     self.h = self.h or self.button:getHeight()
     
     if #self.fullpaths > 1 then
-        self.label = textimg("(" .. #self.fullpaths .. ")")
-        self.label:extendDefaultStyle(Text.createStyle{anchor=3})
-        self.label:setVerticalAlign(1)
+        self.button:setText(Text.createStyledText("(" .. #self.fullpaths .. ")", {fontSize = 16}))
+        self.button:setVerticalAlign(VerticalAlign.BOTTOM)
     end
     
     self.overlay = img("gui/imagegallery#white")
@@ -71,7 +69,7 @@ function ImageSlot.new(self)
 end
 
 function ImageSlot:destroy()
-    destroyValues{self.button, self.label}
+    destroyValues{self.button}
 end
 
 function ImageSlot:getBounds()
@@ -95,25 +93,12 @@ function ImageSlot:layout()
 
     local b = self.button
     local o = self.overlay
-    
+
     b:scaleToFit(w, h)        
     b:setPos(x + (w-b:getWidth())/2, y + (h-b:getHeight())/2)
-    
+
     o:setBounds(b:getX(), b:getY(), b:getWidth(), b:getHeight())
     o:setZ(b:getZ() - 10)
-    
-    self:layoutLabel()
-end
-
-function ImageSlot:layoutLabel()
-    local b = self.button
-    local lbl = self.label
-    if lbl ~= nil then
-        lbl:setZ(b:getZ()-5)
-        lbl:setPadding(b:getHeight()/32)
-        lbl:setSize(b:getWidth(), b:getHeight() / 4)
-        lbl:setPos(b:getX(), b:getY()+b:getHeight()-lbl:getHeight())
-    end
 end
 
 function ImageSlot:tweenImage(i, texture)
@@ -129,11 +114,7 @@ function ImageSlot:update()
 end
 
 function ImageSlot:setText(txt)
-    local lbl = self.label
-    if lbl ~= nil then
-        lbl:setText(txt)
-    end
-    --self:layoutLabel()
+    self.button:setText(txt)
 end
 
 function ImageSlot:show()
@@ -163,7 +144,7 @@ function ImageSlot:show()
         lbl = textimg("")
         lbl:extendDefaultStyle(Text.createStyle{anchor=9})
         lbl:setZ(-5)
-        lbl:setPadding(screenHeight / 64)
+        --lbl:setPadding(screenHeight / 64)
         --lbl:setAnchor(9)
         lbl:setSize(screenWidth/4, screenHeight/8)
         lbl:setPos(screenWidth-lbl:getWidth(), 0)
