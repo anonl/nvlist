@@ -134,7 +134,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     public void renderText(TextRenderCommand trc) {
         flushQuadBatch();
 
-        // Temporarily change the blend mode for non-premultiplied alpha
+        // Temporarily change the blend mode for non-premultiplied alpha (which is what gdx-freetype produces)
         GLBlendMode.DEFAULT.apply(spriteBatch);
 
         matrixStack.pushMatrix();

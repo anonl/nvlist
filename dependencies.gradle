@@ -9,13 +9,13 @@ ext.deps = [:]
 
 ext.errorProneVersion = '2.3.3'
 
-def gdxTestVersion = '2.0.1'
+def gdxTestVersion = '2.0.2'
 def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
 def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible
 def roboVmVersion = '2.3.0'
 def slf4jVersion = '1.7.21'
-def styledTextVersion = '3.1.0'
+def styledTextVersion = '3.2.0'
 def tcommonVersion = '3.0.1'
 def gradleToolingApiVersion = '4.5.1'
 
