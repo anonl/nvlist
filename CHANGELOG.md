@@ -1,4 +1,7 @@
 
+# v4.3.0
+- Added a global preference (`fullscreen`) to choose whether to start in full-screen mode or windows mode. Default value is `true`, unless `debug` mode is enabled.
+
 # v4.2.2
 - fix: t was possible to load an empty save slot using the default load screen. Doing so resulted in a crash.
 

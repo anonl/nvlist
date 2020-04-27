@@ -27,6 +27,11 @@ public final class NovelPrefs {
             "Desired height for the main window. This is the height that will be passed to user code, "
                     + "the framework will take care of any scaling required.");
 
+    public static final Preference<Boolean> FULLSCREEN = newPreference("fullscreen",
+            "Full-screen",
+            true,
+            "If true, start in full-screen display mode");
+
     public static final Preference<Boolean> DEBUG = newPreference("debug",
             "Debug",
             false,

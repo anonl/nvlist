@@ -141,6 +141,13 @@ public final class DesktopLauncher {
 
         config.setTitle(prefs.get(NovelPrefs.TITLE));
         config.setWindowedMode(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
+        if (prefs.get(NovelPrefs.FULLSCREEN) && !prefs.get(NovelPrefs.DEBUG)) {
+            /*
+             * If in debug mode, never start full-screen. Full-screen is annoying when you need to use a bunch
+             * of other windows/programs at the same time.
+             */
+            config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        }
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public boolean closeRequested() {
@@ -190,16 +197,20 @@ public final class DesktopLauncher {
     private void handleInput(INativeInput input) {
         // Fullscreen toggle
         if (input.isPressed(KeyCode.ALT_LEFT, true) && input.consumePress(KeyCode.ENTER)) {
-            if (!Gdx.graphics.isFullscreen()) {
-                LOG.debug("Switch to fullscreen mode");
-                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-            } else {
-                LOG.debug("Switch to windowed mode: {}x{}", windowedSize.w, windowedSize.h);
-                Gdx.graphics.setWindowedMode(windowedSize.w, windowedSize.h);
-            }
+            setFullScreen(!Gdx.graphics.isFullscreen());
 
             // GDX clears internal press state, so we should do the same
             input.clearButtonStates();
+        }
+    }
+
+    private void setFullScreen(boolean fullScreen) {
+        if (fullScreen) {
+            LOG.debug("Switch to fullscreen mode");
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else {
+            LOG.debug("Switch to windowed mode: {}x{}", windowedSize.w, windowedSize.h);
+            Gdx.graphics.setWindowedMode(windowedSize.w, windowedSize.h);
         }
     }
 

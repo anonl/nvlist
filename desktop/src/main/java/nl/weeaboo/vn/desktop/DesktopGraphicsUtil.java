@@ -85,9 +85,7 @@ final class DesktopGraphicsUtil {
      */
     public static Dim limitInitialWindowSize(Graphics graphics) {
         if (graphics.isFullscreen()) {
-
             // If fullscreen, we fill the entire screen already so nothing needs to be done
-
         } else {
             // Width/height of the window in physical pixels
             int w = graphics.getBackBufferWidth();
