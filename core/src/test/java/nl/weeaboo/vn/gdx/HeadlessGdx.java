@@ -18,7 +18,7 @@ public class HeadlessGdx {
      * Initializes a headless GDX platform for testing.
      */
     public static synchronized void init() {
-        if (Gdx.gl instanceof MockGL) {
+        if (Gdx.app != null) {
             // Already initialized
             return;
         }
@@ -32,6 +32,17 @@ public class HeadlessGdx {
         Gdx.gl = Gdx.gl20;
         Gdx.audio = new GdxAudioMock();
         Gdx.input = new MockInput();
+    }
+
+    public static synchronized void clear() {
+        Gdx.app = null;
+        Gdx.files = null;
+        Gdx.net = null;
+        Gdx.graphics = null;
+        Gdx.gl20 = null;
+        Gdx.gl = null;
+        Gdx.audio = null;
+        Gdx.input = null;
     }
 
     private static final class HeadlessGraphics extends MockGraphics {

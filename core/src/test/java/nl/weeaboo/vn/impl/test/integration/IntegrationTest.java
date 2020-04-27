@@ -3,7 +3,9 @@ package nl.weeaboo.vn.impl.test.integration;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
@@ -17,6 +19,7 @@ import nl.weeaboo.gdx.test.junit.GdxLwjgl3TestRunner;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.Novel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -34,6 +37,11 @@ public abstract class IntegrationTest {
     protected Launcher launcher;
     protected Novel novel;
     protected IEnvironment env;
+
+    @BeforeClass
+    public static final void beforeAllIntegration() {
+        HeadlessGdx.init();
+    }
 
     @Before
     public final void beforeIntegration() throws ScriptException {
@@ -65,6 +73,11 @@ public abstract class IntegrationTest {
 
         // Clear static state
         StaticEnvironment.getInstance().clear();
+    }
+
+    @AfterClass
+    public static final void afterAllIntegration() {
+        HeadlessGdx.clear();
     }
 
     protected void loadScript(String path) {

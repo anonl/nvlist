@@ -7,15 +7,21 @@ import java.nio.IntBuffer;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.profiling.GL20Interceptor;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.google.common.testing.ArbitraryInstances;
 
 /**
  * Test double for {@link GL20}.
  */
 public class MockGL extends GL20Interceptor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MockGL.class);
 
     private int textureId;
     private int shaderId;
@@ -112,7 +118,10 @@ public class MockGL extends GL20Interceptor {
                 Method mockMethod = MockGL.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
                 return mockMethod.invoke(mockGL, args);
             } catch (NoSuchMethodException nsme) {
-                return null;
+                return ArbitraryInstances.get(method.getReturnType());
+            } catch (Exception e) {
+                LOG.error("Exception calling MockGL", e);
+                throw e;
             }
         }
     }
