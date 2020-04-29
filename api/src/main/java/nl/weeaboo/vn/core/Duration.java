@@ -55,6 +55,13 @@ public final class Duration implements Serializable {
         return TimeUnit.MILLISECONDS.toSeconds(millis);
     }
 
+    /**
+     * @return The duration in milliseconds.
+     */
+    public long toMillis() {
+        return millis;
+    }
+
     @Override
     public int hashCode() {
         return Longs.hashCode(millis);

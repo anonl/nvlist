@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.impl.core;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import com.google.common.base.Stopwatch;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.core.Duration;
 
 /**
  * This class contains various helper methods for logging the durations of operations.
