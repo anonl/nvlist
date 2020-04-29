@@ -208,7 +208,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     }
 
     private double getTotalColSpacing() {
-        return (getColCount() - 1) * colSpacing;
+        return Math.max(0, getColCount() - 1) * colSpacing;
     }
 
     private double getAvailableTrackHeight() {
@@ -216,7 +216,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     }
 
     private double getTotalRowSpacing() {
-        return (getRowCount() - 1) * rowSpacing;
+        return Math.max(0, getRowCount() - 1) * rowSpacing;
     }
 
 
@@ -283,6 +283,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
     private static LayoutSize getTotalBreadth(TrackMetrics[] sizes, LayoutSizeType sizeType,
             double sumInterTrackSpacing) {
 
+        Checks.checkRange(sumInterTrackSpacing, "sumInterTrackSpacing", 0);
         double total = sumInterTrackSpacing;
         for (TrackMetrics size : sizes) {
             total += size.getSize(sizeType).value(size.breadth);
@@ -409,7 +410,7 @@ public class GridLayout extends LayoutGroup implements IGridLayout {
 
         public double grow(LayoutSizeType limitType, double amount) {
             LayoutSize limit = getSize(limitType);
-            amount = Math.min(amount, limit.value(Double.MAX_VALUE) - breadth);
+            amount = Math.max(0, Math.min(amount, limit.value(Double.MAX_VALUE) - breadth));
             breadth += amount;
             return amount;
         }

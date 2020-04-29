@@ -14,6 +14,17 @@ public class GridLayoutTest {
         tester = new LayoutTester();
     }
 
+    /**
+     * Perform layout on an empty grid. This requires special care in the code path because it has 0 rows and 0 columns.
+     */
+    @Test
+    public void testEmptyLayout() {
+        layout.setColSpacing(1);
+        layout.setRowSpacing(2);
+        tester.layout(layout, 0, 0);
+        tester.assertBounds(layout, 0, 0, 0, 0);
+    }
+
     @Test
     public void singleRow() {
         DummyLayoutElem alpha = new DummyLayoutElem();
