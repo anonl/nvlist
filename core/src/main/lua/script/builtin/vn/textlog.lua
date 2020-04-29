@@ -96,7 +96,7 @@ function TextLogScreen:show()
 
     setActiveLayer(oldActiveLayer)
 
-    while not Input.consume(VKeys.cancel) do
+    while not Input.consume(VKeys.cancel) and not Input.consume(VKeys.down) do
         if returnButton:consumePress() then
             break
         end

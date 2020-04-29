@@ -17,6 +17,7 @@ public final class VKey extends AbstractId {
     public static final VKey CONFIRM = new VKey("confirm");
     public static final VKey CANCEL = new VKey("cancel");
     public static final VKey TEXT_CONTINUE = new VKey("textContinue");
+    public static final VKey SHOW_TEXT_LOG = new VKey("showTextLog");
     public static final VKey SKIP = new VKey("skip");
     public static final VKey ALT_SKIP = new VKey("altSkip");
     public static final VKey SCENE_SKIP = new VKey("sceneSkip");
@@ -28,7 +29,7 @@ public final class VKey extends AbstractId {
 
     private static final ImmutableList<VKey> STANDARD_KEYS = ImmutableList.of(
             UP, DOWN, LEFT, RIGHT,
-            CONFIRM, CANCEL, TEXT_CONTINUE,
+            CONFIRM, CANCEL, TEXT_CONTINUE, SHOW_TEXT_LOG,
             SKIP, ALT_SKIP, SCENE_SKIP,
             MOUSE_LEFT
     );

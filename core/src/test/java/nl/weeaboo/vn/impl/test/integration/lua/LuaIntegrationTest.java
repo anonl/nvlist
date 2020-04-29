@@ -73,7 +73,11 @@ public abstract class LuaIntegrationTest {
     }
 
     protected void textContinue() {
-        env.getInput().buttonPressed(VKey.TEXT_CONTINUE);
+        buttonPress(VKey.TEXT_CONTINUE);
+    }
+
+    protected void buttonPress(VKey pressed) {
+        env.getInput().buttonPressed(pressed);
         env.update();
     }
 

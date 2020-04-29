@@ -2,6 +2,7 @@
 # v4.3.0
 - Added a global preference (`fullscreen`) to choose whether to start in full-screen mode or windows mode. Default value is `true`, unless `debug` mode is enabled.
 - Improvements to text rendering. In particular, glyphs are now rendered slightly thicker which really helps with thin lines in some fonts.
+- New keyboard shortcut (`VKey.SHOW_TEXT_LOG`) for opening the text log screen. With the default key config, press the up arrow key to open the text log while  
 - fix: Attempting to layout an empty `GridLayout` with non-zero row/col spacing resulted in an exception (layout size with negative dimensions).
 
 # v4.2.2

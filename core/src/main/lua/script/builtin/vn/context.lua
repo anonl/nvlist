@@ -110,11 +110,14 @@ function waitClick()
     if textBox ~= nil then
         textBox:showClickIndicator()
     end
-        
+
     while not shouldSkipLine() and not Input.consume(VKeys.textContinue) do
+        if textLog ~= nil and Input.consume(VKeys.showTextLog) then
+            textLog()
+        end
         yield()
     end
-    
+
     if textBox ~= nil then
         textBox:hideClickIndicator()
     end

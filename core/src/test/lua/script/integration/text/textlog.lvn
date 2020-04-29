@@ -1,0 +1,11 @@
+
+@@
+
+require("builtin/vn")
+
+-- While in waitClick, the text log can be opened using VKey.SHOW_TEXTLOG
+waitClick()
+
+finished = true
+
+@@

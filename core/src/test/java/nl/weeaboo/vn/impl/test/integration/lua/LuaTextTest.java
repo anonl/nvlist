@@ -7,6 +7,7 @@ import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
+import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.scene.IScreenTextState;
 
 public class LuaTextTest extends LuaIntegrationTest {
@@ -49,6 +50,26 @@ public class LuaTextTest extends LuaIntegrationTest {
 
         textContinue();
         Assert.assertEquals(new StyledText("line3"), textState.getText());
+    }
+
+
+    @Test
+    public void testTextlog() {
+        loadScript("integration/text/textlog");
+
+        LuaTestUtil.assertGlobal("finished", false);
+
+        // Show textlog screen
+        buttonPress(VKey.SHOW_TEXT_LOG);
+
+        // Close textlog screen
+        buttonPress(VKey.DOWN);
+
+        // Cancel the waitClick() and let the script finish
+        textContinue();
+        waitForAllThreads();
+
+        LuaTestUtil.assertGlobal("finished", true);
     }
 
 }
