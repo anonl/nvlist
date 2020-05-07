@@ -25,10 +25,14 @@ end
 ---Quicksave
 -------------------------------------------------------------------------------------------------------------- @section Quicksave
 
+---Saves in the quick-save slot with the given number (1..99)
+-- @param[opt=nil] userdata table
+-- @param[opt=nil] screenshot table (screenshot, width, height)
 function quickSave(slot, userdata, screenshot)
     return Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)
 end
 
+---Loads the quick-save slot with the given number (1..99)
 function quickLoad(slot)
     return Save.load(Save.getQuickSaveSlot(slot))
 end
