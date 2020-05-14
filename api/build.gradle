@@ -52,7 +52,7 @@ if (version != compatibleVersion) {
         project.group = oldGroup
     }
 
-    task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
+    tasks.register('japicmp', me.champeau.gradle.japicmp.JapicmpTask) {
         group = 'verification'
 
         oldClasspath = files(configurations.oldApi)

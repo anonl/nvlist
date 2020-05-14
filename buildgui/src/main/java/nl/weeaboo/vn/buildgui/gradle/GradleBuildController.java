@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.buildgui.gradle;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -112,8 +111,8 @@ public final class GradleBuildController implements IBuildController {
     }
 
     @Override
-    public File getBuildToolsFolder() {
-        return folderConfig.getBuildToolsFolder();
+    public ProjectFolderConfig getFolderConfig() {
+        return folderConfig;
     }
 
     private static final class GradleTask extends AbstractTask {

@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.vn.buildgui.task.IActiveTaskListener;
+import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.task.IProgressListener;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
@@ -106,7 +107,8 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
                     return;
                 }
 
-                File releaseFolder = new File(buildController.getBuildToolsFolder(), "build/release");
+                ProjectFolderConfig folderConfig = buildController.getFolderConfig();
+                File releaseFolder = new File(folderConfig.getBuildOutFolder(), "desktop/release");
                 if (!releaseFolder.isDirectory()) {
                     return;
                 }

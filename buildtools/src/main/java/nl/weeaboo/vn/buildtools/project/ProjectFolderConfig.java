@@ -73,6 +73,13 @@ public final class ProjectFolderConfig {
     }
 
     /**
+     * Generated build artifacts are stored in this folder.
+     */
+    public File getBuildOutFolder() {
+        return new File(projectFolder, "build-out");
+    }
+
+    /**
      * The build-tools folder containing the Gradle build scripts and other engine-version-specific resources.
      * This folder may be a sub-folder of the project folder, or an entire separate folder.
      */

@@ -43,7 +43,7 @@ def settings = gradle.ext.settings
 
 allprojects {
     apply plugin: 'eclipse'
-    
+
     group = settings.appPackage
     version = settings.appVersion
 
@@ -93,7 +93,7 @@ project(':android') {
             transitive = true
         }
     }
-    
+
     android {
         signingConfigs {
             release {
@@ -121,16 +121,18 @@ project(':android') {
     }
 
     // Run installed app through adb
-    task runInstalled(type: Exec) {
+    tasks.register('runInstalled', Exec) {
         def adb = android.getAdbExe()
         def target = settings.appPackage + '/' + settings.androidMain
         commandLine "$adb", 'shell', 'am', 'start', '-n', target
     }
     // Install, then run debug build
-    task runDebug(dependsOn: ['installDebug', 'runInstalled']) {
+    tasks.register('runDebug') {
+        dependsOn('installDebug', 'runInstalled')
     }
     // Install, then run release build
-    task runRelease(dependsOn: ['installRelease', 'runInstalled']) {
+    tasks.register('runRelease') {
+        dependsOn('installRelease', 'runInstalled')
     }
 }
 

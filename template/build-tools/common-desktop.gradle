@@ -21,7 +21,7 @@ eclipse {
     }
 }
 
-task assembleNvl(type: Zip) {
+tasks.register('assembleNvl', Zip) {
     from vnResDir
     archiveName "${vnId}.nvl"
 }

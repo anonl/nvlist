@@ -12,8 +12,7 @@ buildscript {
 import com.badlogicgames.packr.*
 
 // Pack-all tasks that depends on each platform-specific pack task
-task packrAll() {    
-}
+def packrAll = tasks.register('packrAll')
 assembleDist.dependsOn packrAll
 
 class PackrExtension {
@@ -24,23 +23,23 @@ class PackrExtension {
         // PackrConfig.Platform.Linux32, // Should be obsolete
         PackrConfig.Platform.MacOS,
     ].asImmutable()
-    
+
     private final CopySpec resources;
     private final def outputFolder
-    
+
     PackrExtension(project) {
         resources = project.copySpec()
         outputFolder = project.file("${project.buildDir}/packr")
     }
-    
+
     public File getOutputFolder() {
         return outputFolder;
     }
-    
+
     public CopySpec getResources() {
         return resources
     }
-    
+
     public void resources(Action<? super CopySpec> action) {
         action.execute(resources)
     }
@@ -54,7 +53,7 @@ class PackrTask extends Copy {
 packr.platforms.each{ platform ->
     def platformId = platform.toString().toLowerCase(Locale.ROOT)
 
-    task "packr${platform}"(type: PackrTask) {
+    def packrTask = tasks.register("packr${platform}", PackrTask) {
         group 'dist'
 
         dependsOn shadowJar
@@ -93,23 +92,25 @@ packr.platforms.each{ platform ->
 
         with packr.resources
     }
-    packrAll.dependsOn "packr${platform}"
+    packrAll.configure {
+        dependsOn packrTask
+    }
 }
 
 def releaseDir = file("$buildDir/release")
 
-task cleanArtifacts(type: Delete) {
+tasks.register('cleanArtifacts', Delete) {
     delete releaseDir
 }
 
-task archiveWindows64(type: Zip) {
+tasks.register('archiveWindows64', Zip) {
     destinationDir = releaseDir
     archiveName = "${rootProject.name}-${version}-windows64.zip"
     from tasks['packrWindows64']
     into "${rootProject.name}-${version}"
 }
 
-task archiveLinux64(type: Tar) {
+tasks.register('archiveLinux64', Tar) {
     destinationDir = releaseDir
     archiveName = "${rootProject.name}-${version}-linux64.tgz"
     compression = Compression.GZIP
@@ -117,12 +118,12 @@ task archiveLinux64(type: Tar) {
     into "${rootProject.name}-${version}"
 }
 
-task archiveMacOS(type: Copy) {
+tasks.register('archiveMacOS', Copy) {
     destinationDir = file("$releaseDir/${rootProject.name}-${version}.app")
     from tasks['packrMacOS']
 }
 
-task archiveArtifacts {
+def archiveArtifacts = tasks.register('archiveArtifacts') {
     dependsOn archiveWindows64
     dependsOn archiveLinux64
     dependsOn archiveMacOS

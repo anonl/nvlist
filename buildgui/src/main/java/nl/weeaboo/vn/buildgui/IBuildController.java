@@ -2,6 +2,7 @@ package nl.weeaboo.vn.buildgui;
 
 import java.io.File;
 
+import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
 import nl.weeaboo.vn.buildtools.task.ITask;
 
@@ -13,7 +14,15 @@ public interface IBuildController extends IProjectModelListener {
     /**
      * @see ProjectFolderConfig#getBuildToolsFolder()
      */
-    File getBuildToolsFolder();
+    @Deprecated
+    default File getBuildToolsFolder() {
+        return getFolderConfig().getBuildToolsFolder();
+    }
+
+    /**
+     * @see NvlistProjectConnection#getFolderConfig()
+     */
+    ProjectFolderConfig getFolderConfig();
 
     /**
      * Adds a listener to track build progress.

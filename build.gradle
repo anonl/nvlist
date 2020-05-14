@@ -103,7 +103,8 @@ allprojects {
             }
         }
 
-        task testJar(type: Jar, dependsOn: testClasses) {
+        tasks.register('testJar', Jar) {
+            dependsOn(testClasses)
             classifier = 'testlib'
             from (sourceSets.test.output) {
                 include '**/*.class' // Only include code, no resources

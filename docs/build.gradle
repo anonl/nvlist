@@ -2,10 +2,6 @@ plugins {
     id 'com.github.jruby-gradle.base' version '1.6.0'
 }
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     jrubyExec 'rubygems:bundler:1.5.2'
     jrubyExec 'rubygems:jekyll-feed:0.11.0'
@@ -13,18 +9,18 @@ dependencies {
     jrubyExec 'rubygems:jekyll-theme-minimal:0.1.1'
 }
 
-task clean(type: Delete) {
+tasks.register('clean') {
     delete project.buildDir
 }
 
-task copyJavadoc(type: Sync) {
+tasks.register('copyJavadoc', Sync) {
     description = "Copies generated Javadoc to the /assets folder"
 
     destinationDir = new File("assets/javadoc")
     from { project(':nvlist-api').tasks.javadoc }
 }
 
-task generateLuaPages {
+tasks.register('generateLuaPages') {
     def sourceDir = project(':nvlist-core').file('src/main/lua/script/builtin')
     def destinationDir = file("_lua")
 
@@ -56,13 +52,13 @@ title: ${luaPath}
     }
 }
 
-task assemble {
+tasks.register('assemble') {
     dependsOn copyJavadoc
     dependsOn generateLuaPages
 }
 
 def jekyllTask(name, args) {
-    return tasks.create(name, com.github.jrubygradle.JRubyExec) {
+    return tasks.register(name, com.github.jrubygradle.JRubyExec) {
         if (args.startsWith('new')) {
             throw new StopExecutionException("'new' isn't allowed by the Gradle task")
         }
@@ -78,6 +74,6 @@ def jekyllTask(name, args) {
 jekyllTask('jekyllServe', 'serve')
 
 // 'jekyllBuild' task that builds the site into the '_site' folder
-jekyllTask('jekyllBuild', 'build').with {
+jekyllTask('jekyllBuild', 'build').configure {
     outputs.dir('_site')
 }
