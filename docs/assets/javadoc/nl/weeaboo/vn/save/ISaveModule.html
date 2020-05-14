@@ -102,6 +102,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">ISaveModule</span>
 extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a></pre>
+<div class="block">Save module.</div>
 </li>
 </ul>
 </div>
@@ -174,9 +175,8 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/save/ISaveModule.html#load-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.core.IProgressListener-">load</a></span>(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
-    int&nbsp;slot,
-    <a href="../../../../nl/weeaboo/vn/core/IProgressListener.html" title="interface in nl.weeaboo.vn.core">IProgressListener</a>&nbsp;pl)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/save/ISaveModule.html#load-nl.weeaboo.vn.core.INovel-int-">load</a></span>(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
+    int&nbsp;slot)</code>
 <div class="block">Load a save slot.</div>
 </td>
 </tr>
@@ -200,10 +200,9 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/save/ISaveModule.html#save-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.save.ISaveParams-nl.weeaboo.vn.core.IProgressListener-">save</a></span>(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/save/ISaveModule.html#save-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.save.ISaveParams-">save</a></span>(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
     int&nbsp;slot,
-    <a href="../../../../nl/weeaboo/vn/save/ISaveParams.html" title="interface in nl.weeaboo.vn.save">ISaveParams</a>&nbsp;params,
-    <a href="../../../../nl/weeaboo/vn/core/IProgressListener.html" title="interface in nl.weeaboo.vn.core">IProgressListener</a>&nbsp;pl)</code>
+    <a href="../../../../nl/weeaboo/vn/save/ISaveParams.html" title="interface in nl.weeaboo.vn.save">ISaveParams</a>&nbsp;params)</code>
 <div class="block">Saves the current state to the specified save slot.</div>
 </td>
 </tr>
@@ -284,15 +283,14 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </dl>
 </li>
 </ul>
-<a name="load-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.core.IProgressListener-">
+<a name="load-nl.weeaboo.vn.core.INovel-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>load</h4>
 <pre>void&nbsp;load(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
-          int&nbsp;slot,
-          <a href="../../../../nl/weeaboo/vn/core/IProgressListener.html" title="interface in nl.weeaboo.vn.core">IProgressListener</a>&nbsp;pl)
+          int&nbsp;slot)
    throws <a href="../../../../nl/weeaboo/vn/save/SaveFormatException.html" title="class in nl.weeaboo.vn.save">SaveFormatException</a>,
           java.io.IOException</pre>
 <div class="block">Load a save slot. Resumes script execution from the saved state.</div>
@@ -303,7 +301,7 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </dl>
 </li>
 </ul>
-<a name="save-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.save.ISaveParams-nl.weeaboo.vn.core.IProgressListener-">
+<a name="save-nl.weeaboo.vn.core.INovel-int-nl.weeaboo.vn.save.ISaveParams-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -311,8 +309,7 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 <h4>save</h4>
 <pre>void&nbsp;save(<a href="../../../../nl/weeaboo/vn/core/INovel.html" title="interface in nl.weeaboo.vn.core">INovel</a>&nbsp;novel,
           int&nbsp;slot,
-          <a href="../../../../nl/weeaboo/vn/save/ISaveParams.html" title="interface in nl.weeaboo.vn.save">ISaveParams</a>&nbsp;params,
-          <a href="../../../../nl/weeaboo/vn/core/IProgressListener.html" title="interface in nl.weeaboo.vn.core">IProgressListener</a>&nbsp;pl)
+          <a href="../../../../nl/weeaboo/vn/save/ISaveParams.html" title="interface in nl.weeaboo.vn.save">ISaveParams</a>&nbsp;params)
    throws java.io.IOException</pre>
 <div class="block">Saves the current state to the specified save slot.</div>
 <dl>

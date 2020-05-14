@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -138,31 +138,37 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#createContext--">createContext</a></span>()</code>
-<div class="block">Creates a new context and registers it with the context manager.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#callInContext-nl.weeaboo.vn.script.IScriptFunction-">callInContext</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</code>
+<div class="block">Calls the given function in a temporary context.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#createContext-nl.weeaboo.vn.script.IScriptFunction-">createContext</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#createContext--">createContext</a></span>()</code>
+<div class="block">Creates a new context and registers it with the context manager.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#createContext-nl.weeaboo.vn.script.IScriptFunction-">createContext</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.Collection&lt;? extends <a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#getActiveContexts--">getActiveContexts</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.Collection&lt;? extends <a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#getContexts--">getContexts</a></span>()</code>
 <div class="block">Returns a read-only collection containing the registered contexts.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#getPrimaryContext--">getPrimaryContext</a></span>()</code>
 <div class="block">Returns the 'most important' active context, or <code>null</code> if no context is active.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#setContextActive-nl.weeaboo.vn.core.IContext-boolean-">setContextActive</a></span>(<a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&nbsp;context,
                 boolean&nbsp;active)</code>
@@ -223,6 +229,17 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../nl/weeaboo/vn/core/IContextManager.html#createContext--"><code>createContext()</code></a></dd>
 </dl>
+</li>
+</ul>
+<a name="callInContext-nl.weeaboo.vn.script.IScriptFunction-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>callInContext</h4>
+<pre><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&nbsp;callInContext(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</pre>
+<div class="block">Calls the given function in a temporary context. The current context is paused until the function
+ returns. When the function returns, the temporary context is destroyed.</div>
 </li>
 </ul>
 <a name="getContexts--">

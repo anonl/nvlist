@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -96,12 +96,17 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd>java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script">IScriptExceptionHandler</a>, java.io.Serializable</dd>
+</dl>
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../nl/weeaboo/vn/core/ContextListener.html" title="class in nl.weeaboo.vn.core">ContextListener</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IContextListener</span>
-extends java.io.Serializable</pre>
+extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script">IScriptExceptionHandler</a></pre>
+<div class="block">Event listener for <a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core"><code>IContext</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -138,7 +143,20 @@ extends java.io.Serializable</pre>
 <div class="block">Called when a context is destroyed.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContextListener.html#onMainThreadFinished-nl.weeaboo.vn.core.IContext-">onMainThreadFinished</a></span>(<a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&nbsp;context)</code>
+<div class="block">Called when the main thread finishes execution.</div>
+</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.script.IScriptExceptionHandler">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.script.<a href="../../../../nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script">IScriptExceptionHandler</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/script/IScriptExceptionHandler.html#onScriptException-nl.weeaboo.vn.script.IScriptThread-java.lang.Exception-">onScriptException</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -176,11 +194,21 @@ extends java.io.Serializable</pre>
 <a name="onContextDestroyed-nl.weeaboo.vn.core.IContext-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>onContextDestroyed</h4>
 <pre>void&nbsp;onContextDestroyed(<a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&nbsp;context)</pre>
 <div class="block">Called when a context is destroyed.</div>
+</li>
+</ul>
+<a name="onMainThreadFinished-nl.weeaboo.vn.core.IContext-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>onMainThreadFinished</h4>
+<pre>void&nbsp;onMainThreadFinished(<a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core">IContext</a>&nbsp;context)</pre>
+<div class="block">Called when the main thread finishes execution.</div>
 </li>
 </ul>
 </li>

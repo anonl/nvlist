@@ -27,17 +27,11 @@ end
 
 ---Shows the textlog screen.
 function textLog()
-    local oldContext = getCurrentContext()
-
-    local newContext = createContext(function()
+    callInContext(function()
         local screen = textLogConstructor()
         screen:show()
         screen:destroy()
-        setContextActive(oldContext, true)
     end)
-    setContextActive(newContext, true)
-    setContextActive(oldContext, false)
-    yield()
 end
 
 ---TextLog screen
@@ -109,7 +103,7 @@ function TextLogScreen:show()
 
     setActiveLayer(oldActiveLayer)
 
-    while not Input.consume(VKeys.cancel) do
+    while not Input.consume(VKeys.cancel) and not Input.consume(VKeys.down) do
         if returnButton:consumePress() then
             break
         end

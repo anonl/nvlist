@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -102,6 +102,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">ISoundController</span>
 extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></pre>
+<div class="block">Controls audio playback.</div>
 </li>
 </ul>
 </div>
@@ -151,53 +152,59 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#checkSounds--">checkSounds</a></span>()</code>
+<div class="block">Update internal bookkeeping.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound">ISound</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#get-int-">get</a></span>(int&nbsp;channel)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#getFreeChannel--">getFreeChannel</a></span>()</code>
 <div class="block">Returns a currently unused sound channel.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#getMasterVolume-nl.weeaboo.vn.sound.SoundType-">getMasterVolume</a></span>(<a href="../../../../nl/weeaboo/vn/sound/SoundType.html" title="enum in nl.weeaboo.vn.sound">SoundType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#isPaused--">isPaused</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#set-int-nl.weeaboo.vn.sound.ISound-">set</a></span>(int&nbsp;channel,
    <a href="../../../../nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound">ISound</a>&nbsp;sound)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#setMasterVolume-nl.weeaboo.vn.sound.SoundType-double-">setMasterVolume</a></span>(<a href="../../../../nl/weeaboo/vn/sound/SoundType.html" title="enum in nl.weeaboo.vn.sound">SoundType</a>&nbsp;type,
                double&nbsp;volume)</code>
 <div class="block">Changes the master volume for the specified type.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#setPaused-boolean-">setPaused</a></span>(boolean&nbsp;p)</code>
 <div class="block">Pauses or unpauses this sound state.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#stop-int-">stop</a></span>(int&nbsp;channel)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#stop-int-int-">stop</a></span>(int&nbsp;channel,
-    int&nbsp;fadeOutMillis)</code>
+    int&nbsp;fadeOutFrames)</code>
 <div class="block">Stops the sound playing in the specified channel.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html#stopAll--">stopAll</a></span>()</code>
 <div class="block">Stops all sounds.</div>
@@ -259,6 +266,16 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="checkSounds--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>checkSounds</h4>
+<pre>void&nbsp;checkSounds()</pre>
+<div class="block">Update internal bookkeeping. This method is automatically called as part of <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html#update--"><code>IUpdateable.update()</code></a>.</div>
+</li>
+</ul>
 <a name="stopAll--">
 <!--   -->
 </a>
@@ -289,13 +306,13 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <li class="blockList">
 <h4>stop</h4>
 <pre>void&nbsp;stop(int&nbsp;channel,
-          int&nbsp;fadeOutMillis)</pre>
+          int&nbsp;fadeOutFrames)</pre>
 <div class="block">Stops the sound playing in the specified channel.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>channel</code> - The sound channel to stop.</dd>
-<dd><code>fadeOutMillis</code> - Instead of stopping the sound immediately, fade it out slowly over the course of
-        <code>fadeOutMillis</code>.</dd>
+<dd><code>fadeOutFrames</code> - Instead of stopping the sound immediately, fade it out slowly over the course of
+        <code>fadeOutFrames</code>.</dd>
 </dl>
 </li>
 </ul>

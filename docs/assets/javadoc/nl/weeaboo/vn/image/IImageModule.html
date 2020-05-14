@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -102,6 +102,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">IImageModule</span>
 extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a></pre>
+<div class="block">Module for images and rendering.</div>
 </li>
 </ul>
 </div>
@@ -208,6 +209,12 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/image/IScreenshot.html" title="interface in nl.weeaboo.vn.image">IScreenshot</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/IImageModule.html#screenshot--">screenshot</a></span>()</code>
+<div class="block">Schedules a screenshot of the root layer for the active context.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/image/IScreenshot.html" title="interface in nl.weeaboo.vn.image">IScreenshot</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/IImageModule.html#screenshot-nl.weeaboo.vn.scene.ILayer-short-boolean-boolean-">screenshot</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&nbsp;layer,
           short&nbsp;z,
           boolean&nbsp;isVolatile,
@@ -215,7 +222,7 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 <div class="block">Schedules a screenshot of the given layer.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/IImageModule.html#setImageResolution-nl.weeaboo.common.Dim-">setImageResolution</a></span>(nl.weeaboo.common.Dim&nbsp;desiredSize)</code>
 <div class="block">Changes the desired image resolution (width x height).</div>
@@ -396,6 +403,21 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 <pre>void&nbsp;setImageResolution(nl.weeaboo.common.Dim&nbsp;desiredSize)</pre>
 <div class="block">Changes the desired image resolution (width x height). Images are loaded from the resource folder that
  most closely matches the desired size.</div>
+</li>
+</ul>
+<a name="screenshot--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>screenshot</h4>
+<pre><a href="../../../../nl/weeaboo/vn/image/IScreenshot.html" title="interface in nl.weeaboo.vn.image">IScreenshot</a>&nbsp;screenshot()</pre>
+<div class="block">Schedules a screenshot of the root layer for the active context. Use <a href="../../../../nl/weeaboo/vn/render/IAsyncRenderTask.html#isAvailable--"><code>IAsyncRenderTask.isAvailable()</code></a> and/or
+ <a href="../../../../nl/weeaboo/vn/render/IAsyncRenderTask.html#isFailed--"><code>IAsyncRenderTask.isFailed()</code></a> to find out the state of the returned screenshot object.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../nl/weeaboo/vn/image/IImageModule.html#screenshot-nl.weeaboo.vn.scene.ILayer-short-boolean-boolean-"><code>screenshot(ILayer, short, boolean, boolean)</code></a></dd>
+</dl>
 </li>
 </ul>
 <a name="screenshot-nl.weeaboo.vn.scene.ILayer-short-boolean-boolean-">

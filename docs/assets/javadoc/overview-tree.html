@@ -95,7 +95,6 @@
 <li type="circle">nl.weeaboo.common.AbstractId (implements java.io.Serializable)
 <ul>
 <li type="circle">nl.weeaboo.vn.input.<a href="nl/weeaboo/vn/input/VKey.html" title="class in nl.weeaboo.vn.input"><span class="typeNameLink">VKey</span></a></li>
-<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/VnId.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">VnId</span></a></li>
 </ul>
 </li>
 <li type="circle">nl.weeaboo.vn.signal.<a href="nl/weeaboo/vn/signal/AbstractSignal.html" title="class in nl.weeaboo.vn.signal"><span class="typeNameLink">AbstractSignal</span></a> (implements nl.weeaboo.vn.signal.<a href="nl/weeaboo/vn/signal/ISignal.html" title="interface in nl.weeaboo.vn.signal">ISignal</a>)
@@ -106,6 +105,7 @@
 </ul>
 </li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/Color.html" title="class in nl.weeaboo.vn.image"><span class="typeNameLink">Color</span></a> (implements java.io.Serializable)</li>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/ContextListener.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">ContextListener</span></a> (implements nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextListener.html" title="interface in nl.weeaboo.vn.core">IContextListener</a>)</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/DistortGrid.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">DistortGrid</span></a> (implements java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/Duration.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">Duration</span></a> (implements java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.layout.<a href="nl/weeaboo/vn/layout/GridCellConstraints.html" title="class in nl.weeaboo.vn.layout"><span class="typeNameLink">GridCellConstraints</span></a> (implements java.io.Serializable)</li>
@@ -142,6 +142,12 @@
 </ul>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IAnimation</span></a>
+<ul>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a> (also extends nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>)</li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a> (also extends nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>)</li>
+</ul>
+</li>
 <li type="circle">nl.weeaboo.vn.input.<a href="nl/weeaboo/vn/input/IBaseInput.html" title="interface in nl.weeaboo.vn.input"><span class="typeNameLink">IBaseInput</span></a>&lt;K&gt;
 <ul>
 <li type="circle">nl.weeaboo.vn.input.<a href="nl/weeaboo/vn/input/IInput.html" title="interface in nl.weeaboo.vn.input"><span class="typeNameLink">IInput</span></a></li>
@@ -219,7 +225,7 @@
 </li>
 </ul>
 </li>
-<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IEnvironment.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IEnvironment</span></a></li>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IEnvironment.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IEnvironment</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IGridPanel.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IGridPanel</span></a></li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IImageDrawable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IImageDrawable</span></a></li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">ILayer</span></a></li>
@@ -228,7 +234,6 @@
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IGridPanel.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IGridPanel</span></a></li>
 </ul>
 </li>
-<li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IScreenRenderer.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IScreenRenderer</span></a>&lt;D&gt;</li>
 <li type="circle">nl.weeaboo.vn.script.<a href="nl/weeaboo/vn/script/IScriptThread.html" title="interface in nl.weeaboo.vn.script"><span class="typeNameLink">IScriptThread</span></a> (also extends java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/ITextDrawable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">ITextDrawable</span></a> (also extends nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextRenderState.html" title="interface in nl.weeaboo.vn.text">ITextRenderState</a>, nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/ITransformable.html" title="interface in nl.weeaboo.vn.scene">ITransformable</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ITextureData.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ITextureData</span></a> (also extends java.io.Serializable)</li>
@@ -577,7 +582,6 @@
 <li type="circle">nl.weeaboo.vn.video.<a href="nl/weeaboo/vn/video/IVideoModule.html" title="interface in nl.weeaboo.vn.video"><span class="typeNameLink">IVideoModule</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a>)</li>
 </ul>
 </li>
-<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IProgressListener.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IProgressListener</span></a></li>
 <li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IRenderEnvConsumer</span></a>
 <ul>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContext</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, java.io.Serializable)</li>
@@ -591,7 +595,12 @@
 <li type="circle">nl.weeaboo.vn.save.<a href="nl/weeaboo/vn/save/ISaveFile.html" title="interface in nl.weeaboo.vn.save"><span class="typeNameLink">ISaveFile</span></a></li>
 <li type="circle">nl.weeaboo.vn.save.<a href="nl/weeaboo/vn/save/ISaveFileHeader.html" title="interface in nl.weeaboo.vn.save"><span class="typeNameLink">ISaveFileHeader</span></a></li>
 <li type="circle">nl.weeaboo.vn.save.<a href="nl/weeaboo/vn/save/ISaveParams.html" title="interface in nl.weeaboo.vn.save"><span class="typeNameLink">ISaveParams</span></a></li>
-<li type="circle">nl.weeaboo.vn.script.<a href="nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script"><span class="typeNameLink">IScriptExceptionHandler</span></a></li>
+<li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IScreenRenderer.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IScreenRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.script.<a href="nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script"><span class="typeNameLink">IScriptExceptionHandler</span></a>
+<ul>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextListener.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextListener</span></a> (also extends java.io.Serializable)</li>
+</ul>
+</li>
 <li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IScriptSeenLog.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IScriptSeenLog</span></a></li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IScrollable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IScrollable</span></a>
 <ul>
@@ -735,7 +744,7 @@
 <li type="circle">nl.weeaboo.vn.sound.desc.<a href="nl/weeaboo/vn/sound/desc/ISoundDefinition.html" title="interface in nl.weeaboo.vn.sound.desc"><span class="typeNameLink">ISoundDefinition</span></a></li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IStreamingMedia</span></a>
 <ul>
-<li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISound</span></a> (also extends java.io.Serializable)</li>
+<li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISound</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.video.<a href="nl/weeaboo/vn/video/IVideo.html" title="interface in nl.weeaboo.vn.video"><span class="typeNameLink">IVideo</span></a> (also extends nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, java.io.Serializable)</li>
 </ul>
 </li>
@@ -766,17 +775,12 @@
 </li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IUpdateable</span></a>
 <ul>
-<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IAnalytics.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IAnalytics</span></a> (also extends java.io.Serializable)</li>
-<li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IAnimatedRenderable</span></a>
-<ul>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
-</ul>
-</li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IAnalytics.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IAnalytics</span></a> (also extends nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats">IResourceLoadLog</a>)</li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>, nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IButtonRenderer.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IButtonRenderer</span></a></li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextManager.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextManager</span></a> (also extends nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, java.io.Serializable)</li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>, nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>)</li>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IEnvironment.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IEnvironment</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IImageModule.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IImageModule</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a>)</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IModule</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, java.io.Serializable)
 <ul>
@@ -795,15 +799,9 @@
 <li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IPlayTimer.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IPlayTimer</span></a> (also extends java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IRenderable</span></a> (also extends java.io.Serializable)
 <ul>
-<li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IAnimatedRenderable</span></a>
-<ul>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
-</ul>
-</li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IButtonRenderer.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IButtonRenderer</span></a></li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/INinePatchRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">INinePatchRenderer</span></a> (also extends nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/INinePatch.html" title="interface in nl.weeaboo.vn.image">INinePatch</a>)</li>
 <li type="circle">nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextRenderer.html" title="interface in nl.weeaboo.vn.text"><span class="typeNameLink">ITextRenderer</span></a> (also extends nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextRenderState.html" title="interface in nl.weeaboo.vn.text">ITextRenderState</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ITextureRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ITextureRenderer</span></a></li>
@@ -812,6 +810,7 @@
 <li type="circle">nl.weeaboo.vn.save.<a href="nl/weeaboo/vn/save/ISaveModule.html" title="interface in nl.weeaboo.vn.save"><span class="typeNameLink">ISaveModule</span></a></li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IScreen.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IScreen</span></a> (also extends nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IScreenTextState.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IScreenTextState</span></a> (also extends java.io.Serializable)</li>
+<li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISound</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>, java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISoundController.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISoundController</span></a> (also extends java.io.Serializable)</li>
 <li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISoundModule.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISoundModule</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a>)</li>
 <li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IStatsModule.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IStatsModule</span></a></li>
@@ -824,7 +823,6 @@
 </li>
 <li type="circle">java.io.Serializable
 <ul>
-<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IAnalytics.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IAnalytics</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IAsyncRenderTask.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IAsyncRenderTask</span></a>
 <ul>
 <li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IOffscreenRenderTask.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IOffscreenRenderTask</span></a></li>
@@ -840,7 +838,7 @@
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IButtonModel.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IButtonModel</span></a></li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContext</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>)</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextFactory.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextFactory</span></a>&lt;C&gt;</li>
-<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextListener.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextListener</span></a></li>
+<li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextListener.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextListener</span></a> (also extends nl.weeaboo.vn.script.<a href="nl/weeaboo/vn/script/IScriptExceptionHandler.html" title="interface in nl.weeaboo.vn.script">IScriptExceptionHandler</a>)</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IContextManager.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IContextManager</span></a> (also extends nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeConfig.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeConfig</span></a></li>
 <li type="circle">nl.weeaboo.vn.layout.<a href="nl/weeaboo/vn/layout/IGridLayout.html" title="interface in nl.weeaboo.vn.layout"><span class="typeNameLink">IGridLayout</span></a></li>
@@ -872,22 +870,20 @@
 <li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IPlayTimer.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IPlayTimer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IRenderable</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)
 <ul>
-<li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IAnimatedRenderable</span></a>
-<ul>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
-</ul>
-</li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IBitmapTweenRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IBitmapTweenRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>)</li>
 <li type="circle">nl.weeaboo.vn.scene.<a href="nl/weeaboo/vn/scene/IButtonRenderer.html" title="interface in nl.weeaboo.vn.scene"><span class="typeNameLink">IButtonRenderer</span></a></li>
-<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a></li>
+<li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ICrossFadeRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ICrossFadeRenderer</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/INinePatchRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">INinePatchRenderer</span></a> (also extends nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/INinePatch.html" title="interface in nl.weeaboo.vn.image">INinePatch</a>)</li>
 <li type="circle">nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextRenderer.html" title="interface in nl.weeaboo.vn.text"><span class="typeNameLink">ITextRenderer</span></a> (also extends nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextRenderState.html" title="interface in nl.weeaboo.vn.text">ITextRenderState</a>)</li>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/ITextureRenderer.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">ITextureRenderer</span></a></li>
 </ul>
 </li>
 <li type="circle">nl.weeaboo.vn.render.<a href="nl/weeaboo/vn/render/IRenderEnv.html" title="interface in nl.weeaboo.vn.render"><span class="typeNameLink">IRenderEnv</span></a></li>
-<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IResourceLoadLog</span></a></li>
+<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IResourceLoadLog</span></a>
+<ul>
+<li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/IAnalytics.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">IAnalytics</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
+</ul>
+</li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">IResourceResolver</span></a>
 <ul>
 <li type="circle">nl.weeaboo.vn.image.<a href="nl/weeaboo/vn/image/IImageModule.html" title="interface in nl.weeaboo.vn.image"><span class="typeNameLink">IImageModule</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>)</li>
@@ -906,7 +902,7 @@
 <li type="circle">nl.weeaboo.vn.script.<a href="nl/weeaboo/vn/script/IScriptThread.html" title="interface in nl.weeaboo.vn.script"><span class="typeNameLink">IScriptThread</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>)</li>
 <li type="circle">nl.weeaboo.vn.stats.<a href="nl/weeaboo/vn/stats/ISeenLogHolder.html" title="interface in nl.weeaboo.vn.stats"><span class="typeNameLink">ISeenLogHolder</span></a></li>
 <li type="circle">nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/ISkipState.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">ISkipState</span></a></li>
-<li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISound</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>)</li>
+<li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISound.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISound</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>, nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.sound.<a href="nl/weeaboo/vn/sound/ISoundController.html" title="interface in nl.weeaboo.vn.sound"><span class="typeNameLink">ISoundController</span></a> (also extends nl.weeaboo.vn.core.<a href="nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>)</li>
 <li type="circle">nl.weeaboo.vn.save.<a href="nl/weeaboo/vn/save/IStorage.html" title="interface in nl.weeaboo.vn.save"><span class="typeNameLink">IStorage</span></a></li>
 <li type="circle">nl.weeaboo.vn.text.<a href="nl/weeaboo/vn/text/ITextLog.html" title="interface in nl.weeaboo.vn.text"><span class="typeNameLink">ITextLog</span></a></li>

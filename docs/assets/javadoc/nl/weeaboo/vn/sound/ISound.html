@@ -96,18 +96,34 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">ISound</span>
-extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a></pre>
+extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></pre>
+<div class="block">Represents playable audio.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.nl.weeaboo.vn.core.IUpdateable">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IUpdateable.html#EMPTY">EMPTY</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -186,7 +202,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IStreaming
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISound.html#stop-int-">stop</a></span>(int&nbsp;fadeOutMillis)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISound.html#stop-int-">stop</a></span>(int&nbsp;fadeOutFrames)</code>
 <div class="block">Stops playing the sound.</div>
 </td>
 </tr>
@@ -197,6 +213,13 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IStreaming
 </a>
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html" title="interface in nl.weeaboo.vn.core">IStreamingMedia</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html#isPaused--">isPaused</a>, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html#isPlaying--">isPlaying</a>, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html#isStopped--">isStopped</a>, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html#pause--">pause</a>, <a href="../../../../nl/weeaboo/vn/core/IStreamingMedia.html#resume--">resume</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IUpdateable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IUpdateable.html#update--">update</a></code></li>
 </ul>
 </li>
 </ul>
@@ -270,12 +293,12 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IStreaming
 <ul class="blockList">
 <li class="blockList">
 <h4>stop</h4>
-<pre>void&nbsp;stop(int&nbsp;fadeOutMillis)</pre>
+<pre>void&nbsp;stop(int&nbsp;fadeOutFrames)</pre>
 <div class="block">Stops playing the sound.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fadeOutMillis</code> - Instead of stopping the sound immediately, fade it
-        out slowly over the course of <code>fadeOutMillis</code>.</dd>
+<dd><code>fadeOutFrames</code> - Instead of stopping the sound immediately, fade it
+        out slowly over the course of <code>fadeOutFrames</code>.</dd>
 </dl>
 </li>
 </ul>

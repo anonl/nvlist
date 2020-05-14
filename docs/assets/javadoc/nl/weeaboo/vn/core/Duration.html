@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -45,7 +45,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../nl/weeaboo/vn/core/DistortGrid.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?nl/weeaboo/vn/core/Duration.html" target="_top">Frames</a></li>
@@ -111,6 +111,7 @@ var activeTableTab = "activeTableTab";
 <pre>public final class <span class="typeNameLabel">Duration</span>
 extends java.lang.Object
 implements java.io.Serializable</pre>
+<div class="block">An amount of time. We can't use <code>java.time.Duration</code> because it's not available on older versions of Android.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#nl.weeaboo.vn.core.Duration">Serialized Form</a></dd>
@@ -175,9 +176,13 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/Duration.html#toSeconds--">toSeconds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/Duration.html#toMillis--">toMillis</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/Duration.html#toSeconds--">toSeconds</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/Duration.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -259,6 +264,19 @@ implements java.io.Serializable</pre>
 </dl>
 </li>
 </ul>
+<a name="toMillis--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toMillis</h4>
+<pre>public&nbsp;long&nbsp;toMillis()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The duration in milliseconds.</dd>
+</dl>
+</li>
+</ul>
 <a name="hashCode--">
 <!--   -->
 </a>
@@ -323,7 +341,7 @@ implements java.io.Serializable</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../nl/weeaboo/vn/core/DistortGrid.html" title="class in nl.weeaboo.vn.core"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../nl/weeaboo/vn/core/IContext.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?nl/weeaboo/vn/core/Duration.html" target="_top">Frames</a></li>

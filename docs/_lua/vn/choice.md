@@ -38,7 +38,11 @@ function choice2(uniqueChoiceId, ...)
     if options == nil or #options == 0 then
         options = &#123;\"Genuflect\"}
     end
-    
+
+    if getSkipMode() == SkipMode.SCENE then
+        stopSkipping()
+    end
+
     local selected = 1
     if choiceScreenConstructor == nil then
         Log.warn(\"No choice screen registered\")
@@ -85,13 +89,15 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
 
     local panel = gridPanel()
     local pad = 100
-    panel:setBounds(pad, pad, screenWidth - pad*2, screenHeight - pad*2)
-    
+    -- Limit choice button width (looks nicer)
+    local width = math.min(screenWidth, screenHeight * 1.25) - pad * 2
+    panel:setBounds((screenWidth - width) / 2, pad, width, screenHeight - pad * 2)
+
     local buttons = &#123;}
     for i,option in ipairs(options) do
         local b = button(\"gui/button\")
         b:setZ(-1000)
-        
+
         local styledText = option
         if Seen.hasSelectedChoice(uniqueChoiceId, i) then
             --Apply a custom text style if the user has selected this choice before
@@ -99,12 +105,12 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
         end
         b:setText(styledText)
         buttons[i] = b
-        
+
         panel:add(b):growX()
         panel:endRow()
     end
     panel:pack()
-    
+
     local selected = 0
     while selected == 0 do
         for i,b in ipairs(buttons) do

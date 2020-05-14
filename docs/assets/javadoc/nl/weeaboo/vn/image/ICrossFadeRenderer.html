@@ -90,12 +90,14 @@
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene">IAnimatedRenderable</a>, <a href="../../../../nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a>, <a href="../../../../nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">ICrossFadeRenderer</span>
-extends <a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene">IAnimatedRenderable</a></pre>
+extends <a href="../../../../nl/weeaboo/vn/scene/IRenderable.html" title="interface in nl.weeaboo.vn.scene">IRenderable</a>, <a href="../../../../nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a></pre>
+<div class="block">Animated transition between two textures, where each pixel gradually changes from the start textures to the
+ end textures.</div>
 </li>
 </ul>
 </div>
@@ -124,13 +126,6 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html" title
 </a>
 <h3>Method Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.scene.IAnimatedRenderable">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.scene.<a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html" title="interface in nl.weeaboo.vn.scene">IAnimatedRenderable</a></h3>
-<code><a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html#isFinished--">isFinished</a>, <a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html#setSpeed-double-">setSpeed</a></code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.scene.IRenderable">
 <!--   -->
 </a>
@@ -143,6 +138,13 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAnimatedRenderable.html" title
 </a>
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IUpdateable.html#update--">update</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IAnimation">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IAnimation.html" title="interface in nl.weeaboo.vn.core">IAnimation</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IAnimation.html#isFinished--">isFinished</a>, <a href="../../../../nl/weeaboo/vn/core/IAnimation.html#setSpeed-double-">setSpeed</a></code></li>
 </ul>
 </li>
 </ul>

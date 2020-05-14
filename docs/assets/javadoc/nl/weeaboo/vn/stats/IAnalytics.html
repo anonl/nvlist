@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6};
+var methods = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -96,12 +96,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats">IResourceLoadLog</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IAnalytics</span>
-extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></pre>
+extends <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, <a href="../../../../nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats">IResourceLoadLog</a></pre>
+<div class="block">Logs interesting events for later analysis.</div>
 </li>
 </ul>
 </div>
@@ -144,13 +145,6 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/stats/IAnalytics.html#logResourceLoad-nl.weeaboo.vn.core.ResourceId-nl.weeaboo.vn.core.ResourceLoadInfo-">logResourceLoad</a></span>(<a href="../../../../nl/weeaboo/vn/core/ResourceId.html" title="class in nl.weeaboo.vn.core">ResourceId</a>&nbsp;resourceId,
-               <a href="../../../../nl/weeaboo/vn/core/ResourceLoadInfo.html" title="class in nl.weeaboo.vn.core">ResourceLoadInfo</a>&nbsp;info)</code>
-<div class="block">This method is called when a resource is loaded.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/stats/IAnalytics.html#save-nl.weeaboo.filesystem.SecureFileWriter-nl.weeaboo.filesystem.FilePath-">save</a></span>(nl.weeaboo.filesystem.SecureFileWriter&nbsp;sfw,
     nl.weeaboo.filesystem.FilePath&nbsp;path)</code>
 <div class="block">Stores analytics to a file.</div>
@@ -163,6 +157,13 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 </a>
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IUpdateable.html#update--">update</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.stats.IResourceLoadLog">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.stats.<a href="../../../../nl/weeaboo/vn/stats/IResourceLoadLog.html" title="interface in nl.weeaboo.vn.stats">IResourceLoadLog</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/stats/IResourceLoadLog.html#logLoad-nl.weeaboo.vn.core.ResourceId-nl.weeaboo.vn.core.ResourceLoadInfo-">logLoad</a></code></li>
 </ul>
 </li>
 </ul>
@@ -178,17 +179,6 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="logResourceLoad-nl.weeaboo.vn.core.ResourceId-nl.weeaboo.vn.core.ResourceLoadInfo-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>logResourceLoad</h4>
-<pre>void&nbsp;logResourceLoad(<a href="../../../../nl/weeaboo/vn/core/ResourceId.html" title="class in nl.weeaboo.vn.core">ResourceId</a>&nbsp;resourceId,
-                     <a href="../../../../nl/weeaboo/vn/core/ResourceLoadInfo.html" title="class in nl.weeaboo.vn.core">ResourceLoadInfo</a>&nbsp;info)</pre>
-<div class="block">This method is called when a resource is loaded.</div>
-</li>
-</ul>
 <a name="load-nl.weeaboo.filesystem.SecureFileWriter-nl.weeaboo.filesystem.FilePath-">
 <!--   -->
 </a>

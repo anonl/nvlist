@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -102,6 +102,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">IRenderEnv</span>
 extends java.io.Serializable</pre>
+<div class="block">Exposes properties of the main render target (screen size, etc.)</div>
 </li>
 </ul>
 </div>
@@ -151,10 +152,6 @@ extends java.io.Serializable</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/render/IRenderEnv.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/render/IRenderEnv.html#isTouchScreen--">isTouchScreen</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -265,7 +262,7 @@ extends java.io.Serializable</pre>
 <a name="getGLScreenVirtualBounds--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getGLScreenVirtualBounds</h4>
 <pre>nl.weeaboo.common.Rect2D&nbsp;getGLScreenVirtualBounds()</pre>
@@ -273,19 +270,6 @@ extends java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The bounds of the full OpenGL rendering bounds in virtual
          coordinates, ignoring any offset or clipping.</dd>
-</dl>
-</li>
-</ul>
-<a name="isTouchScreen--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isTouchScreen</h4>
-<pre>boolean&nbsp;isTouchScreen()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> when running on a touchscreen device.</dd>
 </dl>
 </li>
 </ul>

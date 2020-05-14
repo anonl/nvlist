@@ -40,11 +40,10 @@ end
 
 ---Shows the save or load screen.
 local function saveLoadScreen(isSave)
-    local oldContext = getCurrentContext()
-    
     local slot = nil
     local userData = nil
-    local newContext = createContext(function()
+
+    callInContext(function()
         local function showScreen()
             local screen = nil
             if isSave then
@@ -57,25 +56,21 @@ local function saveLoadScreen(isSave)
         end
 
         showScreen()
-        setContextActive(oldContext, true)
-
-        if slot > 0 then
-            if isSave then
-                -- Take a screenshot to add to the save file
-                local ss = screenshot(getRootLayer(), -32768)
-                ss:markTransient()
-                local screenshotInfo = &#123;screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
-
-                Save.save(slot, userData, screenshotInfo)
-                setSharedGlobal(KEY_SAVE_LAST, slot)
-            else
-                Save.load(slot)
-            end
-        end
     end)
-    setContextActive(newContext, true)
-    setContextActive(oldContext, false)
-    yield()
+
+    if slot > 0 then
+        if isSave then
+            -- Take a screenshot to add to the save file
+            local ss = screenshot(getRootLayer(), -32768)
+            ss:markTransient()
+            local screenshotInfo = &#123;screenshot=ss, width=SCREENSHOT_WIDTH, height=SCREENSHOT_HEIGHT}
+
+            Save.save(slot, userData, screenshotInfo)
+            setSharedGlobal(KEY_SAVE_LAST, slot)
+        else
+            Save.load(slot)
+        end
+    end
 
     return slot
 end
@@ -117,7 +112,7 @@ function SaveSlot.new(self)
     
     local button = button(buttonImagePath)
     button:setToggle(true)
-    button:setEnabled(self.isSave or not self.empty)
+    button:setEnabled(self.isSave or not self.isEmpty)
     
     local label = textimg(self.label)
     label:setZ(button:getZ() - 10)
@@ -127,14 +122,12 @@ function SaveSlot.new(self)
     if not self.compact then
         if self.screenshot ~= nil then
             i = img(self.screenshot)
-        elseif not self.empty then
+        else
             i = img(\"gui/savescreen#noImage\")
         end
-        if i ~= nil then
-            i:setZ(button:getZ() - button:getWidth()/2)   
-        end
-        
-        if self.isNew and not self.empty then
+        i:setZ(button:getZ() - button:getWidth()/2)   
+
+        if self.isNew and not self.isEmpty then
             newI = img(\"gui/savescreen#newSave\")
             newI:setZ(i:getZ() - 1)
         end
@@ -162,25 +155,31 @@ function SaveSlot:setBounds(x, y, w, h)
     local i = self.image
 
     local fontSize = math.ceil(w * .065)
-    Log.debug(\"SaveSlot fontSize=&#123;}\", fontSize)
     l:extendDefaultStyle(Text.createStyle&#123;align=\"center\", fontSize=fontSize})
 
     if i ~= nil then
-        local iw = w * 224 / 254
-        local ih = h * 126 / 190
+        local scale = math.min(w / 256, h / 192)
+        b:setScale(scale)
+        x = x + (w - b:getWidth()) / 2
+        y = y + (h - b:getHeight()) / 2
+        w = b:getWidth()
+        h = b:getHeight()
+        b:setPos(x, y)
+
+        local iw = 224 * scale
+        local ih = 126 * scale
         local ipad = (w - iw) / 2
         i:setBounds(x + ipad, y + ipad, iw, ih)
-        
+
         local lh = h - ih - ipad
         l:setSize(iw, lh)
-        l:setPos(math.ceil(x), math.ceil(y + h - (lh + l:getTextHeight()) / 2))
+        l:setPos(math.ceil(i:getX()), math.ceil(y + h - (lh + l:getTextHeight()) / 2))
     else
+        b:setBounds(x, y, w, h)
         l:setSize(w, h)
         l:setPos(math.ceil(x), math.ceil(y + (h - l:getTextHeight()) / 2))
-    end 
-    
-    b:setBounds(x, y, w, h)
-    
+    end
+
     local newI = self.newImage
     if newI ~= nil then
         if i ~= nil then    
@@ -469,7 +468,7 @@ function SaveLoadScreen:show()
                 break
             end
         end
-        
+
         self.okButton:setEnabled(self.selected ~= 0)
         if self.okButton:consumePress() then
             break
@@ -477,12 +476,12 @@ function SaveLoadScreen:show()
             self.selected = 0
             break
         end
-        
+
         yield()
     end
-    
+
     setSharedGlobal(KEY_SAVE_PAGE, self:getPage())
-    
+
     return self.selected, self.metaData
 end
 
