@@ -58,7 +58,10 @@ allprojects {
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
     }
-    
+
+    // Set output folder relative to the vnRoot so multiple projects can
+    buildDir = "${ext.vnRootDir}/build-out/${project.name}"
+
     plugins.withType(JavaPlugin) {
         sourceCompatibility = javaVersion
         compileJava.options.encoding = 'UTF-8'
