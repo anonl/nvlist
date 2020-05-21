@@ -1,6 +1,7 @@
 
 # v4.x
 - Build artifacts for NVList projects are now stored relative to the project folder (`vnRoot/build-out`), instead of inside the engine folder (`build-tools`).
+- fix: Internal error (`NullPointerException`) in nvlist-buildgui when attempting to open a project folder missing the file `build-res/build.properties`.
 
 # v4.3.0
 - Added a global preference (`fullscreen`) to choose whether to start in full-screen mode or windows mode. Default value is `true`, unless `debug` mode is enabled.

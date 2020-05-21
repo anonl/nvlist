@@ -12,6 +12,10 @@ public final class BuildProperties {
 
     private final Properties properties;
 
+    public BuildProperties() {
+        this(new Properties());
+    }
+
     private BuildProperties(Properties properties) {
         this.properties = properties;
     }

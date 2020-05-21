@@ -56,6 +56,7 @@ public final class NvlistProjectConnection implements AutoCloseable {
             buildProperties = BuildProperties.fromFile(folderConfig.getBuildPropertiesFile());
         } catch (IOException e) {
             LOG.warn("Unable to load {}", folderConfig.getBuildPropertiesFile(), e);
+            buildProperties = new BuildProperties(); // Set to empty
         }
     }
 
