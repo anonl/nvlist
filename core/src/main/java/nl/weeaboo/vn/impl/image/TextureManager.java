@@ -131,7 +131,7 @@ final class TextureManager implements IPreloadHandler {
         return newTexture(new RegionResource(res), scale, scale);
     }
 
-    protected double getImageScale() {
+    private double getImageScale() {
         return Math.min(virtualSize.w / (double)imageResolution.w,
                 virtualSize.h / (double)imageResolution.h);
     }

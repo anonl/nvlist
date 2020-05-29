@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -213,19 +212,19 @@ final class SeenLog implements ISeenLogHolder, IResourceSeenLog, IScriptSeenLog,
             out.writeInt(VERSION);
 
             out.writeInt(mediaSeen.size());
-            for (Entry<MediaType, MediaSeen> entry : mediaSeen.entrySet()) {
+            for (Map.Entry<MediaType, MediaSeen> entry : mediaSeen.entrySet()) {
                 out.writeObject(entry.getKey());
                 out.writeObject(entry.getValue());
             }
 
             out.writeInt(scriptSeen.size());
-            for (Entry<FilePath, IndexBasedSeen> entry : scriptSeen.entrySet()) {
+            for (Map.Entry<FilePath, IndexBasedSeen> entry : scriptSeen.entrySet()) {
                 out.writeUTF(entry.getKey().toString());
                 out.writeObject(entry.getValue());
             }
 
             out.writeInt(choiceSeen.size());
-            for (Entry<String, IndexBasedSeen> entry : choiceSeen.entrySet()) {
+            for (Map.Entry<String, IndexBasedSeen> entry : choiceSeen.entrySet()) {
                 out.writeUTF(entry.getKey());
                 out.writeObject(entry.getValue());
             }

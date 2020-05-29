@@ -17,7 +17,7 @@ import com.google.common.collect.Iterables;
  */
 public abstract class NonFileGdxFileHandle extends FileHandle {
 
-    public NonFileGdxFileHandle(String path, FileType type) {
+    protected NonFileGdxFileHandle(String path, FileType type) {
         super(path, type);
     }
 

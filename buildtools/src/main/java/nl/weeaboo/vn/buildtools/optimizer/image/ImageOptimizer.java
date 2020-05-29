@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,11 +116,11 @@ public final class ImageOptimizer {
 
     private void writeImageDefinitions() {
         Multimap<FilePath, ImageDefinition> defsPerFolder = HashMultimap.create();
-        for (Entry<FilePath, ImageDefinition> entry : optimizedDefs.entrySet()) {
+        for (Map.Entry<FilePath, ImageDefinition> entry : optimizedDefs.entrySet()) {
             defsPerFolder.put(entry.getKey().getParent(), entry.getValue());
         }
 
-        for (Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
+        for (Map.Entry<FilePath, Collection<ImageDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
             FilePath jsonRelativePath = folderEntry.getKey().resolve(IImageDefinition.IMG_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 

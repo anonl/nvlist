@@ -13,7 +13,8 @@ tasks.withType(JavaCompile) {
     options.errorprone {
         warn('FieldMissingNullable')
         warn('ParameterNotNullable')
-        warn('ReturnMissingNullable')
-        warn('NullableDereference')
+        // warn('ReturnMissingNullable') // (temporarily?) removed in 2.4.0 due to bugs in the check
+        // warn('NullableDereference') // (temporarily?) removed in 2.4.0 due to bugs in the check
+        disable('MissingSummary') // Allow Javadoc without summary (for example just an @see for an overloaded method)
     }
 }

@@ -41,9 +41,6 @@ public abstract class Transformable extends VisualElement implements ITransforma
     private transient @Nullable Rect2D cachedVisualBounds;
     private transient @Nullable Matrix cachedTransform;
 
-    public Transformable() {
-    }
-
     protected Matrix createTransform() {
         MutableMatrix m = baseTransform.mutableCopy();
         m.translate(getX(), getY());

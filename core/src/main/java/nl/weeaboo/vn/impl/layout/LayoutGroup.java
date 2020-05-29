@@ -22,7 +22,7 @@ public abstract class LayoutGroup extends LayoutElem implements ILayoutGroup {
     /** True if we're currently inside the {@link #layout()} method. */
     private volatile boolean performingLayout;
 
-    public LayoutGroup(ILayoutElemPeer visualElem) {
+    protected LayoutGroup(ILayoutElemPeer visualElem) {
         super(visualElem);
     }
 

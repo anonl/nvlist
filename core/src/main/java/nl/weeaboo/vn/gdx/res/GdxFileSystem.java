@@ -24,7 +24,7 @@ public abstract class GdxFileSystem extends AbstractFileSystem implements FileHa
 
     private final boolean isReadOnly;
 
-    public GdxFileSystem(boolean isReadOnly) {
+    protected GdxFileSystem(boolean isReadOnly) {
         this.isReadOnly = isReadOnly;
     }
 

@@ -16,17 +16,17 @@ public interface ILayer extends IAxisAlignedContainer {
     void add(IVisualElement d);
 
     /**
-     * @return {@code true} if the specified layer is a descendant of this layer.
+     * Returns {@code true} if the specified layer is a descendant of this layer.
      */
     boolean containsLayer(ILayer layer);
 
     /**
-     * @return A read-only view of all layer children (non-recursive).
+     * Returns a read-only view of all layer children (non-recursive).
      */
     Iterable<? extends ILayer> getSubLayers();
 
     /**
-     * @return A buffer for pending screenshots. Screenshots requests queued in this buffer will be fullfilled
+     * Returns a buffer for pending screenshots. Screenshots requests queued in this buffer will be fullfilled
      *         at some later time.
      */
     IScreenshotBuffer getScreenshotBuffer();

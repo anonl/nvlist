@@ -191,7 +191,7 @@ public final class JngReader {
         }
     }
 
-    protected static byte[] mergeAlpha(JngHeader header, JngAlphaType type, List<byte[]> c) {
+    private static byte[] mergeAlpha(JngHeader header, JngAlphaType type, List<byte[]> c) {
         Preconditions.checkArgument(type != null, "Invalid alpha type for this method: " + type);
 
         if (type != JngAlphaType.PNG) {

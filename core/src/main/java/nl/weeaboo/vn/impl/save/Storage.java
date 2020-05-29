@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -58,7 +57,7 @@ public class Storage implements IStorage, Json.Serializable {
 
     @Override
     public final void write(Json json) {
-        for (Entry<String, StoragePrimitive> entry : properties.entrySet()) {
+        for (Map.Entry<String, StoragePrimitive> entry : properties.entrySet()) {
             try {
                 json.getWriter().json(entry.getKey(), entry.getValue().toJson());
             } catch (IOException e) {

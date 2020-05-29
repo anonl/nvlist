@@ -11,7 +11,7 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
  */
 public abstract class WritableGdxFileSystem extends GdxFileSystem implements IWritableFileSystem {
 
-    public WritableGdxFileSystem() {
+    protected WritableGdxFileSystem() {
         super(false);
     }
 

@@ -22,11 +22,11 @@ public final class StoragePrimitive {
         this.value = value;
     }
 
-    protected static String escapeString(String string) {
+    private String escapeString(String string) {
         return StringUtil.replaceAll(string, stringEscapeFrom, stringEscapeTo);
     }
 
-    protected static String unescapeString(String string) {
+    private static String unescapeString(String string) {
         return StringUtil.replaceAll(string, stringEscapeTo, stringEscapeFrom);
     }
 

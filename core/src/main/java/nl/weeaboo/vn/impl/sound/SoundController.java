@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -41,9 +40,9 @@ final class SoundController implements ISoundController {
 
     @Override
     public void checkSounds() {
-        Iterator<Entry<Integer, ISound>> itr = sounds.entrySet().iterator();
+        Iterator<Map.Entry<Integer, ISound>> itr = sounds.entrySet().iterator();
         while (itr.hasNext()) {
-            Entry<Integer, ISound> entry = itr.next();
+            Map.Entry<Integer, ISound> entry = itr.next();
             ISound s = entry.getValue();
             s.update();
             if (s.isStopped()) {
@@ -86,7 +85,7 @@ final class SoundController implements ISoundController {
         return masterVolume.get(type);
     }
 
-    protected Iterable<ISound> getSounds(SoundType type) {
+    private Iterable<ISound> getSounds(SoundType type) {
         Collection<ISound> result = new ArrayList<>();
         for (ISound sound : sounds.values()) {
             if (sound.getSoundType() == type) {

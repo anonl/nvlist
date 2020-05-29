@@ -25,7 +25,7 @@ public abstract class CrossFadeRenderer extends AnimatedRenderable implements IC
     // --- Initialized in prepare() ---
     private @Nullable TriangleGrid grid;
 
-    public CrossFadeRenderer(CrossFadeConfig config) {
+    protected CrossFadeRenderer(CrossFadeConfig config) {
         super(config.getDuration());
 
         this.config = config;

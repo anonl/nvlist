@@ -38,7 +38,7 @@ public abstract class VisualElement implements IVisualElement {
 
     private ILayoutElem layoutAdapter;
 
-    public VisualElement() {
+    protected VisualElement() {
         // Add self at index 0
         signalSupport.addSignalHandler(0, new SelfSignalHandler(this));
     }

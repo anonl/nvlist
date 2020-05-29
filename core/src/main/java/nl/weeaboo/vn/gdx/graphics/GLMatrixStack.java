@@ -109,7 +109,7 @@ public final class GLMatrixStack {
         return combined;
     }
 
-    protected void onTransformChanged() {
+    private void onTransformChanged() {
         batch.setTransformMatrix(transform);
         combinedDirty = true;
     }
@@ -123,7 +123,7 @@ public final class GLMatrixStack {
         onProjectionChanged();
     }
 
-    protected void onProjectionChanged() {
+    private void onProjectionChanged() {
         batch.setProjectionMatrix(projection);
         combinedDirty = true;
     }

@@ -27,7 +27,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
      * @param tableName The name of the global table object to which the library functions should be added, or
      *        {@code null} if the library functions should be directly added to the global table.
      */
-    public LuaLib(String tableName) {
+    protected LuaLib(String tableName) {
         this.tableName = tableName;
     }
 

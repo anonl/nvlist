@@ -32,7 +32,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     void draw(IDrawBuffer drawBuffer);
 
     /**
-     * @return The parent of this element in the view hierarchy. For example, a {@link ILayer}.
+     * Returns the parent of this element in the view hierarchy. For example, a {@link ILayer}.
      */
     @Nullable IVisualGroup getParent();
 
@@ -47,18 +47,18 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     void setParent(@Nullable IVisualGroup parent);
 
     /**
-     * @return The relative rendering order of this element. Elements with lower Z-values are rendered on top of
+     * Returns the relative rendering order of this element. Elements with lower Z-values are rendered on top of
      *         elements with higher Z-values.
      */
     short getZ();
 
     /**
-     * @return {@code true} if this element should be rendered.
+     * Returns {@code true} if this element should be rendered.
      */
     boolean isVisible();
 
     /**
-     * @return The axis-aligned bounding box for this visual element, relative to the origin of its parent.
+     * Returns the axis-aligned bounding box for this visual element, relative to the origin of its parent.
      */
     Rect2D getVisualBounds();
 
@@ -68,7 +68,7 @@ public interface IVisualElement extends Serializable, IDestructible, ISignalHand
     @Nullable IRenderEnv getRenderEnv();
 
     /**
-     * @return The interface used to access this visual element's layout properties.
+     * Returns the interface used to access this visual element's layout properties.
      */
     ILayoutElem getLayoutAdapter();
 

@@ -14,7 +14,7 @@ import nl.weeaboo.vn.text.ITextLog;
 public interface IScreenTextState extends Serializable, IUpdateable {
 
     /**
-     * @return The main text drawable.
+     * Returns the main text drawable.
      */
     @Nullable ITextDrawable getTextDrawable();
 
@@ -24,7 +24,7 @@ public interface IScreenTextState extends Serializable, IUpdateable {
     void setTextDrawable(ITextDrawable td);
 
     /**
-     * @return The relative text speed.
+     * Returns the relative text speed.
      * @see #setTextSpeed(double)
      */
     double getTextSpeed();
@@ -60,7 +60,7 @@ public interface IScreenTextState extends Serializable, IUpdateable {
     void appendText(StyledText st);
 
     /**
-     * @return This screen's text log.
+     * Returns this screen's text log.
      */
     ITextLog getTextLog();
 

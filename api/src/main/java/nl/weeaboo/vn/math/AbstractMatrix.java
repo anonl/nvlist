@@ -23,7 +23,7 @@ abstract class AbstractMatrix implements Serializable {
     protected double m11;
     protected double m12;
 
-    public AbstractMatrix(double m00, double m01, double m02, double m10, double m11, double m12) {
+    AbstractMatrix(double m00, double m01, double m02, double m10, double m11, double m12) {
         this.m00 = m00;
         this.m01 = m01;
         this.m02 = m02;
@@ -32,7 +32,7 @@ abstract class AbstractMatrix implements Serializable {
         this.m12 = m12;
     }
 
-    public AbstractMatrix(AbstractMatrix m) {
+    AbstractMatrix(AbstractMatrix m) {
         this(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12);
     }
 
@@ -95,7 +95,7 @@ abstract class AbstractMatrix implements Serializable {
     }
 
     /**
-     * @return The modified input vector.
+     * Returns the modified input vector.
      */
     public Vec2 transform(Vec2 v) {
         double newX = m00 * v.x + m01 * v.y + m02;

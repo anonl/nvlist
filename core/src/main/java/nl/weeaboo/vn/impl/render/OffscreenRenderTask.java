@@ -44,14 +44,14 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
     private transient @Nullable PixelTextureData resultPixels;
     private Vec2 resultScale = new Vec2(1.0, 1.0);
 
-    public OffscreenRenderTask(IImageModule imageModule, Dim size) {
+    protected OffscreenRenderTask(IImageModule imageModule, Dim size) {
         this.imageModule = imageModule;
         this.size = size;
 
         isTransient = true;
     }
 
-    public OffscreenRenderTask(IImageModule imageModule, ITexture tex) {
+    protected OffscreenRenderTask(IImageModule imageModule, ITexture tex) {
         this(imageModule, Dim.of(tex.getPixelWidth(), tex.getPixelHeight()));
 
         resultScale.x = tex.getScaleX();
@@ -149,7 +149,7 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
         public final Rect innerRect;
         public final SpriteBatch batch;
 
-        protected RenderContext(Dim outerSize, Rect innerRect) {
+        RenderContext(Dim outerSize, Rect innerRect) {
             this.outerSize = outerSize;
             this.innerRect = innerRect;
 

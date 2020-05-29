@@ -63,7 +63,7 @@ final class PlayTimer implements IPlayTimer {
         storage.setLong(KEY_TOTAL, totalNanos);
     }
 
-    protected long now() {
+    private long now() {
         return System.nanoTime();
     }
 

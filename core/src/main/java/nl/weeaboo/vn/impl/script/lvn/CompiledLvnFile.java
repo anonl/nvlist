@@ -37,7 +37,7 @@ final class CompiledLvnFile implements ICompiledLvnFile {
         return countTextWords(BreakIterator.getWordInstance(Locale.ROOT));
     }
 
-    protected int countTextWords(BreakIterator wordBreakIterator) {
+    private int countTextWords(BreakIterator wordBreakIterator) {
         int totalWords = 0;
         for (LvnLine line : lines) {
             int lineWords = 0;

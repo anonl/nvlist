@@ -18,7 +18,7 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
     private transient WeakReference<S> cachedOriginal;
     private transient D cachedTransformed;
 
-    public TransformedResource(IResource<S> inner) {
+    protected TransformedResource(IResource<S> inner) {
         this.inner = Checks.checkNotNull(inner);
     }
 

@@ -20,7 +20,7 @@ public abstract class DecodingScreenshot extends AbstractScreenshot {
     private transient @Nullable byte[] data;
     private transient boolean isLoaded;
 
-    public DecodingScreenshot(byte[] bytes) {
+    protected DecodingScreenshot(byte[] bytes) {
         super((short)0, false);
 
         if (bytes == null) {

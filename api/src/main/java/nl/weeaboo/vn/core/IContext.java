@@ -21,7 +21,7 @@ public interface IContext extends Serializable, IDestructible, IRenderEnvConsume
     void removeContextListener(IContextListener contextListener);
 
     /**
-     * @return {@code true} if this context is active. Only active contexts are updated.
+     * Returns {@code true} if this context is active. Only active contexts are updated.
      */
     boolean isActive();
 

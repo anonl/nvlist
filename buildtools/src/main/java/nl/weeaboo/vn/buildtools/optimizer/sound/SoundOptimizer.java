@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,11 +99,11 @@ public final class SoundOptimizer {
 
     private void writeSoundDefinitions() {
         Multimap<FilePath, SoundDefinition> defsPerFolder = HashMultimap.create();
-        for (Entry<FilePath, SoundDefinition> entry : optimizedDefs.entrySet()) {
+        for (Map.Entry<FilePath, SoundDefinition> entry : optimizedDefs.entrySet()) {
             defsPerFolder.put(entry.getKey().getParent(), entry.getValue());
         }
 
-        for (Entry<FilePath, Collection<SoundDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
+        for (Map.Entry<FilePath, Collection<SoundDefinition>> folderEntry : defsPerFolder.asMap().entrySet()) {
             FilePath jsonRelativePath = folderEntry.getKey().resolve(ISoundDefinition.SND_DEF_FILE);
             optimizerFileSet.markOptimized(jsonRelativePath);
 

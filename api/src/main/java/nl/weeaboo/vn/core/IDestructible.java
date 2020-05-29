@@ -9,7 +9,7 @@ public interface IDestructible {
     void destroy();
 
     /**
-     * @return {@code true} if this object is destroyed.
+     * Returns {@code true} if this object is destroyed.
      * @see #destroy()
      */
     boolean isDestroyed();

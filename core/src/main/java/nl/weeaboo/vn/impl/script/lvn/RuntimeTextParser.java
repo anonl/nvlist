@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.script.lvn;
 
 import static nl.weeaboo.lua2.LuaUtil.unescape;
-import static nl.weeaboo.lua2.vm.LuaValue.valueOf;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,6 +18,7 @@ import com.google.common.base.Objects;
 
 import nl.weeaboo.collections.IntMap;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
@@ -36,9 +36,9 @@ public class RuntimeTextParser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final LuaValue F_STRINGIFY = valueOf("stringify");
-    public static final LuaValue F_TAG_OPEN  = valueOf("textTagOpen");
-    public static final LuaValue F_TAG_CLOSE = valueOf("textTagClose");
+    public static final LuaValue F_STRINGIFY = LuaString.valueOf("stringify");
+    public static final LuaValue F_TAG_OPEN  = LuaString.valueOf("textTagOpen");
+    public static final LuaValue F_TAG_CLOSE = LuaString.valueOf("textTagClose");
 
     private static final Logger LOG = LoggerFactory.getLogger(RuntimeTextParser.class);
     private static final Pattern TAG_REGEX = Pattern.compile("[A-Za-z]+");
@@ -176,7 +176,7 @@ public class RuntimeTextParser implements Serializable {
             return StyledText.EMPTY_STRING;
         }
 
-        Varargs result = func.invoke(valueOf(str));
+        Varargs result = func.invoke(LuaString.valueOf(str));
         return LuaConvertUtil.getStyledTextArg(result.arg(1));
     }
 
@@ -191,7 +191,7 @@ public class RuntimeTextParser implements Serializable {
             argsTable.rawset(n + 1, args[n]);
         }
 
-        Varargs result = func.invoke(valueOf(tag), argsTable);
+        Varargs result = func.invoke(LuaString.valueOf(tag), argsTable);
         if (isOpenTag) {
             TextStyle style = TextStyle.defaultInstance();
             if (result.narg() >= 2) {

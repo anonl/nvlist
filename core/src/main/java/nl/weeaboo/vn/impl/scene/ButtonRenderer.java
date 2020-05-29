@@ -66,7 +66,7 @@ public final class ButtonRenderer extends AbstractRenderable implements IButtonR
         super.onDetached(listener);
     }
 
-    protected void invalidateBackground() {
+    private void invalidateBackground() {
         INinePatch patch = textures.get(currentViewState);
         if (patch == null) {
             patch = textures.get(ButtonViewState.DEFAULT);

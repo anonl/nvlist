@@ -17,12 +17,12 @@ public interface IScriptThread extends Serializable, IDestructible {
     public void update() throws ScriptException;
 
     /**
-     * @return {@code true} if the thread has been started and not yet finished.
+     * Returns {@code true} if the thread has been started and not yet finished.
      */
     public boolean isRunnable();
 
     /**
-     * @return A string representation of the current call stack of this thread. Returns an empty list if no
+     * Returns a string representation of the current call stack of this thread. Returns an empty list if no
      *         stack trace is available.
      */
     List<String> getStackTrace();

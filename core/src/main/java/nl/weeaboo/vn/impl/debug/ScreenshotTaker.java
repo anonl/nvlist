@@ -56,6 +56,7 @@ final class ScreenshotTaker {
         try {
             byte[] bytes = PixmapUtil.encodePng(pixmap);
 
+            @SuppressWarnings("JdkObsolete") // Use date because Android doesn't have java.time
             String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
             FilePath fileName = FilePath.of("screenshot-" + timestamp + ".png");
 

@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.gdx.input;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -46,7 +45,7 @@ public class GdxInputAdapterTest {
         Set<Integer> unmapped = Sets.newHashSet();
 
         Map<String, Integer> keyConstants = ReflectUtil.getConstants(Keys.class, Integer.TYPE);
-        for (Entry<String, Integer> entry : keyConstants.entrySet()) {
+        for (Map.Entry<String, Integer> entry : keyConstants.entrySet()) {
             int keycode = entry.getValue();
             KeyCode result = GdxInputAdapter.convertKeyboard(keycode);
             if (result == KeyCode.UNKNOWN) {
@@ -65,7 +64,7 @@ public class GdxInputAdapterTest {
     @Test
     public void convertMouse() throws IllegalArgumentException, IllegalAccessException {
         Map<String, Integer> keyConstants = ReflectUtil.getConstants(Buttons.class, Integer.TYPE);
-        for (Entry<String, Integer> entry : keyConstants.entrySet()) {
+        for (Map.Entry<String, Integer> entry : keyConstants.entrySet()) {
             int button = entry.getValue();
             KeyCode result = GdxInputAdapter.convertMouse(button);
             Assert.assertNotEquals(KeyCode.UNKNOWN, result);

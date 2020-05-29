@@ -15,7 +15,7 @@ public final class LayerRenderCommand extends BaseRenderCommand {
     public final double contentDx;
     public final double contentDy;
 
-    protected LayerRenderCommand(int layerId, short z, Rect2D layerBounds, double contentDx, double contentDy) {
+    LayerRenderCommand(int layerId, short z, Rect2D layerBounds, double contentDx, double contentDy) {
         super(ID, z, true, (byte)layerId);
 
         this.layerId = layerId;

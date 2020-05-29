@@ -46,7 +46,7 @@ final class StyleStack {
         return false;
     }
 
-    protected void onStackChanged() {
+    private void onStackChanged() {
         calculated = null;
     }
 

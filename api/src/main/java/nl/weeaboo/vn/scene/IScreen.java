@@ -21,12 +21,12 @@ public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer {
     ILayer createLayer(ILayer parentLayer);
 
     /**
-     * @return The root layer of this screen.
+     * Returns the root layer of this screen.
      */
     ILayer getRootLayer();
 
     /**
-     * @return The current default layer for new drawables that are added to this screen.
+     * Returns the current default layer for new drawables that are added to this screen.
      */
     ILayer getActiveLayer();
 
@@ -36,12 +36,12 @@ public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer {
     void setActiveLayer(ILayer layer);
 
     /**
-     * @return Information about the current text box.
+     * Returns information about the current text box.
      */
     IScreenTextState getTextState();
 
     /**
-     * @return An object for starting and monitoring offscreen render tasks.
+     * Returns an object for starting and monitoring offscreen render tasks.
      */
     IOffscreenRenderTaskBuffer getOffscreenRenderTaskBuffer();
 

@@ -26,7 +26,7 @@ abstract class AbstractSound implements ISound {
     private double masterVolume = 1.0;
     private int preferredChannel = -1;
 
-    public AbstractSound(ISoundController sctrl, SoundType soundType, FilePath filename) {
+    protected AbstractSound(ISoundController sctrl, SoundType soundType, FilePath filename) {
         this.soundController = Checks.checkNotNull(sctrl);
         this.soundType = Checks.checkNotNull(soundType);
         this.filename = Checks.checkNotNull(filename);

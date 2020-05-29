@@ -4,6 +4,8 @@ import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.math.Vec2;
 
 /**
+ * Provides access to user-input events.
+ *
  * @param <K> Key identifier.
  */
 public interface IBaseInput<K> {
@@ -14,23 +16,23 @@ public interface IBaseInput<K> {
     void clearButtonStates();
 
     /**
-     * @return Same as {@link #isPressed(Object, boolean)}, then marks the press as consumed so further calls
+     * Same as {@link #isPressed(Object, boolean)}, then marks the press as consumed so further calls
      *         return {@code false}.
      */
     boolean consumePress(K button);
 
     /**
-     * @return {@code true} if the specified button got pressed since the last frame.
+     * Returns {@code true} if the specified button got pressed since the last frame.
      */
     boolean isJustPressed(K button);
 
     /**
-     * @return {@code true} if the specified button is currently pressed.
+     * Returns {@code true} if the specified button is currently pressed.
      */
     boolean isPressed(K button, boolean allowConsumedPress);
 
     /**
-     * @return The time in milliseconds that the specified button has been continuously held, or {@code 0} if
+     * Returns the time in milliseconds that the specified button has been continuously held, or {@code 0} if
      *         that button isn't currently being held.
      */
     long getPressedTime(K button, boolean allowConsumedPress);
@@ -47,7 +49,7 @@ public interface IBaseInput<K> {
     int getPointerScroll();
 
     /**
-     * @return {@code true} if the user hasn't performed any type of input this frame (no button presses, no
+     * Returns {@code true} if the user hasn't performed any type of input this frame (no button presses, no
      *         mouse/touch events).
      */
     boolean isIdle();

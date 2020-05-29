@@ -50,7 +50,7 @@ public abstract class ResourceLoader implements IResourceResolver {
     private String[] autoFileExts = new String[0];
     private boolean checkFileExt = true;
 
-    public ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
+    protected ResourceLoader(MediaType mediaType, IResourceLoadLog resourceLoadLog) {
         this.mediaType = Checks.checkNotNull(mediaType);
         this.resourceLoadLog = Checks.checkNotNull(resourceLoadLog);
 

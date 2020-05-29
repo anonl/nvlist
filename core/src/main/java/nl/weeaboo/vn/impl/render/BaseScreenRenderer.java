@@ -29,7 +29,7 @@ public abstract class BaseScreenRenderer implements IScreenRenderer {
     private int foreground;
     //-------------------------------------------------------------------------------------
 
-    public BaseScreenRenderer(IRenderEnv env, RenderStats stats) {
+    protected BaseScreenRenderer(IRenderEnv env, RenderStats stats) {
         this.renderEnv = env;
         this.renderStats = Checks.checkNotNull(stats);
 

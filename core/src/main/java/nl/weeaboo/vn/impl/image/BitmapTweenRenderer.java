@@ -33,7 +33,7 @@ public abstract class BitmapTweenRenderer extends AnimatedRenderable implements 
     private @Nullable ITexture remapTexture;
     private @Nullable TriangleGrid grid;
 
-    public BitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
+    protected BitmapTweenRenderer(IImageModule imageModule, BitmapTweenConfig config) {
         super(config.getDuration());
 
         this.imageModule = imageModule;

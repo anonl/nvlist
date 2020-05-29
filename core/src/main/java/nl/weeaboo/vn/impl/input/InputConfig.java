@@ -3,7 +3,7 @@ package nl.weeaboo.vn.impl.input;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -69,7 +69,7 @@ public final class InputConfig implements Json.Serializable {
 
     @Override
     public void write(Json json) {
-        for (Entry<VKey, Collection<KeyCombination>> entry : keyMapping.asMap().entrySet()) {
+        for (Map.Entry<VKey, Collection<KeyCombination>> entry : keyMapping.asMap().entrySet()) {
             json.writeArrayStart(entry.getKey().toString());
             for (KeyCombination keyCombination : entry.getValue()) {
                 writeKeyCombination(json, keyCombination);

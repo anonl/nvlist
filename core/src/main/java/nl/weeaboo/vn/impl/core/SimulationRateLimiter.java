@@ -56,7 +56,7 @@ public final class SimulationRateLimiter {
         lastRenderTime = now;
     }
 
-    protected long timestampNanos() {
+    private long timestampNanos() {
         return TimeUtils.nanoTime();
     }
 

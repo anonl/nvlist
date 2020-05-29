@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.script.lib;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class InterpolatorsLib extends LuaLib {
         // Add well-known interpolators to table
         try {
             Map<String, IInterpolator> map = ReflectUtil.getConstants(Interpolators.class, IInterpolator.class);
-            for (Entry<String, IInterpolator> entry : map.entrySet()) {
+            for (Map.Entry<String, IInterpolator> entry : map.entrySet()) {
                 LuaUserdata interpolator = LuajavaLib.toUserdata(entry.getValue(), IInterpolator.class);
                 table.rawset(entry.getKey(), interpolator);
             }

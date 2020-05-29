@@ -25,7 +25,7 @@ public abstract class Panel extends Transformable implements IPanel {
 
     private transient IEventListener rendererListener;
 
-    public Panel() {
+    protected Panel() {
         children = new ChildCollection(this);
         addSignalHandler(0, children);
 

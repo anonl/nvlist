@@ -19,22 +19,22 @@ public interface IAxisAlignedContainer extends IVisualGroup, IPositionable {
     boolean contains(double cx, double cy);
 
     /**
-     * @return The top-left X-coordinate of the container relative to its parent.
+     * Returns the top-left X-coordinate of the container relative to its parent.
      */
     double getX();
 
     /**
-     * @return The top-left Y-coordinate of the container relative to its parent.
+     * Returns the top-left Y-coordinate of the container relative to its parent.
      */
     double getY();
 
     /**
-     * @return The width of the container.
+     * Returns the width of the container.
      */
     double getWidth();
 
     /**
-     * @return The height of the container.
+     * Returns the height of the container.
      */
     double getHeight();
 

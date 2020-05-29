@@ -37,7 +37,7 @@ final class FileResource<T> implements IResource<T> {
         return (ref != null ? ref.get() : null);
     }
 
-    protected void set(Ref<T> ref) {
+    void set(Ref<T> ref) {
         this.valueRef = ref;
     }
 

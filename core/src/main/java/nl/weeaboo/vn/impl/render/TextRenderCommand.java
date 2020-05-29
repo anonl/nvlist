@@ -17,7 +17,7 @@ public final class TextRenderCommand extends BaseRenderCommand {
     public final ITextLayout textLayout;
     public final double visibleGlyphs;
 
-    protected TextRenderCommand(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
+    TextRenderCommand(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
             double visibleGlyphs) {
 
         super(ID, dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), 0xFFFFFFFF,

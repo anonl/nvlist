@@ -15,7 +15,7 @@ public abstract class ResourceStore implements IDestructible {
 
     private boolean destroyed;
 
-    public ResourceStore(Logger log) {
+    protected ResourceStore(Logger log) {
         this.log = Checks.checkNotNull(log);
     }
 

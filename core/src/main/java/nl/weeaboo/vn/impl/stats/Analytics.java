@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -174,7 +173,7 @@ final class Analytics implements IAnalytics {
             out.writeInt(VERSION);
 
             out.writeInt(loadsPerLine.size());
-            for (Entry<FileLine, LineStats> entry : loadsPerLine.entrySet()) {
+            for (Map.Entry<FileLine, LineStats> entry : loadsPerLine.entrySet()) {
                 out.writeUTF(entry.getKey().toString());
                 out.writeUnshared(entry.getValue());
             }

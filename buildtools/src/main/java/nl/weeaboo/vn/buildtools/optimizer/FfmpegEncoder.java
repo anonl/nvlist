@@ -30,7 +30,7 @@ public abstract class FfmpegEncoder {
 
     private final ITempFileProvider tempFileProvider;
 
-    public FfmpegEncoder(ITempFileProvider tempFileProvider) {
+    protected FfmpegEncoder(ITempFileProvider tempFileProvider) {
         this.tempFileProvider = Checks.checkNotNull(tempFileProvider);
     }
 

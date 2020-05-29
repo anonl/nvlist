@@ -53,7 +53,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         this.defaultStyle = fontStore.getDefaultStyle();
     }
 
-    protected ITextLayout createLayout(int wrapWidth) {
+    private ITextLayout createLayout(int wrapWidth) {
         MutableStyledText newText = getText().mutableCopy();
         newText.setBaseStyle(getDefaultStyle());
 
@@ -81,7 +81,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         buffer.drawText(d, dx, dy, textLayout, visibleText);
     }
 
-    protected final ITextLayout getLayout() {
+    private final ITextLayout getLayout() {
         ITextLayout result = cachedLayout;
         if (result == null) {
             result = createLayout(getLayoutMaxWidth());
@@ -90,7 +90,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         return result;
     }
 
-    protected void invalidateLayout() {
+    private void invalidateLayout() {
         cachedLayout = null;
         cachedVisibleLayout = null;
     }
@@ -113,7 +113,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         return result;
     }
 
-    protected void onVisibleTextChanged() {
+    private void onVisibleTextChanged() {
     }
 
     @Override
@@ -166,11 +166,11 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         }
     }
 
-    protected int getLayoutMaxWidth() {
+    private int getLayoutMaxWidth() {
         return (int)Math.floor(getMaxWidth());
     }
 
-    protected int getLayoutMaxHeight() {
+    private int getLayoutMaxHeight() {
         return (int)Math.floor(getMaxHeight());
     }
 

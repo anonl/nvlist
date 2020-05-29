@@ -68,7 +68,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#translationMatrix(double, double)}.
+     * Returns {@code this} * {@link Matrix#translationMatrix(double, double)}.
      */
     public Matrix translatedCopy(double x, double y) {
         return new Matrix(
@@ -77,7 +77,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#rotationMatrix(double)}.
+     * Returns {@code this} * {@link Matrix#rotationMatrix(double)}.
      */
     public Matrix rotatedCopy(double angle) {
         double cos = FastMath.fastCos((float)angle);
@@ -89,7 +89,7 @@ public final class Matrix extends AbstractMatrix {
     }
 
     /**
-     * @return {@code this} * {@link Matrix#scaledCopy(double, double)}.
+     * Returns {@code this} * {@link Matrix#scaledCopy(double, double)}.
      */
     public Matrix scaledCopy(double sx, double sy) {
         return new Matrix(

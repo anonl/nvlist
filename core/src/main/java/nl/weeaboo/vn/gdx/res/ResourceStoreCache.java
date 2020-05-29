@@ -28,7 +28,7 @@ public abstract class ResourceStoreCache<K, V> {
     private final LoadingCache<K, PreloadRef> preloadCache;
     private final LoadingCache<K, Ref<V>> cache;
 
-    public ResourceStoreCache(ResourceStoreCacheConfig<V> config) {
+    protected ResourceStoreCache(ResourceStoreCacheConfig<V> config) {
         maximumWeight = config.getMaximumWeight();
         weigher = config.getWeigher();
 

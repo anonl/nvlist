@@ -98,7 +98,7 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         return true;
     }
 
-    protected long timestampMs() {
+    private long timestampMs() {
         return TimeUtils.nanoTime() / 1000_000L;
     }
 

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
@@ -56,7 +55,7 @@ public final class StorageIO {
      */
     public static IStorage read(InputStream in) throws IOException {
         Storage storage = new Storage();
-        for (Entry<String, String> entry : PropertiesUtil.load(in).entrySet()) {
+        for (Map.Entry<String, String> entry : PropertiesUtil.load(in).entrySet()) {
             storage.set(entry.getKey(), StoragePrimitive.fromJson(entry.getValue()));
         }
         return storage;
