@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.render.IRenderEnv;
 
@@ -23,6 +24,7 @@ public class NativeVideoTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         renderEnv = env.getRenderEnv();
 
