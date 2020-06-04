@@ -1,0 +1,12 @@
+@@
+
+require("builtin/vn")
+
+image = img(colorTex(0xFFFFFFFF, 10, 10), {width=100, height=100})
+bitmapTweenIn(image, "vshutter")
+
+-- bitmapTweenIn should keep any custom scaling previously applied to the image
+luaAssert(100, image:getWidth())
+luaAssert(100, image:getHeight())
+
+@@

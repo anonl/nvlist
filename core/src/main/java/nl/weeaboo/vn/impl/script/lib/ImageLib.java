@@ -14,7 +14,9 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITexture;
+import nl.weeaboo.vn.image.ITextureRenderer;
 import nl.weeaboo.vn.impl.core.ContextUtil;
+import nl.weeaboo.vn.impl.image.TextureRenderer;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.scene.IDrawable;
@@ -46,7 +48,7 @@ public class ImageLib extends LuaLib {
      * @param args
      *        <ol>
      *        <li>Layer to which the new image drawable should be added.
-     *        <li>Texture of filename
+     *        <li>Texture or filename
      *        </ol>
      * @return The newly created image drawable.
      * @throws ScriptException If the input parameters are invalid.
@@ -68,6 +70,26 @@ public class ImageLib extends LuaLib {
         }
 
         return LuajavaLib.toUserdata(image, IImageDrawable.class);
+    }
+
+    /**
+     * Creates a {@link ITextureRenderer}.
+     *
+     * @param args
+     *        <ol>
+     *        <li>Texture or filename
+     *        </ol>
+     * @return The newly created texture renderer.
+     * @throws ScriptException If the input parameters are invalid.
+     */
+    @ScriptFunction
+    public Varargs createTextureRenderer(Varargs args) throws ScriptException {
+        IImageModule imageModule = env.getImageModule();
+
+        ITexture tex = LuaConvertUtil.getTextureArg(imageModule, args.arg(1));
+        TextureRenderer renderer = new TextureRenderer(tex);
+
+        return LuajavaLib.toUserdata(renderer, ITextureRenderer.class);
     }
 
     /**

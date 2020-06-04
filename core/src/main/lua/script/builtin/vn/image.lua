@@ -229,10 +229,13 @@ end
 -- @treturn Texture The created Texture object, or <code>nil</code> if something
 --          went wrong.
 function tex(filename, suppressErrors)
-    if type(filename) == "string" then
-        return Image.getTexture(filename, suppressErrors)
-    end
-    return filename
+    return Image.getTexture(filename, suppressErrors)
+end
+
+---Creates a texture renderer from an image file or texture.
+-- @see tex
+function texRenderer(...)
+    return Image.createTextureRenderer(tex(...))
 end
 
 ---Creates a texture object with the specified color.
