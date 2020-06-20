@@ -19,7 +19,7 @@ dependencies {
 
 // Takes the native dependencies of the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
-tasks.register('copyAndroidNatives', Copy) {
+def copyAndroidNatives = tasks.register('copyAndroidNatives', Copy) {
     configurations.natives.files.each { jar ->
         def outputDir = null
         if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = 'libs/arm64-v8a'
@@ -40,53 +40,35 @@ tasks.register('copyAndroidNatives', Copy) {
 assemble.dependsOn copyAndroidNatives
 
 // Run installed app through adb
-tasks.register('runInstalled', Exec) {
-    def adb = android.getAdbExe()
+def runInstalled = tasks.register('runInstalled', Exec) {
     def target = 'nl.weeaboo.vn.android/nl.weeaboo.vn.android.AndroidLauncher'
-    commandLine "$adb", 'shell', 'am', 'start', '-n', target
+    doFirst {
+        // Resolve ADB only when task is executed. This allows you to configure the nvlist-android project
+        // without installing the Android SDK
+        commandLine android.adbExecutable, 'shell', 'am', 'start', '-n', target
+    }
 }
 
 // Install, then run debug build
 tasks.register('runDebug') {
-    dependsOn('installDebug', 'runInstalled')
+    dependsOn('installDebug', runInstalled)
 }
 
 afterEvaluate {
-    plugins.withId('com.android.library') {
-        publishing {
-            publications {
-                android(MavenPublication) {
-                    // Manually configure artifact and dependencies (Android plugin doesn't supply a component)
-                    artifact project.tasks.bundleReleaseAar
+    publishing {
+        publications {
+            android(MavenPublication) {
+                from components.release
+                artifactId 'nvlist-android'
 
-                    pom.withXml {
-                        // Gather dependencies
-                        def projectDeps = [].toSet()
-                        projectDeps += configurations.implementation.allDependencies
-                        // projectDeps += configurations.natives.allDependencies
-
-                        def root = asNode()
-
-                        // Append dependencies to POM
-                        def depsNode = root.appendNode('dependencies')
-                        projectDeps.each {
-                            def depNode = depsNode.appendNode('dependency')
-                            depNode.appendNode('groupId', it.group)
-                            depNode.appendNode('artifactId', it.name)
-                            depNode.appendNode('version', it.version)
-                        }
-
-                        // Append license info
-                        root = root.children().last() + pomLicenseConfig
-                    }
-
-                    artifactId 'nvlist-android'
+                pom.withXml {
+                    asNode().children().last() + pomLicenseConfig
                 }
             }
         }
+    }
 
-        bintray {
-            publications = ['android']
-        }
+    bintray {
+        publications = ['android']
     }
 }

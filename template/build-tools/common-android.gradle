@@ -2,7 +2,7 @@
 configurations { natives }
 
 android {
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.2'
     compileSdkVersion 28
 
     defaultConfig {
@@ -32,7 +32,7 @@ android {
         textReport true
     }
 
-    if (android.hasProperty("applicationVariants")) {
+    if (android.hasProperty('applicationVariants')) {
         android.applicationVariants.all { variant ->
             variant.mergeAssets.doLast {
                 // Generate an assets.list file containing all assets files in the APK
