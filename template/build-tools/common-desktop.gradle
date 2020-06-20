@@ -27,10 +27,6 @@ tasks.register('assembleNvl', Zip) {
 }
 assembleDist.dependsOn assembleNvl
 
-// Disable dist tasks from 'distribution' plugin (we use packr instead)
-tasks.distZip.enabled = false
-tasks.distTar.enabled = false
-
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
@@ -40,6 +36,12 @@ shadowJar {
 }
 
 apply from: "${buildToolsDir}/common-packr.gradle"
+
+// Disable dist tasks from 'distribution'/'shadow' plugin (we use packr instead)
+tasks.distZip.enabled = false
+tasks.distTar.enabled = false
+tasks.shadowDistZip.enabled = false
+tasks.shadowDistTar.enabled = false
 
 packr {
     resources {
