@@ -7,12 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
+import nl.weeaboo.vn.render.DisplayMode;
 
 public class SystemModuleMock extends AbstractModule implements ISystemModule {
 
@@ -22,7 +21,7 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
     private final AtomicInteger restartCount = new AtomicInteger();
     private final List<String> openedWebsites = new ArrayList<>();
 
-    private transient SystemEnv systemEnv;
+    private transient SystemEnvMock systemEnv;
 
     public SystemModuleMock(IEnvironment env) {
         this.env = env;
@@ -67,11 +66,16 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
     }
 
     @Override
-    public ISystemEnv getSystemEnv() {
+    public SystemEnvMock getSystemEnv() {
         if (systemEnv == null) {
-            systemEnv = new SystemEnv(ApplicationType.HeadlessDesktop);
+            systemEnv = new SystemEnvMock();
         }
         return systemEnv;
+    }
+
+    @Override
+    public void setDisplayMode(DisplayMode mode) {
+        getSystemEnv().setDisplayMode(mode);
     }
 
 }

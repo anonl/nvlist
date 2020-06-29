@@ -123,6 +123,9 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         IRenderEnv old = getRenderEnv();
         renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize);
 
+        for (IModule module : getModules()) {
+            module.setRenderEnv(renderEnv);
+        }
         contextManager.setRenderEnv(renderEnv);
     }
 

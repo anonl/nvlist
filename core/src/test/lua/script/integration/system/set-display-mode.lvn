@@ -1,0 +1,7 @@
+@@
+
+require("builtin/vn")
+
+System.setDisplayMode(DisplayMode.WINDOWED)
+
+@@
