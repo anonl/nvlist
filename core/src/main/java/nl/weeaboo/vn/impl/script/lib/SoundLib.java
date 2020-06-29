@@ -1,8 +1,7 @@
 package nl.weeaboo.vn.impl.script.lib;
 
-import com.google.common.base.MoreObjects;
-
 import nl.weeaboo.lua2.luajava.LuajavaLib;
+import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -41,7 +40,7 @@ public class SoundLib extends LuaLib {
     @ScriptFunction
     public Varargs create(Varargs args) {
         ResourceLoadInfo loadInfo = LuaConvertUtil.getLoadInfo(MediaType.SOUND, args.arg(1));
-        SoundType stype = MoreObjects.firstNonNull(args.touserdata(2, SoundType.class), SoundType.SOUND);
+        SoundType stype = args.optuserdata(2, SoundType.class, SoundType.SOUND);
 
         ISoundModule soundModule = env.getSoundModule();
         ISound sound = soundModule.createSound(stype, loadInfo);
@@ -74,5 +73,23 @@ public class SoundLib extends LuaLib {
 
     private ISoundController getSoundController() {
         return env.getSoundModule().getSoundController();
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Sound type (sound effect, music, voice clip)
+     *        <li>New master volume (between {@code 0.0} and {@code 1.0}).
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs setMasterVolume(Varargs args) {
+        SoundType stype = args.optuserdata(1, SoundType.class, SoundType.SOUND);
+        double volume = args.checkdouble(2);
+
+        ISoundController sc = getSoundController();
+        sc.setMasterVolume(stype, volume);
+
+        return LuaConstants.NONE;
     }
 }

@@ -1,0 +1,8 @@
+
+@@
+
+Sound.setMasterVolume(SoundType.MUSIC, 0.1)
+Sound.setMasterVolume(SoundType.SOUND, 0.2)
+Sound.setMasterVolume(SoundType.VOICE, 0.3)
+
+@@
