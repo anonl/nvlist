@@ -6,6 +6,7 @@ import static nl.weeaboo.vn.sound.ISoundController.MIN_CHANNEL;
 import java.io.IOException;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Doubles;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
@@ -90,6 +91,8 @@ abstract class AbstractSound implements ISound {
 
     @Override
     public void setPrivateVolume(double v) {
+        v = Doubles.constrainToRange(v, 0.0, 1.0);
+
         if (privateVolume != v) {
             privateVolume = v;
 
@@ -99,6 +102,8 @@ abstract class AbstractSound implements ISound {
 
     @Override
     public void setMasterVolume(double v) {
+        v = Doubles.constrainToRange(v, 0.0, 1.0);
+
         if (masterVolume != v) {
             masterVolume = v;
 

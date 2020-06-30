@@ -7,6 +7,7 @@ import nl.weeaboo.common.VersionNumber;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
@@ -144,6 +145,7 @@ public class SystemLib extends LuaLib {
     public Varargs setDisplayMode(Varargs args) {
         DisplayMode mode = args.checkuserdata(1, DisplayMode.class);
         try {
+            LuaThread.getRunning().yield(LuaConstants.NONE);
             env.getSystemModule().setDisplayMode(mode);
             return LuaConstants.NONE;
         } catch (IllegalStateException e) {

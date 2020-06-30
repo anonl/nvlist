@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.script.lib;
 
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaDouble;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -73,6 +74,22 @@ public class SoundLib extends LuaLib {
 
     private ISoundController getSoundController() {
         return env.getSoundModule().getSoundController();
+    }
+
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>Sound type (sound effect, music, voice clip)
+     *        </ol>
+     * @return The current master volume (between {@code 0.0} and {@code 1.0}) for the given sound type.
+     */
+    @ScriptFunction
+    public Varargs getMasterVolume(Varargs args) {
+        SoundType stype = args.optuserdata(1, SoundType.class, SoundType.SOUND);
+
+        ISoundController sc = getSoundController();
+        return LuaDouble.valueOf(sc.getMasterVolume(stype));
     }
 
     /**
