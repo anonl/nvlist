@@ -9,8 +9,8 @@ import org.junit.experimental.categories.Category;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
-import nl.weeaboo.vn.impl.image.TestImageUtil;
 import nl.weeaboo.vn.impl.image.ScreenshotMock;
+import nl.weeaboo.vn.impl.image.TestImageUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.save.ISaveFileHeader;
 import nl.weeaboo.vn.save.IStorage;
@@ -23,16 +23,12 @@ public final class SaveIntegrationTest extends IntegrationTest {
     @Test
     public void saveLoad() throws SaveFormatException, IOException {
         PixelTextureData textureData = TestImageUtil.newTestTextureData(10, 10);
-        try {
-            ScreenshotMock ss = new ScreenshotMock();
-            ss.setPixels(textureData, Dim.of(1280, 720));
-            LuaTestUtil.setGlobal("screenshot", ss);
+        ScreenshotMock ss = new ScreenshotMock();
+        ss.setPixels(textureData, Dim.of(1280, 720));
+        LuaTestUtil.setGlobal("screenshot", ss);
 
-            loadScript("integration/save/saveload.lvn");
-            waitForAllThreads();
-        } finally {
-            textureData.destroy();
-        }
+        loadScript("integration/save/saveload.lvn");
+        waitForAllThreads();
 
         ISaveFileHeader saveHeader = env.getSaveModule().readSaveHeader(1);
 

@@ -4,11 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.gdx.test.junit.GdxUiTest;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
 import nl.weeaboo.vn.impl.image.VolatileTextureData;
 import nl.weeaboo.vn.impl.image.WritableScreenshot;
@@ -27,17 +26,17 @@ public class VolatileScreenshotTest extends IntegrationTest {
 
         // Volatile screenshot
         VolatileTextureData vp = (VolatileTextureData)screenshot(renderer, true, glRect).getPixels();
-        TextureRegion vregion = vp.toTextureRegion();
-        Assert.assertNotNull(vregion);
+        ITexture vregion = vp.toTexture(1, 1);
+        Assert.assertNotNull(vp.toTexture(1, 1));
 
         // Non-Volatile screenshot
         PixelTextureData np = (PixelTextureData)screenshot(renderer, false, glRect).getPixels();
-        TextureRegion nregion = np.toTextureRegion();
+        ITexture nregion = np.toTexture(1, 1);
         Assert.assertNotNull(nregion);
 
         // Check that volatile and non-volatile screenshots are identical
-        Assert.assertEquals(nregion.getRegionWidth(), vregion.getRegionWidth());
-        Assert.assertEquals(nregion.getRegionHeight(), vregion.getRegionHeight());
+        Assert.assertEquals(nregion.getWidth(), vregion.getWidth(), 0.0);
+        Assert.assertEquals(nregion.getHeight(), vregion.getHeight(), 0.0);
     }
 
     private WritableScreenshot screenshot(GLScreenRenderer renderer, boolean isVolatile, Rect glRect) {

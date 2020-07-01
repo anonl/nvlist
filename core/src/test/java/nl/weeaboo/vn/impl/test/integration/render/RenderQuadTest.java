@@ -31,7 +31,7 @@ public class RenderQuadTest extends RenderIntegrationTest {
 
     @Test
     public void renderInvalidTexture() {
-        // The GL renderer only knows how to render TextureAdapters, not TextureStubs
+        // The GL renderer only knows how to render GdxTexture, not TextureStubs
         TextureStub invalidTex = new TextureStub(1, 1);
 
         drawQuad(invalidTex, Area2D.of(0, 0, 1280, 720));

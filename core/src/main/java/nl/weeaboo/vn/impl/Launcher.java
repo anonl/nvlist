@@ -28,7 +28,6 @@ import nl.weeaboo.vn.gdx.input.GdxInputAdapter;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.core.Destructibles;
@@ -90,7 +89,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable GdxTextureStore textureStore;
     private @Nullable GdxMusicStore musicStore;
     private @Nullable ShaderStore shaderStore;
-    private @Nullable GeneratedResourceStore generatedResourceStore;
     private @Nullable GdxFontStore fontStore;
     private boolean windowDirty;
 
@@ -174,8 +172,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(textureStore =
                 new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem, prefs));
-        StaticEnvironment.GENERATED_RESOURCES.set(generatedResourceStore =
-                new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(fontStore = new GdxFontStore(resourceFileSystem));
@@ -207,7 +203,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         osd = DisposeUtil.dispose(osd);
 
         textureStore = Destructibles.destroy(textureStore);
-        generatedResourceStore = Destructibles.destroy(generatedResourceStore);
         shaderStore = Destructibles.destroy(shaderStore);
         musicStore = Destructibles.destroy(musicStore);
         fontStore = Destructibles.destroy(fontStore);

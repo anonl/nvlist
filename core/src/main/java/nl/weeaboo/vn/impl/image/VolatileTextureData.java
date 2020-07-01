@@ -1,42 +1,38 @@
 package nl.weeaboo.vn.impl.image;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import nl.weeaboo.common.Checks;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
+import nl.weeaboo.vn.gdx.res.IResource;
+import nl.weeaboo.vn.image.ITexture;
 
 /**
  * Texture data stored in volatile memory (typically VRAM).
  */
 public final class VolatileTextureData implements IGdxTextureData {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private final transient TextureRegion textureRegion;
-    private final boolean isShared;
+    private final RegionResource regionResource;
     private final int width;
     private final int height;
 
-    private boolean destroyed;
-
-    private VolatileTextureData(TextureRegion textureRegion, boolean isShared) {
-        this.textureRegion = Checks.checkNotNull(textureRegion);
-        this.isShared = isShared;
+    private VolatileTextureData(TextureRegion textureRegion) {
+        regionResource = new RegionResource(textureRegion);
 
         this.width = textureRegion.getRegionWidth();
         this.height = textureRegion.getRegionHeight();
     }
 
-    /**
-     * @param isShared If {@code true}, the texture region is considered a shared resource and disposing the
-     *        resulting texture data object won't dispose the texture region.
-     */
-    public static VolatileTextureData fromRegion(TextureRegion texture, boolean isShared) {
-        return new VolatileTextureData(texture, isShared);
+    public static VolatileTextureData fromRegion(TextureRegion texture) {
+        return new VolatileTextureData(texture);
     }
 
     @Override
-    public TextureRegion toTextureRegion() {
-        return textureRegion;
+    public ITexture toTexture(double sx, double sy) {
+        return new GdxTexture(regionResource, sx, sy);
     }
 
     @Override
@@ -49,25 +45,21 @@ public final class VolatileTextureData implements IGdxTextureData {
         return height;
     }
 
-    @Override
-    public void destroy() {
-        if (!destroyed) {
-            destroyed = true;
+    private static final class RegionResource implements IResource<TextureRegion> {
 
-            if (!isShared) {
-                textureRegion.getTexture().dispose();
-            }
+        private static final long serialVersionUID = 1L;
+
+        private transient @Nullable TextureRegion textureRegion;
+
+        public RegionResource(TextureRegion textureRegion) {
+            this.textureRegion = textureRegion;
+            GdxCleaner.get().register(this, textureRegion.getTexture());
         }
-    }
 
-    @Override
-    public boolean isDestroyed() {
-        return destroyed;
-    }
+        @Override
+        public TextureRegion get() {
+            return textureRegion;
+        }
 
-    @Override
-    public final void dispose() {
-        destroy();
     }
-
 }

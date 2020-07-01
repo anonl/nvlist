@@ -6,7 +6,6 @@ import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.res.AssetManagerMock;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ImageModule;
 import nl.weeaboo.vn.impl.image.ShaderStore;
@@ -58,7 +57,6 @@ public class TestEnvironment extends DefaultEnvironment {
         StaticEnvironment.ASSET_MANAGER.set(new AssetManagerMock(gdxFileSystem));
         StaticEnvironment.TEXTURE_STORE.set(new GdxTextureStore(StaticEnvironment.TEXTURE_STORE,
                 gdxFileSystem, prefs));
-        StaticEnvironment.GENERATED_RESOURCES.set(new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(new ShaderStore());
         StaticEnvironment.FONT_STORE.set(new GdxFontStore(gdxFileSystem));
         StaticEnvironment.MUSIC_STORE.set(new GdxMusicStore(StaticEnvironment.MUSIC_STORE));

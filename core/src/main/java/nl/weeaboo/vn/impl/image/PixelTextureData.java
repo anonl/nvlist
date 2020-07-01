@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.annotation.Nullable;
+import javax.annotation.WillCloseWhenClosed;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +14,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
+import nl.weeaboo.vn.gdx.res.IResource;
+import nl.weeaboo.vn.image.ITexture;
 
 /**
  * Pixmap-backed {@link IGdxTextureData}.
@@ -18,19 +24,20 @@ import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 @CustomSerializable
 public final class PixelTextureData implements IGdxTextureData {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private transient Pixmap pixels;
-    private boolean destroyed;
+    private Pixmap pixels;
+    private final RegionResource regionResource = new RegionResource();
 
     private PixelTextureData(Pixmap pixels) {
         this.pixels = Checks.checkNotNull(pixels);
+        GdxCleaner.get().register(this, pixels);
     }
 
     /**
      * Creates a new instance from a pixmap using premultiplied alpha.
      */
-    public static PixelTextureData fromPremultipliedPixmap(Pixmap pixmap) {
+    public static PixelTextureData fromPremultipliedPixmap(@WillCloseWhenClosed Pixmap pixmap) {
         return new PixelTextureData(pixmap);
     }
 
@@ -44,20 +51,22 @@ public final class PixelTextureData implements IGdxTextureData {
         in.defaultReadObject();
 
         pixels = PixelTextureDataIO.deserialize(in);
+        GdxCleaner.get().register(this, pixels);
     }
 
     /**
-     * @return The backing pixmap for this texture data object. Uses premultiplied alpha.
+     * The backing pixmap for this texture data object. Uses premultiplied alpha.
+     *
+     * @deprecated This method returns a direct reference to a disposable value and is therefore dangerous.
      */
+    @Deprecated
     public Pixmap getPixels() {
         return pixels;
     }
 
     @Override
-    public TextureRegion toTextureRegion() {
-        Texture texture = new Texture(getPixels());
-        GdxTextureUtil.setDefaultTextureParams(texture);
-        return GdxTextureUtil.newGdxTextureRegion(texture);
+    public ITexture toTexture(double sx, double sy) {
+        return new GdxTexture(regionResource, sx, sy);
     }
 
     @Override
@@ -70,23 +79,25 @@ public final class PixelTextureData implements IGdxTextureData {
         return pixels.getHeight();
     }
 
-    @Override
-    public void destroy() {
-        if (!destroyed) {
-            destroyed = true;
+    private final class RegionResource implements IResource<TextureRegion> {
 
-            pixels.dispose();
+        private static final long serialVersionUID = 1L;
+
+        private transient @Nullable TextureRegion region;
+
+        @Override
+        public TextureRegion get() {
+            TextureRegion result = region;
+            if (result == null) {
+                Texture texture = new Texture(pixels);
+                GdxTextureUtil.setDefaultTextureParams(texture);
+                result = GdxTextureUtil.newGdxTextureRegion(texture);
+                GdxCleaner.get().register(this, texture);
+                region = result;
+            }
+            return result;
         }
-    }
 
-    @Override
-    public boolean isDestroyed() {
-        return destroyed;
-    }
-
-    @Override
-    public final void dispose() {
-        destroy();
     }
 
 }
