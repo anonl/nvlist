@@ -22,7 +22,6 @@ import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.gdx.res.IResource;
-import nl.weeaboo.vn.gdx.res.TransformedResource;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
@@ -119,14 +118,14 @@ final class TextureManager implements IPreloadHandler {
                 IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
                 if (subRect != null) {
                     LOG.debug("Load image sub-rect: {}: {}", resourceId, subRect.getArea());
-                    return new GdxTexture(new RegionResource(res, subRect.getArea()), scale, scale);
+                    return new GdxTexture(new SubTextureResource(res, subRect.getArea()), scale, scale);
                 } else {
                     LOG.warn("Image definition sub-rect not found: {}", resourceId);
                     throw new FileNotFoundException("Texture sub-rect not found: " + resourceId);
                 }
             }
         }
-        return new GdxTexture(new RegionResource(res), scale, scale);
+        return new GdxTexture(new SubTextureResource(res, null), scale, scale);
     }
 
     private double getImageScale() {
@@ -149,31 +148,35 @@ final class TextureManager implements IPreloadHandler {
         return Checks.checkNotNull(texture, "Color texture loading should never fail");
     }
 
-    private static class RegionResource extends TransformedResource<Texture, TextureRegion> {
+    private static final class SubTextureResource implements IResource<TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 
+        private final IResource<Texture> textureResource;
         private final @Nullable Area subRect;
 
-        public RegionResource(IResource<Texture> inner) {
-            super(inner);
+        private transient @Nullable TextureRegion cachedRegion;
 
-            this.subRect = null;
-        }
-
-        public RegionResource(IResource<Texture> inner, Area subRect) {
-            super(inner);
-
-            this.subRect = Checks.checkNotNull(subRect);
+        public SubTextureResource(IResource<Texture> tex, @Nullable Area subRect) {
+            this.textureResource = Checks.checkNotNull(tex);
+            this.subRect = subRect;
         }
 
         @Override
-        protected TextureRegion transform(Texture original) {
-            if (subRect == null) {
-                return GdxTextureUtil.newGdxTextureRegion(original);
-            } else {
-                return GdxTextureUtil.newGdxTextureRegion(original, subRect);
+        public @Nullable TextureRegion get() {
+            TextureRegion result = cachedRegion;
+            if (result == null) {
+                Texture texture = textureResource.get();
+                if (texture != null) {
+                    if (subRect == null) {
+                        result = GdxTextureUtil.newGdxTextureRegion(texture);
+                    } else {
+                        result = GdxTextureUtil.newGdxTextureRegion(texture, subRect);
+                    }
+                }
+                cachedRegion = result;
             }
+            return result;
         }
 
     }
