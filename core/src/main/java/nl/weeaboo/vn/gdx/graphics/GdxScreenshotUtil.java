@@ -20,6 +20,9 @@ public final class GdxScreenshotUtil {
 
     /**
      * Takes a screenshot of the current OpenGL framebuffer.
+     *
+     * @return A newly allocated pixmap. It's the responsibility of the caller to call
+     *         {@link Pixmap#dispose()} on the pixmap when it's no longer needed.
      */
     public static Pixmap screenshot(Rect glRect) {
         Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
