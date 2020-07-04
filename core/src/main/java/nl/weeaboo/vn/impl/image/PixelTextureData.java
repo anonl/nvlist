@@ -54,6 +54,17 @@ public final class PixelTextureData implements IGdxTextureData {
         GdxCleaner.get().register(this, pixels);
     }
 
+    @Deprecated
+    @Override
+    public void destroy() {
+    }
+
+    @Deprecated
+    @Override
+    public boolean isDestroyed() {
+        return false;
+    }
+
     /**
      * The backing pixmap for this texture data object. Uses premultiplied alpha.
      *

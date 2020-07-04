@@ -30,6 +30,17 @@ public final class VolatileTextureData implements IGdxTextureData {
         return new VolatileTextureData(texture);
     }
 
+    @Deprecated
+    @Override
+    public void destroy() {
+    }
+
+    @Deprecated
+    @Override
+    public boolean isDestroyed() {
+        return false;
+    }
+
     @Override
     public ITexture toTexture(double sx, double sy) {
         return new GdxTexture(regionResource, sx, sy);
