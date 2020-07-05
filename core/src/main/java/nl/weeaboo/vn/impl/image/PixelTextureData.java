@@ -26,7 +26,7 @@ public final class PixelTextureData implements IGdxTextureData {
 
     private static final long serialVersionUID = 2L;
 
-    private Pixmap pixels;
+    private transient Pixmap pixels;
     private final RegionResource regionResource = new RegionResource();
 
     private PixelTextureData(Pixmap pixels) {
