@@ -12,7 +12,7 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
 
         // Plugins for Android
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:4.0.0'
 
         // Plugins for iOS
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.9'

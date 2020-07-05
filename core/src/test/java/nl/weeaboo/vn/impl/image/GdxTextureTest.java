@@ -13,7 +13,7 @@ import nl.weeaboo.vn.gdx.res.ResourceStub;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
-public class TextureAdapterTest {
+public class GdxTextureTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
 

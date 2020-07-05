@@ -6,6 +6,8 @@
 -- Default image gallery v3.0
 -------------------------------------------------------------------------------
 
+local lockedImagePath = "gui/imagegallery#locked"
+
 local function gridLayout(bounds, rows, cols, ipad, components)
     local x = bounds.x
     local y = bounds.y
@@ -46,7 +48,7 @@ local ImageSlot = {
 
 function ImageSlot.new(self)
     self = extend(ImageSlot, self)
-    
+
     if self.thumbnail then
         self.button = button(tex(self.thumbnail))
     else
@@ -56,20 +58,30 @@ function ImageSlot.new(self)
 
     self.w = self.w or self.button:getWidth()
     self.h = self.h or self.button:getHeight()
-    
+
     if #self.fullpaths > 1 then
-        self.button:setText(Text.createStyledText("(" .. #self.fullpaths .. ")", {fontSize = 16}))
+        self.button:setText(Text.createStyledText("(" .. #self:getUnlockedPaths() .. "/" .. #self.fullpaths.. ")", {fontSize = 16}))
         self.button:setVerticalAlign(VerticalAlign.BOTTOM)
     end
-    
+
     self.overlay = img("gui/imagegallery#white")
     self.overlay:setBlendMode(BlendMode.ADD)
-    
+
     return self
 end
 
 function ImageSlot:destroy()
     destroyValues{self.button}
+end
+
+function ImageSlot:getUnlockedPaths()
+    local unlockedPaths = {}
+    for i,path in pairs(self.fullpaths) do
+        if not self.gallery:isLocked(path) then
+            table.insert(unlockedPaths, path)
+        end
+    end
+    return unlockedPaths
 end
 
 function ImageSlot:getBounds()
@@ -101,10 +113,6 @@ function ImageSlot:layout()
     o:setZ(b:getZ() - 10)
 end
 
-function ImageSlot:tweenImage(i, texture)
-    return imgtween(i, texture)
-end
-
 function ImageSlot:update()
     if self.button:isRollover() and self.button:isEnabled() then
         self.overlay:setAlpha(0.5)
@@ -118,79 +126,49 @@ function ImageSlot:setText(txt)
 end
 
 function ImageSlot:show()
-    local index = 0
-    local length = #self.fullpaths
-    local locked = 0
-    
-    local paths = {}
-    for i,fullpath in ipairs(self.fullpaths) do
-        fullpath = fullpath or self.thumbnail
-        if self.gallery:isLocked(fullpath) then
-            locked = locked + 1
-        else
-            paths[i] = fullpath
-            if index == 0 then
-                index = i
-            end
-        end
+    local unlockedPaths = self:getUnlockedPaths()
+    local index = 1
+
+    local lbl = nil
+    if #unlockedPaths > 1 then
+        lbl = textimg("")
+        lbl:extendDefaultStyle(Text.createStyle{anchor=9, fontSize=16})
+        lbl:setZ(-2000)
+        local pad = screenWidth/64
+        lbl:setBounds(pad, pad, screenWidth/4, screenHeight/8)
     end
-    preload(unpack(paths)) --Gives us a 2 frame head start for loading the full image(s)
 
     self.button:setEnabled(false)
     self.overlay:setAlpha(0)
 
-    local lbl = nil
-    if length > 1 then
-        lbl = textimg("")
-        lbl:extendDefaultStyle(Text.createStyle{anchor=9})
-        lbl:setZ(-5)
-        --lbl:setPadding(screenHeight / 64)
-        --lbl:setAnchor(9)
-        lbl:setSize(screenWidth/4, screenHeight/8)
-        lbl:setPos(screenWidth-lbl:getWidth(), 0)
-    end
-    
-    local function updatelbl()
-        if lbl ~= nil then
-            local lockedText = ""
-            if locked == 1 then         
-                lockedText = "\n" .. locked .. " image locked"
-            elseif locked > 1 then
-                lockedText = "\n" .. locked .. " images locked"
-            end
-            lbl:setText(index .. "/" .. length .. lockedText)
-        end
-    end
-    
-    local i = img(paths[index], {z=-1000})
     local b = self.button
     local small = {b:getX(), b:getY(), b:getWidth(), b:getHeight()}
     local dur = 20
     local ip = Interpolators.SMOOTH
-    
+
+    local function updateLabel()
+        if lbl ~= nil then
+            lbl:setText("(" .. index .. "/" .. #unlockedPaths .. ")")
+        end
+    end
+    updateLabel()
+
+    local initialTex = tex(unlockedPaths[index])
     local function getLargeBounds()
-        local iw = math.max(1, i:getWidth())
-        local ih = math.max(1, i:getHeight())
+        local iw = math.max(1, initialTex:getWidth())
+        local ih = math.max(1, initialTex:getHeight())
         local scale = math.min(screenWidth/iw, screenHeight/ih) --Find scale factor to fill screen, maintaining aspect ratio
         return {(screenWidth-scale*iw)/2, (screenHeight-scale*ih)/2, scale*iw, scale*ih} --Scaled image bounds, centered on the screen
     end
-    
-    Anim.createTween(i, "bounds", small, getLargeBounds(), dur, ip):run()
-
-    updatelbl()
-    while true do
+    local i = imgf(initialTex, {z=-1000, bounds=getLargeBounds()})
+    while index <= #unlockedPaths do
         if Input.consume(VKeys.cancel) then
             break
         elseif Input.consume(VKeys.confirm) or Input.consume(VKeys.textContinue) then
-            repeat --Skip to next unlocked image, quit if no more images
-                index = index + 1
-            until index > length or paths[index] ~= nil
-            
-            if paths[index] ~= nil then
-                updatelbl()
-                self:tweenImage(i, tex(paths[index]))
-            else
-                break
+            index = index + 1
+            if index <= #unlockedPaths then
+                updateLabel()
+                i:setTexture(tex(unlockedPaths[index]))
             end
         end
         yield()
@@ -198,11 +176,9 @@ function ImageSlot:show()
     if lbl ~= nil then  
         lbl:destroy()
     end
-    
-    Anim.createTween(i, "bounds", getLargeBounds(), small, dur, ip):run()
 
-    i:destroy()
-    
+    rmf(i)
+
     self.button:setEnabled(true)
 end
 
@@ -296,26 +272,24 @@ function ImageGallery:setFolder(folder)
         local path = string.gsub(rawpath, "^(.*)%..-$", "%1") --Strips file-ext     
         if not self:isExcludePath(path) then
             local relpath = string.sub(path, folderPrefixLen + 1)
-            
+
             local group = nil
             local lastSlashIndex = string.find(string.reverse(relpath), "/")
             if lastSlashIndex ~= nil then
                 group = string.sub(relpath, 1, #relpath-lastSlashIndex)
             end
-        
+
             local index = groups[group]
             if not index then
                 table.insert(self.files, {path})
                 index = #self.files
             else
                 table.insert(self.files[index], path)
-            end         
-                        
+            end
+
             if group ~= nil then
                 groups[group] = index
             end
-            
-            --print(k, group, path, index)
         end
     end
     groups = nil -- Allow groups table to be garbage collected, we don't need it anymore
@@ -357,13 +331,13 @@ function ImageGallery:setPage(p)
         local slotsPerPage = self.rows * self.cols
         local pageStart = 1 + (p - 1) * slotsPerPage
         local pageEnd = math.min(#self.files, p * slotsPerPage)
-        
+
         for i=pageStart,pageEnd do
             local index = i
-            local fullpath = "gui/imagegallery#locked"
-            local thumbnail = "gui/imagegallery#locked"
+            local fullpath = lockedImagePath
+            local thumbnail = lockedImagePath
             local empty = true
-            
+
             local group = self.files[i]
             for _,file in ipairs(group) do
                 if not self:isLocked(file) then
@@ -375,18 +349,18 @@ function ImageGallery:setPage(p)
                     break
                 end
             end
-            
+
             local is = ImageSlot.new{gallery=self, index=index, thumbnail=thumbnail, fullpaths=group}
             is.button:setEnabled(not empty)
             Gui.setClickHandler(is.button, function() self:setSelected(index) end)
             table.insert(self.slots, is)
         end
-        
+
         if self.selected < pageStart or self.selected >= pageEnd then
             self.selected = 0
         end
         self:setSelected(self.selected)
-        
+
         self:layout()
     end
 end

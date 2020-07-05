@@ -12,7 +12,6 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ShaderStore;
 import nl.weeaboo.vn.impl.sound.GdxMusicStore;
@@ -51,9 +50,6 @@ public final class StaticEnvironment {
 
     public static final StaticRef<GdxTextureStore> TEXTURE_STORE =
             StaticRef.from("store.texture", GdxTextureStore.class);
-
-    public static final StaticRef<GeneratedResourceStore> GENERATED_RESOURCES =
-            StaticRef.from("generatedResources", GeneratedResourceStore.class);
 
     public static final StaticRef<ShaderStore> SHADER_STORE =
             StaticRef.from("store.shader", ShaderStore.class);

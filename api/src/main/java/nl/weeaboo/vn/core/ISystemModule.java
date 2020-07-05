@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.core;
 
+import nl.weeaboo.vn.render.DisplayMode;
+
 /** Interface for interacting with hardware and external applications. */
 public interface ISystemModule extends IModule {
 
@@ -34,5 +36,13 @@ public interface ISystemModule extends IModule {
      * @return The system environment data.
      */
     ISystemEnv getSystemEnv();
+
+    /**
+     * Changes the current display mode.
+     *
+     * @throws IllegalStateException if the given display mode is unsupported.
+     * @see ISystemEnv#isDisplayModeSupported(DisplayMode)
+     */
+    void setDisplayMode(DisplayMode mode);
 
 }

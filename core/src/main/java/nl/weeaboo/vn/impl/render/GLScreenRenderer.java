@@ -263,10 +263,10 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
             TextureRegion textureRegion = ScreenUtils.getFrameBufferTexture(glRect.x, glRect.y, glRect.w, glRect.h);
             GdxTextureUtil.setDefaultTextureParams(textureRegion.getTexture());
             textureRegion.flip(false, true);
-            texData = VolatileTextureData.fromRegion(textureRegion, false);
+            texData = VolatileTextureData.fromRegion(textureRegion); // Takes ownership of textureRegion
         } else {
             Pixmap pixels = GdxScreenshotUtil.screenshot(glRect);
-            texData = PixelTextureData.fromPremultipliedPixmap(pixels);
+            texData = PixelTextureData.fromPremultipliedPixmap(pixels); // Takes ownership of pixels
         }
 
         Rect glSize = renderEnv.getGLClip();

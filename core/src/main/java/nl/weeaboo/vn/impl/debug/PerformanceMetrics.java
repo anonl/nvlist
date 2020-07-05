@@ -66,9 +66,12 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
             return Double.NaN;
         }
 
-        // Checking CPU load is slow, so rate limit the calls and return a cached result if called too often
+        /*
+         * Checking CPU load can be very slow depending on the JVM used, so rate limit the calls and return a
+         * cached result if called too often.
+         */
         long now = System.nanoTime();
-        if (now - lastCpuLoadCheck < 500_000_000L) {
+        if (now - lastCpuLoadCheck < 5_000_000_000L) {
             return cpuLoad;
         }
 

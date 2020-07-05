@@ -19,6 +19,8 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.ISystemEnv;
+import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -26,7 +28,6 @@ import nl.weeaboo.vn.gdx.input.GdxInputAdapter;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.gdx.res.GdxAssetManager;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.core.Destructibles;
@@ -54,6 +55,8 @@ import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
+import nl.weeaboo.vn.render.DisplayMode;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.video.IVideo;
 import nl.weeaboo.vn.video.IVideoModule;
@@ -86,7 +89,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
     private @Nullable GdxTextureStore textureStore;
     private @Nullable GdxMusicStore musicStore;
     private @Nullable ShaderStore shaderStore;
-    private @Nullable GeneratedResourceStore generatedResourceStore;
     private @Nullable GdxFontStore fontStore;
     private boolean windowDirty;
 
@@ -170,8 +172,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         StaticEnvironment.ASSET_MANAGER.set(assetManager);
         StaticEnvironment.TEXTURE_STORE.set(textureStore =
                 new GdxTextureStore(StaticEnvironment.TEXTURE_STORE, resourceFileSystem, prefs));
-        StaticEnvironment.GENERATED_RESOURCES.set(generatedResourceStore =
-                new GeneratedResourceStore(StaticEnvironment.GENERATED_RESOURCES));
         StaticEnvironment.SHADER_STORE.set(shaderStore = new ShaderStore());
         StaticEnvironment.MUSIC_STORE.set(musicStore = new GdxMusicStore(StaticEnvironment.MUSIC_STORE));
         StaticEnvironment.FONT_STORE.set(fontStore = new GdxFontStore(resourceFileSystem));
@@ -203,7 +203,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         osd = DisposeUtil.dispose(osd);
 
         textureStore = Destructibles.destroy(textureStore);
-        generatedResourceStore = Destructibles.destroy(generatedResourceStore);
         shaderStore = Destructibles.destroy(shaderStore);
         musicStore = Destructibles.destroy(musicStore);
         fontStore = Destructibles.destroy(fontStore);
@@ -264,6 +263,25 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         debugControls.update(novel, nativeInput);
 
         IEnvironment env = novel.getEnv();
+
+        // Fullscreen toggle (if supported)
+        ISystemModule systemModule = env.getSystemModule();
+        ISystemEnv systemEnv = systemModule.getSystemEnv();
+        if (systemEnv.isDisplayModeSupported(DisplayMode.WINDOWED)) {
+            DisplayMode dm = systemEnv.getDisplayMode();
+            if (nativeInput.isPressed(KeyCode.ALT_LEFT, true) && nativeInput.consumePress(KeyCode.ENTER)) {
+                if (dm == DisplayMode.FULL_SCREEN) {
+                    dm = DisplayMode.WINDOWED;
+                } else {
+                    dm = DisplayMode.FULL_SCREEN;
+                }
+                systemModule.setDisplayMode(dm);
+
+                // GDX clears internal press state, so we should do the same
+                nativeInput.clearButtonStates();
+            }
+        }
+
         IInput input = StaticEnvironment.INPUT.get();
         osd.update(env, input);
     }

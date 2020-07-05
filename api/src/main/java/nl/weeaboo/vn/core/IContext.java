@@ -8,7 +8,8 @@ import nl.weeaboo.vn.script.IScriptContext;
 
 /**
  * High-level container of state. In a more general-purpose game engine this concept is usually called
- * 'scene', 'stage' or 'level'.
+ * 'scene', 'stage' or 'level'. In NVList, the context primarily consists of visual state ({@link IScreen} and script
+ * engine state ({@link IScriptContext}.
  *
  * @see IContextManager
  */

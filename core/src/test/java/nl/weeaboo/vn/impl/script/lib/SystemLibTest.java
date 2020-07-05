@@ -1,9 +1,12 @@
 package nl.weeaboo.vn.impl.script.lib;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import nl.weeaboo.vn.impl.core.SystemEnvMock;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
+import nl.weeaboo.vn.render.DisplayMode;
 
 public class SystemLibTest extends AbstractLibTest {
 
@@ -57,6 +60,14 @@ public class SystemLibTest extends AbstractLibTest {
         loadScript("integration/system/open-website");
 
         env.getSystemModule().consumeOpenedWebsites("http://example.com");
+    }
+
+    @Test
+    public void testSetDisplayMode() {
+        loadScript("integration/system/set-display-mode");
+
+        SystemEnvMock systemEnv = env.getSystemModule().getSystemEnv();
+        Assert.assertEquals(DisplayMode.WINDOWED, systemEnv.getDisplayMode());
     }
 
 }

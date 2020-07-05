@@ -1,0 +1,13 @@
+
+@@
+
+Sound.setMasterVolume(SoundType.MUSIC, 0.1)
+luaAssertEquals(0.1, Sound.getMasterVolume(SoundType.MUSIC))
+
+Sound.setMasterVolume(SoundType.SOUND, 0.2)
+luaAssertEquals(0.2, Sound.getMasterVolume(SoundType.SOUND))
+
+Sound.setMasterVolume(SoundType.VOICE, 0.3)
+luaAssertEquals(0.3, Sound.getMasterVolume(SoundType.VOICE))
+
+@@

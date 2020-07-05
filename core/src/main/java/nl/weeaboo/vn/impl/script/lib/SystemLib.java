@@ -1,13 +1,19 @@
 package nl.weeaboo.vn.impl.script.lib;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nl.weeaboo.common.VersionNumber;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaBoolean;
+import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.render.DisplayMode;
 import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.script.ScriptFunction;
 import nl.weeaboo.vn.stats.IPlayTimer;
@@ -18,6 +24,7 @@ import nl.weeaboo.vn.stats.IPlayTimer;
 public class SystemLib extends LuaLib {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = LoggerFactory.getLogger(SystemLib.class);
 
     private final IEnvironment env;
 
@@ -124,4 +131,27 @@ public class SystemLib extends LuaLib {
             throw new ScriptException("Error parsing version numbers: " + first + ", " + second, nfe);
         }
     }
+
+    /**
+     * Changes the current display mode.
+     *
+     * @param args
+     *        <ol>
+     *        <li>
+     *        </ol>
+     * @return {@code true} if the display mode was changed successfully.
+     */
+    @ScriptFunction
+    public Varargs setDisplayMode(Varargs args) {
+        DisplayMode mode = args.checkuserdata(1, DisplayMode.class);
+        try {
+            LuaThread.getRunning().yield(LuaConstants.NONE);
+            env.getSystemModule().setDisplayMode(mode);
+            return LuaConstants.NONE;
+        } catch (IllegalStateException e) {
+            LOG.warn("Error setting display mode to {}", mode, e);
+            return LuaBoolean.FALSE;
+        }
+    }
+
 }

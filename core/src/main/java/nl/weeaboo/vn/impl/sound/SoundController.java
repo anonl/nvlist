@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.Doubles;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.sound.ISound;
@@ -129,6 +130,8 @@ final class SoundController implements ISoundController {
 
     @Override
     public void setMasterVolume(SoundType type, double vol) {
+        vol = Doubles.constrainToRange(vol, 0.0, 1.0);
+
         masterVolume.put(type, vol);
 
         for (ISound sound : getSounds(type)) {

@@ -1,7 +1,6 @@
 package nl.weeaboo.vn.impl.video;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.annotation.Nullable;
 
@@ -15,19 +14,13 @@ import com.google.common.annotations.VisibleForTesting;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.core.IDestructible;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
-import nl.weeaboo.vn.gdx.res.IResource;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.core.StaticRef;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.render.IRenderEnv;
 
 final class NativeVideo implements INativeVideo {
 
     private static final long serialVersionUID = VideoImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(NativeVideo.class);
-
-    private final StaticRef<GeneratedResourceStore> resourceStore = StaticEnvironment.GENERATED_RESOURCES;
 
     private final IGdxVideoPlayerFactory videoPlayerFactory;
     private final FilePath filePath;
@@ -36,7 +29,7 @@ final class NativeVideo implements INativeVideo {
     private double volume = 1.0;
     private IRenderEnv renderEnv;
 
-    private IResource<VideoPlayerResource> videoPlayerRef;
+    private transient @Nullable VideoPlayer videoPlayer;
 
     public NativeVideo(IGdxVideoPlayerFactory videoPlayerFactory, FilePath filePath, IRenderEnv renderEnv) {
         this.videoPlayerFactory = Checks.checkNotNull(videoPlayerFactory);
@@ -65,14 +58,11 @@ final class NativeVideo implements INativeVideo {
     }
 
     private void initVideoPlayer() throws VideoPlayerInitException {
-        if (videoPlayerRef == null) {
-            VideoPlayerResource res = new VideoPlayerResource(videoPlayerFactory);
-            videoPlayerRef = resourceStore.get().register(res);
-        }
-
-        VideoPlayerResource videoPlayerResource = videoPlayerRef.get();
-        if (videoPlayerResource != null) {
-            videoPlayerResource.initVideoPlayer();
+        VideoPlayer player = videoPlayer;
+        if (player == null) {
+            player = videoPlayerFactory.createVideoPlayer();
+            GdxCleaner.get().register(this, player);
+            videoPlayer = player;
         }
     }
 
@@ -144,16 +134,7 @@ final class NativeVideo implements INativeVideo {
 
     @VisibleForTesting
     @Nullable VideoPlayer getVideoPlayer() {
-        if (videoPlayerRef == null) {
-            return null;
-        }
-
-        VideoPlayerResource videoPlayerResource = videoPlayerRef.get();
-        if (videoPlayerResource == null) {
-            return null;
-        }
-
-        return videoPlayerResource.getVideoPlayer();
+        return videoPlayer;
     }
 
     @Override
@@ -170,42 +151,6 @@ final class NativeVideo implements INativeVideo {
     @Override
     public void setRenderEnv(IRenderEnv renderEnv) {
         this.renderEnv = Checks.checkNotNull(renderEnv);
-    }
-
-    private static final class VideoPlayerResource implements Serializable, IDestructible {
-
-        private static final long serialVersionUID = VideoImpl.serialVersionUID;
-
-        private final IGdxVideoPlayerFactory videoPlayerFactory;
-        private transient @Nullable VideoPlayer player;
-
-        public VideoPlayerResource(IGdxVideoPlayerFactory videoPlayerFactory) {
-            this.videoPlayerFactory = Checks.checkNotNull(videoPlayerFactory);
-        }
-
-        @Override
-        public boolean isDestroyed() {
-            return player != null;
-        }
-
-        @Override
-        public void destroy() {
-            if (player != null) {
-                player.dispose();
-                player = null;
-            }
-        }
-
-        public void initVideoPlayer() throws VideoPlayerInitException {
-            if (player == null) {
-                player = videoPlayerFactory.createVideoPlayer();
-            }
-        }
-
-        public @Nullable VideoPlayer getVideoPlayer() {
-            return player;
-        }
-
     }
 
 }

@@ -21,9 +21,7 @@ import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
-import nl.weeaboo.vn.gdx.res.GeneratedResourceStore;
 import nl.weeaboo.vn.gdx.res.IResource;
-import nl.weeaboo.vn.gdx.res.TransformedResource;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
@@ -42,7 +40,6 @@ final class TextureManager implements IPreloadHandler {
     private static final Logger LOG = LoggerFactory.getLogger(TextureManager.class);
 
     private final StaticRef<GdxTextureStore> textureStore = StaticEnvironment.TEXTURE_STORE;
-    private final StaticRef<GeneratedResourceStore> generatedTextureStore = StaticEnvironment.GENERATED_RESOURCES;
 
     private final FileResourceLoader resourceLoader;
     private final Dim virtualSize;
@@ -121,14 +118,14 @@ final class TextureManager implements IPreloadHandler {
                 IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
                 if (subRect != null) {
                     LOG.debug("Load image sub-rect: {}: {}", resourceId, subRect.getArea());
-                    return newTexture(new RegionResource(res, subRect.getArea()), scale, scale);
+                    return new GdxTexture(new SubTextureResource(res, subRect.getArea()), scale, scale);
                 } else {
                     LOG.warn("Image definition sub-rect not found: {}", resourceId);
                     throw new FileNotFoundException("Texture sub-rect not found: " + resourceId);
                 }
             }
         }
-        return newTexture(new RegionResource(res), scale, scale);
+        return new GdxTexture(new SubTextureResource(res, null), scale, scale);
     }
 
     private double getImageScale() {
@@ -136,13 +133,8 @@ final class TextureManager implements IPreloadHandler {
                 virtualSize.h / (double)imageResolution.h);
     }
 
-    public IResource<TextureRegion> generateTextureRegion(IGdxTextureData texData) {
-        GeneratedResourceStore generatedStore = generatedTextureStore.get();
-        return new GeneratedRegionResource(generatedStore.register(texData));
-    }
-
     public ITexture generateTexture(IGdxTextureData texData, double sx, double sy) {
-        return newTexture(generateTextureRegion(texData), sx, sy);
+        return texData.toTexture(sx, sy);
     }
 
     /**
@@ -156,50 +148,35 @@ final class TextureManager implements IPreloadHandler {
         return Checks.checkNotNull(texture, "Color texture loading should never fail");
     }
 
-    private static ITexture newTexture(IResource<TextureRegion> tr, double sx, double sy) {
-        return new GdxTexture(tr, sx, sy);
-    }
-
-    private static class RegionResource extends TransformedResource<Texture, TextureRegion> {
+    private static final class SubTextureResource implements IResource<TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 
+        private final IResource<Texture> textureResource;
         private final @Nullable Area subRect;
 
-        public RegionResource(IResource<Texture> inner) {
-            super(inner);
+        private transient @Nullable TextureRegion cachedRegion;
 
-            this.subRect = null;
-        }
-
-        public RegionResource(IResource<Texture> inner, Area subRect) {
-            super(inner);
-
-            this.subRect = Checks.checkNotNull(subRect);
+        public SubTextureResource(IResource<Texture> tex, @Nullable Area subRect) {
+            this.textureResource = Checks.checkNotNull(tex);
+            this.subRect = subRect;
         }
 
         @Override
-        protected TextureRegion transform(Texture original) {
-            if (subRect == null) {
-                return GdxTextureUtil.newGdxTextureRegion(original);
-            } else {
-                return GdxTextureUtil.newGdxTextureRegion(original, subRect);
+        public @Nullable TextureRegion get() {
+            TextureRegion result = cachedRegion;
+            if (result == null) {
+                Texture texture = textureResource.get();
+                if (texture != null) {
+                    if (subRect == null) {
+                        result = GdxTextureUtil.newGdxTextureRegion(texture);
+                    } else {
+                        result = GdxTextureUtil.newGdxTextureRegion(texture, subRect);
+                    }
+                }
+                cachedRegion = result;
             }
-        }
-
-    }
-
-    private static class GeneratedRegionResource extends TransformedResource<IGdxTextureData, TextureRegion> {
-
-        private static final long serialVersionUID = 1L;
-
-        public GeneratedRegionResource(IResource<IGdxTextureData> inner) {
-            super(inner);
-        }
-
-        @Override
-        protected TextureRegion transform(IGdxTextureData original) {
-            return original.toTextureRegion();
+            return result;
         }
 
     }

@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableList;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.InitException;
@@ -29,8 +28,6 @@ import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
-import nl.weeaboo.vn.input.INativeInput;
-import nl.weeaboo.vn.input.KeyCode;
 
 /**
  * Main entrypoint for desktop operating systems (Windows, Mac, Linux).
@@ -40,8 +37,6 @@ public final class DesktopLauncher {
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
     private final ImmutableList<String> args;
-
-    private Dim windowedSize;
 
     public DesktopLauncher(String[] args) {
         this.args = ImmutableList.copyOf(args);
@@ -68,30 +63,13 @@ public final class DesktopLauncher {
         DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("."));
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
-        final DesktopLauncher desktopLauncher = this;
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
             @Override
             public void create() {
                 DesktopGraphicsUtil.setWindowIcon(gdxFileSystem);
-                windowedSize = DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
+                DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
 
                 super.create();
-            }
-
-            @Override
-            public void resize(int width, int height) {
-                super.resize(width, height);
-
-                if (!Gdx.graphics.isFullscreen()) {
-                    windowedSize = Dim.of(width, height);
-                }
-            }
-
-            @Override
-            protected void handleInput(INativeInput input) {
-                super.handleInput(input);
-
-                desktopLauncher.handleInput(input);
             }
         };
 
@@ -192,26 +170,6 @@ public final class DesktopLauncher {
     private <T> void setPref(NovelPrefsStore prefs, Preference<T> pref, String value) {
         LOG.info("Set preference: {}={}", pref.getKey(), value);
         prefs.set(pref, pref.fromString(value));
-    }
-
-    private void handleInput(INativeInput input) {
-        // Fullscreen toggle
-        if (input.isPressed(KeyCode.ALT_LEFT, true) && input.consumePress(KeyCode.ENTER)) {
-            setFullScreen(!Gdx.graphics.isFullscreen());
-
-            // GDX clears internal press state, so we should do the same
-            input.clearButtonStates();
-        }
-    }
-
-    private void setFullScreen(boolean fullScreen) {
-        if (fullScreen) {
-            LOG.debug("Switch to fullscreen mode");
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        } else {
-            LOG.debug("Switch to windowed mode: {}x{}", windowedSize.w, windowedSize.h);
-            Gdx.graphics.setWindowedMode(windowedSize.w, windowedSize.h);
-        }
     }
 
 }

@@ -63,6 +63,7 @@ local submodules = {
     "imagefx",
     "save",
     "savescreen",
+    "settingsscreen",
     "sound",
     "system",
     "text",

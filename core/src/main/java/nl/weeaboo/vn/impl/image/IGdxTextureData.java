@@ -1,16 +1,13 @@
 package nl.weeaboo.vn.impl.image;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Disposable;
-
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.ITextureData;
 
-interface IGdxTextureData extends ITextureData, Disposable {
+interface IGdxTextureData extends ITextureData {
 
     /**
-     * @return A texture region representing this texture, or {@code null} if such a texture couldn't be
-     *         created.
+     * Returns a texture consisting of the pixels in this texture data object.
      */
-    TextureRegion toTextureRegion();
+    ITexture toTexture(double sx, double sy);
 
 }
