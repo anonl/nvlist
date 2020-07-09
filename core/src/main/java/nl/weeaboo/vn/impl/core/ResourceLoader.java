@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -113,6 +115,13 @@ public abstract class ResourceLoader implements IResourceResolver {
         // If the file has an extension, isn't valid, but would be valid with a different extension...
         ResourceId resourceId = resolveResource(filePath);
         if (resourceId == null) {
+            // Maybe we couldn't find the resource is because the file extension is incorrectly capitalized?
+            for (String ext : autoFileExts) {
+                if (filePath.getName().toLowerCase(Locale.ROOT).endsWith("." + ext.toLowerCase(Locale.ROOT))) {
+                    LOG.warn("File extension has incorrect capitalization: {}, expected: {}",
+                            filePath, Arrays.asList(autoFileExts));
+                }
+            }
             return EFileExtCheckResult.INVALID;
         }
 

@@ -43,6 +43,7 @@ public class FileResourceLoaderTest {
     private void writeTestFiles(IWritableFileSystem fs) throws IOException {
         writeString(fs, "base/valid.png");
         writeString(fs, "base/valid.jpg");
+        writeString(fs, "base/uppercase-ext.JPG");
         writeString(fs, "base/subfolder/a.txt");
         writeString(fs, "base/subfolder/b.txt");
         writeString(fs, "invalid.jpg");
@@ -132,6 +133,10 @@ public class FileResourceLoaderTest {
         // As an optimization, each file path is only checked once
         checkFileExt("valid.jpg", EFileExtCheckResult.ALREADY_CHECKED);
         checkFileExt("valid", EFileExtCheckResult.OK);
+
+        // File extensions are case sensitive (like the rest of the file name)
+        checkFileExt("uppercase-ext", EFileExtCheckResult.INVALID);
+        checkFileExt("uppercase-ext.JPG", EFileExtCheckResult.OK);
     }
 
     @Test
