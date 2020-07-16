@@ -234,8 +234,8 @@ end
 
 ---Creates a texture renderer from an image file or texture.
 -- @see tex
-function texRenderer(...)
-    return Image.createTextureRenderer(tex(...))
+function texRenderer(pathOrTex)
+    return Image.createTextureRenderer(tex(pathOrTex))
 end
 
 ---Creates a texture object with the specified color.

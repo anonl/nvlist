@@ -2,7 +2,11 @@
 
 require("builtin/vn")
 
-config = Tween.bitmapTweenConfig(123, tex("a"))
-tween = Tween.bitmapTween(config)
+image = img(colorTex(0xFFFFFFFF, 10, 10), {width=100, height=100})
+bitmapTween(image, "a", "vshutter")
+
+-- bitmapTweenIn should keep any custom scaling previously applied to the image
+luaAssert(100, image:getWidth())
+luaAssert(100, image:getHeight())
 
 @@

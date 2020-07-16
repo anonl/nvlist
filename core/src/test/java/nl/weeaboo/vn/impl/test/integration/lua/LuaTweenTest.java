@@ -10,4 +10,9 @@ public class LuaTweenTest extends LuaIntegrationTest {
         loadScript("integration/tween/bitmap-tween-in");
     }
 
+    @Test
+    public void testBitmapTween() {
+        loadScript("integration/tween/bitmap-tween");
+    }
+
 }

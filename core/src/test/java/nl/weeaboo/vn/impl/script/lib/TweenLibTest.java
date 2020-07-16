@@ -33,7 +33,7 @@ public class TweenLibTest extends AbstractLibTest {
 
     @Test
     public void testBitmapTween() {
-        loadScript("integration/tween/bitmap-tween");
+        loadScript("integration/tween/bitmap-tween-lib");
 
         IBitmapTweenConfig config = LuaTestUtil.getGlobal("config", IBitmapTweenConfig.class);
         Assert.assertNotNull(config);

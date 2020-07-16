@@ -1,5 +1,8 @@
 
-# v4.x
+# v4.4.1
+- fix: `attempt to call nil` at `builtin/vn/tween.lua:93` when calling `bitmapTween` 
+
+# v4.4.0
 - Build artifacts for NVList projects are now stored relative to the project folder (`vnRoot/build-out`), instead of inside the engine folder (`build-tools`).
 - Added functions to change the master volume levels from Lua.
 - Added functions to toggle between fullscreen/windowed mode from Lua.

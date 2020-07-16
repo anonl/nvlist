@@ -77,6 +77,22 @@ end
 ---Bitmap tween
 -------------------------------------------------------------------------------- @section Bitmap tween
 
+local function bitmapTweenR(image, targetTexture, targetRenderer, controlImage, duration, range, interpolator)
+    duration = duration or 60
+    range = range or 0.5
+
+    local config = Tween.bitmapTweenConfig(duration, controlImage, false)
+    config:setStartTexture(image:getTexture())
+    config:setEndTexture(tex(targetTexture))
+    config:setRange(range)
+    if interpolator ~= nil then
+        config:setInterpolator(Interpolators.get(interpolator))
+    end
+
+    local tween = Tween.bitmapTween(config)
+    return doTween(image, tween, targetRenderer)
+end
+
 ---Changes an ImageDrawable's texture through a dissolve effect shaped by a grayscale bitmap.
 --
 -- @tparam ImageDrawable image The image to tween.
@@ -91,22 +107,6 @@ end
 --                 <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 function bitmapTween(image, targetTexture, controlImage, duration, range, interpolator)
     return bitmapTweenR(image, targetTexture, texRenderer(targetTexture), controlImage, duration, range, interpolator)
-end
-
-local function bitmapTweenR(image, targetTexture, targetRenderer, controlImage, duration, range, interpolator)
-    duration = duration or 60
-    range = range or 0.5
-
-    local config = Tween.bitmapTweenConfig(duration, controlImage, false)
-    config:setStartTexture(image:getTexture())
-    config:setEndTexture(targetTexture)
-    config:setRange(range)
-    if interpolator ~= nil then
-        config:setInterpolator(Interpolators.get(interpolator))
-    end
-
-    local tween = Tween.bitmapTween(config)
-    return doTween(image, tween, targetRenderer)
 end
 
 ---Fades in an ImageDrawable's texture using a bitmap transition.
