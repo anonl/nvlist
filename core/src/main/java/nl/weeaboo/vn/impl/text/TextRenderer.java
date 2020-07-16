@@ -252,6 +252,8 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
 
     @Override
     public void setText(StyledText st) {
+        Checks.checkNotNull(st);
+
         if (!Objects.equal(stext, st)) {
             stext = st;
 

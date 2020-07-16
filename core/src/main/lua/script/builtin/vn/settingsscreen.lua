@@ -13,11 +13,30 @@ local function nextDisplayMode()
     return m
 end
 
+local function getDisplayModeName(mode)
+    if mode == DisplayMode.FULL_SCREEN then
+        return "Full-screen"
+    elseif mode == DisplayMode.WINDOWED then
+        return "Windowed"
+    end
+    return mode
+end
+
+local function getSoundTypeName(mode)
+    if mode == SoundType.MUSIC then
+        return "Music"
+    elseif mode == SoundType.SOUND then
+        return "SFX"
+    elseif mode == SoundType.VOICE then
+        return "Voice"
+    end
+    return mode
+end
+
 -------------------------------------------------------------------------------------------------------------- @section VolumeControl
 
 local VolumeControl = {
     soundType=SoundType.MUSIC,
-    panel=nil,
     label=nil,
     minusButton=nil,
     plusButton=nil,
@@ -28,31 +47,25 @@ function VolumeControl.new(self)
     self = extend(VolumeControl, self)
 
     self.label = textimg()
-    self.label:setText(self.soundType)
-    self.label:setWidth(320)
+    self.label:setText(getSoundTypeName(self.soundType))
 
     self.valueLabel = textimg()
+    self.valueLabel:setMaxSize(180, 100)
     self.valueLabel:extendDefaultStyle(Text.createStyle{align="center"})
 
-    self.minusButton = button("gui/settingsscreen#button-")
+    self.minusButton = button("gui/button")
     self.minusButton:setText("-")
+    self.minusButton:setSize(75, 75)
     Gui.setClickHandler(self.minusButton, function()
         self:adjustVolume(-.05)
     end)
 
-    self.plusButton = button("gui/settingsscreen#button-")
+    self.plusButton = button("gui/button")
     self.plusButton:setText("+")
+    self.plusButton:setSize(75, 75)
     Gui.setClickHandler(self.plusButton, function()
         self:adjustVolume(.05)
     end)
-
-    self.panel = gridPanel()
-    self.panel:setColSpacing(50)
-    self.panel:add(self.label)
-    self.panel:add(self.minusButton)
-    self.panel:add(self.valueLabel)
-    self.panel:add(self.plusButton)
-    self.panel:setSize(640, 50)
 
     self:onValueChanged()
 
@@ -69,47 +82,57 @@ function VolumeControl:adjustVolume(change)
     self:onValueChanged()
 end
 
+function VolumeControl:layout(x, y)
+    self.label:setPos(x, y + 10)
+    x = x + 180
+    self.minusButton:setPos(x, y)
+    x = x + 50
+    self.valueLabel:setPos(x, y + 10)
+    x = x + 160
+    self.plusButton:setPos(x, y)
+end
+
 ---Default settings screen
 -------------------------------------------------------------------------------------------------------------- @section SettingsScreen
 
 local SettingsScreen = {
-    topPanel=nil,
-    bottomPanel=nil,
     returnButton=nil
     }
 
 function SettingsScreen.new(self)
     self = extend(SettingsScreen, self)
 
-    self.topPanel = gridPanel()
-
+    local x = 400
+    local y = 100
+    local volumeControls = {}
     for _,v in pairs(SoundType) do
         local vc = VolumeControl.new{soundType = v}
-        self.topPanel:add(vc.panel)
-        self.topPanel:endRow()
+        vc:layout(x, y)
+        y = y + 75
+        table.insert(volumeControls, vc)
     end
 
-    local displayModeButton = button("gui/settingsscreen#button-")
+    y = y + 25
+
+    local dmLabel = textimg("Display Mode")
+    dmLabel:setPos(x, y + 10)
+
+    local displayModeButton = button("gui/button")
     displayModeButton:setEnabled(System.getEnv():isDisplayModeSupported(DisplayMode.WINDOWED))
-    displayModeButton:setText(System.getEnv():getDisplayMode())
+    displayModeButton:setText(getDisplayModeName(System.getEnv():getDisplayMode()))
+    displayModeButton:setWidth(200)
     Gui.setClickHandler(displayModeButton, function()
         local mode = nextDisplayMode()
         System.setDisplayMode(mode)
-        displayModeButton:setText(mode)
+        displayModeButton:setText(getDisplayModeName(mode))
     end)
-    self.topPanel:add(displayModeButton)
-    self.topPanel:endRow()
+    displayModeButton:setPos(x + 250, y)
+    y = y + 50
 
-    self.topPanel:setInsets(100, 100, 100, 100)
-    self.topPanel:pack(8)
-
-    self.returnButton = button("gui/settingsscreen#button-")
+    self.returnButton = button("gui/button")
     self.returnButton:setText("Return")
-
-    self.bottomPanel = gridPanel()
-    self.bottomPanel:add(self.returnButton)
-    self.bottomPanel:setInsets(100, 100, 100, 100)
-    self.bottomPanel:pack(2)
+    self.returnButton:setWidth(200)
+    self.returnButton:setPos((screenWidth - 200) / 2, screenHeight - 150)
 
     return self
 end
