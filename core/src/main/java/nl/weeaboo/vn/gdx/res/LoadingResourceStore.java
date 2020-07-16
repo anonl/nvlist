@@ -152,6 +152,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
 
             String pathString = absolutePath.toString();
             if (am.isLoaded(pathString)) {
+                LOG.debug("Unloading resource: {}", pathString);
                 am.unload(pathString);
             }
         }

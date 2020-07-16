@@ -5,6 +5,9 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -14,6 +17,8 @@ import nl.weeaboo.common.Checks;
  * Calls the {@link Disposable#dispose()} on resources when they become eligible for garbage collection.
  */
 public final class GdxCleaner {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GdxCleaner.class);
 
     private static final GdxCleaner INSTANCE = new GdxCleaner();
 
@@ -58,13 +63,16 @@ public final class GdxCleaner {
         // Clean garbage
         Reference<?> rawReference;
         while ((rawReference = garbage.poll()) != null) {
-            ((Cleanable)rawReference).cleanup.dispose();
+            Cleanable cleanable = (Cleanable)rawReference;
+            LOG.debug("Disposing resource: {}", cleanable);
+            cleanable.cleanup.dispose();
         }
     }
 
     private static final class Cleanable extends WeakReference<Object> {
 
         private final Disposable cleanup;
+        private final String stringRepresentation;
 
         public Cleanable(Object referent, ReferenceQueue<? super Object> q, Disposable cleanup) {
             super(referent, q);
@@ -72,6 +80,13 @@ public final class GdxCleaner {
             this.cleanup = Checks.checkNotNull(cleanup);
             Checks.checkArgument(referent != cleanup,
                     "Cleanup  function shouldn't reference (or be equal to) the referent");
+
+            stringRepresentation = String.valueOf(referent);
+        }
+
+        @Override
+        public String toString() {
+            return stringRepresentation;
         }
 
     }

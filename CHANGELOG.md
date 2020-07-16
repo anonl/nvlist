@@ -1,4 +1,7 @@
 
+#v4.4.2
+- fix: Texture reloading sometimes resulted in black images
+
 # v4.4.1
 - fix: `attempt to call nil` at `builtin/vn/tween.lua:93` when calling `bitmapTween` 
 

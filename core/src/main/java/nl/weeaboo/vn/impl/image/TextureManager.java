@@ -22,6 +22,7 @@ import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.gdx.graphics.ColorTextureLoader;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.gdx.res.IResource;
+import nl.weeaboo.vn.gdx.res.TransformedResource;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
@@ -148,35 +149,27 @@ final class TextureManager implements IPreloadHandler {
         return Checks.checkNotNull(texture, "Color texture loading should never fail");
     }
 
-    private static final class SubTextureResource implements IResource<TextureRegion> {
+    private static final class SubTextureResource extends TransformedResource<Texture, TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 
-        private final IResource<Texture> textureResource;
         private final @Nullable Area subRect;
 
         private transient @Nullable TextureRegion cachedRegion;
 
         public SubTextureResource(IResource<Texture> tex, @Nullable Area subRect) {
-            this.textureResource = Checks.checkNotNull(tex);
+            super(tex);
+
             this.subRect = subRect;
         }
 
         @Override
-        public @Nullable TextureRegion get() {
-            TextureRegion result = cachedRegion;
-            if (result == null) {
-                Texture texture = textureResource.get();
-                if (texture != null) {
-                    if (subRect == null) {
-                        result = GdxTextureUtil.newGdxTextureRegion(texture);
-                    } else {
-                        result = GdxTextureUtil.newGdxTextureRegion(texture, subRect);
-                    }
-                }
-                cachedRegion = result;
+        protected TextureRegion transform(Texture original) {
+            if (subRect == null) {
+                return GdxTextureUtil.newGdxTextureRegion(original);
+            } else {
+                return GdxTextureUtil.newGdxTextureRegion(original, subRect);
             }
-            return result;
         }
 
     }
