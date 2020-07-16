@@ -155,8 +155,6 @@ final class TextureManager implements IPreloadHandler {
 
         private final @Nullable Area subRect;
 
-        private transient @Nullable TextureRegion cachedRegion;
-
         public SubTextureResource(IResource<Texture> tex, @Nullable Area subRect) {
             super(tex);
 
