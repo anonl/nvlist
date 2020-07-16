@@ -367,19 +367,25 @@ end
 
 function ImageGallery:setSelected(i)
     self.selected = i
-    
+
     local selectedSlot = nil
     for _,slot in ipairs(self.slots) do
         if slot.index == i then
-            selectedSlot = slot         
+            selectedSlot = slot
             slot.button:setSelected(true)
         else
-            slot.button:setSelected(false)      
+            slot.button:setSelected(false)
         end
     end
-    
+
     if selectedSlot ~= nil then
+        for _,slot in ipairs(self.slots) do
+            slot.button:setEnabled(false)
+        end
         selectedSlot:show()
+        for _,slot in ipairs(self.slots) do
+            slot.button:setEnabled(true)
+        end
     end
 end
 
