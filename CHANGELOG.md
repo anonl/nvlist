@@ -1,5 +1,8 @@
 
-#v4.4.2
+# v4.5.0
+- fix: Deactivating the current context from Lua didn't stop other threads and events from executing. Now, when the context becomes inactive, script execution within that context is immediately suspended.
+
+# v4.4.2
 - fix: Texture reloading sometimes resulted in black images
 
 # v4.4.1

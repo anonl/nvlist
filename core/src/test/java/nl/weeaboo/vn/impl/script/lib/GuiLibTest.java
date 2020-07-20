@@ -88,7 +88,7 @@ public final class GuiLibTest extends AbstractLibTest {
         LuaTestUtil.assertGlobal("clickCount", 0);
 
         // Check that the click handler set on the button is the Lua function that we supplied
-        button.getClickHandler().call();
+        LuaScriptUtil.callFunction(mainContext, button.getClickHandler());
 
         LuaTestUtil.assertGlobal("clickCount", 1);
     }

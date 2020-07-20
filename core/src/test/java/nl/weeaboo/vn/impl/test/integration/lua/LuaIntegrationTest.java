@@ -13,10 +13,9 @@ import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.input.VKey;
-import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
 /** Base class for tests of the Lua script environment */
@@ -25,7 +24,7 @@ public abstract class LuaIntegrationTest {
     protected TestEnvironment env;
     protected ContextManager contextManager;
     protected Context mainContext;
-    protected IScriptThread mainThread;
+    protected LuaScriptThread mainThread;
 
     @Before
     public void init() throws ScriptException {
@@ -41,8 +40,7 @@ public abstract class LuaIntegrationTest {
         contextManager.setContextActive(mainContext, true);
         ContextUtil.setCurrentContext(mainContext);
 
-        IScriptContext mainScriptContext = mainContext.getScriptContext();
-        mainThread = mainScriptContext.getMainThread();
+        mainThread = mainContext.getScriptContext().getMainThread();
     }
 
     /**

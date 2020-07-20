@@ -69,11 +69,12 @@ public class CoreLib extends LuaLib {
     @ScriptFunction
     public Varargs callInContext(Varargs args) {
         IContextManager contextManager = env.getContextManager();
+        LuaThread runningThread = LuaThread.getRunning();
 
         IScriptFunction func = LuaScriptUtil.toScriptFunction(args, 1);
         contextManager.callInContext(func);
 
-        return LuaThread.getRunning().yield(LuaConstants.NONE);
+        return runningThread.yield(LuaConstants.NONE);
     }
 
     /**

@@ -6,13 +6,12 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.impl.input.InputMock;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
-import nl.weeaboo.vn.impl.script.ScriptFunctionStub;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptFunctionStub;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.impl.text.FontStoreMock;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.scene.IButton;
 import nl.weeaboo.vn.script.IScriptFunction;
-import nl.weeaboo.vn.script.ScriptException;
 
 public class ButtonClickTest {
 
@@ -21,7 +20,7 @@ public class ButtonClickTest {
     private InputMock input;
 
     private ScriptEventDispatcher eventDispatcher;
-    private ScriptFunctionStub clickFunction;
+    private LuaScriptFunctionStub clickFunction;
     private Button button;
 
     @Before
@@ -29,7 +28,7 @@ public class ButtonClickTest {
         input = new InputMock();
 
         eventDispatcher = new ScriptEventDispatcher();
-        clickFunction = new ScriptFunctionStub();
+        clickFunction = new LuaScriptFunctionStub();
         FontStoreMock fontStore = new FontStoreMock();
         button = new Button(eventDispatcher, fontStore);
         button.setClickHandler(clickFunction);
@@ -129,7 +128,7 @@ public class ButtonClickTest {
     private void assertButtonState(boolean rollover, boolean pressed, int clickCount) {
         Assert.assertEquals(rollover, button.isRollover());
         Assert.assertEquals(pressed, button.isPressed());
-        Assert.assertEquals(clickCount, clickFunction.consumeCallCount());
+        Assert.assertEquals(clickCount, clickFunction.getCallCount());
     }
 
     private void assertSelected(boolean expected) {
@@ -140,11 +139,7 @@ public class ButtonClickTest {
         button.handleInput(Matrix.identityMatrix(), input);
 
         for (IScriptFunction func : eventDispatcher.retrieveWork()) {
-            try {
-                func.call();
-            } catch (ScriptException e) {
-                Assert.fail(e.toString());
-            }
+            ((LuaScriptFunctionStub)func).call();
         }
     }
 

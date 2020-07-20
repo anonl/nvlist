@@ -1,9 +1,11 @@
 package nl.weeaboo.vn.impl.script;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
 
     private static final Comparator<Task> TASK_SORTER = new TaskSorter();
 
-    private final List<IScriptFunction> events = new ArrayList<>();
+    private final Deque<IScriptFunction> events = new ArrayDeque<>();
     private final List<Task> tasks = new ArrayList<>();
 
     private transient boolean tasksSorted = false;
@@ -28,8 +30,13 @@ public class ScriptEventDispatcher implements IScriptEventDispatcher {
     }
 
     @Override
+    public void prependEvent(IScriptFunction func) {
+        events.addFirst(func);
+    }
+
+    @Override
     public void addEvent(IScriptFunction func) {
-        events.add(func);
+        events.addLast(func);
     }
 
     @Override

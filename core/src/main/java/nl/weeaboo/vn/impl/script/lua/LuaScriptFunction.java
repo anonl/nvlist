@@ -22,9 +22,7 @@ class LuaScriptFunction implements IScriptFunction {
 
     @Override
     public void call() throws ScriptException {
-        LuaRunState runState = LuaImpl.getRunState();
-
-        call(runState.getMainThread());
+        call(LuaThread.getRunning());
     }
 
     void call(LuaThread thread) throws ScriptException {

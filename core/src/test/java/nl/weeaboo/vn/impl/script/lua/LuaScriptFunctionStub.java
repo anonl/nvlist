@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.script.lua;
 
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 
 public class LuaScriptFunctionStub extends LuaScriptFunction {
@@ -24,6 +25,11 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
     }
 
     @Override
+    final void call(LuaThread thread) {
+        call();
+    }
+
+    @Override
     public LuaScriptThread callInNewThread() {
         return new ThreadStub(this);
     }
@@ -38,6 +44,7 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
         private static final long serialVersionUID = 1L;
 
         private final LuaScriptFunctionStub function;
+        private boolean finished;
         private boolean destroyed;
 
         public ThreadStub(LuaScriptFunctionStub f) {
@@ -63,12 +70,17 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
 
         @Override
         public void update() {
+            if (finished) {
+                return;
+            }
+
             function.call();
+            finished = true;
         }
 
         @Override
         public boolean isRunnable() {
-            return !destroyed && function.getCallCount() < 1;
+            return !destroyed && !finished;
         }
 
     }

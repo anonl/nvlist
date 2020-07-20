@@ -1,7 +1,8 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,6 @@ public class LuaScriptContext implements IScriptContext {
     private final LuaTable contextGlobals;
     private final IScriptEventDispatcher eventDispatcher;
     private final LuaScriptThread mainThread;
-    private final LuaScriptThread eventThread;
 
     private final DestructibleElemList<LuaScriptThread> threads = new DestructibleElemList<>();
 
@@ -46,9 +46,6 @@ public class LuaScriptContext implements IScriptContext {
         eventDispatcher = new ScriptEventDispatcher();
 
         LuaRunState lrs = scriptEnv.getRunState();
-
-        eventThread = LuaScriptUtil.createPersistentThread(lrs);
-        threads.add(eventThread);
 
         mainThread = LuaScriptUtil.createPersistentThread(lrs);
         threads.add(mainThread);
@@ -113,27 +110,39 @@ public class LuaScriptContext implements IScriptContext {
     public void updateThreads(IContext context, IScriptExceptionHandler exceptionHandler) {
         IContext oldContext = ContextUtil.setCurrentContext(context);
         try {
-            runEvents(exceptionHandler);
-            runThreads(exceptionHandler);
+            runEvents(context, exceptionHandler);
+            runThreads(context, exceptionHandler);
         } finally {
             ContextUtil.setCurrentContext(oldContext);
         }
     }
 
-    private void runEvents(IScriptExceptionHandler exceptionHandler) {
-        List<IScriptFunction> eventWork = eventDispatcher.retrieveWork();
-        for (IScriptFunction func : eventWork) {
-            try {
-                eventThread.call((LuaScriptFunction)func);
-            } catch (ScriptException e) {
-                LOG.warn("Exception while executing event: {}", func, e);
-                exceptionHandler.onScriptException(eventThread, e);
+    private void runEvents(IContext context, IScriptExceptionHandler exceptionHandler) {
+        Deque<IScriptFunction> eventWork = new ArrayDeque<>(eventDispatcher.retrieveWork());
+        try {
+            while (!eventWork.isEmpty() && context.isActive()) {
+                IScriptFunction func = eventWork.removeFirst();
+                try {
+                    mainThread.call((LuaScriptFunction)func);
+                } catch (ScriptException e) {
+                    LOG.warn("Exception while executing event: {}", func, e);
+                    exceptionHandler.onScriptException(mainThread, e);
+                }
+            }
+        } finally {
+            // Return unexecuted work to the front of the event queue
+            while (!eventWork.isEmpty()) {
+                eventDispatcher.prependEvent(eventWork.removeLast());
             }
         }
     }
 
-    private void runThreads(IScriptExceptionHandler exceptionHandler) {
+    private void runThreads(IContext context, IScriptExceptionHandler exceptionHandler) {
         for (LuaScriptThread thread : threads) {
+            if (!context.isActive()) {
+                break;
+            }
+
             try {
                 thread.update();
             } catch (ScriptException e) {
