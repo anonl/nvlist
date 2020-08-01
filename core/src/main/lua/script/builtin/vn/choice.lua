@@ -40,13 +40,17 @@ function choice2(uniqueChoiceId, ...)
     if choiceScreenConstructor == nil then
         Log.warn("No choice screen registered")
     else
-        Seen.registerChoice(uniqueChoiceId, #options)
-    
+        if uniqueChoiceId ~= nil then
+            Seen.registerChoice(uniqueChoiceId, #options)
+        end
+
         local screen = choiceScreenConstructor()
         selected = screen:choose(uniqueChoiceId, options)
         screen:destroy()
-        
-        Seen.markChoiceSelected(uniqueChoiceId, selected)
+
+        if uniqueChoiceId ~= nil then
+            Seen.markChoiceSelected(uniqueChoiceId, selected)
+        end
     end
     return selected
 end
@@ -70,7 +74,7 @@ function ChoiceScreen:destroy()
 end
 
 ---Show the user a selection screen
--- @param uniqueChoiceId Unique identifier for the script location from which this choice screen was
+-- @param[opt=nil] uniqueChoiceId Unique identifier for the script location from which this choice screen was
 --        triggered.
 -- @param options Table of styled text option descriptions.
 function ChoiceScreen:choose(uniqueChoiceId, options)
@@ -92,7 +96,7 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
         b:setZ(-1000)
 
         local styledText = option
-        if Seen.hasSelectedChoice(uniqueChoiceId, i) then
+        if uniqueChoiceId ~= nil and Seen.hasSelectedChoice(uniqueChoiceId, i) then
             --Apply a custom text style if the user has selected this choice before
             styledText = Text.createStyledText(option, self.seenStyle)
         end

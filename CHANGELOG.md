@@ -1,4 +1,7 @@
 
+# v4.5.1
+- You can now display choices without tracking which options were previously selected by the user. To to so, use `choice2(nil, "my option 1", "my option 2")` instead of `choice("my option 1", "my option 2")`.
+
 # v4.5.0
 - fix: Deactivating the current context from Lua didn't stop other threads and events from executing. Now, when the context becomes inactive, script execution within that context is immediately suspended.
 
