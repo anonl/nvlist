@@ -118,7 +118,7 @@ public class TextLib extends LuaLib {
     public Varargs extendStyle(Varargs args) throws ScriptException {
         TextStyle baseStyle = LuaConvertUtil.getTextStyleArg(args.arg(1));
         TextStyle extStyle = LuaConvertUtil.getTextStyleArg(args.arg(2));
-        TextStyle merged = TextStyle.extend(baseStyle, extStyle);
+        TextStyle merged = TextStyle.combine(baseStyle, extStyle);
         return LuajavaLib.toUserdata(merged, TextStyle.class);
     }
 

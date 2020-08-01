@@ -111,7 +111,7 @@ class PremultFileTextureData implements TextureData {
             }
             decodeStopwatch.logDuration("PremultTextureData.decodePixmap: {}", file);
         } catch (GdxRuntimeException e) {
-            throw new IOException("Error loading texture: " + file);
+            throw new IOException("Error loading texture: " + file, e);
         }
 
         if (needsPremultiplyAlpha) {

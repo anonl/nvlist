@@ -1,5 +1,6 @@
 
 # v4.5.1
+- fix: Fonts could be unloaded while still in use, causing text to be rendered as black squared.
 - You can now display choices without tracking which options were previously selected by the user. To to so, use `choice2(nil, "my option 1", "my option 2")` instead of `choice("my option 1", "my option 2")`.
 
 # v4.5.0

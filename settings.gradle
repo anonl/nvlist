@@ -21,3 +21,4 @@ subProjects.each { proj ->
 }
 
 // includeBuild '../tcommon'
+// includeBuild '../gdx-styledtext'

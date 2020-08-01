@@ -12,18 +12,21 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Disposable;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
+import nl.weeaboo.styledtext.gdx.GdxFont;
 import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
-import nl.weeaboo.styledtext.gdx.GdxFontInfo;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
@@ -41,7 +44,7 @@ public final class GdxFontStore extends ResourceStore {
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);
 
     private final GdxFileSystem resourceFileSystem;
-    private final nl.weeaboo.styledtext.gdx.GdxFontStore backing;
+    private final nl.weeaboo.styledtext.gdx.GdxFontRegistry backing;
     private final Cache cache;
     private final LruSet<FilePath> missingFonts = new LruSet<>(16);
 
@@ -50,7 +53,7 @@ public final class GdxFontStore extends ResourceStore {
 
         this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
 
-        backing = new nl.weeaboo.styledtext.gdx.GdxFontStore();
+        backing = new nl.weeaboo.styledtext.gdx.GdxFontRegistry();
         cache = new Cache(new ResourceStoreCacheConfig<>());
     }
 
@@ -64,20 +67,11 @@ public final class GdxFontStore extends ResourceStore {
     }
 
     @Override
-    public void destroy() {
-        if (!isDestroyed()) {
-            super.destroy();
-
-            backing.dispose();
-        }
-    }
-
-    @Override
     public void clear() {
         cache.clear();
     }
 
-    private GdxFontInfo loadFont(FilePath absoluteFontPath, TextStyle ts) throws IOException {
+    private GdxFont loadFont(FilePath absoluteFontPath, TextStyle ts) throws IOException {
         for (FilePath variantPath : getStyleSpecificPaths(absoluteFontPath, ts.getFontStyle(EFontStyle.PLAIN))) {
             FileHandle fileHandle = resourceFileSystem.resolve(variantPath.toString());
             if (fileHandle.exists()) {
@@ -90,12 +84,20 @@ public final class GdxFontStore extends ResourceStore {
         throw new FileNotFoundException(absoluteFontPath.toString());
     }
 
-    private GdxFontInfo loadFont(FileHandle file, TextStyle ts) throws IOException {
+    private GdxFont loadFont(FileHandle file, TextStyle ts) throws IOException {
         GdxFontGenerator fontGenerator = new GdxFontGenerator();
         fontGenerator.setYDir(YDir.DOWN);
 
-        GdxFontInfo font = fontGenerator.load(file, ts);
-        backing.registerFont(font);
+        GdxFont font = fontGenerator.load(file, ts);
+        backing.addFont(font);
+
+        // Dispose native resources when font is no longer referenced.
+        GdxCleaner.get().register(font, new Disposable() {
+            @Override
+            public void dispose() {
+                font.dispose();
+            }
+        });
         return font;
     }
 
@@ -161,14 +163,14 @@ public final class GdxFontStore extends ResourceStore {
         }
     }
 
-    private final class Cache extends ResourceStoreCache<CacheKey, GdxFontInfo> {
+    private final class Cache extends ResourceStoreCache<CacheKey, GdxFont> {
 
-        public Cache(ResourceStoreCacheConfig<GdxFontInfo> config) {
+        public Cache(ResourceStoreCacheConfig<GdxFont> config) {
             super(config);
         }
 
         @Override
-        public GdxFontInfo doLoad(CacheKey key) throws IOException {
+        public GdxFont doLoad(CacheKey key) throws IOException {
             try {
                 return loadFont(key.absolutePath, key.style);
             } catch (RuntimeException re) {
@@ -178,8 +180,14 @@ public final class GdxFontStore extends ResourceStore {
         }
 
         @Override
-        protected void doUnload(CacheKey key, @Nullable GdxFontInfo value) {
-            backing.disposeFont(value);
+        protected void doUnload(CacheKey key, @Nullable GdxFont value) {
+            /*
+             * We can't dispose the font object here since it may be still be referenced directly by
+             * GdxFontInfo/GdxTextElement/...
+             */
+            if (value != null) {
+                backing.removeFont(value);
+            }
         }
 
     }
@@ -207,6 +215,11 @@ public final class GdxFontStore extends ResourceStore {
 
             CacheKey other = (CacheKey)obj;
             return absolutePath.equals(other.absolutePath) && style.equals(other.style);
+        }
+
+        @Override
+        public String toString() {
+            return StringUtil.formatRoot("CacheKey[path=%s, style=%s]", absolutePath, style);
         }
 
     }
