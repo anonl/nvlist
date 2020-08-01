@@ -116,26 +116,29 @@ ClickIndicatorPos = {
 -- @param d Click indicator drawable.
 -- @tparam ClickIndicatorPos clickIndicatorPos Click indicator positioning type.
 -- @tparam TextDrawable textDrawable Main textbox drawable.
-function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable)
+-- @param[opt=0] dx Relative position offset (x-axis)
+-- @param[opt=0] dy Relative position offset (y-axis)
+function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable, dx, dy)
+    dx = dx or 0
+    dy = dy or 0
     local dw = d:getWidth()
     local dh = d:getHeight()
-    
+
     local tx = textDrawable:getX()
     local ty = textDrawable:getY()
 
-    d:setAlign(0.5, 0.5)
     if clickIndicatorPos == ClickIndicatorPos.RIGHT then
-        d:setPos(tx + textDrawable:getMaxWidth() - dw / 2, ty + textDrawable:getMaxHeight() - dh / 2)
+        d:setPos(tx + textDrawable:getMaxWidth() + dx - dw, ty + textDrawable:getMaxHeight() + dy - dh)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_BOTTOM then
         ty = ty + textDrawable:getTextHeight()
-        d:setPos(tx + dw / 2, ty + dh / 2)
+        d:setPos(tx + dx, ty + dy)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_INLINE then
         local lineIndex = textDrawable:getEndLine() - 1
         if lineIndex >= 0 then
             local lineBounds = textDrawable:getLineBounds(lineIndex)
             tx = tx + lineBounds.x + lineBounds.w
             ty = ty + textDrawable:getTextHeight() - lineBounds.h / 2
-            d:setPos(tx + dw, ty)
+            d:setPos(tx + dx, ty + dy - dh / 2)
         else
             -- Panic
             d:setVisible(false)
@@ -147,6 +150,8 @@ DefaultClickIndicator = extend(ClickIndicator, {
     drawable = nil, -- Click indicator drawable
     textDrawable = nil, -- Text drawable that this click indicator belongs to
     pos = ClickIndicatorPos.TEXT_INLINE,
+    dx = 0, -- Relative position offset (x-axis)
+    dy = 0, -- Relative position offset (y-axis)
 })
 
 function DefaultClickIndicator.new(self)
@@ -176,7 +181,7 @@ function DefaultClickIndicator:show()
 	if self.thread == nil then
         self.thread = newThread(function()
             while not self.drawable:isDestroyed() do
-                applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable)
+                applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable, self.dx, self.dy)
                 yield()
             end
         end)

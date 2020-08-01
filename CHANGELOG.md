@@ -2,6 +2,7 @@
 # v4.5.1
 - fix: Fonts could be unloaded while still in use, causing text to be rendered as black squared.
 - You can now display choices without tracking which options were previously selected by the user. To to so, use `choice2(nil, "my option 1", "my option 2")` instead of `choice("my option 1", "my option 2")`.
+- The click indicator position can now be modified with relative dx/dy offsets (i.e. `self.clickIndicator.dx = 50`). The default click indicator position changed slightly to make the position easier to customize.
 
 # v4.5.0
 - fix: Deactivating the current context from Lua didn't stop other threads and events from executing. Now, when the context becomes inactive, script execution within that context is immediately suspended.
