@@ -47,13 +47,9 @@ local function saveLoadScreen(isSave)
             slot, userData = screen:show()
             screen:destroy()
         end
-
-        print("pre")
         showScreen()
-        print("post")
     end)
 
-    print(slot)
     if slot > 0 then
         if isSave then
             -- Take a screenshot to add to the save file
