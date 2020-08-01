@@ -58,6 +58,8 @@ abstract class AbstractEnvironment implements IEnvironment {
 
     @Override
     public void update() {
+        getSaveModule().processSaveLoadRequests();
+
         for (IModule module : getModules()) {
             module.update();
         }

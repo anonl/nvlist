@@ -1,4 +1,7 @@
 
+# v4.5.2
+- fix: Quick-saving from within a click handler resulted in a broken save file (more robust fix).
+
 # v4.5.1
 - fix: Fonts could be unloaded while still in use, causing text to be rendered as black squared.
 - fix: Quick-saving from within a click handler resulted in a broken save file.

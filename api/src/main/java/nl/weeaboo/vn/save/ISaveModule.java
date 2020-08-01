@@ -11,6 +11,13 @@ import nl.weeaboo.vn.core.INovel;
  */
 public interface ISaveModule extends IModule {
 
+    /**
+     * Perform requests to save or load. Must be called at the very beginning or very end of every frame. If
+     * this method is called mid-frame, or from within Lua code, the results of saving of loading may be
+     * unpredictable.
+     */
+    void processSaveLoadRequests();
+
     /** Load persistent storage. */
     void loadPersistent();
 

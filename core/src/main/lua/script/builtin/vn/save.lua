@@ -29,20 +29,12 @@ end
 -- @param[opt=nil] userdata table
 -- @param[opt=nil] screenshot table (screenshot, width, height)
 function quickSave(slot, userdata, screenshot)
-    local result
-    callInContext(function()
-        result = Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)
-    end)
-    return result
+    return Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)
 end
 
 ---Loads the quick-save slot with the given number (1..99)
 function quickLoad(slot)
-    local result
-    callInContext(function()
-        result = Save.load(Save.getQuickSaveSlot(slot))
-    end)
-    return result
+    return Save.load(Save.getQuickSaveSlot(slot))
 end
 
 ---Autosave

@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -30,6 +32,8 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.impl.core.AbstractModule;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.image.EmptyScreenshot;
 import nl.weeaboo.vn.impl.image.PixmapDecodingScreenshot;
 import nl.weeaboo.vn.save.ISaveFile;
@@ -54,10 +58,13 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     private static final int AUTO_SAVE_OFFSET = 900;
     private static final int NUM_AUTO_SAVE_SLOTS = 99;
 
+    private final StaticRef<INovel> novelRef = StaticEnvironment.NOVEL;
     private final IEnvironment env;
 
     private transient IStorage sharedGlobals;
     private transient LuaSerializer luaSerializer;
+    private transient Deque<LoadRequest> loadRequests;
+    private transient Deque<SaveRequest> saveRequests;
 
     public SaveModule(IEnvironment env) {
         this.env = Checks.checkNotNull(env);
@@ -69,6 +76,8 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         sharedGlobals = new Storage();
 
         luaSerializer = new LuaSerializer();
+        loadRequests = new ArrayDeque<>();
+        saveRequests = new ArrayDeque<>();
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -96,6 +105,24 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     final IWritableFileSystem getFileSystem() {
         return env.getOutputFileSystem();
+    }
+
+    @Override
+    public void processSaveLoadRequests() {
+        while (!saveRequests.isEmpty()) {
+            try {
+                doSave(novelRef.get(), saveRequests.removeFirst());
+            } catch (IOException e) {
+                LOG.warn("Save error", e);
+            }
+        }
+        while (!loadRequests.isEmpty()) {
+            try {
+                doLoad(novelRef.get(), loadRequests.removeFirst());
+            } catch (IOException e) {
+                LOG.warn("Load error", e);
+            }
+        }
     }
 
     @Override
@@ -136,8 +163,12 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     @Override
-    public void load(INovel novel, int slot) throws SaveFormatException, IOException {
-        IFileSystem arc = openSaveArchive(slot);
+    public void load(INovel novel, int slot) {
+        loadRequests.add(new LoadRequest(slot));
+    }
+
+    private void doLoad(INovel novel, LoadRequest lr) throws IOException {
+        IFileSystem arc = openSaveArchive(lr.slot);
         try {
             readSaveData(arc, novel);
         } finally {
@@ -232,26 +263,31 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     }
 
     @Override
-    public void save(INovel novel, int slot, ISaveParams params) throws IOException {
+    public void save(INovel novel, int slot, ISaveParams params) {
+        saveRequests.add(new SaveRequest(slot, params));
+        LOG.info("Save requested: {}", slot);
+    }
+
+    private void doSave(INovel novel, SaveRequest sr) throws IOException {
         // This seems to be a good time to flush other values to disk as well
         savePersistent();
 
         IWritableFileSystem fs = getFileSystem();
 
-        FilePath savePath = getSavePath(slot);
+        FilePath savePath = getSavePath(sr.slot);
         ZipOutputStream zout = new ZipOutputStream(fs.openOutputStream(savePath, false));
         try {
-            ThumbnailInfo thumbnailInfo = params.getThumbnailInfo();
+            ThumbnailInfo thumbnailInfo = sr.saveParams.getThumbnailInfo();
 
             // Save header
             SaveFileHeader header = new SaveFileHeader(System.currentTimeMillis());
             header.setThumbnail(thumbnailInfo);
-            header.setUserData(params.getUserData());
+            header.setUserData(sr.saveParams.getUserData());
             SaveFileIO.writeJson(zout, SaveFileConstants.HEADER_PATH, SaveFileHeaderJson.encode(header));
 
             // Thumbnail
             if (thumbnailInfo != null) {
-                SaveFileIO.writeBytes(zout, thumbnailInfo.getPath(), params.getThumbnailData());
+                SaveFileIO.writeBytes(zout, thumbnailInfo.getPath(), sr.saveParams.getThumbnailData());
             }
 
             // Save data
@@ -336,6 +372,28 @@ public class SaveModule extends AbstractModule implements ISaveModule {
 
     static boolean isAutoSaveSlot(int slot) {
         return slot > AUTO_SAVE_OFFSET && slot <= AUTO_SAVE_OFFSET + NUM_AUTO_SAVE_SLOTS;
+    }
+
+    private static final class LoadRequest {
+
+        final int slot;
+
+        LoadRequest(int slot) {
+            this.slot = slot;
+        }
+
+    }
+
+    private static final class SaveRequest {
+
+        final int slot;
+        final ISaveParams saveParams;
+
+        SaveRequest(int slot, ISaveParams saveParams) {
+            this.slot = slot;
+            this.saveParams = saveParams;
+        }
+
     }
 
 }

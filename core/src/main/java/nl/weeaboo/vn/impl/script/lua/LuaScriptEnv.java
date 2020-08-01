@@ -1,9 +1,12 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.script.IScriptEnv;
@@ -13,6 +16,7 @@ import nl.weeaboo.vn.script.ScriptException;
 /**
  * Default implementation of {@link IScriptEnv}.
  */
+@CustomSerializable
 public class LuaScriptEnv implements IScriptEnv {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
@@ -26,6 +30,12 @@ public class LuaScriptEnv implements IScriptEnv {
     public LuaScriptEnv(LuaRunState runState, LuaScriptLoader loader) {
         this.runState = runState;
         this.loader = loader;
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        registerOnThread();
     }
 
     /**

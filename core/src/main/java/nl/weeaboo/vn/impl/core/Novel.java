@@ -105,8 +105,6 @@ public class Novel implements INovel {
 
     @Override
     public void update() {
-        getScriptEnv().registerOnThread(); // Required after deserialization
-
         getEnv().update();
     }
 

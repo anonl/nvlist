@@ -25,6 +25,7 @@ import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.image.IScreenshot;
+import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 import nl.weeaboo.vn.impl.save.SaveParams;
@@ -158,16 +159,17 @@ public final class SaveLib extends LuaLib {
         ISaveModule saveModule = env.getSaveModule();
         INovel novel = novelRef.get();
 
-        final LuaRunState lrs = LuaRunState.getCurrent();
-        final LuaThread thread = lrs.getRunningThread();
-        Varargs result = thread.yield(LuaConstants.NONE);
-        lrs.destroy();
+        ContextUtil.getCurrentContext().destroy();
+//        final LuaRunState lrs = LuaRunState.getCurrent();
+//        final LuaThread thread = lrs.getRunningThread();
+//        Varargs result = thread.yield(LuaConstants.NONE);
+//        lrs.destroy();
         try {
             saveModule.load(novel, slot);
         } catch (IOException e) {
             throw new ScriptException("Error loading save slot: " + slot, e);
         }
-        return result;
+        return LuaConstants.NONE;
     }
 
     /**
