@@ -37,7 +37,7 @@ matrix:
       before_install:
         # Download SDK
         - brew update --quiet
-        - brew cask install --quiet android-sdk
+        - brew cask install android-sdk
         # Install the SDK, use grep to suppress thousands of lines showing an ASCII progress bar
         - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-28" | grep -v = || true
         - export ANDROID_HOME=/usr/local/share/android-sdk
