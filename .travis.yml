@@ -20,8 +20,8 @@ matrix:
           - platform-tools
           - android-28
       before_script:
-        # Install the SDK, use grep to suppress thousands of lines showing an ASCII progress bar
-        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-27" | grep -v = || true
+        # Install the SDK
+        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-27"
         # Start virtual frame buffer
         - "export DISPLAY=:99.0"
         - "/sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
@@ -37,9 +37,9 @@ matrix:
       before_install:
         # Download SDK
         - brew update --quiet
-        - brew cask install android-sdk
-        # Install the SDK
-        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-28"
+        - brew cask install --quiet android-sdk
+        # Install the SDK, use grep to suppress thousands of lines showing an ASCII progress bar
+        - (while sleep 5; do echo "y"; done) | sdkmanager "platforms;android-28" | grep -v = || true
         - export ANDROID_HOME=/usr/local/share/android-sdk
       script:
         ./gradlew robovmArchive
