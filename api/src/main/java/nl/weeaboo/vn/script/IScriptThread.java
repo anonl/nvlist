@@ -14,12 +14,17 @@ public interface IScriptThread extends Serializable, IDestructible {
      * Runs the thread until it yields.
      * @throws ScriptException If an exception occurs while trying to execute the thread.
      */
-    public void update() throws ScriptException;
+    void update() throws ScriptException;
 
     /**
      * Returns {@code true} if the thread has been started and not yet finished.
      */
-    public boolean isRunnable();
+    boolean isRunnable();
+
+    /**
+     * Returns the name of the thread (may not be unique).
+     */
+    String getName();
 
     /**
      * Returns a string representation of the current call stack of this thread. Returns an empty list if no

@@ -12,7 +12,12 @@ test {
 
 run {
     workingDir = vnRootDir
+    args '--Pdebug=true'
     ignoreExitValue = true
+}
+
+tasks.register('runDesktop') {
+    dependsOn run
 }
 
 eclipse {

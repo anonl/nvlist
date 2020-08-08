@@ -2,8 +2,6 @@ package nl.weeaboo.vn.impl.script.lua;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
@@ -23,6 +21,8 @@ public class LuaScriptThread implements IScriptThread {
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
     final Indirect<LuaThread> threadRef;
+
+    private transient boolean paused;
 
     LuaScriptThread(LuaThread thread) {
         this.threadRef = Indirect.of(thread);
@@ -95,6 +95,10 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public void update() throws ScriptException {
+        if (paused) {
+            return;
+        }
+
         LuaThread thread = threadRef.get();
 
         if (!thread.isDead()) {
@@ -114,23 +118,26 @@ public class LuaScriptThread implements IScriptThread {
     }
 
     @Override
-    public String toString() {
-        LuaThread thread = threadRef.get();
-        if (thread == null) {
-            return "<no-thread-active>";
-        }
+    public String getName() {
+        return String.valueOf(threadRef.get());
+    }
 
-        return String.valueOf(thread);
+    @Override
+    public String toString() {
+        return getName();
     }
 
     @Override
     public List<String> getStackTrace() {
-        LuaThread thread = threadRef.get();
-        if (thread == null) {
-            return ImmutableList.of();
-        }
+        return LuaUtil.getLuaStack(threadRef.get());
+    }
 
-        return LuaUtil.getLuaStack(thread);
+    public void pause() {
+        paused = true;
+    }
+
+    public void unpause() {
+        paused = false;
     }
 
 }
