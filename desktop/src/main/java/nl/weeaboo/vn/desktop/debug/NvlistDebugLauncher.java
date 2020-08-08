@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Closeables;
+import com.google.common.io.Closer;
 
 /**
  * Starts/stops listening for incoming debug adapter protocol (DAP) connections.
@@ -22,6 +23,8 @@ public final class NvlistDebugLauncher implements Closeable {
     private final int listenPort;
     private final INvlistTaskRunner taskRunner;
     private final Thread acceptorThread;
+
+    private volatile ServerSocket serverSocket;
 
     NvlistDebugLauncher(int listenPort, INvlistTaskRunner taskRunner) {
         this.listenPort = listenPort;
@@ -39,7 +42,7 @@ public final class NvlistDebugLauncher implements Closeable {
      * @param nvlistAccessExecutor Access NVList internal structures only through tasks running on this executor.
      */
     public static NvlistDebugLauncher launch(int listenPort, Executor nvlistAccessExecutor) {
-        LOG.info("Debug mode requested, starting debug adapter server on port {}");
+        LOG.info("Debug mode requested, starting debug adapter server on port {}", listenPort);
 
         NvlistDebugLauncher launcher = new NvlistDebugLauncher(listenPort, new NvlistTaskRunner(nvlistAccessExecutor));
         launcher.acceptorThread.start();
@@ -48,21 +51,24 @@ public final class NvlistDebugLauncher implements Closeable {
 
     @Override
     public void close() {
-        acceptorThread.interrupt();
         try {
+            Closeables.close(serverSocket, true);
+            acceptorThread.interrupt();
             acceptorThread.join();
-        } catch (InterruptedException e) {
-            LOG.warn("Wait for acceptor thread shutdown was interrupted", e);
+        } catch (IOException | InterruptedException e) {
+            LOG.warn("Acceptor thread shutdown failed", e);
         }
     }
 
     private void acceptorLoop() {
-        try (ServerSocket serverSocket = new ServerSocket(listenPort)) {
-            while (true) {
+        Closer closer = Closer.create();
+        try {
+            closer.register(serverSocket = new ServerSocket(listenPort));
+            while (!serverSocket.isClosed()) {
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();
-                    NvlistDebugServer.start(taskRunner, socket);
+                    closer.register(NvlistDebugServer.start(taskRunner, socket));
                 } catch (IOException e) {
                     LOG.warn("[debug-server] I/O error while trying to accept a new connection", e);
                     Closeables.close(socket, true);
@@ -71,6 +77,11 @@ public final class NvlistDebugLauncher implements Closeable {
         } catch (IOException serverSocketException) {
             LOG.error("[debug-server] fatal I/O error", serverSocketException);
         } finally {
+            try {
+                closer.close();
+            } catch (IOException e) {
+                LOG.warn("Unable to close debug server", e);
+            }
             LOG.info("[debug-server] terminated");
         }
     }

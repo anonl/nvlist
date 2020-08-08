@@ -5,21 +5,24 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.WillCloseWhenClosed;
 
+import org.eclipse.lsp4j.debug.Breakpoint;
 import org.eclipse.lsp4j.debug.Capabilities;
 import org.eclipse.lsp4j.debug.ContinueArguments;
 import org.eclipse.lsp4j.debug.ContinueResponse;
 import org.eclipse.lsp4j.debug.DisconnectArguments;
-import org.eclipse.lsp4j.debug.EvaluateArguments;
-import org.eclipse.lsp4j.debug.EvaluateResponse;
 import org.eclipse.lsp4j.debug.InitializeRequestArguments;
 import org.eclipse.lsp4j.debug.PauseArguments;
+import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
+import org.eclipse.lsp4j.debug.SetBreakpointsResponse;
 import org.eclipse.lsp4j.debug.StackTraceArguments;
 import org.eclipse.lsp4j.debug.StackTraceResponse;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
@@ -32,6 +35,8 @@ import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 
@@ -41,28 +46,37 @@ import nl.weeaboo.vn.impl.core.StaticEnvironment;
 final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(NvlistDebugServer.class);
-
-    private final ActiveThreads activeThreads = new ActiveThreads();
+    private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(1,
+            new ThreadFactoryBuilder().setNameFormat("debug-server-scheduler").setDaemon(true).build());
 
     private final INvlistTaskRunner taskRunner;
+    private final Breakpoints breakpoints = new Breakpoints();
+    private final ActiveThreads activeThreads = new ActiveThreads(breakpoints);
+    private Future<?> periodicUpdateTask = CompletableFuture.completedFuture(null);
 
     private IDebugProtocolClient peer;
     private Socket socket;
     private Future<Void> messageHandler;
 
-    public NvlistDebugServer(INvlistTaskRunner taskRunner) {
+    private NvlistDebugServer(INvlistTaskRunner taskRunner) {
         this.taskRunner = Objects.requireNonNull(taskRunner);
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     @Override
     public CompletableFuture<Capabilities> initialize(InitializeRequestArguments args) {
+        periodicUpdateTask.cancel(true);
+        periodicUpdateTask = SCHEDULER.scheduleWithFixedDelay(() -> {
+            taskRunner.runOnNvlistThread(this::update);
+        }, 1, 1, TimeUnit.SECONDS);
+
         Capabilities caps = new Capabilities();
-        caps.setSupportsEvaluateForHovers(true);
         return CompletableFuture.completedFuture(caps);
     }
 
     @Override
     public void close() {
+        periodicUpdateTask.cancel(true);
         messageHandler.cancel(true);
         try {
             socket.close();
@@ -71,17 +85,17 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         }
     }
 
+    private void update() {
+        INovel novel = getNovel();
+        if (novel != null) {
+            activeThreads.update(novel, peer);
+        }
+    }
+
     @Override
     public CompletableFuture<Void> disconnect(DisconnectArguments args) {
         close();
         return CompletableFuture.completedFuture(null);
-    }
-
-    @Override
-    public CompletableFuture<Void> launch(Map<String, Object> args) {
-        return taskRunner.runOnNvlistThread(() -> {
-            LOG.debug("[debug-server] Received launch request");
-        });
     }
 
     @Override
@@ -121,7 +135,8 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         return taskRunner.supplyOnNvlistThread(() -> {
             LOG.debug("[debug-server] Received threads request");
 
-            activeThreads.updateFrom(getNovel());
+            update();
+
             List<org.eclipse.lsp4j.debug.Thread> threads = new ArrayList<>();
             for (DebugThread thread : activeThreads) {
                 threads.add(thread.toDapThread());
@@ -149,12 +164,14 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     }
 
     @Override
-    public CompletableFuture<EvaluateResponse> evaluate(EvaluateArguments args) {
+    public CompletableFuture<SetBreakpointsResponse> setBreakpoints(SetBreakpointsArguments args) {
         return taskRunner.supplyOnNvlistThread(() -> {
-            LOG.debug("[debug-server] Received evaluate request {}", args.getExpression());
+            LOG.debug("[debug-server] Received setBreakpoints request for {}", args.getSource());
 
-            EvaluateResponse response = new EvaluateResponse();
-            response.setResult("???");
+            Breakpoint[] resultBreakpoints = breakpoints.setBreakpoints(args.getSource(), args.getBreakpoints());
+
+            SetBreakpointsResponse response = new SetBreakpointsResponse();
+            response.setBreakpoints(resultBreakpoints);
             return response;
         });
     }

@@ -35,7 +35,7 @@ function start()
 # Insert your code here
 @registerSpeaker("aza", "Azathoth")
 @bgf("bg/gate")
-@settingsScreen()
+#@settingsScreen()
 #@imgf("azathoth", "c")
 $aza Hello there
 
