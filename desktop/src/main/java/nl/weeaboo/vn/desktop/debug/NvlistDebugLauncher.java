@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Objects;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,13 +64,14 @@ public final class NvlistDebugLauncher implements Closeable {
 
     private void acceptorLoop() {
         Closer closer = Closer.create();
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
             closer.register(serverSocket = new ServerSocket(listenPort));
             while (!serverSocket.isClosed()) {
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();
-                    closer.register(NvlistDebugServer.start(taskRunner, socket));
+                    closer.register(NvlistDebugServer.start(taskRunner, socket, executorService));
                 } catch (IOException e) {
                     LOG.warn("[debug-server] I/O error while trying to accept a new connection", e);
                     Closeables.close(socket, true);
@@ -82,6 +85,7 @@ public final class NvlistDebugLauncher implements Closeable {
             } catch (IOException e) {
                 LOG.warn("Unable to close debug server", e);
             }
+            executorService.shutdown();
             LOG.info("[debug-server] terminated");
         }
     }

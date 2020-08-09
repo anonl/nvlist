@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.WillCloseWhenClosed;
 
 import org.eclipse.lsp4j.debug.Breakpoint;
@@ -19,6 +21,8 @@ import org.eclipse.lsp4j.debug.Capabilities;
 import org.eclipse.lsp4j.debug.ContinueArguments;
 import org.eclipse.lsp4j.debug.ContinueResponse;
 import org.eclipse.lsp4j.debug.DisconnectArguments;
+import org.eclipse.lsp4j.debug.EvaluateArguments;
+import org.eclipse.lsp4j.debug.EvaluateResponse;
 import org.eclipse.lsp4j.debug.InitializeRequestArguments;
 import org.eclipse.lsp4j.debug.PauseArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
@@ -28,10 +32,10 @@ import org.eclipse.lsp4j.debug.StackTraceResponse;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
 import org.eclipse.lsp4j.debug.StoppedEventArgumentsReason;
 import org.eclipse.lsp4j.debug.ThreadsResponse;
-import org.eclipse.lsp4j.debug.launch.DSPLauncher;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolServer;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.debug.DebugLauncher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +75,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         }, 1, 1, TimeUnit.SECONDS);
 
         Capabilities caps = new Capabilities();
+        caps.setSupportsEvaluateForHovers(true);
         return CompletableFuture.completedFuture(caps);
     }
 
@@ -176,16 +181,34 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         });
     }
 
-    private INovel getNovel() {
-        return StaticEnvironment.NOVEL.get();
+    @Override
+    public CompletableFuture<EvaluateResponse> evaluate(EvaluateArguments args) {
+        return taskRunner.supplyOnNvlistThread(() -> {
+            LOG.debug("[debug-server] Received evaluate request: context={}, expr={}",
+                    args.getContext(), args.getExpression());
+
+            EvaluateResponse response = new EvaluateResponse();
+            response.setResult("???");
+            return response;
+        });
     }
 
-    public static NvlistDebugServer start(INvlistTaskRunner taskRunner, @WillCloseWhenClosed Socket socket)
-            throws IOException {
+    @CheckForNull
+    private INovel getNovel() {
+        return StaticEnvironment.NOVEL.getIfPresent();
+    }
+
+    public static NvlistDebugServer start(INvlistTaskRunner taskRunner, @WillCloseWhenClosed Socket socket,
+            ExecutorService executorService) throws IOException {
 
         NvlistDebugServer debugServer = new NvlistDebugServer(taskRunner);
-        Launcher<IDebugProtocolClient> launcher = DSPLauncher.createServerLauncher(
-                debugServer, socket.getInputStream(), socket.getOutputStream());
+        Launcher<IDebugProtocolClient> launcher = new DebugLauncher.Builder<IDebugProtocolClient>()
+                .setLocalService(debugServer)
+                .setRemoteInterface(IDebugProtocolClient.class)
+                .setInput(socket.getInputStream())
+                .setOutput(socket.getOutputStream())
+                .setExecutorService(executorService)
+                .create();
         debugServer.peer = launcher.getRemoteProxy();
         debugServer.socket = socket;
         debugServer.messageHandler = launcher.startListening();
