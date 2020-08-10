@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemModule;
@@ -48,7 +47,6 @@ public final class DebugControls {
         }
 
         final boolean alt = input.isPressed(KeyCode.ALT_LEFT, true);
-        final IContext activeContext = env.getContextManager().getPrimaryContext();
 
         // Reset
         ISystemModule systemModule = env.getSystemModule();
@@ -89,7 +87,7 @@ public final class DebugControls {
         }
 
         // Lua console
-        luaConsole.setActiveContext(activeContext);
+        luaConsole.setContext(env.getContextManager());
         if (input.consumePress(KeyCode.F1)) {
             // TODO: LuaConsole needs to intercept the F1 key in order to hide itself
             luaConsole.setVisible(!luaConsole.isVisible());

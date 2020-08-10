@@ -140,15 +140,21 @@ public class LuaScriptThread implements IScriptThread {
 
     public void pause() {
         paused = true;
+
+        // Suspend execution immediately
+        LuaThread luaThread = threadRef.get();
+        if (luaThread.isRunning()) {
+            luaThread.yield(LuaConstants.NONE);
+        }
     }
 
     public void unpause() {
         paused = false;
     }
 
-    public void installHook(Runnable callback) {
+    public void installHook(ILuaDebugHook callback) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
-        Varargs args = LuaValue.varargsOf(threadRef.get(), new DebugHook(callback), LuaString.valueOf("l"));
+        Varargs args = LuaValue.varargsOf(threadRef.get(), new DebugHook(callback), LuaString.valueOf("crl"));
         globals.get("debug").get("sethook").invoke(args);
     }
 
@@ -156,19 +162,26 @@ public class LuaScriptThread implements IScriptThread {
 
         private static final long serialVersionUID = 1L;
 
-        private transient Runnable callback;
+        private transient ILuaDebugHook callback;
 
-        public DebugHook(Runnable callback) {
+        public DebugHook(ILuaDebugHook callback) {
             this.callback = Checks.checkNotNull(callback);
         }
 
         @Override
         public LuaValue call(LuaValue eventName, LuaValue lineNumber) {
-            if (callback != null) {
-                callback.run();
-            }
+            callback.onEvent(eventName.tojstring(), lineNumber.optint(0));
             return LuaConstants.NONE;
         }
+
+    }
+
+    /**
+     * Lua debug library callback.
+     */
+    public interface ILuaDebugHook {
+
+        void onEvent(String eventName, int lineNumber);
 
     }
 }

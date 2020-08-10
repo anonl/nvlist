@@ -12,6 +12,7 @@ import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.ContextUtil;
@@ -150,19 +151,43 @@ public final class LuaScriptUtil {
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
      * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
-    public static String eval(IContext mainContext, String luaCode) throws ScriptException {
-        LuaScriptContext scriptContext = getScriptContext(mainContext);
-        LuaScriptThread mainThread = scriptContext.getMainThread();
-
+    public static String eval(IContext context, String luaCode) throws ScriptException {
         Varargs result;
-        IContext oldContext = ContextUtil.setCurrentContext(mainContext);
+        IContext oldContext = ContextUtil.setCurrentContext(context);
         try {
-            result = mainThread.eval(luaCode);
+            result = getScriptContext(context).getMainThread().eval(luaCode);
         } finally {
             ContextUtil.setCurrentContext(oldContext);
         }
-
         return result.tojstring();
+    }
+
+    /**
+     * Runs arbitrary Lua code in the given thread.
+     *
+     * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
+     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
+     */
+    public static String eval(IContextManager contextManager, LuaScriptThread thread, String luaCode)
+            throws ScriptException {
+
+        Varargs result;
+        IContext oldContext = ContextUtil.setCurrentContext(getContextForThread(contextManager, thread));
+        try {
+            result = thread.eval(luaCode);
+        } finally {
+            ContextUtil.setCurrentContext(oldContext);
+        }
+        return result.tojstring();
+    }
+
+    private static @Nullable IContext getContextForThread(IContextManager contextManager, IScriptThread thread) {
+        for (IContext context : contextManager.getContexts()) {
+            if (context.getScriptContext().getThreads().contains(thread)) {
+                return context;
+            }
+        }
+        throw new IllegalStateException("Thread doesn't exist: " + thread);
     }
 
     private static IScreen getCurrentScreen() throws ScriptException {

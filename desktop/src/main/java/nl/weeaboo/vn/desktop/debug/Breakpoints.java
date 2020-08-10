@@ -3,6 +3,7 @@ package nl.weeaboo.vn.desktop.debug;
 import org.eclipse.lsp4j.debug.Breakpoint;
 import org.eclipse.lsp4j.debug.Source;
 import org.eclipse.lsp4j.debug.SourceBreakpoint;
+import org.eclipse.lsp4j.debug.StackFrame;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -25,6 +26,11 @@ final class Breakpoints {
                 .stream()
                 .map(DebugBreakpoint::toDapBreakpoint)
                 .toArray(Breakpoint[]::new);
+    }
+
+    public boolean shouldPause(StackFrame sf) {
+        String relativePath = NameMapping.toRelativeScriptPath(sf.getSource().getPath());
+        return shouldPause(relativePath, sf.getLine());
     }
 
     boolean shouldPause(String relativePath, int line) {

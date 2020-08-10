@@ -3,9 +3,13 @@ package nl.weeaboo.vn.desktop.debug;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import org.eclipse.lsp4j.debug.ContinuedEventArguments;
+import org.eclipse.lsp4j.debug.Source;
 import org.eclipse.lsp4j.debug.StackFrame;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
+import org.eclipse.lsp4j.debug.StoppedEventArgumentsReason;
 import org.eclipse.lsp4j.debug.Thread;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 
@@ -15,12 +19,15 @@ import com.google.common.primitives.Ints;
 
 import nl.weeaboo.lua2.stdlib.DebugTrace;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptThread.ILuaDebugHook;
 
 final class DebugThread {
 
     private final int threadId;
     private final LuaScriptThread thread;
     private final IDebugProtocolClient peer;
+
+    private @Nullable EStepMode stepMode;
 
     DebugThread(LuaScriptThread thread, IDebugProtocolClient peer) {
         this.threadId = getThreadId(thread);
@@ -34,6 +41,10 @@ final class DebugThread {
 
     int getThreadId() {
         return threadId;
+    }
+
+    LuaScriptThread getThread() {
+        return thread;
     }
 
     boolean isDead() {
@@ -56,6 +67,21 @@ final class DebugThread {
         peer.continued(continueEvent);
     }
 
+    void step(EStepMode mode) {
+        stepMode = Objects.requireNonNull(mode);
+        thread.unpause();
+    }
+
+    private void stepHit() {
+        stepMode = null;
+        thread.pause();
+
+        StoppedEventArguments stopEvent = new StoppedEventArguments();
+        stopEvent.setThreadId(threadId);
+        stopEvent.setReason(StoppedEventArgumentsReason.STEP);
+        peer.stopped(stopEvent);
+    }
+
     /**
      * Creates a debug adapter protocol (DAP) thread object based on this thread.
      */
@@ -67,24 +93,81 @@ final class DebugThread {
     }
 
     StackFrame[] getStackTrace() {
-        return thread.getStackTrace().stream().map(line -> {
-            StackFrame sf = new StackFrame();
-            sf.setName(line);
-            return sf;
-        }).toArray(StackFrame[]::new);
+        return thread.getStackTrace().stream().map(this::toStackFrame).toArray(StackFrame[]::new);
     }
 
     void installHook(Breakpoints breakpoints) {
-        thread.installHook(() -> {
-            List<String> parts = Splitter.on(':').splitToList(DebugTrace.fileline());
-            if (parts.size() == 2) {
-                String path = parts.get(0);
-                int line = MoreObjects.firstNonNull(Ints.tryParse(parts.get(1)), 0);
-                if (breakpoints.shouldPause(path, line)) {
-                    pause();
-                }
-            }
-        });
+        thread.installHook(new DebugHook(breakpoints));
     }
 
+    @Override
+    public String toString() {
+        return thread.toString();
+    }
+
+    private StackFrame toStackFrame(String fileline) {
+        String relativePath = fileline;
+        int lineNumber = 0;
+
+        List<String> parts = Splitter.on(':').splitToList(fileline);
+        if (parts.size() == 2) {
+            relativePath = parts.get(0);
+            lineNumber = MoreObjects.firstNonNull(Ints.tryParse(parts.get(1)), 0);
+        }
+
+        Source source = new Source();
+        source.setName(relativePath);
+        source.setPath(NameMapping.toAbsoluteScriptPath(relativePath));
+
+        StackFrame sf = new StackFrame();
+        sf.setName(fileline);
+        sf.setSource(source);
+        sf.setLine(lineNumber);
+        return sf;
+    }
+
+    private final class DebugHook implements ILuaDebugHook {
+
+        private final Breakpoints breakpoints;
+        private int depth = 0;
+
+        public DebugHook(Breakpoints breakpoints) {
+            this.breakpoints = breakpoints;
+        }
+
+        @Override
+        public void onEvent(String eventName, int lineNumber) {
+            StackFrame sf = toStackFrame(DebugTrace.fileline());
+            if (stepMode != null) {
+                switch (stepMode) {
+                case IN:
+                    if (eventName.endsWith("call")) {
+                        stepHit();
+                    }
+                    break;
+                case OUT:
+                    if (eventName.equals("return")) {
+                        // Pausing during a "tail return" seems to cause stack corruption (this is a bug)
+                        stepHit();
+                    }
+                    break;
+                case NEXT:
+                    // Ignore line events in nested function calls
+                    if (eventName.endsWith("call")) {
+                        depth++;
+                    } else if (eventName.endsWith("return")) {
+                        depth--;
+                    }
+
+                    if (depth <= 0 && "line".equals(eventName)) {
+                        stepHit();
+                    }
+                    break;
+                }
+            } else if (breakpoints.shouldPause(sf)) {
+                pause();
+            }
+        }
+
+    }
 }

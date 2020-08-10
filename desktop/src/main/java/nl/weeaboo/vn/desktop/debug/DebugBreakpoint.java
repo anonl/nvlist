@@ -1,19 +1,12 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Objects;
 
 import org.eclipse.lsp4j.debug.Breakpoint;
 import org.eclipse.lsp4j.debug.Source;
 import org.eclipse.lsp4j.debug.SourceBreakpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 final class DebugBreakpoint {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DebugBreakpoint.class);
 
     private final String absolutePath;
     private final String relativePath;
@@ -27,18 +20,7 @@ final class DebugBreakpoint {
         this.absolutePath = Objects.requireNonNull(absolutePath);
         this.lineNumber = lineNumber;
 
-        this.relativePath = relativize(absolutePath);
-    }
-
-    private static String relativize(String absolutePath) {
-        try {
-            URI scriptFolderUri = new File("res/script").getCanonicalFile().toURI();
-            URI absoluteUri = new File(absolutePath).getCanonicalFile().toURI();
-            return scriptFolderUri.relativize(absoluteUri).getPath();
-        } catch (IOException ioe) {
-            LOG.warn("Unable to determine relative path for {}", absolutePath, ioe);
-            return absolutePath;
-        }
+        this.relativePath = NameMapping.toRelativeScriptPath(absolutePath);
     }
 
     public String getAbsolutePath() {
@@ -60,6 +42,7 @@ final class DebugBreakpoint {
         Breakpoint result = new Breakpoint();
         result.setSource(source);
         result.setLine(lineNumber);
+        result.setVerified(true);
         return result;
     }
 }

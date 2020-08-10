@@ -22,13 +22,17 @@ import org.eclipse.lsp4j.debug.ContinueArguments;
 import org.eclipse.lsp4j.debug.ContinueResponse;
 import org.eclipse.lsp4j.debug.DisconnectArguments;
 import org.eclipse.lsp4j.debug.EvaluateArguments;
+import org.eclipse.lsp4j.debug.EvaluateArgumentsContext;
 import org.eclipse.lsp4j.debug.EvaluateResponse;
 import org.eclipse.lsp4j.debug.InitializeRequestArguments;
+import org.eclipse.lsp4j.debug.NextArguments;
 import org.eclipse.lsp4j.debug.PauseArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsResponse;
 import org.eclipse.lsp4j.debug.StackTraceArguments;
 import org.eclipse.lsp4j.debug.StackTraceResponse;
+import org.eclipse.lsp4j.debug.StepInArguments;
+import org.eclipse.lsp4j.debug.StepOutArguments;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
 import org.eclipse.lsp4j.debug.StoppedEventArgumentsReason;
 import org.eclipse.lsp4j.debug.ThreadsResponse;
@@ -39,10 +43,14 @@ import org.eclipse.lsp4j.jsonrpc.debug.DebugLauncher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.script.ScriptException;
 
 /**
  * Main debug adapter protocol implementation for NVList.
@@ -99,7 +107,10 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
     @Override
     public CompletableFuture<Void> disconnect(DisconnectArguments args) {
+        LOG.debug("[debug-server] Received disconnect request {}", args);
+
         close();
+        System.exit(0);
         return CompletableFuture.completedFuture(null);
     }
 
@@ -132,6 +143,42 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
             ContinueResponse response = new ContinueResponse();
             return response;
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> next(NextArguments args) {
+        return taskRunner.runOnNvlistThread(() -> {
+            DebugThread thread = activeThreads.findById(args.getThreadId());
+            LOG.debug("[debug-server] Received next request {}: {}", args.getThreadId(), thread);
+
+            if (thread != null) {
+                thread.step(EStepMode.NEXT);
+            }
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> stepIn(StepInArguments args) {
+        return taskRunner.runOnNvlistThread(() -> {
+            DebugThread thread = activeThreads.findById(args.getThreadId());
+            LOG.debug("[debug-server] Received step-in request {}: {}", args.getThreadId(), thread);
+
+            if (thread != null) {
+                thread.step(EStepMode.IN);
+            }
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> stepOut(StepOutArguments args) {
+        return taskRunner.runOnNvlistThread(() -> {
+            DebugThread thread = activeThreads.findById(args.getThreadId());
+            LOG.debug("[debug-server] Received step-out request {}: {}", args.getThreadId(), thread);
+
+            if (thread != null) {
+                thread.step(EStepMode.OUT);
+            }
         });
     }
 
@@ -184,11 +231,36 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     @Override
     public CompletableFuture<EvaluateResponse> evaluate(EvaluateArguments args) {
         return taskRunner.supplyOnNvlistThread(() -> {
-            LOG.debug("[debug-server] Received evaluate request: context={}, expr={}",
-                    args.getContext(), args.getExpression());
+            String context = args.getContext();
+            String expr = args.getExpression();
+            LOG.debug("[debug-server] Received evaluate request: context={}, expr={}", context, expr);
+
+            INovel novel = getNovel();
+            Preconditions.checkNotNull(novel, "NVList isn't active");
+
+            IContextManager contextManager = novel.getEnv().getContextManager();
+            DebugThread debugThread = activeThreads.findByFrameId(args.getFrameId());
+            Preconditions.checkNotNull(novel, "NVList isn't active");
 
             EvaluateResponse response = new EvaluateResponse();
-            response.setResult("???");
+            try {
+                LOG.debug("Evaluating in {} ({}): {}", debugThread, context, expr);
+                switch (context) {
+                case EvaluateArgumentsContext.REPL:
+                    response.setResult(LuaScriptUtil.eval(contextManager, debugThread.getThread(), expr));
+                    break;
+                case EvaluateArgumentsContext.HOVER:
+                    // Only run expressions without side-effects
+                    // This regex-based implementation is rather crude and should be improved
+                    if (expr.matches("[A-Za-z_][A-Za-z0-9_]*")) {
+                        response.setResult(LuaScriptUtil.eval(contextManager, debugThread.getThread(), expr));
+                    }
+                    break;
+                }
+            } catch (ScriptException e) {
+                LOG.trace("Error evaluating expression: " + expr, e);
+                LOG.warn("Error evaluating expression: " + expr + " :: " + e);
+            }
             return response;
         });
     }
