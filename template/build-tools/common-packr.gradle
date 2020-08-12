@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         // Plugin for creating runnable distributions (Win/Mac/Linux)
-        classpath 'com.bladecoder.packr:packr:2.0' // 3rd party prerelease version
+        classpath 'com.bladecoder.packr:packr:2.1' // 3rd party prerelease version
     }
 }
 
