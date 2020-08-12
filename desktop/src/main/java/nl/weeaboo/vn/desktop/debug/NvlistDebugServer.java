@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -46,6 +47,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -111,7 +114,29 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
         close();
         System.exit(0);
+
         return CompletableFuture.completedFuture(null);
+    }
+
+    @Override
+    public CompletableFuture<Void> launch(Map<String, Object> args) {
+        return taskRunner.runOnNvlistThread(() -> {
+            LOG.debug("[debug-server] Received launch request {}", args);
+
+            INovel novel = getNovel();
+            DebugThread primaryThread = activeThreads.getPrimaryThread();
+            String program = NameMapping.toRelativeScriptPath((String)args.get("program"));
+            if (novel == null || primaryThread == null || program == null) {
+                return;
+            }
+
+            String expr = StringUtil.formatRoot("jump(\"%s\")", LuaUtil.escape(program));
+            try {
+                LuaScriptUtil.eval(novel.getEnv().getContextManager(), primaryThread.getThread(), expr);
+            } catch (ScriptException e) {
+                LOG.warn("Unable to launch script: {}", program, e);
+            }
+        });
     }
 
     @Override
@@ -138,7 +163,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
             DebugThread thread = activeThreads.findById(args.getThreadId());
             if (thread != null) {
-                thread.unpause();
+                thread.resume();
             }
 
             ContinueResponse response = new ContinueResponse();

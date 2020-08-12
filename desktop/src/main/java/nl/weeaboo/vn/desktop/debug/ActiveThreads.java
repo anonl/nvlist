@@ -70,8 +70,8 @@ final class ActiveThreads implements Iterable<DebugThread> {
 
                     debugThread.installHook(breakpoints);
 
-                    LOG.debug("Send thread start event to debug adapter client (now {} active threads)",
-                            threadsById.size());
+                    LOG.debug("Send thread start event to debug adapter client (id={}, now {} active threads)",
+                            threadId, threadsById.size());
                     ThreadEventArguments threadEvent = new ThreadEventArguments();
                     threadEvent.setThreadId(debugThread.getThreadId());
                     threadEvent.setReason(ThreadEventArgumentsReason.STARTED);
@@ -92,6 +92,10 @@ final class ActiveThreads implements Iterable<DebugThread> {
     @Override
     public Iterator<DebugThread> iterator() {
         return Collections.unmodifiableCollection(threadsById.values()).iterator();
+    }
+
+    public @Nullable DebugThread getPrimaryThread() {
+        return primaryThread;
     }
 
     public @Nullable DebugThread findByFrameId(@Nullable Integer frameId) {

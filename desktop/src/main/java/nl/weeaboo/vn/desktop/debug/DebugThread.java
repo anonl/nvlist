@@ -59,8 +59,8 @@ final class DebugThread {
         peer.stopped(stopEvent);
     }
 
-    void unpause() {
-        thread.unpause();
+    void resume() {
+        thread.resume();
 
         ContinuedEventArguments continueEvent = new ContinuedEventArguments();
         continueEvent.setThreadId(threadId);
@@ -69,7 +69,7 @@ final class DebugThread {
 
     void step(EStepMode mode) {
         stepMode = Objects.requireNonNull(mode);
-        thread.unpause();
+        thread.resume();
     }
 
     private void stepHit() {

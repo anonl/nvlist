@@ -138,6 +138,7 @@ public class LuaScriptThread implements IScriptThread {
         return LuaUtil.getLuaStack(threadRef.get());
     }
 
+    @Override
     public void pause() {
         paused = true;
 
@@ -148,7 +149,8 @@ public class LuaScriptThread implements IScriptThread {
         }
     }
 
-    public void unpause() {
+    @Override
+    public void resume() {
         paused = false;
     }
 

@@ -71,6 +71,7 @@ public final class NvlistDebugLauncher implements Closeable {
                 Socket socket = null;
                 try {
                     socket = serverSocket.accept();
+                    LOG.info("[debug-server] Accepted incoming connection from {}", socket.getRemoteSocketAddress());
                     closer.register(NvlistDebugServer.start(taskRunner, socket, executorService));
                 } catch (IOException e) {
                     LOG.warn("[debug-server] I/O error while trying to accept a new connection", e);

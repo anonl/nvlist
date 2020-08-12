@@ -32,4 +32,14 @@ public interface IScriptThread extends Serializable, IDestructible {
      */
     List<String> getStackTrace();
 
+    /**
+     * Pauses execution of this thread until {@link #resume} is called.
+     */
+    void pause();
+
+    /**
+     * Unpauses execution of this thread after it was paused using {@link #pause}.
+     */
+    void resume();
+
 }
