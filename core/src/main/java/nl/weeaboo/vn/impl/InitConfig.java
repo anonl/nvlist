@@ -29,6 +29,18 @@ public final class InitConfig {
 
     private static void configLogging() {
         System.setProperty("sun.io.serialization.extendedDebugInfo", "true");
+
+        try {
+            Class<?> bridgeHandler = Class.forName("org.slf4j.bridge.SLF4JBridgeHandler");
+            try {
+                bridgeHandler.getMethod("removeHandlersForRootLogger").invoke(null);
+                bridgeHandler.getMethod("install").invoke(null);
+            } catch (ReflectiveOperationException | SecurityException e) {
+                LOG.debug("Unexpected exception while trying to install JUL->SLF4J bridge", e);
+            }
+        } catch (ClassNotFoundException cnfe) {
+            LOG.debug("No JUL->SLF4J bridge found; java.util.logging may not be included in the log output", cnfe);
+        }
     }
 
 }

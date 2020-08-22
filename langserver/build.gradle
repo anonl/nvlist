@@ -1,0 +1,47 @@
+
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow'
+}
+
+mainClassName = "nl.weeaboo.vn.langserver.LangServerMain"
+
+dependencies {
+    implementation project(':nvlist-core')
+    implementation deps.lsp4j
+
+    runtimeOnly deps.slf4j_desktop
+}
+
+run {
+    standardInput = System.in
+}
+
+tasks.register('runLangServer') {
+    dependsOn 'run'
+}
+
+shadowJar {
+   baseName = 'nvlist-langserver'
+   classifier = null
+   version = null
+}
+
+publishing {
+    publications {
+        langserver(MavenPublication) {
+            from components.java
+            artifactId 'nvlist-langserver'
+
+            pom.withXml {
+                asNode().children().last() + pomLicenseConfig
+            }  
+        }
+    }
+}
+
+bintray {
+    publications = ['langserver']
+}
