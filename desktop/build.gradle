@@ -8,7 +8,7 @@ dependencies {
 
     implementation deps.gdx_desktop
     implementation deps.jopt_simple
-    implementation deps.lsp4j
+    implementation deps.lsp4j_debug
     implementation deps.lua_core
 
     runtimeOnly deps.slf4j_desktop

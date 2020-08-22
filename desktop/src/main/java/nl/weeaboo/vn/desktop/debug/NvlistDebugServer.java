@@ -2,6 +2,7 @@ package nl.weeaboo.vn.desktop.debug;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ import org.eclipse.lsp4j.debug.NextArguments;
 import org.eclipse.lsp4j.debug.PauseArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsResponse;
+import org.eclipse.lsp4j.debug.SourceArguments;
+import org.eclipse.lsp4j.debug.SourceResponse;
 import org.eclipse.lsp4j.debug.StackTraceArguments;
 import org.eclipse.lsp4j.debug.StackTraceResponse;
 import org.eclipse.lsp4j.debug.StepInArguments;
@@ -48,7 +51,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.io.StreamUtil;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
+import nl.weeaboo.lua2.lib.LuaResource;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -285,6 +291,29 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
             } catch (ScriptException e) {
                 LOG.trace("Error evaluating expression: " + expr, e);
                 LOG.warn("Error evaluating expression: " + expr + " :: " + e);
+            }
+            return response;
+        });
+    }
+
+    @Override
+    public CompletableFuture<SourceResponse> source(SourceArguments args) {
+        return taskRunner.supplyOnNvlistThread(() -> {
+            LOG.debug("[debug-server] Received source request: source={}", args.getSource());
+
+            LuaRunState lrs = LuaRunState.getCurrent();
+            Preconditions.checkNotNull(lrs, "NVList isn't active");
+
+            String relPath = NameMapping.toRelativeScriptPath(args.getSource().getPath());
+
+            SourceResponse response = new SourceResponse();
+            LuaResource resource = lrs.findResource(relPath);
+            if (resource != null) {
+                try (InputStream in = resource.open()) {
+                    response.setContent(StringUtil.fromUTF8(StreamUtil.readBytes(in)));
+                } catch (IOException e) {
+                    LOG.warn("Error reading source file: " + relPath, e);
+                }
             }
             return response;
         });

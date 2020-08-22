@@ -18,7 +18,7 @@ function titlescreen()
     b:setText("Start")
     Gui.setClickHandler(b, function()
         panel:destroy()
-        start()
+        return start()
     end)
     
     -- Center the panel's contents in the bottom center
