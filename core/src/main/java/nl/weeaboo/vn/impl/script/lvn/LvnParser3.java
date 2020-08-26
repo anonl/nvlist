@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.filesystem.FilePath;
 
-class LvnParser3 implements ILvnParser {
+final class LvnParser3 extends AbstractLvnParser {
 
     private List<LvnLine> compiledLines;
 

@@ -13,17 +13,12 @@ import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import nl.weeaboo.vn.core.NovelPrefs;
-import nl.weeaboo.vn.impl.script.lvn.ILvnParser;
-import nl.weeaboo.vn.impl.script.lvn.LvnParserFactory;
 
 final class NvlistTextDocumentService implements TextDocumentService, LanguageClientAware {
 
@@ -40,20 +35,11 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
         this.peer = client;
     }
 
-    private static ILvnParser getLvnParser() {
-        // TODO: Use actual engine target version based on config
-        return LvnParserFactory.getParser(NovelPrefs.ENGINE_TARGET_VERSION.getDefaultValue());
-    }
-
     @Override
     public void didOpen(DidOpenTextDocumentParams params) {
         LOG.debug("didOpen({})", params);
 
-        TextDocumentItem doc = params.getTextDocument();
-
-        TODO: Modify LvnParser to return (optionally) a full AST instead of just a string
-        getLvnParser().parseFile(filename, in)
-        new LvnParserFactory().getParser(engineVersion).getText();
+        // TODO: Modify LvnParser to return (optionally) a full AST instead of just a string
     }
 
     @Override
