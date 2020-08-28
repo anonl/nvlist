@@ -3,7 +3,7 @@ package nl.weeaboo.vn.impl.script.lvn;
 /**
  * Line type enum for LVN files.
  */
-enum LvnMode {
+public enum LvnMode {
     TEXT(false),
 
     CODE(true),

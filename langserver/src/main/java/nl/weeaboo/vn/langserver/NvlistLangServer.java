@@ -10,11 +10,14 @@ import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
+import org.eclipse.lsp4j.DocumentLinkOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
+import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -22,10 +25,16 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
+import nl.weeaboo.vn.impl.core.BuiltinAssets;
+
 /**
  * Main language server protocol implementation for NVList.
  */
 public final class NvlistLangServer implements LanguageServer, LanguageClientAware, Closeable {
+
+    static final String NVLIST_BUILTIN_SCHEME = "nvlist-builtin";
 
     private static final Logger LOG = LoggerFactory.getLogger(NvlistLangServer.class);
 
@@ -69,6 +78,8 @@ public final class NvlistLangServer implements LanguageServer, LanguageClientAwa
         ServerCapabilities caps = new ServerCapabilities();
         caps.setTextDocumentSync(TextDocumentSyncKind.Full);
         caps.setDefinitionProvider(true);
+        caps.setHoverProvider(true);
+        caps.setDocumentLinkProvider(new DocumentLinkOptions(true));
 
         InitializeResult result = new InitializeResult();
         result.setCapabilities(caps);
@@ -96,6 +107,26 @@ public final class NvlistLangServer implements LanguageServer, LanguageClientAwa
     @Override
     public NvlistWorkspaceService getWorkspaceService() {
         return workspaceService;
+    }
+
+    /**
+     * Requests the source code of a built-in NVList script.
+     */
+    @JsonRequest("nvlist/builtinSource")
+    public CompletableFuture<String> builtinSource(TextDocumentIdentifier docId) {
+        String uri = docId.getUri();
+
+        String expectedPrefix = NVLIST_BUILTIN_SCHEME + "://";
+        Preconditions.checkArgument(uri.startsWith(expectedPrefix));
+        uri = uri.substring(expectedPrefix.length());
+
+        String contents = "";
+        try {
+            contents = BuiltinAssets.readString(uri);
+        } catch (IOException e) {
+            LOG.warn("Unable to resolve built-in script: {}", uri, e);
+        }
+        return CompletableFuture.completedFuture(contents);
     }
 
 }

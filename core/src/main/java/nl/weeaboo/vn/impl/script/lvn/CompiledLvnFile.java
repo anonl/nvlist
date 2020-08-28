@@ -77,4 +77,9 @@ final class CompiledLvnFile implements ICompiledLvnFile {
         return sb.toString();
     }
 
+    @Override
+    public ImmutableList<LvnLine> getLines() {
+        return lines;
+    }
+
 }

@@ -5,13 +5,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 
-final class LvnParser4 extends AbstractLvnParser {
+/**
+ * NVList 4.x .lvn script file parser.
+ */
+public final class LvnParser4 extends AbstractLvnParser {
 
     private final TextParser textParser;
 
@@ -50,15 +54,19 @@ final class LvnParser4 extends AbstractLvnParser {
     private void doParseFile() {
         while (input.hasRemainingLines()) {
             String line = input.readLine();
-            if (line.startsWith("##")) {
+            String trimmed = line.trim();
+
+            if (trimmed.startsWith("##")) {
+                Preconditions.checkState(trimmed.equals("##"));
                 output.addEmpty(LvnMode.MULTILINE_COMMENT, line);
                 parseCommentBlock();
-            } else if (line.startsWith("#")) {
+            } else if (trimmed.startsWith("#")) {
                 output.addEmpty(LvnMode.COMMENT, line);
-            } else if (line.startsWith("@@")) {
+            } else if (trimmed.startsWith("@@")) {
+                Preconditions.checkState(trimmed.equals("@@"));
                 output.addEmpty(LvnMode.MULTILINE_CODE, line);
                 parseCodeBlock();
-            } else if (line.startsWith("@")) {
+            } else if (trimmed.startsWith("@")) {
                 output.addLine(LvnMode.CODE, line, line.substring(1));
             } else {
                 parseTextLine(line);
@@ -178,7 +186,7 @@ final class LvnParser4 extends AbstractLvnParser {
         }
 
         public String readLine() {
-            return sourceLines.get(currentLine++).trim();
+            return sourceLines.get(currentLine++);
         }
 
     }

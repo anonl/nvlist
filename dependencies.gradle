@@ -9,6 +9,7 @@ ext.deps = [:]
 
 ext.errorProneVersion = '2.4.0'
 
+def antlrVersion = '4.8';
 def gdxTestVersion = '2.0.2'
 def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
@@ -53,6 +54,14 @@ deps.gdx_android_natives = [
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64",
+]
+
+deps.antlr_compiler = [
+    'org.antlr:antlr4:' + antlrVersion,
+]
+
+deps.antlr_runtime = [
+    'org.antlr:antlr4-runtime:' + antlrVersion,
 ]
 
 deps.gdx_core = [

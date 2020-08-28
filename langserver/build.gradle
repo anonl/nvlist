@@ -10,6 +10,7 @@ mainClassName = "nl.weeaboo.vn.langserver.LangServerMain"
 
 dependencies {
     implementation project(':nvlist-core')
+    implementation deps.antlr_runtime
     implementation deps.lsp4j
 
     runtimeOnly deps.slf4j_desktop

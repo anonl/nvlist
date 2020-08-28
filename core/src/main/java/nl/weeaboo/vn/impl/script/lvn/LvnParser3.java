@@ -103,7 +103,7 @@ final class LvnParser3 extends AbstractLvnParser {
         }
     }
 
-    protected String parseTextLine(FilePath filename, String line, int textLineNum) {
+    private String parseTextLine(FilePath filename, String line, int textLineNum) {
         if (line.length() == 0) {
             return ""; //Empty line
         }
@@ -171,7 +171,7 @@ final class LvnParser3 extends AbstractLvnParser {
         return sb.toString();
     }
 
-    protected void parseTextLine_flush(Collection<String> out, StringBuilder sb) {
+    private void parseTextLine_flush(Collection<String> out, StringBuilder sb) {
         if (sb.length() > 0) { //Flush buffered chars
             String ln = appendTextCommand(sb.toString());
             if (ln.length() > 0) {
@@ -181,19 +181,19 @@ final class LvnParser3 extends AbstractLvnParser {
         }
     }
 
-    protected String parseCodeLine(String line) {
+    private String parseCodeLine(String line) {
         return line.trim();
     }
 
-    protected String parseStringifier(String str) {
+    private String parseStringifier(String str) {
         return "paragraph.stringify(\"" + escape(str) + "\")";
     }
 
-    protected String beginParagraphCommand(FilePath filename, int textLineNum) {
+    private String beginParagraphCommand(FilePath filename, int textLineNum) {
         return "paragraph.start(\"" + escape(filename.toString()) + "\", " + textLineNum + ")";
     }
 
-    protected String appendTextCommand(String line) {
+    private String appendTextCommand(String line) {
         if (line.length() == 0) {
             return "";
         }
@@ -206,7 +206,7 @@ final class LvnParser3 extends AbstractLvnParser {
         return "paragraph.append(\"" + line + "\")";
     }
 
-    protected String endParagraphCommand() {
+    private String endParagraphCommand() {
         return "paragraph.finish()";
     }
 

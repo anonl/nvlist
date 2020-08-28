@@ -21,7 +21,7 @@ tasks.register('copyJavadoc', Sync) {
 }
 
 tasks.register('generateLuaPages') {
-    def sourceDir = project(':nvlist-core').file('src/main/lua/script/builtin')
+    def sourceDir = project(':nvlist-core').file('src/main/lua/builtin/script')
     def destinationDir = file("_lua")
 
     inputs.dir(sourceDir)
