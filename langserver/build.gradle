@@ -20,7 +20,7 @@ run {
     standardInput = System.in
 }
 
-tasks.register('runLangServer') {
+tasks.register('runLanguageServer') {
     dependsOn 'run'
 }
 

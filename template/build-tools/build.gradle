@@ -143,12 +143,24 @@ project(':ios') {
 }
 
 configurations {
-    buildtools {
-    }
+    buildtools { }
+    langserver { }
 }
 
 dependencies {
     buildtools "ch.qos.logback:logback-classic:1.2.3"
+    langserver "nl.weeaboo.vn:nvlist-langserver:$nvlistVersion"
+}
+
+// To run against a local prerelease version:
+// gradlew --PvnRoot=.. --include-build=../..
+task runLanguageServer(type: JavaExec) {
+    def targetFolder = new File(buildToolsDir, 'langserver')
+
+    classpath = configurations.langserver
+    main = 'nl.weeaboo.vn.langserver.LangServerMain'
+    args = []
+    workingDir vnRoot
 }
 
 task optimizeResources(type: JavaExec) {
@@ -164,7 +176,7 @@ task optimizeResources(type: JavaExec) {
     main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
     args = [configFile]
     workingDir vnRoot
-    
+
     doFirst {
         // Delete the output folder first
         delete(outputFolder)
