@@ -18,6 +18,7 @@ dependencies {
 
 run {
     standardInput = System.in
+    args (findProperty('args') ?: '')
 }
 
 tasks.register('runLanguageServer') {
