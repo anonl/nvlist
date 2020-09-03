@@ -11,10 +11,13 @@ def loadProperties(String filename) {
     return props
 }
 
-logger.lifecycle("VN root parameter: " + vnRoot)
+if (!hasProperty('vnRoot')) {
+    gradle.ext.vnRoot = '..'
+}
+logger.lifecycle("VN root parameter: " + gradle.ext.vnRoot)
 
 def x = gradle.ext
-x.vnRootDir = new File(vnRoot).getCanonicalFile()
+x.vnRootDir = new File(gradle.ext.vnRoot).getCanonicalFile()
 x.vnResDir = new File(x.vnRootDir, "/res")
 x.buildResDir = new File(x.vnRootDir, "/build-res")
 x.buildToolsDir = rootProject.projectDir

@@ -18,7 +18,7 @@ function titlescreen()
     b:setText("Start")
     Gui.setClickHandler(b, function()
         panel:destroy()
-        start()
+        return start()
     end)
     
     -- Center the panel's contents in the bottom center
@@ -35,7 +35,7 @@ function start()
 # Insert your code here
 @registerSpeaker("aza", "Azathoth")
 @bgf("bg/gate")
-@settingsScreen()
+#@settingsScreen()
 #@imgf("azathoth", "c")
 $aza Hello there
 

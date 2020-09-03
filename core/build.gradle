@@ -1,15 +1,20 @@
 
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'antlr'
+}
 
 dependencies {
+    antlr deps.antlr_compiler
+
     api project(":nvlist-api")
     api deps.gdx_core
     api deps.guava
     api deps.tcommon_prefsstore
-    
     implementation deps.lua_core
     implementation deps.styled_text_impl
+    implementation deps.antlr_runtime
 
     testImplementation deps.gdx_desktop
     testImplementation deps.gdx_headless
@@ -18,6 +23,47 @@ dependencies {
     testImplementation deps.tcommon_test
     testRuntimeOnly deps.slf4j_desktop
 }
+
+def genAssetsList = tasks.register('generateBuiltinAssetsList') {
+    def builtinLuaFolder = file('src/main/lua/builtin')
+    inputs.dir(builtinLuaFolder)
+    def builtinResFolder = file('src/main/resources/builtin')
+    inputs.dir(builtinResFolder)
+
+    def outputFile = file('src/main/resources/builtin/assets.list')
+    outputs.file(outputFile)
+
+    doLast {
+        def assets = ""
+        (fileTree(dir: builtinResFolder, exclude: 'assets.list') + fileTree(dir: builtinLuaFolder)).visit {
+            if (!it.isDirectory()) {
+                assets <<= "${it.relativePath}\n"
+            }
+        }
+
+        outputFile.getParentFile().mkdirs()
+        outputFile.text = assets
+    }
+}
+eclipse.synchronizationTasks genAssetsList
+processResources.dependsOn genAssetsList
+
+sourceSets.main.java {
+    srcDir 'src/gen/java'
+}
+
+// Workaround for https://github.com/gradle/gradle/issues/820
+configurations {
+    compile {
+        extendsFrom = extendsFrom.findAll { it != configurations.antlr }
+    }
+}
+
+generateGrammarSource {
+    arguments += ['-package', 'nl.weeaboo.vn.impl.script.lvn.gen', '-visitor']
+    outputDirectory = file('src/gen/java/nl/weeaboo/vn/impl/script/lvn/gen')
+}
+eclipse.synchronizationTasks generateGrammarSource
 
 publishing {
     publications {

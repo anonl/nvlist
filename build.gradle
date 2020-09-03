@@ -47,7 +47,7 @@ allprojects {
     apply plugin: 'com.jfrog.bintray'
 
     group = 'nl.weeaboo.vn'
-    version = '4.5.2'
+    version = '4.6.0'
     ext {
         javaVersion = 8
 
@@ -112,13 +112,13 @@ allprojects {
             main {
                 resources {
                     // Add additional resource dir for .lua/.lvn scripts
-                    srcDirs 'src/main/lua'
+                    srcDir 'src/main/lua'
                 }
             }
             test {
                 resources {
                     // Add additional resource dir for .lua/.lvn scripts
-                    srcDirs 'src/test/lua'
+                    srcDir 'src/test/lua'
                 }
             }
         }
@@ -153,6 +153,15 @@ allprojects {
         jacocoTestReport {
             reports {
                 xml.enabled true
+            }
+        }
+
+        eclipse.classpath.file.whenMerged {
+            entries.each { entry ->
+                if (entry.kind == 'src' && entry.path.contains('/gen/')) {
+                    // Ignore warnings in generated code
+                    entry.entryAttributes['ignore_optional_problems'] = 'true'
+                }
             }
         }
 

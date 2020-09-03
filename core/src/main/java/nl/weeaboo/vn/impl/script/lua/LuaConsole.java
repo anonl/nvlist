@@ -22,6 +22,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Queues;
 
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dUtil;
 import nl.weeaboo.vn.script.ScriptException;
@@ -39,7 +40,7 @@ public class LuaConsole {
     private final StringBuilder log = new StringBuilder("*** Lua console ***");
     private Deque<String> inputBuffer = Queues.newArrayDeque();
     private int inputBufferIndex;
-    private @Nullable IContext activeContext;
+    private @Nullable IContextManager contextManager;
 
     private @Nullable Table layout;
     private TextArea console;
@@ -157,20 +158,28 @@ public class LuaConsole {
             layout.remove();
             layout = null;
         }
-        activeContext = null;
+        contextManager = null;
     }
 
     protected void eval(String luaCode) {
-        if (activeContext == null) {
+        if (contextManager == null) {
             append("No script context active");
-        } else {
-            try {
-                String result = LuaScriptUtil.eval(activeContext, luaCode);
-                append("> " + result);
-            } catch (ScriptException e) {
-                LOG.info("Error during eval", e);
-                append("> Error: " + e.getLocalizedMessage());
-            }
+            return;
+        }
+
+        IContext context = contextManager.getPrimaryContext();
+        if (context == null) {
+            append("No script context active");
+            return;
+        }
+
+        try {
+            String result = LuaScriptUtil.eval(contextManager,
+                    (LuaScriptThread)context.getScriptContext().getMainThread(), luaCode);
+            append("> " + result);
+        } catch (ScriptException e) {
+            LOG.info("Error during eval", e);
+            append("> Error: " + e.getLocalizedMessage());
         }
     }
 
@@ -194,9 +203,8 @@ public class LuaConsole {
         console.appendText("\n" + str);
     }
 
-    /** Sets the active context. The Lua console executes commands in this context. */
-    public void setActiveContext(IContext context) {
-        activeContext = context;
+    public void setContext(@Nullable IContextManager contextManager) {
+        this.contextManager = contextManager;
     }
 
 }

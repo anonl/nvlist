@@ -1,6 +1,9 @@
 
 template/save
 android/libs
+.vscode
+save
+*.log
 
 ## Java
 

@@ -2,14 +2,18 @@ package nl.weeaboo.vn.impl.script.lua;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.LuaException;
+import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
+import nl.weeaboo.lua2.lib.TwoArgFunction;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaString;
+import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
+import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.impl.core.Indirect;
 import nl.weeaboo.vn.script.IScriptThread;
@@ -23,6 +27,8 @@ public class LuaScriptThread implements IScriptThread {
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
     final Indirect<LuaThread> threadRef;
+
+    private transient boolean paused;
 
     LuaScriptThread(LuaThread thread) {
         this.threadRef = Indirect.of(thread);
@@ -95,6 +101,10 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public void update() throws ScriptException {
+        if (paused) {
+            return;
+        }
+
         LuaThread thread = threadRef.get();
 
         if (!thread.isDead()) {
@@ -114,23 +124,66 @@ public class LuaScriptThread implements IScriptThread {
     }
 
     @Override
-    public String toString() {
-        LuaThread thread = threadRef.get();
-        if (thread == null) {
-            return "<no-thread-active>";
-        }
+    public String getName() {
+        return String.valueOf(threadRef.get());
+    }
 
-        return String.valueOf(thread);
+    @Override
+    public String toString() {
+        return getName();
     }
 
     @Override
     public List<String> getStackTrace() {
-        LuaThread thread = threadRef.get();
-        if (thread == null) {
-            return ImmutableList.of();
-        }
-
-        return LuaUtil.getLuaStack(thread);
+        return LuaUtil.getLuaStack(threadRef.get());
     }
 
+    @Override
+    public void pause() {
+        paused = true;
+
+        // Suspend execution immediately
+        LuaThread luaThread = threadRef.get();
+        if (luaThread.isRunning()) {
+            luaThread.yield(LuaConstants.NONE);
+        }
+    }
+
+    @Override
+    public void resume() {
+        paused = false;
+    }
+
+    public void installHook(ILuaDebugHook callback) {
+        LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
+        Varargs args = LuaValue.varargsOf(threadRef.get(), new DebugHook(callback), LuaString.valueOf("crl"));
+        globals.get("debug").get("sethook").invoke(args);
+    }
+
+    private static final class DebugHook extends TwoArgFunction {
+
+        private static final long serialVersionUID = 1L;
+
+        private transient ILuaDebugHook callback;
+
+        public DebugHook(ILuaDebugHook callback) {
+            this.callback = Checks.checkNotNull(callback);
+        }
+
+        @Override
+        public LuaValue call(LuaValue eventName, LuaValue lineNumber) {
+            callback.onEvent(eventName.tojstring(), lineNumber.optint(0));
+            return LuaConstants.NONE;
+        }
+
+    }
+
+    /**
+     * Lua debug library callback.
+     */
+    public interface ILuaDebugHook {
+
+        void onEvent(String eventName, int lineNumber);
+
+    }
 }

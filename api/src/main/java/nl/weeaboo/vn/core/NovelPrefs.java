@@ -79,4 +79,9 @@ public final class NovelPrefs {
             "Texture cache size in number of pages. A page is equal to the texture memory required for a "
             + "full screen, full color image.");
 
+    public static final Preference<Integer> DEBUG_ADAPTER_PORT = newPreference("debug.port",
+            "Debug adapter protocol port",
+            4711,
+            "If debug mode is enabled, listens for incoming debug adapter protocol connections on this port.");
+
 }
