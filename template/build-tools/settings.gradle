@@ -3,16 +3,18 @@
 def loadProperties(String filename) {
     def props = new Properties()
     def propertiesFile = file(filename)
-    if (propertiesFile.canRead()) {
-        propertiesFile.withInputStream { instr ->
-            props.load(instr)
-        }
+    if (!propertiesFile.canRead()) {
+        throw new GradleException('File not found: ' + filename);
+    }
+    propertiesFile.withInputStream { instr ->
+        props.load(instr)
     }
     return props
 }
 
-if (!hasProperty('vnRoot')) {
-    gradle.ext.vnRoot = '..'
+gradle.ext.vnRoot = '..'
+if (hasProperty('vnRoot')) {
+    gradle.ext.vnRoot = vnRoot
 }
 logger.lifecycle("VN root parameter: " + gradle.ext.vnRoot)
 

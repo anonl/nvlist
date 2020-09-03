@@ -158,12 +158,10 @@ dependencies {
 // To run against a local prerelease version:
 // gradlew --PvnRoot=.. --include-build=../..
 task runLanguageServer(type: JavaExec) {
-    def targetFolder = new File(buildDir, 'langserver')
-
     classpath = files(configurations.langserver)
     main = 'nl.weeaboo.vn.langserver.LangServerMain'
     args (findProperty('args') ?: '')
-    workingDir project.ext.vnRoot
+    workingDir project.ext.vnRootDir
 }
 
 task optimizeResources(type: JavaExec) {
@@ -171,14 +169,14 @@ task optimizeResources(type: JavaExec) {
     def configFile = new File(buildResDir, 'optimizer.json')
     inputs.file(configFile)
 
-    def outputFolder = new File(project.ext.vnRoot, 'res-optimized')
+    def outputFolder = new File(project.ext.vnRootDir, 'res-optimized')
     outputs.dir(outputFolder)
 
     // Setup to launch the resource optimizer
     classpath = configurations.buildtools + buildscript.configurations.classpath
     main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
     args = [configFile]
-    workingDir project.ext.vnRoot
+    workingDir project.ext.vnRootDir
 
     doFirst {
         // Delete the output folder first
