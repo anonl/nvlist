@@ -156,8 +156,7 @@ final class Analytics implements IAnalytics {
                 loadsPerLine.put(fileLine, lineStats);
             }
         } catch (ClassNotFoundException e) {
-            LOG.error("Invalid analytics file: {}", path, e);
-            throw new IOException(e);
+            throw new IOException("Invalid analytics file: " + path, e);
         } finally {
             in.close();
         }
