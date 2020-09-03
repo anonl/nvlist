@@ -9,10 +9,12 @@ ext.deps = [:]
 
 ext.errorProneVersion = '2.4.0'
 
+def antlrVersion = '4.8';
 def gdxTestVersion = '2.0.2'
 def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
 def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible
+def lsp4jVersion = '0.9.0'
 def roboVmVersion = '2.3.0'
 def slf4jVersion = '1.7.21'
 def styledTextVersion = '4.0.0'
@@ -52,6 +54,14 @@ deps.gdx_android_natives = [
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64",
+]
+
+deps.antlr_compiler = [
+    'org.antlr:antlr4:' + antlrVersion,
+]
+
+deps.antlr_runtime = [
+    'org.antlr:antlr4-runtime:' + antlrVersion,
 ]
 
 deps.gdx_core = [
@@ -109,8 +119,16 @@ deps.junit = [
     "junit:junit:4.13"
 ]
 
+deps.lsp4j = [
+    'org.eclipse.lsp4j:org.eclipse.lsp4j:' + lsp4jVersion
+]
+
+deps.lsp4j_debug = [
+    'org.eclipse.lsp4j:org.eclipse.lsp4j.debug:' + lsp4jVersion
+]
+
 deps.lua_core = [
-    "nl.weeaboo.luajpp2:luajpp2-core:3.0.3"
+    "nl.weeaboo.luajpp2:luajpp2-core:3.1.0"
 ]
 
 deps.slf4j_api = [

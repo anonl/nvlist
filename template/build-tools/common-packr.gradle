@@ -9,6 +9,12 @@ buildscript {
     }
 }
 
+// Disable dist tasks from 'distribution'/'shadow' plugin (we use packr instead)
+tasks.distZip.enabled = false
+tasks.distTar.enabled = false
+tasks.shadowDistZip.enabled = false
+tasks.shadowDistTar.enabled = false
+
 import com.badlogicgames.packr.*
 
 // Pack-all tasks that depends on each platform-specific pack task
@@ -56,9 +62,7 @@ packr.platforms.each{ platform ->
     def packrTask = tasks.register("packr${platform}", PackrTask) {
         group 'dist'
 
-        dependsOn shadowJar
-        inputs.files shadowJar.outputs.files
-
+        from shadowJar
         destinationDir = file("${packr.outputFolder}/$platformId")
 
         doFirst {
@@ -67,7 +71,7 @@ packr.platforms.each{ platform ->
             def jrePath = "${buildToolsDir}/jre/jre8-${platformId}.zip".toString()
 
             def vmArgs = []
-            vmArgs += applicationDefaultJvmArgs            
+            vmArgs += applicationDefaultJvmArgs
             if (platform == PackrConfig.Platform.MacOS) {
                 vmArgs += ['XstartOnFirstThread'] // Required for LWJGL3
             }

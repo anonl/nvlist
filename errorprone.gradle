@@ -11,6 +11,8 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.compilerArgs += ['-Werror']
     options.errorprone {
+        excludedPaths = '.*/gen/.*';
+
         warn('FieldMissingNullable')
         warn('ParameterNotNullable')
         // warn('ReturnMissingNullable') // (temporarily?) removed in 2.4.0 due to bugs in the check

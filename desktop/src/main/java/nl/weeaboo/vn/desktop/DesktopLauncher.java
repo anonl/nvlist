@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.HdpiMode;
@@ -24,6 +25,7 @@ import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.desktop.debug.NvlistDebugLauncher;
 import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
 import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.Launcher;
@@ -64,12 +66,30 @@ public final class DesktopLauncher {
         IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
 
         final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
+
+            private @Nullable NvlistDebugLauncher debugLauncher;
+
             @Override
             public void create() {
                 DesktopGraphicsUtil.setWindowIcon(gdxFileSystem);
                 DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
 
+                NovelPrefsStore prefs = loadPreferences();
+                if (prefs.get(NovelPrefs.DEBUG)) {
+                    debugLauncher = NvlistDebugLauncher.launch(prefs.get(NovelPrefs.DEBUG_ADAPTER_PORT),
+                            Gdx.app::postRunnable);
+                }
+
                 super.create();
+            }
+
+            @Override
+            public void dispose() {
+                super.dispose();
+
+                if (debugLauncher != null) {
+                    debugLauncher.close();
+                }
             }
         };
 
@@ -77,23 +97,11 @@ public final class DesktopLauncher {
         handleCommandlineOptions(prefs);
 
         Lwjgl3ApplicationConfiguration config = createConfig(launcher, prefs);
-        Lwjgl3Application app = new Lwjgl3Application(launcher, config);
-        app.addLifecycleListener(new LifecycleListener() {
-            @Override
-            public void resume() {
-                LOG.info("App resume");
-            }
+        // Note: The Lwjgl3Application constructor contains an infinite loop
+        @SuppressWarnings("unused")
+        Lwjgl3Application app = new Lwjgl3Application(launcher, config) {
 
-            @Override
-            public void pause() {
-                LOG.info("App pause");
-            }
-
-            @Override
-            public void dispose() {
-                LOG.info("App dispose");
-            }
-        });
+        };
     }
 
     /**

@@ -186,6 +186,8 @@ final class Analytics implements IAnalytics {
     @LuaSerializable
     private static final class LineStats implements Externalizable {
 
+        private static final long serialVersionUID = StatsImpl.serialVersionUID;
+
         private final Set<FilePath> imagesLoaded = Sets.newHashSet();
 
         // No-arg constructor is required by Externalizable interface

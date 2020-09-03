@@ -223,8 +223,13 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
             return filename.toString().startsWith("builtin/");
         }
 
-        public static URL getClassResource(FilePath filename) {
-            return LuaScriptLoader.class.getResource("/script/" + filename);
+        public static @Nullable URL getClassResource(FilePath filename) {
+            // You declare paths in Lua as builtin/abc.lua, which resolves to resource path /builtin/scripts/abc.lua
+            if (filename.startsWith("builtin/")) {
+                return LuaScriptLoader.class.getResource("/builtin/script/" + filename.toString().substring(8));
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -237,7 +242,7 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 
         public InputStream newInputStream(FilePath filename) throws IOException {
             if (isBuiltInScript(filename)) {
-                URL url = LuaScriptResourceLoader.getClassResource(filename);
+                URL url = getClassResource(filename);
                 if (url == null) {
                     throw new FileNotFoundException(filename.toString());
                 }

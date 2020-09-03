@@ -5,6 +5,13 @@
 @rem
 @rem ##########################################################################
 
+
+
+@rem Remove/change this line to use a different JDK
+set JAVA_HOME="../jre"
+
+
+
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 

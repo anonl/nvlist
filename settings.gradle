@@ -13,6 +13,7 @@ def subProjects = [
     'docs',
     'buildtools',
     'buildgui',
+    'langserver',
 ]
 
 subProjects.each { proj ->
@@ -22,3 +23,4 @@ subProjects.each { proj ->
 
 // includeBuild '../tcommon'
 // includeBuild '../gdx-styledtext'
+// includeBuild '../luajpp2'

@@ -7,4 +7,9 @@
   <fileset name="all" enabled="true" check-config-name="nvlist" local="true">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
+  <filter name="DerivedFiles" enabled="true"/>
+  <filter name="FilesFromPackage" enabled="true">
+    <filter-data value="src/main/java/nl/weeaboo/vn/impl"/>
+    <filter-data value="src/gen/java/nl/weeaboo/vn/impl/script/lvn/gen"/>
+  </filter>
 </fileset-config>

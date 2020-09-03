@@ -5,20 +5,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.vn.impl.script.lvn.TextParser.Token;
 
-class LvnParser4 implements ILvnParser {
+/**
+ * NVList 4.x .lvn script file parser.
+ */
+public final class LvnParser4 extends AbstractLvnParser {
 
     private final TextParser textParser;
 
-    private FilePath filename;
-    private ImmutableList<String> sourceLines;
-    private List<LvnLine> compiledLines;
+    private Input input;
+    private Output output;
 
     public LvnParser4() {
         textParser = new TextParser();
@@ -28,110 +30,79 @@ class LvnParser4 implements ILvnParser {
     private void init(FilePath filename, InputStream in) throws IOException {
         List<String> lines = ParserUtil.readLinesUtf8(in);
 
-        this.filename = filename;
-        this.sourceLines = ImmutableList.copyOf(lines);
-        this.compiledLines = Lists.newArrayList();
+        this.input = new Input(filename, lines);
+        this.output = new Output();
     }
 
     private void reset() {
-        filename = FilePath.empty();
-        sourceLines = ImmutableList.of();
-        compiledLines = ImmutableList.of();
+        this.input = new Input(FilePath.empty(), ImmutableList.of());
+        this.output = new Output();
     }
 
     @Override
-    public CompiledLvnFile parseFile(FilePath filename, InputStream in) throws LvnParseException, IOException {
+    public CompiledLvnFile parseFile(FilePath filename, InputStream in) throws IOException {
         init(filename, in);
 
         doParseFile();
 
         // Return result and clear internal state
-        CompiledLvnFile result = new CompiledLvnFile(filename, compiledLines);
+        CompiledLvnFile result = new CompiledLvnFile(filename, output.lines);
         reset();
         return result;
     }
 
-    private void doParseFile() throws LvnParseException {
-        LvnMode mode = LvnMode.TEXT;
-        StringBuilder temp = new StringBuilder();
+    private void doParseFile() {
+        while (input.hasRemainingLines()) {
+            String line = input.readLine();
+            String trimmed = line.trim();
 
-        int lineNum = 1;
-        int textLineNum = 1;
-        for (String srcLine : sourceLines) {
-            srcLine = srcLine.trim();
-
-            //End single-line modes
-            if (mode.isSingleLine()) {
-                mode = LvnMode.TEXT;
-            }
-
-            //Look for comment starts
-            if (mode == LvnMode.TEXT && srcLine.startsWith("#")) {
-                mode = LvnMode.COMMENT;
-            }
-            if (mode == LvnMode.TEXT && srcLine.startsWith("@")) {
-                mode = LvnMode.CODE;
-            }
-
-            //Process line
-            String compiledLine;
-            final LvnMode compiledLineMode;
-            if (mode == LvnMode.TEXT) {
-                compiledLineMode = mode;
-
-                if (srcLine.length() > 0) {
-                    parseTextLine(temp, filename, srcLine, textLineNum);
-                    textLineNum++;
-                    compiledLine = temp.toString();
-                    temp.delete(0, temp.length());
-                } else {
-                    compiledLine = "";
-                }
-            } else if (mode == LvnMode.CODE || mode == LvnMode.MULTILINE_CODE) {
-                if (srcLine.startsWith("@@")) {
-                    compiledLineMode = LvnMode.MULTILINE_CODE;
-
-                    compiledLine = srcLine.substring(2);
-                    mode = (mode == LvnMode.MULTILINE_CODE ? LvnMode.TEXT : LvnMode.MULTILINE_CODE);
-                } else {
-                    compiledLineMode = mode;
-
-                    if (mode == LvnMode.CODE && srcLine.startsWith("@")) {
-                        compiledLine = srcLine.substring(1);
-                    } else {
-                        compiledLine = srcLine;
-                    }
-                }
-
-                if (mode == LvnMode.CODE || mode == LvnMode.MULTILINE_CODE) {
-                    compiledLine = parseCodeLine(compiledLine);
-                } else {
-                    compiledLine = "";
-                }
-            } else if (mode == LvnMode.COMMENT || mode == LvnMode.MULTILINE_COMMENT) {
-                if (srcLine.startsWith("##")) {
-                    compiledLineMode = LvnMode.MULTILINE_COMMENT;
-
-                    mode = (mode == LvnMode.MULTILINE_COMMENT ? LvnMode.TEXT : LvnMode.MULTILINE_COMMENT);
-                } else {
-                    compiledLineMode = mode;
-                }
-
-                //Ignore commented lines
-                compiledLine = "";
+            if (trimmed.startsWith("##")) {
+                Preconditions.checkState(trimmed.equals("##"));
+                output.addEmpty(LvnMode.MULTILINE_COMMENT, line);
+                parseCommentBlock();
+            } else if (trimmed.startsWith("#")) {
+                output.addEmpty(LvnMode.COMMENT, line);
+            } else if (trimmed.startsWith("@@")) {
+                Preconditions.checkState(trimmed.equals("@@"));
+                output.addEmpty(LvnMode.MULTILINE_CODE, line);
+                parseCodeBlock();
+            } else if (trimmed.startsWith("@")) {
+                output.addLine(LvnMode.CODE, line, line.substring(1));
             } else {
-                throw new LvnParseException(filename, lineNum, "Invalid mode: " + mode);
+                parseTextLine(line);
             }
-
-            compiledLines.add(new LvnLine(srcLine, compiledLine, compiledLineMode));
-            lineNum++;
         }
     }
 
-    protected void parseTextLine(StringBuilder out, FilePath filename, String line, int textLineNum) {
-        if (line.length() == 0) {
-            return; //Empty line
+    private void parseCodeBlock() {
+        while (input.hasRemainingLines()) {
+            String line = input.readLine();
+            if (line.startsWith("@@")) {
+                output.addEmpty(LvnMode.MULTILINE_CODE, line);
+                break;
+            }
+            output.addLine(LvnMode.MULTILINE_CODE, line, line);
         }
+    }
+
+    private void parseCommentBlock() {
+        while (input.hasRemainingLines()) {
+            String line = input.readLine();
+            if (line.startsWith("##")) {
+                output.addEmpty(LvnMode.MULTILINE_COMMENT, line);
+                break;
+            }
+            output.addEmpty(LvnMode.MULTILINE_COMMENT, line);
+        }
+    }
+
+    private void parseTextLine(String line) {
+        if (line.length() == 0) {
+            output.addEmpty(LvnMode.TEXT, line);
+            return; // Empty line
+        }
+
+        final int lineNumber = ++output.textLineCount; // 1-based
 
         List<String> triggers = new ArrayList<>(4);
         for (Token token : textParser.tokenize(line)) {
@@ -140,8 +111,8 @@ class LvnParser4 implements ILvnParser {
             }
         }
 
+        StringBuilder out = new StringBuilder();
         out.append("text(\"").append(escapeText(line)).append("\"");
-
         if (triggers.isEmpty()) {
             out.append(", nil");
         } else {
@@ -151,16 +122,12 @@ class LvnParser4 implements ILvnParser {
             }
             out.append("}");
         }
-        out.append(", {");
-        out.append("filename=\"").append(LuaUtil.escape(filename.toString())).append("\", ");
-        out.append("line=").append(textLineNum).append(",");
-        out.append("}");
-
-        out.append(")");
-    }
-
-    protected String parseCodeLine(String line) {
-        return line.trim();
+        out.append(", {filename=\"");
+        out.append(LuaUtil.escape(input.filename.toString()));
+        out.append("\", line=");
+        out.append(lineNumber);
+        out.append(",})");
+        output.addLine(LvnMode.TEXT, line, out.toString());
     }
 
     /**
@@ -201,5 +168,41 @@ class LvnParser4 implements ILvnParser {
             }
         }
         return sb.toString();
+    }
+
+    private static final class Input {
+
+        private final FilePath filename;
+        private final ImmutableList<String> sourceLines;
+        private int currentLine;
+
+        public Input(FilePath filename, List<String> lines) {
+            this.filename = filename;
+            this.sourceLines = ImmutableList.copyOf(lines);
+        }
+
+        public boolean hasRemainingLines() {
+            return currentLine < sourceLines.size();
+        }
+
+        public String readLine() {
+            return sourceLines.get(currentLine++);
+        }
+
+    }
+
+    private static final class Output {
+
+        private final List<LvnLine> lines = new ArrayList<>();
+        private int textLineCount;
+
+        private void addEmpty(LvnMode mode, String input) {
+            addLine(mode, input, "");
+        }
+
+        private void addLine(LvnMode mode, String input, String output) {
+            lines.add(new LvnLine(input, output, mode));
+        }
+
     }
 }

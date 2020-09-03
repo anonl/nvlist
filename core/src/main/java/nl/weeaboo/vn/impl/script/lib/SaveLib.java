@@ -160,10 +160,6 @@ public final class SaveLib extends LuaLib {
         INovel novel = novelRef.get();
 
         ContextUtil.getCurrentContext().destroy();
-//        final LuaRunState lrs = LuaRunState.getCurrent();
-//        final LuaThread thread = lrs.getRunningThread();
-//        Varargs result = thread.yield(LuaConstants.NONE);
-//        lrs.destroy();
         try {
             saveModule.load(novel, slot);
         } catch (IOException e) {

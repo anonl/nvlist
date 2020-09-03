@@ -2,7 +2,10 @@ package nl.weeaboo.vn.impl.script.lvn;
 
 import nl.weeaboo.common.Checks;
 
-final class LvnLine {
+/**
+ * Annotated output line of {@link ICompiledLvnFile}.
+ */
+public final class LvnLine {
 
     private final String sourceLine;
     private final String compiledLine;

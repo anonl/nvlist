@@ -167,10 +167,6 @@ function DefaultClickIndicator.new(self)
 end
 
 function DefaultClickIndicator:destroy()
-    self:destroyThread()
-end
-
-function DefaultClickIndicator:destroyThread()
     if self.thread ~= nil then
         self.thread:destroy()
         self.thread = nil
@@ -178,24 +174,27 @@ function DefaultClickIndicator:destroyThread()
 end
 
 function DefaultClickIndicator:show()
-	if self.thread == nil then
+    if self.thread == nil then
         self.thread = newThread(function()
             while not self.drawable:isDestroyed() do
                 applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable, self.dx, self.dy)
                 yield()
             end
         end)
-	end
+    end
 
     -- Make sure the position is updated before the drawable is made visible
+    self.thread:resume()
     self.thread:update()
 
     self.drawable:setVisible(true)
 end
 
 function DefaultClickIndicator:hide()
-	self:destroyThread()
-	
+    if self.thread ~= nil then
+        self.thread:pause()
+    end
+
     self.drawable:setVisible(false)
 end
 
@@ -212,7 +211,7 @@ function TextBox:install()
     context.textBox = self
     self:setSpeaker(nil)
     setMainTextDrawable(self:getTextDrawable())
-    
+
     -- Store initial alpha values for each subcomponent so we can restore the alpha after fading out
     self.baseAlpha = {}
     for _,d in ipairs(self:getDrawables()) do

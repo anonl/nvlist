@@ -6,6 +6,7 @@ buildscript {
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/nvlist/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
+        mavenLocal()
     }
     dependencies {
         // Plugin for making a 'fat' JAR
@@ -25,6 +26,7 @@ buildscript {
 // Copy properties from settings.gradle into project properties for convenience
 allprojects {
     ext {
+        vnRoot = gradle.ext.vnRoot
         vnRootDir = gradle.ext.vnRootDir
         vnResDir = gradle.ext.vnResDir
         buildResDir = gradle.ext.buildResDir
@@ -49,6 +51,7 @@ allprojects {
         maven { url "https://dl.bintray.com/anonl/nvlist/" }
         maven { url "https://dl.bintray.com/anonl/luajpp2/" }
         maven { url "https://dl.bintray.com/anonl/tcommon/" }
+        mavenLocal()
     }
 
     // Set output folder relative to the vnRoot so multiple projects can
@@ -143,12 +146,24 @@ project(':ios') {
 }
 
 configurations {
-    buildtools {
-    }
+    buildtools { }
+    langserver { }
 }
 
 dependencies {
     buildtools "ch.qos.logback:logback-classic:1.2.3"
+    langserver "nl.weeaboo.vn:nvlist-langserver:$nvlistVersion"
+}
+
+// To run against a local prerelease version:
+// gradlew --PvnRoot=.. --include-build=../..
+task runLanguageServer(type: JavaExec) {
+    def targetFolder = new File(buildDir, 'langserver')
+
+    classpath = files(configurations.langserver)
+    main = 'nl.weeaboo.vn.langserver.LangServerMain'
+    args (findProperty('args') ?: '')
+    workingDir project.ext.vnRoot
 }
 
 task optimizeResources(type: JavaExec) {
@@ -156,15 +171,15 @@ task optimizeResources(type: JavaExec) {
     def configFile = new File(buildResDir, 'optimizer.json')
     inputs.file(configFile)
 
-    def outputFolder = new File(vnRoot, 'res-optimized')
+    def outputFolder = new File(project.ext.vnRoot, 'res-optimized')
     outputs.dir(outputFolder)
 
     // Setup to launch the resource optimizer
     classpath = configurations.buildtools + buildscript.configurations.classpath
     main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
     args = [configFile]
-    workingDir vnRoot
-    
+    workingDir project.ext.vnRoot
+
     doFirst {
         // Delete the output folder first
         delete(outputFolder)
