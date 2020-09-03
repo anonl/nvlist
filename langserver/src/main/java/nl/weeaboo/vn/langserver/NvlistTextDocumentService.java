@@ -86,10 +86,12 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
         LOG.debug("didOpen({})", params);
 
         TextDocumentItem doc = params.getTextDocument();
-        try {
-            filesByUri.put(doc.getUri(), LvnSourceMap.fromFile(doc.getUri(), doc.getText()));
-        } catch (LvnParseException | IOException e) {
-            LOG.warn("Unable to parse file: {}", doc.getUri(), e);
+        if (!doc.getUri().startsWith("nvlist-builtin://")) {
+            try {
+                filesByUri.put(doc.getUri(), LvnSourceMap.fromFile(doc.getUri(), doc.getText()));
+            } catch (LvnParseException | IOException e) {
+                LOG.warn("Unable to parse file: {}", doc.getUri(), e);
+            }
         }
     }
 
@@ -102,7 +104,10 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
     public void didClose(DidCloseTextDocumentParams params) {
         LOG.debug("didClose({})", params);
 
-        filesByUri.remove(params.getTextDocument().getUri());
+        String uri = params.getTextDocument().getUri();
+        if (!uri.startsWith("nvlist-builtin://")) {
+            filesByUri.remove(uri);
+        }
     }
 
     @Override
@@ -135,7 +140,7 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
                     if (function != null) {
                         Location loc = new Location();
                         loc.setUri(file.getUri());
-                        loc.setRange(function.headerRange);
+                        loc.setRange(function.bodyRange);
                         locations.add(loc);
                     }
                 }
@@ -157,7 +162,8 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
             for (SourceMap file : filesByUri.values()) {
                 Function function = file.getFunction(word);
                 if (function != null) {
-                    hover = Markdown.toMarkdown(function.headerComment);
+                    hover = Markdown.toCodeBlock("lua", "function " + file.getText(function.headerRange)) +
+                            "\n---\n" + Markdown.toMarkdown(function.headerComment);
                 }
             }
         }

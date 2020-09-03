@@ -33,7 +33,6 @@ final class LangServerMain {
 
         startAsSocketClient(closer, Integer.parseInt(args[0]));
         // startAsSocketServer(closer);
-
         // NvlistLangServer.start(System.in, System.out);
     }
 
@@ -42,7 +41,6 @@ final class LangServerMain {
             Socket socket = new Socket();
             closer.register(socket);
             try {
-                socket.setSoTimeout(30_000);
                 socket.connect(new InetSocketAddress(port));
 
                 NvlistLangServer.start(socket.getInputStream(), socket.getOutputStream());
@@ -61,14 +59,14 @@ final class LangServerMain {
         }
     }
 
-//    private static void startAsSocketServer(Closer closer) throws IOException {
-//        ServerSocket serverSocket = new ServerSocket(12345);
-//        closer.register(serverSocket);
-//
-//        Socket socket = serverSocket.accept();
-//        closer.register(socket);
-//
-//        NvlistLangServer.start(socket.getInputStream(), socket.getOutputStream());
-//    }
+    //    private static void startAsSocketServer(Closer closer) throws IOException {
+    //        ServerSocket serverSocket = new ServerSocket(12345);
+    //        closer.register(serverSocket);
+    //
+    //        Socket socket = serverSocket.accept();
+    //        closer.register(socket);
+    //
+    //        NvlistLangServer.start(socket.getInputStream(), socket.getOutputStream());
+    //    }
 
 }

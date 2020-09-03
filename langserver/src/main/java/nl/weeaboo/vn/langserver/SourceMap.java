@@ -2,6 +2,7 @@ package nl.weeaboo.vn.langserver;
 
 import java.util.List;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -30,6 +31,7 @@ abstract class SourceMap {
     /**
      * @param lineOffset Zero-based
      */
+    @CheckForNull
     protected abstract Line lineAt(int lineOffset);
 
     protected abstract List<? extends Line> getLines();
@@ -90,6 +92,21 @@ abstract class SourceMap {
             return "";
         }
         return line.getWordAt(pos.getCharacter());
+    }
+
+    public String getText(Range range) {
+        StringBuilder sb = new StringBuilder();
+        Position startPos = range.getStart();
+        Position endPos = range.getEnd();
+        for (int lineOffset = startPos.getLine(); lineOffset <= endPos.getLine(); lineOffset++) {
+            int start = (lineOffset == startPos.getLine() ? startPos.getCharacter() : 0);
+            int end = (lineOffset == endPos.getLine() ? endPos.getCharacter() : 0);
+            if (sb.length() > 0) {
+                sb.append('\n');
+            }
+            sb.append(lineAt(lineOffset).contents.substring(start, end + 1));
+        }
+        return sb.toString();
     }
 
     /**

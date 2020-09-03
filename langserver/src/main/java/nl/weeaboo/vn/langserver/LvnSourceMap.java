@@ -49,7 +49,7 @@ final class LvnSourceMap extends SourceMap {
     }
 
     @Override
-    protected Line lineAt(int lineOffset) {
+    protected @Nullable Line lineAt(int lineOffset) {
         LvnMode type = lvnModeAt(lineOffset);
         if (type == LvnMode.CODE || type == LvnMode.MULTILINE_CODE) {
             return luaSourceMap.lineAt(lineOffset);

@@ -101,7 +101,10 @@ final class LuaSourceMap extends SourceMap {
     }
 
     @Override
-    protected LuaLine lineAt(int lineOffset) {
+    protected @Nullable LuaLine lineAt(int lineOffset) {
+        if (lineOffset < 0 || lineOffset >= lines.size()) {
+            return null;
+        }
         return lines.get(lineOffset);
     }
 
@@ -113,8 +116,11 @@ final class LuaSourceMap extends SourceMap {
     @Override
     protected @Nullable Range getDefinitionAt(Position pos) {
         LuaLine line = lineAt(pos.getLine());
-        String wordAt = line.getWordAt(pos.getCharacter());
+        if (line == null) {
+            return null;
+        }
 
+        String wordAt = line.getWordAt(pos.getCharacter());
         Function function = getFunction(wordAt);
         if (function != null) {
             return function.headerRange;

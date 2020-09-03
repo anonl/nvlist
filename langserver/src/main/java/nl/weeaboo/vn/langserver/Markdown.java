@@ -18,4 +18,8 @@ final class Markdown {
         return sb.toString();
     }
 
+    public static String toCodeBlock(String language, String code) {
+        return "```" + language + "\n" + code + "\n```\n";
+    }
+
 }
