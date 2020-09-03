@@ -162,8 +162,8 @@ final class NvlistTextDocumentService implements TextDocumentService, LanguageCl
             for (SourceMap file : filesByUri.values()) {
                 Function function = file.getFunction(word);
                 if (function != null) {
-                    hover = Markdown.toCodeBlock("lua", "function " + file.getText(function.headerRange)) +
-                            "\n---\n" + Markdown.toMarkdown(function.headerComment);
+                    hover = Markdown.toCodeBlock("lua", "function " + file.getText(function.headerRange))
+                            + "\n---\n" + Markdown.toMarkdown(function.headerComment);
                 }
             }
         }
