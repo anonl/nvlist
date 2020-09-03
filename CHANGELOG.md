@@ -1,4 +1,7 @@
 
+# v4.6.0
+- Implemented debug adapter protocol (in nvlist-desktop) and language server protocol (in nvlist-langserver).
+
 # v4.5.2
 - fix: Quick-saving from within a click handler resulted in a broken save file (more robust fix).
 
