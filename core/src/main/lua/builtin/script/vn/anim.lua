@@ -33,11 +33,11 @@ function Animator:start(loops)
     self.loops = loops or self.loops or 1
     destroyAnimatorThread(self) 
     self.time = 0
-    
+
     self.thread = newThread(function()
         while not self.destroyed do
             self.time = self.time + getEffectSpeed()
-            if self.time >= self.duration then            
+            if self.time >= self.duration then
                 self:onLoopEnd()
                 if self.loops == 0 then
                     self:finish()
@@ -49,6 +49,7 @@ function Animator:start(loops)
         end
     end)
     self:update()
+    return self
 end
 
 ---This method is called when the animation completes a loop.
@@ -142,9 +143,9 @@ end
 function ParallelAnimator:start(loops)
     self.loops = loops or self.loops or 1
     destroyAnimatorThread(self)
-        
+
     self:multicall("start")
-    
+
     self.thread = newThread(function()
         while not self.destroyed do
             local running = false
@@ -154,7 +155,7 @@ function ParallelAnimator:start(loops)
                     break
                 end
             end
-        
+
             if not running then
                 self:onLoopEnd()
                 if self.loops == 0 then
@@ -164,12 +165,12 @@ function ParallelAnimator:start(loops)
                     self:multicall("start")
                 end
             end
-            
+
             yield()
         end
     end)
-    
     self:update()
+    return self
 end
 
 function ParallelAnimator:update()
@@ -196,9 +197,9 @@ local SequentialAnimator = {
 
 function SequentialAnimator.new(self)
     self = extend(Animator, SequentialAnimator, self)   
-    
+
     self.anims = values(self.anims or {})
-        
+
     return self
 end
 
@@ -207,19 +208,20 @@ function SequentialAnimator:start(loops)
     destroyAnimatorThread(self)
     self.time = 0
     self.active = 1
-    
+
     self.thread = newThread(function()
         while not self.destroyed and self.active <= #self.anims do
             self:update()
             yield()
         end
     end)
-    
+
     local anim = self.anims[self.active]
     if anim ~= nil then
         anim:start()
-    end    
+    end
     self:update()
+    return self
 end
 
 function SequentialAnimator:update()
@@ -458,7 +460,6 @@ Anim = {
 --         60 frames per second).
 -- @tparam[opt=nil] Interpolator interpolator An optional Interpolator object,
 --         can be used to create an ease-in, ease-out effect.
--- @treturn Animator A new <code>PropertyInterpolator</code>.
 -- @see Anim.tweenFromTo
 function Anim.tweenTo(obj, property, endval, durationFrames, interpolator)
     return Anim.tweenFromTo(obj, property, nil, endval, durationFrames, interpolator)
@@ -469,13 +470,13 @@ end
 -- <code>durationFrames</code> frames.
 -- @param obj The object to change the property of.
 -- @string property The property to change.
--- @param startval The initial value to set the property to.
+-- @param[opt=nil] startval The initial value to set the property to. If nil,
+--         uses the current value of the property in obj.
 -- @param endval The end value for the property.
 -- @number durationFrames The duration of the animation in frames (default is
 --         60 frames per second).
 -- @tparam[opt=nil] Interpolator interpolator An optional Interpolator object,
 --         can be used to create an ease-in, ease-out effect.
--- @treturn Animator A new <code>PropertyInterpolator</code>.
 -- @see Anim.createTween
 function Anim.tweenFromTo(obj, property, startval, endval, durationFrames, interpolator)
     local tween = Anim.createTween(obj, property, startval, endval, durationFrames, interpolator)
@@ -497,7 +498,9 @@ end
 -- @treturn Animator A new <code>PropertyInterpolator</code>.
 -- @see Anim.tweenFromTo
 function Anim.createTween(obj, property, startval, endval, durationFrames, interpolator)
-    durationFrames = durationFrames or 60
+    if durationFrames == nil then
+        durationFrames = 60
+    end
 
     return PropertyInterpolator.new{
         obj=obj,
@@ -540,7 +543,9 @@ end
 -- @number durationFrames The duration of the animation in frames (holding the skip key
 --        can cause the animation to advance multiple frames at once).
 function Anim.fromFunction(func, durationFrames)
-    durationFrames = durationFrames or 0
+    if durationFrames == nil then
+        durationFrames = 0
+    end
 
     return FunctorAnimator.new{
         func=func,
@@ -556,8 +561,10 @@ end
 --         skip key can cause the animation to advance multiple frames at once).
 function Anim.createImageTween(image, targetTexture, durationFrames)
     targetTexture = tex(targetTexture)
-    durationFrames = durationFrames or 60
-    
+    if durationFrames == nil then
+        durationFrames = 60
+    end
+
     local config = Tween.crossFadeConfig(durationFrames)
     config:setStartTexture(image:getTexture())
     config:setEndTexture(targetTexture)    

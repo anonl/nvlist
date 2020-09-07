@@ -77,7 +77,7 @@ function setActiveTextBox(textMode)
     else
         textBox = textBoxConstr()
         textBox:install()
-        textBox:hide(1) -- Set alpha to 0.0 (starts at 1.0)
+        textBox:hide(0) -- Set alpha to 0.0 (starts at 1.0)
 
         if wasVisible then
             textBox:show() -- Gradually fade to visibility
@@ -237,7 +237,9 @@ function TextBox:isVisible()
 end
 
 function TextBox:fadeTo(targetAlpha, duration)
-    duration = duration or 30
+    if duration == nil then
+        duration = 30
+    end
 
     local threads = {}
     for _,d in ipairs(self:getDrawables()) do
@@ -299,7 +301,7 @@ NvlTextBox = extend(TextBox, {
 
 function NvlTextBox.new(self)
     self = extend(NvlTextBox, self)
-    
+
     local layer = createTextBoxLayer()
     local bgColor = 0xA0000000
 
@@ -311,18 +313,18 @@ function NvlTextBox.new(self)
     textBox:setPos(math.floor(textPad), math.floor(textPad))
     textBox:setSize(math.ceil(screenWidth - textPad*2), math.ceil(screenHeight - textPad*2))
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
-    
+
     -- Add continue indicator
     self.clickIndicator = DefaultClickIndicator.new{
         texture="gui/cursor",
         textDrawable=textArea,
         pos=ClickIndicatorPos.TEXT_INLINE,
     }
-        
+
     self.layer = layer
     self.textArea = textArea
     self.textBox = textBox
-    
+
     return self
 end
 

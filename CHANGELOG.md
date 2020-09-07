@@ -1,4 +1,8 @@
 
+# v4.6.1
+- fix: Build error when using the build gui (broken since v4.6.0).
+- fix: Off-by-one in behavior between fadeTo() and Anim. Now both treat duration==0.0 as instant transition and duration==1.0 as ending the next frame.
+
 # v4.6.0
 - Implemented debug adapter protocol (in nvlist-desktop) and language server protocol (in nvlist-langserver).
 

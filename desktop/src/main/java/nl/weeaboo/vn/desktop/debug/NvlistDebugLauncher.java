@@ -67,6 +67,7 @@ public final class NvlistDebugLauncher implements Closeable {
         ExecutorService executorService = Executors.newCachedThreadPool();
         try {
             closer.register(serverSocket = new ServerSocket(listenPort));
+            LOG.info("[debug-server] Listening for incoming connections on {}", listenPort);
             while (!serverSocket.isClosed()) {
                 Socket socket = null;
                 try {

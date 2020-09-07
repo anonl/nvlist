@@ -1,0 +1,31 @@
+
+@@
+
+require("builtin/vn")
+
+local obj = {
+    x = 1,
+    y = 2,
+}
+
+local anim = Anim.par(
+    Anim.createTween(obj, 'x', nil, 2, 1),
+    Anim.createTween(obj, 'y', 3, 4, 2))
+
+luaAssertEquals(1.0, obj.x)
+luaAssertEquals(2.0, obj.y)
+
+anim:start()
+
+-- x uses its current value as the start value
+luaAssertEquals(1.0, obj.x)
+-- y has an explicit start value (which is set immediately inside start())
+luaAssertEquals(3.0, obj.y)
+
+Anim.waitFor(anim)
+
+-- After the animation finished, the properties are set to their end values
+luaAssertEquals(2.0, obj.x)
+luaAssertEquals(4.0, obj.y)
+
+@@

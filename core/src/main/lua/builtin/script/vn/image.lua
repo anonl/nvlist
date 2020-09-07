@@ -310,10 +310,12 @@ end
 -- @number durationFrames The duration of the movement in frames (gets
 --         multiplied with <code>getEffectSpeed()</code> internally)
 function fadeTo(i, targetAlpha, durationFrames)
-    durationFrames = durationFrames or 20
+    if durationFrames == nil then
+        durationFrames = 20
+    end
 
     local startAlpha = i:getAlpha()
-    local frame = 1
+    local frame = 0
     while frame + getEffectSpeed() <= durationFrames do
         local f = frame / durationFrames
         i:setAlpha(startAlpha + (targetAlpha - startAlpha) * f)
