@@ -1,4 +1,7 @@
 
+# v4.6.2
+- fix: Animations with duration 0 should end immediately
+
 # v4.6.1
 - fix: Build error when using the build gui (broken since v4.6.0).
 - fix: Off-by-one in behavior between fadeTo() and Anim. Now both treat duration==0.0 as instant transition and duration==1.0 as ending the next frame.

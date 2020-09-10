@@ -48,7 +48,7 @@ function Animator:start(loops)
             yield()
         end
     end)
-    self:update()
+    self.thread:update()
     return self
 end
 
@@ -169,7 +169,7 @@ function ParallelAnimator:start(loops)
             yield()
         end
     end)
-    self:update()
+    self.thread:update()
     return self
 end
 
@@ -220,7 +220,7 @@ function SequentialAnimator:start(loops)
     if anim ~= nil then
         anim:start()
     end
-    self:update()
+    self.thread:update()
     return self
 end
 
