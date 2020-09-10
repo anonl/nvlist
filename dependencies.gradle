@@ -18,7 +18,7 @@ def lsp4jVersion = '0.9.0'
 def roboVmVersion = '2.3.0'
 def slf4jVersion = '1.7.21'
 def styledTextVersion = '4.0.0'
-def tcommonVersion = '3.0.1'
+def tcommonVersion = '3.0.3'
 def gradleToolingApiVersion = '4.5.1'
 
 deps.static_analysis_annotations = [

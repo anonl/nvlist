@@ -26,6 +26,12 @@ function choice(...)
     return choice2(getScriptPos(1), ...)
 end
 
+---Asks the user to select an option.
+-- @param uniqueChoiceId[opt=nil] Unique identifier of the choice, or nil to not track the selected options for this
+--                                choice.
+-- @string ... Any number of strings to use as options. Example use:
+--         <code>choice("First option", "Second option")</code>
+-- @treturn number The index of the selected option (starting at <code>1</code>).
 function choice2(uniqueChoiceId, ...)
     local options = getTableOrVarArg(...)
     if options == nil or #options == 0 then

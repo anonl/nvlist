@@ -1,0 +1,27 @@
+
+@@
+
+require("builtin/vn")
+
+-- Register a dummy choice screen for testing
+local sel = 1
+registerChoiceScreen(function()
+    return {
+        choose = function() return sel end,
+        destroy = function() end,
+    }
+end)
+
+luaAssertEquals(sel, choice("a", "b"))
+luaAssertEquals(true, Seen.hasSelectedChoice("integration/choice/basic-choice.lvn:15", sel))
+
+sel = 2
+luaAssertEquals(sel, choice2("myIdentifier", "c", "d"))
+luaAssertEquals(true, Seen.hasSelectedChoice("myIdentifier", sel))
+
+sel = 1
+-- If the choice ID is nil, the selected choice isn't stored
+luaAssertEquals(sel, choice2(nil, "c", "d"))
+luaAssertEquals(false, Seen.hasSelectedChoice("integration/choice/basic-choice.lvn:24", sel))
+
+@@

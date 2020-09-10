@@ -1,0 +1,38 @@
+
+@@
+
+require("builtin/vn")
+
+local cursor = img(colorTex(0xFFFF0000))
+cursor:setSize(10, 10)
+local text = textimg("ABC\nDEF")
+
+function newClickIndicator(pos)
+    local ci = DefaultClickIndicator.new{drawable=cursor, textDrawable=text, pos=pos}
+    ci:show()
+    return ci
+end
+
+-- RIGHT  | text |  
+--        | text | x
+local ci = newClickIndicator(ClickIndicatorPos.RIGHT)
+luaAssertEquals(text:getMaxWidth(), cursor:getX())
+luaAssertEquals(text:getMaxHeight() - 10, cursor:getY())
+ci:destroy()
+
+-- BOTTOM  | text  |  
+--         | x     |
+local ci = newClickIndicator(ClickIndicatorPos.TEXT_BOTTOM)
+luaAssertEquals(0, cursor:getX())
+luaAssertEquals(text:getTextHeight(), cursor:getY())
+ci:destroy()
+
+-- TEXT_INLINE  | text text |  
+--              | text x    |
+local ci = newClickIndicator(ClickIndicatorPos.TEXT_INLINE)
+local lb = text:getLineBounds(1)
+luaAssertEquals(lb.w, cursor:getX()) -- Right of the text on the final line
+luaAssertEquals(text:getTextHeight() - lb.h / 2 - 5, cursor:getY()) -- Vertically centered in the final line
+ci:destroy()
+
+@@
