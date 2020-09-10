@@ -128,7 +128,7 @@ function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable, dx, dy)
     local ty = textDrawable:getY()
 
     if clickIndicatorPos == ClickIndicatorPos.RIGHT then
-        d:setPos(tx + textDrawable:getMaxWidth() + dx - dw, ty + textDrawable:getMaxHeight() + dy - dh)
+        d:setPos(tx + textDrawable:getMaxWidth() + dx, ty + textDrawable:getMaxHeight() + dy - dh)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_BOTTOM then
         ty = ty + textDrawable:getTextHeight()
         d:setPos(tx + dx, ty + dy)
