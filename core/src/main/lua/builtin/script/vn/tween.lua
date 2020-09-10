@@ -6,11 +6,7 @@ module("vn.tween", package.seeall)
 --------------------------------------------------------------------------------------------------------------
 
 local function doTween(image, tween, endRenderer)
-    if endRenderer == nil then
-        tween:setSize(image:getWidth(), image:getHeight())
-    else
-        tween:setSize(endRenderer:getWidth(), endRenderer:getHeight());
-    end
+    tween:setSize(endRenderer:getWidth(), endRenderer:getHeight());
 
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
@@ -80,16 +76,21 @@ end
 local function bitmapTweenR(image, targetTexture, targetRenderer, controlImage, duration, range, interpolator)
     duration = duration or 60
     range = range or 0.5
+    targetTexture = tex(targetTexture)
 
     local config = Tween.bitmapTweenConfig(duration, controlImage, false)
     config:setStartTexture(image:getTexture())
-    config:setEndTexture(tex(targetTexture))
+    config:setEndTexture(targetTexture)
     config:setRange(range)
     if interpolator ~= nil then
         config:setInterpolator(Interpolators.get(interpolator))
     end
 
     local tween = Tween.bitmapTween(config)
+    if targetTexture == nil then
+        --Use existing size when fading out
+        targetRenderer:setSize(image:getWidth(), image:getHeight())
+    end
     return doTween(image, tween, targetRenderer)
 end
 

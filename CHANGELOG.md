@@ -3,6 +3,7 @@
 - fix: Build error when using the build gui (broken since v4.6.0).
 - fix: Off-by-one in behavior between fadeTo() and Anim. Now both treat duration==0.0 as instant transition and duration==1.0 as ending the next frame.
 - fix: `ClickIndicatorPos.RIGHT` should be displayed to the right (outside) the text drawable, not inside its bounds.
+- fix: `bitmapTweenOut` didn't work (changed size to 0x0 causing the image to immediately disappear).
 
 # v4.6.0
 - Implemented debug adapter protocol (in nvlist-desktop) and language server protocol (in nvlist-langserver).

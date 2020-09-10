@@ -180,7 +180,8 @@ end
 --          no background image currently exists.
 function getBackground()
     local imageLayer = getActiveLayer()
-    if imageLayer == nil or not imageLayer:contains(context.background) then
+    if context.background ~= nil and (imageLayer == nil or not imageLayer:contains(context.background)) then
+        Log.debug("Reset context.background (no longer exists)")
         context.background = nil
     end
     return context.background

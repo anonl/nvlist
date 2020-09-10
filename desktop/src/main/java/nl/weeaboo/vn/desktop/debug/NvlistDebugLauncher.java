@@ -27,6 +27,7 @@ public final class NvlistDebugLauncher implements Closeable {
     private final Thread acceptorThread;
 
     private volatile ServerSocket serverSocket;
+    private volatile boolean stopping;
 
     NvlistDebugLauncher(int listenPort, INvlistTaskRunner taskRunner) {
         this.listenPort = listenPort;
@@ -53,6 +54,7 @@ public final class NvlistDebugLauncher implements Closeable {
 
     @Override
     public void close() {
+        stopping = true;
         try {
             Closeables.close(serverSocket, true);
             acceptorThread.interrupt();
@@ -75,12 +77,16 @@ public final class NvlistDebugLauncher implements Closeable {
                     LOG.info("[debug-server] Accepted incoming connection from {}", socket.getRemoteSocketAddress());
                     closer.register(NvlistDebugServer.start(taskRunner, socket, executorService));
                 } catch (IOException e) {
-                    LOG.warn("[debug-server] I/O error while trying to accept a new connection", e);
+                    if (!stopping) {
+                        LOG.warn("[debug-server] I/O error while trying to accept a new connection", e);
+                    }
                     Closeables.close(socket, true);
                 }
             }
         } catch (IOException serverSocketException) {
-            LOG.error("[debug-server] fatal I/O error", serverSocketException);
+            if (!stopping) {
+                LOG.error("[debug-server] fatal I/O error", serverSocketException);
+            }
         } finally {
             try {
                 closer.close();
