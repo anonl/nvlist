@@ -1,4 +1,7 @@
 
+# v4.6.3
+- fix: Off-by-one for animations with length 1 (broken since v4.6.2)
+
 # v4.6.2
 - fix: Animations with duration 0 should end immediately
 

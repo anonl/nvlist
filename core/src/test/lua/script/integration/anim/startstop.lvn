@@ -6,14 +6,17 @@ require("builtin/vn")
 local obj = {
     x = 1,
     y = 2,
+    z = 3,
 }
 
 local anim = Anim.par(
     Anim.createTween(obj, 'x', nil, 2, 1),
-    Anim.createTween(obj, 'y', 3, 4, 2))
+    Anim.createTween(obj, 'y', 3, 4, 2),
+    Anim.createTween(obj, 'z', 5, 6, 0))
 
 luaAssertEquals(1.0, obj.x)
 luaAssertEquals(2.0, obj.y)
+luaAssertEquals(3.0, obj.z)
 
 anim:start()
 
@@ -21,6 +24,8 @@ anim:start()
 luaAssertEquals(1.0, obj.x)
 -- y has an explicit start value (which is set immediately inside start())
 luaAssertEquals(3.0, obj.y)
+-- z has a zero-duration animation, which means it immediately finishes when you call start()
+luaAssertEquals(6.0, obj.z)
 
 Anim.waitFor(anim)
 

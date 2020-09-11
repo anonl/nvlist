@@ -36,7 +36,6 @@ function Animator:start(loops)
 
     self.thread = newThread(function()
         while not self.destroyed do
-            self.time = self.time + getEffectSpeed()
             if self.time >= self.duration then
                 self:onLoopEnd()
                 if self.loops == 0 then
@@ -44,8 +43,11 @@ function Animator:start(loops)
                     return --Thread gets killed inside finish() anyway...
                 end
             end
+
             self:update()
             yield()
+
+            self.time = self.time + getEffectSpeed()
         end
     end)
     self.thread:update()
@@ -301,7 +303,9 @@ end
 
 function PropertyInterpolator:update()
     local f = 0
-    if self.duration > 0 and self.time >= 0 and self.time <= self.duration then
+    if self.duration <= 0 then
+        f = 1
+    elseif self.time >= 0 and self.time <= self.duration then
         f = self.time / self.duration
         if self.interpolator ~= nil then
             f = self.interpolator:remap(f)
