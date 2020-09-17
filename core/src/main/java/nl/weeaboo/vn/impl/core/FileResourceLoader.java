@@ -56,7 +56,8 @@ public class FileResourceLoader extends ResourceLoader {
         if (filePath == null) {
             return false;
         }
-        return getFileSystem().getFileExists(filePath);
+        FileSystemView fs = getFileSystem();
+        return fs.getFileExists(filePath) && !fs.isFolder(filePath);
     }
 
     @Override
