@@ -72,15 +72,26 @@ public final class DesktopLauncher {
             @Override
             public void create() {
                 DesktopGraphicsUtil.setWindowIcon(gdxFileSystem);
+                NovelPrefsStore prefs = loadPreferences();
                 DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
 
-                NovelPrefsStore prefs = loadPreferences();
                 if (prefs.get(NovelPrefs.DEBUG)) {
                     debugLauncher = NvlistDebugLauncher.launch(prefs.get(NovelPrefs.DEBUG_ADAPTER_PORT),
                             Gdx.app::postRunnable);
                 }
 
                 super.create();
+
+                if (prefs.get(NovelPrefs.FULLSCREEN) && !prefs.get(NovelPrefs.DEBUG)) {
+                    /*
+                     * If in debug mode, never start full-screen. Full-screen is annoying when you need to use
+                     * a bunch of other windows/programs at the same time.
+                     *
+                     * Must activate fullscreen mode after creating the window, or else the window is created
+                     * without window decorations.
+                     */
+                    Gdx.graphics.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+                }
             }
 
             @Override
@@ -127,13 +138,6 @@ public final class DesktopLauncher {
 
         config.setTitle(prefs.get(NovelPrefs.TITLE));
         config.setWindowedMode(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
-        if (prefs.get(NovelPrefs.FULLSCREEN) && !prefs.get(NovelPrefs.DEBUG)) {
-            /*
-             * If in debug mode, never start full-screen. Full-screen is annoying when you need to use a bunch
-             * of other windows/programs at the same time.
-             */
-            config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-        }
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public boolean closeRequested() {

@@ -2,6 +2,7 @@
 # v4.6.3
 - fix: Off-by-one for animations with length 1 (broken since v4.6.2)
 - fix: Toggling between fullscreen and windowed now remembers the window size.
+- fix: Window decorations were missing when going to windowed mode after starting full-screen.
 
 # v4.6.2
 - fix: Animations with duration 0 should end immediately
