@@ -33,6 +33,14 @@ public abstract class ResourceMetaDataCache<T> {
     private final Set<FilePath> seenFolders = Sets.newHashSet();
 
     /**
+     * Removes all item from this cache, resetting it to an empty state.
+     */
+    public void clear() {
+        cache.clear();
+        seenFolders.clear();
+    }
+
+    /**
      * @return Returns the image definition for the given path, or {@code null} if the given image has no
      *         definition.
      */

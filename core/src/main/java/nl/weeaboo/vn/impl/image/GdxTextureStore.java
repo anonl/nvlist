@@ -54,6 +54,13 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
         return config;
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+
+        cachedImageDefs.clear();
+    }
+
     /**
      * Returns the image definition corresponding to the specified image file, or {@code null} if the image
      * doesn't exist or doesn't have an image definition..

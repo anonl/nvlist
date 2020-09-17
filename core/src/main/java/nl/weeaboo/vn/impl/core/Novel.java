@@ -81,6 +81,12 @@ public class Novel implements INovel {
     public void restart() throws InitException {
         stop();
 
+        // Clear caches
+        StaticEnvironment.TEXTURE_STORE.get().clear();
+        StaticEnvironment.SHADER_STORE.get().clear();
+        StaticEnvironment.MUSIC_STORE.get().clear();
+        StaticEnvironment.FONT_STORE.get().clear();
+
         start(KnownScriptFunctions.TITLESCREEN);
     }
 

@@ -58,7 +58,9 @@ public final class ShaderStore implements IDestructible {
         return destroyed;
     }
 
-
+    public void clear() {
+        // Nothing to clear
+    }
 
     /**
      * Loads a shader from classpath resources.
