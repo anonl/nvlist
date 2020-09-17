@@ -31,9 +31,12 @@ final class LangServerMain {
             }
         }));
 
-        startAsSocketClient(closer, Integer.parseInt(args[0]));
+        if (args.length == 0) {
+            NvlistLangServer.start(System.in, System.out);
+        } else {
+            startAsSocketClient(closer, Integer.parseInt(args[0]));
+        }
         // startAsSocketServer(closer);
-        // NvlistLangServer.start(System.in, System.out);
     }
 
     private static void startAsSocketClient(Closer closer, int port) throws IOException {
