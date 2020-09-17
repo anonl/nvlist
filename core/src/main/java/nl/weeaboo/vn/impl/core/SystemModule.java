@@ -104,7 +104,7 @@ public class SystemModule extends AbstractModule implements ISystemModule {
         super.setRenderEnv(env);
 
         if (getSystemEnv().getDisplayMode() == DisplayMode.WINDOWED) {
-            windowedSize = env.getScreenSize();
+            windowedSize = Dim.of(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
     }
 
