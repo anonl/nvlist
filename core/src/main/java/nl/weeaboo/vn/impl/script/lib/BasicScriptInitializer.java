@@ -16,6 +16,7 @@ import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.render.DisplayMode;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.scene.ButtonViewState;
 import nl.weeaboo.vn.sound.SoundType;
 
 /**
@@ -49,7 +50,8 @@ public class BasicScriptInitializer implements ILuaScriptEnvInitializer {
                 SkipMode.class,
                 VerticalAlign.class,
                 SoundType.class,
-                DisplayMode.class
+                DisplayMode.class,
+                ButtonViewState.class
         );
 
         LuaPrefsAdapter prefsAdapter = new LuaPrefsAdapter();
