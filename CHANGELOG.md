@@ -1,4 +1,7 @@
 
+# v4.7.0
+- Changed the default italic font to be less slanted (it was a little extreme).
+
 # v4.6.3
 - fix: Off-by-one for animations with length 1 (broken since v4.6.2)
 - fix: Toggling between fullscreen and windowed now remembers the window size.
