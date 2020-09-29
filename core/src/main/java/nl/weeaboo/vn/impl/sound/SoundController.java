@@ -52,6 +52,7 @@ final class SoundController implements ISoundController {
             ISound s = entry.getValue();
             s.update();
             if (s.isStopped()) {
+                LOG.debug("Removing stopped sound from channel {}: {}", entry.getKey(), s);
                 pausedList.remove(s);
                 itr.remove();
             }
@@ -120,6 +121,7 @@ final class SoundController implements ISoundController {
     @Override
     public void set(int channel, ISound sound) {
         Checks.checkState(!isPaused(), "Unable to add sounds while paused");
+        Checks.checkRange(channel, "channel", MIN_CHANNEL, MAX_CHANNEL);
 
         stop(channel);
 

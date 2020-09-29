@@ -1,34 +1,24 @@
 package nl.weeaboo.vn.impl.sound;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.badlogic.gdx.audio.Music;
-
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.test.SerializeTester;
-import nl.weeaboo.vn.gdx.res.StaticResourceStub;
-import nl.weeaboo.vn.impl.core.StaticRef;
+import nl.weeaboo.vn.gdx.GdxMusicMock;
 
 public class NativeAudioTest {
 
-    private StaticRef<Music> musicRef = StaticRef.anonymous(Music.class);
+    private final NativeAudioFactoryMock audioFactory = new NativeAudioFactoryMock();
+    private GdxMusicMock gdxMusic = new GdxMusicMock();
 
     private NativeAudio nativeAudio;
-    private MockGdxMusic mockGdxMusic;
 
     @Before
     public void before() {
-        mockGdxMusic = new MockGdxMusic();
-        musicRef.set(mockGdxMusic);
-
-        nativeAudio = new NativeAudio(new StaticResourceStub<>(musicRef));
-    }
-
-    @After
-    public void after() {
-        musicRef.set(null);
+        audioFactory.setNextGdxMusic(gdxMusic);
+        nativeAudio = new NativeAudio(audioFactory, FilePath.of("test"));
     }
 
     @Test
@@ -62,12 +52,12 @@ public class NativeAudioTest {
         assertPlaying();
 
         // First loop finishes
-        mockGdxMusic.fireComplete();
+        gdxMusic.fireComplete();
         Assert.assertEquals(1, nativeAudio.getLoopsLeft());
         assertPlaying();
 
         // Second (final) loop finished and the sound is stopped
-        mockGdxMusic.fireComplete();
+        gdxMusic.fireComplete();
         Assert.assertEquals(0, nativeAudio.getLoopsLeft());
         assertStopped();
     }
@@ -76,15 +66,15 @@ public class NativeAudioTest {
     public void infiniteLooping() {
         nativeAudio.play(-1);
         assertPlaying();
-        Assert.assertEquals(true, mockGdxMusic.isLooping());
+        Assert.assertEquals(true, gdxMusic.isLooping());
 
         // No completion listener was registered
-        mockGdxMusic.fireComplete();
+        gdxMusic.fireComplete();
         Assert.assertEquals(-1, nativeAudio.getLoopsLeft());
 
         // Sound just loops forever until stopped manually
         assertPlaying();
-        Assert.assertEquals(true, mockGdxMusic.isLooping());
+        Assert.assertEquals(true, gdxMusic.isLooping());
     }
 
     @Test
@@ -94,22 +84,6 @@ public class NativeAudioTest {
         // Setting the volume delegates to the internal music object
         nativeAudio.setVolume(0.5);
         assertVolume(0.5);
-    }
-
-    @Test
-    public void musicRefNull() {
-        musicRef.set(null);
-
-        /*
-         * The internal music reference may become invalid, for example after serialization. This is
-         * unrecoverable. Just make sure that no unintended exceptions are thrown when this happens.
-         */
-        nativeAudio.play(2);
-        assertStopped(); // Play failed
-        nativeAudio.pause();
-        nativeAudio.resume();
-        nativeAudio.stop();
-        nativeAudio.setVolume(0.5);
     }
 
     /**
@@ -135,33 +109,30 @@ public class NativeAudioTest {
 
     private void reserialize() {
         byte[] serialized = SerializeTester.serializeObject(nativeAudio);
-
-        // Reset music object to mimic real deserialization of a save file
-        mockGdxMusic.reset();
-
         nativeAudio = SerializeTester.deserializeObject(serialized, NativeAudio.class);
+        gdxMusic = (GdxMusicMock)nativeAudio.gdxMusic;
     }
 
     private void assertStopped() {
         Assert.assertEquals(false, nativeAudio.isPlaying());
-        Assert.assertEquals(false, mockGdxMusic.isPlaying());
+        Assert.assertEquals(false, gdxMusic.isPlaying());
         Assert.assertEquals(false, nativeAudio.isPaused());
     }
 
     private void assertPlaying() {
         Assert.assertEquals(true, nativeAudio.isPlaying());
-        Assert.assertEquals(true, mockGdxMusic.isPlaying());
+        Assert.assertEquals(true, gdxMusic.isPlaying());
         Assert.assertEquals(false, nativeAudio.isPaused());
     }
 
     private void assertPaused() {
         Assert.assertEquals(false, nativeAudio.isPlaying());
-        Assert.assertEquals(false, mockGdxMusic.isPlaying());
+        Assert.assertEquals(false, gdxMusic.isPlaying());
         Assert.assertEquals(true, nativeAudio.isPaused());
     }
 
     private void assertVolume(double expected) {
-        Assert.assertEquals((float)expected, mockGdxMusic.getVolume(), 0.001f);
+        Assert.assertEquals((float)expected, gdxMusic.getVolume(), 0.001f);
     }
 
 }

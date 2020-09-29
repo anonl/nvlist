@@ -2,54 +2,69 @@ package nl.weeaboo.vn.impl.sound;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.audio.Music;
+import com.google.common.annotations.VisibleForTesting;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.gdx.res.IResource;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
 
 /**
  * Default implementation of {@link INativeAudio}.
  */
 @CustomSerializable
-final class NativeAudio implements INativeAudio {
+class NativeAudio implements INativeAudio {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(NativeAudio.class);
 
-    private final IResource<Music> musicRef;
+    private final INativeAudioFactory audioFactory;
+    private final FilePath filePath;
+
+    @VisibleForTesting
+    transient @Nullable Music gdxMusic;
 
     private final AtomicInteger loopsLeft = new AtomicInteger();
     private boolean paused;
+    private boolean playing;
     private double volume;
 
-    public NativeAudio(IResource<Music> music) {
-        this.musicRef = Checks.checkNotNull(music);
+    public NativeAudio(INativeAudioFactory audioFactory, FilePath absolutePath) {
+        this.audioFactory = audioFactory;
+        this.filePath = absolutePath;
+
+        gdxMusic = initMusic();
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
 
-        boolean playing = in.readBoolean();
-        int loopsLeft = in.readInt();
-
+        gdxMusic = initMusic();
         applyVolume();
-        if (playing) {
-            doPlay(loopsLeft);
+        if (playing && !paused) {
+            doPlay(loopsLeft.get());
         }
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
+    private Music initMusic() {
+        Checks.checkState(gdxMusic == null, "Accidental overwrite of gdxMusic");
 
-        out.writeBoolean(isPlaying());
-        out.writeInt(getLoopsLeft());
+        Music m = audioFactory.newGdxMusic(filePath);
+        /*
+         * Dispose GDX music object when NativeAudio is garbage collected to prevent a memory leak if stop()
+         * is never called.
+         */
+        GdxCleaner.get().register(this, m);
+        gdxMusic = m;
+        return m;
     }
 
     @Override
@@ -58,60 +73,65 @@ final class NativeAudio implements INativeAudio {
     }
 
     private void doPlay(int loops) {
-        Music music = musicRef.get();
-        if (music != null) {
-            if (loops <= 0) {
-                music.setOnCompletionListener(null);
-            } else {
-                // TODO: Doesn't work on Desktop, unlike Android the completion listener is only called
-                //       when the music ends, not on every loop.
-                music.setOnCompletionListener(new LoopEndListener());
-            }
-
-            loopsLeft.set(loops);
-            music.setLooping(loops < 0 || loops > 1);
-            applyVolume(); // Re-apply volume in case Music object had to be reloaded
-            music.play();
-            paused = false;
+        Music m = gdxMusic;
+        if (m == null) {
+            m = initMusic();
         }
+
+        if (loops <= 0) {
+            m.setOnCompletionListener(null);
+        } else {
+            // TODO: Doesn't work on Desktop, unlike Android the completion listener is only called
+            //       when the music ends, not on every loop.
+            m.setOnCompletionListener(new LoopEndListener());
+        }
+
+        loopsLeft.set(loops);
+        m.setLooping(loops < 0 || loops > 1);
+        applyVolume(); // Re-apply volume in case Music object had to be reloaded
+
+        paused = false;
+        playing = true;
+        m.play();
     }
 
     @Override
     public void pause() {
-        Music music = musicRef.get();
-        if (music != null) {
-            music.pause();
+        Music m = gdxMusic;
+        if (m != null) {
+            m.pause();
             paused = true;
         }
     }
 
     @Override
     public void resume() {
-        Music music = musicRef.get();
-        if (music != null) {
-            music.play();
+        Music m = gdxMusic;
+        if (m != null) {
+            m.play();
             paused = false;
         }
     }
 
     @Override
     public void stop() {
-        Music music = musicRef.get();
-        if (music != null) {
-            music.stop();
+        Music m = gdxMusic;
+        if (m != null) {
             paused = false;
+            playing = false;
+
+            m.stop();
         }
     }
 
     @Override
     public boolean isStopped() {
-        return !isPlaying() && !isPaused();
+        return !playing && !paused;
     }
 
     @Override
     public boolean isPlaying() {
-        Music music = musicRef.get();
-        return music != null && music.isPlaying();
+        return playing && !paused;
     }
 
     @Override
@@ -134,9 +154,9 @@ final class NativeAudio implements INativeAudio {
     }
 
     private void applyVolume() {
-        Music music = musicRef.get();
-        if (music != null) {
-            music.setVolume((float)volume);
+        Music m = gdxMusic;
+        if (m != null) {
+            m.setVolume((float)volume);
         }
     }
 
@@ -146,7 +166,7 @@ final class NativeAudio implements INativeAudio {
         public void onCompletion(Music music) {
             int left = loopsLeft.decrementAndGet();
             if (left <= 0) {
-                LOG.debug("Music all loops finished");
+                LOG.debug("Audio all loops finished");
                 stop();
             } else {
                 LOG.debug("Decrease music loops -> {}", left);

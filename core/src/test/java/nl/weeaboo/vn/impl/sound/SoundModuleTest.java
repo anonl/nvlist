@@ -22,13 +22,13 @@ import nl.weeaboo.vn.sound.SoundType;
 public final class SoundModuleTest {
 
     private TestEnvironment env;
-    private MockSoundController soundController;
+    private SoundControllerMock soundController;
     private SoundModule module;
 
     @Before
     public void before() {
         env = TestEnvironment.newInstance();
-        soundController = new MockSoundController();
+        soundController = new SoundControllerMock();
         module = new SoundModule(new SoundResourceLoader(env), soundController, new NativeAudioFactory());
     }
 

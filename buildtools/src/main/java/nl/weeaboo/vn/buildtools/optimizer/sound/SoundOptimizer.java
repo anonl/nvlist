@@ -31,7 +31,7 @@ import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.NoOpSoundEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
-import nl.weeaboo.vn.impl.sound.GdxMusicStore;
+import nl.weeaboo.vn.impl.sound.SoundModule;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinition;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionCache;
 import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionIO;
@@ -120,7 +120,7 @@ public final class SoundOptimizer {
 
     private Iterable<FilePath> getSoundFiles() {
         FileCollectOptions filter = FileCollectOptions.files(MediaType.SOUND.getSubFolder());
-        return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), GdxMusicStore.getSupportedFileExts());
+        return OptimizerFileUtil.filterByExts(resFileSystem.getFiles(filter), SoundModule.getSupportedFileExts());
     }
 
     private void optimizeSound(FilePath inputFile) throws IOException {

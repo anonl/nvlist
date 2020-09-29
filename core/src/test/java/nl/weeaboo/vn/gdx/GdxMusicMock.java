@@ -1,8 +1,14 @@
 package nl.weeaboo.vn.gdx;
 
+import java.io.Serializable;
+
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.audio.Music;
 
-final class GdxMusicMock implements Music {
+public final class GdxMusicMock implements Music, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private boolean playing;
     private boolean paused;
@@ -10,8 +16,23 @@ final class GdxMusicMock implements Music {
     private float position = 1f;
     private boolean isLooping = false;
 
+    private @Nullable OnCompletionListener completionListener;
+
+    public GdxMusicMock() {
+        reset();
+    }
+
+    public final void reset() {
+        playing = false;
+        paused = false;
+        isLooping = false;
+        volume = 1f;
+        completionListener = null;
+    }
+
     @Override
     public void play() {
+        paused = false;
         playing = true;
     }
 
@@ -71,6 +92,13 @@ final class GdxMusicMock implements Music {
 
     @Override
     public void setOnCompletionListener(OnCompletionListener listener) {
+        this.completionListener = listener;
+    }
+
+    public void fireComplete() {
+        if (completionListener != null) {
+            completionListener.onCompletion(this);
+        }
     }
 
 }

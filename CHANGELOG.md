@@ -1,6 +1,7 @@
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).
+- fix: When idle for a long time, currently playing music could be unloaded (causing it to stop playing)
 
 # v4.6.3
 - fix: Off-by-one for animations with length 1 (broken since v4.6.2)

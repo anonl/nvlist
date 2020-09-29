@@ -19,7 +19,7 @@ final class SoundResourceLoader extends FileResourceLoader {
     public SoundResourceLoader(IEnvironment env) {
         super(env, MediaType.SOUND);
 
-        setAutoFileExts(GdxMusicStore.getSupportedFileExts().toArray(new String[0]));
+        setAutoFileExts(SoundModule.getSupportedFileExts().toArray(new String[0]));
     }
 
     /**

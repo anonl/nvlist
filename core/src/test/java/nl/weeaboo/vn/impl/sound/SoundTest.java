@@ -15,14 +15,14 @@ public final class SoundTest {
     private static final SoundType SOUND_TYPE = SoundType.SOUND;
     private static final FilePath FILENAME = FilePath.of("myFilename");
 
-    private MockSoundController soundController;
+    private SoundControllerMock soundController;
     private SoundTestHelper soundTester;
     private NativeAudioMock nativeAudio;
     private Sound sound;
 
     @Before
     public void before() {
-        soundController = new MockSoundController();
+        soundController = new SoundControllerMock();
         soundTester = new SoundTestHelper(soundController);
         nativeAudio = new NativeAudioMock();
         sound = new Sound(soundController, SOUND_TYPE, FILENAME, nativeAudio);

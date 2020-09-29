@@ -14,7 +14,6 @@ import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 import nl.weeaboo.vn.impl.image.ShaderStore;
-import nl.weeaboo.vn.impl.sound.GdxMusicStore;
 import nl.weeaboo.vn.impl.text.GdxFontStore;
 import nl.weeaboo.vn.input.IInput;
 
@@ -53,9 +52,6 @@ public final class StaticEnvironment {
 
     public static final StaticRef<ShaderStore> SHADER_STORE =
             StaticRef.from("store.shader", ShaderStore.class);
-
-    public static final StaticRef<GdxMusicStore> MUSIC_STORE =
-            StaticRef.from("store.music", GdxMusicStore.class);
 
     public static final StaticRef<GdxFontStore> FONT_STORE =
             StaticRef.from("store.font", GdxFontStore.class);

@@ -13,7 +13,7 @@ import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
 
-class MockSoundController implements ISoundController {
+class SoundControllerMock implements ISoundController {
 
     private static final long serialVersionUID = 1L;
 

@@ -114,14 +114,15 @@ abstract class AbstractSound implements ISound {
 
     @Override
     public void setPreferredChannel(int ch) {
-        Preconditions.checkArgument(ch == -1 || (ch >= MIN_CHANNEL && ch <= MAX_CHANNEL));
+        Preconditions.checkArgument(ch == -1 || (ch >= MIN_CHANNEL && ch <= MAX_CHANNEL), "Illegal channel: %s", ch);
 
         preferredChannel = ch;
     }
 
     @Override
     public String toString() {
-        return StringUtil.formatRoot("%s[%s]", getClass().getName(), filename);
+        return StringUtil.formatRoot("%s[%s%s%s]", getClass().getSimpleName(), filename,
+                isPlaying() ? " playing" : "", isPaused() ? " paused" : "");
     }
 
 }

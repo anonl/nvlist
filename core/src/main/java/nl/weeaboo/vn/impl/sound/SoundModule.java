@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSet;
+
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -43,6 +45,14 @@ public class SoundModule extends AbstractModule implements ISoundModule {
         this.resourceLoader = resourceLoader;
         this.soundController = soundController;
         this.nativeAudioFactory = nativeAudioFactory;
+    }
+
+    /**
+     * Returns the set of file extensions (without the '.' prefix) supported by the load methods of this
+     * class.
+     */
+    public static ImmutableSet<String> getSupportedFileExts() {
+        return ImmutableSet.of("ogg", "mp3");
     }
 
     @Override
