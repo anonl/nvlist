@@ -87,7 +87,7 @@ end
 -- @int[opt=1] loops The number of times the sound should repeat. Default is <code>1</code> (play it only
 --             once). Use <code>-1</code> for infinite looping.
 -- @number[opt=1.0] volume Loudness of the sound between <code>0.0</code> and <code>1.0</code>.
--- @int[opt=1] channel The audio channel to use. Each channel can only play one sound at a time. Use
+-- @int[opt=9100] channel The audio channel to use. Each channel can only play one sound at a time. Use
 --             <code>-1</code> to use a random free channel.
 -- @tparam[opt=SoundType.SOUND] SoundType type The sound type:
 --         <code>SoundType.SOUND</code>, <code>SoundType.MUSIC</code> or
@@ -110,7 +110,7 @@ function sound(filename, loops, volume, channel, type)
         s:setPrivateVolume(volume)
         s:setPreferredChannel(channel)
         s:start(loops)
-    end    
+    end
     return s
 end
 

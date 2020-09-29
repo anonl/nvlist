@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.primitives.Doubles;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
@@ -116,6 +117,11 @@ abstract class AbstractSound implements ISound {
         Preconditions.checkArgument(ch == -1 || (ch >= MIN_CHANNEL && ch <= MAX_CHANNEL));
 
         preferredChannel = ch;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtil.formatRoot("%s[%s]", getClass().getName(), filename);
     }
 
 }

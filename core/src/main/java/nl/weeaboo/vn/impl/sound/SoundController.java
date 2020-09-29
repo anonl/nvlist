@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Doubles;
@@ -20,6 +23,8 @@ import nl.weeaboo.vn.sound.SoundType;
 final class SoundController implements ISoundController {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SoundController.class);
 
     private final Map<SoundType, Double> masterVolume;
     private final Map<Integer, ISound> sounds = new HashMap<>();
@@ -69,6 +74,7 @@ final class SoundController implements ISoundController {
     public void stop(int channel, int fadeOutFrames) {
         ISound sound = sounds.remove(channel);
         if (sound != null) {
+            LOG.debug("Stop sound in channel {}: {}", channel, sound);
             sound.stop(fadeOutFrames);
         }
 
@@ -124,6 +130,8 @@ final class SoundController implements ISoundController {
         double mvol = getMasterVolume(sound.getSoundType());
         sound.setMasterVolume(mvol);
         sounds.put(channel, sound);
+
+        LOG.debug("Start sound in channel {}: {}", channel, sound);
 
         checkSounds();
     }
