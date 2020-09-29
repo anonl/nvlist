@@ -56,21 +56,23 @@ public final class SkipState implements ISkipState {
         SkipMode skipMode = getSkipMode();
 
         if (input.isPressed(VKey.SCENE_SKIP, false)) {
-            LOG.debug("Start skipping (scene)");
+            if (skipMode != SkipMode.SCENE) {
+                LOG.debug("Skip scene");
+            }
             skipUnread = true;
             setSkipMode(SkipMode.SCENE);
         }
 
         if (input.isPressed(VKey.SKIP, false) && !input.isPressed(VKey.ALT_SKIP, false)) {
             if (skipMode == SkipMode.NONE) {
-                LOG.debug("Start skipping (regular)");
+                LOG.debug("Skip paragraph (regular)");
 
                 setSkipMode(SkipMode.PARAGRAPH);
                 skipUnread = false;
             }
         } else if (input.isPressed(VKey.ALT_SKIP, false)) {
             if (skipMode == SkipMode.NONE) {
-                LOG.debug("Start skipping (alt)");
+                LOG.debug("Skip paragraph (alt)");
 
                 setSkipMode(SkipMode.PARAGRAPH);
                 skipUnread = true;
