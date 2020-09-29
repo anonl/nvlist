@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.test.SerializeTester;
 import nl.weeaboo.vn.gdx.GdxMusicMock;
@@ -110,7 +111,7 @@ public class NativeAudioTest {
     private void reserialize() {
         byte[] serialized = SerializeTester.serializeObject(nativeAudio);
         nativeAudio = SerializeTester.deserializeObject(serialized, NativeAudio.class);
-        gdxMusic = (GdxMusicMock)nativeAudio.gdxMusic;
+        gdxMusic = (GdxMusicMock)Checks.checkNotNull(nativeAudio.gdxMusic);
     }
 
     private void assertStopped() {

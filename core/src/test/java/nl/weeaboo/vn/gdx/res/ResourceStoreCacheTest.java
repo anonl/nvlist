@@ -34,7 +34,9 @@ public final class ResourceStoreCacheTest {
     public void testClear() throws ExecutionException {
         cache.preload("preload-and-load");
         cache.getEntry("preload-and-load");
-        cache.consumeUnloadCount(1); // Loading an entry invalidates the preloader entry
+
+        // TODO: This was removed
+        // cache.consumeUnloadCount(1); // Loading an entry invalidates the preloader entry
 
         cache.preload("preload");
         cache.getEntry("load");
