@@ -62,7 +62,7 @@ public abstract class ResourceStoreCache<K, V> {
     private LoadingCache<K, PreloadRef> buildPreloadCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(1)
-                .expireAfterAccess(15, TimeUnit.SECONDS)
+                .expireAfterWrite(15, TimeUnit.SECONDS)
                 .removalListener(new RemovalListener<K, PreloadRef>() {
                     @Override
                     public void onRemoval(RemovalNotification<K, PreloadRef> notification) {
@@ -104,8 +104,12 @@ public abstract class ResourceStoreCache<K, V> {
                     public Ref<V> load(K resourceKey) throws Exception {
                         V resource = doLoad(resourceKey);
 
+                        /*
+                         * TODO: This doesn't work; the 'real' cache doesn't contain the resource until after
+                         * the load method returns.
+                         */
                         // Remove resource from the preload cache because it's now fully loaded
-                        preloadCache.invalidate(resourceKey);
+                        // preloadCache.invalidate(resourceKey);
 
                         return new Ref<>(resource);
                     }

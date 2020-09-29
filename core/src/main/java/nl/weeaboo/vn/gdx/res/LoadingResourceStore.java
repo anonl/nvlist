@@ -57,7 +57,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
 
         // Finish loading resource
         String pathString = absolutePath.toString();
-        startLoading(absolutePath);
+        startLoading(absolutePath, "Start loading");
         am.finishLoadingAsset(pathString);
         T resource = am.get(pathString);
 
@@ -66,13 +66,15 @@ public class LoadingResourceStore<T> extends ResourceStore {
         return resource;
     }
 
-    private void startLoading(FilePath absolutePath) {
+    private void startLoading(FilePath absolutePath, String message) {
         AssetManager am = assetManager.get();
         String pathString = absolutePath.toString();
 
-        LOG.debug("Start loading: {}", absolutePath);
+        if (!am.isLoaded(pathString)) {
+            LOG.debug("{}: {}", message, absolutePath);
 
-        am.load(pathString, assetType, getLoadParams(absolutePath));
+            am.load(pathString, assetType, getLoadParams(absolutePath));
+        }
     }
 
     /**
@@ -143,7 +145,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
 
         @Override
         protected void doPreload(FilePath absolutePath) {
-            startLoading(absolutePath);
+            startLoading(absolutePath, "Start preload");
         }
 
         @Override

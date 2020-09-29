@@ -45,5 +45,12 @@ apply from: "${buildToolsDir}/common-packr.gradle"
 packr {
     resources {
         from(assembleNvl)
+
+        // The resource preloader needs an analytics file to function.
+        // Use the accumulated analytics from the developer play-testing as the starting point.
+        from("$vnRootDir/save") {
+            into 'save'
+            include 'analytics.bin'
+        }
     }
 }

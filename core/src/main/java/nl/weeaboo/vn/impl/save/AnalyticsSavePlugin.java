@@ -13,6 +13,8 @@ import nl.weeaboo.vn.stats.IAnalytics;
 final class AnalyticsSavePlugin implements IPersistentSavePlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnalyticsSavePlugin.class);
+
+    // Note: This path is also used in common-desktop.gradle
     private static final FilePath ANALYTICS_PATH = FilePath.of("analytics.bin");
 
     private final IAnalytics analytics;
