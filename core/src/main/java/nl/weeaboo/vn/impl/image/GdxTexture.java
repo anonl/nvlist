@@ -32,8 +32,8 @@ public class GdxTexture implements ITexture {
     @Override
     public String toString() {
         return String.format(Locale.ROOT,
-                "GdxTexture(%d, %.1fx%.1f)",
-                getHandle(), getWidth(), getHeight());
+                "GdxTexture(%d, %.1fx%.1f, %s)",
+                getHandle(), getWidth(), getHeight(), res);
     }
 
     protected int getHandle() {

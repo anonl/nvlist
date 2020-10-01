@@ -84,4 +84,9 @@ public abstract class AbstractRenderable implements IRenderable {
 
     protected abstract void render(IDrawBuffer drawBuffer, IDrawable parent, Area2D bounds);
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + Integer.toHexString(hashCode());
+    }
+
 }

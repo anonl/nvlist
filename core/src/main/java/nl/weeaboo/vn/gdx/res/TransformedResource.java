@@ -10,7 +10,7 @@ import nl.weeaboo.common.Checks;
  * @param <S> The original resource type.
  * @param <D> The transformed resource type.
  */
-public abstract class TransformedResource<S, D> implements IResource<D> {
+public abstract class TransformedResource<S, D> extends AbstractResource<D> {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,5 +50,10 @@ public abstract class TransformedResource<S, D> implements IResource<D> {
      * @return The transformed resource, or {@code null} if the resource couldn't be transformed.
      */
     protected abstract D transform(S original);
+
+    @Override
+    public String toString() {
+        return "<transformed " + inner + ">";
+    }
 
 }

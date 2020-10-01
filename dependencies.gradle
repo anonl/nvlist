@@ -128,7 +128,7 @@ deps.lsp4j_debug = [
 ]
 
 deps.lua_core = [
-    "nl.weeaboo.luajpp2:luajpp2-core:3.1.0"
+    "nl.weeaboo.luajpp2:luajpp2-core:3.2.0"
 ]
 
 deps.slf4j_api = [

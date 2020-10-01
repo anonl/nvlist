@@ -2,14 +2,21 @@ package nl.weeaboo.vn.impl.script.lua;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
+import nl.weeaboo.lua2.compiler.LuaEval;
 import nl.weeaboo.lua2.lib.TwoArgFunction;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
+import nl.weeaboo.lua2.stdlib.DebugTrace;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaStackTraceElement;
 import nl.weeaboo.lua2.vm.LuaString;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaThread;
@@ -44,6 +51,10 @@ public class LuaScriptThread implements IScriptThread {
         return threadRef.get().isDead();
     }
 
+    public int getThreadId() {
+        return threadRef.get().getThreadId();
+    }
+
     /**
      * Runs Lua code on this thread.
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
@@ -52,7 +63,7 @@ public class LuaScriptThread implements IScriptThread {
         LuaThread thread = threadRef.get();
 
         try {
-            LuaClosure func = LuaUtil.compileForEval(code, thread.getfenv());
+            LuaClosure func = LuaEval.compileForEval(code, thread);
             return thread.callFunctionInThread(func, LuaConstants.NONE);
         } catch (LuaException e) {
             throw LuaScriptUtil.toScriptException("Error in thread: " + this, e);
@@ -133,9 +144,17 @@ public class LuaScriptThread implements IScriptThread {
         return getName();
     }
 
+    public @Nullable LuaStackTraceElement stackTraceElem(int offset) {
+        return DebugTrace.stackTraceElem(threadRef.get(), offset);
+    }
+
+    public List<LuaStackTraceElement> stackTrace() {
+        return DebugTrace.stackTrace(threadRef.get());
+    }
+
     @Override
     public List<String> getStackTrace() {
-        return LuaUtil.getLuaStack(threadRef.get());
+        return Lists.transform(stackTrace(), LuaStackTraceElement::toString);
     }
 
     @Override
@@ -186,4 +205,5 @@ public class LuaScriptThread implements IScriptThread {
         void onEvent(String eventName, int lineNumber);
 
     }
+
 }

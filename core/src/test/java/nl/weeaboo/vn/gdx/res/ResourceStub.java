@@ -1,6 +1,6 @@
 package nl.weeaboo.vn.gdx.res;
 
-public class ResourceStub<T> implements IResource<T> {
+public class ResourceStub<T> extends AbstractResource<T> {
 
     private static final long serialVersionUID = 1L;
 

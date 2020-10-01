@@ -4,7 +4,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 /** Resource stub backed by a static reference */
-public class StaticResourceStub<T> implements IResource<T> {
+public class StaticResourceStub<T> extends AbstractResource<T> {
 
     private static final long serialVersionUID = 1L;
 

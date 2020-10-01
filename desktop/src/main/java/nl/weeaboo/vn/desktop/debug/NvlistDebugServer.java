@@ -289,8 +289,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
                     break;
                 }
             } catch (ScriptException e) {
-                LOG.trace("Error evaluating expression: " + expr, e);
-                LOG.warn("Error evaluating expression: " + expr + " :: " + e);
+                LOG.warn("Error evaluating expression: " + expr, e);
             }
             return response;
         });

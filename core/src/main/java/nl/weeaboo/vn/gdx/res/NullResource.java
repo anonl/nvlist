@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 /**
  * Resource reference which always returns {@code null}.
  */
-public final class NullResource<T> implements IResource<T> {
+public final class NullResource<T> extends AbstractResource<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,6 +19,11 @@ public final class NullResource<T> implements IResource<T> {
     @Override
     public @Nullable T get() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
 
 }

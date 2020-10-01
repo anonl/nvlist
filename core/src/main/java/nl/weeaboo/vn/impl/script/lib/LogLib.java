@@ -1,13 +1,11 @@
 package nl.weeaboo.vn.impl.script.lib;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterables;
-
-import nl.weeaboo.lua2.LuaUtil;
+import nl.weeaboo.lua2.stdlib.DebugTrace;
+import nl.weeaboo.lua2.vm.LuaStackTraceElement;
+import nl.weeaboo.lua2.vm.LuaThread;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -24,13 +22,12 @@ public class LogLib extends LuaLib {
     }
 
     private Logger getLogger() {
-        return getLogger(LuaUtil.getLuaStack());
+        LuaStackTraceElement stackTraceElem = DebugTrace.stackTraceElem(LuaThread.getRunning(), 0);
+        return getLogger(stackTraceElem != null ? stackTraceElem.getFileName() : "unknown");
     }
 
-    protected Logger getLogger(List<String> luaStackTrace) {
-        String luaScriptFile = Iterables.getFirst(luaStackTrace, "unknown");
-
-        return LoggerFactory.getLogger("lua." + luaScriptFile);
+    protected Logger getLogger(String fileName) {
+        return LoggerFactory.getLogger("lua." + fileName);
     }
 
     private String getLogFormat(Varargs args) {

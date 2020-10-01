@@ -65,7 +65,7 @@ public class LuaLogTest extends LuaIntegrationTest {
     private class TestLogLib extends LogLib {
 
         @Override
-        protected Logger getLogger(List<String> luaStackTrace) {
+        protected Logger getLogger(String fileName) {
             return logger;
         }
 

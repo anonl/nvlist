@@ -156,6 +156,11 @@ public abstract class VisualElement implements IVisualElement {
 
     protected abstract ILayoutElem createLayoutAdapter();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + Integer.toHexString(hashCode());
+    }
+
     private static class SelfSignalHandler implements ISignalHandler, Serializable {
 
         private static final long serialVersionUID = VisualElement.serialVersionUID;

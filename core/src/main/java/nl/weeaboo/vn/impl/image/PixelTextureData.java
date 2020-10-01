@@ -14,8 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.res.AbstractResource;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
-import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.image.ITexture;
 
 /**
@@ -90,7 +90,7 @@ public final class PixelTextureData implements IGdxTextureData {
         return pixels.getHeight();
     }
 
-    private final class RegionResource implements IResource<TextureRegion> {
+    private final class RegionResource extends AbstractResource<TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 

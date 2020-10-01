@@ -6,7 +6,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
-final class FileResource<T> implements IResource<T> {
+final class FileResource<T> extends AbstractResource<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,11 @@ final class FileResource<T> implements IResource<T> {
 
     void set(Ref<T> ref) {
         this.valueRef = ref;
+    }
+
+    @Override
+    public String toString() {
+        return "<" + filename + ">";
     }
 
 }

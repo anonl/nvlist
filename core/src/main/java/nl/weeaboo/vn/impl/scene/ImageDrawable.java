@@ -170,4 +170,9 @@ public class ImageDrawable extends Transformable implements IImageDrawable {
         setRenderer(new TextureRenderer(texture), alignX, alignY);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + renderer + ")";
+    }
+
 }

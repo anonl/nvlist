@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import nl.weeaboo.vn.gdx.res.AbstractResource;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
-import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.image.ITexture;
 
 /**
@@ -56,7 +56,7 @@ public final class VolatileTextureData implements IGdxTextureData {
         return height;
     }
 
-    private static final class RegionResource implements IResource<TextureRegion> {
+    private static final class RegionResource extends AbstractResource<TextureRegion> {
 
         private static final long serialVersionUID = 1L;
 

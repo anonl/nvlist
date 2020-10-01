@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -13,24 +12,18 @@ import org.eclipse.lsp4j.debug.StoppedEventArgumentsReason;
 import org.eclipse.lsp4j.debug.Thread;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Splitter;
-import com.google.common.primitives.Ints;
-
-import nl.weeaboo.lua2.stdlib.DebugTrace;
+import nl.weeaboo.lua2.vm.LuaStackTraceElement;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThread.ILuaDebugHook;
 
 final class DebugThread {
 
-    private final int threadId;
     private final LuaScriptThread thread;
     private final IDebugProtocolClient peer;
 
     private @Nullable EStepMode stepMode;
 
     DebugThread(LuaScriptThread thread, IDebugProtocolClient peer) {
-        this.threadId = getThreadId(thread);
         this.thread = Objects.requireNonNull(thread);
         this.peer = Objects.requireNonNull(peer);
     }
@@ -40,7 +33,7 @@ final class DebugThread {
     }
 
     int getThreadId() {
-        return threadId;
+        return thread.getThreadId();
     }
 
     LuaScriptThread getThread() {
@@ -55,7 +48,7 @@ final class DebugThread {
         thread.pause();
 
         StoppedEventArguments stopEvent = new StoppedEventArguments();
-        stopEvent.setThreadId(threadId);
+        stopEvent.setThreadId(getThreadId());
         peer.stopped(stopEvent);
     }
 
@@ -63,7 +56,7 @@ final class DebugThread {
         thread.resume();
 
         ContinuedEventArguments continueEvent = new ContinuedEventArguments();
-        continueEvent.setThreadId(threadId);
+        continueEvent.setThreadId(getThreadId());
         peer.continued(continueEvent);
     }
 
@@ -77,7 +70,7 @@ final class DebugThread {
         thread.pause();
 
         StoppedEventArguments stopEvent = new StoppedEventArguments();
-        stopEvent.setThreadId(threadId);
+        stopEvent.setThreadId(getThreadId());
         stopEvent.setReason(StoppedEventArgumentsReason.STEP);
         peer.stopped(stopEvent);
     }
@@ -87,13 +80,13 @@ final class DebugThread {
      */
     Thread toDapThread() {
         Thread result = new org.eclipse.lsp4j.debug.Thread();
-        result.setId(threadId);
+        result.setId(getThreadId());
         result.setName(thread.getName());
         return result;
     }
 
     StackFrame[] getStackTrace() {
-        return thread.getStackTrace().stream().map(this::toStackFrame).toArray(StackFrame[]::new);
+        return thread.stackTrace().stream().map(this::toStackFrame).toArray(StackFrame[]::new);
     }
 
     void installHook(Breakpoints breakpoints) {
@@ -105,24 +98,17 @@ final class DebugThread {
         return thread.toString();
     }
 
-    private StackFrame toStackFrame(String fileline) {
-        String relativePath = fileline;
-        int lineNumber = 0;
-
-        List<String> parts = Splitter.on(':').splitToList(fileline);
-        if (parts.size() == 2) {
-            relativePath = parts.get(0);
-            lineNumber = MoreObjects.firstNonNull(Ints.tryParse(parts.get(1)), 0);
-        }
+    private StackFrame toStackFrame(LuaStackTraceElement elem) {
+        String relativePath = elem.getFileName();
 
         Source source = new Source();
         source.setName(relativePath);
         source.setPath(NameMapping.toAbsoluteScriptPath(relativePath));
 
         StackFrame sf = new StackFrame();
-        sf.setName(fileline);
+        sf.setName(elem.getFunctionName());
         sf.setSource(source);
-        sf.setLine(lineNumber);
+        sf.setLine(elem.getLineNumber());
         return sf;
     }
 
@@ -137,7 +123,6 @@ final class DebugThread {
 
         @Override
         public void onEvent(String eventName, int lineNumber) {
-            StackFrame sf = toStackFrame(DebugTrace.fileline());
             if (stepMode != null) {
                 switch (stepMode) {
                 case IN:
@@ -164,8 +149,14 @@ final class DebugThread {
                     }
                     break;
                 }
-            } else if (breakpoints.shouldPause(sf)) {
-                pause();
+            } else {
+                LuaStackTraceElement lsf = thread.stackTraceElem(0);
+                if (lsf != null) {
+                    StackFrame sf = toStackFrame(lsf);
+                    if (breakpoints.shouldPause(sf)) {
+                        pause();
+                    }
+                }
             }
         }
 

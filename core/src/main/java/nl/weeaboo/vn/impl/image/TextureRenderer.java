@@ -101,4 +101,9 @@ public final class TextureRenderer extends AbstractRenderable implements ITextur
         setUV(uv.x + du, uv.y + dv, uv.w, uv.h);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + texture + ")";
+    }
+
 }

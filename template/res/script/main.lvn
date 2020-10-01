@@ -35,11 +35,10 @@ function start()
 # Insert your code here
 @registerSpeaker("aza", "Azathoth")
 @bgf("bg/gate")
-@local aza = imgf("azathoth", "c")
-$aza Hello there
 
 Create a sprite in the center (c) position.
-@aza = imgf("azathoth", "c")
+@local aza = imgf("azathoth", "c")
+$aza Hello there
 Change image (instantly)
 @aza:setTexture(tex("azathoth-angry"))
 Change image (animated)
