@@ -154,7 +154,7 @@ public class LuaScriptThread implements IScriptThread {
 
     @Override
     public List<String> getStackTrace() {
-        return Lists.transform(stackTrace(), LuaStackTraceElement::toString);
+        return Lists.transform(stackTrace(), elem -> elem.getFileName() + ":" + elem.getLineNumber());
     }
 
     @Override
