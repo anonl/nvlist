@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.core;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.IPreferenceStore;
@@ -59,6 +61,12 @@ abstract class AbstractEnvironment implements IEnvironment {
     @Override
     public void update() {
         getSaveModule().processSaveLoadRequests();
+
+        // Perform synchronous part of asset loading
+        AssetManager assetManager = StaticEnvironment.ASSET_MANAGER.getIfPresent();
+        if (assetManager != null) {
+            assetManager.update();
+        }
 
         for (IModule module : getModules()) {
             module.update();

@@ -1,4 +1,7 @@
 
+# v4.7.1
+- Improved preloader performance. It can now preload images loaded from a background thread.
+
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).
 - Preloader analytics gathered during development are now included in the distribution (`save/analytics.bin`). Without this file, the preloader does very little.

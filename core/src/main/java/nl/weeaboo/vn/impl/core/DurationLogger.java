@@ -14,11 +14,13 @@ import nl.weeaboo.vn.core.Duration;
  */
 public final class DurationLogger {
 
+    private static final int DEFAULT_INFO_MS = 500;
     private static final int DEFAULT_WARN_MS = 500;
 
     private final Logger logger;
     private final Stopwatch stopwatch;
 
+    private long infoLimitMs = DEFAULT_INFO_MS;
     private long warnLimitMs = DEFAULT_WARN_MS;
 
     private DurationLogger(Logger logger) {
@@ -48,9 +50,18 @@ public final class DurationLogger {
         long loadDurationMs = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         if (loadDurationMs >= warnLimitMs) {
             logger.warn(logFormatString + " took {} on thread '{}'", combinedParams);
+        } else if (loadDurationMs >= infoLimitMs) {
+            logger.info(logFormatString + " took {} on thread '{}'", combinedParams);
         } else {
             logger.debug(logFormatString + " took {} on thread '{}'", combinedParams);
         }
+    }
+
+    /**
+     * Sets the threshold for 'somewhat long' durations (upgrades the log level to INFO).
+     */
+    public void setInfoLimit(Duration duration) {
+        infoLimitMs = duration.toMillis();
     }
 
     /**

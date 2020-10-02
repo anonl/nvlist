@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
+
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
@@ -30,6 +35,7 @@ import nl.weeaboo.vn.script.ScriptException;
  */
 public final class LuaScriptUtil {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LuaScriptUtil.class);
     private static final String LVN_PATTERN = ".lvn:";
 
     private LuaScriptUtil() {
@@ -85,7 +91,21 @@ public final class LuaScriptUtil {
      * @see LuaUtil#getLuaStack()
      */
     public static ResourceLoadInfo createLoadInfo(MediaType mediaType, FilePath filename) {
-        return new ResourceLoadInfo(mediaType, filename, LuaUtil.getLuaStack());
+        List<String> callStack = ImmutableList.of();
+        try {
+            IScriptContext scriptContext = getCurrentScriptContext();
+
+            /*
+             * By taking the stack trace of the main thread, we can correlate image loads with the current
+             * line in the .lvn file. This assumes that the main thread is used to run the .lvn files, but that should
+             * pretty much always be the case.
+             */
+            callStack = scriptContext.getMainThread().getStackTrace();
+        } catch (ScriptException e) {
+            LOG.warn("No script context is current: unable to determine callStack", e);
+        }
+
+        return new ResourceLoadInfo(mediaType, filename, callStack);
     }
 
     private static LuaScriptContext getScriptContext(IContext context) {

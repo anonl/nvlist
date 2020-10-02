@@ -31,6 +31,11 @@ public final class Duration implements Serializable {
         return fromDuration(seconds, TimeUnit.SECONDS);
     }
 
+    /** Creates a new duration object representing a number of milliseconds. */
+    public static Duration fromMillis(long millis) {
+        return fromDuration(millis, TimeUnit.MILLISECONDS);
+    }
+
     /**
      * Creates a new duration object.
      *

@@ -13,6 +13,7 @@ import com.badlogic.gdx.assets.AssetManager;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.impl.core.DurationLogger;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
@@ -51,17 +52,31 @@ public class LoadingResourceStore<T> extends ResourceStore {
         cache.preload(absolutePath);
     }
 
+    public static DurationLogger startLoadDurationLogger(Logger logger) {
+        DurationLogger dl = DurationLogger.createStarted(logger);
+        dl.setInfoLimit(Duration.fromMillis(32)); // 2 frames @ 60Hz
+        return dl;
+    }
+
     protected T loadResource(FilePath absolutePath) {
-        DurationLogger dl = DurationLogger.createStarted(LOG);
+        DurationLogger dl = startLoadDurationLogger(LOG);
+
         AssetManager am = assetManager.get();
 
         // Finish loading resource
         String pathString = absolutePath.toString();
-        startLoading(absolutePath, "Start loading");
-        am.finishLoadingAsset(pathString);
+        boolean alreadyLoaded = am.isLoaded(pathString);
+        if (!alreadyLoaded) {
+            startLoading(absolutePath, "Start loading");
+            am.finishLoadingAsset(pathString);
+        }
         T resource = am.get(pathString);
 
-        dl.logDuration("Loading resource '{}'", absolutePath);
+        if (alreadyLoaded) {
+            dl.logDuration("Loading resource (preloaded) '{}'", absolutePath);
+        } else {
+            dl.logDuration("Loading resource (cache miss) '{}'", absolutePath);
+        }
 
         return resource;
     }
