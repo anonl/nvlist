@@ -75,6 +75,8 @@ end
 function VolumeControl:onValueChanged()
     local percent = math.floor(100 * Sound.getMasterVolume(self.soundType) + 0.5)
     self.valueLabel:setText(percent .. "%")
+    self.minusButton:setEnabled(percent > 0)
+    self.plusButton:setEnabled(percent < 100)
 end
 
 function VolumeControl:adjustVolume(change)

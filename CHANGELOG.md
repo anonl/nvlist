@@ -2,6 +2,7 @@
 # v4.8.0
 - Improved preloader performance. It can now preload images loaded from a background thread.
 - Added the space bar to the default 'textContinue' keys (see `input-config.json`).
+- fix: In the default settings screen, the + button didn't disable when already as max volume. Same goes for the - button and min volume.
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).
