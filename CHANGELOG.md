@@ -1,6 +1,7 @@
 
-# v4.7.1
+# v4.8.0
 - Improved preloader performance. It can now preload images loaded from a background thread.
+- Added the space bar to the default 'textContinue' keys (see `input-config.json`).
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).

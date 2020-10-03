@@ -5,7 +5,7 @@
     "right": ["RIGHT"],
     "confirm": ["ENTER"],
     "cancel": ["ESCAPE", "MOUSE_RIGHT"],
-    "textContinue": ["ENTER", "MOUSE_LEFT", "DOWN", "RIGHT"],
+    "textContinue": ["ENTER", "MOUSE_LEFT", "DOWN", "RIGHT", "SPACE"],
     "showTextLog": ["UP"],
     "skip": ["CONTROL_LEFT", "CONTROL_RIGHT"],
     "altSkip": ["SHIFT_LEFT+CONTROL_LEFT", "SHIFT_RIGHT+CONTROL_RIGHT"],
