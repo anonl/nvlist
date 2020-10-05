@@ -3,9 +3,6 @@ package nl.weeaboo.vn.impl.render;
 import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -39,8 +36,6 @@ import nl.weeaboo.vn.render.RenderUtil;
  * OpenGL-based renderer.
  */
 public class GLScreenRenderer extends BaseScreenRenderer implements IDestructible {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GLScreenRenderer.class);
 
     private boolean destroyed;
 
@@ -94,7 +89,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     public void renderQuad(QuadRenderCommand qrc) {
         TextureRegion tex = GdxTextureUtil.getTextureRegion(qrc.tex, qrc.uv);
         if (tex == null) {
-            LOG.trace("Skip drawing quad with null texture");
+            RenderLog.warn("Skip drawing quad; backing texture is null: {}", qrc.tex);
             return;
         }
 

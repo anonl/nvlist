@@ -58,6 +58,11 @@ public final class DebugControls {
             }
         }
 
+        // Clear caches
+        if (input.consumePress(KeyCode.F3)) {
+            novel.getEnv().clearCaches();
+        }
+
         // Save/load
         ISaveModule saveModule = env.getSaveModule();
         int slot = saveModule.getQuickSaveSlot(99);

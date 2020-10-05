@@ -15,6 +15,7 @@ import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.image.desc.GLScaleFilter;
 import nl.weeaboo.vn.image.desc.GLTilingMode;
 import nl.weeaboo.vn.impl.image.GdxTexture;
+import nl.weeaboo.vn.impl.render.RenderLog;
 
 /**
  * Various functions related to GDX texture objects.
@@ -59,13 +60,20 @@ public final class GdxTextureUtil {
      * Binds a texture to OpenGL. If no backing libGDX texture can be resolved, binds {@code 0} as the active texture.
      * @see #getTexture(ITexture)
      */
-    public static void bindTexture(int texUnit, ITexture tex) {
-        Texture texture = GdxTextureUtil.getTexture(tex);
-        if (texture != null) {
-            texture.bind(texUnit);
-        } else {
+    public static void bindTexture(int texUnit, @Nullable ITexture tex) {
+        Texture texture = null;
+        if (tex != null) {
+            texture = GdxTextureUtil.getTexture(tex);
+            if (texture == null) {
+                RenderLog.warn("Skip drawing quad; backing texture is null: {}", tex);
+            }
+        }
+
+        if (texture == null) {
             Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + texUnit);
             Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);
+        } else {
+            texture.bind(texUnit);
         }
     }
 

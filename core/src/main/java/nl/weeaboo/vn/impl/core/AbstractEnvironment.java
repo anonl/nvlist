@@ -75,4 +75,11 @@ abstract class AbstractEnvironment implements IEnvironment {
         getContextManager().update();
     }
 
+    @Override
+    public void clearCaches() {
+        StaticEnvironment.TEXTURE_STORE.get().clear();
+        StaticEnvironment.SHADER_STORE.get().clear();
+        StaticEnvironment.FONT_STORE.get().clear();
+    }
+
 }
