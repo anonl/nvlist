@@ -53,6 +53,7 @@ public class Novel implements INovel {
         // Building the environment also (re)loads persistent data
         env = envFactory.build();
 
+        LOG.info("NVList version {}", EngineVersion.getEngineVersionString());
         String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
         String engineTargetVersion = env.getPref(NovelPrefs.ENGINE_TARGET_VERSION);
         try {
