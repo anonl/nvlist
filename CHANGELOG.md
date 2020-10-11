@@ -5,6 +5,7 @@
 - Rendering code now logs warnings when images unexpectedly can't be rendered. This makes it a bit easier to detect/investigate texture (un)loading bugs.
 - NVList version number is now logged during startup.
 - fix: In the default settings screen, the + button didn't disable when already as max volume. Same goes for the - button and min volume.
+- fix: The default textlog didn't perform word-wrapping.
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).

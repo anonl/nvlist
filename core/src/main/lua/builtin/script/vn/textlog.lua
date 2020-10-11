@@ -78,19 +78,19 @@ function TextLogScreen:show()
     panel:setInsets(pad, pad, pad, pad)
     panel:setRowSpacing(pad)
     viewport:setContents(panel)
-    
+
     local textLog = getTextState():getTextLog()
     local page = textLog:getPageCount() - 1
     while page >= 0 do
         local text = textimg(textLog:getPage(page))
 
-        panel:add(text):growX()
+        panel:add(text)
         panel:endRow()
-        
+
         page = page - 1
     end
     panel:pack()
-    
+
     -- Scroll to bottom
     viewport:scroll(0, 999999)
 
