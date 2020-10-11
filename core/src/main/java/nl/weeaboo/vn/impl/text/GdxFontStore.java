@@ -45,7 +45,7 @@ public final class GdxFontStore extends ResourceStore {
 
     private final GdxFileSystem resourceFileSystem;
     private final nl.weeaboo.styledtext.gdx.GdxFontRegistry backing;
-    private final Cache cache;
+    private final FontCache cache;
     private final LruSet<FilePath> missingFonts = new LruSet<>(16);
 
     public GdxFontStore(GdxFileSystem resourceFileSystem) {
@@ -54,7 +54,7 @@ public final class GdxFontStore extends ResourceStore {
         this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
 
         backing = new nl.weeaboo.styledtext.gdx.GdxFontRegistry();
-        cache = new Cache(new ResourceStoreCacheConfig<>());
+        cache = new FontCache(new ResourceStoreCacheConfig<>());
     }
 
     private void loadBuiltInFont() {
@@ -146,7 +146,7 @@ public final class GdxFontStore extends ResourceStore {
         if (!absoluteFontPath.equals(FilePath.empty()) && !missingFonts.contains(absoluteFontPath)) {
             // Load font (if needed)
             try {
-                cache.getEntry(new CacheKey(absoluteFontPath, style));
+                cache.get(new CacheKey(absoluteFontPath, style));
             } catch (ExecutionException e) {
                 loadError(absoluteFontPath, e.getCause());
             }
@@ -163,9 +163,9 @@ public final class GdxFontStore extends ResourceStore {
         }
     }
 
-    private final class Cache extends ResourceStoreCache<CacheKey, GdxFont> {
+    private final class FontCache extends ResourceStoreCache<CacheKey, GdxFont> {
 
-        public Cache(ResourceStoreCacheConfig<GdxFont> config) {
+        public FontCache(ResourceStoreCacheConfig<GdxFont> config) {
             super(config);
         }
 

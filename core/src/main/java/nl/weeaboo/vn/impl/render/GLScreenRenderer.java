@@ -88,7 +88,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     @Override
     public void renderQuad(QuadRenderCommand qrc) {
         TextureRegion tex = GdxTextureUtil.getTextureRegion(qrc.tex, qrc.uv);
-        if (tex == null) {
+        if (tex == null || tex.getTexture().getTextureObjectHandle() == 0) {
             RenderLog.warn("Skip drawing quad; backing texture is null: {}", qrc.tex);
             return;
         }

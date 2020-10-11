@@ -29,7 +29,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
-    private ResourceStoreCache<FilePath, T> cache;
+    private LoadingResourceStoreCache cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
         super(LoggerFactory.getLogger("LoadingResourceStore<" + type.getSimpleName() + ">"));
@@ -37,7 +37,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
         this.selfId = selfId;
         this.assetType = Checks.checkNotNull(type);
 
-        cache = new Cache(new ResourceStoreCacheConfig<>());
+        cache = new LoadingResourceStoreCache(new ResourceStoreCacheConfig<>());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
      * Request a preload of the given resource.
      */
     public void preload(FilePath absolutePath) {
-        cache.preload(absolutePath);
+        startLoading(absolutePath, "preload");
     }
 
     public static DurationLogger startLoadDurationLogger(Logger logger) {
@@ -106,19 +106,8 @@ public class LoadingResourceStore<T> extends ResourceStore {
      * @return A resource wrapper pointing to the resource, or {@code null} if the resource couldn't be loaded.
      */
     public @Nullable IResource<T> get(FilePath absolutePath) {
-        Ref<T> entry = getEntry(absolutePath);
-        if (entry == null) {
-            return null;
-        }
-
-        FileResource<T> resource = new FileResource<>(selfId, absolutePath);
-        resource.set(entry);
-        return resource;
-    }
-
-    protected @Nullable Ref<T> getEntry(FilePath absolutePath) {
         try {
-            return cache.getEntry(absolutePath);
+            return cache.get(absolutePath);
         } catch (ExecutionException e) {
             loadError(absolutePath, e.getCause());
             return null;
@@ -135,23 +124,23 @@ public class LoadingResourceStore<T> extends ResourceStore {
         LOG.info("{}.setCacheConfig(maxWeight={})", getClass().getSimpleName(), config.getMaximumWeight());
 
         // Init a new cache with the new config
-        cache = new Cache(config);
+        cache = new LoadingResourceStoreCache(config);
     }
 
-    protected final ResourceStoreCache<FilePath, T> getCache() {
+    protected final ResourceStoreCache<FilePath, ? extends IResource<T>> getCache() {
         return cache;
     }
 
-    private final class Cache extends ResourceStoreCache<FilePath, T> {
+    private final class LoadingResourceStoreCache extends ResourceStoreCache<FilePath, FileResource<T>> {
 
-        public Cache(ResourceStoreCacheConfig<T> config) {
-            super(config);
+        public LoadingResourceStoreCache(ResourceStoreCacheConfig<T> config) {
+            super(config.map(w -> new ResourceWeigher<>(w)));
         }
 
         @Override
-        public T doLoad(FilePath absolutePath) throws IOException {
+        public FileResource<T> doLoad(FilePath absolutePath) throws IOException {
             try {
-                return loadResource(absolutePath);
+                return new FileResource<>(selfId, absolutePath, loadResource(absolutePath));
             } catch (RuntimeException re) {
                 loadError(absolutePath, re);
                 throw new IOException("Error loading file: " + absolutePath, re);
@@ -159,17 +148,13 @@ public class LoadingResourceStore<T> extends ResourceStore {
         }
 
         @Override
-        protected void doPreload(FilePath absolutePath) {
-            startLoading(absolutePath, "Start preload");
-        }
-
-        @Override
-        protected void doUnload(FilePath absolutePath, @Nullable T value) {
+        protected void doUnload(FilePath absolutePath, FileResource<T> value) {
             AssetManager am = assetManager.get();
 
             String pathString = absolutePath.toString();
             if (am.isLoaded(pathString)) {
                 LOG.debug("Unloading resource: {}", pathString);
+                value.invalidate();
                 am.unload(pathString);
             }
         }

@@ -93,7 +93,7 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
      * Returns a string representation of the state of the internal texture load cache.
      */
     public String getCacheStatus() {
-        ResourceStoreCache<FilePath, Texture> cache = getCache();
+        ResourceStoreCache<?, ?> cache = getCache();
         return StringUtil.formatRoot("%s/%s",
                 StringUtil.formatMemoryAmount(cache.estimateWeight()),
                 StringUtil.formatMemoryAmount(cache.getMaximumWeight()));

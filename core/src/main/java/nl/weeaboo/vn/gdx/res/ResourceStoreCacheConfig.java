@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.gdx.res;
 
+import com.google.common.base.Function;
+
 import nl.weeaboo.common.Checks;
 
 /**
@@ -9,6 +11,16 @@ public final class ResourceStoreCacheConfig<T> {
 
     private IWeigher<T> weigher = new DefaultWeigher<>();
     private int maximumWeight = 20;
+
+    /**
+     * Returns an equivalent config for a different resource type.
+     */
+    <D> ResourceStoreCacheConfig<D> map(Function<IWeigher<T>, IWeigher<D>> weigherMapper) {
+        ResourceStoreCacheConfig<D> result = new ResourceStoreCacheConfig<>();
+        result.setWeigher(weigherMapper.apply(weigher));
+        result.setMaximumWeight(maximumWeight);
+        return result;
+    }
 
     /**
      * The weigher assigns a relative size to cached entries.
