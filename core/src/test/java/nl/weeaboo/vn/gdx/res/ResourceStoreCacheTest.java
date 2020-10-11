@@ -28,16 +28,11 @@ public final class ResourceStoreCacheTest {
      */
     @Test
     public void testClear() throws ExecutionException {
-        cache.get("preload-and-load");
-
-        // TODO: This was removed
-        // cache.consumeUnloadCount(1); // Loading an entry invalidates the preloader entry
-
         cache.get("load");
 
-        // Clearing the cache unloads the 'preload' from the preloader cache, and the two entries from the load cache
+        // Clearing the cache unloads the two entries from the load cache
         cache.clear();
-        cache.consumeUnloadCount(3);
+        cache.consumeUnloadCount(1);
     }
 
     @Test
