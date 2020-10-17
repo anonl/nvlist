@@ -16,6 +16,10 @@ final class FileResource<T> extends AbstractResource<T> {
     private final StaticRef<? extends LoadingResourceStore<T>> store;
     private final FilePath filename;
 
+    /**
+     * This is a non-serializable reference to a cache entry in the resource store. When the cache entry is
+     * cleared, the ref is marked invalid by the resource store. A new ref must then be obtained.
+     */
     private @Nullable Ref<T> ref;
 
     FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename, @Nullable Ref<T> ref) {
@@ -35,10 +39,6 @@ final class FileResource<T> extends AbstractResource<T> {
             return null;
         }
         return ref.get();
-    }
-
-    void invalidate() {
-        ref = null;
     }
 
     @Override

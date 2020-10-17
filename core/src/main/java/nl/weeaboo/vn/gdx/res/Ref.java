@@ -5,11 +5,12 @@ import javax.annotation.Nullable;
 /**
  * Invalidatable reference.
  */
+// Unlike IResource, this class isn't serializable.
 final class Ref<T> {
 
     private @Nullable T referent;
 
-    public Ref(@Nullable T referent) {
+    Ref(@Nullable T referent) {
         this.referent = referent;
     }
 
