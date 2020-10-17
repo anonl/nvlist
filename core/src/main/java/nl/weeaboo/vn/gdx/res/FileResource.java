@@ -7,7 +7,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
 /**
- * (Re)loadable resource.
+ * (Re)loadable file-based resource.
  */
 final class FileResource<T> extends AbstractResource<T> {
 
@@ -16,27 +16,29 @@ final class FileResource<T> extends AbstractResource<T> {
     private final StaticRef<? extends LoadingResourceStore<T>> store;
     private final FilePath filename;
 
-    private transient @Nullable T value;
+    private @Nullable Ref<T> ref;
 
-    public FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename, T value) {
+    FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename, @Nullable Ref<T> ref) {
         this.store = Checks.checkNotNull(store);
         this.filename = Checks.checkNotNull(filename);
-        this.value = value;
+        this.ref = ref;
     }
 
     @Override
     public @Nullable T get() {
-        T result = value;
-        if (result == null) {
+        if (ref == null || ref.get() == null) {
             // Attempt to (re)load value
-            result = store.get().loadResource(filename);
-            value = result;
+            ref = store.get().getValueRef(filename);
         }
-        return result;
+
+        if (ref == null) {
+            return null;
+        }
+        return ref.get();
     }
 
     void invalidate() {
-        value = null;
+        ref = null;
     }
 
     @Override

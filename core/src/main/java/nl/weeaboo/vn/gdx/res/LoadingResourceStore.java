@@ -1,6 +1,8 @@
 package nl.weeaboo.vn.gdx.res;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
@@ -29,6 +31,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
     private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
     private final Class<T> assetType;
 
+    private final Set<FilePath> loading = new HashSet<>();
     private LoadingResourceStoreCache cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
@@ -52,44 +55,64 @@ public class LoadingResourceStore<T> extends ResourceStore {
         startLoading(absolutePath, "preload");
     }
 
+    /**
+     * Returns the current loading state of the resource with the given name.
+     */
+    protected final ELoadState getLoadState(FilePath absolutePath) {
+        AssetManager am = assetManager.get();
+        if (am.isLoaded(absolutePath.toString())) {
+            loading.remove(absolutePath); // Remove stale entry if one exists
+            return ELoadState.LOADED;
+        } else if (loading.contains(absolutePath)) {
+            return ELoadState.PRELOADING;
+        } else {
+            loading.remove(absolutePath); // Remove stale entry if one exists
+            return ELoadState.UNLOADED;
+        }
+    }
+
+    private void startLoading(FilePath absolutePath, String message) {
+        if (getLoadState(absolutePath) == ELoadState.UNLOADED) {
+            LOG.debug("{}: {}", message, absolutePath);
+
+            loading.add(absolutePath);
+
+            AssetManager am = assetManager.get();
+            am.load(absolutePath.toString(), assetType, getLoadParams(absolutePath));
+        }
+    }
+
     public static DurationLogger startLoadDurationLogger(Logger logger) {
         DurationLogger dl = DurationLogger.createStarted(logger);
         dl.setInfoLimit(Duration.fromMillis(32)); // 2 frames @ 60Hz
         return dl;
     }
 
+    /** Loads the resource directly, skipping the resource cache. */
     protected T loadResource(FilePath absolutePath) {
         DurationLogger dl = startLoadDurationLogger(LOG);
 
         AssetManager am = assetManager.get();
 
         // Finish loading resource
-        String pathString = absolutePath.toString();
-        boolean alreadyLoaded = am.isLoaded(pathString);
-        if (!alreadyLoaded) {
+        ELoadState loadState = getLoadState(absolutePath);
+        if (loadState == ELoadState.UNLOADED) {
             startLoading(absolutePath, "Start loading");
-            am.finishLoadingAsset(pathString);
         }
+
+        String pathString = absolutePath.toString();
+        am.finishLoadingAsset(pathString);
+        loading.remove(absolutePath);
+
         T resource = am.get(pathString);
 
-        if (alreadyLoaded) {
+        if (loadState == ELoadState.LOADED) {
             dl.logDuration("Loading resource (preloaded) '{}'", absolutePath);
         } else {
             dl.logDuration("Loading resource (cache miss) '{}'", absolutePath);
         }
 
         return resource;
-    }
-
-    private void startLoading(FilePath absolutePath, String message) {
-        AssetManager am = assetManager.get();
-        String pathString = absolutePath.toString();
-
-        if (!am.isLoaded(pathString)) {
-            LOG.debug("{}: {}", message, absolutePath);
-
-            am.load(pathString, assetType, getLoadParams(absolutePath));
-        }
     }
 
     /**
@@ -105,7 +128,11 @@ public class LoadingResourceStore<T> extends ResourceStore {
      *
      * @return A resource wrapper pointing to the resource, or {@code null} if the resource couldn't be loaded.
      */
-    public @Nullable IResource<T> get(FilePath absolutePath) {
+    public @Nullable IResource<T> getResource(FilePath absolutePath) {
+        return new FileResource<>(selfId, absolutePath, getValueRef(absolutePath));
+    }
+
+    @Nullable Ref<T> getValueRef(FilePath absolutePath) {
         try {
             return cache.get(absolutePath);
         } catch (ExecutionException e) {
@@ -127,20 +154,24 @@ public class LoadingResourceStore<T> extends ResourceStore {
         cache = new LoadingResourceStoreCache(config);
     }
 
-    protected final ResourceStoreCache<FilePath, ? extends IResource<T>> getCache() {
+    protected final ResourceStoreCache<FilePath, ?> getCache() {
         return cache;
     }
 
-    private final class LoadingResourceStoreCache extends ResourceStoreCache<FilePath, FileResource<T>> {
+    private enum ELoadState {
+        UNLOADED, PRELOADING, LOADED;
+    }
+
+    private final class LoadingResourceStoreCache extends ResourceStoreCache<FilePath, Ref<T>> {
 
         public LoadingResourceStoreCache(ResourceStoreCacheConfig<T> config) {
-            super(config.map(w -> new ResourceWeigher<>(w)));
+            super(config.map(w -> new RefWeigher<>(w)));
         }
 
         @Override
-        public FileResource<T> doLoad(FilePath absolutePath) throws IOException {
+        public Ref<T> doLoad(FilePath absolutePath) throws IOException {
             try {
-                return new FileResource<>(selfId, absolutePath, loadResource(absolutePath));
+                return new Ref<>(loadResource(absolutePath));
             } catch (RuntimeException re) {
                 loadError(absolutePath, re);
                 throw new IOException("Error loading file: " + absolutePath, re);
@@ -148,16 +179,18 @@ public class LoadingResourceStore<T> extends ResourceStore {
         }
 
         @Override
-        protected void doUnload(FilePath absolutePath, FileResource<T> value) {
+        protected void doUnload(FilePath absolutePath, Ref<T> ref) {
             AssetManager am = assetManager.get();
 
             String pathString = absolutePath.toString();
             if (am.isLoaded(pathString)) {
                 LOG.debug("Unloading resource: {}", pathString);
-                value.invalidate();
+                ref.invalidate();
                 am.unload(pathString);
             }
         }
     }
+
+
 
 }

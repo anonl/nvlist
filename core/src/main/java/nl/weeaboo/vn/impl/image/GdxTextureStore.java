@@ -94,9 +94,10 @@ public final class GdxTextureStore extends LoadingResourceStore<Texture> {
      */
     public String getCacheStatus() {
         ResourceStoreCache<?, ?> cache = getCache();
-        return StringUtil.formatRoot("%s/%s",
-                StringUtil.formatMemoryAmount(cache.estimateWeight()),
-                StringUtil.formatMemoryAmount(cache.getMaximumWeight()));
+        long used = cache.estimateWeight();
+        long total = cache.getMaximumWeight();
+        return StringUtil.formatRoot("%s/%sM (%d%%)",
+                used >> 20, total >> 20, 100 * used / total);
     }
 
 }

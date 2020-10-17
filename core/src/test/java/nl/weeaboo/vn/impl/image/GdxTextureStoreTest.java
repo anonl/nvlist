@@ -40,7 +40,7 @@ public final class GdxTextureStoreTest {
     public void testLoadParams() {
         FilePath imagePath = FilePath.of("img/loadparams/loadparams.png");
 
-        IResource<Texture> texResource = texStore.get(imagePath);
+        IResource<Texture> texResource = texStore.getResource(imagePath);
         Assert.assertNotNull(texResource);
         Texture tex = texResource.get();
         Assert.assertNotNull(tex);

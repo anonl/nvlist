@@ -111,7 +111,7 @@ final class TextureStore implements ITextureStore {
         }
 
         FilePath absolutePath = resourceLoader.getAbsolutePath(relPath);
-        IResource<Texture> res = gdxTextureStore.get().get(absolutePath);
+        IResource<Texture> res = gdxTextureStore.get().getResource(absolutePath);
         if (res == null) {
             throw new FileNotFoundException("Texture resource not found: " + absolutePath);
         }

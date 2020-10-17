@@ -1,18 +1,18 @@
 package nl.weeaboo.vn.gdx.res;
 
 /**
- * Weigher for values wrapped in a {@link IResource}.
+ * Weigher for values wrapped in a {@link Ref}.
  */
-final class ResourceWeigher<T> implements IWeigher<IResource<T>> {
+final class RefWeigher<T> implements IWeigher<Ref<T>> {
 
     private final IWeigher<T> delegate;
 
-    ResourceWeigher(IWeigher<T> inner) {
+    RefWeigher(IWeigher<T> inner) {
         this.delegate = inner;
     }
 
     @Override
-    public int weigh(IResource<T> resource) {
+    public int weigh(Ref<T> resource) {
         T value = resource.get();
         if (value == null) {
             return 0;

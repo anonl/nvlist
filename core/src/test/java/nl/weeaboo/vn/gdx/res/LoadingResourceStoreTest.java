@@ -37,7 +37,7 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void testLoad() {
-        IResource<Pixmap> imgResource = cam.get(TEST_FILENAME);
+        IResource<Pixmap> imgResource = cam.getResource(TEST_FILENAME);
         Assert.assertNotNull(imgResource);
 
         Pixmap img = imgResource.get();
@@ -48,7 +48,7 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void testLoadException() {
-        Assert.assertNull(cam.get(ERROR_FILENAME));
+        Assert.assertNull(cam.getResource(ERROR_FILENAME));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void testInvalidateCache() {
-        IResource<Pixmap> imgResource = cam.get(TEST_FILENAME);
+        IResource<Pixmap> imgResource = cam.getResource(TEST_FILENAME);
         Assert.assertNotNull(imgResource);
         Pixmap img1 = imgResource.get();
         Assert.assertNotNull(img1);
