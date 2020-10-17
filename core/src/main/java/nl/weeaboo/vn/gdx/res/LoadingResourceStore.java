@@ -17,6 +17,7 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.impl.core.DurationLogger;
+import nl.weeaboo.vn.impl.core.LruSet;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
@@ -32,6 +33,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
     private final Class<T> assetType;
 
     private final Set<FilePath> loading = new HashSet<>();
+    private final LruSet<FilePath> invalid = new LruSet<>(128);
     private LoadingResourceStoreCache cache;
 
     public LoadingResourceStore(StaticRef<? extends LoadingResourceStore<T>> selfId, Class<T> type) {
@@ -46,13 +48,19 @@ public class LoadingResourceStore<T> extends ResourceStore {
     @Override
     public void clear() {
         cache.clear();
+        invalid.clear();
     }
 
     /**
      * Request a preload of the given resource.
      */
     public void preload(FilePath absolutePath) {
-        startLoading(absolutePath, "preload");
+        ELoadState loadState = getLoadState(absolutePath);
+        if (loadState == ELoadState.ERROR) {
+            LOG.debug("Blocked preload of broken resource: {}", absolutePath);
+        } else if (loadState == ELoadState.UNLOADED) {
+            startLoading(absolutePath, "preload");
+        }
     }
 
     /**
@@ -63,6 +71,9 @@ public class LoadingResourceStore<T> extends ResourceStore {
         if (am.isLoaded(absolutePath.toString())) {
             loading.remove(absolutePath); // Remove stale entry if one exists
             return ELoadState.LOADED;
+        } else if (invalid.contains(absolutePath)) {
+            loading.remove(absolutePath); // Remove stale entry if one exists
+            return ELoadState.UNLOADED;
         } else if (loading.contains(absolutePath)) {
             return ELoadState.PRELOADING;
         } else {
@@ -72,14 +83,12 @@ public class LoadingResourceStore<T> extends ResourceStore {
     }
 
     private void startLoading(FilePath absolutePath, String message) {
-        if (getLoadState(absolutePath) == ELoadState.UNLOADED) {
-            LOG.debug("{}: {}", message, absolutePath);
+        LOG.debug("{}: {}", message, absolutePath);
 
-            loading.add(absolutePath);
+        loading.add(absolutePath);
 
-            AssetManager am = assetManager.get();
-            am.load(absolutePath.toString(), assetType, getLoadParams(absolutePath));
-        }
+        AssetManager am = assetManager.get();
+        am.load(absolutePath.toString(), assetType, getLoadParams(absolutePath));
     }
 
     public static DurationLogger startLoadDurationLogger(Logger logger) {
@@ -92,19 +101,22 @@ public class LoadingResourceStore<T> extends ResourceStore {
     protected T loadResource(FilePath absolutePath) {
         DurationLogger dl = startLoadDurationLogger(LOG);
 
-        AssetManager am = assetManager.get();
-
-        // Finish loading resource
         ELoadState loadState = getLoadState(absolutePath);
-        if (loadState == ELoadState.UNLOADED) {
+        if (loadState == ELoadState.ERROR) {
+            throw new IllegalStateException("Refusing to load broken resource " + absolutePath);
+        } else if (loadState == ELoadState.UNLOADED) {
             startLoading(absolutePath, "Start loading");
         }
 
+        // Finish loading resource
+        AssetManager am = assetManager.get();
         String pathString = absolutePath.toString();
         am.finishLoadingAsset(pathString);
         loading.remove(absolutePath);
 
         T resource = am.get(pathString);
+
+        invalid.remove(absolutePath);
 
         if (loadState == ELoadState.LOADED) {
             dl.logDuration("Loading resource (preloaded) '{}'", absolutePath);
@@ -129,16 +141,29 @@ public class LoadingResourceStore<T> extends ResourceStore {
      * @return A resource wrapper pointing to the resource, or {@code null} if the resource couldn't be loaded.
      */
     public @Nullable IResource<T> getResource(FilePath absolutePath) {
-        return new FileResource<>(selfId, absolutePath, getValueRef(absolutePath));
+        Ref<T> valueRef = getValueRef(absolutePath);
+        if (valueRef == null) {
+            return null; // Load error
+        }
+        return new FileResource<>(selfId, absolutePath, valueRef);
     }
 
     @Nullable Ref<T> getValueRef(FilePath absolutePath) {
         try {
             return cache.get(absolutePath);
         } catch (ExecutionException e) {
-            loadError(absolutePath, e.getCause());
+            // Log load error cause once per resource
+            if (invalid.add(absolutePath)) {
+                loadError(absolutePath, e.getCause());
+            }
             return null;
         }
+    }
+
+    @Override
+    protected void loadError(FilePath path, Throwable cause) {
+        invalid.add(path);
+        super.loadError(path, cause);
     }
 
     /**
@@ -159,7 +184,7 @@ public class LoadingResourceStore<T> extends ResourceStore {
     }
 
     private enum ELoadState {
-        UNLOADED, PRELOADING, LOADED;
+        UNLOADED, PRELOADING, LOADED, ERROR;
     }
 
     private final class LoadingResourceStoreCache extends ResourceStoreCache<FilePath, Ref<T>> {
@@ -173,7 +198,6 @@ public class LoadingResourceStore<T> extends ResourceStore {
             try {
                 return new Ref<>(loadResource(absolutePath));
             } catch (RuntimeException re) {
-                loadError(absolutePath, re);
                 throw new IOException("Error loading file: " + absolutePath, re);
             }
         }

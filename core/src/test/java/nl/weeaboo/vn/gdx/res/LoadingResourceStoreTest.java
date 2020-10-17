@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.gdx.res;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -48,7 +49,14 @@ public class LoadingResourceStoreTest {
 
     @Test
     public void testLoadException() {
+        cam.consumeLoadErrorCount(0);
+
         Assert.assertNull(cam.getResource(ERROR_FILENAME));
+        cam.consumeLoadErrorCount(1);
+
+        // A LRU set is used to throttle load errors. Resource loads throwing an exception aren't retried.
+        Assert.assertNull(cam.getResource(ERROR_FILENAME));
+        cam.consumeLoadErrorCount(0); // No load error
     }
 
     @Test
@@ -92,6 +100,8 @@ public class LoadingResourceStoreTest {
 
     private static class PixmapResourceStore extends LoadingResourceStore<Pixmap> {
 
+        private final AtomicInteger loadErrorCount = new AtomicInteger();
+
         public PixmapResourceStore(StaticRef<PixmapResourceStore> selfId) {
             super(selfId, Pixmap.class);
         }
@@ -105,6 +115,16 @@ public class LoadingResourceStoreTest {
             return super.loadResource(absolutePath);
         }
 
+        @Override
+        protected void loadError(FilePath path, Throwable cause) {
+            loadErrorCount.incrementAndGet();
+
+            super.loadError(path, cause);
+        }
+
+        void consumeLoadErrorCount(int expected) {
+            Assert.assertEquals(expected, loadErrorCount.getAndSet(0));
+        }
     }
 
 }
