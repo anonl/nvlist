@@ -77,9 +77,9 @@ abstract class AbstractEnvironment implements IEnvironment {
 
     @Override
     public void clearCaches() {
-        StaticEnvironment.TEXTURE_STORE.get().clear();
-        StaticEnvironment.SHADER_STORE.get().clear();
-        StaticEnvironment.FONT_STORE.get().clear();
+        for (IModule module : getModules()) {
+            module.clearCaches();
+        }
     }
 
 }

@@ -23,6 +23,7 @@ import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.ResolutionFolderSelector.ResolutionPath;
 import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
@@ -190,6 +191,15 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
         resourceLoader.setImageResolution(selected.folder, selected.resolution);
         texStore.clear();
+    }
+
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
+
+        StaticEnvironment.TEXTURE_STORE.get().clear();
+        StaticEnvironment.SHADER_STORE.get().clear();
+        StaticEnvironment.FONT_STORE.get().clear();
     }
 
 }

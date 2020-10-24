@@ -126,14 +126,14 @@ final class TextureStore implements ITextureStore {
                 IImageSubRect subRect = imageDef.findSubRect(resourceId.getSubId());
                 if (subRect != null) {
                     LOG.debug("Load image sub-rect: {}: {}", resourceId, subRect.getArea());
-                    return new GdxTexture(new SubTextureResource(res, subRect.getArea()), scale, scale);
+                    return new GdxTexture(new SubTextureResource(resourceId, res, subRect.getArea()), scale, scale);
                 } else {
                     LOG.warn("Image definition sub-rect not found: {}", resourceId);
                     throw new FileNotFoundException("Texture sub-rect not found: " + resourceId);
                 }
             }
         }
-        return new GdxTexture(new SubTextureResource(res, null), scale, scale);
+        return new GdxTexture(new SubTextureResource(resourceId, res, null), scale, scale);
     }
 
     public static DurationLogger startLoadDurationLogger(Logger logger) {
@@ -178,13 +178,15 @@ final class TextureStore implements ITextureStore {
 
     private static final class SubTextureResource extends TransformedResource<Texture, TextureRegion> {
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 2L;
 
+        private final ResourceId resourceId;
         private final @Nullable Area subRect;
 
-        public SubTextureResource(IResource<Texture> tex, @Nullable Area subRect) {
+        public SubTextureResource(ResourceId resourceId, IResource<Texture> tex, @Nullable Area subRect) {
             super(tex);
 
+            this.resourceId = resourceId;
             this.subRect = subRect;
         }
 
@@ -195,6 +197,11 @@ final class TextureStore implements ITextureStore {
             } else {
                 return GdxTextureUtil.newGdxTextureRegion(original, subRect);
             }
+        }
+
+        @Override
+        public String toString() {
+            return "<" + resourceId + ">";
         }
 
     }

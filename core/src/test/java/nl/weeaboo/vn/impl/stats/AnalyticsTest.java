@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.impl.stats;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,14 +54,19 @@ public final class AnalyticsTest {
         analytics.save(sfw, savePath);
         analytics.load(sfw, savePath);
 
-        // Currently, only images are preloaded
-        assertPreloads("x.lvn:1", IMAGE);
+        // Currently, only images and sounds are preloaded
+        assertPreloads("x.lvn:1", IMAGE, SOUND);
     }
 
     private void assertPreloads(String lvnFileLine, ResourceId... expectedPreloads) {
         analytics.handlePreloads(FileLine.fromString(lvnFileLine));
+
+        List<FilePath> actualPreloads = new ArrayList<>();
+        for (MediaType type : MediaType.values()) {
+            actualPreloads.addAll(preloader.consumePreloaded(type));
+        }
         Assert.assertEquals(Stream.of(expectedPreloads).map(ResourceId::getFilePath).collect(Collectors.toList()),
-                preloader.consumePreloadedImages());
+                actualPreloads);
     }
 
     private void logLoad(ResourceId id, List<String> stackTrace) {

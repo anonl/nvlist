@@ -40,7 +40,7 @@ final class Analytics implements IAnalytics {
     private static final long serialVersionUID = StatsImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Analytics.class);
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final int LOOKAHEAD_LINES = 20;
 
     private final IEnvironment env;
@@ -88,8 +88,11 @@ final class Analytics implements IAnalytics {
     @VisibleForTesting
     void handlePreloads(FileLine lvnLine) {
         for (LineStats lineStats : getUpcomingLines(lvnLine)) {
-            for (FilePath imagePath : lineStats.imagesLoaded) {
-                preloader.preloadImage(imagePath);
+            for (FilePath path : lineStats.imagesLoaded) {
+                preloader.preloadImage(path);
+            }
+            for (FilePath path : lineStats.soundsLoaded) {
+                preloader.preloadSound(path);
             }
         }
     }
@@ -188,6 +191,7 @@ final class Analytics implements IAnalytics {
         private static final long serialVersionUID = StatsImpl.serialVersionUID;
 
         private final Set<FilePath> imagesLoaded = Sets.newHashSet();
+        private final Set<FilePath> soundsLoaded = Sets.newHashSet();
 
         // No-arg constructor is required by Externalizable interface
         public LineStats() {
@@ -198,14 +202,21 @@ final class Analytics implements IAnalytics {
             FilePath path = ResourceId.extractFilePath(info.getPath().toString());
             if (info.getMediaType() == MediaType.IMAGE) {
                 imagesLoaded.add(path);
+            } else if (info.getMediaType() == MediaType.SOUND) {
+                soundsLoaded.add(path);
             }
         }
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeInt(imagesLoaded.size());
-            for (FilePath imagePath : imagesLoaded) {
-                out.writeUTF(imagePath.toString());
+            for (FilePath path : imagesLoaded) {
+                out.writeUTF(path.toString());
+            }
+
+            out.writeInt(soundsLoaded.size());
+            for (FilePath path : soundsLoaded) {
+                out.writeUTF(path.toString());
             }
         }
 
@@ -214,6 +225,11 @@ final class Analytics implements IAnalytics {
             int imagesLoadedSize = in.readInt();
             for (int n = 0; n < imagesLoadedSize; n++) {
                 imagesLoaded.add(FilePath.of(in.readUTF()));
+            }
+
+            int soundsLoadedSize = in.readInt();
+            for (int n = 0; n < soundsLoadedSize; n++) {
+                soundsLoaded.add(FilePath.of(in.readUTF()));
             }
         }
 

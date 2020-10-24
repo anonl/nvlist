@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.Duration;
 import nl.weeaboo.vn.core.IDestructible;
+import nl.weeaboo.vn.impl.core.DurationLogger;
 
 /**
  * Loads and caches resources.
@@ -35,6 +37,12 @@ public abstract class ResourceStore implements IDestructible {
 
     protected void loadError(FilePath path, Throwable cause) {
         log.info("Load error: {}", path, cause);
+    }
+
+    public static DurationLogger startLoadDurationLogger(Logger logger) {
+        DurationLogger dl = DurationLogger.createStarted(logger);
+        dl.setInfoLimit(Duration.fromMillis(32)); // 2 frames @ 60Hz
+        return dl;
     }
 
 }
