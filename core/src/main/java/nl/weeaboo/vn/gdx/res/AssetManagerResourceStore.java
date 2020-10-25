@@ -128,7 +128,7 @@ public class AssetManagerResourceStore<T> extends ResourceStore {
             return ELoadState.LOADED;
         } else if (invalid.contains(absolutePath)) {
             loading.remove(absolutePath); // Remove stale entry if one exists
-            return ELoadState.UNLOADED;
+            return ELoadState.ERROR;
         } else if (loading.contains(absolutePath)) {
             return ELoadState.PRELOADING;
         } else {
