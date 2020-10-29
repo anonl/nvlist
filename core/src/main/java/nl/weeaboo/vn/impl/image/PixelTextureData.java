@@ -67,11 +67,8 @@ public final class PixelTextureData implements IGdxTextureData {
 
     /**
      * The backing pixmap for this texture data object. Uses premultiplied alpha.
-     *
-     * @deprecated This method returns a direct reference to a disposable value and is therefore dangerous.
      */
-    @Deprecated
-    public Pixmap getPixels() {
+    public Pixmap borrowPixels() {
         return pixels;
     }
 
