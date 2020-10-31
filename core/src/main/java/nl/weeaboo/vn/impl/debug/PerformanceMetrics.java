@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.RateLimiter;
 
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -23,9 +24,12 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
 
     private double logicFps;
 
-    private boolean cpuLoadError;
+    /**
+     * Checking CPU load can be very slow depending on the JVM used, so rate limit the calls and return a
+     * cached result if called too often.
+     */
+    private final RateLimiter cpuLoadRateLimiter = RateLimiter.create(.2);
     private double cpuLoad;
-    private long lastCpuLoadCheck;
 
     public PerformanceMetrics() {
     }
@@ -38,10 +42,7 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
             lines.add(StringUtil.formatRoot("FPS: %.2f (logic)", logicFps));
         }
         lines.add(StringUtil.formatRoot("CPU: %s", getCpuLoadText()));
-        lines.add(String.format("Memory use (heap): %s",
-                StringUtil.formatMemoryAmount(Gdx.app.getJavaHeap())));
-        lines.add(StringUtil.formatRoot("Memory use (non-heap): %s",
-                StringUtil.formatMemoryAmount(Gdx.app.getNativeHeap())));
+        lines.add(String.format("Memory use (managed): %sM", Gdx.app.getJavaHeap() >> 20));
 
         GdxTextureStore texStore = StaticEnvironment.TEXTURE_STORE.getIfPresent();
         if (texStore != null) {
@@ -62,46 +63,33 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
 
     @Override
     public double getCpuLoad() {
-        if (cpuLoadError) {
-            return Double.NaN;
-        }
-
-        /*
-         * Checking CPU load can be very slow depending on the JVM used, so rate limit the calls and return a
-         * cached result if called too often.
-         */
-        long now = System.nanoTime();
-        if (now - lastCpuLoadCheck < 5_000_000_000L) {
+        if (!cpuLoadRateLimiter.tryAcquire()) {
             return cpuLoad;
         }
 
-        lastCpuLoadCheck = now;
         try {
-            // java.lang.management isn't supported on Android
-            @SuppressWarnings("LiteralClassName")
-            Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
-            Object osBean = managementFactory.getMethod("getOperatingSystemMXBean").invoke(null);
+            Object osBean = getMXBean("OperatingSystemMXBean");
             Method method = osBean.getClass().getMethod("getProcessCpuLoad");
             method.setAccessible(true);
             cpuLoad = ((Number)method.invoke(osBean)).doubleValue();
         } catch (Exception e) {
             LOG.info("Error obtaining CPU load (method not supported): " + e);
-            setCpuLoadError();
-        } catch (NoClassDefFoundError e) {
-            LOG.info("Error obtaining CPU load: Required method not implemented on this platform");
-            setCpuLoadError();
+            cpuLoadRateLimiter.setRate(1e-3);
+            cpuLoad = Double.NaN;
         }
         return cpuLoad;
-    }
-
-    private void setCpuLoadError() {
-        cpuLoadError = true;
-        cpuLoad = Double.NaN;
     }
 
     /** Internal 'game logic' update rate */
     public void setLogicFps(double logicFps) {
         this.logicFps = logicFps;
+    }
+
+    private static Object getMXBean(String beanName) throws Exception {
+        // java.lang.management isn't supported on Android
+        @SuppressWarnings("LiteralClassName")
+        Class<?> managementFactory = Class.forName("java.lang.management.ManagementFactory");
+        return managementFactory.getMethod("get" + beanName).invoke(null);
     }
 
 }

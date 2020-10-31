@@ -6,6 +6,7 @@
 - NVList version number is now logged during startup.
 - fix: In the default settings screen, the + button didn't disable when already as max volume. Same goes for the - button and min volume.
 - fix: The default textlog didn't perform word-wrapping.
+- fix: Memory leak in font loader. Unused fonts would never be unloaded.
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).

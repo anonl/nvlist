@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Disposable;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
@@ -26,7 +25,6 @@ import nl.weeaboo.styledtext.gdx.GdxFont;
 import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
-import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
@@ -90,14 +88,6 @@ public final class GdxFontStore extends ResourceStore {
 
         GdxFont font = fontGenerator.load(file, ts);
         backing.addFont(font);
-
-        // Dispose native resources when font is no longer referenced.
-        GdxCleaner.get().register(font, new Disposable() {
-            @Override
-            public void dispose() {
-                font.dispose();
-            }
-        });
         return font;
     }
 
@@ -183,7 +173,7 @@ public final class GdxFontStore extends ResourceStore {
         protected void doUnload(CacheKey key, @Nullable GdxFont value) {
             /*
              * We can't dispose the font object here since it may be still be referenced directly by
-             * GdxFontInfo/GdxTextElement/...
+             * GdxFont/GdxTextElement/...
              */
             if (value != null) {
                 backing.removeFont(value);
