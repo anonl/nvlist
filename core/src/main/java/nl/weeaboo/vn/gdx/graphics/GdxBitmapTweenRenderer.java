@@ -123,7 +123,7 @@ public final class GdxBitmapTweenRenderer extends BitmapTweenRenderer {
         // Create remap texture
         int w = INTERPOLATOR_MAX + 1;
         int h = 1;
-        Pixmap pixmap = new Pixmap(w, h, Pixmap.Format.Intensity);
+        Pixmap pixmap = PixmapUtil.newUninitializedPixmap(w, h, Pixmap.Format.Intensity);
         try {
             ByteBuffer buf = pixmap.getPixels();
 

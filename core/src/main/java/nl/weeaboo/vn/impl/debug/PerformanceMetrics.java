@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.RateLimiter;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.GdxTextureStore;
 
@@ -42,12 +43,14 @@ public final class PerformanceMetrics implements IPerformanceMetrics {
             lines.add(StringUtil.formatRoot("FPS: %.2f (logic)", logicFps));
         }
         lines.add(StringUtil.formatRoot("CPU: %s", getCpuLoadText()));
-        lines.add(String.format("Memory use (managed): %sM", Gdx.app.getJavaHeap() >> 20));
+        lines.add(String.format("Memory (managed): %sM", Gdx.app.getJavaHeap() >> 20));
 
         GdxTextureStore texStore = StaticEnvironment.TEXTURE_STORE.getIfPresent();
         if (texStore != null) {
-            lines.add("Texture cache: " + texStore.getCacheStatus());
+            lines.add("Memory (textures): " + texStore.getCacheStatus());
         }
+
+        lines.add(String.format("Memory (other): %sM", NativeMemoryTracker.get().getTotalBytes() >> 20));
 
         return Joiner.on('\n').join(lines);
     }

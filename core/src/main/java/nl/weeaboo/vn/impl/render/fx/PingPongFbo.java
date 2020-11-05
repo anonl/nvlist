@@ -16,6 +16,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 final class PingPongFbo implements Disposable {
 
@@ -85,6 +86,7 @@ final class PingPongFbo implements Disposable {
             LOG.info("Create FBO: size={}x{}, format={}", size.w, size.h, format);
 
             result = new FrameBuffer(format, size.w, size.h, false);
+            NativeMemoryTracker.get().register(result, size.w * size.h * 4);
             fbos[currentIndex] = result;
         }
         return result;

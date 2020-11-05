@@ -125,20 +125,17 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         backBuffer = new HybridBackBuffer(vsize, viewports);
         inputAdapter = new GdxInputAdapter(viewports.getScreenViewport());
 
-        Novel novel;
         try {
-            novel = initNovel(prefs, createInput(inputAdapter));
+            initNovel(prefs, createInput(inputAdapter));
         } catch (InitException e) {
             throw new RuntimeException("Fatal error during init", e);
         }
-
-        final IEnvironment env = novel.getEnv();
 
         simulationRateLimiter = new SimulationRateLimiter();
         simulationRateLimiter.setSimulation(this, 60);
 
         sceneEnv = new Scene2dEnv(resourceFileSystem, viewports.getScene2dViewport());
-        osd = new Osd(env.getTextModule().getFontStore(), performanceMetrics);
+        osd = new Osd(performanceMetrics);
         debugControls = new DebugControls(sceneEnv);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(sceneEnv.getStage(), inputAdapter));
@@ -197,7 +194,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         disposeRenderer();
         backBuffer = DisposeUtil.dispose(backBuffer);
-        osd = DisposeUtil.dispose(osd);
 
         textureStore = Destructibles.destroy(textureStore);
         shaderStore = Destructibles.destroy(shaderStore);

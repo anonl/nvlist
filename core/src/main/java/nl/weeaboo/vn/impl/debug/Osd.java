@@ -3,7 +3,7 @@ package nl.weeaboo.vn.impl.debug;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.utils.Disposable;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -34,36 +34,19 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
-import nl.weeaboo.vn.text.ILoadingFontStore;
 import nl.weeaboo.vn.text.ITextRenderer;
 
 /**
  * On-screen display for debug mode (see {@link NovelPrefs#DEBUG}).
  */
-public final class Osd implements Disposable {
+public final class Osd {
 
     private final IPerformanceMetrics performanceMetrics;
-    private final ITextRenderer textRenderer;
 
     private boolean visible = false;
 
-    public Osd(ILoadingFontStore fontStore, IPerformanceMetrics perfMetrics) {
-        this(new TextRenderer(fontStore), perfMetrics);
-    }
-
-    public Osd(ITextRenderer textRenderer, IPerformanceMetrics perfMetrics) {
-        this.textRenderer = Checks.checkNotNull(textRenderer);
+    public Osd(IPerformanceMetrics perfMetrics) {
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
-
-        MutableTextStyle normalBuilder = new MutableTextStyle(TextUtil.DEFAULT_FONT_NAME, EFontStyle.PLAIN, 16);
-        normalBuilder.setShadowColor(0xFF000000);
-        normalBuilder.setShadowDx(.5f);
-        normalBuilder.setShadowDy(.5f);
-        textRenderer.setDefaultStyle(normalBuilder.immutableCopy());
-    }
-
-    @Override
-    public void dispose() {
     }
 
     /** Handle input and update internal state. */
@@ -79,9 +62,20 @@ public final class Osd implements Disposable {
 
     /** Renders the on-screen display to the screen. If not visible, this is a no-op. */
     public void render(Batch batch, IEnvironment env) {
+        render(batch, env, new TextRenderer(env.getTextModule().getFontStore()));
+    }
+
+    @VisibleForTesting
+    void render(Batch batch, IEnvironment env, ITextRenderer textRenderer) {
         if (!visible) {
             return;
         }
+
+        MutableTextStyle normalBuilder = new MutableTextStyle(TextUtil.DEFAULT_FONT_NAME, EFontStyle.PLAIN, 16);
+        normalBuilder.setShadowColor(0xFF000000);
+        normalBuilder.setShadowDx(.5f);
+        normalBuilder.setShadowDy(.5f);
+        textRenderer.setDefaultStyle(normalBuilder.immutableCopy());
 
         Dim vsize = env.getRenderEnv().getVirtualSize();
         int pad = Math.min(vsize.w, vsize.h) / 64;

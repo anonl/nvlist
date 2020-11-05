@@ -11,6 +11,7 @@ import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReaderOpts;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Loads {@link Pixmap} files.
@@ -50,7 +51,10 @@ public final class PixmapLoader {
             return JngReader.read(new ByteArrayInputStream(bytes, offset, length),
                     new JngReaderOpts());
         }
-        return new Pixmap(bytes, offset, length);
+
+        Pixmap pixmap = new Pixmap(bytes, offset, length);
+        NativeMemoryTracker.get().register(pixmap);
+        return pixmap;
     }
 
 }

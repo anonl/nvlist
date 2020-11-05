@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 final class PixelTextureDataIO {
 
@@ -29,7 +30,9 @@ final class PixelTextureDataIO {
         byte[] bytes = new byte[len];
         din.readFully(bytes);
 
-        return new Pixmap(bytes, 0, len);
+        Pixmap pixmap = new Pixmap(bytes, 0, len);
+        NativeMemoryTracker.get().register(pixmap);
+        return pixmap;
     }
 
 }

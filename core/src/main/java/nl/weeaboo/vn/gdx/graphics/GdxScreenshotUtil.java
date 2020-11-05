@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
@@ -26,6 +27,7 @@ public final class GdxScreenshotUtil {
      */
     public static Pixmap screenshot(Rect glRect) {
         Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
+        NativeMemoryTracker.get().register(pixmap);
         PixmapUtil.flipVertical(pixmap);
         return pixmap;
     }

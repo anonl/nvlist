@@ -10,6 +10,7 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Implementation of {@link IBackBuffer} where rendering is done directly to the back buffer.
@@ -23,6 +24,7 @@ public final class DirectBackBuffer implements IBackBuffer {
         this.viewports = Checks.checkNotNull(viewports);
 
         batch = new SpriteBatch();
+        NativeMemoryTracker.get().register(batch);
     }
 
     @Override

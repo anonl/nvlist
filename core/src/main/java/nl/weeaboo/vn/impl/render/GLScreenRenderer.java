@@ -25,6 +25,7 @@ import nl.weeaboo.vn.gdx.graphics.GLBlendMode;
 import nl.weeaboo.vn.gdx.graphics.GLMatrixStack;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
@@ -206,6 +207,8 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
                 triangleMesh.dispose();
             }
             triangleMesh = new Mesh(false, false, cols * 4, cols * 6, attrs);
+            NativeMemoryTracker.get().register(triangleMesh,
+                    triangleMesh.getMaxIndices() * triangleMesh.getMaxVertices() * triangleMesh.getVertexSize());
         }
 
         // Create an index buffer for a triangle strip

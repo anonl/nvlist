@@ -15,6 +15,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.vn.core.IDestructible;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
@@ -101,6 +102,7 @@ public final class ShaderStore implements IDestructible {
             shader.dispose();
             throw new IOException("Shader compilation error: " + errorMessage);
         }
+        NativeMemoryTracker.get().register(shader, 0); // TODO: How much memory does a shader take?
         return shader;
     }
 

@@ -3,26 +3,35 @@ package nl.weeaboo.vn.gdx.res;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
-import java.util.Iterator;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.google.common.collect.Iterables;
+import com.google.errorprone.annotations.concurrent.GuardedBy;
 
 import nl.weeaboo.common.Checks;
 
 /**
  * Calls the {@link Disposable#dispose()} on resources when they become eligible for garbage collection.
  */
+@ThreadSafe
 public final class GdxCleaner {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxCleaner.class);
 
     private static final GdxCleaner INSTANCE = new GdxCleaner();
 
+    private final Object stateLock = new Object();
+
+    @GuardedBy("stateLock")
     private final ReferenceQueue<Object> garbage = new ReferenceQueue<>();
+
+    @GuardedBy("stateLock")
     private final Array<Cleanable> registered = new Array<>(false, 8);
 
     private GdxCleaner() {
@@ -39,7 +48,9 @@ public final class GdxCleaner {
     public <T> void register(T referent, Disposable cleanup) {
         cleanUp();
 
-        registered.add(new Cleanable(referent, garbage, cleanup));
+        synchronized (stateLock) {
+            registered.add(new Cleanable(referent, garbage, cleanup));
+        }
     }
 
     /**
@@ -47,25 +58,24 @@ public final class GdxCleaner {
      * unregistered.
      */
     public int size() {
-        return registered.size;
+        synchronized (stateLock) {
+            return registered.size;
+        }
     }
 
     /** Garbage collect resources that are no longer referenced. */
     public void cleanUp() {
-        // Remove dead references
-        for (Iterator<Cleanable> itr = registered.iterator(); itr.hasNext(); ) {
-            Cleanable ref = itr.next();
-            if (ref.get() == null) {
-                itr.remove();
-            }
-        }
+        synchronized (stateLock) {
+            // Remove dead references
+            Iterables.removeIf(registered, ref -> ref.get() == null);
 
-        // Clean garbage
-        Reference<?> rawReference;
-        while ((rawReference = garbage.poll()) != null) {
-            Cleanable cleanable = (Cleanable)rawReference;
-            LOG.debug("Disposing resource: {}", cleanable);
-            cleanable.cleanup.dispose();
+            // Clean garbage
+            Reference<?> rawReference;
+            while ((rawReference = garbage.poll()) != null) {
+                Cleanable cleanable = (Cleanable)rawReference;
+                LOG.debug("Disposing resource: {}", cleanable);
+                cleanable.cleanup.dispose();
+            }
         }
     }
 

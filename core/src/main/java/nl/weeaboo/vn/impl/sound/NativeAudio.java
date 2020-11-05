@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.sound;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
@@ -83,7 +84,7 @@ class NativeAudio implements INativeAudio {
         } else {
             // TODO: Doesn't work on Desktop, unlike Android the completion listener is only called
             //       when the music ends, not on every loop.
-            m.setOnCompletionListener(new LoopEndListener());
+            m.setOnCompletionListener(new LoopEndListener(this));
         }
 
         loopsLeft.set(loops);
@@ -121,6 +122,7 @@ class NativeAudio implements INativeAudio {
             playing = false;
 
             m.stop();
+            m.setOnCompletionListener(null);
         }
     }
 
@@ -160,14 +162,30 @@ class NativeAudio implements INativeAudio {
         }
     }
 
-    private final class LoopEndListener implements Music.OnCompletionListener {
+    private static final class LoopEndListener implements Music.OnCompletionListener {
+
+        private final WeakReference<NativeAudio> nativeAudioRef;
+
+        LoopEndListener(NativeAudio nativeAudio) {
+            /*
+             * Use a weak reference here to avoid a memory leak. The use of GdxCleaner requires that Music
+             * contains no references to its parent NativeAudio. This LoopEndListener is set on the Music
+             * object which would cause such a reference.
+             */
+            this.nativeAudioRef = new WeakReference<>(nativeAudio);
+        }
 
         @Override
         public void onCompletion(Music music) {
-            int left = loopsLeft.decrementAndGet();
+            NativeAudio nativeAudio = nativeAudioRef.get();
+            if (nativeAudio == null) {
+                return; // We're already in the process of garbage collection
+            }
+
+            int left = nativeAudio.loopsLeft.decrementAndGet();
             if (left <= 0) {
                 LOG.debug("Audio all loops finished");
-                stop();
+                nativeAudio.stop();
             } else {
                 LOG.debug("Decrease music loops -> {}", left);
             }

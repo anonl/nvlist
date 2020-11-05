@@ -23,6 +23,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.gdx.graphics.GLBlendMode;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
@@ -154,6 +155,7 @@ public abstract class OffscreenRenderTask extends AsyncRenderTask implements IOf
             this.innerRect = innerRect;
 
             batch = new SpriteBatch();
+            NativeMemoryTracker.get().register(batch);
         }
 
         public void prepare() {
