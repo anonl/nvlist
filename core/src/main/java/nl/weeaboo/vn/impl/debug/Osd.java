@@ -16,6 +16,7 @@ import nl.weeaboo.styledtext.EFontStyle;
 import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.StyledText;
+import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.gdx.GdxFontUtil;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -42,11 +43,18 @@ import nl.weeaboo.vn.text.ITextRenderer;
 public final class Osd {
 
     private final IPerformanceMetrics performanceMetrics;
+    private final TextStyle defaultStyle;
 
     private boolean visible = false;
 
     public Osd(IPerformanceMetrics perfMetrics) {
         this.performanceMetrics = Checks.checkNotNull(perfMetrics);
+
+        MutableTextStyle normalBuilder = new MutableTextStyle(TextUtil.DEFAULT_FONT_NAME, EFontStyle.PLAIN, 16);
+        normalBuilder.setShadowColor(0xFF000000);
+        normalBuilder.setShadowDx(.5f);
+        normalBuilder.setShadowDy(.5f);
+        defaultStyle = normalBuilder.immutableCopy();
     }
 
     /** Handle input and update internal state. */
@@ -71,11 +79,7 @@ public final class Osd {
             return;
         }
 
-        MutableTextStyle normalBuilder = new MutableTextStyle(TextUtil.DEFAULT_FONT_NAME, EFontStyle.PLAIN, 16);
-        normalBuilder.setShadowColor(0xFF000000);
-        normalBuilder.setShadowDx(.5f);
-        normalBuilder.setShadowDy(.5f);
-        textRenderer.setDefaultStyle(normalBuilder.immutableCopy());
+        textRenderer.setDefaultStyle(defaultStyle);
 
         Dim vsize = env.getRenderEnv().getVirtualSize();
         int pad = Math.min(vsize.w, vsize.h) / 64;

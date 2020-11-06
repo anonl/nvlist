@@ -82,9 +82,12 @@ abstract class AbstractEnvironment implements IEnvironment {
         for (IModule module : getModules()) {
             module.clearCaches();
         }
-        GdxCleaner.get().cleanUp();
-        NativeMemoryTracker.get().cleanUp();
+
         System.gc();
+        GdxCleaner.get().cleanUp();
+
+        System.gc();
+        NativeMemoryTracker.get().cleanUp();
     }
 
 }
