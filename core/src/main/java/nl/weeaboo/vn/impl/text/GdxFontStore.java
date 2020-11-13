@@ -23,6 +23,7 @@ import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.gdx.GdxFont;
 import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
+import nl.weeaboo.styledtext.gdx.GdxFontRegistry;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
@@ -42,7 +43,7 @@ public final class GdxFontStore extends ResourceStore {
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);
 
     private final GdxFileSystem resourceFileSystem;
-    private final nl.weeaboo.styledtext.gdx.GdxFontRegistry backing;
+    private final GdxFontRegistry backing;
     private final FontCache cache;
     private final LruSet<FilePath> missingFonts = new LruSet<>(16);
 
@@ -51,7 +52,7 @@ public final class GdxFontStore extends ResourceStore {
 
         this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
 
-        backing = new nl.weeaboo.styledtext.gdx.GdxFontRegistry();
+        backing = new GdxFontRegistry();
         cache = new FontCache(new ResourceStoreCacheConfig<>());
     }
 
@@ -126,11 +127,12 @@ public final class GdxFontStore extends ResourceStore {
         }
 
         // Workaround for a bug in gdx-styledtext -- a null font name causes problems
-        MutableTextStyle mts = styleArg.mutableCopy();
-        if (styleArg.getFontName() == null) {
+        TextStyle style = styleArg;
+        if (style.getFontName() == null) {
+            MutableTextStyle mts = style.mutableCopy();
             mts.setFontName(TextUtil.DEFAULT_FONT_NAME);
+            style = mts.immutableCopy();
         }
-        TextStyle style = mts.immutableCopy();
 
         // Only attempt to load each font once
         if (!absoluteFontPath.equals(FilePath.empty()) && !missingFonts.contains(absoluteFontPath)) {

@@ -31,6 +31,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.impl.core.LruSet;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.stats.IAnalytics;
@@ -49,6 +50,8 @@ final class Analytics implements IAnalytics {
     // Transient because the actual state is stored in a separate (shared) file
     private transient Map<FileLine, LineStats> loadsPerLine;
 
+    private transient LruSet<FileLine> recentPreloads;
+
     public Analytics(IEnvironment env) {
         this(env, new AnalyticsPreloader(env));
     }
@@ -63,6 +66,7 @@ final class Analytics implements IAnalytics {
 
     private void initTransients() {
         loadsPerLine = Maps.newHashMap();
+        recentPreloads = new LruSet<>(10);
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -78,6 +82,7 @@ final class Analytics implements IAnalytics {
             for (IScriptThread thread : active.getScriptContext().getThreads()) {
                 List<String> stackTrace = thread.getStackTrace();
                 FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(stackTrace);
+                // Use recentPreloads as a rate-limiter to avoid preloading the same line over and over again
                 if (lvnLine != null) {
                     handlePreloads(lvnLine);
                 }
@@ -87,6 +92,12 @@ final class Analytics implements IAnalytics {
 
     @VisibleForTesting
     void handlePreloads(FileLine lvnLine) {
+        if (recentPreloads.add(lvnLine)) {
+            doHandlePreloads(lvnLine);
+        }
+    }
+
+    private void doHandlePreloads(FileLine lvnLine) {
         for (LineStats lineStats : getUpcomingLines(lvnLine)) {
             for (FilePath path : lineStats.imagesLoaded) {
                 preloader.preloadImage(path);

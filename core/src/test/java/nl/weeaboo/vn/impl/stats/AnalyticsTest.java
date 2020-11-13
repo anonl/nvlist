@@ -58,6 +58,21 @@ public final class AnalyticsTest {
         assertPreloads("x.lvn:1", IMAGE, SOUND);
     }
 
+    @Test
+    public void testPreloadsThrottled() {
+        logLoad(IMAGE, Arrays.asList("x.lvn:21"));
+        logLoad(SOUND, Arrays.asList("x.lvn:22"));
+
+        // Handle preloads for line 1 (looks 20 lines ahead)
+        assertPreloads("x.lvn:1", IMAGE);
+
+        // Because we're often at the same line for several seconds, as an optimization we only look for preloads once
+        assertPreloads("x.lvn:1");
+
+        // When the script moves to a new line, we check for preloads again
+        assertPreloads("x.lvn:2", IMAGE, SOUND);
+    }
+
     private void assertPreloads(String lvnFileLine, ResourceId... expectedPreloads) {
         analytics.handlePreloads(FileLine.fromString(lvnFileLine));
 
