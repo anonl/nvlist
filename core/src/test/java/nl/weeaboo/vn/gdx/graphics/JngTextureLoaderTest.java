@@ -23,7 +23,7 @@ public class JngTextureLoaderTest {
     private static final Logger LOG = LoggerFactory.getLogger(JngTextureLoaderTest.class);
 
     @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder(new File("build/temp"));
 
     private JngTestSuite testSuite;
     private AssetManager assetManager;

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import nl.weeaboo.vn.buildtools.file.TempFileProvider;
 public final class FfmpegEncoderTest {
 
     @Rule
-    public final TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder(new File("build/temp"));
 
     private TestFfmpegEncoder encoder;
 

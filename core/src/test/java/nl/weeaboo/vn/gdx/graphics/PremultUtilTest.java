@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.gdx.graphics;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
@@ -23,7 +24,7 @@ public final class PremultUtilTest {
     private static final Logger LOG = LoggerFactory.getLogger(PremultUtilTest.class);
 
     @Rule
-    public final TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder(new File("build/temp"));
 
     private final PixmapTester pixmapTester = new PixmapTester();
 

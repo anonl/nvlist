@@ -26,7 +26,7 @@ import nl.weeaboo.vn.gdx.HeadlessGdx;
 public abstract class AbstractGdxFileSystemTest {
 
     @Rule
-    public final TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder(new File("build/temp"));
 
     @BeforeClass
     public static void beforeAll() {
