@@ -136,6 +136,9 @@ allprojects {
         }
 
         test {
+            // Change temp dir (default doesn't work in GitHub actions when running on Windows)
+            systemProperty 'java.io.tmpdir', file("$buildDir/tmp")
+
             testLogging {
                 // showStandardStreams true
                 exceptionFormat = 'full'                
