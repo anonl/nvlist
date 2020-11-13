@@ -24,7 +24,7 @@ public abstract class OptimizerTest {
     private static final Logger LOG = LoggerFactory.getLogger(OptimizerTest.class);
 
     @Rule
-    public final TemporaryFolder tempFolder = new TemporaryFolder(new File("build/temp"));
+    public final TemporaryFolder tempFolder = new TemporaryFolder();
 
     private ProjectFolderConfig folderConfig;
 
