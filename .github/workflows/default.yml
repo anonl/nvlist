@@ -20,8 +20,10 @@ jobs:
     - uses: actions/setup-java@v1
       with: {java-version: 1.8}
     - uses: GabrielBB/xvfb-action@v1.4
-      if: runner.os != 'macOS'
+      if: runner.os == 'Linux'
       with: {run: ./gradlew check jacocoTestReport -PuiTest}
+    - run: ./gradlew check jacocoTestReport
+      if: runner.os == 'Windows'
     - run: ./gradlew check jacocoTestReport robovmArchive
       if: runner.os == 'macOS'
     - run: bash <(curl -s https://codecov.io/bash)
