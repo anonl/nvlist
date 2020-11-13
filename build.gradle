@@ -138,6 +138,7 @@ allprojects {
         test {
             testLogging {
                 // showStandardStreams true
+                exceptionFormat = 'full'                
             }
 
             def uiTest = project.hasProperty('uiTest')
