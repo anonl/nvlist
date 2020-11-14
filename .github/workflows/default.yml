@@ -21,9 +21,11 @@ jobs:
       with: {java-version: 1.8}
     - uses: GabrielBB/xvfb-action@v1.4
       if: runner.os == 'Linux'
-      with: {run: ./gradlew check jacocoTestReport -PuiTest}
-    - run: ./gradlew check jacocoTestReport
+      with:
+        run: |
+          ./gradlew check jacocoTestReport -PuiTest
+          bash <(curl -s https://codecov.io/bash)
+    - run: ./gradlew check
       if: runner.os == 'Windows'
-    - run: ./gradlew check jacocoTestReport robovmArchive
+    - run: ./gradlew check robovmArchive
       if: runner.os == 'macOS'
-    - run: bash <(curl -s https://codecov.io/bash)
