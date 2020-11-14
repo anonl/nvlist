@@ -7,11 +7,12 @@ import nl.weeaboo.common.VersionNumber;
  */
 public final class EngineVersion {
 
-    private static final int VERSION_MAJOR = 4;
-    private static final int VERSION_MINOR = 0;
-    private static final VersionNumber VERSION = new VersionNumber(VERSION_MAJOR, VERSION_MINOR);
+    private static final String VERSION_STRING = "4.8.0";
+    private static final VersionNumber VERSION = VersionNumber.parse(
+            // Take only major.minor part of the version number
+            VERSION_STRING.replaceAll("(\\d+\\.\\d+).*", "$1"));
 
-    /** The oldest target engine version we're still reasonably backwards-compatible with */
+    /** The oldest target engine version we're still mostly backwards-compatible with */
     private static final VersionNumber MIN_COMPAT_VERSION = new VersionNumber(4, 0);
 
     private EngineVersion() {
@@ -50,4 +51,11 @@ public final class EngineVersion {
         return VERSION;
     }
 
+    /**
+     * Returns the full version number as a string. To compare versions for compatibility, use
+     * {@link #getEngineVersion()} instead.
+     */
+    public static String getEngineVersionString() {
+        return VERSION_STRING;
+    }
 }

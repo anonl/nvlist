@@ -31,6 +31,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.impl.core.LruSet;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.stats.IAnalytics;
@@ -40,7 +41,7 @@ final class Analytics implements IAnalytics {
     private static final long serialVersionUID = StatsImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(Analytics.class);
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final int LOOKAHEAD_LINES = 20;
 
     private final IEnvironment env;
@@ -48,6 +49,8 @@ final class Analytics implements IAnalytics {
 
     // Transient because the actual state is stored in a separate (shared) file
     private transient Map<FileLine, LineStats> loadsPerLine;
+
+    private transient LruSet<FileLine> recentPreloads;
 
     public Analytics(IEnvironment env) {
         this(env, new AnalyticsPreloader(env));
@@ -63,6 +66,7 @@ final class Analytics implements IAnalytics {
 
     private void initTransients() {
         loadsPerLine = Maps.newHashMap();
+        recentPreloads = new LruSet<>(10);
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -78,6 +82,7 @@ final class Analytics implements IAnalytics {
             for (IScriptThread thread : active.getScriptContext().getThreads()) {
                 List<String> stackTrace = thread.getStackTrace();
                 FileLine lvnLine = LuaScriptUtil.getNearestLvnSrcloc(stackTrace);
+                // Use recentPreloads as a rate-limiter to avoid preloading the same line over and over again
                 if (lvnLine != null) {
                     handlePreloads(lvnLine);
                 }
@@ -87,9 +92,18 @@ final class Analytics implements IAnalytics {
 
     @VisibleForTesting
     void handlePreloads(FileLine lvnLine) {
+        if (recentPreloads.add(lvnLine)) {
+            doHandlePreloads(lvnLine);
+        }
+    }
+
+    private void doHandlePreloads(FileLine lvnLine) {
         for (LineStats lineStats : getUpcomingLines(lvnLine)) {
-            for (FilePath imagePath : lineStats.imagesLoaded) {
-                preloader.preloadImage(imagePath);
+            for (FilePath path : lineStats.imagesLoaded) {
+                preloader.preloadImage(path);
+            }
+            for (FilePath path : lineStats.soundsLoaded) {
+                preloader.preloadSound(path);
             }
         }
     }
@@ -188,6 +202,7 @@ final class Analytics implements IAnalytics {
         private static final long serialVersionUID = StatsImpl.serialVersionUID;
 
         private final Set<FilePath> imagesLoaded = Sets.newHashSet();
+        private final Set<FilePath> soundsLoaded = Sets.newHashSet();
 
         // No-arg constructor is required by Externalizable interface
         public LineStats() {
@@ -198,14 +213,21 @@ final class Analytics implements IAnalytics {
             FilePath path = ResourceId.extractFilePath(info.getPath().toString());
             if (info.getMediaType() == MediaType.IMAGE) {
                 imagesLoaded.add(path);
+            } else if (info.getMediaType() == MediaType.SOUND) {
+                soundsLoaded.add(path);
             }
         }
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeInt(imagesLoaded.size());
-            for (FilePath imagePath : imagesLoaded) {
-                out.writeUTF(imagePath.toString());
+            for (FilePath path : imagesLoaded) {
+                out.writeUTF(path.toString());
+            }
+
+            out.writeInt(soundsLoaded.size());
+            for (FilePath path : soundsLoaded) {
+                out.writeUTF(path.toString());
             }
         }
 
@@ -214,6 +236,11 @@ final class Analytics implements IAnalytics {
             int imagesLoadedSize = in.readInt();
             for (int n = 0; n < imagesLoadedSize; n++) {
                 imagesLoaded.add(FilePath.of(in.readUTF()));
+            }
+
+            int soundsLoadedSize = in.readInt();
+            for (int n = 0; n < soundsLoadedSize; n++) {
+                soundsLoaded.add(FilePath.of(in.readUTF()));
             }
         }
 

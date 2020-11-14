@@ -9,6 +9,14 @@ import nl.weeaboo.vn.core.IDestructible;
  */
 public interface ITextureData extends Serializable, IDestructible {
 
+    @Override
+    @Deprecated
+    void destroy();
+
+    @Override
+    @Deprecated
+    boolean isDestroyed();
+
     /**
      * Pixel width of the texture data.
      */

@@ -58,7 +58,7 @@ public class ScreenshotTest {
         PixelTextureData pixels = TestImageUtil.newTestTextureData(w, h);
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        TestImageUtil.writePng(pixels.getPixels(), bout);
+        TestImageUtil.writePng(pixels.borrowPixels(), bout);
 
         PixmapDecodingScreenshot ds = new PixmapDecodingScreenshot(bout.toByteArray());
         ITextureData decodedPixels = ds.getPixels();

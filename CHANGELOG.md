@@ -2,8 +2,13 @@
 # v4.8.0
 - Improved preloader performance. It can now preload images loaded from a background thread.
 - Added the space bar to the default 'textContinue' keys (see `input-config.json`).
+- Rendering code now logs warnings when images unexpectedly can't be rendered. This makes it a bit easier to detect/investigate texture (un)loading bugs.
+- NVList version number is now logged during startup.
+- The OSD (activated by pressing F7 in debug mode) now shows an estimate of the native memory use. If this value becomes very large and keeps increasing, you probably have a memory leak somewhere.
 - fix: In the default settings screen, the + button didn't disable when already as max volume. Same goes for the - button and min volume.
 - fix: The default textlog didn't perform word-wrapping.
+- fix: Memory leak in font loader. Unused fonts would never be unloaded.
+- fix: Memory leak after using the `restart()` function. This could also cause the OSD text to become corrupted.
 
 # v4.7.0
 - Changed the default italic font to be less slanted (it was a little extreme).

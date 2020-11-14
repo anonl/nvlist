@@ -17,6 +17,7 @@ import com.google.common.base.Preconditions;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Reads JNG image data.
@@ -112,6 +113,7 @@ public final class JngReader {
             byte[] colorBytesMerged = JngInputUtil.concatChunks(colorBytes);
             result = new Pixmap(new Gdx2DPixmap(colorBytesMerged, 0, colorBytesMerged.length,
                     Format.toGdx2DPixmapFormat(resultFormat)));
+            NativeMemoryTracker.get().register(result);
         }
 
         // Read and apply alpha mask if it exists
@@ -120,6 +122,7 @@ public final class JngReader {
             {
                 byte[] alphaBytesMerged = mergeAlpha(header, alphaType, alphaBytes);
                 alpha = new Pixmap(alphaBytesMerged, 0, alphaBytesMerged.length);
+                NativeMemoryTracker.get().register(alpha);
             }
 
             insertAlpha(result, alpha);

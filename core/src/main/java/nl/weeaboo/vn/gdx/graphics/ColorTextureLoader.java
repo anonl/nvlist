@@ -9,10 +9,12 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.render.RenderUtil;
 
 /**
@@ -37,7 +39,8 @@ public class ColorTextureLoader extends SynchronousAssetLoader<Texture, ColorTex
     public Texture load(AssetManager assetManager, String fileName, FileHandle file, Parameters parameter) {
         int colorARGB = parseARGB8888(file.nameWithoutExtension());
 
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = PixmapUtil.newUninitializedPixmap(1, 1, Format.RGBA8888);
+        NativeMemoryTracker.get().register(pixmap);
         pixmap.setColor(RenderUtil.argb2rgba(RenderUtil.premultiplyAlpha(colorARGB)));
         pixmap.fill();
         return new Texture(pixmap);

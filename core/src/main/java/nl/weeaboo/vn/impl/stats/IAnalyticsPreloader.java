@@ -8,4 +8,6 @@ interface IAnalyticsPreloader extends Serializable {
 
     void preloadImage(FilePath path);
 
+    void preloadSound(FilePath path);
+
 }

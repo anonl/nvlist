@@ -17,6 +17,7 @@ import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.graphics.GdxViewportUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Implementation of {@link IBackBuffer} which first renders to a fixed-size frame buffer object (FBO), then
@@ -38,6 +39,7 @@ public final class FboBackBuffer implements IBackBuffer {
 
         frameBufferViewport = new FitViewport(vsize.w, vsize.h);
         batch = new SpriteBatch();
+        NativeMemoryTracker.get().register(batch);
     }
 
     @Override

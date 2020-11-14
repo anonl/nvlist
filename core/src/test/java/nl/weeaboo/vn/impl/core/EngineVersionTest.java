@@ -1,6 +1,9 @@
 package nl.weeaboo.vn.impl.core;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import nl.weeaboo.common.VersionNumber;
 
 public class EngineVersionTest {
 
@@ -22,4 +25,10 @@ public class EngineVersionTest {
         EngineVersion.checkVersion("1.0", "999.0");
     }
 
+    @Test
+    public void testVersionString() {
+        VersionNumber version = EngineVersion.getEngineVersion();
+        String fullVersion = EngineVersion.getEngineVersionString();
+        Assert.assertTrue(fullVersion.startsWith(version.toString()));
+    }
 }

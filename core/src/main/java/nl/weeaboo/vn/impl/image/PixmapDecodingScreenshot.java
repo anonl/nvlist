@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.image;
 import com.badlogic.gdx.graphics.Pixmap;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Screenshot which initially stores its pixel data in a compressed format, then decodes the binary data using
@@ -19,6 +20,7 @@ public class PixmapDecodingScreenshot extends DecodingScreenshot {
     @Override
     protected void tryLoad(byte[] data) {
         Pixmap pixmap = new Pixmap(data, 0, data.length);
+        NativeMemoryTracker.get().register(pixmap);
         // The stored data is already premultiplied
         PixelTextureData texData = PixelTextureData.fromPremultipliedPixmap(pixmap);
 

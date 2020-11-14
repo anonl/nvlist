@@ -33,13 +33,12 @@ public final class OsdTest {
         env = TestEnvironment.newInstance();
 
         batch = new SpriteBatch();
-        osd = new Osd(textRenderer, perfMetrics);
+        osd = new Osd(perfMetrics);
         osd.setVisible(true);
     }
 
     @After
     public void after() {
-        DisposeUtil.dispose(osd);
         DisposeUtil.dispose(batch);
     }
 
@@ -82,7 +81,7 @@ public final class OsdTest {
     }
 
     private void assertOsdText(String expected) {
-        osd.render(batch, env);
+        osd.render(batch, env, textRenderer);
         Assert.assertEquals(expected, textRenderer.getText().toString());
     }
 

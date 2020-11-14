@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Disposable;
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
@@ -24,9 +23,9 @@ import nl.weeaboo.styledtext.MutableTextStyle;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.styledtext.gdx.GdxFont;
 import nl.weeaboo.styledtext.gdx.GdxFontGenerator;
+import nl.weeaboo.styledtext.gdx.GdxFontRegistry;
 import nl.weeaboo.styledtext.gdx.YDir;
 import nl.weeaboo.styledtext.layout.IFontMetrics;
-import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.gdx.res.ResourceStore;
 import nl.weeaboo.vn.gdx.res.ResourceStoreCache;
@@ -44,8 +43,8 @@ public final class GdxFontStore extends ResourceStore {
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);
 
     private final GdxFileSystem resourceFileSystem;
-    private final nl.weeaboo.styledtext.gdx.GdxFontRegistry backing;
-    private final Cache cache;
+    private final GdxFontRegistry backing;
+    private final FontCache cache;
     private final LruSet<FilePath> missingFonts = new LruSet<>(16);
 
     public GdxFontStore(GdxFileSystem resourceFileSystem) {
@@ -53,8 +52,8 @@ public final class GdxFontStore extends ResourceStore {
 
         this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
 
-        backing = new nl.weeaboo.styledtext.gdx.GdxFontRegistry();
-        cache = new Cache(new ResourceStoreCacheConfig<>());
+        backing = new GdxFontRegistry();
+        cache = new FontCache(new ResourceStoreCacheConfig<>());
     }
 
     private void loadBuiltInFont() {
@@ -90,14 +89,6 @@ public final class GdxFontStore extends ResourceStore {
 
         GdxFont font = fontGenerator.load(file, ts);
         backing.addFont(font);
-
-        // Dispose native resources when font is no longer referenced.
-        GdxCleaner.get().register(font, new Disposable() {
-            @Override
-            public void dispose() {
-                font.dispose();
-            }
-        });
         return font;
     }
 
@@ -136,17 +127,18 @@ public final class GdxFontStore extends ResourceStore {
         }
 
         // Workaround for a bug in gdx-styledtext -- a null font name causes problems
-        MutableTextStyle mts = styleArg.mutableCopy();
-        if (styleArg.getFontName() == null) {
+        TextStyle style = styleArg;
+        if (style.getFontName() == null) {
+            MutableTextStyle mts = style.mutableCopy();
             mts.setFontName(TextUtil.DEFAULT_FONT_NAME);
+            style = mts.immutableCopy();
         }
-        TextStyle style = mts.immutableCopy();
 
         // Only attempt to load each font once
         if (!absoluteFontPath.equals(FilePath.empty()) && !missingFonts.contains(absoluteFontPath)) {
             // Load font (if needed)
             try {
-                cache.getEntry(new CacheKey(absoluteFontPath, style));
+                cache.get(new CacheKey(absoluteFontPath, style));
             } catch (ExecutionException e) {
                 loadError(absoluteFontPath, e.getCause());
             }
@@ -163,9 +155,9 @@ public final class GdxFontStore extends ResourceStore {
         }
     }
 
-    private final class Cache extends ResourceStoreCache<CacheKey, GdxFont> {
+    private final class FontCache extends ResourceStoreCache<CacheKey, GdxFont> {
 
-        public Cache(ResourceStoreCacheConfig<GdxFont> config) {
+        public FontCache(ResourceStoreCacheConfig<GdxFont> config) {
             super(config);
         }
 
@@ -183,7 +175,7 @@ public final class GdxFontStore extends ResourceStore {
         protected void doUnload(CacheKey key, @Nullable GdxFont value) {
             /*
              * We can't dispose the font object here since it may be still be referenced directly by
-             * GdxFontInfo/GdxTextElement/...
+             * GdxFont/GdxTextElement/...
              */
             if (value != null) {
                 backing.removeFont(value);

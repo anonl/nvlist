@@ -87,4 +87,8 @@ public interface IEnvironment extends IDestructible, IUpdateable {
      */
     void updateRenderEnv(Rect realClip, Dim realScreenSize);
 
+    /**
+     * Clears (resource) caches. This is automatically done during a restart.
+     */
+    void clearCaches();
 }

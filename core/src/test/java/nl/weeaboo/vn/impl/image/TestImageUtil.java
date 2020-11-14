@@ -53,8 +53,8 @@ public final class TestImageUtil {
      * Asserts that two texture data objects contain equal pixel data.
      */
     public static void assertEquals(ITextureData a, ITextureData b) {
-        Pixmap pixelsA = ((PixelTextureData)a).getPixels();
-        Pixmap pixelsB = ((PixelTextureData)b).getPixels();
+        Pixmap pixelsA = ((PixelTextureData)a).borrowPixels();
+        Pixmap pixelsB = ((PixelTextureData)b).borrowPixels();
         new PixmapEquality().assertEquals(pixelsA, pixelsB);
     }
 

@@ -123,7 +123,7 @@ public final class SaveLib extends LuaLib {
         IScreenshot screenshot = ssTable.get("screenshot").checkuserdata(IScreenshot.class);
         Dim targetSize = Dim.of(ssTable.get("width").checkint(), ssTable.get("height").checkint());
 
-        Pixmap original = GdxScreenshotUtil.getPixels(screenshot);
+        Pixmap original = GdxScreenshotUtil.borrowPixels(screenshot);
         if (original == null) {
             LOG.warn("Screenshot pixels are missing: {}", screenshot);
             return;

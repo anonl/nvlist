@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReader;
 import nl.weeaboo.vn.gdx.graphics.jng.JngReaderOpts;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.impl.core.DurationLogger;
 
 /**
@@ -108,6 +109,7 @@ class PremultFileTextureData implements TextureData {
                 // .jpg, .png files
                 pixmap = new Pixmap(new Gdx2DPixmap(fileBytes, 0, fileBytes.length,
                         targetFormat));
+                NativeMemoryTracker.get().register(pixmap);
             }
             decodeStopwatch.logDuration("PremultTextureData.decodePixmap: {}", file);
         } catch (GdxRuntimeException e) {

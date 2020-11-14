@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 
 /**
  * Various functions related to {@link Pixmap}.
@@ -146,7 +147,9 @@ public final class PixmapUtil {
     public static Pixmap newUninitializedPixmap(int width, int height, Format format) {
         Gdx2DPixmap gdx2dPixmap = new Gdx2DPixmap(width, height,
                 Format.toGdx2DPixmapFormat(format));
-        return new Pixmap(gdx2dPixmap);
+        Pixmap pixmap = new Pixmap(gdx2dPixmap);
+        NativeMemoryTracker.get().register(pixmap);
+        return pixmap;
     }
 
     /**
@@ -206,6 +209,14 @@ public final class PixmapUtil {
             return 32;
         }
         throw new IllegalArgumentException("Unsupported format: " + format);
+    }
+
+    /**
+     * Returns the RAM usage of the given pixmap.
+     */
+    public static int getMemoryUseBytes(Pixmap pixmap) {
+        int bpp = getBitsPerPixel(pixmap.getFormat());
+        return pixmap.getWidth() * pixmap.getHeight() * (bpp + 7) / 8;
     }
 
     /**

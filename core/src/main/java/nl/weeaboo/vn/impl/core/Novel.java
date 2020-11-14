@@ -53,6 +53,7 @@ public class Novel implements INovel {
         // Building the environment also (re)loads persistent data
         env = envFactory.build();
 
+        LOG.info("NVList version {}", EngineVersion.getEngineVersionString());
         String engineMinVersion = env.getPref(NovelPrefs.ENGINE_MIN_VERSION);
         String engineTargetVersion = env.getPref(NovelPrefs.ENGINE_TARGET_VERSION);
         try {
@@ -81,10 +82,7 @@ public class Novel implements INovel {
     public void restart() throws InitException {
         stop();
 
-        // Clear caches
-        StaticEnvironment.TEXTURE_STORE.get().clear();
-        StaticEnvironment.SHADER_STORE.get().clear();
-        StaticEnvironment.FONT_STORE.get().clear();
+        env.clearCaches();
 
         start(KnownScriptFunctions.TITLESCREEN);
     }

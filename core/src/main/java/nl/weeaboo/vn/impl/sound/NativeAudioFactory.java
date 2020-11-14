@@ -1,25 +1,38 @@
 package nl.weeaboo.vn.impl.sound;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.audio.Music;
 
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.vn.gdx.res.LoadingResourceStore;
-import nl.weeaboo.vn.impl.core.DurationLogger;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
-import nl.weeaboo.vn.impl.core.StaticRef;
+import nl.weeaboo.vn.core.ResourceId;
 
 final class NativeAudioFactory implements INativeAudioFactory {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
-    private static final Logger LOG = LoggerFactory.getLogger(NativeAudioFactory.class);
 
-    private final StaticRef<AssetManager> assetManager = StaticEnvironment.ASSET_MANAGER;
+    private final SoundResourceLoader resourceLoader;
+    private transient @Nullable GdxMusicStore musicStore;
+
+    public NativeAudioFactory(SoundResourceLoader resourceLoader) {
+        this.resourceLoader = Checks.checkNotNull(resourceLoader);
+
+        initTransients();
+    }
+
+    private void initTransients() {
+        musicStore = new GdxMusicStore();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
+    }
 
     @Override
     public INativeAudio createNativeAudio(FilePath filePath) {
@@ -28,13 +41,18 @@ final class NativeAudioFactory implements INativeAudioFactory {
 
     @Override
     public Music newGdxMusic(FilePath filePath) {
-        DurationLogger dl = LoadingResourceStore.startLoadDurationLogger(LOG);
+        return musicStore.newGdxMusic(filePath);
+    }
 
-        FileHandleResolver fileResolver = assetManager.get().getFileHandleResolver();
-        Music music = Gdx.audio.newMusic(fileResolver.resolve(filePath.toString()));
+    @Override
+    public void preloadNormalized(ResourceId resourceId) {
+        FilePath absolutePath = resourceLoader.getAbsolutePath(resourceId.getFilePath());
+        musicStore.preload(absolutePath);
+    }
 
-        dl.logDuration("Loading music {}", filePath);
-        return music;
+    @Override
+    public void clearCaches() {
+        musicStore.clear();
     }
 
 }

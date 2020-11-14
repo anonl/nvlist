@@ -16,6 +16,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.gdx.res.AbstractResource;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.ITexture;
 
 /**
@@ -31,6 +32,7 @@ public final class PixelTextureData implements IGdxTextureData {
 
     private PixelTextureData(Pixmap pixels) {
         this.pixels = Checks.checkNotNull(pixels);
+
         GdxCleaner.get().register(this, pixels);
     }
 
@@ -67,11 +69,8 @@ public final class PixelTextureData implements IGdxTextureData {
 
     /**
      * The backing pixmap for this texture data object. Uses premultiplied alpha.
-     *
-     * @deprecated This method returns a direct reference to a disposable value and is therefore dangerous.
      */
-    @Deprecated
-    public Pixmap getPixels() {
+    public Pixmap borrowPixels() {
         return pixels;
     }
 
@@ -101,6 +100,9 @@ public final class PixelTextureData implements IGdxTextureData {
             TextureRegion result = region;
             if (result == null) {
                 Texture texture = new Texture(pixels);
+                // Only the pixmap (tracked separately) takes significant memory
+                NativeMemoryTracker.get().register(texture, 0);
+
                 GdxTextureUtil.setDefaultTextureParams(texture);
                 result = GdxTextureUtil.newGdxTextureRegion(texture);
                 GdxCleaner.get().register(this, texture);

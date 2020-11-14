@@ -35,4 +35,8 @@ public abstract class AbstractModule implements IModule {
     public void setRenderEnv(IRenderEnv env) {
     }
 
+    @Override
+    public void clearCaches() {
+    }
+
 }

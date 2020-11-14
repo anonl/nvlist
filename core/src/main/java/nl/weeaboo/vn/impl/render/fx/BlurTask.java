@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.Insets2D;
@@ -56,13 +57,18 @@ public final class BlurTask extends OffscreenRenderTask {
     protected Pixmap render(RenderContext context) throws IOException {
         Vec2 pixelSize = toUV(1f);
 
+        TextureRegion texRegion = GdxTextureUtil.getTextureRegion(tex);
+        if (texRegion == null) {
+            throw new IOException("Backing texture unexpectedly missing: " + tex);
+        }
+
         ShaderProgram shader = null;
         PingPongFbo fbos = null;
         try {
             fbos = new PingPongFbo(context.outerSize);
             fbos.start();
 
-            context.drawInitial(GdxTextureUtil.getTextureRegion(tex), null);
+            context.drawInitial(texRegion, null);
 
             shader = shaderStore.get().createShaderFromClasspath(getClass(), findBestShader(scaledRadius));
 

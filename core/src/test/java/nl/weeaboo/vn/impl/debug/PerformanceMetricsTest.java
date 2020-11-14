@@ -29,7 +29,7 @@ public final class PerformanceMetricsTest {
         new StringTester()
                 .withSubString("FPS")
                 .withSubString("CPU")
-                .withSubString("Memory use")
+                .withSubString("Memory")
                 .test(metrics.getPerformanceSummary());
 
         metrics.setLogicFps(12.3456789);

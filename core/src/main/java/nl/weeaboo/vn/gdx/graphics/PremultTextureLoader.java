@@ -97,9 +97,8 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
     }
 
     @SuppressWarnings("rawtypes")
-    @Nullable
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
+    public @Nullable Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
             TextureParameter parameter) {
         return null;
     }
