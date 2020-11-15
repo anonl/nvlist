@@ -26,5 +26,5 @@ jobs:
       if: runner.os == 'Windows'
     - run: ./gradlew check robovmArchive
       if: runner.os == 'macOS'
-    - run: codecov/codecov-action@v1.0.14
+    - uses: codecov/codecov-action@v1.0.14
       if: runner.os == 'Linux'
