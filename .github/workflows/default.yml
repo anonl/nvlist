@@ -1,0 +1,30 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: NVList CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with: {java-version: 1.8}
+    - uses: GabrielBB/xvfb-action@v1.4
+      if: runner.os == 'Linux'
+      with: {run: ./gradlew check jacocoTestReport -PuiTest}
+    - run: ./gradlew check
+      if: runner.os == 'Windows'
+    - run: ./gradlew check robovmArchive
+      if: runner.os == 'macOS'
+    - uses: codecov/codecov-action@v1.0.14
+      if: runner.os == 'Linux'
