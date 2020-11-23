@@ -32,7 +32,7 @@ final class ScreenshotTaker {
     /** Handle input and update internal state. */
     void update(IEnvironment env, INativeInput input) {
         if (pendingScreenshot != null && (pendingScreenshot.isAvailable() || pendingScreenshot.isFailed())) {
-            Pixmap pixmap = GdxScreenshotUtil.getPixels(pendingScreenshot);
+            Pixmap pixmap = GdxScreenshotUtil.borrowPixels(pendingScreenshot);
             if (pixmap != null) {
                 writeScreenshot(env.getOutputFileSystem(), pixmap);
             }

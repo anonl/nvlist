@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
@@ -26,6 +27,7 @@ public final class GdxScreenshotUtil {
      */
     public static Pixmap screenshot(Rect glRect) {
         Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
+        NativeMemoryTracker.get().register(pixmap);
         PixmapUtil.flipVertical(pixmap);
         return pixmap;
     }
@@ -34,11 +36,11 @@ public final class GdxScreenshotUtil {
      * Returns a reference to the backing pixmap of the given screenshot. This method may fail either because
      * the screenshot has no backing pixmap, or if the specific type of screenshot isn't supported.
      */
-    public static @Nullable Pixmap getPixels(IScreenshot screenshot) {
+    public static @Nullable Pixmap borrowPixels(IScreenshot screenshot) {
         ITextureData textureData = screenshot.getPixels();
         if (textureData instanceof PixelTextureData) {
             PixelTextureData pixelData = (PixelTextureData)textureData;
-            return pixelData.getPixels();
+            return pixelData.borrowPixels();
         } else {
             return null;
         }

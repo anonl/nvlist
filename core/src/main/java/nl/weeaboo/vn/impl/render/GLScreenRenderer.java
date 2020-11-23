@@ -3,9 +3,6 @@ package nl.weeaboo.vn.impl.render;
 import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,6 +25,7 @@ import nl.weeaboo.vn.gdx.graphics.GLBlendMode;
 import nl.weeaboo.vn.gdx.graphics.GLMatrixStack;
 import nl.weeaboo.vn.gdx.graphics.GdxScreenshotUtil;
 import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.impl.image.PixelTextureData;
@@ -39,8 +37,6 @@ import nl.weeaboo.vn.render.RenderUtil;
  * OpenGL-based renderer.
  */
 public class GLScreenRenderer extends BaseScreenRenderer implements IDestructible {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GLScreenRenderer.class);
 
     private boolean destroyed;
 
@@ -93,8 +89,8 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     @Override
     public void renderQuad(QuadRenderCommand qrc) {
         TextureRegion tex = GdxTextureUtil.getTextureRegion(qrc.tex, qrc.uv);
-        if (tex == null) {
-            LOG.trace("Skip drawing quad with null texture");
+        if (tex == null || tex.getTexture().getTextureObjectHandle() == 0) {
+            RenderLog.warn("Skip drawing quad; backing texture is null: {}", qrc.tex);
             return;
         }
 
@@ -211,6 +207,8 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
                 triangleMesh.dispose();
             }
             triangleMesh = new Mesh(false, false, cols * 4, cols * 6, attrs);
+            NativeMemoryTracker.get().register(triangleMesh,
+                    triangleMesh.getMaxIndices() * triangleMesh.getMaxVertices() * triangleMesh.getVertexSize());
         }
 
         // Create an index buffer for a triangle strip

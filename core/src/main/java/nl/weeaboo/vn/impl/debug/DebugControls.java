@@ -10,6 +10,7 @@ import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.impl.save.SaveParams;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
@@ -56,6 +57,12 @@ public final class DebugControls {
             } catch (InitException e) {
                 LOG.error("Fatal error during restart", e);
             }
+        }
+
+        // Clear caches
+        if (input.consumePress(KeyCode.F3)) {
+            novel.getEnv().clearCaches();
+            LOG.debug("{}", NativeMemoryTracker.get().getSummary());
         }
 
         // Save/load

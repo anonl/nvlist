@@ -23,7 +23,7 @@ import nl.weeaboo.vn.image.IWritableScreenshot;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.AbstractModule;
 import nl.weeaboo.vn.impl.core.DefaultEnvironment;
-import nl.weeaboo.vn.impl.core.FileResourceLoader;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.image.ResolutionFolderSelector.ResolutionPath;
 import nl.weeaboo.vn.impl.scene.Button;
 import nl.weeaboo.vn.impl.scene.ImageDrawable;
@@ -45,25 +45,23 @@ public class ImageModule extends AbstractModule implements IImageModule {
     private static final Logger LOG = LoggerFactory.getLogger(ImageModule.class);
 
     protected final IEnvironment env;
-    protected final FileResourceLoader resourceLoader;
+    protected final ImageResourceLoader resourceLoader;
 
-    private final TextureManager texManager;
+    private final ITextureStore texStore;
 
     public ImageModule(DefaultEnvironment env) {
         this(env, new ImageResourceLoader(env));
     }
 
-    public ImageModule(DefaultEnvironment env, FileResourceLoader resourceLoader) {
+    public ImageModule(DefaultEnvironment env, ImageResourceLoader resourceLoader) {
         this.env = env;
         this.resourceLoader = resourceLoader;
 
+        texStore = new TextureStore(resourceLoader);
+        resourceLoader.setPreloadHandler(texStore);
+
         IRenderEnv renderEnv = env.getRenderEnv();
-
-        Dim vsize = renderEnv.getVirtualSize();
-        texManager = new TextureManager(resourceLoader, vsize);
-        resourceLoader.setPreloadHandler(texManager);
-
-        setImageResolution(vsize);
+        setImageResolution(renderEnv.getVirtualSize());
     }
 
     @Override
@@ -113,7 +111,7 @@ public class ImageModule extends AbstractModule implements IImageModule {
 
         // Quick abort if we need an image def and it doesn't exist
         if (resourceId.hasSubId()) {
-            IImageDefinition imageDef = texManager.getImageDef(resourceId.getFilePath());
+            IImageDefinition imageDef = resourceLoader.getImageDef(resourceId.getFilePath());
             if (imageDef == null || imageDef.findSubRect(resourceId.getSubId()) == null) {
                 if (!suppressErrors) {
                     LOG.debug("Image definition not found: " + resourceId);
@@ -137,17 +135,17 @@ public class ImageModule extends AbstractModule implements IImageModule {
     protected @Nullable ITexture getTextureNormalized(ResourceId resourceId, ResourceLoadInfo loadInfo) {
         resourceLoader.logLoad(resourceId, loadInfo);
 
-        return texManager.getTexture(resourceId);
+        return texStore.getTexture(resourceId);
     }
 
     @Override
     public ITexture getColorTexture(int argb) {
-        return texManager.getColorTexture(argb);
+        return texStore.getColorTexture(argb);
     }
 
     @Override
     public ITexture createTexture(ITextureData texData, double sx, double sy) {
-        return texManager.generateTexture((IGdxTextureData)texData, sx, sy);
+        return ((IGdxTextureData)texData).toTexture(sx, sy);
     }
 
     @Override
@@ -191,8 +189,17 @@ public class ImageModule extends AbstractModule implements IImageModule {
         ResolutionFolderSelector folderSelector = new ResolutionFolderSelector(env, MediaType.IMAGE);
         ResolutionPath selected = folderSelector.select(desiredSize);
 
-        resourceLoader.setResourceFolder(selected.folder);
-        texManager.setImageResolution(selected.resolution);
+        resourceLoader.setImageResolution(selected.folder, selected.resolution);
+        texStore.clear();
+    }
+
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
+
+        StaticEnvironment.TEXTURE_STORE.get().clear();
+        StaticEnvironment.SHADER_STORE.get().clear();
+        StaticEnvironment.FONT_STORE.get().clear();
     }
 
 }

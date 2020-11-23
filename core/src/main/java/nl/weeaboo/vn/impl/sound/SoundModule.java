@@ -26,7 +26,7 @@ import nl.weeaboo.vn.sound.desc.ISoundDefinition;
 /**
  * Sub-module for audio.
  */
-public class SoundModule extends AbstractModule implements ISoundModule {
+public final class SoundModule extends AbstractModule implements ISoundModule {
 
     private static final long serialVersionUID = SoundImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(SoundModule.class);
@@ -36,15 +36,15 @@ public class SoundModule extends AbstractModule implements ISoundModule {
     private final INativeAudioFactory nativeAudioFactory;
 
     public SoundModule(IEnvironment env) {
-        this(new SoundResourceLoader(env), new SoundController(), new NativeAudioFactory());
+        this(new SoundResourceLoader(env), new SoundController());
     }
 
-    public SoundModule(SoundResourceLoader resourceLoader, ISoundController soundController,
-            INativeAudioFactory nativeAudioFactory) {
-
+    public SoundModule(SoundResourceLoader resourceLoader, ISoundController soundController) {
         this.resourceLoader = resourceLoader;
         this.soundController = soundController;
-        this.nativeAudioFactory = nativeAudioFactory;
+
+        nativeAudioFactory = new NativeAudioFactory(resourceLoader);
+        resourceLoader.setPreloadHandler(nativeAudioFactory);
     }
 
     /**
@@ -127,12 +127,24 @@ public class SoundModule extends AbstractModule implements ISoundModule {
     }
 
     @Override
+    public void preload(FilePath path) {
+        resourceLoader.preload(path);
+    }
+
+    @Override
     public void onPrefsChanged(IPreferenceStore config) {
         super.onPrefsChanged(config);
 
         soundController.setMasterVolume(SoundType.MUSIC, config.get(NovelPrefs.MUSIC_VOLUME));
         soundController.setMasterVolume(SoundType.SOUND, config.get(NovelPrefs.SOUND_EFFECT_VOLUME));
         soundController.setMasterVolume(SoundType.VOICE, config.get(NovelPrefs.VOICE_VOLUME));
+    }
+
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
+
+        nativeAudioFactory.clearCaches();
     }
 
 }

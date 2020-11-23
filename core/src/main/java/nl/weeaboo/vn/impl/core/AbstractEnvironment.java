@@ -12,6 +12,8 @@ import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INotifier;
+import nl.weeaboo.vn.gdx.res.GdxCleaner;
+import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
 abstract class AbstractEnvironment implements IEnvironment {
@@ -73,6 +75,19 @@ abstract class AbstractEnvironment implements IEnvironment {
         }
 
         getContextManager().update();
+    }
+
+    @Override
+    public void clearCaches() {
+        for (IModule module : getModules()) {
+            module.clearCaches();
+        }
+
+        System.gc();
+        GdxCleaner.get().cleanUp();
+
+        System.gc();
+        NativeMemoryTracker.get().cleanUp();
     }
 
 }

@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.render.fx;
 import java.io.IOException;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import nl.weeaboo.common.StringUtil;
@@ -36,6 +37,11 @@ public final class ColorMatrixTask extends OffscreenRenderTask {
 
     @Override
     protected Pixmap render(RenderContext context) throws IOException {
+        TextureRegion texRegion = GdxTextureUtil.getTextureRegion(tex);
+        if (texRegion == null) {
+            throw new IOException("Backing texture unexpectedly missing: " + tex);
+        }
+
         ShaderProgram shader = null;
         PingPongFbo fbos = null;
         try {
@@ -47,7 +53,7 @@ public final class ColorMatrixTask extends OffscreenRenderTask {
             shader.begin();
             shader.setUniformMatrix4fv("u_matrix", matrix.getGLMatrix(), 0, 16);
             shader.setUniform4fv("u_offset", matrix.getGLOffset(), 0, 4);
-            context.drawInitial(GdxTextureUtil.getTextureRegion(tex), shader);
+            context.drawInitial(texRegion, shader);
 
             return fbos.stop();
         } finally {

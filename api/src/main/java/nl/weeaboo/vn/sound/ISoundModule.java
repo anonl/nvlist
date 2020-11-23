@@ -39,4 +39,9 @@ public interface ISoundModule extends IModule, IResourceResolver {
      */
     ISoundController getSoundController();
 
+    /**
+     * Suggests to the resource loader that the audio file with the given file path should be preloaded into memory.
+     */
+    void preload(FilePath path);
+
 }

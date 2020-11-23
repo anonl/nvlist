@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.render.fx;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,7 @@ import nl.weeaboo.vn.gdx.graphics.GdxTextureUtil;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTask;
 import nl.weeaboo.vn.impl.render.fx.ImageCompositeConfig.TextureEntry;
 
@@ -36,7 +39,7 @@ public final class ImageCompositeTask extends OffscreenRenderTask {
     }
 
     @Override
-    protected Pixmap render(RenderContext context) {
+    protected Pixmap render(RenderContext context) throws IOException {
         Dim outerSize = context.outerSize;
         if (outerSize.w <= 0 || outerSize.h <= 0) {
             LOG.info("Skip {}, outerSize is empty: {}", getClass().getSimpleName(), outerSize);
@@ -52,10 +55,15 @@ public final class ImageCompositeTask extends OffscreenRenderTask {
             batch.begin();
             try {
                 for (TextureEntry entry : config.getEntries()) {
-                    TextureRegion region = GdxTextureUtil.getTextureRegion(entry.getTexture());
+                    ITexture tex = entry.getTexture();
+                    TextureRegion texRegion = GdxTextureUtil.getTextureRegion(tex);
+                    if (texRegion == null) {
+                        throw new IOException("Backing texture unexpectedly missing: " + tex);
+                    }
+
                     Rect2D r = entry.getBounds();
                     GLBlendMode.from(entry.getBlendMode()).apply(batch);
-                    batch.draw(region, (float)r.x, (float)r.y, (float)r.w, (float)r.h);
+                    batch.draw(texRegion, (float)r.x, (float)r.y, (float)r.w, (float)r.h);
                 }
             } finally {
                 batch.end();

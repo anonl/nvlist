@@ -6,6 +6,7 @@ import java.util.Queue;
 import com.badlogic.gdx.audio.Music;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.gdx.GdxMusicMock;
 
 class NativeAudioFactoryMock implements INativeAudioFactory {
@@ -30,6 +31,14 @@ class NativeAudioFactoryMock implements INativeAudioFactory {
 
     public void setNextGdxMusic(GdxMusicMock gdxMusic) {
         gdxMusics.add(gdxMusic);
+    }
+
+    @Override
+    public void preloadNormalized(ResourceId resourceId) {
+    }
+
+    @Override
+    public void clearCaches() {
     }
 
 }

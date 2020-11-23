@@ -6,6 +6,9 @@ import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.core.StaticRef;
 
+/**
+ * (Re)loadable file-based resource.
+ */
 final class FileResource<T> extends AbstractResource<T> {
 
     private static final long serialVersionUID = 1L;
@@ -13,32 +16,29 @@ final class FileResource<T> extends AbstractResource<T> {
     private final StaticRef<? extends LoadingResourceStore<T>> store;
     private final FilePath filename;
 
-    private transient Ref<T> valueRef;
+    /**
+     * This is a non-serializable reference to a cache entry in the resource store. When the cache entry is
+     * cleared, the ref is marked invalid by the resource store. A new ref must then be obtained.
+     */
+    private transient @Nullable Ref<T> ref;
 
-    public FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename) {
+    FileResource(StaticRef<? extends LoadingResourceStore<T>> store, FilePath filename, @Nullable Ref<T> ref) {
         this.store = Checks.checkNotNull(store);
         this.filename = Checks.checkNotNull(filename);
+        this.ref = ref;
     }
 
     @Override
     public @Nullable T get() {
-        T value = getValue();
-        if (value != null) {
-            return value;
+        if (ref == null || ref.get() == null) {
+            // Attempt to (re)load value
+            ref = store.get().getValueRef(filename);
         }
 
-        // Attempt to (re)load value
-        set(store.get().getEntry(filename));
-        return getValue();
-    }
-
-    private @Nullable T getValue() {
-        Ref<T> ref = valueRef;
-        return (ref != null ? ref.get() : null);
-    }
-
-    void set(Ref<T> ref) {
-        this.valueRef = ref;
+        if (ref == null) {
+            return null;
+        }
+        return ref.get();
     }
 
     @Override

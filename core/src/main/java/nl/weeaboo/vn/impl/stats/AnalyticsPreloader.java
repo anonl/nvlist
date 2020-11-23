@@ -18,4 +18,9 @@ final class AnalyticsPreloader implements IAnalyticsPreloader {
         env.getImageModule().preload(path);
     }
 
+    @Override
+    public void preloadSound(FilePath path) {
+        env.getSoundModule().preload(path);
+    }
+
 }
