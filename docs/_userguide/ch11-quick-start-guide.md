@@ -43,7 +43,7 @@ Now we know how to show text, but it's not much of a visual novel without visual
 $aza Hello there
 " %}
 
-Running the game again shows the added images.
+Running the game again shows the added images. If you've left the game running, press Ctrl+F5 to reload the changed files and restart.
 
 ![User script screenshot 2]({{site.baseurl}}{% link assets/userguide/ch11-user-script2.jpg %})
 

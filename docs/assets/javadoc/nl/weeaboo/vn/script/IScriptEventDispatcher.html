@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -124,7 +124,7 @@ extends java.io.Serializable</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#addEvent-nl.weeaboo.vn.script.IScriptFunction-">addEvent</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</code>
-<div class="block">Enqueues an event</div>
+<div class="block">Enqueues an event at the back of the event queue.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -136,12 +136,18 @@ extends java.io.Serializable</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#prependEvent-nl.weeaboo.vn.script.IScriptFunction-">prependEvent</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</code>
+<div class="block">Enqueues an event at the front of the event queue.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#removeTask-nl.weeaboo.vn.script.IScriptFunction-">removeTask</a></span>(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;function)</code>
 <div class="block">Cancels all active tasks for the given script function.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#retrieveWork--">retrieveWork</a></span>()</code>
 <div class="block">This method should be called once every frame.</div>
@@ -162,6 +168,20 @@ extends java.io.Serializable</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="prependEvent-nl.weeaboo.vn.script.IScriptFunction-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prependEvent</h4>
+<pre>void&nbsp;prependEvent(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</pre>
+<div class="block">Enqueues an event at the front of the event queue.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#addEvent-nl.weeaboo.vn.script.IScriptFunction-"><code>addEvent(IScriptFunction)</code></a></dd>
+</dl>
+</li>
+</ul>
 <a name="addEvent-nl.weeaboo.vn.script.IScriptFunction-">
 <!--   -->
 </a>
@@ -169,7 +189,11 @@ extends java.io.Serializable</pre>
 <li class="blockList">
 <h4>addEvent</h4>
 <pre>void&nbsp;addEvent(<a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html" title="interface in nl.weeaboo.vn.script">IScriptFunction</a>&nbsp;func)</pre>
-<div class="block">Enqueues an event</div>
+<div class="block">Enqueues an event at the back of the event queue.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../nl/weeaboo/vn/script/IScriptEventDispatcher.html#prependEvent-nl.weeaboo.vn.script.IScriptFunction-"><code>prependEvent(IScriptFunction)</code></a></dd>
+</dl>
 </li>
 </ul>
 <a name="addTask-nl.weeaboo.vn.script.IScriptFunction-double-">

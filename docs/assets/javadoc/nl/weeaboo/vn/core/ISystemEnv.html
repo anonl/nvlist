@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -123,6 +123,18 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/render/DisplayMode.html" title="enum in nl.weeaboo.vn.render">DisplayMode</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/ISystemEnv.html#getDisplayMode--">getDisplayMode</a></span>()</code>
+<div class="block">Returns the current display mode.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/ISystemEnv.html#isDisplayModeSupported-nl.weeaboo.vn.render.DisplayMode-">isDisplayModeSupported</a></span>(<a href="../../../../nl/weeaboo/vn/render/DisplayMode.html" title="enum in nl.weeaboo.vn.render">DisplayMode</a>&nbsp;mode)</code>
+<div class="block">Returns <code>true</code> if the given display mode is currently supported.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/ISystemEnv.html#isTouchScreen--">isTouchScreen</a></span>()</code>
 <div class="block"><code>true</code> when running on a touchscreen device.</div>
@@ -156,11 +168,36 @@ var activeTableTab = "activeTableTab";
 <a name="isTouchScreen--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isTouchScreen</h4>
 <pre>boolean&nbsp;isTouchScreen()</pre>
 <div class="block"><code>true</code> when running on a touchscreen device.</div>
+</li>
+</ul>
+<a name="isDisplayModeSupported-nl.weeaboo.vn.render.DisplayMode-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDisplayModeSupported</h4>
+<pre>boolean&nbsp;isDisplayModeSupported(<a href="../../../../nl/weeaboo/vn/render/DisplayMode.html" title="enum in nl.weeaboo.vn.render">DisplayMode</a>&nbsp;mode)</pre>
+<div class="block">Returns <code>true</code> if the given display mode is currently supported. Available modes may depend on
+ the platform (desktop, mobile).</div>
+</li>
+</ul>
+<a name="getDisplayMode--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getDisplayMode</h4>
+<pre><a href="../../../../nl/weeaboo/vn/render/DisplayMode.html" title="enum in nl.weeaboo.vn.render">DisplayMode</a>&nbsp;getDisplayMode()</pre>
+<div class="block">Returns the current display mode.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../nl/weeaboo/vn/core/ISystemModule.html#setDisplayMode-nl.weeaboo.vn.render.DisplayMode-"><code>ISystemModule.setDisplayMode(DisplayMode)</code></a></dd>
+</dl>
 </li>
 </ul>
 </li>

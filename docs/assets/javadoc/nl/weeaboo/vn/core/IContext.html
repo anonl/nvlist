@@ -103,7 +103,8 @@ var activeTableTab = "activeTableTab";
 <pre>public interface <span class="typeNameLabel">IContext</span>
 extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, <a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a></pre>
 <div class="block">High-level container of state. In a more general-purpose game engine this concept is usually called
- 'scene', 'stage' or 'level'.</div>
+ 'scene', 'stage' or 'level'. In NVList, the context primarily consists of visual state (<a href="../../../../nl/weeaboo/vn/scene/IScreen.html" title="interface in nl.weeaboo.vn.scene"><code>IScreen</code></a> and script
+ engine state (<a href="../../../../nl/weeaboo/vn/script/IScriptContext.html" title="interface in nl.weeaboo.vn.script"><code>IScriptContext</code></a>.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../nl/weeaboo/vn/core/IContextManager.html" title="interface in nl.weeaboo.vn.core"><code>IContextManager</code></a></dd>
@@ -152,7 +153,9 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContext.html#isActive--">isActive</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IContext.html#isActive--">isActive</a></span>()</code>
+<div class="block">Returns <code>true</code> if this context is active.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -234,10 +237,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <li class="blockList">
 <h4>isActive</h4>
 <pre>boolean&nbsp;isActive()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if this context is active. Only active contexts are updated.</dd>
-</dl>
+<div class="block">Returns <code>true</code> if this context is active. Only active contexts are updated.</div>
 </li>
 </ul>
 <a name="updateScreen--">

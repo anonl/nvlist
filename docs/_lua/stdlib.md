@@ -221,32 +221,58 @@ end
 -- @param obj The object to set the property value on.
 -- @param name The name of the property to change.
 -- @param ... The parameters to pass to the setter function (the new value for the property).
+-- @see getProperty
 function setProperty(obj, name, ...)
     local vals = getTableOrVarArg(...)
-    
-    local setterName = \"set\" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)
-    local setter = obj[setterName]
-    if setter == nil then
-        Log.warn(\"Invalid property: &#123;}\", setterName)
-        return
+
+    Log.trace(\"setProperty(&#123;}, &#123;}, &#123;})\", obj, name, ...)
+
+    -- First, try to access a direct accessor function with the given name
+    local property = obj[name]
+    if type(property) == \"function\" then
+        --Property is an accessor method
+        return property(obj, unpack(vals))
     end
-    return setter(obj, unpack(vals))
+
+    local setter = obj[\"set\" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)]
+    if setter ~= nil then
+        return setter(obj, unpack(vals))
+    end
+
+    -- Set value directly. This needs to be our last alternative, because in Lua we can't
+    -- distinguish between an undefined property and a property whose value is currently nil.
+    obj[name] = unpack(vals)
 end
 
 ---Calls the default getter function corresponding to a property called <code>name</code>.
 -- @param obj The object to get the property value of.
 -- @param name The name of the property to get the value of.
 -- @return The value of the property (result of calling the property getter function).
-function getProperty(obj, name)    
-    --TODO Use Java's Introspector class? That would give use a little more well-defined behavior.
-    local getterName = \"get\" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)
+-- @see setProperty
+function getProperty(obj, name)
+    -- First, try to access a direct field with the given name
+    local property = obj[name]
+    if property ~= nil then
+        local result
+        if type(property) == \"function\" then
+            --Property is an accessor method
+            result = property(obj)
+        else
+            result = property
+        end
+        Log.trace(\"getProperty(&#123;}, &#123;}) => &#123;}\", obj, name, result)
+        return result
+    else
+        -- If no direct field exists, try a function named \"get$&#123;Name}\"
+        local getter = obj[\"get\" .. string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)]
+        if getter ~= nii then
+            local result = getter(obj)
+            Log.trace(\"getProperty(&#123;}, &#123;}) => &#123;}\", obj, name, result)
+            return result
+        end
+    end
     
-    local getter = obj[getterName]
-    if getter == nil then
-        Log.warn(\"Invalid property: &#123;}\", getterName)
-        return
-    end    
-    return getter(obj)
+    Log.warn(\"Invalid property: &#123;}\", name)
 end
 
 -- ----------------------------------------------------------------------------

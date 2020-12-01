@@ -17,12 +17,6 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
-var altColor = "altColor";
-var rowColor = "rowColor";
-var tableTab = "tableTab";
-var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -72,13 +66,13 @@ var activeTableTab = "activeTableTab";
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method.summary">Method</a></li>
+<li>Method</li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -96,7 +90,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
@@ -105,7 +99,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IModule</span>
-extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a></pre>
+extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a></pre>
 <div class="block">Sub-module of the engine.</div>
 </li>
 </ul>
@@ -134,19 +128,13 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/core/IModule.html#destroy--">destroy</a></span>()</code>
-<div class="block">Destroys the module, cleaning up any native resources.</div>
-</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IDestructible">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">destroy</a>, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">isDestroyed</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IUpdateable">
 <!--   -->
@@ -161,29 +149,19 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html#onPrefsChanged-nl.weeaboo.prefsstore.IPreferenceStore-">onPrefsChanged</a></code></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="details">
 <ul class="blockList">
-<li class="blockList">
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method.detail">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.render.IRenderEnvConsumer">
 <!--   -->
 </a>
-<h3>Method Detail</h3>
-<a name="destroy--">
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.render.<a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html#setRenderEnv-nl.weeaboo.vn.render.IRenderEnv-">setRenderEnv</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IResourceCache">
 <!--   -->
 </a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>destroy</h4>
-<pre>void&nbsp;destroy()</pre>
-<div class="block">Destroys the module, cleaning up any native resources.</div>
-</li>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IResourceCache.html#clearCaches--">clearCaches</a></code></li>
 </ul>
 </li>
 </ul>
@@ -237,13 +215,13 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IUpdateabl
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method.summary">Method</a></li>
+<li>Method</li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">

@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -96,7 +96,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceResolver.html" title="interface in nl.weeaboo.vn.core">IResourceResolver</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <hr>
 <br>
@@ -161,13 +161,19 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 <div class="block">Returns the paths for all sound files in the specified folder and its sub-folders.</div>
 </td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/sound/ISoundModule.html#preload-nl.weeaboo.filesystem.FilePath-">preload</a></span>(nl.weeaboo.filesystem.FilePath&nbsp;path)</code>
+<div class="block">Suggests to the resource loader that the audio file with the given file path should be preloaded into memory.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IModule">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IDestructible">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a></h3>
-<code><a href="../../../../nl/weeaboo/vn/core/IModule.html#destroy--">destroy</a></code></li>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">destroy</a>, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">isDestroyed</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IUpdateable">
@@ -182,6 +188,20 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </a>
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html#onPrefsChanged-nl.weeaboo.prefsstore.IPreferenceStore-">onPrefsChanged</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.render.IRenderEnvConsumer">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.render.<a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html#setRenderEnv-nl.weeaboo.vn.render.IRenderEnv-">setRenderEnv</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IResourceCache">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IResourceCache.html#clearCaches--">clearCaches</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IResourceResolver">
@@ -249,11 +269,21 @@ java.lang.String&nbsp;getDisplayName(nl.weeaboo.filesystem.FilePath&nbsp;filenam
 <a name="getSoundController--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSoundController</h4>
 <pre><a href="../../../../nl/weeaboo/vn/sound/ISoundController.html" title="interface in nl.weeaboo.vn.sound">ISoundController</a>&nbsp;getSoundController()</pre>
 <div class="block">Returns the sound controller, which provides functions for manipulating audio playback.</div>
+</li>
+</ul>
+<a name="preload-nl.weeaboo.filesystem.FilePath-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>preload</h4>
+<pre>void&nbsp;preload(nl.weeaboo.filesystem.FilePath&nbsp;path)</pre>
+<div class="block">Suggests to the resource loader that the audio file with the given file path should be preloaded into memory.</div>
 </li>
 </ul>
 </li>
