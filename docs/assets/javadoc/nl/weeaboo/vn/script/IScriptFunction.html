@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var methods = {"i0":38};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -116,7 +116,7 @@ extends java.io.Serializable</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -124,7 +124,9 @@ extends java.io.Serializable</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/script/IScriptFunction.html#call--">call</a></span>()</code>
-<div class="block">Runs the script function.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">Use <a href="../../../../nl/weeaboo/vn/script/IScriptContext.html" title="interface in nl.weeaboo.vn.script"><code>IScriptContext</code></a> to create threads or run code instead.</span></div>
+</div>
 </td>
 </tr>
 </table>
@@ -148,8 +150,10 @@ extends java.io.Serializable</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>call</h4>
-<pre>void&nbsp;call()
-   throws <a href="../../../../nl/weeaboo/vn/script/ScriptException.html" title="class in nl.weeaboo.vn.script">ScriptException</a></pre>
+<pre>@Deprecated
+void&nbsp;call()
+                throws <a href="../../../../nl/weeaboo/vn/script/ScriptException.html" title="class in nl.weeaboo.vn.script">ScriptException</a></pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Use <a href="../../../../nl/weeaboo/vn/script/IScriptContext.html" title="interface in nl.weeaboo.vn.script"><code>IScriptContext</code></a> to create threads or run code instead.</span></div>
 <div class="block">Runs the script function.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>

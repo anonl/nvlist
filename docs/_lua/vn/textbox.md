@@ -84,7 +84,7 @@ function setActiveTextBox(textMode)
     else
         textBox = textBoxConstr()
         textBox:install()
-        textBox:hide(1) -- Set alpha to 0.0 (starts at 1.0)
+        textBox:hide(0) -- Set alpha to 0.0 (starts at 1.0)
 
         if wasVisible then
             textBox:show() -- Gradually fade to visibility
@@ -123,26 +123,29 @@ ClickIndicatorPos = &#123;
 -- @param d Click indicator drawable.
 -- @tparam ClickIndicatorPos clickIndicatorPos Click indicator positioning type.
 -- @tparam TextDrawable textDrawable Main textbox drawable.
-function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable)
+-- @param[opt=0] dx Relative position offset (x-axis)
+-- @param[opt=0] dy Relative position offset (y-axis)
+function applyClickIndicatorPos(d, clickIndicatorPos, textDrawable, dx, dy)
+    dx = dx or 0
+    dy = dy or 0
     local dw = d:getWidth()
     local dh = d:getHeight()
-    
+
     local tx = textDrawable:getX()
     local ty = textDrawable:getY()
 
-    d:setAlign(0.5, 0.5)
     if clickIndicatorPos == ClickIndicatorPos.RIGHT then
-        d:setPos(tx + textDrawable:getMaxWidth() - dw / 2, ty + textDrawable:getMaxHeight() - dh / 2)
+        d:setPos(tx + textDrawable:getMaxWidth() + dx, ty + textDrawable:getMaxHeight() + dy - dh)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_BOTTOM then
         ty = ty + textDrawable:getTextHeight()
-        d:setPos(tx + dw / 2, ty + dh / 2)
+        d:setPos(tx + dx, ty + dy)
     elseif clickIndicatorPos == ClickIndicatorPos.TEXT_INLINE then
         local lineIndex = textDrawable:getEndLine() - 1
         if lineIndex >= 0 then
             local lineBounds = textDrawable:getLineBounds(lineIndex)
             tx = tx + lineBounds.x + lineBounds.w
             ty = ty + textDrawable:getTextHeight() - lineBounds.h / 2
-            d:setPos(tx + dw, ty)
+            d:setPos(tx + dx, ty + dy - dh / 2)
         else
             -- Panic
             d:setVisible(false)
@@ -154,6 +157,8 @@ DefaultClickIndicator = extend(ClickIndicator, &#123;
     drawable = nil, -- Click indicator drawable
     textDrawable = nil, -- Text drawable that this click indicator belongs to
     pos = ClickIndicatorPos.TEXT_INLINE,
+    dx = 0, -- Relative position offset (x-axis)
+    dy = 0, -- Relative position offset (y-axis)
 })
 
 function DefaultClickIndicator.new(self)
@@ -169,10 +174,6 @@ function DefaultClickIndicator.new(self)
 end
 
 function DefaultClickIndicator:destroy()
-    self:destroyThread()
-end
-
-function DefaultClickIndicator:destroyThread()
     if self.thread ~= nil then
         self.thread:destroy()
         self.thread = nil
@@ -180,24 +181,27 @@ function DefaultClickIndicator:destroyThread()
 end
 
 function DefaultClickIndicator:show()
-	if self.thread == nil then
+    if self.thread == nil then
         self.thread = newThread(function()
             while not self.drawable:isDestroyed() do
-                applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable)
+                applyClickIndicatorPos(self.drawable, self.pos, self.textDrawable, self.dx, self.dy)
                 yield()
             end
         end)
-	end
+    end
 
     -- Make sure the position is updated before the drawable is made visible
+    self.thread:resume()
     self.thread:update()
 
     self.drawable:setVisible(true)
 end
 
 function DefaultClickIndicator:hide()
-	self:destroyThread()
-	
+    if self.thread ~= nil then
+        self.thread:pause()
+    end
+
     self.drawable:setVisible(false)
 end
 
@@ -214,7 +218,7 @@ function TextBox:install()
     context.textBox = self
     self:setSpeaker(nil)
     setMainTextDrawable(self:getTextDrawable())
-    
+
     -- Store initial alpha values for each subcomponent so we can restore the alpha after fading out
     self.baseAlpha = &#123;}
     for _,d in ipairs(self:getDrawables()) do
@@ -240,7 +244,9 @@ function TextBox:isVisible()
 end
 
 function TextBox:fadeTo(targetAlpha, duration)
-    duration = duration or 30
+    if duration == nil then
+        duration = 30
+    end
 
     local threads = &#123;}
     for _,d in ipairs(self:getDrawables()) do
@@ -302,7 +308,7 @@ NvlTextBox = extend(TextBox, &#123;
 
 function NvlTextBox.new(self)
     self = extend(NvlTextBox, self)
-    
+
     local layer = createTextBoxLayer()
     local bgColor = 0xA0000000
 
@@ -314,18 +320,18 @@ function NvlTextBox.new(self)
     textBox:setPos(math.floor(textPad), math.floor(textPad))
     textBox:setSize(math.ceil(screenWidth - textPad*2), math.ceil(screenHeight - textPad*2))
     layoutPadded(textBox, textArea, math.ceil(textPad * 0.50))
-    
+
     -- Add continue indicator
     self.clickIndicator = DefaultClickIndicator.new&#123;
         texture=\"gui/cursor\",
         textDrawable=textArea,
         pos=ClickIndicatorPos.TEXT_INLINE,
     }
-        
+
     self.layer = layer
     self.textArea = textArea
     self.textBox = textBox
-    
+
     return self
 end
 

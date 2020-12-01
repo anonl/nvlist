@@ -282,7 +282,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#rotatedCopy-double-">rotatedCopy</a></span>(double&nbsp;angle)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#rotatedCopy-double-">rotatedCopy</a></span>(double&nbsp;angle)</code>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#rotationMatrix-double-"><code>rotationMatrix(double)</code></a>.</div>
+</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
@@ -293,7 +295,9 @@ extends java.lang.Object</pre>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#scaledCopy-double-double-">scaledCopy</a></span>(double&nbsp;sx,
-          double&nbsp;sy)</code>&nbsp;</td>
+          double&nbsp;sy)</code>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#scaledCopy-double-double-"><code>scaledCopy(double, double)</code></a>.</div>
+</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
@@ -323,12 +327,16 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#transform-nl.weeaboo.vn.math.Vec2-">transform</a></span>(<a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a>&nbsp;v)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#transform-nl.weeaboo.vn.math.Vec2-">transform</a></span>(<a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a>&nbsp;v)</code>
+<div class="block">Returns the modified input vector.</div>
+</td>
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/math/Matrix.html#translatedCopy-double-double-">translatedCopy</a></span>(double&nbsp;x,
-              double&nbsp;y)</code>&nbsp;</td>
+              double&nbsp;y)</code>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#translationMatrix-double-double-"><code>translationMatrix(double, double)</code></a>.</div>
+</td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a></code></td>
@@ -501,10 +509,7 @@ extends java.lang.Object</pre>
 <h4>translatedCopy</h4>
 <pre>public&nbsp;<a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a>&nbsp;translatedCopy(double&nbsp;x,
                              double&nbsp;y)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#translationMatrix-double-double-"><code>translationMatrix(double, double)</code></a>.</dd>
-</dl>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#translationMatrix-double-double-"><code>translationMatrix(double, double)</code></a>.</div>
 </li>
 </ul>
 <a name="rotatedCopy-double-">
@@ -514,10 +519,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>rotatedCopy</h4>
 <pre>public&nbsp;<a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a>&nbsp;rotatedCopy(double&nbsp;angle)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#rotationMatrix-double-"><code>rotationMatrix(double)</code></a>.</dd>
-</dl>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#rotationMatrix-double-"><code>rotationMatrix(double)</code></a>.</div>
 </li>
 </ul>
 <a name="scaledCopy-double-double-">
@@ -528,10 +530,7 @@ extends java.lang.Object</pre>
 <h4>scaledCopy</h4>
 <pre>public&nbsp;<a href="../../../../nl/weeaboo/vn/math/Matrix.html" title="class in nl.weeaboo.vn.math">Matrix</a>&nbsp;scaledCopy(double&nbsp;sx,
                          double&nbsp;sy)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#scaledCopy-double-double-"><code>scaledCopy(double, double)</code></a>.</dd>
-</dl>
+<div class="block">Returns <code>this</code> * <a href="../../../../nl/weeaboo/vn/math/Matrix.html#scaledCopy-double-double-"><code>scaledCopy(double, double)</code></a>.</div>
 </li>
 </ul>
 <a name="toGLMatrix--">
@@ -641,10 +640,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>transform</h4>
 <pre>public&nbsp;<a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a>&nbsp;transform(<a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a>&nbsp;v)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The modified input vector.</dd>
-</dl>
+<div class="block">Returns the modified input vector.</div>
 </li>
 </ul>
 <a name="transform-double-double-">

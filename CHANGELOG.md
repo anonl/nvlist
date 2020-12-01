@@ -1,5 +1,6 @@
 
 # v4.8.0
+- Restart hotkey changed to Ctrl+F5 to prevent accidental restarts when debugging (F5 is 'Resume' in the debugger).
 - Improved preloader performance. It can now preload images loaded from a background thread.
 - Added the space bar to the default 'textContinue' keys (see `input-config.json`).
 - Rendering code now logs warnings when images unexpectedly can't be rendered. This makes it a bit easier to detect/investigate texture (un)loading bugs.

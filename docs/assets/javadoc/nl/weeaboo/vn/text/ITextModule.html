@@ -96,7 +96,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
+<dd><a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a>, <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a>, <a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a>, <a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a>, <a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a>, <a href="../../../../nl/weeaboo/vn/core/IUpdateable.html" title="interface in nl.weeaboo.vn.core">IUpdateable</a>, java.io.Serializable</dd>
 </dl>
 <hr>
 <br>
@@ -156,11 +156,11 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IModule">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IDestructible">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface in nl.weeaboo.vn.core">IModule</a></h3>
-<code><a href="../../../../nl/weeaboo/vn/core/IModule.html#destroy--">destroy</a></code></li>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">destroy</a>, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">isDestroyed</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IUpdateable">
@@ -175,6 +175,20 @@ extends <a href="../../../../nl/weeaboo/vn/core/IModule.html" title="interface i
 </a>
 <h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html" title="interface in nl.weeaboo.vn.core">IPrefsChangeListener</a></h3>
 <code><a href="../../../../nl/weeaboo/vn/core/IPrefsChangeListener.html#onPrefsChanged-nl.weeaboo.prefsstore.IPreferenceStore-">onPrefsChanged</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.render.IRenderEnvConsumer">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.render.<a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html" title="interface in nl.weeaboo.vn.render">IRenderEnvConsumer</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/render/IRenderEnvConsumer.html#setRenderEnv-nl.weeaboo.vn.render.IRenderEnv-">setRenderEnv</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IResourceCache">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IResourceCache.html" title="interface in nl.weeaboo.vn.core">IResourceCache</a></h3>
+<code><a href="../../../../nl/weeaboo/vn/core/IResourceCache.html#clearCaches--">clearCaches</a></code></li>
 </ul>
 </li>
 </ul>

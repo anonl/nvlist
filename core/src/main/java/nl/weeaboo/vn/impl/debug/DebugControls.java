@@ -17,9 +17,6 @@ import nl.weeaboo.vn.impl.script.lua.LuaConsole;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.save.ISaveModule;
-import nl.weeaboo.vn.sound.ISound;
-import nl.weeaboo.vn.sound.ISoundController;
-import nl.weeaboo.vn.sound.ISoundModule;
 
 /**
  * Activates special functionality only available in debug mode (see {@link NovelPrefs#DEBUG}).
@@ -47,11 +44,12 @@ public final class DebugControls {
             return; // Debug mode not enabled
         }
 
-        final boolean alt = input.isPressed(KeyCode.ALT_LEFT, true);
+        final boolean ctrl = input.isPressed(KeyCode.CONTROL_LEFT, true) ||
+                input.isPressed(KeyCode.CONTROL_RIGHT, true);
 
-        // Reset
+        // Restart
         ISystemModule systemModule = env.getSystemModule();
-        if (input.consumePress(KeyCode.F5)) {
+        if (ctrl && input.consumePress(KeyCode.F5)) {
             try {
                 systemModule.restart();
             } catch (InitException e) {
@@ -79,17 +77,6 @@ public final class DebugControls {
                 saveModule.load(novel, slot);
             } catch (IOException e) {
                 LOG.warn("Load error", e);
-            }
-        }
-
-        // Music
-        ISoundModule soundModule = env.getSoundModule();
-        if (alt && input.consumePress(KeyCode.PERIOD)) {
-            ISoundController soundController = soundModule.getSoundController();
-
-            ISound music = soundController.get(9000);
-            if (music != null) {
-                music.stop(60);
             }
         }
 

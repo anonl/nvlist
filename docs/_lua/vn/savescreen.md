@@ -54,7 +54,6 @@ local function saveLoadScreen(isSave)
             slot, userData = screen:show()
             screen:destroy()
         end
-
         showScreen()
     end)
 

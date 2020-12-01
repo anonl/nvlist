@@ -187,7 +187,8 @@ end
 --          no background image currently exists.
 function getBackground()
     local imageLayer = getActiveLayer()
-    if imageLayer == nil or not imageLayer:contains(context.background) then
+    if context.background ~= nil and (imageLayer == nil or not imageLayer:contains(context.background)) then
+        Log.debug(\"Reset context.background (no longer exists)\")
         context.background = nil
     end
     return context.background
@@ -236,10 +237,13 @@ end
 -- @treturn Texture The created Texture object, or <code>nil</code> if something
 --          went wrong.
 function tex(filename, suppressErrors)
-    if type(filename) == \"string\" then
-        return Image.getTexture(filename, suppressErrors)
-    end
-    return filename
+    return Image.getTexture(filename, suppressErrors)
+end
+
+---Creates a texture renderer from an image file or texture.
+-- @see tex
+function texRenderer(pathOrTex)
+    return Image.createTextureRenderer(tex(pathOrTex))
 end
 
 ---Creates a texture object with the specified color.
@@ -314,10 +318,12 @@ end
 -- @number durationFrames The duration of the movement in frames (gets
 --         multiplied with <code>getEffectSpeed()</code> internally)
 function fadeTo(i, targetAlpha, durationFrames)
-    durationFrames = durationFrames or 20
+    if durationFrames == nil then
+        durationFrames = 20
+    end
 
     local startAlpha = i:getAlpha()
-    local frame = 1
+    local frame = 0
     while frame + getEffectSpeed() <= durationFrames do
         local f = frame / durationFrames
         i:setAlpha(startAlpha + (targetAlpha - startAlpha) * f)
