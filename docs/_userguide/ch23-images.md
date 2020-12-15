@@ -25,11 +25,38 @@ Remove sprite
 @@@ rm vs rmf
 @@@
 
-### Positioning
+## Positioning
 
 @@@ positioning slots: l/lc/c/rc/r
+@@@ X/Y positioning
+@@@ Anchors & alignment
 
 ### Movement
 
 @@@ translateTo/translateRelative
 
+### Scaling
+
+@@@ setScale, scale
+@@@ setUnscaledSize
+@@@ scaleToFit
+
+### Rotation
+
+@@@ setRotation
+
+### Z
+
+## Effects
+
+### Color tinting
+
+@@@ setColor
+
+### Transparency
+
+@@@ setAlpha
+
+### Blending mode
+
+@@@ setBlendMode

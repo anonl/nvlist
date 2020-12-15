@@ -2,33 +2,30 @@
 title: Script introduction
 ---
 
-@@@ VN is mostly text, so scripting language optimized for displaying text.
-
 ## Text
 
-@@@ Just type what you want to appear. Every line is a separate sentence (starts a new paragraph in NVL mode, new window of text for ADV mode (<- too advanced?))
-
+Visual novels are mostly text, so NVList tries to make displaying text as easy as possible. To show a line of text on the screen, just type what you want to appear:
 {% include sourcecode.html id="textnotation" content="
 A line of text.
 Another line of text.
 " %}
 
+Any line that doesn't start with a special character (and isn't in a block delimited by special characters) is treated as text and displayed as-is.
+
 ## Embedded scripting
 
-@@@ Lines starting with an `@`-character are code lines. NVList uses Lua (link!) as its scripting language. Easy to learn and VNs require very little programming.
+Lines starting with an `@`-character are code lines. NVList uses [Lua](https://www.lua.org/manual/5.1/) as its scripting language. Everything after the `@` is treated as Lua code. If you have multiple lines of Lue code in a row, you add `@@` above and below the code to create a block of Lua code.
 
 {% include sourcecode.html id="codenotation" content="
 @value = 2
 Text
 @@
+-- The lines between the @@ characters are Lua code
 if value > 1 then
     jump(\"badend7\")
 end
 @@
 " %}
-
-@@@ Doesn't really matter what it does, but for completeness sake: assign value of `2` to `value`, then jumps to another script file (`badend7`) if `value` is greater than `1`. 
-
 
 ## Comments
 

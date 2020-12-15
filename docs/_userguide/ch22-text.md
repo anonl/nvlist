@@ -2,17 +2,30 @@
 title: Text
 ---
 
-- Text
-
 ## NVL and ADV modes
 
-@@@ Terminology
-@@@ NVL -> full-screen text. More room for descriptive text. New lines are appended to the visible text until an explicit `clearText()` command is used.
-@@@ ADV -> textbox at the bottom of the screen, usually 2-4 lines tall. Every new line clears the screen. Possible to append text, but requires a special command instead of being the default behavior.
+NVList has built-in support for two text display styles: ADV and NVL. To change between styles, use the `setTextModeADV()` or `setTextModeNVL()` functions.
+
+{% include sourcecode.html id="change-textmode" content="
+@bgf(\"bg/marsh\")
+@setTextModeADV()
+First line
+Second line
+" %}
+
+### ADV
+Text is displayed in a text box, typically at the bottom of the screen. One line of text is shown at a time.
+
+![ADV mode]({{site.baseurl}}{% link assets/userguide/ch22-text.jpg %})
+
+### NVL
+Text is displayed over the entire screen. New lines are appended to the currently visible text until the screen is explicitly cleared by using the `clearText()` function.
+
+![NVL mode]({{site.baseurl}}{% link assets/userguide/ch22-text-nvl.jpg %})
 
 ## Speakers
 
-@@@ Typing the same name over and over again isn't fun. Define a shorthand.
+@@@ VN written as screenplay (Speaker: Text). Typing the same name over and over again isn't fun. Define a shorthand.
 
 @@@ Shorthand for name in text box.
 {% include sourcecode.html id="speakersyntax" content="
