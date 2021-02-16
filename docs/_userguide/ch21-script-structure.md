@@ -2,8 +2,7 @@
 title: Script structure
 ---
 
-@@@ Talk about where the script folder is located.
-@@@ Screenshot of the script folder.
+Script files are stored in the `res/script` folder. 
 
 ## .lua and .lvn files
 
