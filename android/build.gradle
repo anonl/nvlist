@@ -8,6 +8,11 @@ apply from: "${buildToolsDir}/common-android.gradle"
 
 configurations { natives }
 
+repositories {
+    // Android build tools aren't available in Maven central
+    google()
+}
+
 dependencies {
     natives deps.gdx_android_natives
 
@@ -52,4 +57,12 @@ def runInstalled = tasks.register('runInstalled', Exec) {
 // Install, then run debug build
 tasks.register('runDebug') {
     dependsOn('installDebug', runInstalled)
+}
+
+afterEvaluate {
+    ext {
+        mainComponent = components.release
+    }
+
+    project.apply from: rootProject.file('publish.gradle')
 }

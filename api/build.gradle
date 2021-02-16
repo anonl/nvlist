@@ -2,14 +2,19 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
+repositories {
+    // NVList v4.0.0 isn't available in Maven central
+    maven { url 'https://dl.bintray.com/anonl/nvlist/' }
+}
+
 dependencies {
     api deps.styled_text_api
     api deps.tcommon_core
-    
+
     implementation deps.guava
     implementation deps.tcommon_logging
     implementation deps.tcommon_prefsstore
-    
+
     testImplementation deps.tcommon_test
 }
 

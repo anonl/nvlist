@@ -5,9 +5,12 @@ if (isSnapshot) {
     repoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
+plugins.withType(JavaPlugin) {
+    project.ext.mainComponent = components.java
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
 }
 
 apply plugin: 'maven-publish'
@@ -26,13 +29,13 @@ publishing {
     }
 
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             pom {
                 groupId = project.group
                 name = project.name
                 description = 'Cross-platform visual novel engine with a Lua-based scripting language'
                 url = 'https://github.com/anonl/nvlist'
-                from components.java
+                from project.ext.mainComponent
                 licenses {
                     license {
                         name = 'Apache License, Version 2.0'
@@ -56,10 +59,10 @@ publishing {
 }
 
 signing {
-    sign publishing.publications.mavenJava
+    sign publishing.publications.maven
 }
 
-publishMavenJavaPublicationToMavenRepository {
+publishMavenPublicationToMavenRepository {
     doFirst {
         logger.lifecycle("Maven publish user: ${ossrhUsername}")
     }

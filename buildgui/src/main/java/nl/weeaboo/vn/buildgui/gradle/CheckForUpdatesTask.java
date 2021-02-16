@@ -61,7 +61,7 @@ public final class CheckForUpdatesTask extends AbstractTask {
             final RepositorySystemSession session = startSession(repoSystem);
 
             RemoteRepository repo = new RemoteRepository.Builder("mavenCentral", MAVEN_LAYOUT,
-                    "https://repo1.maven.org/maven2/").build();
+                    "https://repo.maven.apache.org/maven2").build();
 
             VersionRangeRequest rangeRequest = new VersionRangeRequest();
             rangeRequest.setArtifact(new DefaultArtifact("nl.weeaboo.vn:nvlist-core:[0,)"));

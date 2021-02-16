@@ -39,7 +39,7 @@ deps.gdx_android = [
     "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
     "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion",
     "com.badlogicgames.gdx:gdx-freetype:$gdxVersion",
-    "nl.weeaboo.gdx.video:gdx-video-android:$gdxVideoVersion",
+    "nl.weeaboo.gdx-video:gdx-video-android:$gdxVideoVersion",
 ]
 
 deps.gdx_android_natives = [
@@ -68,7 +68,7 @@ deps.gdx_core = [
     "com.badlogicgames.gdx:gdx:$gdxVersion",
     "com.badlogicgames.gdx:gdx-controllers:$gdxVersion",
     "com.badlogicgames.gdx:gdx-freetype:$gdxVersion",
-    "nl.weeaboo.gdx.video:gdx-video:$gdxVideoVersion",
+    "nl.weeaboo.gdx-video:gdx-video:$gdxVideoVersion",
 ]
 
 deps.gdx_desktop = [
@@ -78,8 +78,8 @@ deps.gdx_desktop = [
     "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop",
     "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop",
     "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
-    "nl.weeaboo.gdx.video:gdx-video-desktop:$gdxVideoVersion",
-    "nl.weeaboo.gdx.video:gdx-video-desktop-natives:$gdxVideoVersion",
+    "nl.weeaboo.gdx-video:gdx-video-desktop:$gdxVideoVersion",
+    "nl.weeaboo.gdx-video:gdx-video-desktop-natives:$gdxVideoVersion",
 ]
 
 deps.gdx_headless = [
@@ -128,7 +128,7 @@ deps.lsp4j_debug = [
 ]
 
 deps.lua_core = [
-    "nl.weeaboo.luajpp2:luajpp2-core:3.2.0"
+    "nl.weeaboo.luajpp2:luajpp2-core:3.3.0"
 ]
 
 deps.slf4j_api = [
