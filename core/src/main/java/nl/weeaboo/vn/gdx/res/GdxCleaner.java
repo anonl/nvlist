@@ -74,7 +74,11 @@ public final class GdxCleaner {
             while ((rawReference = garbage.poll()) != null) {
                 Cleanable cleanable = (Cleanable)rawReference;
                 LOG.debug("Disposing resource: {}", cleanable);
-                cleanable.cleanup.dispose();
+                try {
+                    cleanable.cleanup.dispose();
+                } catch (RuntimeException e) {
+                    LOG.error("Cleanup task threw an exception: {}", cleanable.cleanup, e);
+                }
             }
         }
     }
