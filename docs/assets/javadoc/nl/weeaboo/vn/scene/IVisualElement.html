@@ -140,11 +140,15 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/layout/ILayoutElem.html" title="interface in nl.weeaboo.vn.layout">ILayoutElem</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getLayoutAdapter--">getLayoutAdapter</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getLayoutAdapter--">getLayoutAdapter</a></span>()</code>
+<div class="block">Returns the interface used to access this visual element's layout properties.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/scene/IVisualGroup.html" title="interface in nl.weeaboo.vn.scene">IVisualGroup</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getParent--">getParent</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getParent--">getParent</a></span>()</code>
+<div class="block">Returns the parent of this element in the view hierarchy.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/render/IRenderEnv.html" title="interface in nl.weeaboo.vn.render">IRenderEnv</a></code></td>
@@ -154,15 +158,21 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>nl.weeaboo.common.Rect2D</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getVisualBounds--">getVisualBounds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getVisualBounds--">getVisualBounds</a></span>()</code>
+<div class="block">Returns the axis-aligned bounding box for this visual element, relative to the origin of its parent.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>short</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getZ--">getZ</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getZ--">getZ</a></span>()</code>
+<div class="block">Returns the relative rendering order of this element.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#isVisible--">isVisible</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#isVisible--">isVisible</a></span>()</code>
+<div class="block">Returns <code>true</code> if this element should be rendered.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -257,10 +267,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <h4>getParent</h4>
 <pre>@Nullable
 <a href="../../../../nl/weeaboo/vn/scene/IVisualGroup.html" title="interface in nl.weeaboo.vn.scene">IVisualGroup</a>&nbsp;getParent()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The parent of this element in the view hierarchy. For example, a <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene"><code>ILayer</code></a>.</dd>
-</dl>
+<div class="block">Returns the parent of this element in the view hierarchy. For example, a <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene"><code>ILayer</code></a>.</div>
 </li>
 </ul>
 <a name="setParent-nl.weeaboo.vn.scene.IVisualGroup-">
@@ -288,11 +295,8 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <li class="blockList">
 <h4>getZ</h4>
 <pre>short&nbsp;getZ()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The relative rendering order of this element. Elements with lower Z-values are rendered on top of
-         elements with higher Z-values.</dd>
-</dl>
+<div class="block">Returns the relative rendering order of this element. Elements with lower Z-values are rendered on top of
+         elements with higher Z-values.</div>
 </li>
 </ul>
 <a name="isVisible--">
@@ -302,10 +306,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <li class="blockList">
 <h4>isVisible</h4>
 <pre>boolean&nbsp;isVisible()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if this element should be rendered.</dd>
-</dl>
+<div class="block">Returns <code>true</code> if this element should be rendered.</div>
 </li>
 </ul>
 <a name="getVisualBounds--">
@@ -315,10 +316,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <li class="blockList">
 <h4>getVisualBounds</h4>
 <pre>nl.weeaboo.common.Rect2D&nbsp;getVisualBounds()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The axis-aligned bounding box for this visual element, relative to the origin of its parent.</dd>
-</dl>
+<div class="block">Returns the axis-aligned bounding box for this visual element, relative to the origin of its parent.</div>
 </li>
 </ul>
 <a name="getRenderEnv--">
@@ -339,10 +337,7 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <li class="blockList">
 <h4>getLayoutAdapter</h4>
 <pre><a href="../../../../nl/weeaboo/vn/layout/ILayoutElem.html" title="interface in nl.weeaboo.vn.layout">ILayoutElem</a>&nbsp;getLayoutAdapter()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The interface used to access this visual element's layout properties.</dd>
-</dl>
+<div class="block">Returns the interface used to access this visual element's layout properties.</div>
 </li>
 </ul>
 </li>

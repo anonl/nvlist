@@ -105,6 +105,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IBaseInput&lt;K&gt;</span></pre>
+<div class="block">Provides access to user-input events.</div>
 </li>
 </ul>
 </div>
@@ -131,7 +132,10 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#consumePress-K-">consumePress</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#consumePress-K-">consumePress</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</code>
+<div class="block">Same as <a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isPressed-K-boolean-"><code>isPressed(Object, boolean)</code></a>, then marks the press as consumed so further calls
+         return <code>false</code>.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/math/Vec2.html" title="class in nl.weeaboo.vn.math">Vec2</a></code></td>
@@ -148,20 +152,30 @@ var activeTableTab = "activeTableTab";
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#getPressedTime-K-boolean-">getPressedTime</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button,
-              boolean&nbsp;allowConsumedPress)</code>&nbsp;</td>
+              boolean&nbsp;allowConsumedPress)</code>
+<div class="block">Returns the time in milliseconds that the specified button has been continuously held, or <code>0</code> if
+         that button isn't currently being held.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isIdle--">isIdle</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isIdle--">isIdle</a></span>()</code>
+<div class="block">Returns <code>true</code> if the user hasn't performed any type of input this frame (no button presses, no
+         mouse/touch events).</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isJustPressed-K-">isJustPressed</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isJustPressed-K-">isJustPressed</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</code>
+<div class="block">Returns <code>true</code> if the specified button got pressed since the last frame.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isPressed-K-boolean-">isPressed</a></span>(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button,
-         boolean&nbsp;allowConsumedPress)</code>&nbsp;</td>
+         boolean&nbsp;allowConsumedPress)</code>
+<div class="block">Returns <code>true</code> if the specified button is currently pressed.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -197,11 +211,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>consumePress</h4>
 <pre>boolean&nbsp;consumePress(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Same as <a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isPressed-K-boolean-"><code>isPressed(Object, boolean)</code></a>, then marks the press as consumed so further calls
-         return <code>false</code>.</dd>
-</dl>
+<div class="block">Same as <a href="../../../../nl/weeaboo/vn/input/IBaseInput.html#isPressed-K-boolean-"><code>isPressed(Object, boolean)</code></a>, then marks the press as consumed so further calls
+         return <code>false</code>.</div>
 </li>
 </ul>
 <a name="isJustPressed-java.lang.Object-">
@@ -213,10 +224,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>isJustPressed</h4>
 <pre>boolean&nbsp;isJustPressed(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the specified button got pressed since the last frame.</dd>
-</dl>
+<div class="block">Returns <code>true</code> if the specified button got pressed since the last frame.</div>
 </li>
 </ul>
 <a name="isPressed-java.lang.Object-boolean-">
@@ -229,10 +237,7 @@ var activeTableTab = "activeTableTab";
 <h4>isPressed</h4>
 <pre>boolean&nbsp;isPressed(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button,
                   boolean&nbsp;allowConsumedPress)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the specified button is currently pressed.</dd>
-</dl>
+<div class="block">Returns <code>true</code> if the specified button is currently pressed.</div>
 </li>
 </ul>
 <a name="getPressedTime-java.lang.Object-boolean-">
@@ -245,11 +250,8 @@ var activeTableTab = "activeTableTab";
 <h4>getPressedTime</h4>
 <pre>long&nbsp;getPressedTime(<a href="../../../../nl/weeaboo/vn/input/IBaseInput.html" title="type parameter in IBaseInput">K</a>&nbsp;button,
                     boolean&nbsp;allowConsumedPress)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The time in milliseconds that the specified button has been continuously held, or <code>0</code> if
-         that button isn't currently being held.</dd>
-</dl>
+<div class="block">Returns the time in milliseconds that the specified button has been continuously held, or <code>0</code> if
+         that button isn't currently being held.</div>
 </li>
 </ul>
 <a name="getPointerPos-nl.weeaboo.vn.math.Matrix-">
@@ -280,11 +282,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>isIdle</h4>
 <pre>boolean&nbsp;isIdle()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the user hasn't performed any type of input this frame (no button presses, no
-         mouse/touch events).</dd>
-</dl>
+<div class="block">Returns <code>true</code> if the user hasn't performed any type of input this frame (no button presses, no
+         mouse/touch events).</div>
 </li>
 </ul>
 </li>

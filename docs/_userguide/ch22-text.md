@@ -2,30 +2,51 @@
 title: Text
 ---
 
-- Text
-
 ## NVL and ADV modes
 
-@@@ Terminology
-@@@ NVL -> full-screen text. More room for descriptive text. New lines are appended to the visible text until an explicit `clearText()` command is used.
-@@@ ADV -> textbox at the bottom of the screen, usually 2-4 lines tall. Every new line clears the screen. Possible to append text, but requires a special command instead of being the default behavior.
+NVList has built-in support for two text display styles: ADV and NVL. To change between styles, use the `setTextModeADV()` or `setTextModeNVL()` functions.
+
+{% include sourcecode.html id="change-textmode" content="
+@bgf(\"bg/marsh\")
+@setTextModeADV()
+First line
+Second line
+" %}
+
+### ADV
+Text is displayed in a text box, typically at the bottom of the screen. One line of text is shown at a time.
+
+![ADV mode]({{site.baseurl}}{% link assets/userguide/ch22-text.jpg %})
+
+### NVL
+Text is displayed over the entire screen. New lines are appended to the currently visible text until the screen is explicitly cleared by using the `clearText()` function.
+
+![NVL mode]({{site.baseurl}}{% link assets/userguide/ch22-text-nvl.jpg %})
 
 ## Speakers
 
-@@@ Typing the same name over and over again isn't fun. Define a shorthand.
+NVList has special support for displaying text spoken by a character.
 
-@@@ Shorthand for name in text box.
 {% include sourcecode.html id="speakersyntax" content="
+#Register 'bob' as a speaker (you only need to do this once)
 @registerSpeaker(\"bob\", \"Man named Bob\")
+
+#Now that 'bob' is defined, we can make him say stuff by prefixing text lines with $bob
+$bob My name is Bob
+$bob I'm still talking
 "%}
-@@@ short-name (no spaces), full name
 
 ## Stringifiers
 
-@@@ Dynamic text, replacing `$whatever` with the value of a script variable or function. Common term for this is "string interpolation".
-@@@ Stringifier example, both simple variable replacement, but also a custom stringifier function.
+Stringifiers are a way to display dynamic text.
 
-@@@ Explain that variables are automatically replaced by their value, but that you can also register a function. Stringifiers run before the first character of the line becomes visible. Full line of text is needed to calculate the line-wrapping.
+{% include sourcecode.html id="stringifiersyntax" content="
+# Assign 'red' to a Lua variable
+@local color = 'purple'
+
+# Displays: My favorite color is purple 
+My favorite color is $color
+"%}
 
 ## Embedded commands
 
@@ -39,18 +60,17 @@ The main use for this is syncing up special effects with a specific word in the 
 
 ## Text tags
 
-@@@ Only standard text tags (see: advanced text chapter for custom tags)
-@@@ HTML-like tags that allow you to change the appearance (color, size, etc.) of text.
+Text tags can be used to apply styling to text. Simply surround the text you want to style with any of the following tags:
 
 {% include sourcecode.html id="basictexttags" content="
 {b}bold{/b}
 {i}italic{/i}
 {u}underlined{/u}
-{font myCustomFont.ttf}different font{/font}
-{color FF0000}red text{/color}
-{size 24}text size{/size}
-{align right}right-aligned text{/align}
+{font=\"custom-font.ttf\"}different font{/font}
+{color=0xFFFF0000}red text{/color}
+{size=24}text size{/size}
+{align=\"right\"}right-aligned text{/align}
 {center}center-aligned text{/center}
 "%}
 
-@@@ Add screenshot of result of this code example
+![Text tags]({{site.baseurl}}{% link assets/userguide/ch22-text-tags.jpg %})

@@ -12,12 +12,8 @@ module(\"vn.tween\", package.seeall)
 -- Local functions shared between sections
 --------------------------------------------------------------------------------------------------------------
 
-local function doTween(image, tween, endTexture)
-    if endTexture == nil then
-        tween:setSize(image:getWidth(), image:getHeight())
-    else
-        tween:setSize(endTexture:getWidth(), endTexture:getHeight());
-    end
+local function doTween(image, tween, endRenderer)
+    tween:setSize(endRenderer:getWidth(), endRenderer:getHeight());
 
     image:setRenderer(tween)
     while not image:isDestroyed() and not tween:isFinished() do
@@ -27,7 +23,7 @@ local function doTween(image, tween, endTexture)
         end
         yield()
     end
-    image:setTexture(endTexture)
+    image:setRenderer(endRenderer)
     return true -- Causes various tween functions to return true for backwards compatibility
 end
 
@@ -75,14 +71,35 @@ function crossFadeTween(image, targetTexture, duration, interpolator)
     if interpolator ~= nil then
         config:setInterpolator(Interpolators.get(interpolator))
     end
-    
+
     local tween = Tween.crossFade(config)
-    return doTween(image, tween, targetTexture)
+    return doTween(image, tween, texRenderer(targetTexture))
 end
 
 
 ---Bitmap tween
 -------------------------------------------------------------------------------- @section Bitmap tween
+
+local function bitmapTweenR(image, targetTexture, targetRenderer, controlImage, duration, range, interpolator)
+    duration = duration or 60
+    range = range or 0.5
+    targetTexture = tex(targetTexture)
+
+    local config = Tween.bitmapTweenConfig(duration, controlImage, false)
+    config:setStartTexture(image:getTexture())
+    config:setEndTexture(targetTexture)
+    config:setRange(range)
+    if interpolator ~= nil then
+        config:setInterpolator(Interpolators.get(interpolator))
+    end
+
+    local tween = Tween.bitmapTween(config)
+    if targetTexture == nil then
+        --Use existing size when fading out
+        targetRenderer:setSize(image:getWidth(), image:getHeight())
+    end
+    return doTween(image, tween, targetRenderer)
+end
 
 ---Changes an ImageDrawable's texture through a dissolve effect shaped by a grayscale bitmap.
 --
@@ -97,20 +114,7 @@ end
 -- @param[opt=nil] interpolator A function or interpolator object mapping an input in the range
 --                 <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 function bitmapTween(image, targetTexture, controlImage, duration, range, interpolator)
-    targetTexture = tex(targetTexture)
-    duration = duration or 60
-    range = range or 0.5
-
-    local config = Tween.bitmapTweenConfig(duration, controlImage, false)
-    config:setStartTexture(image:getTexture())
-    config:setEndTexture(targetTexture)
-    config:setRange(range)
-    if interpolator ~= nil then
-        config:setInterpolator(Interpolators.get(interpolator))
-    end
-
-    local tween = Tween.bitmapTween(config)
-    return doTween(image, tween, targetTexture)
+    return bitmapTweenR(image, targetTexture, texRenderer(targetTexture), controlImage, duration, range, interpolator)
 end
 
 ---Fades in an ImageDrawable's texture using a bitmap transition.
@@ -126,9 +130,10 @@ end
 --                 <code>(0, 1)</code> to an output in the range <code>(0, 1)</code>.
 -- @see bitmapTween
 function bitmapTweenIn(image, controlImage, duration, range, interpolator)
-    local tex = image:getTexture()
+    local oldTexture = image:getTexture()
+    local oldRenderer = image:getRenderer()
     image:setTexture(nil)
-    return bitmapTween(image, tex, controlImage, duration, range, interpolator)
+    return bitmapTweenR(image, oldTexture, oldRenderer, controlImage, duration, range, interpolator)
 end
 
 ---Fades away an ImageDrawable's texture using a bitmap transition.

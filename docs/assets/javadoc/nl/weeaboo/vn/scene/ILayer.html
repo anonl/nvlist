@@ -129,19 +129,27 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" tit
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#containsLayer-nl.weeaboo.vn.scene.ILayer-">containsLayer</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&nbsp;layer)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#containsLayer-nl.weeaboo.vn.scene.ILayer-">containsLayer</a></span>(<a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&nbsp;layer)</code>
+<div class="block">Returns <code>true</code> if the specified layer is a descendant of this layer.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getParent--">getParent</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getParent--">getParent</a></span>()</code>
+<div class="block">Returns the parent of this element in the view hierarchy.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../nl/weeaboo/vn/image/IScreenshotBuffer.html" title="interface in nl.weeaboo.vn.image">IScreenshotBuffer</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getScreenshotBuffer--">getScreenshotBuffer</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getScreenshotBuffer--">getScreenshotBuffer</a></span>()</code>
+<div class="block">Returns a buffer for pending screenshots.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.Iterable&lt;? extends <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getSubLayers--">getSubLayers</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/scene/ILayer.html#getSubLayers--">getSubLayers</a></span>()</code>
+<div class="block">Returns a read-only view of all layer children (non-recursive).</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -220,13 +228,13 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" tit
 <li class="blockList">
 <h4>getParent</h4>
 <pre><a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&nbsp;getParent()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getParent--">IVisualElement</a></code></span></div>
+<div class="block">Returns the parent of this element in the view hierarchy. For example, a <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene"><code>ILayer</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html#getParent--">getParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" title="interface in nl.weeaboo.vn.scene">IAxisAlignedContainer</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html#getParent--">getParent</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../nl/weeaboo/vn/scene/IVisualElement.html" title="interface in nl.weeaboo.vn.scene">IVisualElement</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The parent of this element in the view hierarchy. For example, a <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene"><code>ILayer</code></a>.</dd>
 </dl>
 </li>
 </ul>
@@ -247,10 +255,7 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" tit
 <li class="blockList">
 <h4>containsLayer</h4>
 <pre>boolean&nbsp;containsLayer(<a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&nbsp;layer)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>true</code> if the specified layer is a descendant of this layer.</dd>
-</dl>
+<div class="block">Returns <code>true</code> if the specified layer is a descendant of this layer.</div>
 </li>
 </ul>
 <a name="getSubLayers--">
@@ -260,10 +265,7 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" tit
 <li class="blockList">
 <h4>getSubLayers</h4>
 <pre>java.lang.Iterable&lt;? extends <a href="../../../../nl/weeaboo/vn/scene/ILayer.html" title="interface in nl.weeaboo.vn.scene">ILayer</a>&gt;&nbsp;getSubLayers()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A read-only view of all layer children (non-recursive).</dd>
-</dl>
+<div class="block">Returns a read-only view of all layer children (non-recursive).</div>
 </li>
 </ul>
 <a name="getScreenshotBuffer--">
@@ -273,11 +275,8 @@ extends <a href="../../../../nl/weeaboo/vn/scene/IAxisAlignedContainer.html" tit
 <li class="blockList">
 <h4>getScreenshotBuffer</h4>
 <pre><a href="../../../../nl/weeaboo/vn/image/IScreenshotBuffer.html" title="interface in nl.weeaboo.vn.image">IScreenshotBuffer</a>&nbsp;getScreenshotBuffer()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A buffer for pending screenshots. Screenshots requests queued in this buffer will be fullfilled
-         at some later time.</dd>
-</dl>
+<div class="block">Returns a buffer for pending screenshots. Screenshots requests queued in this buffer will be fullfilled
+         at some later time.</div>
 </li>
 </ul>
 <a name="setZ-short-">

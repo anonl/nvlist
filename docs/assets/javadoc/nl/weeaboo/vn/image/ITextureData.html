@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var methods = {"i0":38,"i1":6,"i2":6,"i3":38};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -116,31 +116,36 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/ITextureData.html#destroy--">destroy</a></span>()</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/ITextureData.html#getHeight--">getHeight</a></span>()</code>
 <div class="block">Pixel height of the texture data.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/ITextureData.html#getWidth--">getWidth</a></span>()</code>
 <div class="block">Pixel width of the texture data.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../nl/weeaboo/vn/image/ITextureData.html#isDestroyed--">isDestroyed</a></span>()</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.nl.weeaboo.vn.core.IDestructible">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;nl.weeaboo.vn.core.<a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></h3>
-<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">destroy</a>, <a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">isDestroyed</a></code></li>
-</ul>
 </li>
 </ul>
 </li>
@@ -155,6 +160,42 @@ extends java.io.Serializable, <a href="../../../../nl/weeaboo/vn/core/IDestructi
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="destroy--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>destroy</h4>
+<pre>@Deprecated
+void&nbsp;destroy()</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">IDestructible</a></code></span></div>
+<div class="block">Destroys the object, cleaning up any native resources.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--">destroy</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="isDestroyed--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDestroyed</h4>
+<pre>@Deprecated
+boolean&nbsp;isDestroyed()</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">IDestructible</a></code></span></div>
+<div class="block">Returns <code>true</code> if this object is destroyed.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#isDestroyed--">isDestroyed</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../nl/weeaboo/vn/core/IDestructible.html" title="interface in nl.weeaboo.vn.core">IDestructible</a></code></dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../nl/weeaboo/vn/core/IDestructible.html#destroy--"><code>IDestructible.destroy()</code></a></dd>
+</dl>
+</li>
+</ul>
 <a name="getWidth--">
 <!--   -->
 </a>
