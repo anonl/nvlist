@@ -13,22 +13,3 @@ dependencies {
 
     runtimeOnly deps.slf4j_desktop
 }
-
-
-publishing {
-    publications {
-        desktop(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-desktop'
-
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['desktop']
-}
-

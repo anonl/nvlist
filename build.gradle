@@ -1,7 +1,6 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
     }
     dependencies {
@@ -14,10 +13,6 @@ buildscript {
 }
 
 plugins {
-    // Plugin for uploading to bintray
-    // Note: Causes a classpath conflict for org.apache.tools.zip
-    id 'com.jfrog.bintray' version '1.8.4'
-
     // Google error-prone
     id 'net.ltgt.errorprone' version '1.1.1' apply false
 
@@ -44,9 +39,8 @@ def templateDir = file('template').getAbsoluteFile()
 allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'jacoco'
-    apply plugin: 'com.jfrog.bintray'
 
-    group = 'nl.weeaboo.vn'
+    group = 'nl.weeaboo.tcommon'
     version = '4.8.0'
     ext {
         javaVersion = 8
@@ -54,26 +48,10 @@ allprojects {
         vnRootDir = rootProject.file(project.findProperty('vnRoot') ?: templateDir)
         vnResDir = new File(vnRootDir, 'res')
         buildToolsDir = new File(templateDir, 'build-tools') 
-
-        pomLicenseConfig = {
-           licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-        }
-        pomLicenseConfig.resolveStrategy = Closure.DELEGATE_ONLY // Otherwise 'license' elem is missing
     }
 
     repositories {
-        jcenter()
-        google()
         maven { url 'https://repo.gradle.org/gradle/libs-releases' } // For Gradle tooling API
-        maven { url 'https://dl.bintray.com/anonl/luajpp2/' }
-        maven { url 'https://dl.bintray.com/anonl/nvlist/' }
-        maven { url 'https://dl.bintray.com/anonl/tcommon/' }
     }
 
     plugins.withType(JavaPlugin) {
@@ -172,19 +150,6 @@ allprojects {
         project.apply from: rootProject.file('errorprone.gradle')
         project.apply from: rootProject.file('pitest.gradle')
         project.apply from: rootProject.file('jmh.gradle')
-    }
-
-    bintray {
-        user = System.getenv('BINTRAY_USER')
-        key = System.getenv('BINTRAY_KEY')
-        pkg {
-            repo = 'nvlist'
-            name = 'nvlist'
-            licenses = ['Apache-2.0']
-            vcsUrl = 'https://github.com/anonl/nvlist.git'
-            version {
-                name = project.version
-            }
-        }
+        project.apply from: rootProject.file('publish.gradle')
     }
 }

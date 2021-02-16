@@ -1,0 +1,66 @@
+def isSnapshot = version.endsWith('SNAPSHOT')
+
+def repoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+if (isSnapshot) {
+    repoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+publishing {
+    repositories {
+        maven {
+            url = repoUrl
+            credentials {
+                // These values are typically defined in gradle.properties in your user home
+                username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'user-undefined'
+                password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'password-undefined'
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                groupId = project.group
+                name = project.name
+                description = 'Cross-platform visual novel engine with a Lua-based scripting language'
+                url = 'https://github.com/anonl/nvlist'
+                from components.java
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://opensource.org/licenses/Apache-2.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'anonl'
+                        email = 'mail@weeaboo.nl'
+                    }
+                }
+                scm {
+                    connection = 'scm:git://github.com/anonl/nvlist.git'
+                    developerConnection = 'scm:git:ssh://github.com:anonl/nvlist.git'
+                    url = 'https://github.com/anonl/nvlist'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+publishMavenJavaPublicationToMavenRepository {
+    doFirst {
+        logger.lifecycle("Maven publish user: ${ossrhUsername}")
+    }
+}

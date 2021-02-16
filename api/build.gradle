@@ -13,22 +13,6 @@ dependencies {
     testImplementation deps.tcommon_test
 }
 
-publishing {
-    publications {
-        api(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-api'
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['api']
-}
-
 // Check to see if we're API-compatible with a previous release
 // To release a breaking change, set compatibleVersion to version
 def compatibleVersion = '4.0.0'

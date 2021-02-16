@@ -31,8 +31,8 @@ final class RunMavenResolver {
         session.setLocalRepositoryManager(repoSystem.newLocalRepositoryManager(session,
                 new LocalRepository("build/tmp/repo")));
 
-        RemoteRepository repo = new RemoteRepository.Builder("nvlist", MAVEN_LAYOUT,
-                "https://dl.bintray.com/anonl/nvlist/").build();
+        RemoteRepository repo = new RemoteRepository.Builder("mavenCentral", MAVEN_LAYOUT,
+                "https://repo1.maven.org/maven2/").build();
 
         VersionRangeRequest rangeRequest = new VersionRangeRequest();
         rangeRequest.setArtifact(new DefaultArtifact("nl.weeaboo.vn:nvlist-core:[0,)"));
@@ -43,7 +43,7 @@ final class RunMavenResolver {
 
         /*
         MavenResolvedArtifact[] resolved = Maven.configureResolver()
-            .withRemoteRepo("nvlist", "https://dl.bintray.com/anonl/nvlist/", MAVEN_LAYOUT)
+            .withRemoteRepo("mavenCentral", "https://repo1.maven.org/maven2/", MAVEN_LAYOUT)
             .resolve("nl.weeaboo.vn:nvlist-desktop:RELEASE")
             .withoutTransitivity()
             .asResolvedArtifact();

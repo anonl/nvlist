@@ -22,22 +22,6 @@ shadowJar {
    version = null
 }
 
-publishing {
-    publications {
-        buildgui(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-buildgui'
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['buildgui']
-}
-
 // Generate a native executable
 apply from: "${buildToolsDir}/common-packr.gradle"
 

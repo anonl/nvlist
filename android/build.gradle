@@ -53,22 +53,3 @@ def runInstalled = tasks.register('runInstalled', Exec) {
 tasks.register('runDebug') {
     dependsOn('installDebug', runInstalled)
 }
-
-afterEvaluate {
-    publishing {
-        publications {
-            android(MavenPublication) {
-                from components.release
-                artifactId 'nvlist-android'
-
-                pom.withXml {
-                    asNode().children().last() + pomLicenseConfig
-                }
-            }
-        }
-    }
-
-    bintray {
-        publications = ['android']
-    }
-}

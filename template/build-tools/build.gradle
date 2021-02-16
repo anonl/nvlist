@@ -1,11 +1,8 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
-        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
-        maven { url "https://dl.bintray.com/anonl/nvlist/" }
-        maven { url "https://dl.bintray.com/anonl/tcommon/" }
         mavenLocal()
     }
     dependencies {
@@ -47,10 +44,7 @@ allprojects {
     }
 
     repositories {
-        jcenter()
-        maven { url "https://dl.bintray.com/anonl/nvlist/" }
-        maven { url "https://dl.bintray.com/anonl/luajpp2/" }
-        maven { url "https://dl.bintray.com/anonl/tcommon/" }
+        mavenCentral()
         mavenLocal()
     }
 

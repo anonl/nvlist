@@ -64,19 +64,3 @@ generateGrammarSource {
     outputDirectory = file('src/gen/java/nl/weeaboo/vn/impl/script/lvn/gen')
 }
 eclipse.synchronizationTasks generateGrammarSource
-
-publishing {
-    publications {
-        core(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-core'
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['core']
-}

@@ -30,20 +30,3 @@ shadowJar {
    classifier = null
    version = null
 }
-
-publishing {
-    publications {
-        langserver(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-langserver'
-
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['langserver']
-}

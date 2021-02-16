@@ -12,19 +12,3 @@ dependencies {
 
     testRuntimeOnly deps.slf4j_desktop
 }
-
-publishing {
-    publications {
-        buildtools(MavenPublication) {
-            from components.java
-            artifactId 'nvlist-buildtools'
-            pom.withXml {
-                asNode().children().last() + pomLicenseConfig
-            }  
-        }
-    }
-}
-
-bintray {
-    publications = ['buildtools']
-}
