@@ -1,6 +1,11 @@
 
 configurations { natives }
 
+repositories {
+    // Android build tools aren't available in Maven central
+    google()
+}
+
 android {
     buildToolsVersion '29.0.2'
     compileSdkVersion 28

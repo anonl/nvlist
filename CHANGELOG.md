@@ -1,4 +1,7 @@
 
+# v4.8.1
+- fix: Gradle plugin portal was missing from `build-tools/build.gradle` causing "Could not resolve all artifacts" errors.
+
 # v4.8.0
 - Restart hotkey changed to Ctrl+F5 to prevent accidental restarts when debugging (F5 is 'Resume' in the debugger).
 - Improved preloader performance. It can now preload images loaded from a background thread.
