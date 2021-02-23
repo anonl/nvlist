@@ -1,4 +1,7 @@
 
+# v4.9.0
+- When debug mode is enabled, `(debug)` is now added to the window's title. This makes it easier to spot if debug mode is enabled/disabled.
+
 # v4.8.1
 - fix: Gradle plugin portal was missing from `build-tools/build.gradle` causing "Could not resolve all artifacts" errors.
 

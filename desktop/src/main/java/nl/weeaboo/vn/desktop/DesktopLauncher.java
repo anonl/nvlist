@@ -136,7 +136,7 @@ public final class DesktopLauncher {
          */
         config.setHdpiMode(HdpiMode.Pixels);
 
-        config.setTitle(prefs.get(NovelPrefs.TITLE));
+        config.setTitle(getWindowTitle(prefs));
         config.setWindowedMode(prefs.get(NovelPrefs.WIDTH), prefs.get(NovelPrefs.HEIGHT));
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
@@ -146,6 +146,14 @@ public final class DesktopLauncher {
         });
 
         return config;
+    }
+
+    private static String getWindowTitle(NovelPrefsStore prefs) {
+        String title = prefs.get(NovelPrefs.TITLE);
+        if (prefs.get(NovelPrefs.DEBUG)) {
+            title += " (debug)";
+        }
+        return title;
     }
 
     private void handleCommandlineOptions(NovelPrefsStore prefs) throws InitException {
