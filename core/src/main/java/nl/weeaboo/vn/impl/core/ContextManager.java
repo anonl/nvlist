@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.ContextListener;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
@@ -146,6 +147,13 @@ public final class ContextManager implements IContextManager {
 
         for (IContext context : contexts) {
             context.setRenderEnv(env);
+        }
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
+        for (IContext context : contexts) {
+            context.onPrefsChanged(config);
         }
     }
 

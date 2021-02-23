@@ -11,7 +11,7 @@ import nl.weeaboo.vn.script.IScriptFunction;
 /**
  * Manages the active {@link IContext} and context lifetimes.
  */
-public interface IContextManager extends Serializable, IUpdateable, IRenderEnvConsumer {
+public interface IContextManager extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener {
 
     /**
      * Creates a new context and registers it with the context manager.

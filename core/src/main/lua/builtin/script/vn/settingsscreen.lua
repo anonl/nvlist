@@ -33,21 +33,21 @@ local function getSoundTypeName(mode)
     return mode
 end
 
--------------------------------------------------------------------------------------------------------------- @section VolumeControl
+-------------------------------------------------------------------------------------------------------------- @section RangeControl
 
-local VolumeControl = {
-    soundType=SoundType.MUSIC,
+
+local RangeControl = {
     label=nil,
     minusButton=nil,
     plusButton=nil,
     valueLabel=nil
     }
 
-function VolumeControl.new(self)
-    self = extend(VolumeControl, self)
+function RangeControl.new(label, self)
+    self = extend(RangeControl, self)
 
     self.label = textimg()
-    self.label:setText(getSoundTypeName(self.soundType))
+    self.label:setText(label)
 
     self.valueLabel = textimg()
     self.valueLabel:setMaxSize(180, 100)
@@ -57,18 +57,60 @@ function VolumeControl.new(self)
     self.minusButton:setText("-")
     self.minusButton:setSize(75, 75)
     Gui.setClickHandler(self.minusButton, function()
-        self:adjustVolume(-.05)
+        self:adjustValue(-1)
     end)
 
     self.plusButton = button("gui/button")
     self.plusButton:setText("+")
     self.plusButton:setSize(75, 75)
     Gui.setClickHandler(self.plusButton, function()
-        self:adjustVolume(.05)
+        self:adjustValue(1)
     end)
 
-    self:onValueChanged()
+    return self
+end
 
+function RangeControl:layout(x, y)
+    self.label:setPos(x, y + 10)
+    x = x + 180
+    self.minusButton:setPos(x, y)
+    x = x + 50
+    self.valueLabel:setPos(x, y + 10)
+    x = x + 160
+    self.plusButton:setPos(x, y)
+end
+
+-------------------------------------------------------------------------------------------------------------- @section TextSpeedControl
+
+local TextSpeedControl = {}
+
+function TextSpeedControl.new(self)
+    self = RangeControl.new("Text speed", extend(TextSpeedControl, self))
+    self:onValueChanged()
+    return self
+end
+
+function TextSpeedControl:onValueChanged()
+    local charsPerSecond = math.floor(60 * Text.getTextSpeed() + 0.5)
+    self.valueLabel:setText(charsPerSecond)
+    self.minusButton:setEnabled(charsPerSecond > 1)
+    self.plusButton:setEnabled(charsPerSecond < 100)
+end
+
+function TextSpeedControl:adjustValue(change)
+    Text.setTextSpeed(Text.getTextSpeed() + change / 60)
+    self:onValueChanged()
+end
+
+-------------------------------------------------------------------------------------------------------------- @section VolumeControl
+
+local VolumeControl = {
+    soundType=SoundType.MUSIC,
+    }
+
+function VolumeControl.new(self)
+    self = RangeControl.new(getSoundTypeName(self.soundType), extend(VolumeControl, self))
+    self:onValueChanged()
     return self
 end
 
@@ -79,19 +121,9 @@ function VolumeControl:onValueChanged()
     self.plusButton:setEnabled(percent < 100)
 end
 
-function VolumeControl:adjustVolume(change)
-    Sound.setMasterVolume(self.soundType, Sound.getMasterVolume(self.soundType) + change)
+function VolumeControl:adjustValue(change)
+    Sound.setMasterVolume(self.soundType, Sound.getMasterVolume(self.soundType) + change * .05)
     self:onValueChanged()
-end
-
-function VolumeControl:layout(x, y)
-    self.label:setPos(x, y + 10)
-    x = x + 180
-    self.minusButton:setPos(x, y)
-    x = x + 50
-    self.valueLabel:setPos(x, y + 10)
-    x = x + 160
-    self.plusButton:setPos(x, y)
 end
 
 ---Default settings screen
@@ -106,6 +138,11 @@ function SettingsScreen.new(self)
 
     local x = 400
     local y = 100
+
+    local textSpeedControl = TextSpeedControl.new()
+    textSpeedControl:layout(x, y)
+    y = y + 75
+
     local volumeControls = {}
     for _,v in pairs(SoundType) do
         local vc = VolumeControl.new{soundType = v}

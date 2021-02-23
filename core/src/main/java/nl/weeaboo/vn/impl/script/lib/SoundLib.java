@@ -5,8 +5,10 @@ import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaDouble;
 import nl.weeaboo.lua2.vm.LuaNil;
 import nl.weeaboo.lua2.vm.Varargs;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.script.ScriptFunction;
@@ -76,7 +78,6 @@ public class SoundLib extends LuaLib {
         return env.getSoundModule().getSoundController();
     }
 
-
     /**
      * @param args
      *        <ol>
@@ -104,8 +105,19 @@ public class SoundLib extends LuaLib {
         SoundType stype = args.optuserdata(1, SoundType.class, SoundType.SOUND);
         double volume = args.checkdouble(2);
 
-        ISoundController sc = getSoundController();
-        sc.setMasterVolume(stype, volume);
+        // Change the global preferences. This eventually changes ISoundController.setMasterValue()
+        IPreferenceStore prefStore = env.getPrefStore();
+        switch (stype) {
+        case MUSIC:
+            prefStore.set(NovelPrefs.MUSIC_VOLUME, volume);
+            break;
+        case SOUND:
+            prefStore.set(NovelPrefs.SOUND_EFFECT_VOLUME, volume);
+            break;
+        case VOICE:
+            prefStore.set(NovelPrefs.VOICE_VOLUME, volume);
+            break;
+        }
 
         return LuaConstants.NONE;
     }

@@ -3,6 +3,7 @@ package nl.weeaboo.vn.scene;
 import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IPrefsChangeListener;
 import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.render.IOffscreenRenderTaskBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
@@ -11,7 +12,7 @@ import nl.weeaboo.vn.render.IRenderEnvConsumer;
 /**
  * Top-level container for the visual elements in a {@link IContext}.
  */
-public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer {
+public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener {
 
     /**
      * Creates a new layer and adds it to {@code parentLayer}.

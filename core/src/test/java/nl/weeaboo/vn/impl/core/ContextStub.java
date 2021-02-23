@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.impl.core;
 
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.ISkipState;
@@ -70,6 +71,10 @@ public final class ContextStub implements IContext {
     @Override
     public ISkipState getSkipState() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
     }
 
 }

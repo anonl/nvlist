@@ -13,7 +13,7 @@ import nl.weeaboo.vn.script.IScriptContext;
  *
  * @see IContextManager
  */
-public interface IContext extends Serializable, IDestructible, IRenderEnvConsumer {
+public interface IContext extends Serializable, IDestructible, IRenderEnvConsumer, IPrefsChangeListener {
 
     /** Adds a context listener. */
     void addContextListener(IContextListener contextListener);

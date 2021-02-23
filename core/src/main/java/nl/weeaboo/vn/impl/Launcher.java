@@ -16,8 +16,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.IWritableFileSystem;
-import nl.weeaboo.prefsstore.IPreferenceListener;
-import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemEnv;
 import nl.weeaboo.vn.core.ISystemModule;
@@ -173,14 +171,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
         EnvironmentFactory envFactory = new EnvironmentFactory();
         novel = new Novel(envFactory);
         novel.start("main");
-
-        // Attach listener to static environment
-        prefs.addPreferenceListener(new IPreferenceListener() {
-            @Override
-            public <T> void onPreferenceChanged(Preference<T> pref, T oldValue, T newValue) {
-                onPrefsChanged();
-            }
-        });
 
         return novel;
     }
@@ -366,12 +356,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
             return false;
         }
         return true;
-    }
-
-    private void onPrefsChanged() {
-        if (novel != null) {
-            novel.onPrefsChanged();
-        }
     }
 
     /** Returns the global scene2D environment. */

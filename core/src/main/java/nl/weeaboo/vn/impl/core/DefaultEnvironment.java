@@ -40,8 +40,16 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
 
     private boolean destroyed;
 
+    public DefaultEnvironment() {
+        getPrefStore().addPreferenceListener(this);
+    }
+
     @Override
     public void destroy() {
+        if (destroyed) {
+            return;
+        }
+
         destroyed = true;
 
         for (IModule module : getModules()) {
@@ -54,6 +62,8 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         if (lrs != null) {
             lrs.destroy();
         }
+
+        getPrefStore().removePreferenceListener(this);
     }
 
     @Override

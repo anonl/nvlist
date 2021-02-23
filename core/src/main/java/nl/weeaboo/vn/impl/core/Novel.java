@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -126,14 +124,6 @@ public class Novel implements INovel {
     @Override
     public IEnvironment getEnv() {
         return env;
-    }
-
-    /** Called when the global preferences change. */
-    public void onPrefsChanged() {
-        IPreferenceStore prefsStore = env.getPrefStore();
-        for (IModule module : env.getModules()) {
-            module.onPrefsChanged(prefsStore);
-        }
     }
 
     protected ContextManager getContextManager() {

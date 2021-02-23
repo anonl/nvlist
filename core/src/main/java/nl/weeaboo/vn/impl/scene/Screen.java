@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.io.CustomSerializable;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.ISkipState;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTaskBuffer;
 import nl.weeaboo.vn.input.IInput;
@@ -172,6 +174,11 @@ public class Screen implements IScreen {
         renderEnv = Checks.checkNotNull(env);
 
         sendSignal(new RenderEnvChangeSignal(env));
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
+        textState.setTextSpeed(config.get(NovelPrefs.TEXT_SPEED));
     }
 
 }

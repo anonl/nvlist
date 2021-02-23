@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.ISkipState;
@@ -162,6 +163,11 @@ public class Context implements IContext {
     @Override
     public void setRenderEnv(IRenderEnv env) {
         screen.setRenderEnv(env);
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
+        screen.onPrefsChanged(config);
     }
 
 }

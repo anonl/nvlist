@@ -3,6 +3,7 @@ package nl.weeaboo.vn.sound;
 import java.io.Serializable;
 
 import nl.weeaboo.vn.core.IUpdateable;
+import nl.weeaboo.vn.core.NovelPrefs;
 
 /**
  * Controls audio playback.
@@ -69,6 +70,9 @@ public interface ISoundController extends Serializable, IUpdateable {
     /**
      * Changes the master volume for the specified type. The master volume is multiplied together with the
      * sound's private volume to get the final playback volume.
+     * <p>
+     * Do not call directly. Instead, change the global preferences (e.g. {@link NovelPrefs#MUSIC_VOLUME}) and
+     * this method will be called automatically.
      *
      * @param volume The master volume between {@code 0.0} and {@code 1.0}.
      */

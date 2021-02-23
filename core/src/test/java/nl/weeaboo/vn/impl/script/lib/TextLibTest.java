@@ -135,6 +135,11 @@ public class TextLibTest extends AbstractLibTest {
         LuaTestUtil.assertGlobal("retNumberHex", 0xFEDC4321);
     }
 
+    @Test
+    public void setTextSpeed() {
+        loadScript("integration/text/setTextSpeed");
+    }
+
     private void assertTrigger(LuaTable triggers, int charIndex, String functionName) {
         LuaValue val = triggers.get(charIndex);
         Assert.assertTrue(val.isclosure());

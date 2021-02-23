@@ -1,0 +1,7 @@
+
+@@
+
+Text.setTextSpeed(1.23)
+luaAssertEquals(1.23, Text.getTextSpeed())
+
+@@

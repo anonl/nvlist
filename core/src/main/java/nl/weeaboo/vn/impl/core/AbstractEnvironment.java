@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.filesystem.IWritableFileSystem;
+import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -16,7 +17,7 @@ import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
-abstract class AbstractEnvironment implements IEnvironment {
+abstract class AbstractEnvironment implements IEnvironment, IPreferenceListener {
 
     @Override
     public IFileSystem getFileSystem() {
@@ -34,7 +35,7 @@ abstract class AbstractEnvironment implements IEnvironment {
     }
 
     @Override
-    public IPreferenceStore getPrefStore() {
+    public final IPreferenceStore getPrefStore() {
         return StaticEnvironment.PREFS.get();
     }
 
@@ -75,6 +76,16 @@ abstract class AbstractEnvironment implements IEnvironment {
         }
 
         getContextManager().update();
+    }
+
+    /** Called when the global preferences change. */
+    @Override
+    public <T> void onPreferenceChanged(Preference<T> pref, T oldValue, T newValue) {
+        IPreferenceStore prefsStore = getPrefStore();
+        for (IModule module : getModules()) {
+            module.onPrefsChanged(prefsStore);
+        }
+        getContextManager().onPrefsChanged(prefsStore);
     }
 
     @Override

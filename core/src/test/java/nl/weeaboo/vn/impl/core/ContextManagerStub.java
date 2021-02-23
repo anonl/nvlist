@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.render.IRenderEnv;
@@ -55,6 +56,10 @@ public final class ContextManagerStub implements IContextManager {
 
     @Override
     public void setContextActive(IContext context, boolean active) {
+    }
+
+    @Override
+    public void onPrefsChanged(IPreferenceStore config) {
     }
 
 }

@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import nl.weeaboo.prefsstore.IPreferenceListener;
 import nl.weeaboo.prefsstore.IPreferenceStore;
@@ -9,14 +10,17 @@ import nl.weeaboo.prefsstore.Preference;
 
 public final class PreferenceStoreMock implements IPreferenceStore {
 
+    private final CopyOnWriteArrayList<IPreferenceListener> listeners = new CopyOnWriteArrayList<>();
     private final Map<String, String> values = new HashMap<>();
 
     @Override
-    public void addPreferenceListener(IPreferenceListener l) {
+    public void addPreferenceListener(IPreferenceListener ls) {
+        listeners.add(ls);
     }
 
     @Override
-    public void removePreferenceListener(IPreferenceListener l) {
+    public void removePreferenceListener(IPreferenceListener ls) {
+        listeners.remove(ls);
     }
 
     @Override
@@ -43,8 +47,9 @@ public final class PreferenceStoreMock implements IPreferenceStore {
     }
 
     @Override
-    public <T, V extends T> void set(Preference<T> pref, V value) {
-        values.put(pref.getKey(), pref.toString(value));
+    public <T, V extends T> void set(Preference<T> pref, V newValue) {
+        T oldValue = pref.fromString(values.put(pref.getKey(), pref.toString(newValue)));
+        listeners.forEach(ls -> ls.onPreferenceChanged(pref, oldValue, newValue));
     }
 
 }

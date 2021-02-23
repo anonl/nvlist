@@ -16,6 +16,7 @@ import nl.weeaboo.lua2.LuaUtil;
 import nl.weeaboo.lua2.compiler.LoadState;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaConstants;
+import nl.weeaboo.lua2.vm.LuaDouble;
 import nl.weeaboo.lua2.vm.LuaFunction;
 import nl.weeaboo.lua2.vm.LuaInteger;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -26,6 +27,7 @@ import nl.weeaboo.styledtext.MutableStyledText;
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaConvertUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
@@ -295,6 +297,29 @@ public class TextLib extends LuaLib {
             return val;
         }
         return LuaUtil.parseLuaLiteral(val.tojstring());
+    }
+
+
+    /**
+     * @param args none
+     * @return The current base text speed (in characters per frame)
+     */
+    @ScriptFunction
+    public Varargs getTextSpeed(Varargs args) {
+        return LuaDouble.valueOf(env.getPref(NovelPrefs.TEXT_SPEED));
+    }
+
+    /**
+     * @param args
+     *        <ol>
+     *        <li>New base text speed (in characters per frame)
+     *        </ol>
+     */
+    @ScriptFunction
+    public Varargs setTextSpeed(Varargs args) {
+        double textSpeed = args.checkdouble(1);
+        env.getPrefStore().set(NovelPrefs.TEXT_SPEED, textSpeed);
+        return LuaConstants.NONE;
     }
 
     private RuntimeTextParser getRuntimeTextParser() {
