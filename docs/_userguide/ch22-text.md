@@ -74,3 +74,9 @@ Text tags can be used to apply styling to text. Simply surround the text you wan
 "%}
 
 ![Text tags]({{site.baseurl}}{% link assets/userguide/ch22-text-tags.jpg %})
+
+## Auto read
+
+Auto read mode causes text to advance automatically after a short delay instead of waiting for the user to press a key. Use the `autoRead()` function to enter auto read mode. The time delay between lines is determined by `prefs.autoReadDelay`.
+
+What auto read effectively does is replace the behavior of `waitClick()` with a timed delay.

@@ -24,7 +24,7 @@ public final class SkipState implements ISkipState {
 
     @Override
     public boolean isSkipping() {
-        return getSkipMode() != SkipMode.NONE;
+        return getSkipMode().compareTo(SkipMode.AUTO_READ) > 0;
     }
 
     @Override

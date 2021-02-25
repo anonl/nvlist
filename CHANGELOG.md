@@ -2,6 +2,7 @@
 # v4.9.0
 - Added the ability to change the text speed using the built-in settings screen.
 - When debug mode is enabled, `(debug)` is now added to the window's title. This makes it easier to spot if debug mode is enabled/disabled.
+- Added auto read mode which causes text to advance automatically after a short delay. Use the `autoRead()` script function to enable.
 
 # v4.8.1
 - fix: Gradle plugin portal was missing from `build-tools/build.gradle` causing "Could not resolve all artifacts" errors.

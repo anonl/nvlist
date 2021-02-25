@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.common.Rect2D;
+import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.core.RenderEnv;
 import nl.weeaboo.vn.impl.core.SkipState;
 import nl.weeaboo.vn.impl.image.TextureMock;
@@ -36,11 +37,17 @@ public final class CoreTestUtil {
     private CoreTestUtil() {
     }
 
-    /** Creates a new dummy screen. */
+    /**
+     * @see #newScreen(ISkipState)
+     */
     public static Screen newScreen() {
+        return newScreen(new SkipState());
+    }
+
+    /** Creates a new dummy screen. */
+    public static Screen newScreen(ISkipState skipState) {
         Dim vsize = BASIC_ENV.getVirtualSize();
         IScreenTextState textBoxState = new TextBoxStateMock();
-        SkipState skipState = new SkipState();
         return new Screen(Rect2D.of(0, 0, vsize.w, vsize.h), BASIC_ENV, textBoxState, skipState);
     }
 

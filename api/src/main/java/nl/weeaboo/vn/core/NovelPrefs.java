@@ -58,6 +58,11 @@ public final class NovelPrefs {
             50,
             "The number of pages the textlog keeps in memory.");
 
+    public static final Preference<Integer> AUTO_READ_DELAY = newPreference("vn.autoReadDelay",
+            "Auto Read Delay",
+            90,
+            "The time delay (in frames) after which the next line should be displayed when auto read mode is enabled.");
+
     public static final Preference<Double> MUSIC_VOLUME = newPreference("vn.sound.volume.music",
             "Music volume",
             1.0,

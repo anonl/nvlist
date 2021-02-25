@@ -12,6 +12,9 @@ public enum SkipMode {
     /** Not skipping. */
     NONE,
 
+    /** Automatically continue to the next line after a timed delay. */
+    AUTO_READ,
+
     /** Skip until the end of the paragraph. */
     PARAGRAPH,
 
@@ -19,7 +22,7 @@ public enum SkipMode {
     SCENE;
 
     private static final Ordering<SkipMode> ORDER = Ordering
-            .explicit(NONE, PARAGRAPH, SCENE)
+            .explicit(NONE, AUTO_READ, PARAGRAPH, SCENE)
             .nullsFirst();
 
     /**

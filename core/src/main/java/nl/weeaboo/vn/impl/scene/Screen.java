@@ -9,6 +9,7 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.core.NovelPrefs;
+import nl.weeaboo.vn.core.SkipMode;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.render.OffscreenRenderTaskBuffer;
 import nl.weeaboo.vn.input.IInput;
@@ -66,6 +67,11 @@ public class Screen implements IScreen {
     }
 
     private void handleInput(IInput input) {
+        // Disable auto-read if the text continue key is pressed
+        if (skipState.getSkipMode() == SkipMode.AUTO_READ && input.consumePress(VKey.TEXT_CONTINUE)) {
+            skipState.stopSkipping();
+        }
+
         // Handle text continue
         ITextDrawable td = textState.getTextDrawable();
         if (td != null) {
