@@ -60,6 +60,15 @@ function isSkipping()
     return getSkipState():isSkipping()
 end
 
+function isAutoRead()
+    return getSkipMode() == SkipMode.AUTO_READ
+end
+
+---Enables auto read mode
+function autoRead()
+    return skip(SkipMode.AUTO_READ)
+end
+
 function shouldSkipLine()
     return getSkipState():shouldSkipLine(isLineRead())
 end
@@ -107,10 +116,28 @@ function wait(durationFrames)
     end    
 end
 
+---Timed wait that replaces waitClick() when auto-read mdoe is enabled
+local function autoReadWait(waitFrames)
+    if waitFrames == nil then
+        waitFrames = prefs.autoReadDelay
+    end
+
+    while waitFrames > 0 do
+        if shouldSkipLine() or Input.consume(VKeys.textContinue) then
+            prefs.autoRead = false
+            break
+        end
+        waitFrames = waitFrames - getEffectSpeed()
+        yield()
+    end
+end
+
 ---Waits until the text continue key is pressed. Skipping ignores the wait.
 function waitClick()
     if shouldSkipLine() then
         return
+    elseif isAutoRead() then
+        return autoReadWait()
     end
 
     local textBox = getTextBox()
