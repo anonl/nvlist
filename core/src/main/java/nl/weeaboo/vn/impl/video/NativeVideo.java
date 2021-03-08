@@ -16,6 +16,8 @@ import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 final class NativeVideo implements INativeVideo {
 
@@ -149,8 +151,10 @@ final class NativeVideo implements INativeVideo {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv renderEnv) {
-        this.renderEnv = Checks.checkNotNull(renderEnv);
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            renderEnv = ((RenderEnvChangeSignal)signal).getRenderEnv();
+        }
     }
 
 }

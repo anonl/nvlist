@@ -15,12 +15,16 @@ import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptThread;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 /**
  * Default implementation of {@link IContext}.
@@ -161,13 +165,25 @@ public class Context implements IContext {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv env) {
-        screen.setRenderEnv(env);
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            setRenderEnv(((RenderEnvChangeSignal)signal).getRenderEnv());
+        }
+        if (signal.isUnhandled(PrefsChangeSignal.class)) {
+            onPrefsChanged(((PrefsChangeSignal)signal).getPrefsStore());
+        }
+
+        SignalUtil.forward(signal, screen);
     }
 
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
+    }
+
+    @Deprecated
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
-        screen.onPrefsChanged(config);
     }
 
 }

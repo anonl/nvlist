@@ -17,4 +17,9 @@ public abstract class AbstractSignal implements ISignal {
         handled = true;
     }
 
+    @Override
+    public final <T> boolean isUnhandled(Class<T> type) {
+        return !isHandled() && type.isInstance(this);
+    }
+
 }

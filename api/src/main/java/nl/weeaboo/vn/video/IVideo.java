@@ -6,11 +6,12 @@ import java.io.Serializable;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IStreamingMedia;
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 /**
  * Playable video file.
  */
-public interface IVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
+public interface IVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer, ISignalHandler {
 
     /**
      * Preloads some data structures so {@link #start()} needs to do less work. Calling this method entirely optional.

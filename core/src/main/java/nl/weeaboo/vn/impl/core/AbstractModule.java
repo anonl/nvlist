@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.core;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.signal.ISignal;
 
 /**
  * Base implementation of {@link IModule}.
@@ -28,9 +29,15 @@ public abstract class AbstractModule implements IModule {
     }
 
     @Override
+    public void handleSignal(ISignal signal) {
+    }
+
+    @Deprecated
+    @Override
     public void onPrefsChanged(IPreferenceStore config) {
     }
 
+    @Deprecated
     @Override
     public void setRenderEnv(IRenderEnv env) {
     }

@@ -23,6 +23,7 @@ import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.scene.IScreenTextState;
 import nl.weeaboo.vn.scene.ITextDrawable;
 import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.signal.TickSignal;
 import nl.weeaboo.vn.text.ITextRenderer;
@@ -176,15 +177,30 @@ public class Screen implements IScreen {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv env) {
-        renderEnv = Checks.checkNotNull(env);
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            RenderEnvChangeSignal recSignal = (RenderEnvChangeSignal)signal;
+            renderEnv = recSignal.getRenderEnv();
+            setRenderEnv(renderEnv);
 
-        sendSignal(new RenderEnvChangeSignal(env));
+            sendSignal(recSignal);
+        }
+
+        if (signal.isUnhandled(PrefsChangeSignal.class)) {
+            IPreferenceStore prefsStore = ((PrefsChangeSignal)signal).getPrefsStore();
+            onPrefsChanged(prefsStore);
+
+            textState.setTextSpeed(prefsStore.get(NovelPrefs.TEXT_SPEED));
+        }
     }
 
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
+    }
+
+    @Deprecated
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
-        textState.setTextSpeed(config.get(NovelPrefs.TEXT_SPEED));
     }
-
 }

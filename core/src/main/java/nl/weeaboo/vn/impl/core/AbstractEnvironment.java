@@ -15,6 +15,8 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.INotifier;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
 import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 
 abstract class AbstractEnvironment implements IEnvironment, IPreferenceListener {
@@ -82,10 +84,9 @@ abstract class AbstractEnvironment implements IEnvironment, IPreferenceListener 
     @Override
     public <T> void onPreferenceChanged(Preference<T> pref, T oldValue, T newValue) {
         IPreferenceStore prefsStore = getPrefStore();
-        for (IModule module : getModules()) {
-            module.onPrefsChanged(prefsStore);
-        }
-        getContextManager().onPrefsChanged(prefsStore);
+        PrefsChangeSignal prefsChangeSignal = new PrefsChangeSignal(prefsStore);
+        SignalUtil.forward(prefsChangeSignal, getModules());
+        SignalUtil.forward(prefsChangeSignal, getContextManager());
     }
 
     @Override

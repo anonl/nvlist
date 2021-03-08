@@ -6,7 +6,7 @@ import java.io.Serializable;
 import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.vn.core.IStreamingMedia;
-import nl.weeaboo.vn.render.IRenderEnvConsumer;
+import nl.weeaboo.vn.signal.ISignalHandler;
 import nl.weeaboo.vn.video.IVideo;
 
 /**
@@ -14,7 +14,7 @@ import nl.weeaboo.vn.video.IVideo;
  *
  * @see IVideo
  */
-interface INativeVideo extends Serializable, IStreamingMedia, IRenderEnvConsumer {
+interface INativeVideo extends Serializable, IStreamingMedia, ISignalHandler {
 
     /**
      * Preloads some data structures so {@link #play()} needs to do less work. Calling this method entirely optional.

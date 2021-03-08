@@ -173,10 +173,10 @@ public abstract class VisualElement implements IVisualElement {
 
         @Override
         public void handleSignal(ISignal signal) {
-            if (!signal.isHandled() && signal instanceof TickSignal) {
+            if (signal.isUnhandled(TickSignal.class)) {
                 self.onTick();
             }
-            if (!signal.isHandled() && signal instanceof RenderEnvChangeSignal) {
+            if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
                 self.onRenderEnvChanged(((RenderEnvChangeSignal)signal).getRenderEnv());
             }
         }

@@ -7,11 +7,13 @@ import javax.annotation.Nullable;
 
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
 import nl.weeaboo.vn.script.IScriptFunction;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 /**
  * Manages the active {@link IContext} and context lifetimes.
  */
-public interface IContextManager extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener {
+public interface IContextManager extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener,
+        ISignalHandler {
 
     /**
      * Creates a new context and registers it with the context manager.

@@ -6,7 +6,10 @@ import com.badlogic.gdx.video.VideoPlayerInitException;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.video.IVideo;
 
 /**
@@ -124,8 +127,16 @@ public class Video implements IVideo {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv renderEnv) {
-        videoAdapter.setRenderEnv(renderEnv);
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            setRenderEnv(((RenderEnvChangeSignal)signal).getRenderEnv());
+        }
+        SignalUtil.forward(signal, videoAdapter);
+    }
+
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
     }
 
 }

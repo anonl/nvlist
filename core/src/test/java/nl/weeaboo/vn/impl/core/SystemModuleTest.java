@@ -16,6 +16,7 @@ import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
 
 public class SystemModuleTest {
 
@@ -74,7 +75,7 @@ public class SystemModuleTest {
     @Test
     public void prefsChanged() {
         IPreferenceStore prefs = prefsRef.get();
-        systemModule.onPrefsChanged(prefs);
+        systemModule.handleSignal(new PrefsChangeSignal(prefs));
         // The appropriate script function is called
         Assert.assertEquals(KnownScriptFunctions.ON_PREFS_CHANGE, systemModule.consumeLastCallled());
     }

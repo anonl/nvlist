@@ -9,8 +9,10 @@ import com.google.common.collect.ImmutableList;
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.script.IScriptFunction;
+import nl.weeaboo.vn.signal.ISignal;
 
 public final class ContextManagerStub implements IContextManager {
 
@@ -18,10 +20,6 @@ public final class ContextManagerStub implements IContextManager {
 
     @Override
     public void update() {
-    }
-
-    @Override
-    public void setRenderEnv(IRenderEnv env) {
     }
 
     @Override
@@ -58,6 +56,17 @@ public final class ContextManagerStub implements IContextManager {
     public void setContextActive(IContext context, boolean active) {
     }
 
+    @Override
+    public void handleSignal(ISignal signal) {
+        SignalUtil.forward(signal, getContexts());
+    }
+
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
+    }
+
+    @Deprecated
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
     }

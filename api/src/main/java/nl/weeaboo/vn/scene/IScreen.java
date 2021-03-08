@@ -8,11 +8,12 @@ import nl.weeaboo.vn.core.IUpdateable;
 import nl.weeaboo.vn.render.IOffscreenRenderTaskBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 /**
  * Top-level container for the visual elements in a {@link IContext}.
  */
-public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener {
+public interface IScreen extends Serializable, IUpdateable, IRenderEnvConsumer, IPrefsChangeListener, ISignalHandler {
 
     /**
      * Creates a new layer and adds it to {@code parentLayer}.

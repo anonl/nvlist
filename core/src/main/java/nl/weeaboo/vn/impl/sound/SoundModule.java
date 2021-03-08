@@ -17,6 +17,8 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.AbstractModule;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.ISoundModule;
@@ -132,12 +134,15 @@ public final class SoundModule extends AbstractModule implements ISoundModule {
     }
 
     @Override
-    public void onPrefsChanged(IPreferenceStore config) {
-        super.onPrefsChanged(config);
+    public void handleSignal(ISignal signal) {
+        super.handleSignal(signal);
 
-        soundController.setMasterVolume(SoundType.MUSIC, config.get(NovelPrefs.MUSIC_VOLUME));
-        soundController.setMasterVolume(SoundType.SOUND, config.get(NovelPrefs.SOUND_EFFECT_VOLUME));
-        soundController.setMasterVolume(SoundType.VOICE, config.get(NovelPrefs.VOICE_VOLUME));
+        if (signal.isUnhandled(PrefsChangeSignal.class)) {
+            IPreferenceStore prefsStore = ((PrefsChangeSignal)signal).getPrefsStore();
+            soundController.setMasterVolume(SoundType.MUSIC, prefsStore.get(NovelPrefs.MUSIC_VOLUME));
+            soundController.setMasterVolume(SoundType.SOUND, prefsStore.get(NovelPrefs.SOUND_EFFECT_VOLUME));
+            soundController.setMasterVolume(SoundType.VOICE, prefsStore.get(NovelPrefs.VOICE_VOLUME));
+        }
     }
 
     @Override

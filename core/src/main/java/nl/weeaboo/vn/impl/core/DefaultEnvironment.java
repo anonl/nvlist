@@ -11,8 +11,10 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.stats.IStatsModule;
 import nl.weeaboo.vn.text.ITextModule;
@@ -133,10 +135,9 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         IRenderEnv old = getRenderEnv();
         renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize);
 
-        for (IModule module : getModules()) {
-            module.setRenderEnv(renderEnv);
-        }
-        contextManager.setRenderEnv(renderEnv);
+        RenderEnvChangeSignal signal = new RenderEnvChangeSignal(renderEnv);
+        SignalUtil.forward(signal, getModules());
+        SignalUtil.forward(signal, contextManager);
     }
 
 }

@@ -289,7 +289,6 @@ public class Launcher extends ApplicationAdapter implements IUpdateable {
 
         IVideo movie = env.getVideoModule().getBlocking();
         if (movie != null) {
-            movie.setRenderEnv(renderEnv);
             movie.render();
         }
 

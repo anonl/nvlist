@@ -12,7 +12,6 @@ import com.badlogic.gdx.Gdx;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
-import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
@@ -21,7 +20,9 @@ import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.DisplayMode;
-import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 /**
  * Default implementation of {@link ISystemModule}.
@@ -91,20 +92,18 @@ public class SystemModule extends AbstractModule implements ISystemModule {
     }
 
     @Override
-    public void onPrefsChanged(IPreferenceStore config) {
-        super.onPrefsChanged(config);
+    public void handleSignal(ISignal signal) {
+        super.handleSignal(signal);
 
-        LOG.info("SystemEventHandler.onPrefsChanged()");
+        if (signal.isUnhandled(PrefsChangeSignal.class)) {
+            LOG.info("SystemEventHandler.onPrefsChanged()");
+            callFunction(KnownScriptFunctions.ON_PREFS_CHANGE);
+        }
 
-        callFunction(KnownScriptFunctions.ON_PREFS_CHANGE);
-    }
-
-    @Override
-    public void setRenderEnv(IRenderEnv env) {
-        super.setRenderEnv(env);
-
-        if (getSystemEnv().getDisplayMode() == DisplayMode.WINDOWED) {
-            windowedSize = Dim.of(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            if (getSystemEnv().getDisplayMode() == DisplayMode.WINDOWED) {
+                windowedSize = Dim.of(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            }
         }
     }
 

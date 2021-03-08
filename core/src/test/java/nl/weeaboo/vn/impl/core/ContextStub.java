@@ -7,6 +7,7 @@ import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.signal.ISignal;
 
 public final class ContextStub implements IContext {
 
@@ -23,10 +24,6 @@ public final class ContextStub implements IContext {
     @Override
     public boolean isDestroyed() {
         return destroyed;
-    }
-
-    @Override
-    public void setRenderEnv(IRenderEnv env) {
     }
 
     @Override
@@ -73,6 +70,16 @@ public final class ContextStub implements IContext {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void handleSignal(ISignal signal) {
+    }
+
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
+    }
+
+    @Deprecated
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
     }

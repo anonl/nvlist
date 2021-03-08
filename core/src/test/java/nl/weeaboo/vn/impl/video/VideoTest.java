@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 public class VideoTest {
 
@@ -57,7 +58,7 @@ public class VideoTest {
     public void delegateRender() {
         // setRenderEnv() delegates to the embedded native video
         Assert.assertEquals(null, nativeVideo.getRenderEnv());
-        video.setRenderEnv(CoreTestUtil.BASIC_ENV);
+        video.handleSignal(new RenderEnvChangeSignal(CoreTestUtil.BASIC_ENV));
         Assert.assertEquals(CoreTestUtil.BASIC_ENV, nativeVideo.getRenderEnv());
 
         // render() delegated to the embedded native video

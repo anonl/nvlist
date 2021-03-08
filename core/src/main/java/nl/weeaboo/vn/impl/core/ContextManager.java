@@ -16,10 +16,14 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextFactory;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.render.IDrawBuffer;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.script.IScriptFunction;
 import nl.weeaboo.vn.script.ScriptException;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 /**
  * Default implementation of {@link IContextManager}.
@@ -142,19 +146,26 @@ public final class ContextManager implements IContextManager {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv env) {
-        contextFactory.setRenderEnv(env);
-
-        for (IContext context : contexts) {
-            context.setRenderEnv(env);
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            IRenderEnv renderEnv = ((RenderEnvChangeSignal)signal).getRenderEnv();
+            contextFactory.setRenderEnv(renderEnv);
+            setRenderEnv(renderEnv);
         }
+        if (signal.isUnhandled(PrefsChangeSignal.class)) {
+            onPrefsChanged(((PrefsChangeSignal)signal).getPrefsStore());
+        }
+        SignalUtil.forward(signal, contexts);
     }
 
+    @Deprecated
+    @Override
+    public void setRenderEnv(IRenderEnv env) {
+    }
+
+    @Deprecated
     @Override
     public void onPrefsChanged(IPreferenceStore config) {
-        for (IContext context : contexts) {
-            context.onPrefsChanged(config);
-        }
     }
 
     private static final class ChainContextListener extends ContextListener {
@@ -177,4 +188,5 @@ public final class ContextManager implements IContextManager {
         }
 
     }
+
 }

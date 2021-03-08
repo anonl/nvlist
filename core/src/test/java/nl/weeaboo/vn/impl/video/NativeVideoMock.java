@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.video;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.weeaboo.vn.render.IRenderEnv;
+import nl.weeaboo.vn.signal.ISignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 
 final class NativeVideoMock implements INativeVideo {
 
@@ -95,8 +97,10 @@ final class NativeVideoMock implements INativeVideo {
     }
 
     @Override
-    public void setRenderEnv(IRenderEnv renderEnv) {
-        this.renderEnv = renderEnv;
+    public void handleSignal(ISignal signal) {
+        if (signal.isUnhandled(RenderEnvChangeSignal.class)) {
+            renderEnv = ((RenderEnvChangeSignal)signal).getRenderEnv();
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import nl.weeaboo.vn.render.IRenderEnvConsumer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
+import nl.weeaboo.vn.signal.ISignalHandler;
 
 /**
  * High-level container of state. In a more general-purpose game engine this concept is usually called
@@ -13,7 +14,8 @@ import nl.weeaboo.vn.script.IScriptContext;
  *
  * @see IContextManager
  */
-public interface IContext extends Serializable, IDestructible, IRenderEnvConsumer, IPrefsChangeListener {
+public interface IContext extends Serializable, IDestructible, IRenderEnvConsumer, IPrefsChangeListener,
+        ISignalHandler {
 
     /** Adds a context listener. */
     void addContextListener(IContextListener contextListener);

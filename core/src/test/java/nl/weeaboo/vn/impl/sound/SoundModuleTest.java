@@ -15,6 +15,7 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
 import nl.weeaboo.vn.impl.core.PreferenceStoreMock;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
 import nl.weeaboo.vn.sound.ISound;
 import nl.weeaboo.vn.sound.ISoundController;
 import nl.weeaboo.vn.sound.SoundType;
@@ -54,7 +55,7 @@ public final class SoundModuleTest {
         prefsStore.set(NovelPrefs.MUSIC_VOLUME, .1);
         prefsStore.set(NovelPrefs.SOUND_EFFECT_VOLUME, .2);
         prefsStore.set(NovelPrefs.VOICE_VOLUME, .3);
-        module.onPrefsChanged(prefsStore);
+        module.handleSignal(new PrefsChangeSignal(prefsStore));
         assertMasterVolume(SoundType.MUSIC, .1);
         assertMasterVolume(SoundType.SOUND, .2);
         assertMasterVolume(SoundType.VOICE, .3);
