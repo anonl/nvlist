@@ -13,20 +13,13 @@ def antlrVersion = '4.8';
 def gdxTestVersion = '2.0.2'
 def gdxVersion = '1.9.8'
 def gdxVideoVersion = '1.0.0-anonl'
-def guavaVersion = '23.6-android' // Note: The -android version is not Android-specific, only Android-compatible
+def guavaVersion = '30.1-android' // Note: The -android version is not Android-specific, only Android-compatible
 def lsp4jVersion = '0.9.0'
-def roboVmVersion = '2.3.0'
-def slf4jVersion = '1.7.21'
+def roboVmVersion = '2.3.12'
+def slf4jVersion = '1.7.30'
 def styledTextVersion = '4.1.0'
 def tcommonVersion = '3.0.3'
 def gradleToolingApiVersion = '4.5.1'
-
-deps.static_analysis_annotations = [
-    // ErrorProne annotations
-    "com.google.errorprone:error_prone_annotations:$errorProneVersion",
-    // JSR305 annotations (nullable, etc.)
-    "com.google.code.findbugs:jsr305:3.0.1"
-]
 
 // Maven repository browser
 deps.maven_resolver = [
@@ -36,130 +29,86 @@ deps.maven_resolver = [
 ]
 
 deps.gdx_android = [
-    "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-freetype:$gdxVersion",
-    "nl.weeaboo.gdx-video:gdx-video-android:$gdxVideoVersion",
+    'com.badlogicgames.gdx:gdx-backend-android:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers-android:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-freetype:' + gdxVersion,
+    'nl.weeaboo.gdx-video:gdx-video-android:' + gdxVideoVersion,
 ]
 
 deps.gdx_android_natives = [
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64",
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-armeabi',
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-armeabi-v7a',
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-arm64-v8a',
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-x86',
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-x86_64',
 
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64",
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-armeabi',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-armeabi-v7a',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-arm64-v8a',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-x86',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-x86_64',
 ]
 
-deps.antlr_compiler = [
-    'org.antlr:antlr4:' + antlrVersion,
-]
-
-deps.antlr_runtime = [
-    'org.antlr:antlr4-runtime:' + antlrVersion,
-]
+deps.antlr_compiler = 'org.antlr:antlr4:' + antlrVersion
+deps.antlr_runtime = 'org.antlr:antlr4-runtime:' + antlrVersion
 
 deps.gdx_core = [
-    "com.badlogicgames.gdx:gdx:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-controllers:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-freetype:$gdxVersion",
-    "nl.weeaboo.gdx-video:gdx-video:$gdxVideoVersion",
+    'com.badlogicgames.gdx:gdx:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-freetype:' + gdxVersion,
+    'nl.weeaboo.gdx-video:gdx-video:' + gdxVideoVersion,
 ]
 
 deps.gdx_desktop = [
-    "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
-    "nl.weeaboo.gdx-video:gdx-video-desktop:$gdxVideoVersion",
-    "nl.weeaboo.gdx-video:gdx-video-desktop-natives:$gdxVideoVersion",
+    'com.badlogicgames.gdx:gdx-backend-lwjgl3:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers-desktop:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers-lwjgl3:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers-platform:' + gdxVersion + ':natives-desktop',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-desktop',
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-desktop',
+    'nl.weeaboo.gdx-video:gdx-video-desktop:' + gdxVideoVersion,
+    'nl.weeaboo.gdx-video:gdx-video-desktop-natives:' + gdxVideoVersion,
 ]
 
 deps.gdx_headless = [
-    "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop", // Required native libraries
+    'com.badlogicgames.gdx:gdx-backend-headless:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-desktop', // Required native libraries
 ]
 
 deps.gdx_ios = [
-    "com.mobidevelop.robovm:robovm-rt:$roboVmVersion",
-    "com.mobidevelop.robovm:robovm-cocoatouch:$roboVmVersion",
-    "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion",
-    "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios",
-    "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios",
+    'com.mobidevelop.robovm:robovm-rt:' + roboVmVersion,
+    'com.mobidevelop.robovm:robovm-cocoatouch:' + roboVmVersion,
+    'com.badlogicgames.gdx:gdx-backend-robovm:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-ios',
+    'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-ios',
 ]
 
-deps.gdx_test = [
-    "nl.weeaboo.gdx-test:gdx-test-core:$gdxTestVersion"
-]
+deps.gdx_test = 'nl.weeaboo.gdx-test:gdx-test-core:' + gdxTestVersion
+deps.gradle_tooling_api = 'org.gradle:gradle-tooling-api:' + gradleToolingApiVersion
+deps.guava = 'com.google.guava:guava:' + guavaVersion
+deps.guava_testlib = 'com.google.guava:guava-testlib:' + guavaVersion
+deps.jopt_simple = 'net.sf.jopt-simple:jopt-simple:5.0.3'
+deps.junit = 'junit:junit:4.13.2'
+deps.lsp4j = 'org.eclipse.lsp4j:org.eclipse.lsp4j:' + lsp4jVersion
+deps.lsp4j_debug = 'org.eclipse.lsp4j:org.eclipse.lsp4j.debug:' + lsp4jVersion
+deps.lua_core = 'nl.weeaboo.luajpp2:luajpp2-core:3.3.0'
 
-deps.gradle_tooling_api = [
-    "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
-]
-
-deps.guava = [
-    "com.google.guava:guava:$guavaVersion"
-]
-
-deps.guava_testlib = [
-    "com.google.guava:guava-testlib:$guavaVersion"
-]
-
-deps.jopt_simple = [
-    "net.sf.jopt-simple:jopt-simple:5.0.3"
-]
-
-deps.junit = [
-    "junit:junit:4.13"
-]
-
-deps.lsp4j = [
-    'org.eclipse.lsp4j:org.eclipse.lsp4j:' + lsp4jVersion
-]
-
-deps.lsp4j_debug = [
-    'org.eclipse.lsp4j:org.eclipse.lsp4j.debug:' + lsp4jVersion
-]
-
-deps.lua_core = [
-    "nl.weeaboo.luajpp2:luajpp2-core:3.3.0"
-]
-
-deps.slf4j_api = [
-    "org.slf4j:slf4j-api:$slf4jVersion"
-]
-
+deps.slf4j_api = 'org.slf4j:slf4j-api:' + slf4jVersion
 deps.slf4j_desktop = [
-    "org.slf4j:jul-to-slf4j:$slf4jVersion",
+    'org.slf4j:jul-to-slf4j:' + slf4jVersion,
     'ch.qos.logback:logback-classic:1.2.3',
 ]
 
-deps.styled_text_api = [
-    "nl.weeaboo.gdx-styledtext:styledtext-api:$styledTextVersion"
+deps.static_analysis_annotations = [
+    // ErrorProne annotations
+    'com.google.errorprone:error_prone_annotations:' + errorProneVersion,
+    // JSR305 annotations (nullable, etc.)
+    'com.google.code.findbugs:jsr305:3.0.1'
 ]
 
-deps.styled_text_impl = [
-    "nl.weeaboo.gdx-styledtext:styledtext-impl:$styledTextVersion"
-]
-
-deps.tcommon_core = [
-    "nl.weeaboo.common:tcommon-core:$tcommonVersion"
-]
-
-deps.tcommon_logging = [
-    "nl.weeaboo.common:tcommon-logging:$tcommonVersion"
-]
-
-deps.tcommon_prefsstore = [
-    "nl.weeaboo.common:tcommon-prefsstore:$tcommonVersion"
-]
-
-deps.tcommon_test = [
-    "nl.weeaboo.common:tcommon-test:$tcommonVersion"
-]
+deps.styled_text_api = 'nl.weeaboo.gdx-styledtext:styledtext-api:' + styledTextVersion
+deps.styled_text_impl = 'nl.weeaboo.gdx-styledtext:styledtext-impl:' + styledTextVersion
+deps.tcommon_core = 'nl.weeaboo.common:tcommon-core:' + tcommonVersion
+deps.tcommon_logging = 'nl.weeaboo.common:tcommon-logging:' + tcommonVersion
+deps.tcommon_prefsstore = 'nl.weeaboo.common:tcommon-prefsstore:' + tcommonVersion
+deps.tcommon_test = 'nl.weeaboo.common:tcommon-test:' + tcommonVersion
