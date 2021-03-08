@@ -1,4 +1,7 @@
 
+# v4.9.1
+- fix: Enabling auto read didn't cancel the current `waitClick()` (if any).
+
 # v4.9.0
 - Added the ability to change the text speed using the built-in settings screen.
 - When debug mode is enabled, `(debug)` is now added to the window's title. This makes it easier to spot if debug mode is enabled/disabled.

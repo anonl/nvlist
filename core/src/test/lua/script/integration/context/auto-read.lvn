@@ -1,0 +1,16 @@
+@@
+require("builtin/vn")
+
+luaAssert(not isAutoRead())
+
+-- Pause in waitClick(), then auto-read will be activated
+waitClick()
+
+luaAssert(isAutoRead())
+
+-- Replaced by a timed wait when auto-read is enabled
+waitClick()
+
+luaAssert(isAutoRead())
+
+@@

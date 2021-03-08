@@ -138,7 +138,7 @@ function waitClick()
         textBox:showClickIndicator()
     end
 
-    while not shouldSkipLine() and not Input.consume(VKeys.textContinue) do
+    while not shouldSkipLine() and not isAutoRead() and not Input.consume(VKeys.textContinue) do
         if textLog ~= nil and Input.consume(VKeys.showTextLog) then
             textLog()
         end
