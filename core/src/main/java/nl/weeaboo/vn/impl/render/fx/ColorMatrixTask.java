@@ -50,7 +50,7 @@ public final class ColorMatrixTask extends OffscreenRenderTask {
 
             shader = shaderStore.get().createShaderFromClasspath(getClass(), "colormatrix");
 
-            shader.begin();
+            shader.bind();
             shader.setUniformMatrix4fv("u_matrix", matrix.getGLMatrix(), 0, 16);
             shader.setUniform4fv("u_offset", matrix.getGLOffset(), 0, 4);
             context.drawInitial(texRegion, shader);

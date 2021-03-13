@@ -124,9 +124,15 @@ public final class Input implements IInput {
         return delegate.getPointerPos(transform);
     }
 
+    @SuppressWarnings("deprecation") // Delegates to deprecated method
     @Override
     public int getPointerScroll() {
         return delegate.getPointerScroll();
+    }
+
+    @Override
+    public Vec2 getPointerScrollXY() {
+        return delegate.getPointerScrollXY();
     }
 
     @Override

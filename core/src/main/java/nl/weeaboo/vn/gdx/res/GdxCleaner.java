@@ -9,6 +9,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.collect.Iterables;
@@ -72,13 +73,31 @@ public final class GdxCleaner {
             // Clean garbage
             Reference<?> rawReference;
             while ((rawReference = garbage.poll()) != null) {
-                Cleanable cleanable = (Cleanable)rawReference;
-                LOG.debug("Disposing resource: {}", cleanable);
-                try {
-                    cleanable.cleanup.dispose();
-                } catch (RuntimeException e) {
-                    LOG.error("Cleanup task threw an exception: {}", cleanable.cleanup, e);
+                CleanupRunnable cleanupRunnable = new CleanupRunnable((Cleanable)rawReference);
+                if (Gdx.app != null) {
+                    Gdx.app.postRunnable(cleanupRunnable);
+                } else {
+                    cleanupRunnable.run();
                 }
+            }
+        }
+    }
+
+    private static final class CleanupRunnable implements Runnable {
+
+        private final Cleanable cleanable;
+
+        CleanupRunnable(Cleanable cleanable) {
+            this.cleanable = cleanable;
+        }
+
+        @Override
+        public void run() {
+            LOG.debug("Disposing resource: " + cleanable);
+            try {
+                cleanable.cleanup.dispose();
+            } catch (RuntimeException e) {
+                LOG.error("Cleanup task threw an exception: " + cleanable.cleanup, e);
             }
         }
     }

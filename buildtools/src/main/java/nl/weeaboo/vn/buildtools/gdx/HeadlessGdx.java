@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.buildtools.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.backends.headless.HeadlessFiles;
 import com.badlogic.gdx.backends.headless.HeadlessNativesLoader;
 import com.badlogic.gdx.backends.headless.HeadlessNet;
@@ -25,7 +26,7 @@ public final class HeadlessGdx {
         HeadlessNativesLoader.load();
         Gdx.app = null;
         Gdx.files = new HeadlessFiles();
-        Gdx.net = new HeadlessNet();
+        Gdx.net = new HeadlessNet(new HeadlessApplicationConfiguration());
         Gdx.graphics = new MockGraphics();
         Gdx.gl20 = null;
         Gdx.gl = Gdx.gl20;

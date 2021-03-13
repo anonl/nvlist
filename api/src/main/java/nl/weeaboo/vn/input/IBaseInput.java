@@ -43,10 +43,16 @@ public interface IBaseInput<K> {
     Vec2 getPointerPos(Matrix transform);
 
     /**
-     * The amount that the mouse scroll wheel was scrolled. Positive values indicate a downward scroll,
-     * negative values an upward scroll.
+     * @deprecated Use {@link #getPointerScrollXY()} instead.
      */
+    @Deprecated
     int getPointerScroll();
+
+    /**
+     * The amount that the mouse scroll wheel was scrolled. Positive values indicate a down/right scroll,
+     * negative values an up/left scroll.
+     */
+    Vec2 getPointerScrollXY();
 
     /**
      * Returns {@code true} if the user hasn't performed any type of input this frame (no button presses, no

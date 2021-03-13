@@ -93,8 +93,8 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
-        addMouseScrollEvent(amount);
+    public boolean scrolled(float amountX, float amountY) {
+        addMouseScrollEvent(amountX, amountY);
         return true;
     }
 
@@ -121,9 +121,9 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         accum.addEvent(new PointerPositionEvent(timestampMs(), worldCoords.x, worldCoords.y));
     }
 
-    private void addMouseScrollEvent(int scrollAmount) {
-        LOG.trace("Mouse scroll event: {}", scrollAmount);
-        accum.addEvent(new PointerScrollEvent(timestampMs(), scrollAmount));
+    private void addMouseScrollEvent(float amountX, float amountY) {
+        LOG.trace("Mouse scroll event: {}/{}", amountX, amountY);
+        accum.addEvent(new PointerScrollEvent(timestampMs(), amountX, amountY));
     }
 
     @VisibleForTesting
@@ -150,6 +150,7 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         case Keys.C: return KeyCode.C;
         case Keys.CALL: return KeyCode.CALL;
         case Keys.CAMERA: return KeyCode.CAMERA;
+        case Keys.CAPS_LOCK: return KeyCode.CAPS_LOCK;
         case Keys.CLEAR: return KeyCode.CLEAR;
         case Keys.COMMA: return KeyCode.COMMA;
         case Keys.D: return KeyCode.D;
@@ -191,17 +192,21 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         case Keys.N: return KeyCode.N;
         case Keys.NOTIFICATION: return KeyCode.NOTIFICATION;
         case Keys.NUM: return KeyCode.NUM;
+        case Keys.NUM_LOCK: return KeyCode.NUM_LOCK;
         case Keys.O: return KeyCode.O;
         case Keys.P: return KeyCode.P;
+        case Keys.PAUSE: return KeyCode.PAUSE;
         case Keys.PERIOD: return KeyCode.PERIOD;
         case Keys.PLUS: return KeyCode.PLUS;
         case Keys.POUND: return KeyCode.POUND;
         case Keys.POWER: return KeyCode.POWER;
+        case Keys.PRINT_SCREEN: return KeyCode.PRINT_SCREEN;
         case Keys.Q: return KeyCode.Q;
         case Keys.R: return KeyCode.R;
         case Keys.RIGHT_BRACKET: return KeyCode.RIGHT_BRACKET;
         case Keys.S: return KeyCode.S;
         case Keys.SEARCH: return KeyCode.SEARCH;
+        case Keys.SCROLL_LOCK: return KeyCode.SCROLL_LOCK;
         case Keys.SEMICOLON: return KeyCode.SEMICOLON;
         case Keys.SHIFT_LEFT: return KeyCode.SHIFT_LEFT;
         case Keys.SHIFT_RIGHT: return KeyCode.SHIFT_RIGHT;
@@ -256,6 +261,16 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         case Keys.NUMPAD_7: return KeyCode.NUMPAD_7;
         case Keys.NUMPAD_8: return KeyCode.NUMPAD_8;
         case Keys.NUMPAD_9: return KeyCode.NUMPAD_9;
+        case Keys.NUMPAD_ADD: return KeyCode.NUMPAD_ADD;
+        case Keys.NUMPAD_COMMA: return KeyCode.NUMPAD_COMMA;
+        case Keys.NUMPAD_DIVIDE: return KeyCode.NUMPAD_DIVIDE;
+        case Keys.NUMPAD_DOT: return KeyCode.NUMPAD_DOT;
+        case Keys.NUMPAD_ENTER: return KeyCode.NUMPAD_ENTER;
+        case Keys.NUMPAD_EQUALS: return KeyCode.NUMPAD_EQUALS;
+        case Keys.NUMPAD_LEFT_PAREN: return KeyCode.NUMPAD_LEFT_PAREN;
+        case Keys.NUMPAD_RIGHT_PAREN: return KeyCode.NUMPAD_RIGHT_PAREN;
+        case Keys.NUMPAD_MULTIPLY: return KeyCode.NUMPAD_MULTIPLY;
+        case Keys.NUMPAD_SUBTRACT: return KeyCode.NUMPAD_SUBTRACT;
         case Keys.COLON: return KeyCode.COLON;
         case Keys.F1: return KeyCode.F1;
         case Keys.F2: return KeyCode.F2;
@@ -269,6 +284,18 @@ public final class GdxInputAdapter implements IUpdateable, InputProcessor {
         case Keys.F10: return KeyCode.F10;
         case Keys.F11: return KeyCode.F11;
         case Keys.F12: return KeyCode.F12;
+        case Keys.F13: return KeyCode.F13;
+        case Keys.F14: return KeyCode.F14;
+        case Keys.F15: return KeyCode.F15;
+        case Keys.F16: return KeyCode.F16;
+        case Keys.F17: return KeyCode.F17;
+        case Keys.F18: return KeyCode.F18;
+        case Keys.F19: return KeyCode.F19;
+        case Keys.F20: return KeyCode.F20;
+        case Keys.F21: return KeyCode.F21;
+        case Keys.F22: return KeyCode.F22;
+        case Keys.F23: return KeyCode.F23;
+        case Keys.F24: return KeyCode.F24;
         default:
             LOG.warn("Unmapped keyboard button: {}", keycode);
             return KeyCode.UNKNOWN;

@@ -11,7 +11,8 @@ ext.errorProneVersion = '2.4.0'
 
 def antlrVersion = '4.8';
 def gdxTestVersion = '2.0.2'
-def gdxVersion = '1.9.8'
+def gdxVersion = '1.9.14'
+def gdxControllersVersion = '1.9.13'
 def gdxVideoVersion = '1.0.0-anonl'
 def guavaVersion = '30.1-android' // Note: The -android version is not Android-specific, only Android-compatible
 def lsp4jVersion = '0.9.0'
@@ -19,7 +20,7 @@ def roboVmVersion = '2.3.12'
 def slf4jVersion = '1.7.30'
 def styledTextVersion = '4.1.0'
 def tcommonVersion = '3.0.3'
-def gradleToolingApiVersion = '4.5.1'
+def gradleToolingApiVersion = '6.2.2'
 
 // Maven repository browser
 deps.maven_resolver = [
@@ -30,7 +31,7 @@ deps.maven_resolver = [
 
 deps.gdx_android = [
     'com.badlogicgames.gdx:gdx-backend-android:' + gdxVersion,
-    'com.badlogicgames.gdx:gdx-controllers-android:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers-android:' + gdxControllersVersion,
     'com.badlogicgames.gdx:gdx-freetype:' + gdxVersion,
     'nl.weeaboo.gdx-video:gdx-video-android:' + gdxVideoVersion,
 ]
@@ -54,16 +55,16 @@ deps.antlr_runtime = 'org.antlr:antlr4-runtime:' + antlrVersion
 
 deps.gdx_core = [
     'com.badlogicgames.gdx:gdx:' + gdxVersion,
-    'com.badlogicgames.gdx:gdx-controllers:' + gdxVersion,
+    'com.badlogicgames.gdx:gdx-controllers:' + gdxControllersVersion,
     'com.badlogicgames.gdx:gdx-freetype:' + gdxVersion,
     'nl.weeaboo.gdx-video:gdx-video:' + gdxVideoVersion,
 ]
 
 deps.gdx_desktop = [
     'com.badlogicgames.gdx:gdx-backend-lwjgl3:' + gdxVersion,
-    'com.badlogicgames.gdx:gdx-controllers-desktop:' + gdxVersion,
-    'com.badlogicgames.gdx:gdx-controllers-lwjgl3:' + gdxVersion,
-    'com.badlogicgames.gdx:gdx-controllers-platform:' + gdxVersion + ':natives-desktop',
+    'com.badlogicgames.gdx:gdx-controllers-desktop:' + gdxControllersVersion,
+    'com.badlogicgames.gdx:gdx-controllers-lwjgl3:' + gdxControllersVersion,
+    'com.badlogicgames.gdx:gdx-controllers-platform:' + gdxControllersVersion + ':natives-desktop',
     'com.badlogicgames.gdx:gdx-freetype-platform:' + gdxVersion + ':natives-desktop',
     'com.badlogicgames.gdx:gdx-platform:' + gdxVersion + ':natives-desktop',
     'nl.weeaboo.gdx-video:gdx-video-desktop:' + gdxVideoVersion,

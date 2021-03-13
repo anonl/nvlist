@@ -13,7 +13,7 @@ public class KeyCodeTest {
          * Check if the hash derived from the available keycodes has changed. This is used to detect
          * unintended incompatibilities due to renamed/removed keycodes.
          */
-        Assert.assertEquals(664241046, EnumTester.hashEnum(KeyCode.class));
+        Assert.assertEquals(1115876845, EnumTester.hashEnum(KeyCode.class));
     }
 
 }

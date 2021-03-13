@@ -42,7 +42,7 @@ public class GdxInputAdapterTest {
 
     @Test
     public void convertKeyboard() throws IllegalArgumentException, IllegalAccessException {
-        Set<Integer> unmapped = Sets.newHashSet();
+        Set<Integer> unmapped = Sets.newTreeSet();
 
         Map<String, Integer> keyConstants = ReflectUtil.getConstants(Keys.class, Integer.TYPE);
         for (Map.Entry<String, Integer> entry : keyConstants.entrySet()) {
@@ -54,9 +54,10 @@ public class GdxInputAdapterTest {
         }
 
         Set<Integer> expectedUnsupported = ImmutableSet.of(
-                Keys.UNKNOWN, // Unknown should map to unknown
                 Keys.ANY_KEY, // There is no 'any' key
-                Keys.META_SHIFT_RIGHT_ON // These 'META' constants are not keys
+                Keys.UNKNOWN, // Unknown should map to unknown
+                Keys.META_SHIFT_RIGHT_ON, // These 'META' constants are not keys
+                Keys.MAX_KEYCODE // Not a key
         );
         Assert.assertEquals(expectedUnsupported, unmapped);
     }
@@ -95,8 +96,8 @@ public class GdxInputAdapterTest {
         adapter.mouseMoved(7, 8);
         assertMousePos(7, 8);
 
-        adapter.scrolled(42);
-        Assert.assertEquals(42, getInput().getPointerScroll());
+        adapter.scrolled(1, 2);
+        CoreTestUtil.assertEquals(1, 2, getInput().getPointerScrollXY(), 0.0);
     }
 
     @Test
@@ -117,8 +118,7 @@ public class GdxInputAdapterTest {
     private void assertMousePos(int x, int y) {
         INativeInput input = getInput();
         Vec2 pos = input.getPointerPos(Matrix.identityMatrix());
-        // Camera.unproject() seems to add +1 to the y-coordinate for some reason
-        CoreTestUtil.assertEquals(x, y + 1, pos, 1e-3);
+        CoreTestUtil.assertEquals(x, y, pos, 1e-3);
     }
 
     private void assertPressed(KeyCode... expected) {
