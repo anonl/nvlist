@@ -16,6 +16,12 @@ def subProjects = [
     'langserver',
 ]
 
+def env = System.getenv()
+if (!new File('local.properties').exists() && env['ANDROID_SDK_ROOT'] == null) {
+    logger.warn('Android SDK not found, skipping Android compilation')
+    subProjects.remove('android');
+}
+
 subProjects.each { proj ->
     include "nvlist-$proj"
     project(":nvlist-$proj").projectDir = new File(proj)
