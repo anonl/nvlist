@@ -7,16 +7,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.render.IRenderLogic;
 import nl.weeaboo.vn.render.IScreenRenderer;
 
 public class GLScreenRendererTest {
-
-    static {
-        HeadlessGdx.init();
-    }
 
     private RenderTestHelper renderer;
 

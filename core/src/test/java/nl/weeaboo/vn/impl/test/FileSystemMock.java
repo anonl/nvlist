@@ -2,14 +2,9 @@ package nl.weeaboo.vn.impl.test;
 
 import nl.weeaboo.filesystem.InMemoryFileSystem;
 import nl.weeaboo.filesystem.MultiFileSystem;
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.res.InternalGdxFileSystem;
 
 public final class FileSystemMock {
-
-    static {
-        HeadlessGdx.init();
-    }
 
     /** Creates a new dummy filesystem to use in unit tests */
     public static MultiFileSystem newInstance() {
