@@ -9,8 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 
 import nl.weeaboo.filesystem.FilePath;
@@ -65,11 +63,6 @@ public abstract class IntegrationTest {
     @After
     public final void afterIntegration() {
         launcher.dispose();
-
-        final Application app = Gdx.app;
-        if (app != null) {
-            app.exit();
-        }
 
         // Clear static state
         StaticEnvironment.getInstance().clear();
