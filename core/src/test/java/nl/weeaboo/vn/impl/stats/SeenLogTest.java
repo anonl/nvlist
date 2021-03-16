@@ -10,6 +10,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 
@@ -23,6 +24,7 @@ public class SeenLogTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         seenLog = new SeenLog(env);
     }
