@@ -18,7 +18,7 @@ def guavaVersion = '30.1-android' // Note: The -android version is not Android-s
 def lsp4jVersion = '0.9.0'
 def roboVmVersion = '2.3.12'
 def slf4jVersion = '1.7.30'
-def styledTextVersion = '4.1.0'
+def styledTextVersion = '5.0.0'
 def tcommonVersion = '3.0.3'
 def gradleToolingApiVersion = '6.2.2'
 

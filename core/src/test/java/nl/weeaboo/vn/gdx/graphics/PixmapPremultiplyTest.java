@@ -9,14 +9,8 @@ import org.junit.runners.Parameterized.Parameters;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
-import nl.weeaboo.vn.gdx.HeadlessGdx;
-
 @RunWith(Parameterized.class)
 public class PixmapPremultiplyTest {
-
-    static {
-        HeadlessGdx.init();
-    }
 
     /**
      * Run this test for every libGDX pixmap format.

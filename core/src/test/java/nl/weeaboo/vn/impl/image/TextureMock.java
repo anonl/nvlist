@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.GdxGraphicsTestUtil;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 import nl.weeaboo.vn.image.ITexture;
@@ -18,10 +17,6 @@ import nl.weeaboo.vn.image.ITextureData;
 public class TextureMock implements ITexture {
 
     private static final long serialVersionUID = 1L;
-
-    static {
-        HeadlessGdx.init();
-    }
 
     private final int w;
     private final int h;
