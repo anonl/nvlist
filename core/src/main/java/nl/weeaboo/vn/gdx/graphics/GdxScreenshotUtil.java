@@ -3,6 +3,7 @@ package nl.weeaboo.vn.gdx.graphics;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import nl.weeaboo.common.Rect;
 import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
@@ -25,7 +26,8 @@ public final class GdxScreenshotUtil {
      *         {@link Pixmap#dispose()} on the pixmap when it's no longer needed.
      */
     public static Pixmap screenshot(Rect glRect) {
-        Pixmap pixmap = Pixmap.createFromFrameBuffer(glRect.x, glRect.y, glRect.w, glRect.h);
+        //Pixmap pixmap = Pixmap.createFromFrameBuffer(glRect.x, glRect.y, glRect.w, glRect.h);
+        Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
         NativeMemoryTracker.get().register(pixmap);
         PixmapUtil.flipVertical(pixmap);
         return pixmap;
