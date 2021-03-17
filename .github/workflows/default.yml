@@ -34,9 +34,10 @@ jobs:
     - name: Publish test coverage to codecov
       uses: codecov/codecov-action@v1.0.14
       if: runner.os == 'Linux'
+    - name: Build artifacts
+      run: ./gradlew assembleDist
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
-      run: ./gradlew assembleDist
       with:
         name: binaries
         path: |
