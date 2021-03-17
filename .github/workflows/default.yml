@@ -24,18 +24,19 @@ jobs:
     - name: Build on Linux
       uses: GabrielBB/xvfb-action@v1.4
       if: runner.os == 'Linux'
-      with: {run: ./gradlew check jacocoTestReport -PuiTest}
+      with: {run: ./gradlew -PuiTest check jacocoTestReport}
     - name: Build on Windows
-      run: ./gradlew check
       if: runner.os == 'Windows'
+      run: ./gradlew check
     - name: Build on MacOS
-      run: ./gradlew check robovmArchive
       if: runner.os == 'macOS'
+      run: ./gradlew check robovmArchive
     - name: Publish test coverage to codecov
       uses: codecov/codecov-action@v1.0.14
       if: runner.os == 'Linux'
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
+      run: ./gradlew assembleDist
       with:
         name: binaries
         path: |
