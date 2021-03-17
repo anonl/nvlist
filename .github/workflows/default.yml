@@ -21,21 +21,31 @@ jobs:
     - name: Install JDK
       uses: actions/setup-java@v1
       with: {java-version: 1.8}
+
+    # Compile/Test
     - name: Build on Linux
-      uses: GabrielBB/xvfb-action@v1.4
       if: runner.os == 'Linux'
+      uses: GabrielBB/xvfb-action@v1.4
       with: {run: ./gradlew -PuiTest check jacocoTestReport}
     - name: Build on Windows
       if: runner.os == 'Windows'
       run: ./gradlew check
     - name: Build on MacOS
       if: runner.os == 'macOS'
-      run: ./gradlew check robovmArchive
+      run: ./gradlew check
+
+    # Test results
     - name: Publish test coverage to codecov
-      uses: codecov/codecov-action@v1.0.14
       if: runner.os == 'Linux'
-    - name: Build artifacts
-      run: ./gradlew assembleDist
+      uses: codecov/codecov-action@v1.0.14
+
+    # Artifacts
+    - name: Artifacts on Linux
+      run: ./gradlew archiveLinux64
+    - name: Artifacts on Windows
+      run: ./gradlew archiveWindows64
+    - name: Artifacts on MacOS
+      run: ./gradlew archiveMacOS robovmArchive
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -43,4 +53,4 @@ jobs:
         path: |
           buildgui/build/release
           desktop/build/release
-          ios/build/robovm
+          ios/build/robovm/*.ipa
