@@ -41,10 +41,13 @@ jobs:
 
     # Artifacts
     - name: Artifacts on Linux
+      if: runner.os == 'Linux'
       run: ./gradlew archiveLinux64
     - name: Artifacts on Windows
+      if: runner.os == 'Windows'
       run: ./gradlew archiveWindows64
     - name: Artifacts on MacOS
+      if: runner.os == 'macOS'
       run: ./gradlew archiveMacOS robovmArchive
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
