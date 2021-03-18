@@ -94,16 +94,18 @@ public final class InputAccumulator {
      */
     public static class PointerScrollEvent extends Event {
 
-        public final int scrollAmount;
+        public final float scrollX;
+        public final float scrollY;
 
         /**
-         * @param scrollAmount The number of clicks scrolled by the scroll wheel. Positive values indicate a
-         *        downward scroll, negative values an upward scroll.
+         * The scroll amount is the number of clicks scrolled by the scroll wheel. Positive values indicate a
+         * down/right scroll, negative values an up/left scroll.
          */
-        public PointerScrollEvent(long timestampMs, int scrollAmount) {
+        public PointerScrollEvent(long timestampMs, float scrollX, float scrollY) {
             super(timestampMs);
 
-            this.scrollAmount = scrollAmount;
+            this.scrollX = scrollX;
+            this.scrollY = scrollY;
         }
 
     }

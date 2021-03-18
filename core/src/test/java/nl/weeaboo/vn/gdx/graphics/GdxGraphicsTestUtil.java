@@ -4,16 +4,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 
 import nl.weeaboo.common.Checks;
-import nl.weeaboo.vn.gdx.HeadlessGdx;
 
 /**
  * Various functions for testing graphics.
  */
 public class GdxGraphicsTestUtil {
-
-    static {
-        HeadlessGdx.init();
-    }
 
     /**
      * Copies an array of ARGB8888 pixels to a pixmap.

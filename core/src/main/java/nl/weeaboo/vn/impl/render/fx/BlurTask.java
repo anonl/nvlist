@@ -73,12 +73,12 @@ public final class BlurTask extends OffscreenRenderTask {
             shader = shaderStore.get().createShaderFromClasspath(getClass(), findBestShader(scaledRadius));
 
             // Horizontal
-            shader.begin();
+            shader.bind();
             shader.setUniformf("radius", (float)(scaledRadius * pixelSize.x), 0);
             context.draw(fbos.nextBlank(), shader);
 
             // Vertical
-            shader.begin();
+            shader.bind();
             shader.setUniformf("radius", 0, (float)(scaledRadius * pixelSize.y));
             context.draw(fbos.nextBlank(), shader);
 

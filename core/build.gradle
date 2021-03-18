@@ -13,7 +13,10 @@ dependencies {
     api deps.guava
     api deps.tcommon_prefsstore
     implementation deps.lua_core
-    implementation deps.styled_text_impl
+    implementation (deps.styled_text_impl) {
+        // Ignore transitive libGDX dependencies (to prevent version conflicts)
+        exclude group: 'com.badlogicgames.gdx'
+    }
     implementation deps.antlr_runtime
 
     testImplementation deps.gdx_desktop

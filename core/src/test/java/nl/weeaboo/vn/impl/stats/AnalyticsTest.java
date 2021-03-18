@@ -18,6 +18,7 @@ import nl.weeaboo.filesystem.SecureFileWriter;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.Destructibles;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 
@@ -32,6 +33,7 @@ public final class AnalyticsTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         preloader = new AnalyticsPreloaderStub();
 

@@ -26,7 +26,7 @@ public final class NativeInput implements INativeInput {
 
     private final EnumMap<KeyCode, ButtonState> buttonStates = Maps.newEnumMap(KeyCode.class);
     private final Vec2 pointerPos = new Vec2();
-    private int pointerScroll;
+    private final Vec2 pointerScroll = new Vec2();
     private boolean idle;
 
     private long timestampMs;
@@ -47,7 +47,8 @@ public final class NativeInput implements INativeInput {
         this.idle = events.isEmpty();
 
         // Clear outdated state from last update
-        pointerScroll = 0;
+        pointerScroll.x = 0;
+        pointerScroll.y = 0;
         for (ButtonState state : buttonStates.values()) {
             state.clearJustPressed();
         }
@@ -78,7 +79,8 @@ public final class NativeInput implements INativeInput {
             } else if (raw instanceof PointerScrollEvent) {
                 PointerScrollEvent event = (PointerScrollEvent)raw;
 
-                pointerScroll += event.scrollAmount;
+                pointerScroll.x += event.scrollX;
+                pointerScroll.y += event.scrollY;
             } else {
                 LOG.warn("Unknown event type: {}", raw.getClass());
             }
@@ -139,7 +141,12 @@ public final class NativeInput implements INativeInput {
 
     @Override
     public int getPointerScroll() {
-        return pointerScroll;
+        return (int)Math.round(pointerScroll.y);
+    }
+
+    @Override
+    public Vec2 getPointerScrollXY() {
+        return new Vec2(pointerScroll);
     }
 
     @Override

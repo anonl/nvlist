@@ -301,7 +301,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
         int g = (argb >> 8) & 0xFF;
         int b = argb & 0xFF;
 
-        spriteBatch.setColor(Color.toFloatBits(r, g, b, a));
+        spriteBatch.setPackedColor(Color.toFloatBits(r, g, b, a));
     }
 
     @Override

@@ -119,7 +119,7 @@ public class InputTest {
     @Test
     public void testPointerDelegate() {
         inputAdapter.pointerMoved(1, 2);
-        inputAdapter.pointerScrolled(3);
+        inputAdapter.pointerScrolled(0, 3);
 
         Vec2 expectedPos = input.getPointerPos(Matrix.identityMatrix());
         Vec2 actualPos = input.getPointerPos(Matrix.identityMatrix());

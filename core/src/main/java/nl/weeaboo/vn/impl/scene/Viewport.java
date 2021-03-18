@@ -53,7 +53,8 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
 
         // Mouse scroll wheel handling
         if (containsPointer) {
-            scroll(0, scrollWheelAccel * input.getPointerScroll());
+            Vec2 scroll = input.getPointerScrollXY();
+            scroll(scrollWheelAccel * scroll.x, scrollWheelAccel * scroll.y);
         }
 
         // Mouse/touch draw handling

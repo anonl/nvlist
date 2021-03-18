@@ -122,12 +122,11 @@ public class RenderTestHelper implements IDestructible {
             @Override
             public void render(IScreenRenderer r) {
                 ShaderProgram shader = SpriteBatch.createDefaultShader();
-                shader.begin();
+                shader.bind();
                 try {
                     GdxShaderUtil.setTexture(shader, 0, tex, "u_texture");
                     renderer.renderTriangleGrid(grid, shader);
                 } finally {
-                    shader.end();
                     shader.dispose();
                 }
             }

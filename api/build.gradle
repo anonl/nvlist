@@ -63,5 +63,7 @@ javadoc {
 
         // Don't include the version number (causes too many unrelated changes)
         title = 'NVList'
+
+        addBooleanOption('Xdoclint:all,-missing', true)
     }
 }

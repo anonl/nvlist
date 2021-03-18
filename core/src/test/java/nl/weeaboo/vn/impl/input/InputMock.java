@@ -17,7 +17,7 @@ public class InputMock implements IInput, Serializable {
 
     private final Map<VKey, ButtonState> buttonStates = new HashMap<>();
     private final Vec2 pointerPos = new Vec2();
-    private int pointerScroll;
+    private final Vec2 pointerScroll = new Vec2();
 
     private long timestampMs;
 
@@ -70,8 +70,13 @@ public class InputMock implements IInput, Serializable {
     }
 
     @Override
+    public Vec2 getPointerScrollXY() {
+        return new Vec2(pointerScroll);
+    }
+
+    @Override
     public int getPointerScroll() {
-        return pointerScroll;
+        return (int)Math.round(pointerScroll.y);
     }
 
     @Override
@@ -111,8 +116,9 @@ public class InputMock implements IInput, Serializable {
     }
 
     /** Adds a pointer scroll event to the input buffer. */
-    public void pointerScrolled(int amount) {
-        pointerScroll += amount;
+    public void pointerScrolled(double x, double y) {
+        pointerScroll.x += x;
+        pointerScroll.y += y;
     }
 
     /** Adds a button press event to the input buffer. */

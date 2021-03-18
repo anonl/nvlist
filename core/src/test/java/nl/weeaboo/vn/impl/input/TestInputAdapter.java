@@ -59,8 +59,8 @@ final class TestInputAdapter {
     }
 
     /** Adds a pointer scroll event to the input buffer. */
-    public void pointerScrolled(int amount) {
-        accum.addEvent(new PointerScrollEvent(getTime(), amount));
+    public void pointerScrolled(float amountX, float amountY) {
+        accum.addEvent(new PointerScrollEvent(getTime(), amountX, amountY));
     }
 
     /** Adds a button press event to the input buffer. */

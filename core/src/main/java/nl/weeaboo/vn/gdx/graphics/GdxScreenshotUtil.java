@@ -26,6 +26,7 @@ public final class GdxScreenshotUtil {
      *         {@link Pixmap#dispose()} on the pixmap when it's no longer needed.
      */
     public static Pixmap screenshot(Rect glRect) {
+        //Pixmap pixmap = Pixmap.createFromFrameBuffer(glRect.x, glRect.y, glRect.w, glRect.h);
         Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(glRect.x, glRect.y, glRect.w, glRect.h);
         NativeMemoryTracker.get().register(pixmap);
         PixmapUtil.flipVertical(pixmap);
