@@ -21,6 +21,7 @@ import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.Novel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.impl.script.ThrowingScriptExceptionHandler;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
@@ -34,7 +35,6 @@ public abstract class IntegrationTest {
 
     protected Launcher launcher;
     protected Novel novel;
-    protected IEnvironment env;
 
     @BeforeClass
     public static final void beforeAllIntegration() {
@@ -54,7 +54,8 @@ public abstract class IntegrationTest {
         launcher.create();
 
         novel = launcher.getNovel();
-        env = novel.getEnv();
+        IEnvironment env = getEnv();
+        env.getScriptEnv().setExceptionHandler(ThrowingScriptExceptionHandler.INSTANCE);
 
         // Add assert lib
         new LuaAssertLib().initEnv((LuaScriptEnv)env.getScriptEnv());
@@ -73,21 +74,25 @@ public abstract class IntegrationTest {
         HeadlessGdx.clear();
     }
 
+    protected IEnvironment getEnv() {
+        return novel.getEnv();
+    }
+
     protected void loadScript(String path) {
         loadScript(FilePath.of(path));
     }
 
     protected void loadScript(FilePath path) {
-        IContext context = env.getContextManager().getPrimaryContext();
+        IContext context = getEnv().getContextManager().getPrimaryContext();
         try {
-            LuaScriptUtil.loadScript(context, env.getScriptEnv().getScriptLoader(), path);
+            LuaScriptUtil.loadScript(context, getEnv().getScriptEnv().getScriptLoader(), path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }
     }
 
     protected void waitForAllThreads() {
-        LuaTestUtil.waitForAllThreads(env);
+        LuaTestUtil.waitForAllThreads(novel);
     }
 
 }

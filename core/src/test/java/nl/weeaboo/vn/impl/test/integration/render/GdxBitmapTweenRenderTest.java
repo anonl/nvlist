@@ -26,7 +26,7 @@ public class GdxBitmapTweenRenderTest extends RenderIntegrationTest {
         tweenConfig.setStartTexture(getTexture("a"));
         tweenConfig.setEndTexture(getTexture("b"));
 
-        tween = new GdxBitmapTweenRenderer(env.getImageModule(), tweenConfig);
+        tween = new GdxBitmapTweenRenderer(getEnv().getImageModule(), tweenConfig);
         drawable = new ImageDrawable();
         drawable.setRenderer(tween);
         drawable.setSize(1280, 720);

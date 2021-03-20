@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.script.lua;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Nullable;
 
 import org.junit.Assert;
@@ -12,7 +14,8 @@ import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.impl.script.ScriptExceptionHandlerMock;
+import nl.weeaboo.vn.core.INovel;
+import nl.weeaboo.vn.impl.script.ThrowingScriptExceptionHandler;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
@@ -112,14 +115,24 @@ public final class LuaTestUtil {
     }
 
     /**
+     * @see #waitForAllThreads(IEnvironment)
+     */
+    public static void waitForAllThreads(INovel novel) {
+        waitForAllThreads(() -> novel.getEnv());
+    }
+
+    /**
      * Runs all threads in all active contexts, until those contexts no longer contain any runnable threads.
      * @see #hasRunnableThreads(IScriptContext)
      */
     public static void waitForAllThreads(IEnvironment env) {
+        waitForAllThreads(() -> env);
+    }
+
+    public static void waitForAllThreads(Supplier<IEnvironment> envSupplier) {
         int iteration = 0;
         while (iteration++ < 10_000) {
-            env.update();
-
+            IEnvironment env = envSupplier.get();
             boolean anyRunnableThreads = false;
             for (IContext context : env.getContextManager().getActiveContexts()) {
                 if (hasRunnableThreads(context.getScriptContext())) {
@@ -130,6 +143,8 @@ public final class LuaTestUtil {
             if (!anyRunnableThreads) {
                 return;
             }
+
+            env.update();
         }
         throw new AssertionError("One or more threads refuse to die");
     }
@@ -142,7 +157,7 @@ public final class LuaTestUtil {
         int iteration = 0;
         IScriptContext scriptContext = context.getScriptContext();
         while (hasRunnableThreads(scriptContext)) {
-            scriptContext.updateThreads(context, ScriptExceptionHandlerMock.INSTANCE);
+            scriptContext.updateThreads(context, ThrowingScriptExceptionHandler.INSTANCE);
 
             if (++iteration >= 10_000) {
                 throw new AssertionError("One or more threads refuse to die");

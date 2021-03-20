@@ -30,7 +30,10 @@ public final class SaveIntegrationTest extends IntegrationTest {
         loadScript("integration/save/saveload.lvn");
         waitForAllThreads();
 
-        ISaveFileHeader saveHeader = env.getSaveModule().readSaveHeader(1);
+        // Check that script finished and that loading worked (changes after saving are gone)
+        LuaTestUtil.assertGlobal("result", 101);
+
+        ISaveFileHeader saveHeader = getEnv().getSaveModule().readSaveHeader(1);
 
         // Thumbnail image is stored at the size specified in the Lua script
         ThumbnailInfo thumbnail = saveHeader.getThumbnail();

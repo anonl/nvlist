@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.vn.impl.script.DefaultScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptEnv;
+import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -24,6 +27,7 @@ public class LuaScriptEnv implements IScriptEnv {
     private final LuaRunState runState;
     private final LuaScriptLoader loader;
     private final List<ILuaScriptEnvInitializer> initializers = new ArrayList<>();
+    private IScriptExceptionHandler exceptionHandler = DefaultScriptExceptionHandler.INSTANCE;
 
     private boolean initialized;
 
@@ -88,6 +92,15 @@ public class LuaScriptEnv implements IScriptEnv {
     @Override
     public IScriptLoader getScriptLoader() {
         return loader;
+    }
+
+    public IScriptExceptionHandler getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    @Override
+    public void setExceptionHandler(IScriptExceptionHandler exceptionHandler) {
+        this.exceptionHandler = Objects.requireNonNull(exceptionHandler);
     }
 
 }

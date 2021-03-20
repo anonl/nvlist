@@ -47,7 +47,7 @@ public class BlurTaskTest extends RenderIntegrationTest {
     }
 
     private void blur(double radius) {
-        BlurTask blurTask = new BlurTask(env.getImageModule(), getTexture("a"), radius);
+        BlurTask blurTask = new BlurTask(getEnv().getImageModule(), getTexture("a"), radius);
         blurTask.render();
 
         ITexture tex = blurTask.getResult();

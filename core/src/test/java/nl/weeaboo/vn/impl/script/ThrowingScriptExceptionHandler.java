@@ -3,7 +3,10 @@ package nl.weeaboo.vn.impl.script;
 import nl.weeaboo.vn.script.IScriptExceptionHandler;
 import nl.weeaboo.vn.script.IScriptThread;
 
-public enum ScriptExceptionHandlerMock implements IScriptExceptionHandler {
+/**
+ * Exception handler which throws an {@link AssertionError}.
+ */
+public enum ThrowingScriptExceptionHandler implements IScriptExceptionHandler {
 
     INSTANCE;
 

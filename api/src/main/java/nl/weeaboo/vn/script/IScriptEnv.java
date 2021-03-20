@@ -12,4 +12,9 @@ public interface IScriptEnv extends Serializable {
      */
     IScriptLoader getScriptLoader();
 
+    /**
+     * This exception handler is called whenever an exception is thrown from Lua code.
+     */
+    void setExceptionHandler(IScriptExceptionHandler exceptionHandler);
+
 }

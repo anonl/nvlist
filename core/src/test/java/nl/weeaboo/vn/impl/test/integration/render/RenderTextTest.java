@@ -58,7 +58,7 @@ public class RenderTextTest extends RenderIntegrationTest {
         layoutParams.ydir = 1;
         layoutParams.wrapWidth = wrapWidth;
 
-        ILoadingFontStore fontStore = env.getTextModule().getFontStore();
+        ILoadingFontStore fontStore = getEnv().getTextModule().getFontStore();
         return LayoutUtil.layout(fontStore, text, layoutParams);
     }
 

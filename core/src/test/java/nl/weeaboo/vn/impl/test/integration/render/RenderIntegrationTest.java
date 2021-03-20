@@ -36,8 +36,8 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
 
     @Before
     public final void beforeRenderTest() {
-        env.updateRenderEnv(Rect.of(0, 60, 640, 360), Dim.of(640, 480));
-        renderer = new RenderTestHelper(env.getRenderEnv());
+        getEnv().updateRenderEnv(Rect.of(0, 60, 640, 360), Dim.of(640, 480));
+        renderer = new RenderTestHelper(getEnv().getRenderEnv());
 
         pixmapTester = new PixmapTester();
         pixmapTester.setMaxColorDiff(MAX_COLOR_DIFF);
@@ -57,7 +57,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
     }
 
     protected ITexture getTexture(String path) {
-        ITexture texture = env.getImageModule().getTexture(FilePath.of(path));
+        ITexture texture = getEnv().getImageModule().getTexture(FilePath.of(path));
         Assert.assertNotNull(texture);
         // Set filtering to nearest so we don't get trolled by slight interpolation differences on the build server
         setFilterNearest(texture);
@@ -108,7 +108,7 @@ public abstract class RenderIntegrationTest extends IntegrationTest {
      * @see #checkRenderResult(String, Rect)
      */
     public void checkRenderResult(String testName) {
-        checkRenderResult(testName, env.getRenderEnv().getGLClip());
+        checkRenderResult(testName, getEnv().getRenderEnv().getGLClip());
     }
 
     /**

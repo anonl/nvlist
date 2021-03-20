@@ -80,7 +80,7 @@ public abstract class LuaIntegrationTest {
     }
 
     protected void waitForAllThreads() {
-        LuaTestUtil.waitForAllThreads(env);
+        LuaTestUtil.waitForAllThreads(() -> env);
     }
 
 }

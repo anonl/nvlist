@@ -23,7 +23,7 @@ public class GdxCrossFadeRenderTest extends RenderIntegrationTest {
         tweenConfig.setStartTexture(getTexture("a"));
         tweenConfig.setEndTexture(getTexture("b"));
 
-        tween = new GdxCrossFadeRenderer(env.getImageModule(), tweenConfig);
+        tween = new GdxCrossFadeRenderer(getEnv().getImageModule(), tweenConfig);
         drawable = new ImageDrawable();
         drawable.setRenderer(tween);
         drawable.setSize(1280, 720);

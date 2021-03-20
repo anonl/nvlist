@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.impl.core.ContextStub;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
-import nl.weeaboo.vn.impl.script.ScriptExceptionHandlerMock;
+import nl.weeaboo.vn.impl.script.ThrowingScriptExceptionHandler;
 import nl.weeaboo.vn.script.ScriptException;
 
 public final class LuaScriptContextTest {
@@ -73,7 +73,7 @@ public final class LuaScriptContextTest {
     }
 
     private void updateThreads() {
-        scriptContext.updateThreads(context, ScriptExceptionHandlerMock.INSTANCE);
+        scriptContext.updateThreads(context, ThrowingScriptExceptionHandler.INSTANCE);
     }
 
     @SuppressWarnings("serial")

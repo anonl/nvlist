@@ -112,7 +112,10 @@ allprojects {
             testImplementation deps.guava_testlib
 
             // gdx-test is a required dependency since it contains the GdxUiTest test category
-            testImplementation deps.gdx_test
+            testImplementation (deps.gdx_test) {
+                // Ignore transitive libGDX dependencies (to prevent version conflicts)
+                exclude group: 'com.badlogicgames.gdx'
+            }
         }
 
         test {

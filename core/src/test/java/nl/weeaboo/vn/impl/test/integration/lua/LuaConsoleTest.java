@@ -24,7 +24,7 @@ public class LuaConsoleTest extends IntegrationTest {
     @Before
     public void before() {
         console = new LuaConsole(launcher.getSceneEnv());
-        console.setContext(env.getContextManager());
+        console.setContext(getEnv().getContextManager());
 
         input = new GdxInputRobot(Gdx.input.getInputProcessor());
 
