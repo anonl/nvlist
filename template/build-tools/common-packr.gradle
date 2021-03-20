@@ -122,9 +122,11 @@ tasks.register('archiveLinux64', Tar) {
     into "${rootProject.name}-${version}"
 }
 
-tasks.register('archiveMacOS', Copy) {
-    destinationDir = file("$releaseDir/${rootProject.name}-${version}.app")
-    from tasks['packrMacOS']
+tasks.register('archiveMacOS', Zip) {
+    destinationDir = releaseDir
+    archiveName = "${rootProject.name}-${version}-macos.zip"
+    from tasks['packrLinux64']
+    into "${rootProject.name}-${version}.app"
 }
 
 def archiveArtifacts = tasks.register('archiveArtifacts') {
