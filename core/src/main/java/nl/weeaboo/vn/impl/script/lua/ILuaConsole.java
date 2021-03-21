@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.impl.script.lua;
 
 import nl.weeaboo.vn.core.IEnvironment;
-import nl.weeaboo.vn.input.IInput;
+import nl.weeaboo.vn.input.INativeInput;
 
 /**
  * Interactive Lua terminal/REPL
@@ -9,6 +9,6 @@ import nl.weeaboo.vn.input.IInput;
 public interface ILuaConsole {
 
     /** Handle input and update internal state. */
-    void update(IEnvironment env, IInput input);
+    void update(IEnvironment env, INativeInput input);
 
 }

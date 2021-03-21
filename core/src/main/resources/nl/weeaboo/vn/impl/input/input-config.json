@@ -12,6 +12,5 @@
     "sceneSkip": ["PAGE_DOWN+CONTROL_LEFT", "PAGE_DOWN+CONTROL_RIGHT"],
     "mouseLeft": ["MOUSE_LEFT"],
 
-    "toggleConsole": ["F1"],
     "toggleOsd": ["F7"]
 }

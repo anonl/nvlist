@@ -12,7 +12,6 @@ import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
-import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.save.SaveParams;
 import nl.weeaboo.vn.impl.script.lua.ILuaConsole;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
@@ -45,7 +44,7 @@ public final class DebugControls {
     public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
         screenshotTaker.update(env, input);
-        luaConsole.update(env, null);
+        luaConsole.update(env, input);
 
         if (!env.getPref(NovelPrefs.DEBUG)) {
             return; // Debug mode not enabled
@@ -86,9 +85,6 @@ public final class DebugControls {
                 LOG.warn("Load error", e);
             }
         }
-
-        // Lua console
-        luaConsole.update(env, StaticEnvironment.INPUT.get());
     }
 
 }

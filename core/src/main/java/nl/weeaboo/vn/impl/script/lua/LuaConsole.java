@@ -27,8 +27,8 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dUtil;
-import nl.weeaboo.vn.input.IInput;
-import nl.weeaboo.vn.input.VKey;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.script.ScriptException;
 
 /**
@@ -56,12 +56,12 @@ public class LuaConsole implements ILuaConsole {
     }
 
     @Override
-    public void update(IEnvironment env, IInput input) {
+    public void update(IEnvironment env, INativeInput input) {
         if (!env.getPref(NovelPrefs.DEBUG)) {
             return; // Debug mode not enabled
         }
 
-        if (input.consumePress(VKey.TOGGLE_OSD)) {
+        if (input.consumePress(KeyCode.F1)) {
             if (isVisible()) {
                 close();
             } else {
@@ -120,6 +120,17 @@ public class LuaConsole implements ILuaConsole {
         layout.row();
         layout.add(inputField).bottom().expandX().fill();
         layout.add(inputButton).bottom().fill();
+        layout.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Keys.F1) {
+                    close();
+                    return true;
+                }
+                return false;
+            }
+
+        });
 
         stage.addActor(layout);
         stage.setKeyboardFocus(inputField);
