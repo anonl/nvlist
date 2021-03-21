@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 
 import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.ISystemModule;
+import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.render.DisplayMode;
 
 public class SystemModuleMock extends AbstractModule implements ISystemModule {
@@ -21,6 +24,7 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
     private final AtomicInteger restartCount = new AtomicInteger();
     private final List<String> openedWebsites = new ArrayList<>();
 
+    private @Nullable InitException restartException;
     private transient SystemEnvMock systemEnv;
 
     public SystemModuleMock(IEnvironment env) {
@@ -40,8 +44,12 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
     }
 
     @Override
-    public void restart() {
+    public void restart() throws InitException {
         restartCount.incrementAndGet();
+
+        if (restartException != null) {
+            throw restartException;
+        }
     }
 
     /**
@@ -49,6 +57,10 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
      */
     public void consumeRestartCount(int expected) {
         Assert.assertEquals(expected, restartCount.getAndSet(0));
+    }
+
+    public void setRestartException(@Nullable InitException restartException) {
+        this.restartException = restartException;
     }
 
     @Override

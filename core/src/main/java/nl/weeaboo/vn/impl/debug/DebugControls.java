@@ -12,7 +12,9 @@ import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.res.NativeMemoryTracker;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
+import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.save.SaveParams;
+import nl.weeaboo.vn.impl.script.lua.ILuaConsole;
 import nl.weeaboo.vn.impl.script.lua.LuaConsole;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
@@ -25,12 +27,16 @@ public final class DebugControls {
 
     private static final Logger LOG = LoggerFactory.getLogger(DebugControls.class);
 
-    private final LuaConsole luaConsole;
-    private final ScreenshotTaker screenshotTaker;
+    private final ILuaConsole luaConsole;
+    private final IScreenshotTaker screenshotTaker;
 
     public DebugControls(Scene2dEnv sceneEnv) {
-        this.luaConsole = new LuaConsole(sceneEnv);
-        this.screenshotTaker = new ScreenshotTaker();
+        this(new LuaConsole(sceneEnv), new ScreenshotTaker());
+    }
+
+    DebugControls(ILuaConsole console, IScreenshotTaker screenshotTaker) {
+        this.luaConsole = console;
+        this.screenshotTaker = screenshotTaker;
     }
 
     /**
@@ -39,6 +45,7 @@ public final class DebugControls {
     public void update(INovel novel, INativeInput input) {
         IEnvironment env = novel.getEnv();
         screenshotTaker.update(env, input);
+        luaConsole.update(env, null);
 
         if (!env.getPref(NovelPrefs.DEBUG)) {
             return; // Debug mode not enabled
@@ -81,11 +88,7 @@ public final class DebugControls {
         }
 
         // Lua console
-        luaConsole.setContext(env.getContextManager());
-        if (input.consumePress(KeyCode.F1)) {
-            // TODO: LuaConsole needs to intercept the F1 key in order to hide itself
-            luaConsole.setVisible(!luaConsole.isVisible());
-        }
+        luaConsole.update(env, StaticEnvironment.INPUT.get());
     }
 
 }

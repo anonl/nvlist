@@ -25,6 +25,7 @@ public final class VKey extends AbstractId {
     public static final VKey MOUSE_LEFT = new VKey("mouseLeft");
 
     // Special keys to access debug/test functionality
+    public static final VKey TOGGLE_CONSOLE = new VKey("toggleConsole");
     public static final VKey TOGGLE_OSD = new VKey("toggleOsd");
 
     private static final ImmutableList<VKey> STANDARD_KEYS = ImmutableList.of(

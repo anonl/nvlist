@@ -9,7 +9,7 @@ import nl.weeaboo.vn.input.KeyCode;
 /**
  * @see InputMock
  */
-final class TestInputAdapter {
+public final class TestInputAdapter {
 
     private final NativeInput input;
     private final InputAccumulator accum = new InputAccumulator();

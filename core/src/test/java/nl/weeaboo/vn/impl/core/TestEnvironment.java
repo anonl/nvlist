@@ -1,5 +1,9 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.Assert;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
@@ -32,6 +36,7 @@ public class TestEnvironment extends DefaultEnvironment {
     private static final long serialVersionUID = 1L;
 
     private final InputMock input;
+    private final AtomicInteger clearCachesCount = new AtomicInteger();
 
     public TestEnvironment(InputMock input) {
         this.input = Checks.checkNotNull(input);
@@ -125,4 +130,14 @@ public class TestEnvironment extends DefaultEnvironment {
         super.update();
     }
 
+    @Override
+    public void clearCaches() {
+        clearCachesCount.incrementAndGet();
+
+        super.clearCaches();
+    }
+
+    public void consumeClearCachesCount(int expected) {
+        Assert.assertEquals(expected, clearCachesCount.getAndSet(0));
+    }
 }
