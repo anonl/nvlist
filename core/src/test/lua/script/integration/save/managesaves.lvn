@@ -15,6 +15,8 @@ end
 for _,slot in ipairs(usedSlots) do
     Save.delete(slot)
     luaAssertEquals(false, Save.getSaveExists(slot))
+    -- Attempting to delete a save slot that doesn't exist is a no-op
+    Save.delete(slot)
 end
 
 @@

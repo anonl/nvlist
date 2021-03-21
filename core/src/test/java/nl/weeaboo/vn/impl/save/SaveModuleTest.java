@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import nl.weeaboo.test.ExceptionTester;
 import nl.weeaboo.vn.core.Duration;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.stats.IPlayTimer;
 import nl.weeaboo.vn.stats.IStatsModule;
@@ -21,6 +22,7 @@ public final class SaveModuleTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         IStatsModule statsModule = env.getStatsModule();
