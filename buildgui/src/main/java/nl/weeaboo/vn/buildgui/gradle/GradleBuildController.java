@@ -22,7 +22,7 @@ import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
-import nl.weeaboo.vn.buildtools.task.AbstractTask;
+import nl.weeaboo.vn.buildtools.task.Task;
 import nl.weeaboo.vn.buildtools.task.ITask;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
@@ -115,7 +115,7 @@ public final class GradleBuildController implements IBuildController {
         return folderConfig;
     }
 
-    private static final class GradleTask extends AbstractTask {
+    private static final class GradleTask extends Task {
 
         private final GradleMonitor gradleMonitor;
         private final CopyOnWriteArrayList<IBuildLogListener> logListeners;

@@ -1,5 +1,6 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
-import com.google.common.io.Files;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import nl.weeaboo.common.Checks;
@@ -35,7 +35,9 @@ public final class OptimizerContext implements IOptimizerContext {
     public OptimizerContext(NvlistProjectConnection projectConnection, MainOptimizerConfig mainConfig) {
         this.projectConnection = projectConnection;
 
-        tempFileProvider = new TempFileProvider(Files.createTempDir());
+        File tempDir = new File(System.getProperty("java.io.tmpdir"), "nvlist-" + System.nanoTime());
+        tempDir.mkdirs();
+        tempFileProvider = new TempFileProvider(tempDir);
         fileSet = new OptimizerFileSet();
 
         executorService = ParallelExecutor.newExecutorService();

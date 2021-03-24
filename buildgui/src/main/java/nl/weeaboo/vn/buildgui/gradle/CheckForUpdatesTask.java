@@ -27,13 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
-import nl.weeaboo.vn.buildtools.task.AbstractTask;
+import nl.weeaboo.vn.buildtools.task.Task;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 /**
  * Checks for updates to NVList.
  */
-public final class CheckForUpdatesTask extends AbstractTask {
+public final class CheckForUpdatesTask extends Task {
 
     private static final Logger LOG = LoggerFactory.getLogger(CheckForUpdatesTask.class);
     private static final String MAVEN_LAYOUT = "default";
