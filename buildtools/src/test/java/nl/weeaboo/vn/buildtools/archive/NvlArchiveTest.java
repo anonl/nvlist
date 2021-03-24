@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
@@ -42,8 +42,8 @@ public final class NvlArchiveTest {
         ZipFileArchive arc = new ZipFileArchive();
         arc.open(outputF);
         try {
-            Assert.assertEquals(ImmutableList.of(ONE, TWO),
-                    arc.getFiles(FileCollectOptions.files(FilePath.empty())));
+            Assert.assertEquals(ImmutableSet.of(ONE, TWO),
+                    ImmutableSet.copyOf(arc.getFiles(FileCollectOptions.files(FilePath.empty()))));
         } finally {
             arc.close();
         }
