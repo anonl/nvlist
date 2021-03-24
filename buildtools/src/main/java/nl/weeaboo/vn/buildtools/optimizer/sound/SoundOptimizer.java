@@ -54,8 +54,7 @@ public final class SoundOptimizer {
     // --- State during optimization ---
     /** Definition per (optimized) sound file */
     private final Map<FilePath, SoundDefinition> optimizedDefs = Maps.newHashMap();
-    private boolean ffmpegAvailable;
-
+    private EAvailable ffmpegAvailable;
 
     public SoundOptimizer(IOptimizerContext context) {
         executor = context.getExecutor();
@@ -66,12 +65,14 @@ public final class SoundOptimizer {
         NvlistProjectConnection project = context.getProject();
         resFileSystem = project.getResFileSystem();
         soundDefCache = new SoundDefinitionCache(resFileSystem);
+
+        resetState();
     }
 
     private void resetState() {
         optimizedDefs.clear();
 
-        ffmpegAvailable = FfmpegSoundEncoder.isAvailable();
+        ffmpegAvailable = EAvailable.UNKNOWN;
     }
 
     /**
@@ -162,11 +163,15 @@ public final class SoundOptimizer {
     }
 
     private ISoundEncoder createEncoder() {
-        if (ffmpegAvailable) {
-            return new FfmpegSoundEncoder(tempFileProvider);
-        } else {
-            return new NoOpSoundEncoder();
+        if (ffmpegAvailable != EAvailable.NO) {
+            FfmpegSoundEncoder encoder = new FfmpegSoundEncoder(tempFileProvider);
+            if (ffmpegAvailable == EAvailable.YES || encoder.isAvailable()) {
+                ffmpegAvailable = EAvailable.YES;
+                return encoder;
+            }
         }
+        ffmpegAvailable = EAvailable.NO;
+        return new NoOpSoundEncoder();
     }
 
     private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
@@ -174,4 +179,7 @@ public final class SoundOptimizer {
         return folder.resolve(outputFilename);
     }
 
+    private enum EAvailable {
+        YES, NO, UNKNOWN
+    }
 }

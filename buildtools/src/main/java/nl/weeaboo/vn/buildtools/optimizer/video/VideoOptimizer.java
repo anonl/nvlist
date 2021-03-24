@@ -19,7 +19,6 @@ import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
-import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.FfmpegVideoEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.IVideoEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.NoOpVideoEncoder;
@@ -41,8 +40,7 @@ public final class VideoOptimizer {
     private final IFileSystem resFileSystem;
 
     // --- State during optimization ---
-    private boolean ffmpegAvailable;
-
+    private EAvailable ffmpegAvailable;
 
     public VideoOptimizer(IOptimizerContext context) {
         executor = context.getExecutor();
@@ -52,10 +50,12 @@ public final class VideoOptimizer {
 
         NvlistProjectConnection project = context.getProject();
         resFileSystem = project.getResFileSystem();
+
+        resetState();
     }
 
     private void resetState() {
-        ffmpegAvailable = FfmpegSoundEncoder.isAvailable();
+        ffmpegAvailable = EAvailable.UNKNOWN;
     }
 
     /**
@@ -118,11 +118,15 @@ public final class VideoOptimizer {
     }
 
     private IVideoEncoder createEncoder() {
-        if (ffmpegAvailable) {
-            return new FfmpegVideoEncoder(tempFileProvider);
-        } else {
-            return new NoOpVideoEncoder();
+        if (ffmpegAvailable != EAvailable.NO) {
+            FfmpegVideoEncoder encoder = new FfmpegVideoEncoder(tempFileProvider);
+            if (ffmpegAvailable == EAvailable.YES || encoder.isAvailable()) {
+                ffmpegAvailable = EAvailable.YES;
+                return encoder;
+            }
         }
+        ffmpegAvailable = EAvailable.NO;
+        return new NoOpVideoEncoder();
     }
 
     private FilePath getOutputPath(FilePath inputPath, String outputFilename) {
@@ -130,4 +134,7 @@ public final class VideoOptimizer {
         return folder.resolve(outputFilename);
     }
 
+    private enum EAvailable {
+        YES, NO, UNKNOWN
+    }
 }
