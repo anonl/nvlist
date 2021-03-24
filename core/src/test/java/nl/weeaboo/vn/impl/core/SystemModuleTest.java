@@ -16,6 +16,7 @@ import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.signal.PrefsChangeSignal;
 
 public class SystemModuleTest {
@@ -28,6 +29,7 @@ public class SystemModuleTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         TestEnvironment env = TestEnvironment.newInstance();
         systemEnv = env.getSystemEnv();
         systemModule = new TestSystemModule(env);

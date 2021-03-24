@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 
 public class ContextTest  {
 
@@ -18,6 +19,7 @@ public class ContextTest  {
 
     @Before
     public void init() {
+        HeadlessGdx.init();
         TestEnvironment env = TestEnvironment.newInstance();
         ContextFactoryMock contextFactory = new ContextFactoryMock(env.getScriptEnv());
         contextManager = new ContextManager(contextFactory);
