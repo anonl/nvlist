@@ -13,6 +13,7 @@ import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.test.InsetsAssert;
 import nl.weeaboo.test.RectAssert;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.image.ITexture;
@@ -33,6 +34,8 @@ public class NinePatchRendererTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
+
         drawBuffer = new DrawBuffer();
         renderer = new NinePatchRenderer();
         imageDrawable = new ImageDrawable();

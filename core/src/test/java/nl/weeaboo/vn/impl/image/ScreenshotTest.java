@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.common.Dim;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 import nl.weeaboo.vn.image.ITextureData;
 import nl.weeaboo.vn.impl.render.DrawBuffer;
@@ -18,6 +20,11 @@ import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.scene.ILayer;
 
 public class ScreenshotTest {
+
+    @Before
+    public void before() {
+        HeadlessGdx.init();
+    }
 
     @Test
     public void stateTransitions() {

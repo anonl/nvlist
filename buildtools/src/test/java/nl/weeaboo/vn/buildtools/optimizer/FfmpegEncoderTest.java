@@ -48,7 +48,6 @@ public abstract class FfmpegEncoderTest {
         case WINDOWS:
             return new File("src/test/resources/nop.exe").getAbsolutePath();
         case LINUX:
-        case MACOSX:
             return new File("/bin/true").getAbsolutePath();
         default:
             throw new AssumptionViolatedException("Unsupported platform: " + platform);

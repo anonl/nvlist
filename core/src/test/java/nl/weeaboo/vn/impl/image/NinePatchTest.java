@@ -1,16 +1,23 @@
 package nl.weeaboo.vn.impl.image;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.common.Insets2D;
 import nl.weeaboo.test.InsetsAssert;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.INinePatch.AreaId;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
 
 public class NinePatchTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
+
+    @Before
+    public void before() {
+        HeadlessGdx.init();
+    }
 
     /** Check state after using the default constructor */
     @Test
