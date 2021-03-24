@@ -64,7 +64,7 @@ public final class ResourceQualifiers implements Iterable<IResourceQualifier> {
     public static FilePath applyToRootFolder(FilePath path, IResourceQualifier qualifier) {
         String pathString = path.toString();
         // Replace "abc/" with "abc-qualifier/"
-        pathString = pathString.replaceFirst("([^/]+)[/]",
+        pathString = pathString.replaceFirst("([^/]+)[/]?",
                 "$1-" + qualifier.toPathString() + "/");
         return FilePath.of(pathString);
     }

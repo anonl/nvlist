@@ -69,4 +69,10 @@ public abstract class OptimizerTest {
         }
     }
 
+    protected void assertOutputExists(String... paths) {
+        File outF = context.getMainConfig().getOutputFolder();
+        for (String path : paths) {
+            Assert.assertEquals("Path:" + path, true, new File(outF, path).exists());
+        }
+    }
 }
