@@ -1,7 +1,8 @@
 package nl.weeaboo.vn.buildtools.project;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -10,14 +11,14 @@ import java.util.Objects;
  */
 public final class ProjectFolderConfig {
 
-    private final File projectFolder;
-    private final File buildToolsFolder;
+    private final Path projectFolder;
+    private final Path buildToolsFolder;
 
     public ProjectFolderConfig() {
-        this(new File(""), new File("build-tools"));
+        this(Paths.get(""), Paths.get("build-tools"));
     }
 
-    public ProjectFolderConfig(File projectFolder, File buildToolsFolder) {
+    public ProjectFolderConfig(Path projectFolder, Path buildToolsFolder) {
         this.projectFolder = Objects.requireNonNull(projectFolder);
         this.buildToolsFolder = Objects.requireNonNull(buildToolsFolder);
     }
@@ -25,7 +26,7 @@ public final class ProjectFolderConfig {
     /**
      * Returns a new instance, using a different project folder.
      */
-    public ProjectFolderConfig withProjectFolder(File newProjectFolder) {
+    public ProjectFolderConfig withProjectFolder(Path newProjectFolder) {
         return new ProjectFolderConfig(newProjectFolder, buildToolsFolder);
     }
 
@@ -33,57 +34,57 @@ public final class ProjectFolderConfig {
      * The folder in which the /res and /build-res folders are stored. This is the root folder for the NVList
      * project.
      */
-    public File getProjectFolder() {
+    public Path getProjectFolder() {
         return projectFolder;
     }
 
     /**
      * Folder containing resources files used by the project.
      */
-    public File getResFolder() {
+    public Path getResFolder() {
         return getResFolder(projectFolder);
     }
 
     /**
      * Folder containing resources files used by the project.
      */
-    public static File getResFolder(File projectFolder) {
-        return new File(projectFolder, "res");
+    public static Path getResFolder(Path projectFolder) {
+        return projectFolder.resolve("res");
     }
 
     /**
      * Folder containing resources and config for building the project.
      */
-    public File getBuildResFolder() {
+    public Path getBuildResFolder() {
         return getBuildResFolder(projectFolder);
     }
 
     /**
      * Folder containing resources and config for building the project.
      */
-    public static File getBuildResFolder(File projectFolder) {
-        return new File(projectFolder, "build-res");
+    public static Path getBuildResFolder(Path projectFolder) {
+        return projectFolder.resolve("build-res");
     }
 
     /**
      * Properties file containing build properties.
      */
-    public File getBuildPropertiesFile() {
-        return new File(getBuildResFolder(), "build.properties");
+    public Path getBuildPropertiesFile() {
+        return getBuildResFolder().resolve("build.properties");
     }
 
     /**
      * Generated build artifacts are stored in this folder.
      */
-    public File getBuildOutFolder() {
-        return new File(projectFolder, "build-out");
+    public Path getBuildOutFolder() {
+        return projectFolder.resolve("build-out");
     }
 
     /**
      * The build-tools folder containing the Gradle build scripts and other engine-version-specific resources.
      * This folder may be a sub-folder of the project folder, or an entire separate folder.
      */
-    public File getBuildToolsFolder() {
+    public Path getBuildToolsFolder() {
         return buildToolsFolder;
     }
 
@@ -91,11 +92,11 @@ public final class ProjectFolderConfig {
      * Returns the canonical path for the given file. In some cases, no canonical path can be determined. In
      * those cases, the file's absolute path is returned instead.
      */
-    public static String toCanonicalPath(File file) {
+    public static String toCanonicalPath(Path file) {
         try {
-            return file.getCanonicalPath();
+            return file.toRealPath().toString();
         } catch (IOException ioe) {
-            return file.getAbsolutePath();
+            return file.toAbsolutePath().toString();
         }
     }
 

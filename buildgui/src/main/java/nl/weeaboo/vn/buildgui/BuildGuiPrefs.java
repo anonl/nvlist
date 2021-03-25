@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.buildgui;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.prefs.Preferences;
 
 import org.slf4j.Logger;
@@ -60,8 +61,8 @@ final class BuildGuiPrefs {
     }
 
     public ProjectFolderConfig getProjectFolderConfig() {
-        File projectFolder = new File(storage.projectPath);
-        File buildToolsFolder = new File(storage.buildToolsPath);
+        Path projectFolder = Paths.get(storage.projectPath);
+        Path buildToolsFolder = Paths.get(storage.buildToolsPath);
         return new ProjectFolderConfig(projectFolder, buildToolsFolder);
     }
 

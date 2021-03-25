@@ -56,7 +56,7 @@ public final class GradleMonitor implements AutoCloseable {
         try {
             connection = GradleConnector.newConnector()
                     .useBuildDistribution()
-                    .forProjectDirectory(folderConfig.getBuildToolsFolder())
+                    .forProjectDirectory(folderConfig.getBuildToolsFolder().toFile())
                     .connect();
         } catch (GradleConnectionException e) {
             throw new CheckedGradleException("Error connecting to Gradle: folderConfig=" + folderConfig, e);
