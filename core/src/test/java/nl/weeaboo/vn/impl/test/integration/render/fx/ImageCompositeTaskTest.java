@@ -49,7 +49,7 @@ public class ImageCompositeTaskTest extends RenderIntegrationTest {
     }
 
     private void doRender(ImageCompositeConfig config) {
-        ImageCompositeTask task = new ImageCompositeTask(env.getImageModule(), config);
+        ImageCompositeTask task = new ImageCompositeTask(getEnv().getImageModule(), config);
         task.render();
 
         ITexture tex = task.getResult();

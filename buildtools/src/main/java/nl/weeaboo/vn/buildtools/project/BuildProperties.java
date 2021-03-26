@@ -1,8 +1,9 @@
 package nl.weeaboo.vn.buildtools.project;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -26,9 +27,9 @@ public final class BuildProperties {
      * @throws IOException If an I/O error occurs while trying to read the properties file.
      * @throws IllegalArgumentException If the properties file is malformed.
      */
-    public static BuildProperties fromFile(File file) throws IOException {
+    public static BuildProperties fromFile(Path file) throws IOException {
         Properties properties = new Properties();
-        try (FileInputStream in = new FileInputStream(file)) {
+        try (InputStream in = Files.newInputStream(file)) {
             properties.load(in);
         }
 

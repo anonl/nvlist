@@ -20,6 +20,7 @@ import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceId;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.ResourceLoader.EFileExtCheckResult;
 import nl.weeaboo.vn.stats.IResourceSeenLog;
 
@@ -32,6 +33,7 @@ public class FileResourceLoaderTest {
 
     @Before
     public void before() throws IOException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         IWritableFileSystem outputFileSystem = env.getOutputFileSystem();

@@ -2,6 +2,8 @@ package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -11,7 +13,6 @@ import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
 import nl.weeaboo.filesystem.FilePath;
@@ -34,8 +35,8 @@ public abstract class OptimizerTest {
     public final void baseBefore() throws IOException {
         HeadlessGdx.init();
 
-        File projectFolder = tempFolder.newFolder("project");
-        File buildToolsFolder = tempFolder.newFolder("build-tools");
+        Path projectFolder = tempFolder.newFolder("project").toPath();
+        Path buildToolsFolder = tempFolder.newFolder("build-tools").toPath();
         folderConfig = new ProjectFolderConfig(projectFolder, buildToolsFolder);
 
         TemplateProjectGenerator projectGenerator = new TemplateProjectGenerator();
@@ -57,9 +58,9 @@ public abstract class OptimizerTest {
     }
 
     protected void writeResource(String relPath, byte[] contents) throws IOException {
-        File file = new File(folderConfig.getResFolder(), relPath.toString());
-        file.getParentFile().mkdirs();
-        Files.write(contents, file);
+        Path path = folderConfig.getResFolder().resolve(relPath);
+        Files.createDirectories(path.getParent());
+        Files.write(path, contents);
     }
 
     protected void assertOptimized(String... paths) {
@@ -69,4 +70,10 @@ public abstract class OptimizerTest {
         }
     }
 
+    protected void assertOutputExists(String... paths) {
+        File outF = context.getMainConfig().getOutputFolder();
+        for (String path : paths) {
+            Assert.assertEquals("Path:" + path, true, new File(outF, path).exists());
+        }
+    }
 }

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 /**
  * Base implementation of {@link ITask}.
  */
-public abstract class AbstractTask implements ITask {
+public class Task implements ITask {
 
     private final CopyOnWriteArrayList<IProgressListener> progressListeners = new CopyOnWriteArrayList<>();
 

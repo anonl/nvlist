@@ -8,6 +8,7 @@ import org.junit.Test;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.INinePatch;
 import nl.weeaboo.vn.image.ITexture;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
@@ -25,6 +26,7 @@ public class ButtonImageLoaderTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         imageLoader = new ButtonImageLoader(env.getImageModule());

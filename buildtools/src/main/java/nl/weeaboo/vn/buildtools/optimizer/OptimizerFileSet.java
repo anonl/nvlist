@@ -7,7 +7,10 @@ import com.google.common.collect.Sets;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.buildtools.file.FilePathPattern;
 
-final class OptimizerFileSet implements IOptimizerFileSet {
+/**
+ * Default implementation of {@link IOptimizerFileSet}.
+ */
+public final class OptimizerFileSet implements IOptimizerFileSet {
 
     private final Set<FilePath> optimized = Sets.newHashSet();
 

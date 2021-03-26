@@ -3,6 +3,8 @@ package nl.weeaboo.vn.buildgui;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -62,7 +64,7 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
         projectFolderLabel.setText(" ");
 
         guiController.getModel().getProject().ifPresent(project -> {
-            File projectFolder = project.getFolderConfig().getProjectFolder();
+            Path projectFolder = project.getFolderConfig().getProjectFolder();
             projectFolderLabel.setText("Project folder: "
                     + ProjectFolderConfig.toCanonicalPath(projectFolder));
         });
@@ -96,12 +98,12 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
                 .map(NvlistProjectConnection::getFolderConfig)
                 .orElseGet(ProjectFolderConfig::new);
 
-        Optional<File> newProjectFolder = selectFolder(folderConfig.getProjectFolder());
+        Optional<File> newProjectFolder = selectFolder(folderConfig.getProjectFolder().toFile());
         if (!newProjectFolder.isPresent()) {
             return null; // Folder selection was cancelled
         }
 
-        return folderConfig.withProjectFolder(newProjectFolder.get());
+        return folderConfig.withProjectFolder(newProjectFolder.map(File::toPath).get());
     }
 
     private void doOpenProject() {
@@ -110,11 +112,11 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
             return;
         }
 
-        if (!folderConfig.getResFolder().isDirectory()) {
+        if (!Files.isDirectory(folderConfig.getResFolder())) {
             String message = "Selected folder doesn't contain a resource folder ('res')";
             JOptionPane.showMessageDialog(this, message, "Invalid project folder", JOptionPane.ERROR_MESSAGE);
             return;
-        } else if (!folderConfig.getBuildResFolder().isDirectory()) {
+        } else if (!Files.isDirectory(folderConfig.getBuildResFolder())) {
             String message = "Selected folder doesn't contain a build-resource folder ('build-res')";
             JOptionPane.showMessageDialog(this, message, "Invalid project folder", JOptionPane.ERROR_MESSAGE);
             return;

@@ -23,14 +23,18 @@ import com.google.common.collect.Queues;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
+import nl.weeaboo.vn.core.IEnvironment;
+import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dEnv;
 import nl.weeaboo.vn.gdx.scene2d.Scene2dUtil;
+import nl.weeaboo.vn.input.INativeInput;
+import nl.weeaboo.vn.input.KeyCode;
 import nl.weeaboo.vn.script.ScriptException;
 
 /**
- * Interactive Lua terminal/REPL
+ * Default implementation of {@link ILuaConsole}.
  */
-public class LuaConsole {
+public class LuaConsole implements ILuaConsole {
 
     private static final Logger LOG = LoggerFactory.getLogger(LuaConsole.class);
     private static final int INPUT_BUFFER_LIMIT = 16;
@@ -51,27 +55,25 @@ public class LuaConsole {
         this.sceneEnv = sceneEnv;
     }
 
-    /**
-     * @return {@code true} if the console is currently visible.
-     */
-    public boolean isVisible() {
-        return visible;
-    }
+    @Override
+    public void update(IEnvironment env, INativeInput input) {
+        if (!env.getPref(NovelPrefs.DEBUG)) {
+            return; // Debug mode not enabled
+        }
 
-    /** Change visibility of the console GUI */
-    public void setVisible(boolean v) {
-        if (visible != v) {
-            visible = v;
-
-            if (v) {
-                show();
+        if (input.consumePress(KeyCode.F1)) {
+            if (isVisible()) {
+                close();
             } else {
-                hide();
+                open(env.getContextManager());
             }
         }
     }
 
-    private void show() {
+    public void open(IContextManager contextManager) {
+        this.contextManager = contextManager;
+        visible = true;
+
         final Stage stage = sceneEnv.getStage();
         final Skin skin = sceneEnv.getSkin();
 
@@ -118,12 +120,11 @@ public class LuaConsole {
         layout.row();
         layout.add(inputField).bottom().expandX().fill();
         layout.add(inputButton).bottom().fill();
-
         layout.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Keys.F1) {
-                    setVisible(false);
+                    close();
                     return true;
                 }
                 return false;
@@ -153,7 +154,8 @@ public class LuaConsole {
         eval(text);
     }
 
-    private void hide() {
+    public void close() {
+        visible = false;
         if (layout != null) {
             layout.remove();
             layout = null;
@@ -203,8 +205,11 @@ public class LuaConsole {
         console.appendText("\n" + str);
     }
 
-    public void setContext(@Nullable IContextManager contextManager) {
-        this.contextManager = contextManager;
+    /**
+     * @return {@code true} if the console is currently visible.
+     */
+    public boolean isVisible() {
+        return visible;
     }
 
 }

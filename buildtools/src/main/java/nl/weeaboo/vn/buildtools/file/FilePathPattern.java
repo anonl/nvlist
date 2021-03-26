@@ -13,13 +13,6 @@ public abstract class FilePathPattern {
     }
 
     /**
-     * Matches all paths equal to, or inside the given folder path.
-     */
-    public static FilePathPattern inFolder(FilePath folderPath) {
-        return new FolderPrefixPattern(folderPath);
-    }
-
-    /**
      * Matches paths using a simple glob-style pattern. The supported special characters are:
      * <table summary="Supported glob patterns">
      * <tr><td>*</td><td>Matches a sequence of zero or more characters excluding '/'</td></tr>
@@ -34,24 +27,6 @@ public abstract class FilePathPattern {
      * @return {@code true} if the given path matches this pattern.
      */
     public abstract boolean matches(FilePath path);
-
-    /**
-     * @see #inFolder(FilePath)
-     */
-    private static final class FolderPrefixPattern extends FilePathPattern {
-
-        private FilePath folderPath;
-
-        public FolderPrefixPattern(FilePath folderPath) {
-            this.folderPath = folderPath;
-        }
-
-        @Override
-        public boolean matches(FilePath path) {
-            return path.startsWith(folderPath);
-        }
-
-    }
 
     /**
      * @see #fromGlob(String)

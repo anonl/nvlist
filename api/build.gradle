@@ -10,10 +10,11 @@ repositories {
 dependencies {
     api deps.styled_text_api
     api deps.tcommon_core
-
     implementation deps.guava
     implementation deps.tcommon_logging
     implementation deps.tcommon_prefsstore
+
+    testFixturesApi deps.tcommon_test
 
     testImplementation deps.tcommon_test
 }
@@ -56,14 +57,7 @@ if (version != compatibleVersion) {
 
 javadoc {
     options {
-        noDeprecatedList = true
-        noHelp = true
-        noIndex = true
-        noTimestamp = true
-
         // Don't include the version number (causes too many unrelated changes)
         title = 'NVList'
-
-        addBooleanOption('Xdoclint:all,-missing', true)
     }
 }

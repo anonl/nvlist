@@ -5,8 +5,8 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -179,12 +179,12 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
             }
         }
 
-        private void doBrowse(Function<ProjectFolderConfig, File> folderGetter) {
+        private void doBrowse(Function<ProjectFolderConfig, Path> folderGetter) {
             if (folderConfig != null && Desktop.isDesktopSupported()) {
-                File folder = folderGetter.apply(folderConfig);
+                Path folder = folderGetter.apply(folderConfig);
                 try {
                     Desktop desktop = Desktop.getDesktop();
-                    desktop.browse(folder.getCanonicalFile().toURI());
+                    desktop.browse(folder.toFile().getCanonicalFile().toURI());
                 } catch (IOException e) {
                     LOG.warn("Error opening browser for: {}", folder, e);
                 }

@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,8 +31,8 @@ public final class OptimizerConfigJson {
      * Opens a connection to a NVList project using the settings from this config.
      */
     public NvlistProjectConnection openProject() {
-        return NvlistProjectConnection.openProject(new ProjectFolderConfig(new File(projectFolder),
-                new File(buildToolsFolder)));
+        return NvlistProjectConnection.openProject(new ProjectFolderConfig(Paths.get(projectFolder),
+                Paths.get(buildToolsFolder)));
     }
 
     /**

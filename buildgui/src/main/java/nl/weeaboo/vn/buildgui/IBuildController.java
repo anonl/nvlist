@@ -16,7 +16,7 @@ public interface IBuildController extends IProjectModelListener {
      */
     @Deprecated
     default File getBuildToolsFolder() {
-        return getFolderConfig().getBuildToolsFolder();
+        return getFolderConfig().getBuildToolsFolder().toFile();
     }
 
     /**

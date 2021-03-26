@@ -23,14 +23,14 @@ import nl.weeaboo.vn.image.IScreenshot;
 import nl.weeaboo.vn.input.INativeInput;
 import nl.weeaboo.vn.input.KeyCode;
 
-final class ScreenshotTaker {
+final class ScreenshotTaker implements IScreenshotTaker {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScreenshotTaker.class);
 
     private @Nullable IScreenshot pendingScreenshot;
 
-    /** Handle input and update internal state. */
-    void update(IEnvironment env, INativeInput input) {
+    @Override
+    public void update(IEnvironment env, INativeInput input) {
         if (pendingScreenshot != null && (pendingScreenshot.isAvailable() || pendingScreenshot.isFailed())) {
             Pixmap pixmap = GdxScreenshotUtil.borrowPixels(pendingScreenshot);
             if (pixmap != null) {

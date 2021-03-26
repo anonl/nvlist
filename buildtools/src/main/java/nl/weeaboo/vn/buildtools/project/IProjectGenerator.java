@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.buildtools.project;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Creates the folder structure for a new project.
@@ -13,6 +13,6 @@ public interface IProjectGenerator {
      *
      * @throws IOException If a fatal I/O error occurred while attempting to create the project on disk.
      */
-    void createNewProject(File targetFolder) throws IOException;
+    void createNewProject(Path targetFolder) throws IOException;
 
 }

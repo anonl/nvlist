@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.weeaboo.vn.core.SkipMode;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.SkipState;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.test.CoreTestUtil;
@@ -19,6 +20,7 @@ public class ScreenTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         skipState = new SkipState();
         screen = CoreTestUtil.newScreen(skipState);

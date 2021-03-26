@@ -2,6 +2,7 @@ package nl.weeaboo.vn.buildtools.optimizer.image;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.common.io.Files;
@@ -30,7 +31,7 @@ final class RunImageOptimizer {
         dstFolder.mkdirs();
 
         // NVList root project
-        ProjectFolderConfig folderConfig = new ProjectFolderConfig(new File("."), new File("."));
+        ProjectFolderConfig folderConfig = new ProjectFolderConfig(Paths.get("."), Paths.get("."));
         try (NvlistProjectConnection connection = NvlistProjectConnection.openProject(folderConfig)) {
             IFileSystem resFileSystem = connection.getResFileSystem();
 

@@ -17,7 +17,7 @@ public final class OptimizerContextStub implements IOptimizerContext {
     private final ITempFileProvider tempFileProvider;
     private final IParallelExecutor executor = new ParallelExecutorStub();
     private final ClassToInstanceMap<IOptimizerConfig> configStore;
-    private final IOptimizerFileSet fileSet = new OptimizerFileSet();
+    private final OptimizerFileSet fileSet = new OptimizerFileSet();
 
     public OptimizerContextStub(ProjectFolderConfig projectFolders, File outputFolder) {
         projectConnection = NvlistProjectConnection.openProject(projectFolders);
@@ -69,8 +69,12 @@ public final class OptimizerContextStub implements IOptimizerContext {
         return result;
     }
 
+    public <T extends IOptimizerConfig> void setConfig(Class<T> configClass, T value) {
+        configStore.put(configClass, value);
+    }
+
     @Override
-    public IOptimizerFileSet getFileSet() {
+    public OptimizerFileSet getFileSet() {
         return fileSet;
     }
 

@@ -7,6 +7,7 @@ import org.junit.Test;
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.test.RectAssert;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.EventListenerStub;
 
 public final class TextureRendererTest {
@@ -18,6 +19,8 @@ public final class TextureRendererTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
+
         renderer = new TextureRenderer(new TextureMock(100, 100));
         renderer.onAttached(eventListener);
     }

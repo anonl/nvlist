@@ -14,6 +14,7 @@ import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.core.IDestructible;
 import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.DestructibleElemList;
 import nl.weeaboo.vn.impl.script.ScriptEventDispatcher;
@@ -27,7 +28,7 @@ import nl.weeaboo.vn.script.ScriptException;
 /**
  * Default implementation of {@link IScriptContext}
  */
-public class LuaScriptContext implements IScriptContext {
+public class LuaScriptContext implements IScriptContext, IDestructible {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
     private static final Logger LOG = LoggerFactory.getLogger(LuaScriptContext.class);
@@ -49,6 +50,16 @@ public class LuaScriptContext implements IScriptContext {
 
         mainThread = LuaScriptUtil.createPersistentThread(lrs);
         threads.add(mainThread);
+    }
+
+    @Override
+    public void destroy() {
+        threads.destroyAll();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return mainThread.isDestroyed();
     }
 
     /**
@@ -75,6 +86,10 @@ public class LuaScriptContext implements IScriptContext {
         LuaScriptThread thread = luaFunc.callInNewThread();
         threads.add(thread);
         return thread;
+    }
+
+    public IScriptExceptionHandler getDefaultExceptionHandler() {
+        return scriptEnv.getExceptionHandler();
     }
 
     /**
@@ -146,7 +161,6 @@ public class LuaScriptContext implements IScriptContext {
             try {
                 thread.update();
             } catch (ScriptException e) {
-                LOG.warn("Exception while executing thread: {}", thread, e);
                 exceptionHandler.onScriptException(thread, e);
             }
         }

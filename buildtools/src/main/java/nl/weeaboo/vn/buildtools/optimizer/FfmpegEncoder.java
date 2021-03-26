@@ -5,45 +5,47 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
-import nl.weeaboo.vn.buildtools.optimizer.video.encoder.FfmpegVideoEncoder;
 
 /**
  * Resource encoder using ffmpeg.
  */
 public abstract class FfmpegEncoder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FfmpegVideoEncoder.class);
-
+    private final Logger logger;
     private final ITempFileProvider tempFileProvider;
 
-    protected FfmpegEncoder(ITempFileProvider tempFileProvider) {
+    private String program = "ffmpeg";
+
+    protected FfmpegEncoder(Logger logger, ITempFileProvider tempFileProvider) {
+        this.logger = Checks.checkNotNull(logger);
         this.tempFileProvider = Checks.checkNotNull(tempFileProvider);
     }
 
     /**
      * @return {@code true} if a usable ffmpeg executable was found, allowing this encoder to be used.
      */
-    public static boolean isAvailable() {
+    public boolean isAvailable() {
         try {
-            doRunProcess(Arrays.asList("ffmpeg", "-h"));
-            LOG.debug("ffmpeg is available");
+            doRunProcess(program, Arrays.asList("-h"));
+            logger.debug("ffmpeg is available");
             return true;
         } catch (IOException e) {
-            LOG.info("ffmpeg not available: {}", e.toString());
+            logger.info("ffmpeg not available: {}", e.toString());
             return false;
         }
     }
@@ -57,7 +59,7 @@ public abstract class FfmpegEncoder {
             // Copy sound to temp file (input)
             Files.write(resource.readBytes(), inputFile);
 
-            runProcess(getCommandLineArgs(inputFile, outputFile));
+            runProcess(program, getCommandLineArgs(inputFile, outputFile));
             resultAudioData = EncodedResource.fromTempFile(outputFile);
         } finally {
             inputFile.delete();
@@ -66,12 +68,17 @@ public abstract class FfmpegEncoder {
         return resultAudioData;
     }
 
-    protected void runProcess(List<String> command) throws IOException {
-        doRunProcess(command);
+    protected void runProcess(String program, List<String> args) throws IOException {
+        doRunProcess(program, args);
     }
 
-    private static void doRunProcess(List<String> command) throws IOException {
+    private void doRunProcess(String program, List<String> args) throws IOException {
+        List<String> command = new ArrayList<>();
+        command.add(program);
+        command.addAll(args);
         String commandString = Joiner.on(' ').join(command);
+
+        logger.trace("Starting process: {}", command);
 
         Process process = new ProcessBuilder()
                 .command(command)
@@ -85,7 +92,7 @@ public abstract class FfmpegEncoder {
             while (process.isAlive()) {
                 String line = in.readLine();
 
-                LOG.trace(line);
+                logger.trace(line);
 
                 output.append(line);
                 output.append('\n');
@@ -93,9 +100,9 @@ public abstract class FfmpegEncoder {
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                throw new IOException("Process terminated with an error: " + exitCode
-                        + "\ncommand: " + commandString
-                        + "\noutput: " + output);
+                throw new IOException(StringUtil.formatRoot(
+                        "Process terminated with an error: %s\ncommand: %s\noutput: %s",
+                        exitCode, commandString, output));
             }
         } catch (InterruptedException e) {
             throw new IOException("Process interrupted", e);
@@ -103,24 +110,27 @@ public abstract class FfmpegEncoder {
     }
 
     private List<String> getCommandLineArgs(File inputFile, File outputFile) {
-        List<String> command = Lists.newArrayList();
-        command.add("ffmpeg");
+        List<String> args = Lists.newArrayList();
 
         // Input file
-        command.add("-i");
-        command.add(inputFile.getAbsolutePath());
+        args.add("-i");
+        args.add(inputFile.getAbsolutePath());
 
         // File format (container)
-        command.add("-f");
-        command.add(getFileFormat());
+        args.add("-f");
+        args.add(getFileFormat());
 
         // Codec
-        command.addAll(getCodecArgs());
+        args.addAll(getCodecArgs());
 
         // Output file
-        command.add("-y"); // Overwrite output file (is usually an empty temp file)
-        command.add(outputFile.getAbsolutePath());
-        return command;
+        args.add("-y"); // Overwrite output file (is usually an empty temp file)
+        args.add(outputFile.getAbsolutePath());
+        return args;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
     }
 
     protected abstract List<String> getCodecArgs();

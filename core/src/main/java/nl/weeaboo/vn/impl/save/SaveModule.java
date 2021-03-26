@@ -165,6 +165,7 @@ public class SaveModule extends AbstractModule implements ISaveModule {
     @Override
     public void load(INovel novel, int slot) {
         loadRequests.add(new LoadRequest(slot));
+        LOG.info("Load requested: {}", slot);
     }
 
     private void doLoad(INovel novel, LoadRequest lr) throws IOException {

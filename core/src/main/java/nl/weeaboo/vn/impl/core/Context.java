@@ -54,6 +54,7 @@ public class Context implements IContext {
         if (!destroyed) {
             destroyed = true;
 
+            scriptContext.destroy();
             LOG.debug("Context destroyed: {}", this);
             fireDestroyed();
         }
@@ -115,9 +116,12 @@ public class Context implements IContext {
         LuaScriptThread mainThread = scriptContext.getMainThread();
         boolean mainThreadWasRunnable = mainThread.isRunnable();
 
+        IScriptExceptionHandler defaultExceptionHandler = scriptContext.getDefaultExceptionHandler();
         scriptContext.updateThreads(this, new IScriptExceptionHandler() {
             @Override
             public void onScriptException(IScriptThread thread, Exception exception) {
+                defaultExceptionHandler.onScriptException(thread, exception);
+
                 for (IScriptExceptionHandler ls : contextListeners) {
                     ls.onScriptException(thread, exception);
                 }

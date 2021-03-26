@@ -66,6 +66,9 @@ abstract class AbstractEnvironment implements IEnvironment, IPreferenceListener 
     @Override
     public void update() {
         getSaveModule().processSaveLoadRequests();
+        if (isDestroyed()) {
+            return;
+        }
 
         // Perform synchronous part of asset loading
         AssetManager assetManager = StaticEnvironment.ASSET_MANAGER.getIfPresent();
@@ -78,6 +81,7 @@ abstract class AbstractEnvironment implements IEnvironment, IPreferenceListener 
         }
 
         getContextManager().update();
+        getSaveModule().processSaveLoadRequests();
     }
 
     /** Called when the global preferences change. */

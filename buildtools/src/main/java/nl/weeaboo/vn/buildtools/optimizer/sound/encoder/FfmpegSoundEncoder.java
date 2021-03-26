@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.annotations.VisibleForTesting;
+
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.ITempFileProvider;
@@ -17,12 +22,19 @@ import nl.weeaboo.vn.impl.sound.desc.SoundDefinitionBuilder;
  */
 public final class FfmpegSoundEncoder extends FfmpegEncoder implements ISoundEncoder {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FfmpegSoundEncoder.class);
+
     private static final String OUTPUT_EXT = "ogg";
     private static final String AUDIO_CODEC = "libvorbis";
     private static final String AUDIO_QUALITY = "3";
 
     public FfmpegSoundEncoder(ITempFileProvider tempFileProvider) {
-        super(tempFileProvider);
+        this(LOG, tempFileProvider);
+    }
+
+    @VisibleForTesting
+    FfmpegSoundEncoder(Logger logger, ITempFileProvider tempFileProvider) {
+        super(logger, tempFileProvider);
     }
 
     @Override

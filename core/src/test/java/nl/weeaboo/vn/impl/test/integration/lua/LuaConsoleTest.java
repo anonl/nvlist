@@ -24,17 +24,16 @@ public class LuaConsoleTest extends IntegrationTest {
     @Before
     public void before() {
         console = new LuaConsole(launcher.getSceneEnv());
-        console.setContext(env.getContextManager());
+        console.open(getEnv().getContextManager());
 
         input = new GdxInputRobot(Gdx.input.getInputProcessor());
 
-        console.setVisible(true);
         Assert.assertEquals(true, console.isVisible());
     }
 
     @After
     public void after() {
-        console.setVisible(false);
+        console.close();
     }
 
     /** Evaluate a trivial Lua expression */

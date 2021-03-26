@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.image;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 
@@ -13,6 +14,8 @@ public class BitmapTweenRendererTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
+
         imageModule = new ImageModuleStub();
 
         TextureMock controlTex = new TextureMock();

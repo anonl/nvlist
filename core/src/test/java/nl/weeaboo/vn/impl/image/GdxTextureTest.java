@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.impl.image;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.test.RectAssert;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.graphics.GdxGraphicsTestUtil;
 import nl.weeaboo.vn.gdx.res.ResourceStub;
 import nl.weeaboo.vn.image.ITexture;
@@ -16,6 +18,11 @@ import nl.weeaboo.vn.impl.test.CoreTestUtil;
 public class GdxTextureTest {
 
     private static final double EPSILON = CoreTestUtil.EPSILON;
+
+    @Before
+    public void before() {
+        HeadlessGdx.init();
+    }
 
     /** Check behavior when the internal resource returns {@code null} */
     @Test

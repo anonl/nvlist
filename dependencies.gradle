@@ -10,7 +10,7 @@ ext.deps = [:]
 ext.errorProneVersion = '2.4.0'
 
 def antlrVersion = '4.8';
-def gdxTestVersion = '3.0.0'
+def gdxTestVersion = '3.0.1'
 def gdxVersion = '1.9.13'
 def gdxControllersVersion = '2.2.0'
 def gdxVideoVersion = '1.0.0-anonl'

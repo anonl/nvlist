@@ -3,8 +3,9 @@ package nl.weeaboo.vn.buildgui;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -108,14 +109,14 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
                 }
 
                 ProjectFolderConfig folderConfig = buildController.getFolderConfig();
-                File releaseFolder = new File(folderConfig.getBuildOutFolder(), "desktop/release");
-                if (!releaseFolder.isDirectory()) {
+                Path releaseFolder = folderConfig.getBuildOutFolder().resolve("desktop/release");
+                if (!Files.isDirectory(releaseFolder)) {
                     return;
                 }
 
                 // Show releases folder
                 try {
-                    Desktop.getDesktop().open(releaseFolder);
+                    Desktop.getDesktop().open(releaseFolder.toFile());
                 } catch (IOException e) {
                     LOG.warn("Unable to show build folder", e);
                 }

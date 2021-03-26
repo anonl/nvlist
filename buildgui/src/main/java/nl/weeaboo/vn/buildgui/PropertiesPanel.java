@@ -3,9 +3,10 @@ package nl.weeaboo.vn.buildgui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 import java.util.TreeSet;
 
@@ -78,9 +79,9 @@ final class PropertiesPanel extends JPanel implements IProjectModelListener {
             return;
         }
 
-        File buildProperties = folderConfig.getBuildPropertiesFile();
+        Path buildProperties = folderConfig.getBuildPropertiesFile();
         try {
-            Desktop.getDesktop().open(buildProperties);
+            Desktop.getDesktop().open(buildProperties.toFile());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error opening file: " + e, "Unable to open file",
                     JOptionPane.ERROR_MESSAGE);
@@ -94,8 +95,8 @@ final class PropertiesPanel extends JPanel implements IProjectModelListener {
         Properties props = new Properties();
 
         if (folderConfig != null) {
-            File buildProperties = folderConfig.getBuildPropertiesFile();
-            try (FileInputStream in = new FileInputStream(buildProperties)) {
+            Path buildProperties = folderConfig.getBuildPropertiesFile();
+            try (InputStream in = Files.newInputStream(buildProperties)) {
                 props.load(in);
             } catch (IOException e) {
                 LOG.warn("Unable to read build properties: {}", buildProperties);
