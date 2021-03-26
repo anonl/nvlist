@@ -19,10 +19,12 @@ dependencies {
     }
     implementation deps.antlr_runtime
 
-    testImplementation deps.gdx_desktop
-    testImplementation deps.gdx_headless
+    testFixturesApi testFixtures(project(':nvlist-api'))
+    testFixturesApi deps.gdx_headless
+    testFixturesImplementation deps.gdx_desktop
+    testFixturesImplementation deps.lua_core
+
     testImplementation deps.tcommon_logging
-    testImplementation deps.tcommon_test
     testRuntimeOnly deps.slf4j_desktop
 }
 

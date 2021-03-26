@@ -4,11 +4,11 @@ apply plugin: 'maven-publish'
 
 dependencies {
     api project(':nvlist-api')
-
-    implementation project(':nvlist-core')
     implementation deps.gdx_headless
+    implementation project(':nvlist-core')
 
-    testImplementation project(path: ':nvlist-core', configuration: 'testlib')
+    testFixturesApi testFixtures(project(':nvlist-core'))
 
+    testImplementation deps.gdx_desktop
     testRuntimeOnly deps.slf4j_desktop
 }
