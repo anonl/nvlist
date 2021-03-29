@@ -1,6 +1,7 @@
 
 # v4.9.2
 - fix: When calling `Save.load` the Lua thread continued executing for one frame before actually loading.
+- fix: `imgtween`/`crossFadeTween` didn't animate properly when the end textures was `nil`.
 
 # v4.9.1
 - fix: Enabling auto read didn't cancel the current `waitClick()` (if any).
