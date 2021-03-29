@@ -77,7 +77,7 @@ public class ImageLib extends LuaLib {
      *
      * @param args
      *        <ol>
-     *        <li>Texture or filename
+     *        <li>Texture or filename or {@code nil}
      *        </ol>
      * @return The newly created texture renderer.
      * @throws ScriptException If the input parameters are invalid.
@@ -215,7 +215,7 @@ public class ImageLib extends LuaLib {
     /**
      * @param args
      *        <ol>
-     *        <li>filename
+     *        <li>filename or texture or {@code nil}
      *        <li>(optional) boolean suppressErrors
      *        </ol>
      * @return A texture object, or {@code null} if the requested texture couldn't be loaded.

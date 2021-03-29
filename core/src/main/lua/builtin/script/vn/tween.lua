@@ -49,7 +49,7 @@ end
 ---Changes an ImageDrawable's texture using a cross fade (dissolve) transition.
 --
 -- @tparam ImageDrawable image The image to tween.
--- @tparam Texture targetTexture The new texture for the image.
+-- @tparam Texture targetTexture The new texture for the image or nil.
 -- @number duration The duration of the fade in frames (will be multiplied by <code>effectSpeed</code>
 --        internally).
 -- @param interpolator A function or Interpolator object mapping an input in the range <code>(0, 1)</code> to
@@ -66,7 +66,12 @@ function crossFadeTween(image, targetTexture, duration, interpolator)
     end
 
     local tween = Tween.crossFade(config)
-    return doTween(image, tween, texRenderer(targetTexture))
+    local endRenderer = texRenderer(targetTexture)
+    if targetTexture == nil then
+        --Use existing size when fading out
+        endRenderer:setSize(image:getWidth(), image:getHeight())
+    end
+    return doTween(image, tween, endRenderer)
 end
 
 

@@ -225,6 +225,7 @@ end
 -- @param filename The path to a valid image file (relative to
 --        <code>res/img</code>). When a texture is passed instead of a filename,
 --        the function will just return that texture.
+--        If <code>nil</code>, this function returns <code>nil</code>.
 -- @bool[opt=false] suppressErrors If <code>true</code> suppresses any errors
 --                  that occur during loading.
 -- @treturn Texture The created Texture object, or <code>nil</code> if something
