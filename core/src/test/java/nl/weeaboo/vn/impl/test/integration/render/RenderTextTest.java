@@ -11,6 +11,7 @@ import nl.weeaboo.styledtext.layout.ITextLayout;
 import nl.weeaboo.styledtext.layout.LayoutParameters;
 import nl.weeaboo.styledtext.layout.LayoutUtil;
 import nl.weeaboo.vn.impl.render.DrawTransform;
+import nl.weeaboo.vn.impl.scene.TextDrawable;
 import nl.weeaboo.vn.math.Matrix;
 import nl.weeaboo.vn.text.ILoadingFontStore;
 
@@ -30,7 +31,7 @@ public class RenderTextTest extends RenderIntegrationTest {
     public void testRender() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        drawText(transform, 0, 0, layout);
+        drawText(transform, 0, 0, 0xFFFFFFFF, layout);
         render();
 
         checkRenderResult("text");
@@ -43,10 +44,23 @@ public class RenderTextTest extends RenderIntegrationTest {
     public void testSnapToGrid() {
         ITextLayout layout = createLayout(styledText("---"), -1);
 
-        drawText(transform, 0, 0.5, layout);
+        drawText(transform, 0, 0.5, 0xFFFFFFFF, layout);
         render();
 
         checkRenderResult("text-snap-to-grid");
+    }
+
+    /**
+     * The alpha of the {@link TextDrawable} is multiplied with the per-glyph alpha.
+     */
+    @Test
+    public void testDrawableAlpha() {
+        ITextLayout layout = createLayout(styledText("ABC"), -1);
+
+        drawText(transform, 0, 0, 0x80808080, layout);
+        render();
+
+        checkRenderResult("text-alpha");
     }
 
     private StyledText styledText(String string) {

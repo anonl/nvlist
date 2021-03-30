@@ -51,10 +51,16 @@ public final class DrawBuffer implements IDrawBuffer {
         draw(new ScreenshotRenderCommand(ss, clip));
     }
 
+    @Deprecated
     @Override
-    public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
+    public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout, double visibleGlyphs) {
+        drawText(dt, dx, dy, 0xFFFFFFFF, textLayout, visibleGlyphs);
+    }
+
+    @Override
+    public void drawText(IDrawTransform dt, double dx, double dy, int argb, ITextLayout textLayout,
             double visibleGlyphs) {
-        draw(new TextRenderCommand(dt, dx, dy, textLayout, visibleGlyphs));
+        draw(new TextRenderCommand(dt, dx, dy, argb, textLayout, visibleGlyphs));
     }
 
     @Override

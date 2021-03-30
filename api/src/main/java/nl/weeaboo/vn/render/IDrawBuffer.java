@@ -22,9 +22,16 @@ public interface IDrawBuffer {
     void drawQuad(IDrawTransform transform, int argb, ITexture tex, Area2D bounds, Area2D uv);
 
     /**
+     * @deprecated Use {@link #drawText(IDrawTransform, double, double, int, ITextLayout, double)} instead.
+     */
+    @Deprecated
+    void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout, double visibleGlyphs);
+
+    /**
      * Adds a command to draw some text to the draw buffer.
      */
-    void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout, double visibleGlyphs);
+    void drawText(IDrawTransform transform, double dx, double dy, int argb, ITextLayout textLayout,
+            double visibleGlyphs);
 
     /**
      * Returns a new draw buffer that can be used to draw the contents of a sub-layer.
