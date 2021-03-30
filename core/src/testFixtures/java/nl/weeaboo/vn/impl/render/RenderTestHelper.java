@@ -95,18 +95,18 @@ public class RenderTestHelper implements IDestructible {
     }
 
     /**
-     * @see #drawText(IDrawTransform, double, double, ITextLayout)
+     * @see #drawText(IDrawTransform, double, double, int, ITextLayout)
      */
     public void drawText(double dx, double dy, ITextLayout textLayout) {
-        drawText(new DrawTransform(), dx, dy, textLayout);
+        drawText(new DrawTransform(), dx, dy, 0xFFFFFFFF, textLayout);
     }
 
     /**
      * Draws some text to the draw buffer.
-     * @see IDrawBuffer#drawText(IDrawTransform, double, double, ITextLayout, double)
+     * @see IDrawBuffer#drawText(IDrawTransform, double, double, int, ITextLayout, double)
      */
-    public void drawText(IDrawTransform transform, double dx, double dy, ITextLayout textLayout) {
-        drawBuffer.drawText(transform, dx, dy, textLayout, -1f);
+    public void drawText(IDrawTransform transform, double dx, double dy, int argb, ITextLayout textLayout) {
+        drawBuffer.drawText(transform, dx, dy, argb, textLayout, -1f);
     }
 
     /**

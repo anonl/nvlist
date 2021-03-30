@@ -78,7 +78,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
          * isn't flipped if ydir == 1.
          */
         double dy = bounds.y - 2 * textLayout.getOffsetY();
-        buffer.drawText(d, dx, dy, textLayout, visibleText);
+        buffer.drawText(d, dx, dy, d.getColorARGB(), textLayout, visibleText);
     }
 
     private final ITextLayout getLayout() {

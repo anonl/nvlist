@@ -17,10 +17,10 @@ public final class TextRenderCommand extends BaseRenderCommand {
     public final ITextLayout textLayout;
     public final double visibleGlyphs;
 
-    TextRenderCommand(IDrawTransform dt, double dx, double dy, ITextLayout textLayout,
+    TextRenderCommand(IDrawTransform dt, double dx, double dy, int argb, ITextLayout textLayout,
             double visibleGlyphs) {
 
-        super(ID, dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), 0xFFFFFFFF,
+        super(ID, dt.getZ(), dt.isClipEnabled(), dt.getBlendMode(), argb,
                 (byte)Double.doubleToRawLongBits(dt.getTransform().getTranslationY()));
 
         this.transform = dt.getTransform();

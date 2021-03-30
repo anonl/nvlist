@@ -136,14 +136,16 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
         matrixStack.pushMatrix();
         matrixStack.multiply(trc.transform);
 
+        Color tint = new Color();
+        Color.argb8888ToColor(tint, trc.argb);
         if (!trc.transform.hasShear()) {
             // For non-rotated text, snap to int coordinates for sharper rendering
             double tx = getSnapOffset(trc.dx, trc.transform.getTranslationX());
             double ty = getSnapOffset(trc.dy, trc.transform.getTranslationY());
             matrixStack.translate(tx, ty);
-            GdxFontUtil.draw(spriteBatch, trc.textLayout, 0, 0, (float)trc.visibleGlyphs);
+            GdxFontUtil.draw(spriteBatch, trc.textLayout, 0, 0, (float)trc.visibleGlyphs, tint);
         } else {
-            GdxFontUtil.draw(spriteBatch, trc.textLayout, (float)trc.dx, (float)trc.dy, (float)trc.visibleGlyphs);
+            GdxFontUtil.draw(spriteBatch, trc.textLayout, (float)trc.dx, (float)trc.dy, (float)trc.visibleGlyphs, tint);
         }
 
         matrixStack.popMatrix();
