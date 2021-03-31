@@ -90,7 +90,7 @@ deps.jopt_simple = 'net.sf.jopt-simple:jopt-simple:5.0.3'
 deps.junit = 'junit:junit:4.13.2'
 deps.lsp4j = 'org.eclipse.lsp4j:org.eclipse.lsp4j:' + lsp4jVersion
 deps.lsp4j_debug = 'org.eclipse.lsp4j:org.eclipse.lsp4j.debug:' + lsp4jVersion
-deps.lua_core = 'nl.weeaboo.luajpp2:luajpp2-core:3.3.0'
+deps.lua_core = 'nl.weeaboo.luajpp2:luajpp2-core:3.4.0'
 
 deps.slf4j_api = 'org.slf4j:slf4j-api:' + slf4jVersion
 deps.slf4j_desktop = [

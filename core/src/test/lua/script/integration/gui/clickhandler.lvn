@@ -9,6 +9,9 @@ function clickHandler()
 end
 
 button = Gui.createButton()
-Gui.setClickHandler(button, clickHandler)
+button:setClickHandler(clickHandler)
+
+button2 = Gui.createButton()
+button2:setClickHandler(clickHandler)
 
 @@

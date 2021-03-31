@@ -1,4 +1,7 @@
 
+# v4.10.0
+- You can now call `:setClickHandler()` directly on the button object from Lua instead of having to use `Gui.setClickHandler()`.
+
 # v4.9.2
 - fix: When calling `Save.load` the Lua thread continued executing for one frame before actually loading.
 - fix: `imgtween`/`crossFadeTween` didn't animate properly when the end textures was `nil`.

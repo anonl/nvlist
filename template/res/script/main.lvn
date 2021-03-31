@@ -16,11 +16,11 @@ function titlescreen()
     local b = button("gui/button")
     panel:add(b)
     b:setText("Start")
-    Gui.setClickHandler(b, function()
+    b:setClickHandler(function()
         panel:destroy()
         return start()
     end)
-    
+
     -- Center the panel's contents in the bottom center
     panel:setInsets(100, 100, 100, 100)
     panel:pack(2)

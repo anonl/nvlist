@@ -51,6 +51,7 @@ public class LuaScriptEnv implements IScriptEnv {
 
         registerOnThread();
         loader.initEnv();
+        LuaTypeCoercions.install(runState);
 
         for (ILuaScriptEnvInitializer init : initializers) {
             init.initEnv(this);

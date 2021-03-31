@@ -84,13 +84,17 @@ public final class GuiLibTest extends AbstractLibTest {
         loadScript("integration/gui/clickhandler");
 
         IButton button = LuaTestUtil.getGlobal("button", IButton.class);
-        Assert.assertNotNull(button);
         LuaTestUtil.assertGlobal("clickCount", 0);
 
         // Check that the click handler set on the button is the Lua function that we supplied
+        // 'button' uses the direct method (button:setClickHandler)
         LuaScriptUtil.callFunction(mainContext, button.getClickHandler());
-
         LuaTestUtil.assertGlobal("clickCount", 1);
+
+        // 'button' uses the old old method of setting the click handler (Gui.setClickHandler)
+        IButton button2 = LuaTestUtil.getGlobal("button2", IButton.class);
+        LuaScriptUtil.callFunction(mainContext, button2.getClickHandler());
+        LuaTestUtil.assertGlobal("clickCount", 2);
     }
 
     private void assertParentLayer(IVisualElement button, ILayer expected) {
