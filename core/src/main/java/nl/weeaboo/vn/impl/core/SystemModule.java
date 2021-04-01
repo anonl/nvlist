@@ -136,6 +136,11 @@ public class SystemModule extends AbstractModule implements ISystemModule {
 
     static boolean callFunction(IEnvironment env, String functionName) {
         IContext context = env.getContextManager().getPrimaryContext();
+        if (context == null) {
+            LOG.warn("No context is active, unable to call {}", functionName);
+            return false;
+        }
+
         try {
             LuaScriptUtil.callFunction(context, functionName);
             return true;

@@ -12,6 +12,7 @@ import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.script.IScriptEnv;
+import nl.weeaboo.vn.signal.ISignal;
 import nl.weeaboo.vn.sound.ISoundModule;
 import nl.weeaboo.vn.stats.IResourceLoadLog;
 import nl.weeaboo.vn.stats.IStatsModule;
@@ -86,6 +87,11 @@ public interface IEnvironment extends IDestructible, IUpdateable {
      * @see IRenderEnv
      */
     void updateRenderEnv(Rect realClip, Dim realScreenSize);
+
+    /**
+     * Forwards a signal to all relevant handlers.
+     */
+    void fireSignal(ISignal signal);
 
     /**
      * Clears (resource) caches. This is automatically done during a restart.

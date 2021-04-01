@@ -1,9 +1,12 @@
 package nl.weeaboo.vn.impl.core;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.common.Rect;
+import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.IEnvironment;
@@ -11,7 +14,6 @@ import nl.weeaboo.vn.core.IModule;
 import nl.weeaboo.vn.core.ISystemModule;
 import nl.weeaboo.vn.image.IImageModule;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
-import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.save.ISaveModule;
 import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
@@ -23,6 +25,7 @@ import nl.weeaboo.vn.video.IVideoModule;
 /**
  * Default implementation of {@link IEnvironment}.
  */
+@CustomSerializable
 public class DefaultEnvironment extends AbstractEnvironment implements Serializable {
 
     private static final long serialVersionUID = CoreImpl.serialVersionUID;
@@ -43,7 +46,17 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
     private boolean destroyed;
 
     public DefaultEnvironment() {
+        initTransients();
+    }
+
+    private void initTransients() {
         getPrefStore().addPreferenceListener(this);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        initTransients();
     }
 
     @Override
@@ -135,9 +148,7 @@ public class DefaultEnvironment extends AbstractEnvironment implements Serializa
         IRenderEnv old = getRenderEnv();
         renderEnv = new RenderEnv(old.getVirtualSize(), realClip, realScreenSize);
 
-        RenderEnvChangeSignal signal = new RenderEnvChangeSignal(renderEnv);
-        SignalUtil.forward(signal, getModules());
-        SignalUtil.forward(signal, contextManager);
+        fireSignal(new RenderEnvChangeSignal(renderEnv));
     }
 
 }
