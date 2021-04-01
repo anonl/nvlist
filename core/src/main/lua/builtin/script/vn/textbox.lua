@@ -174,10 +174,6 @@ function DefaultClickIndicator:destroy()
 end
 
 function DefaultClickIndicator:show()
-    if self.drawable:isVisible() then
-        return false
-    end
-
     if self.thread == nil then
         self.thread = newThread(function()
             while not self.drawable:isDestroyed() do
@@ -191,6 +187,9 @@ function DefaultClickIndicator:show()
     self.thread:resume()
     self.thread:update()
 
+    if self.drawable:isVisible() then
+        return false
+    end
     self.drawable:setVisible(true)
     return true
 end

@@ -13,6 +13,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.PreferenceStoreMock;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.signal.PrefsChangeSignal;
@@ -28,6 +29,7 @@ public final class SoundModuleTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         soundController = new SoundControllerMock();
         module = new SoundModule(new SoundResourceLoader(env), soundController);
