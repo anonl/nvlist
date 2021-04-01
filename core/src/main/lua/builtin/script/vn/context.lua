@@ -134,8 +134,9 @@ function waitClick()
     end
 
     local textBox = getTextBox()
+    local clickIndicatorMadeVisible = false
     if textBox ~= nil then
-        textBox:showClickIndicator()
+        clickIndicatorMadeVisible = textBox:showClickIndicator()
     end
 
     while not shouldSkipLine() and not isAutoRead() and not Input.consume(VKeys.textContinue) do
@@ -145,7 +146,7 @@ function waitClick()
         yield()
     end
 
-    if textBox ~= nil then
+    if textBox ~= nil and clickIndicatorMadeVisible then
         textBox:hideClickIndicator()
     end
 end
