@@ -42,7 +42,7 @@ allprojects {
     apply plugin: 'jacoco'
 
     group = 'nl.weeaboo.vn'
-    version = '4.9.2'
+    version = '4.9.3'
     ext {
         javaVersion = 8
 

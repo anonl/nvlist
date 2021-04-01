@@ -156,13 +156,13 @@ DefaultClickIndicator = extend(ClickIndicator, {
 
 function DefaultClickIndicator.new(self)
     self = extend(DefaultClickIndicator, self)
-    
+
     if self.drawable == nil then    
         local d = Image.createImage(self.textDrawable:getLayer(), self.texture)        
         d:setVisible(false) -- Initially invisible
         self.drawable = d
     end
-       
+
     return self
 end
 
@@ -187,7 +187,11 @@ function DefaultClickIndicator:show()
     self.thread:resume()
     self.thread:update()
 
+    if self.drawable:isVisible() then
+        return false
+    end
     self.drawable:setVisible(true)
+    return true
 end
 
 function DefaultClickIndicator:hide()
@@ -195,7 +199,11 @@ function DefaultClickIndicator:hide()
         self.thread:pause()
     end
 
+    if not self.drawable:isVisible() then
+        return false
+    end
     self.drawable:setVisible(false)
+    return true
 end
 
 ---Textbox functions
@@ -212,11 +220,7 @@ function TextBox:install()
     self:setSpeaker(nil)
     setMainTextDrawable(self:getTextDrawable())
 
-    -- Store initial alpha values for each subcomponent so we can restore the alpha after fading out
-    self.baseAlpha = {}
-    for _,d in ipairs(self:getDrawables()) do
-        self.baseAlpha[d] = d:getAlpha()
-    end
+    self:storeAlpha()
 end
 
 function TextBox:destroy()
@@ -249,26 +253,41 @@ function TextBox:fadeTo(targetAlpha, duration)
     update1join(threads)
 end
 
+function TextBox:storeAlpha()
+    -- Store initial alpha values for each subcomponent so we can restore the alpha after fading out
+    self.baseAlpha = {}
+    for _,d in ipairs(self:getDrawables()) do
+        self.baseAlpha[d] = d:getAlpha()
+    end
+end
+
 function TextBox:show(duration)
     self:fadeTo(1.0, duration)
     self.visible = true
 end
 
 function TextBox:hide(duration)
+    -- Store current alpha so we can restore it later in show()
+    if self.visible then
+        self:storeAlpha()
+    end
+
     self:fadeTo(0.0, duration)
     self.visible = false
 end
 
 function TextBox:showClickIndicator()
-    if self.clickIndicator ~= nil then
-        self.clickIndicator:show()
+    if self.clickIndicator == nil then
+        return false
     end
+    return self.clickIndicator:show()
 end
 
 function TextBox:hideClickIndicator()
-    if self.clickIndicator ~= nil then
-        self.clickIndicator:hide()
+    if self.clickIndicator == nil then
+        return false
     end
+    return self.clickIndicator:hide()
 end
 
 local function createTextBoxLayer()
@@ -344,7 +363,7 @@ AdvTextBox = extend(TextBox, {
 
 function AdvTextBox.new(self)
     self = extend(AdvTextBox, self)
-    
+
     local layer = createTextBoxLayer()
     local bgColor = 0xE0000000
 
