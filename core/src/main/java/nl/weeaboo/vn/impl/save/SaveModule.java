@@ -42,6 +42,8 @@ import nl.weeaboo.vn.save.ISaveParams;
 import nl.weeaboo.vn.save.IStorage;
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
+import nl.weeaboo.vn.signal.PrefsChangeSignal;
+import nl.weeaboo.vn.signal.RenderEnvChangeSignal;
 import nl.weeaboo.vn.stats.IStatsModule;
 
 /**
@@ -133,6 +135,10 @@ public class SaveModule extends AbstractModule implements ISaveModule {
         for (IPersistentSavePlugin plugin : Lists.reverse(getPersistentSavePlugins())) {
             plugin.loadPersistent(writer);
         }
+
+        // The external environment may have also changed
+        env.fireSignal(new RenderEnvChangeSignal(env.getRenderEnv()));
+        env.fireSignal(new PrefsChangeSignal(env.getPrefStore()));
     }
 
     @Override
@@ -247,17 +253,19 @@ public class SaveModule extends AbstractModule implements ISaveModule {
             is.setDepthWarnLimit(125);
             try {
                 novel.readAttributes(is);
-
-                /*
-                 * Note: be very careful here. We've just recreated the env in novel, but we're still running
-                 * in the SaveModule of the previous env.
-                 */
-                novel.getEnv().getSaveModule().loadPersistent();
+                is.close();
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
             } finally {
+                // Note: The 'readDelayed' objects are resolved during close()
                 is.close();
             }
+
+            /*
+             * Note: be very careful here. We've just recreated the env in novel, but we're still running
+             * in the SaveModule of the previous env.
+             */
+            novel.getEnv().getSaveModule().loadPersistent();
         } finally {
             in.close();
         }

@@ -1,4 +1,7 @@
 
+# v4.9.4
+- fix: After loading, no preference change events were generated anymore. This caused the settings screen to no longer function. Also, if you changed the text speed since saving, the loaded file would still use the old text speed instead of the new text speed.
+
 # v4.9.3
 - fix: If the click indicator was already visible, `waitClick` would accidentally hide it.
 - fix: Store textbox drawable alpha in `textoff()` to account for items with variable visibility (side-images, etc.)
