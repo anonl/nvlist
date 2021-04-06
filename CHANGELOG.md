@@ -1,4 +1,8 @@
 
+# v4.9.5
+- fix: File permissions were broken for Linux/Mac builds when building on a file system which doesn't support permissions (e.g. NTFS on Windows)
+- fix: When building a Mac application bundle, the .nvl was placed in the wrong folder causing it to not be found.
+
 # v4.9.4
 - fix: After loading, no preference change events were generated anymore. This caused the settings screen to no longer function. Also, if you changed the text speed since saving, the loaded file would still use the old text speed instead of the new text speed.
 - fix: Lua tables with userdata keys could become corrupted after loading due to changing hash codes of the key objects.
