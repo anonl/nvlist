@@ -62,7 +62,6 @@ packr.platforms.each{ platform ->
     def packrTask = tasks.register("packr${platform}", PackrTask) {
         group 'dist'
 
-        from shadowJar
         destinationDir = file("${packr.outputFolder}/$platformId")
 
         doFirst {
@@ -94,7 +93,15 @@ packr.platforms.each{ platform ->
             new Packr().pack(config);
         }
 
-        with packr.resources
+        if (platform == PackrConfig.Platform.MacOS) {
+            into('Contents/Resources') {
+                from shadowJar
+                with(packr.resources)
+            }
+        } else {
+            from shadowJar
+            with(packr.resources)
+        } 
     }
     packrAll.configure {
         dependsOn packrTask
