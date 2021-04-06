@@ -7,7 +7,7 @@ import nl.weeaboo.common.VersionNumber;
  */
 public final class EngineVersion {
 
-    private static final String VERSION_STRING = "4.9.3";
+    private static final String VERSION_STRING = "4.9.4";
     private static final VersionNumber VERSION = VersionNumber.parse(
             // Take only major.minor part of the version number
             VERSION_STRING.replaceAll("(\\d+\\.\\d+).*", "$1"));

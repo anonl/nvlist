@@ -125,7 +125,7 @@ tasks.register('archiveLinux64', Tar) {
 tasks.register('archiveMacOS', Zip) {
     destinationDir = releaseDir
     archiveName = "${rootProject.name}-${version}-macos.zip"
-    from tasks['packrLinux64']
+    from tasks['packrMacOsx']
     into "${rootProject.name}-${version}.app"
 }
 
