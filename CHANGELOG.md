@@ -1,6 +1,8 @@
 
-# v4.9.5
+# v4.9.6
 - fix: File permissions were broken for Linux/Mac builds when building on a file system which doesn't support permissions (e.g. NTFS on Windows)
+
+# v4.9.5
 - fix: When building a Mac application bundle, the .nvl was placed in the wrong folder causing it to not be found.
 
 # v4.9.4
