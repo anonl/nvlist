@@ -127,6 +127,9 @@ tasks.register('archiveLinux64', Tar) {
     compression = Compression.GZIP
     from tasks['packrLinux64']
     into "${rootProject.name}-${version}"
+    filesMatching('*.sh') {
+        fileMode 0755 // Make shell scripts executable (existing file permissions are lost when building on Windows)
+    }
 }
 
 tasks.register('archiveMacOS', Zip) {
@@ -134,6 +137,9 @@ tasks.register('archiveMacOS', Zip) {
     archiveName = "${rootProject.name}-${version}-macos.zip"
     from tasks['packrMacOS']
     into "${rootProject.name}-${version}.app"
+    filesMatching('**/Contents/MacOS/*') {
+        fileMode 0755 // Main executable should be executable (existing file permissions are lost when building on Windows)
+    }
 }
 
 def archiveArtifacts = tasks.register('archiveArtifacts') {
