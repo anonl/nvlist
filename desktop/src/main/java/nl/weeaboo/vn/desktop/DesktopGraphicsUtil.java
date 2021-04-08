@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,7 @@ final class DesktopGraphicsUtil {
     }
 
     static void setWindowIcon(IFileSystem fileSystem) {
-        Lwjgl3Window window = getCurrentWindow();
+        Lwjgl3Window window = getCurrentWindow(Gdx.graphics);
 
         // Try to load icons in various sizes
         List<Pixmap> pixmaps = Lists.newArrayList();
@@ -74,10 +76,13 @@ final class DesktopGraphicsUtil {
         }
     }
 
-    private static Lwjgl3Window getCurrentWindow() {
+    @CheckForNull
+    private static Lwjgl3Window getCurrentWindow(Graphics graphics) {
+        if (!(graphics instanceof Lwjgl3Graphics)) {
+            return null;
+        }
         // Oddly, the only public way to get a reference to the main window is through the graphics object...
-        Lwjgl3Graphics graphics = (Lwjgl3Graphics)Gdx.graphics;
-        return graphics.getWindow();
+        return ((Lwjgl3Graphics)Gdx.graphics).getWindow();
     }
 
     /**
@@ -86,26 +91,24 @@ final class DesktopGraphicsUtil {
     public static Dim limitInitialWindowSize(Graphics graphics) {
         if (graphics.isFullscreen()) {
             // If fullscreen, we fill the entire screen already so nothing needs to be done
-        } else {
-            // Width/height of the window in physical pixels
-            int w = graphics.getBackBufferWidth();
-            int h = graphics.getBackBufferHeight();
-
-            // Limit window size so it fits inside the current monitor (with a margin for OS bars/decorations)
-            DisplayMode displayMode = graphics.getDisplayMode();
-            int maxW = displayMode.width - 100;
-            int maxH = displayMode.height - 150;
-
-            int dw = Math.min(0, maxW - w);
-            int dh = Math.min(0, maxH - h);
-            graphics.setWindowedMode(w + dw, h + dh);
-
-            // Also change the window's position so it's centered on its previous location
-            Lwjgl3Window window = getCurrentWindow();
-            window.setPosition(window.getPositionX() - dw / 2, window.getPositionY() - dh /  2);
+            return Dim.of(graphics.getBackBufferWidth(), graphics.getBackBufferHeight());
         }
 
-        return Dim.of(graphics.getBackBufferWidth(), graphics.getBackBufferHeight());
+        // Width/height of the window in physical pixels
+        int w = graphics.getBackBufferWidth();
+        int h = graphics.getBackBufferHeight();
+
+        // Limit window size so it fits inside the current monitor (with a margin for OS bars/decorations)
+        DisplayMode displayMode = graphics.getDisplayMode();
+        int targetW = Math.min(w, displayMode.width - 100);
+        int targetH = Math.min(h, displayMode.height - 150);
+
+        float scale = Math.min(targetW / (float)w, targetH / (float)h);
+        targetW = Math.round(w * scale);
+        targetH = Math.round(h * scale);
+        graphics.setWindowedMode(targetW, targetH);
+
+        return Dim.of(targetW, targetH);
     }
 
 }
