@@ -62,7 +62,6 @@ packr.platforms.each{ platform ->
     def packrTask = tasks.register("packr${platform}", PackrTask) {
         group 'dist'
 
-        from shadowJar
         destinationDir = file("${packr.outputFolder}/$platformId")
 
         doFirst {
@@ -94,7 +93,15 @@ packr.platforms.each{ platform ->
             new Packr().pack(config);
         }
 
-        with packr.resources
+        if (platform == PackrConfig.Platform.MacOS) {
+            into('Contents/Resources') {
+                from shadowJar
+                with(packr.resources)
+            }
+        } else {
+            from shadowJar
+            with(packr.resources)
+        } 
     }
     packrAll.configure {
         dependsOn packrTask
@@ -120,13 +127,19 @@ tasks.register('archiveLinux64', Tar) {
     compression = Compression.GZIP
     from tasks['packrLinux64']
     into "${rootProject.name}-${version}"
+    filesMatching('*.sh') {
+        fileMode 0755 // Make shell scripts executable (existing file permissions are lost when building on Windows)
+    }
 }
 
 tasks.register('archiveMacOS', Zip) {
     destinationDir = releaseDir
     archiveName = "${rootProject.name}-${version}-macos.zip"
-    from tasks['packrLinux64']
+    from tasks['packrMacOS']
     into "${rootProject.name}-${version}.app"
+    filesMatching('**/Contents/MacOS/*') {
+        fileMode 0755 // Main executable should be executable (existing file permissions are lost when building on Windows)
+    }
 }
 
 def archiveArtifacts = tasks.register('archiveArtifacts') {

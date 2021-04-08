@@ -5,11 +5,11 @@ apply plugin: 'maven-publish'
 
 dependencies {
     api project(":nvlist-core")
-
     implementation deps.gdx_desktop
     implementation deps.jopt_simple
     implementation deps.lsp4j_debug
     implementation deps.lua_core
-
     runtimeOnly deps.slf4j_desktop
+
+    testFixturesApi testFixtures(project(':nvlist-core'))
 }
