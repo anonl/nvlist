@@ -1,4 +1,7 @@
 
+# v4.10.0
+- fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.
+
 # v4.9.6
 - fix: File permissions were broken for Linux/Mac builds when building on a file system which doesn't support permissions (e.g. NTFS on Windows)
 
