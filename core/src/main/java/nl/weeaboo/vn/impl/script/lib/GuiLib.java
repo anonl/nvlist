@@ -136,7 +136,11 @@ public class GuiLib extends LuaLib {
      *        <li>Button
      *        <li>Lua function
      *        </ol>
+     *
+     * @deprecated Call {@link IButton#setClickHandler(IScriptFunction)} directly from Lua like this:
+     *             {@code myButton:setClickHandler(function() print("click") end)}
      */
+    @Deprecated
     @ScriptFunction
     public Varargs setClickHandler(Varargs args) {
         IButton button = args.checkuserdata(1, IButton.class);

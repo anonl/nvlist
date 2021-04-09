@@ -1,5 +1,6 @@
 
 # v4.10.0
+- You can now call `:setClickHandler()` directly on the button object from Lua instead of having to use `Gui.setClickHandler()`.
 - fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.
 
 # v4.9.6
