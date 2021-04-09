@@ -46,6 +46,9 @@ public final class SaveIntegrationTest extends IntegrationTest {
         // UserData is stored properly
         IStorage userData = saveHeader.getUserData();
         Assert.assertEquals("value", userData.getString("key", "default"));
+
+        // Preferences act the same as shared globals; they're not changed by regular saving/loading
+        LuaTestUtil.assertGlobal("textSpeed", 32);
     }
 
     @Test
