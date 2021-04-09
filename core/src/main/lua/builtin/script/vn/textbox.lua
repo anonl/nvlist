@@ -25,7 +25,7 @@ end
 function texton(...)
     local textBox = getTextBox()
     if textBox ~= nil then
-        getTextBox():show(...)
+        textBox:show(...)
     end
 end
 

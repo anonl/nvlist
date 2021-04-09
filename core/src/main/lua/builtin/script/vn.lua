@@ -95,7 +95,6 @@ end
 -- Flattens this module and its submodules into <code>env</code>
 -- @param env The table (often <code>_G</code>) to flatten the module into.
 local function flattenModule(env)    
-    flattenSingle(env, package.loaded.vn)
     for _,module in ipairs(submodules) do
         flattenSingle(env, package.loaded.vn[module])
     end
