@@ -9,6 +9,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
+import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
@@ -38,6 +39,7 @@ public abstract class LuaIntegrationTest {
         contextManager = env.getContextManager();
         mainContext = contextManager.createContext();
         contextManager.setContextActive(mainContext, true);
+        ContextUtil.setCurrentContext(mainContext);
 
         mainThread = mainContext.getScriptContext().getMainThread();
     }
