@@ -20,7 +20,7 @@ public class CoreLibTest extends AbstractLibTest {
     public void createContext() {
         loadScript(LuaTestUtil.SCRIPT_SCRIPTLIB);
 
-        IContext createdContext = LuaTestUtil.getGlobal("context", IContext.class);
+        IContext createdContext = LuaTestUtil.getGlobal("ctx", IContext.class);
         Assert.assertNotNull(createdContext);
         Assert.assertEquals(2, env.getContextManager().getContexts().size());
     }
