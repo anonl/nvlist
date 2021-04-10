@@ -2,7 +2,7 @@
 @@
 
 -- createContext
-context = createContext()
+ctx = createContext()
 
 -- newThread
 newThreadResult = 0

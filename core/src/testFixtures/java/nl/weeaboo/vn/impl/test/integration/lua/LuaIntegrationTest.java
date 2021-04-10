@@ -14,6 +14,7 @@ import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.input.VKey;
 import nl.weeaboo.vn.script.ScriptException;
@@ -64,7 +65,7 @@ public abstract class LuaIntegrationTest {
 
     protected void loadScript(FilePath path) {
         try {
-            env.getScriptEnv().getScriptLoader().loadScript(mainThread, path);
+            LuaScriptUtil.loadScript(mainContext, env.getScriptEnv().getScriptLoader(), path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }

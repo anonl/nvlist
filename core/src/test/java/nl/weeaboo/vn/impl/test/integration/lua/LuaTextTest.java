@@ -52,7 +52,6 @@ public class LuaTextTest extends LuaIntegrationTest {
         Assert.assertEquals(new StyledText("line3"), textState.getText());
     }
 
-
     @Test
     public void testTextlog() {
         loadScript("integration/text/textlog");

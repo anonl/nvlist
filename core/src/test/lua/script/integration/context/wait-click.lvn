@@ -1,0 +1,18 @@
+@@
+require("builtin/vn")
+
+setTextModeADV()
+texton(0)
+appendText("x")
+
+local textBox = getTextBox()
+
+-- If the click indicator is already visible when calling waitClick(),
+-- the indicator remains visible
+luaAssert(textBox:showClickIndicator())
+waitClick()
+-- hideClickIndicator return true if the indicator was previously visible
+luaAssert(textBox:hideClickIndicator())
+
+textBox:destroy()
+@@
