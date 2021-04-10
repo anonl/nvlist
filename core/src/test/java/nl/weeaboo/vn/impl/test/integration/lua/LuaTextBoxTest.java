@@ -10,4 +10,10 @@ public class LuaTextBoxTest extends LuaIntegrationTest {
         waitForAllThreads();
     }
 
+    @Test
+    public void testTextOnOff() {
+        loadScript("integration/textbox/textonoff");
+        waitForAllThreads();
+    }
+
 }

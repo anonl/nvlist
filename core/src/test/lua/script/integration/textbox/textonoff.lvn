@@ -1,0 +1,53 @@
+
+@@
+
+require("builtin/vn")
+
+-- Register a custom ADV textbox containing additional drawables that should show/hide with the textbox
+local CustomTextBox = {
+    sideImage = nil,
+}
+function CustomTextBox.new(self)
+    self = AdvTextBox.new(extend(CustomTextBox, self))
+
+    self.sideImage = Image.createImage(self.layer, "arm01s")
+    self.sideImage:setVisible(false)
+
+    return self
+end
+registerTextBox(TextMode.ADV, CustomTextBox.new)
+
+local function isSideImageVisible()
+    -- textoff()/texton() only changes the alpha to 0.0; it doesn't touch the visible flag
+    return getTextBox().sideImage:isVisible(0.01)
+end
+local function setSideImageVisible(v)
+    return getTextBox().sideImage:setVisible(v)
+end
+
+setTextModeADV()
+texton()
+
+-- Side image was set to not visible initially
+luaAssert(not isSideImageVisible())
+
+-- Show side image
+setSideImageVisible(true)
+luaAssert(isSideImageVisible())
+
+-- Side image is hidden with the text box
+textoff()
+luaAssert(not isSideImageVisible())
+
+-- texton()/textoff() remember the visibility of the drawables
+texton()
+-- Was visible when calling textoff(), so texton() makes it visible again
+luaAssert(isSideImageVisible())
+
+-- If not visible at textoff(), stays not visible
+setSideImageVisible(false)
+textoff()
+texton()
+luaAssert(not isSideImageVisible())
+
+@@
