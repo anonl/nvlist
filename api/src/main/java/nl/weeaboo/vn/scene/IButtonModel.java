@@ -8,6 +8,11 @@ import java.io.Serializable;
 public interface IButtonModel extends Serializable {
 
     /**
+     * Simulates a click of the button.
+     */
+    void click();
+
+    /**
      * Buttons store internally if they've been pressed. This method returns if that has been the case and
      * clears the internal pressed flag.
      */

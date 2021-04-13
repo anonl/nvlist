@@ -101,13 +101,8 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
         local b = button("gui/button")
         b:setZ(-1000)
 
-        local styledText = option
-        if uniqueChoiceId ~= nil and Seen.hasSelectedChoice(uniqueChoiceId, i) then
-            --Apply a custom text style if the user has selected this choice before
-            styledText = Text.createStyledText(option, self.seenStyle)
-        end
-        b:setText(styledText)
         buttons[i] = b
+        b:setText(option)
 
         panel:add(b):growX()
         panel:endRow()
@@ -116,11 +111,22 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
 
     local selected = 0
     while selected == 0 do
+            print(uniqueChoiceId)
         for i,b in ipairs(buttons) do
+            -- Change text style depending on if the choice has been selected before
+            -- We need to do this in the loop so the styling can update after loading a save made at this choice
+            local styledText = options[i]
+            if uniqueChoiceId ~= nil and Seen.hasSelectedChoice(uniqueChoiceId, i) then
+                --Apply a custom text style if the user has selected this choice before
+                styledText = Text.createStyledText(styledText, self.seenStyle)
+            end
+            b:setText(styledText)
+
             if b:consumePress() then
                 selected = i
             end
         end
+
         yield()
     end
     panel:destroy()

@@ -1,0 +1,8 @@
+
+@@
+
+require("builtin/vn")
+
+selected = choice("a", "b", "c")
+
+@@

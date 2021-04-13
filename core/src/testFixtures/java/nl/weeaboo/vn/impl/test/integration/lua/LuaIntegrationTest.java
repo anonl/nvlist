@@ -71,6 +71,14 @@ public abstract class LuaIntegrationTest {
         }
     }
 
+    protected void runLua(String luaCode) {
+        try {
+            LuaScriptUtil.eval(mainContext, luaCode);
+        } catch (ScriptException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     protected void textContinue() {
         buttonPress(VKey.TEXT_CONTINUE);
     }

@@ -21,7 +21,8 @@ public class ButtonModel implements IButtonModel {
     private boolean mouseArmed;
     private int pressEvents;
 
-    protected void onClicked() {
+    @Override
+    public void click() {
         LOG.trace("Button clicked: {}", this);
 
         if (isToggle()) {
@@ -106,7 +107,7 @@ public class ButtonModel implements IButtonModel {
             mouseArmed = p;
 
             if (enabled && wasPressed && !isPressed()) {
-                onClicked();
+                click();
             }
         }
     }
