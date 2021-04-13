@@ -14,6 +14,11 @@ import nl.weeaboo.vn.script.IScriptFunction;
 public interface IButton extends ITransformable {
 
     /**
+     * Simulates a click of the button.
+     */
+    void click();
+
+    /**
      * @see IButtonModel#consumePress()
      */
     boolean consumePress();

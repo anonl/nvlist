@@ -118,7 +118,8 @@ public final class ButtonRenderer extends AbstractRenderable implements IButtonR
     public void setText(StyledText stext) {
         textRenderer.setText(stext);
 
-        pack();
+        setSize(Math.max(getNativeWidth(), getWidth()),
+                Math.max(getNativeHeight(), getHeight()));
     }
 
     @Override

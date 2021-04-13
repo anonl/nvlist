@@ -91,6 +91,15 @@ public class Button extends Transformable implements IButton {
     }
 
     @Override
+    public void click() {
+        model.click();
+
+        if (clickHandler != null && model.consumePress()) {
+            eventDispatcher.addEvent(clickHandler);
+        }
+    }
+
+    @Override
     public void handleInput(Matrix parentTransform, IInput input) {
         super.handleInput(parentTransform, input);
 

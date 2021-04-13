@@ -30,6 +30,7 @@ function start()
     
     setTextModeADV()
     texton()
+    choice("a", "b", "c")
 @@
 
 # Insert your code here
