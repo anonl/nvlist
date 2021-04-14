@@ -4,6 +4,9 @@
 --Import built-in NVList functions
 require("builtin/vn")
 
+-- Import custom textbox from textbox.lvn
+require("textbox")
+
 function main()
     print("main")
     --return titlescreen()
@@ -27,15 +30,14 @@ function titlescreen()
 end
 
 function start()
-    
+
     setTextModeADV()
     texton()
-    choice("a", "b", "c")
 @@
 
 # Insert your code here
 @registerSpeaker("aza", "Azathoth")
-@bgf("bg/gate")
+@bgf("bg/field")
 
 Create a sprite in the center (c) position.
 @local aza = imgf("azathoth", "c")

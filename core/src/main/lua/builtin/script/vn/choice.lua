@@ -111,7 +111,6 @@ function ChoiceScreen:choose(uniqueChoiceId, options)
 
     local selected = 0
     while selected == 0 do
-            print(uniqueChoiceId)
         for i,b in ipairs(buttons) do
             -- Change text style depending on if the choice has been selected before
             -- We need to do this in the loop so the styling can update after loading a save made at this choice
