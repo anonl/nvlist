@@ -1,5 +1,9 @@
 @@
 
+--quickLoad a slot that doesn't exist (a no-op)
+luaAssert(not Save.getSaveExists(42))
+quickLoad(42)
+
 x = 1
 quickSave(5)
 

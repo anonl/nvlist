@@ -29,12 +29,19 @@ end
 -- @param[opt=nil] userdata table
 -- @param[opt=nil] screenshot table (screenshot, width, height)
 function quickSave(slot, userdata, screenshot)
-    return Save.save(Save.getQuickSaveSlot(slot), userdata, screenshot)
+    slot = Save.getQuickSaveSlot(slot or 1)
+    return Save.save(slot, userdata, screenshot)
 end
 
 ---Loads the quick-save slot with the given number (1..99)
+-- If no save file exists with that number, this function does nothing
 function quickLoad(slot)
-    return Save.load(Save.getQuickSaveSlot(slot))
+    slot = Save.getQuickSaveSlot(slot or 1)
+    if not Save.getSaveExists(slot) then
+        Log.warn("Nothing to quickLoad, save {} doesn't exist", slot)
+        return
+    end
+    return Save.load(slot)
 end
 
 ---Autosave
