@@ -1,6 +1,7 @@
 
 # v4.10.0
 - You can now call `:setClickHandler()` directly on the button object from Lua instead of having to use `Gui.setClickHandler()`.
+- Attempting to `quickLoad` a save slot which doesn't exist now logs a warning instead of throwing an exception.
 - fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.
 - fix: The default choice screen displays previously selected choices in a different color. If you saved at a choice, the colors wouldn't update when loading.
 
