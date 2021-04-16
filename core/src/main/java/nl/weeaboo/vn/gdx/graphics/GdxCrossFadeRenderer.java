@@ -108,7 +108,7 @@ public class GdxCrossFadeRenderer extends CrossFadeRenderer {
 
         @Override
         public void render(IScreenRenderer renderer) {
-            GLScreenRenderer rr = (GLScreenRenderer)renderer;
+            final GLScreenRenderer rr = (GLScreenRenderer)renderer;
 
             ShaderProgram shader = getShader();
             if (shader == null) {
@@ -128,17 +128,15 @@ public class GdxCrossFadeRenderer extends CrossFadeRenderer {
 
             LOG.trace("CrossFade[start={}, end={}, time={}]", startTexture, endTexture, normalizedTime);
 
-            shader.begin();
-            try {
-                // Must init textures in reverse order for some reason (maybe active unit must be 0?)
-                GdxShaderUtil.setTexture(shader, 1, endTexture, "u_tex1");
-                GdxShaderUtil.setTexture(shader, 0, startTexture, "u_tex0");
-                shader.setUniformf("alpha", normalizedTime);
+            shader.bind();
 
-                rr.renderTriangleGrid(geometry, shader);
-            } finally {
-                shader.end();
-            }
+            // Must init textures in reverse order for some reason (maybe active unit must be 0?)
+            GdxShaderUtil.setTexture(shader, 1, endTexture, "u_tex1");
+            GdxShaderUtil.setTexture(shader, 0, startTexture, "u_tex0");
+            shader.setUniformf("alpha", normalizedTime);
+
+            rr.renderTriangleGrid(geometry, shader);
+
             for (int n = 3; n >= 0; n--) {
                 GdxTextureUtil.bindTexture(n, null);
             }
