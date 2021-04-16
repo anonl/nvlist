@@ -41,4 +41,9 @@ public final class EncodedSound implements IEncodedResource {
         soundDefinition = def;
     }
 
+    @Override
+    public long getFileSize() throws IOException {
+        return encodedSound.getFileSize();
+    }
+
 }

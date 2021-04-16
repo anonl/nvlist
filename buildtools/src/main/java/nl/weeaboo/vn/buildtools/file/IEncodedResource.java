@@ -15,4 +15,9 @@ public interface IEncodedResource extends Disposable {
      */
     byte[] readBytes() throws IOException;
 
+    /**
+     * The encoded file size in bytes.
+     */
+    long getFileSize() throws IOException;
+
 }

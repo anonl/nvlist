@@ -170,7 +170,7 @@ task optimizeResources(type: JavaExec) {
     // Setup to launch the resource optimizer
     classpath = configurations.buildtools + buildscript.configurations.classpath
     main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
-    args = [configFile]
+    args = [project.ext.vnRootDir, buildToolsDir]
     workingDir project.ext.vnRootDir
 
     doFirst {

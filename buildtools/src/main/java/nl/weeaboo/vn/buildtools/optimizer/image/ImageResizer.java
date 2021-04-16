@@ -24,6 +24,10 @@ final class ImageResizer implements IImageOperation {
 
     @Override
     public ImageWithDef process(ImageWithDef original) {
+        if (scaleX == 1.0 && scaleY == 1.0) {
+            return original;
+        }
+
         ImageDefinition originalDef = original.getDef();
 
         // Scale the image definition
@@ -40,7 +44,7 @@ final class ImageResizer implements IImageOperation {
 
         // Resize the actual pixmap
         Pixmap resizedPixmap = resizedCopy(original.getPixmap());
-
+        original.dispose();
         return new ImageWithDef(resizedPixmap, newDef.build());
     }
 

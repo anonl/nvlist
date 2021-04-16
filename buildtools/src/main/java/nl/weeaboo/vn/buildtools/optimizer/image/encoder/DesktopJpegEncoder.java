@@ -16,11 +16,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.common.collect.Iterators;
 
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageUtil;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 
 final class DesktopJpegEncoder implements IJpegEncoder {
 
@@ -67,7 +69,9 @@ final class DesktopJpegEncoder implements IJpegEncoder {
         byte[] bytes = encode(image.getPixmap(), new JpegEncoderParams());
 
         IEncodedResource encodedImage = EncodedResource.fromBytes(bytes);
-        return new EncodedImage(encodedImage, image.getDef());
+        ImageDefinitionBuilder imageDef = image.getDef().builder();
+        imageDef.setFilename(Filenames.replaceExt(imageDef.getFilename(), "jpg"));
+        return new EncodedImage(encodedImage, imageDef.build());
     }
 
 }

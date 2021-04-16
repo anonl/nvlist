@@ -8,11 +8,13 @@ import javax.imageio.ImageIO;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
+import nl.weeaboo.io.Filenames;
 import nl.weeaboo.vn.buildtools.file.EncodedResource;
 import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.optimizer.image.BufferedImageUtil;
 import nl.weeaboo.vn.buildtools.optimizer.image.EncodedImage;
 import nl.weeaboo.vn.buildtools.optimizer.image.ImageWithDef;
+import nl.weeaboo.vn.impl.image.desc.ImageDefinitionBuilder;
 
 final class DesktopPngEncoder implements IPngEncoder {
 
@@ -31,7 +33,9 @@ final class DesktopPngEncoder implements IPngEncoder {
         byte[] bytes = encode(image.getPixmap(), new PngEncoderParams());
 
         IEncodedResource encodedImage = EncodedResource.fromBytes(bytes);
-        return new EncodedImage(encodedImage, image.getDef());
+        ImageDefinitionBuilder imageDef = image.getDef().builder();
+        imageDef.setFilename(Filenames.replaceExt(imageDef.getFilename(), "png"));
+        return new EncodedImage(encodedImage, imageDef.build());
     }
 
 }

@@ -2,6 +2,7 @@ package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.Assert;
@@ -18,14 +19,14 @@ public final class OptimizerConfigJsonTest extends OptimizerTest {
     @Test(expected = RuntimeException.class)
     public void testParseEmpty() {
         OptimizerConfigJson config = load("optimizer-config-empty.json");
-        config.openProject(); // Attempting to use an invalid config will just throw an exception
+
+        // Attempting to use an invalid config will just throw an exception
+        config.openProject(Paths.get(""), Paths.get(""));
     }
 
     @Test
     public void testParseFull() {
         OptimizerConfigJson config = load("optimizer-config-full.json");
-        Assert.assertEquals("projectFolder", config.projectFolder);
-        Assert.assertEquals("buildToolsFolder", config.buildToolsFolder);
         Assert.assertEquals(Arrays.asList("1x2", "3x4"), config.targetResolutions);
         Assert.assertEquals(Arrays.asList("a*", "b.png"), config.exclude);
     }
@@ -39,11 +40,10 @@ public final class OptimizerConfigJsonTest extends OptimizerTest {
 
         // Set folders to temp folders supplied by parent class of this test
         ProjectFolderConfig folderConfig = context.getProject().getFolderConfig();
-        config.projectFolder = folderConfig.getProjectFolder().toString();
-        config.buildToolsFolder = folderConfig.getBuildToolsFolder().toString();
 
         // Create the context
-        NvlistProjectConnection projectConnection = config.openProject();
+        NvlistProjectConnection projectConnection = config.openProject(folderConfig.getProjectFolder(),
+                folderConfig.getBuildToolsFolder());
         config.createContext(projectConnection, context.getMainConfig().getOutputFolder());
     }
 

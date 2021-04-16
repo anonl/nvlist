@@ -37,6 +37,11 @@ public final class EncodedImage implements IEncodedResource {
         return encodedImage.readBytes();
     }
 
+    @Override
+    public long getFileSize() throws IOException {
+        return encodedImage.getFileSize();
+    }
+
     /** Returns the {@link IImageDefinition} accompanying the image. */
     public ImageDefinition getDef() {
         return imageDefinition;
