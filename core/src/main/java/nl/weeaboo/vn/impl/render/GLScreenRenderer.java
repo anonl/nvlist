@@ -225,7 +225,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
         }
         triangleMesh.setIndices(indices);
 
-        shader.begin();
+        shader.bind();
         shader.setUniformMatrix("u_projTrans", matrixStack.getCombined());
         for (int n = 0; n < texCount; n++) {
             int loc = shader.fetchUniformLocation("u_texture" + n, false);
@@ -233,26 +233,22 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
                 shader.setUniformi(loc, n);
             }
         }
-        try {
-            FloatBuffer buf = FloatBuffer.allocate(requiredFloats);
-            for (int row = 0; row < rows; row++) {
-                buf.position(0);
-                grid.getVertices(row, buf, floatsPerVertex - 2);
-                buf.position(2);
-                for (int v = 0; v < verticesPerRow; v++) {
-                    buf.put(buf.position() + floatsPerVertex * v, packedColor);
-                }
-                for (int t = 0; t < grid.getTextures(); t++) {
-                    buf.position(3 + 2 * t);
-                    grid.getTexCoords(t, row, buf, floatsPerVertex - 2);
-                }
-                buf.rewind();
-
-                triangleMesh.setVertices(buf.array(), 0, requiredFloats);
-                triangleMesh.render(shader, GL20.GL_TRIANGLES);
+        FloatBuffer buf = FloatBuffer.allocate(requiredFloats);
+        for (int row = 0; row < rows; row++) {
+            buf.position(0);
+            grid.getVertices(row, buf, floatsPerVertex - 2);
+            buf.position(2);
+            for (int v = 0; v < verticesPerRow; v++) {
+                buf.put(buf.position() + floatsPerVertex * v, packedColor);
             }
-        } finally {
-            shader.end();
+            for (int t = 0; t < grid.getTextures(); t++) {
+                buf.position(3 + 2 * t);
+                grid.getTexCoords(t, row, buf, floatsPerVertex - 2);
+            }
+            buf.rewind();
+
+            triangleMesh.setVertices(buf.array(), 0, requiredFloats);
+            triangleMesh.render(shader, GL20.GL_TRIANGLES);
         }
     }
 
