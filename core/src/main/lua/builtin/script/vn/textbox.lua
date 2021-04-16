@@ -326,7 +326,7 @@ function NvlTextBox.new(self)
 
     -- Create the main text box
     local textArea = Text.createTextDrawable(layer, "")
-    textArea:setZ(-100)    
+    textArea:setZ(-100)
     local textPad = .05 * math.min(screenWidth, screenHeight);
     local textBox = createBgBox(layer, bgColor)
     textBox:setPos(math.floor(textPad), math.floor(textPad))

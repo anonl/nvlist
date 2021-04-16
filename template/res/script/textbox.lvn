@@ -1,0 +1,58 @@
+@@
+
+-- Register a custom ADV textbox containing additional drawables that should show/hide with the textbox
+local CustomAdvTextBox = {
+}
+function CustomAdvTextBox.new(self)
+    self = AdvTextBox.new(extend(CustomTextBox, self))
+
+    -- The textbox components are in a special layer, we're going to add some extra buttons to it
+    local oldActiveLayer = getActiveLayer()
+    setActiveLayer(self.layer)
+
+    local x = self.textBox:getX() + self.textBox:getWidth()
+    local y = self.textBox:getY() + self.textBox:getHeight() - 35
+
+
+    local titleButton = button("gui/textbox#title-")
+    titleButton:setClickHandler(function()
+         local ss = blur(screenshot(), 16, true)
+         callInContext(function()
+            bg(ss)
+            -- choice2 is used so this choice doesn't track or display which options you've selected previously
+            if choice2(nil, "Return to title screen", "Cancel") == 1 then
+                restart()
+            end
+         end)
+    end)
+    x = x - 75
+    titleButton:setPos(x, y)
+
+    local logButton = button("gui/textbox#log-")
+    logButton:setClickHandler(function()
+        textLog()
+    end)
+    x = x - 75
+    logButton:setPos(x, y)
+
+    local loadButton = button("gui/textbox#load-")
+    loadButton:setClickHandler(function()
+        loadScreen()
+    end)
+    x = x - 75
+    loadButton:setPos(x, y)
+
+    local saveButton = button("gui/textbox#save-")
+    saveButton:setClickHandler(function()
+        saveScreen()
+    end)
+    x = x - 75
+    saveButton:setPos(x, y)
+
+    setActiveLayer(oldActiveLayer)
+
+    return self
+end
+registerTextBox(TextMode.ADV, CustomAdvTextBox.new)
+
+@@
