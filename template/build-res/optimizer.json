@@ -1,5 +1,5 @@
 {
-    "preset": "LOSSLESS",
+    "preset": "HIGH",
     "targetResolutions": [],
     "exclude": []
 }

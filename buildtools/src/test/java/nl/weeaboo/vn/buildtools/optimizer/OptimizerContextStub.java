@@ -29,7 +29,7 @@ public final class OptimizerContextStub implements IOptimizerContext {
         configStore = MutableClassToInstanceMap.create();
 
         configStore.put(MainOptimizerConfig.class,
-                new MainOptimizerConfig(new File(outputFolder, "out"), OptimizerPreset.MEDIUM));
+                new MainOptimizerConfig(new File(outputFolder, "out"), OptimizerPreset.QUALITY));
     }
 
     @Override

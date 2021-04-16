@@ -166,9 +166,10 @@ public final class ImageOptimizer {
             IImageEncoder imageEncoder = createEncoder();
             optimized = imageEncoder.encode(imageWithDef);
             if (!resized && !premultiplyAlpha) {
-                IEncodedResource original = EncodedResource.fromFileSystem(resFileSystem, inputFile);
-
                 // If the original image is usable and smaller, use it instead of our 'optimized' version
+                // If the original image is a different size, we can't use it
+                // If we can use premultiplied alpha, the load speed improvement is more important than file size
+                IEncodedResource original = EncodedResource.fromFileSystem(resFileSystem, inputFile);
                 if (original.getFileSize() < optimized.getFileSize()) {
                     optimized.dispose();
                     optimized = new EncodedImage(original, imageWithDef.getDef());
@@ -218,7 +219,7 @@ public final class ImageOptimizer {
         switch (preset) {
         case LOSSLESS:
             return new LosslessEncoder();
-        case MEDIUM:
+        case QUALITY:
             return new JngEncoder();
         }
         throw new IllegalArgumentException("Unsupported preset: " + preset);
