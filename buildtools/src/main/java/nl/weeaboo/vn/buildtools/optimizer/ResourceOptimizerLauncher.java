@@ -23,14 +23,21 @@ final class ResourceOptimizerLauncher {
         HeadlessGdx.init();
 
         Path projectFolder = Paths.get(args.length >= 1 ? args[0] : ".").toRealPath();
-        Path buildToolsFolder;
+
+        Path buildToolsFolder = projectFolder.resolve("build-tools");
         if (args.length >= 2) {
             buildToolsFolder = Paths.get(args[1]).toRealPath();
-        } else {
-            buildToolsFolder = projectFolder.resolve("build-tools");
         }
+
         Path configPath = ProjectFolderConfig.getBuildResFolder(projectFolder).resolve("optimizer.json");
+        if (args.length >= 3) {
+            configPath = Paths.get(args[2]).toRealPath();
+        }
+
         Path outputPath = projectFolder.resolve("res-optimized");
+        if (args.length >= 4) {
+            outputPath = Paths.get(args[3]).toAbsolutePath();
+        }
 
         LOG.info("Reading config: {}", configPath.toAbsolutePath());
         String json = FileUtil.readUtf8(configPath.toFile());

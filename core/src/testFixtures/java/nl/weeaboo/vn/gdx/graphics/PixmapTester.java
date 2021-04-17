@@ -27,7 +27,11 @@ public final class PixmapTester implements Disposable {
 
     @Override
     public void dispose() {
-        allocatedPixmaps.forEach(Pixmap::dispose);
+        for (Pixmap pixmap : allocatedPixmaps) {
+            if (!pixmap.isDisposed()) {
+                pixmap.dispose();
+            }
+        }
         allocatedPixmaps.clear();
     }
 

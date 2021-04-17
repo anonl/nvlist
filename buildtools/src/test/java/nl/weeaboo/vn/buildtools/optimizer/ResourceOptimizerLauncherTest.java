@@ -28,7 +28,7 @@ public final class ResourceOptimizerLauncherTest {
 
     @Test
     public void testOptimize() throws IOException, InterruptedException {
-        String[] args = { CONFIG_FILE, outputF.getAbsolutePath() };
+        String[] args = { "../template", "..", CONFIG_FILE, outputF.getAbsolutePath() };
         ResourceOptimizerLauncher.main(args);
 
         // An exception is thrown if the output folder isn't empty (to avoid data loss)

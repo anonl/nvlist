@@ -47,7 +47,7 @@ public final class ImageOptimizerTest extends OptimizerTest {
         ImageOptimizer optimizer = new ImageOptimizer(context);
         optimizer.optimizeResources();
 
-        assertOutputExists("img/a.jpg", "img-128x72/a.jpg");
+        assertOutputExists("img/a.png", "img-128x72/a.jpg");
     }
 
     /**

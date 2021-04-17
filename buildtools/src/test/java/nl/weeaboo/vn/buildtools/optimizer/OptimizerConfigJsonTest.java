@@ -2,12 +2,12 @@ package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
@@ -16,12 +16,13 @@ import nl.weeaboo.vn.impl.save.JsonUtil;
 
 public final class OptimizerConfigJsonTest extends OptimizerTest {
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseEmpty() {
         OptimizerConfigJson config = load("optimizer-config-empty.json");
-
-        // Attempting to use an invalid config will just throw an exception
-        config.openProject(Paths.get(""), Paths.get(""));
+        // Test default values
+        Assert.assertEquals(OptimizerPreset.LOSSLESS, config.preset);
+        Assert.assertEquals(ImmutableList.of(), config.targetResolutions);
+        Assert.assertEquals(ImmutableList.of(), config.exclude);
     }
 
     @Test

@@ -1,5 +1,3 @@
 {
-    "projectFolder": "../template",
-    "buildToolsFolder": "../template/build-tools",
-    "targetResolutions": []
+    "preset": "QUALITY"
 }

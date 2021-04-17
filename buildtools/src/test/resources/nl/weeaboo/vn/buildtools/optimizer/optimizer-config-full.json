@@ -1,6 +1,5 @@
 {
-    "projectFolder": "projectFolder",
-    "buildToolsFolder": "buildToolsFolder",
+    "preset": "LOSSLESS",
     "targetResolutions": ["1x2", "3x4"],
     "exclude": ["a*", "b.png"]
 }
