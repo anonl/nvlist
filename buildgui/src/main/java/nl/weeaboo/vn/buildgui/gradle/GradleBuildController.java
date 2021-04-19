@@ -22,8 +22,8 @@ import nl.weeaboo.vn.buildgui.IBuildLogListener;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
-import nl.weeaboo.vn.buildtools.task.Task;
 import nl.weeaboo.vn.buildtools.task.ITask;
+import nl.weeaboo.vn.buildtools.task.Task;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
 /**
@@ -84,11 +84,6 @@ public final class GradleBuildController implements IBuildController {
         taskController.setActiveTask(task);
         task.start();
         return task;
-    }
-
-    @Override
-    public ITask startResourceOptimizer() {
-        return startTask("optimizeResources");
     }
 
     private GradleTask startTask(String... taskNames) {

@@ -42,12 +42,14 @@ allprojects {
     apply plugin: 'jacoco'
 
     group = 'nl.weeaboo.vn'
-    version = '4.9.6'
+    version = '4.10.0'
     ext {
         javaVersion = 8
+        nvlistVersion = version
 
         vnRootDir = rootProject.file(project.findProperty('vnRoot') ?: templateDir)
         vnResDir = new File(vnRootDir, 'res')
+        buildResDir = new File(templateDir, 'build-res') 
         buildToolsDir = new File(templateDir, 'build-tools') 
     }
 
@@ -145,4 +147,10 @@ allprojects {
         project.apply from: rootProject.file('jmh.gradle')
         project.apply from: rootProject.file('publish.gradle')
     }
+}
+
+apply from: "$buildToolsDir/common.gradle"
+
+dependencies {
+    buildtools project(':nvlist-buildtools') 
 }

@@ -84,13 +84,9 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
     private void handleOtherTaskButtonPress() {
         JPopupMenu menu = new JPopupMenu();
 
-        JMenuItem assembleDistitem = new JMenuItem("Create release");
-        assembleDistitem.addActionListener(e -> createRelease());
-        menu.add(assembleDistitem);
-
-        JMenuItem optimizeResourcesItem = new JMenuItem("Optimize resources");
-        optimizeResourcesItem.addActionListener(e -> buildController.startResourceOptimizer());
-        menu.add(optimizeResourcesItem);
+        JMenuItem releaseItem = new JMenuItem("Create release");
+        releaseItem.addActionListener(e -> createRelease());
+        menu.add(releaseItem);
 
         JMenuItem checkForUpdatesItem = new JMenuItem("Check for updates");
         checkForUpdatesItem.addActionListener(e -> buildController.startCheckForUpdates());

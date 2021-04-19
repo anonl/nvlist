@@ -27,7 +27,7 @@ eclipse {
 }
 
 tasks.register('assembleNvl', Zip) {
-    from vnResDir
+    from rootProject.tasks.optimizeResources
     archiveName "${vnId}.nvl"
 }
 assembleDist.dependsOn assembleNvl
