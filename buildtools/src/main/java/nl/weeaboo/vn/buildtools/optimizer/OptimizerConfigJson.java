@@ -1,7 +1,7 @@
 package nl.weeaboo.vn.buildtools.optimizer;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,21 +18,19 @@ import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
  */
 public final class OptimizerConfigJson {
 
-    public String projectFolder;
-    public String buildToolsFolder;
-
     /** Screen resolutions formatted as width x height, e.g. "1280x720". */
-    public List<String> targetResolutions = new ArrayList<>();
+    public final List<String> targetResolutions = new ArrayList<>();
 
-    /** File exclusion patterns, see {@link OptimizerFileSet#exclude(nl.weeaboo.vn.buildtools.file.FilePathPattern)}. */
-    public List<String> exclude = new ArrayList<>();
+    public OptimizerPreset preset = OptimizerPreset.LOSSLESS;
+
+    /** File exclusion patterns, see {@link OptimizerFileSet#exclude(FilePathPattern)}. */
+    public final List<String> exclude = new ArrayList<>();
 
     /**
      * Opens a connection to a NVList project using the settings from this config.
      */
-    public NvlistProjectConnection openProject() {
-        return NvlistProjectConnection.openProject(new ProjectFolderConfig(Paths.get(projectFolder),
-                Paths.get(buildToolsFolder)));
+    public NvlistProjectConnection openProject(Path projectFolder, Path buildToolsFolder) {
+        return NvlistProjectConnection.openProject(new ProjectFolderConfig(projectFolder, buildToolsFolder));
     }
 
     /**
@@ -40,7 +38,7 @@ public final class OptimizerConfigJson {
      */
     public OptimizerContext createContext(NvlistProjectConnection projectConnection, File outputFolder) {
         // Main config
-        MainOptimizerConfig mainConfig = new MainOptimizerConfig(outputFolder);
+        MainOptimizerConfig mainConfig = new MainOptimizerConfig(outputFolder, preset);
         OptimizerContext context = new OptimizerContext(projectConnection, mainConfig);
 
         // Exclusion patterns
@@ -73,4 +71,5 @@ public final class OptimizerConfigJson {
             throw new IllegalArgumentException("Invalid resolution string: " + resolution);
         }
     }
+
 }

@@ -26,6 +26,7 @@ import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.OptimizerPreset;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.FfmpegSoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.ISoundEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.sound.encoder.NoOpSoundEncoder;
@@ -163,6 +164,10 @@ public final class SoundOptimizer {
     }
 
     private ISoundEncoder createEncoder() {
+        if (optimizerConfig.getPreset() == OptimizerPreset.LOSSLESS) {
+            return new NoOpSoundEncoder();
+        }
+
         if (ffmpegAvailable != EAvailable.NO) {
             FfmpegSoundEncoder encoder = new FfmpegSoundEncoder(tempFileProvider);
             if (ffmpegAvailable == EAvailable.YES || encoder.isAvailable()) {

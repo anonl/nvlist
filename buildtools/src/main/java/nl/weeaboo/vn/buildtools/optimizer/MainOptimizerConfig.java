@@ -9,9 +9,11 @@ import java.util.Objects;
 public final class MainOptimizerConfig implements IOptimizerConfig {
 
     private final File outputFolder;
+    private final OptimizerPreset preset;
 
-    public MainOptimizerConfig(File outputFolder) {
+    public MainOptimizerConfig(File outputFolder, OptimizerPreset preset) {
         this.outputFolder = Objects.requireNonNull(outputFolder);
+        this.preset = Objects.requireNonNull(preset);
     }
 
     /**
@@ -19,6 +21,13 @@ public final class MainOptimizerConfig implements IOptimizerConfig {
      */
     public File getOutputFolder() {
         return outputFolder;
+    }
+
+    /**
+     * Preset which controls various quality/file-format settings.
+     */
+    public OptimizerPreset getPreset() {
+        return preset;
     }
 
 }

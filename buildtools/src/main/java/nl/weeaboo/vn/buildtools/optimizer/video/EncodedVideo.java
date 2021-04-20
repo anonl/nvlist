@@ -34,4 +34,9 @@ public final class EncodedVideo implements IEncodedResource {
         return encodedVideo.readBytes();
     }
 
+    @Override
+    public long getFileSize() throws IOException {
+        return encodedVideo.getFileSize();
+    }
+
 }

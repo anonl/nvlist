@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
@@ -15,17 +16,18 @@ import nl.weeaboo.vn.impl.save.JsonUtil;
 
 public final class OptimizerConfigJsonTest extends OptimizerTest {
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseEmpty() {
         OptimizerConfigJson config = load("optimizer-config-empty.json");
-        config.openProject(); // Attempting to use an invalid config will just throw an exception
+        // Test default values
+        Assert.assertEquals(OptimizerPreset.LOSSLESS, config.preset);
+        Assert.assertEquals(ImmutableList.of(), config.targetResolutions);
+        Assert.assertEquals(ImmutableList.of(), config.exclude);
     }
 
     @Test
     public void testParseFull() {
         OptimizerConfigJson config = load("optimizer-config-full.json");
-        Assert.assertEquals("projectFolder", config.projectFolder);
-        Assert.assertEquals("buildToolsFolder", config.buildToolsFolder);
         Assert.assertEquals(Arrays.asList("1x2", "3x4"), config.targetResolutions);
         Assert.assertEquals(Arrays.asList("a*", "b.png"), config.exclude);
     }
@@ -39,11 +41,10 @@ public final class OptimizerConfigJsonTest extends OptimizerTest {
 
         // Set folders to temp folders supplied by parent class of this test
         ProjectFolderConfig folderConfig = context.getProject().getFolderConfig();
-        config.projectFolder = folderConfig.getProjectFolder().toString();
-        config.buildToolsFolder = folderConfig.getBuildToolsFolder().toString();
 
         // Create the context
-        NvlistProjectConnection projectConnection = config.openProject();
+        NvlistProjectConnection projectConnection = config.openProject(folderConfig.getProjectFolder(),
+                folderConfig.getBuildToolsFolder());
         config.createContext(projectConnection, context.getMainConfig().getOutputFolder());
     }
 

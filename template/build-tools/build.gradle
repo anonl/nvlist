@@ -59,6 +59,12 @@ allprojects {
     }
 }
 
+apply from: 'common.gradle'
+
+dependencies {
+    buildtools "nl.weeaboo.vn:nvlist-buildtools:${nvlistVersion}"
+}
+
 project(':desktop') {
     apply from: "${buildToolsDir}/common-desktop.gradle"
 
@@ -138,43 +144,4 @@ project(':ios') {
     }
 
     ext.mainClassName = settings.iosMain
-}
-
-configurations {
-    buildtools { }
-    langserver { }
-}
-
-dependencies {
-    buildtools "ch.qos.logback:logback-classic:1.2.3"
-    langserver "nl.weeaboo.vn:nvlist-langserver:$nvlistVersion"
-}
-
-// To run against a local prerelease version:
-// gradlew --PvnRoot=.. --include-build=../..
-task runLanguageServer(type: JavaExec) {
-    classpath = files(configurations.langserver)
-    main = 'nl.weeaboo.vn.langserver.LangServerMain'
-    args (findProperty('args') ?: '')
-    workingDir project.ext.vnRootDir
-}
-
-task optimizeResources(type: JavaExec) {
-    // Optimizer config is stored in build-res/optimizer.json
-    def configFile = new File(buildResDir, 'optimizer.json')
-    inputs.file(configFile)
-
-    def outputFolder = new File(project.ext.vnRootDir, 'res-optimized')
-    outputs.dir(outputFolder)
-
-    // Setup to launch the resource optimizer
-    classpath = configurations.buildtools + buildscript.configurations.classpath
-    main = 'nl.weeaboo.vn.buildtools.optimizer.ResourceOptimizerLauncher'
-    args = [configFile]
-    workingDir project.ext.vnRootDir
-
-    doFirst {
-        // Delete the output folder first
-        delete(outputFolder)
-    }
 }

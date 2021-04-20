@@ -19,6 +19,7 @@ import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
+import nl.weeaboo.vn.buildtools.optimizer.OptimizerPreset;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.FfmpegVideoEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.IVideoEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.video.encoder.NoOpVideoEncoder;
@@ -118,6 +119,10 @@ public final class VideoOptimizer {
     }
 
     private IVideoEncoder createEncoder() {
+        if (optimizerConfig.getPreset() == OptimizerPreset.LOSSLESS) {
+            return new NoOpVideoEncoder();
+        }
+
         if (ffmpegAvailable != EAvailable.NO) {
             FfmpegVideoEncoder encoder = new FfmpegVideoEncoder(tempFileProvider);
             if (ffmpegAvailable == EAvailable.YES || encoder.isAvailable()) {

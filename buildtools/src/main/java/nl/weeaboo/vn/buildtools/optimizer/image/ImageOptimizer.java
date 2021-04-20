@@ -21,14 +21,17 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.filesystem.IFileSystem;
 import nl.weeaboo.io.FileUtil;
 import nl.weeaboo.io.Filenames;
+import nl.weeaboo.vn.buildtools.file.EncodedResource;
+import nl.weeaboo.vn.buildtools.file.IEncodedResource;
 import nl.weeaboo.vn.buildtools.file.OptimizerFileUtil;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerContext;
 import nl.weeaboo.vn.buildtools.optimizer.IOptimizerFileSet;
 import nl.weeaboo.vn.buildtools.optimizer.IParallelExecutor;
 import nl.weeaboo.vn.buildtools.optimizer.MainOptimizerConfig;
-import nl.weeaboo.vn.buildtools.optimizer.image.ImageEncoderConfig.EImageEncoding;
+import nl.weeaboo.vn.buildtools.optimizer.OptimizerPreset;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.IImageEncoder;
 import nl.weeaboo.vn.buildtools.optimizer.image.encoder.JngEncoder;
+import nl.weeaboo.vn.buildtools.optimizer.image.encoder.LosslessEncoder;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -53,7 +56,6 @@ public final class ImageOptimizer {
     private final IParallelExecutor executor;
     private final MainOptimizerConfig optimizerConfig;
     private final ImageResizerConfig resizeConfig;
-    private final ImageEncoderConfig encoderConfig;
     private final NvlistProjectConnection project;
     private final IFileSystem resFileSystem;
     private final IOptimizerFileSet optimizerFileSet;
@@ -68,7 +70,6 @@ public final class ImageOptimizer {
         executor = context.getExecutor();
         optimizerConfig = context.getMainConfig();
         resizeConfig = context.getConfig(ImageResizerConfig.class, new ImageResizerConfig());
-        encoderConfig = context.getConfig(ImageEncoderConfig.class, new ImageEncoderConfig());
 
         optimizerFileSet = context.getFileSet();
 
@@ -150,50 +151,78 @@ public final class ImageOptimizer {
 
         LOG.debug("Optimizing image: {}", inputFile);
 
-        Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
+        ImageWithDef imageWithDef = load(inputFile);
+        EncodedImage optimized;
+        try {
+            boolean resized = false;
+            if (!baseResolution.equals(targetResolution)) {
+                ImageResizer resizer = new ImageResizer(baseResolution, targetResolution);
+                imageWithDef = resizer.process(imageWithDef);
+                resized = true;
+            }
 
-        final boolean premultiplyAlpha = true && PixmapUtil.hasAlpha(pixmap.getFormat());
-        if (premultiplyAlpha) {
-            PremultUtil.premultiplyAlpha(pixmap);
+            boolean premultiplyAlpha = premultiplyAlpha(imageWithDef.getPixmap());
+
+            IImageEncoder imageEncoder = createEncoder();
+            optimized = imageEncoder.encode(imageWithDef);
+            if (!resized && !premultiplyAlpha) {
+                // If the original image is usable and smaller, use it instead of our 'optimized' version
+                // If the original image is a different size, we can't use it
+                // If we can use premultiplied alpha, the load speed improvement is more important than file size
+                IEncodedResource original = EncodedResource.fromFileSystem(resFileSystem, inputFile);
+                if (original.getFileSize() < optimized.getFileSize()) {
+                    optimized.dispose();
+                    optimized = new EncodedImage(original, imageWithDef.getDef());
+                }
+            }
+
+            // Give files with premultiplied alpha .pre.ext-style extension.
+            if (premultiplyAlpha && optimized.hasAlpha()) {
+                addPremultipyFileExt(optimized);
+            }
+        } finally {
+            imageWithDef.dispose();
         }
+
+        FilePath outputPath = getOutputPath(inputFile, targetResolution, optimized.getDef().getFilename());
+
+        File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
+        Files.createParentDirs(outputF);
+        Files.write(optimized.readBytes(), outputF);
+
+        optimizedDefs.put(outputPath, optimized.getDef());
+        optimizerFileSet.markOptimized(inputFile);
+        optimized.dispose();
+    }
+
+    private ImageWithDef load(FilePath inputFile) throws IOException {
+        Pixmap pixmap = PixmapLoader.load(resFileSystem, inputFile);
 
         IImageDefinition imageDef = imageDefCache.getMetaData(inputFile);
         if (imageDef == null) {
             imageDef = new ImageDefinition(inputFile.getName(), Dim.of(pixmap.getWidth(), pixmap.getHeight()));
         }
 
-        ImageWithDef imageWithDef = new ImageWithDef(pixmap, imageDef);
+        return new ImageWithDef(pixmap, imageDef);
+    }
 
-        ImageResizer resizer = new ImageResizer(baseResolution, targetResolution);
-        ImageWithDef optimized = resizer.process(imageWithDef);
-        pixmap.dispose();
-
-        IImageEncoder imageEncoder = createEncoder();
-        EncodedImage encoded = imageEncoder.encode(optimized);
-        optimized.dispose();
-
-        // Give files with premultiplied alpha .pre.ext-style extension.
-        if (premultiplyAlpha && encoded.hasAlpha()) {
-            addPremultipyFileExt(encoded);
+    private boolean premultiplyAlpha(Pixmap pixmap) {
+        if (!PixmapUtil.hasAlpha(pixmap.getFormat())) {
+            return false;
         }
-        FilePath outputPath = getOutputPath(inputFile, targetResolution, encoded.getDef().getFilename());
-
-        File outputF = new File(optimizerConfig.getOutputFolder(), outputPath.toString());
-        Files.createParentDirs(outputF);
-        Files.write(encoded.readBytes(), outputF);
-
-        optimizedDefs.put(outputPath, encoded.getDef());
-        optimizerFileSet.markOptimized(inputFile);
-        encoded.dispose();
+        PremultUtil.premultiplyAlpha(pixmap);
+        return true;
     }
 
     private IImageEncoder createEncoder() {
-        EImageEncoding encoding = encoderConfig.getEncoding();
-        switch (encoding) {
-        case JNG:
+        OptimizerPreset preset = optimizerConfig.getPreset();
+        switch (preset) {
+        case LOSSLESS:
+            return new LosslessEncoder();
+        case QUALITY:
             return new JngEncoder();
         }
-        throw new IllegalArgumentException("Unsupported encoding: " + encoding);
+        throw new IllegalArgumentException("Unsupported preset: " + preset);
     }
 
     private void addPremultipyFileExt(EncodedImage encoded) {

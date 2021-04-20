@@ -1,5 +1,6 @@
 
 # v4.10.0
+- The resource optimizer now runs automatically for desktop releases (Windows, Mac, Linux). You can change the optimizer settings through `build-res/optimizer.json`.
 - You can now call `:setClickHandler()` directly on the button object from Lua instead of having to use `Gui.setClickHandler()`.
 - Attempting to `quickLoad` a save slot which doesn't exist now logs a warning instead of throwing an exception.
 - fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.

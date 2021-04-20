@@ -1,7 +1,5 @@
 {
-    "projectFolder": ".",
-    "buildToolsFolder": "./build-tools",
-
-    "targetResolutions": ["1280x720"],
+    "preset": "LOSSLESS",
+    "targetResolutions": [],
     "exclude": []
 }

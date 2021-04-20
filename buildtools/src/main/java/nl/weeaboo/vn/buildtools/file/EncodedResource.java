@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.annotation.Nullable;
 
@@ -63,6 +64,11 @@ public final class EncodedResource {
             return FileSystemUtil.readBytes(fileSystem, path);
         }
 
+        @Override
+        public long getFileSize() throws IOException {
+            return fileSystem.getFileSize(path);
+        }
+
     }
 
     private static final class InMemoryResource implements IEncodedResource {
@@ -85,6 +91,11 @@ public final class EncodedResource {
                 throw new IOException("disposed");
             }
             return result;
+        }
+
+        @Override
+        public long getFileSize() {
+            return bytes.length;
         }
 
     }
@@ -111,6 +122,11 @@ public final class EncodedResource {
             try (InputStream in = new FileInputStream(file)) {
                 return ByteStreams.toByteArray(in);
             }
+        }
+
+        @Override
+        public long getFileSize() throws IOException {
+            return Files.size(file.toPath());
         }
 
     }
