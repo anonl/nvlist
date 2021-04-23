@@ -1,5 +1,5 @@
 {
     "preset": "LOSSLESS",
     "targetResolutions": [],
-    "exclude": []
+    "exclude": ["icon.png"]
 }

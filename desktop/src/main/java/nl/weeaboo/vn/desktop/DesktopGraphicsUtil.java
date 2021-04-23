@@ -22,8 +22,8 @@ import com.google.common.collect.Lists;
 
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.filesystem.FilePath;
-import nl.weeaboo.filesystem.FileSystemUtil;
 import nl.weeaboo.filesystem.IFileSystem;
+import nl.weeaboo.vn.gdx.graphics.PixmapLoader;
 import nl.weeaboo.vn.gdx.graphics.PixmapUtil;
 
 final class DesktopGraphicsUtil {
@@ -41,10 +41,8 @@ final class DesktopGraphicsUtil {
         try {
             FilePath path = FilePath.of("icon.png");
             try {
-                byte[] bytes = FileSystemUtil.readBytes(fileSystem, path);
+                Pixmap fullSize = PixmapLoader.load(fileSystem, path);
 
-                LOG.info("Loading icon: {}", path);
-                Pixmap fullSize = new Pixmap(bytes, 0, bytes.length);
                 /*
                  * Convert to RGBA8888 (libGDX will do this later anyway, doing it now makes resize behavior
                  * more predictable)
@@ -65,7 +63,7 @@ final class DesktopGraphicsUtil {
             } catch (FileNotFoundException fnfe) {
                 // File doesn't exist
             } catch (IOException ioe) {
-                LOG.warn("Error loading icon: {}", path, ioe);
+                LOG.warn("Error loading {}", path, ioe);
             }
 
             window.setIcon(Iterables.toArray(pixmaps, Pixmap.class));
