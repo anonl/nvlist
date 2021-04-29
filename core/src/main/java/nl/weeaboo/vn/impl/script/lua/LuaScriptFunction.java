@@ -38,7 +38,7 @@ class LuaScriptFunction implements IScriptFunction {
         }
     }
 
-    LuaScriptThread callInNewThread() throws ScriptException {
+    ILuaScriptThread callInNewThread() throws ScriptException {
         LuaRunState runState = LuaImpl.getRunState();
         LuaThread thread = runState.newThread(func, args);
         return new LuaScriptThread(thread);

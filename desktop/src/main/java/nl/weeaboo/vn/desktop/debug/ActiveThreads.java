@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,9 +19,8 @@ import com.google.common.collect.Iterables;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.INovel;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.IScriptThread;
 
 final class ActiveThreads implements Iterable<DebugThread> {
 
@@ -59,8 +57,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
         IContext primaryContext = contextManager.getPrimaryContext();
         for (IContext context : contextManager.getContexts()) {
             IScriptContext scriptContext = context.getScriptContext();
-            Collection<? extends IScriptThread> threads = scriptContext.getThreads();
-            for (LuaScriptThread thread : Iterables.filter(threads, LuaScriptThread.class)) {
+            for (ILuaScriptThread thread : Iterables.filter(scriptContext.getThreads(), ILuaScriptThread.class)) {
                 int threadId = DebugThread.getThreadId(thread);
 
                 DebugThread debugThread = threadsById.get(threadId);

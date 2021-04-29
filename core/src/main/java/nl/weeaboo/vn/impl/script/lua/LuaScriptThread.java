@@ -29,7 +29,7 @@ import nl.weeaboo.vn.script.ScriptException;
 /**
  * Default implementation of {@link IScriptThread}.
  */
-public class LuaScriptThread implements IScriptThread {
+class LuaScriptThread implements ILuaScriptThread {
 
     private static final long serialVersionUID = LuaImpl.serialVersionUID;
 
@@ -51,14 +51,12 @@ public class LuaScriptThread implements IScriptThread {
         return threadRef.get().isDead();
     }
 
+    @Override
     public int getThreadId() {
         return threadRef.get().getThreadId();
     }
 
-    /**
-     * Runs Lua code on this thread.
-     * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
-     */
+    @Override
     public Varargs eval(String code) throws ScriptException {
         LuaThread thread = threadRef.get();
 
@@ -70,10 +68,7 @@ public class LuaScriptThread implements IScriptThread {
         }
     }
 
-    /**
-     * Calls a Lua function on this thread.
-     * @throws ScriptException If the function doesn't exist, or the Lua code throws an exception.
-     */
+    @Override
     public void call(String funcName, Object... args) throws ScriptException {
         LuaThread thread = threadRef.get();
 
@@ -86,20 +81,14 @@ public class LuaScriptThread implements IScriptThread {
         }
     }
 
-    /**
-     * Calls a Lua function on this thread.
-     * @throws ScriptException If the Lua function throws an exception.
-     */
+    @Override
     public void call(LuaScriptFunction func) throws ScriptException {
         LuaThread thread = threadRef.get();
 
         func.call(thread);
     }
 
-    /**
-     * Calls a Lua function on this thread.
-     * @throws ScriptException If the Lua function throws an exception.
-     */
+    @Override
     public void call(LuaClosure func) throws ScriptException {
         LuaThread thread = threadRef.get();
 
@@ -144,10 +133,12 @@ public class LuaScriptThread implements IScriptThread {
         return getName();
     }
 
+    @Override
     public @Nullable LuaStackTraceElement stackTraceElem(int offset) {
         return DebugTrace.stackTraceElem(threadRef.get(), offset);
     }
 
+    @Override
     public List<LuaStackTraceElement> stackTrace() {
         return DebugTrace.stackTrace(threadRef.get());
     }
@@ -173,6 +164,7 @@ public class LuaScriptThread implements IScriptThread {
         paused = false;
     }
 
+    @Override
     public void installHook(ILuaDebugHook callback) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
         Varargs args = LuaValue.varargsOf(threadRef.get(), new DebugHook(callback), LuaString.valueOf("crl"));
@@ -194,15 +186,6 @@ public class LuaScriptThread implements IScriptThread {
             callback.onEvent(eventName.tojstring(), lineNumber.optint(0));
             return LuaConstants.NONE;
         }
-
-    }
-
-    /**
-     * Lua debug library callback.
-     */
-    public interface ILuaDebugHook {
-
-        void onEvent(String eventName, int lineNumber);
 
     }
 

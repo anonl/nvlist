@@ -13,8 +13,8 @@ import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.ISkipState;
 import nl.weeaboo.vn.impl.scene.Screen;
+import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptContext;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
 import nl.weeaboo.vn.impl.signal.SignalUtil;
 import nl.weeaboo.vn.input.IInput;
 import nl.weeaboo.vn.render.IDrawBuffer;
@@ -113,7 +113,7 @@ public class Context implements IContext {
 
     @Override
     public void updateScripts() {
-        LuaScriptThread mainThread = scriptContext.getMainThread();
+        ILuaScriptThread mainThread = scriptContext.getMainThread();
         boolean mainThreadWasRunnable = mainThread.isRunnable();
 
         IScriptExceptionHandler defaultExceptionHandler = scriptContext.getDefaultExceptionHandler();

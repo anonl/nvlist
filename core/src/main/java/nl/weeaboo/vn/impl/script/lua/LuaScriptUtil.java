@@ -68,7 +68,7 @@ public final class LuaScriptUtil {
      *
      * @see LuaThread#setPersistent(boolean)
      */
-    public static LuaScriptThread createPersistentThread(LuaRunState runState) {
+    public static ILuaScriptThread createPersistentThread(LuaRunState runState) {
         LuaThread thread = runState.newThread();
         thread.setPersistent(true);
         return new LuaScriptThread(thread);
@@ -123,7 +123,7 @@ public final class LuaScriptUtil {
             throws IOException, ScriptException {
 
         LuaScriptContext scriptContext = getScriptContext(mainContext);
-        LuaScriptThread mainThread = scriptContext.getMainThread();
+        ILuaScriptThread mainThread = scriptContext.getMainThread();
 
         IContext oldContext = ContextUtil.setCurrentContext(mainContext);
         try {
@@ -188,7 +188,7 @@ public final class LuaScriptUtil {
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
      * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
-    public static String eval(IContextManager contextManager, LuaScriptThread thread, String luaCode)
+    public static String eval(IContextManager contextManager, ILuaScriptThread thread, String luaCode)
             throws ScriptException {
 
         Varargs result;

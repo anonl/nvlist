@@ -13,22 +13,22 @@ import org.eclipse.lsp4j.debug.Thread;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 
 import nl.weeaboo.lua2.vm.LuaStackTraceElement;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptThread.ILuaDebugHook;
+import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
+import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread.ILuaDebugHook;
 
 final class DebugThread {
 
-    private final LuaScriptThread thread;
+    private final ILuaScriptThread thread;
     private final IDebugProtocolClient peer;
 
     private @Nullable EStepMode stepMode;
 
-    DebugThread(LuaScriptThread thread, IDebugProtocolClient peer) {
+    DebugThread(ILuaScriptThread thread, IDebugProtocolClient peer) {
         this.thread = Objects.requireNonNull(thread);
         this.peer = Objects.requireNonNull(peer);
     }
 
-    static int getThreadId(LuaScriptThread thread) {
+    static int getThreadId(ILuaScriptThread thread) {
         return System.identityHashCode(thread);
     }
 
@@ -36,7 +36,7 @@ final class DebugThread {
         return thread.getThreadId();
     }
 
-    LuaScriptThread getThread() {
+    ILuaScriptThread getThread() {
         return thread;
     }
 

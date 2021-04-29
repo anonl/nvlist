@@ -30,7 +30,7 @@ public class LuaScriptFunctionStub extends LuaScriptFunction {
     }
 
     @Override
-    public LuaScriptThread callInNewThread() {
+    public ILuaScriptThread callInNewThread() {
         return new ThreadStub(this);
     }
 

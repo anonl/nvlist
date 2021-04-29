@@ -36,9 +36,9 @@ public class LuaScriptContext implements IScriptContext, IDestructible {
     private final LuaScriptEnv scriptEnv;
     private final LuaTable contextGlobals;
     private final IScriptEventDispatcher eventDispatcher;
-    private final LuaScriptThread mainThread;
+    private final ILuaScriptThread mainThread;
 
-    private final DestructibleElemList<LuaScriptThread> threads = new DestructibleElemList<>();
+    private final DestructibleElemList<ILuaScriptThread> threads = new DestructibleElemList<>();
 
     public LuaScriptContext(LuaScriptEnv scriptEnv) {
         this.scriptEnv = Checks.checkNotNull(scriptEnv);
@@ -83,7 +83,7 @@ public class LuaScriptContext implements IScriptContext, IDestructible {
     public IScriptThread createThread(IScriptFunction func) throws ScriptException {
         LuaScriptFunction luaFunc = (LuaScriptFunction)func;
 
-        LuaScriptThread thread = luaFunc.callInNewThread();
+        ILuaScriptThread thread = luaFunc.callInNewThread();
         threads.add(thread);
         return thread;
     }
@@ -107,12 +107,12 @@ public class LuaScriptContext implements IScriptContext, IDestructible {
     }
 
     @Override
-    public LuaScriptThread getMainThread() {
+    public ILuaScriptThread getMainThread() {
         return mainThread;
     }
 
     @Override
-    public Collection<LuaScriptThread> getThreads() {
+    public Collection<ILuaScriptThread> getThreads() {
         return threads.getSnapshot();
     }
 
@@ -153,7 +153,7 @@ public class LuaScriptContext implements IScriptContext, IDestructible {
     }
 
     private void runThreads(IContext context, IScriptExceptionHandler exceptionHandler) {
-        for (LuaScriptThread thread : threads) {
+        for (ILuaScriptThread thread : threads) {
             if (!context.isActive()) {
                 break;
             }
