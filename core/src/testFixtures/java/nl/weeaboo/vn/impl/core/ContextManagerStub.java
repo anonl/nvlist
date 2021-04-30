@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableList;
-
 import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
@@ -17,6 +15,8 @@ import nl.weeaboo.vn.signal.ISignal;
 public final class ContextManagerStub implements IContextManager {
 
     private static final long serialVersionUID = 1L;
+
+    private final DestructibleElemList<IContext> contexts = new DestructibleElemList<>();
 
     @Override
     public void update() {
@@ -37,19 +37,26 @@ public final class ContextManagerStub implements IContextManager {
         return createContext();
     }
 
+    public void addContext(IContext context) {
+        contexts.add(context);
+    }
+
     @Override
     public Collection<? extends IContext> getContexts() {
-        return ImmutableList.of();
+        return contexts.getSnapshot();
     }
 
     @Override
     public Collection<? extends IContext> getActiveContexts() {
-        return ImmutableList.of();
+        return contexts.getSnapshot(c -> c.isActive());
     }
 
     @Override
     public @Nullable IContext getPrimaryContext() {
-        return null;
+        if (contexts.isEmpty()) {
+            return null;
+        }
+        return contexts.get(0);
     }
 
     @Override

@@ -188,7 +188,7 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
 
     @Override
     public void loadScript(IScriptThread thread, FilePath filename) throws ScriptException {
-        LuaScriptThread luaThread = (LuaScriptThread)thread;
+        ILuaScriptThread luaThread = (ILuaScriptThread)thread;
 
         Varargs loadResult = ScriptLoader.loadFile(filename.toString());
         if (!loadResult.arg1().isclosure()) {

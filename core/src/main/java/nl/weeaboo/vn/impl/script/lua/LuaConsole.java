@@ -177,7 +177,7 @@ public class LuaConsole implements ILuaConsole {
 
         try {
             String result = LuaScriptUtil.eval(contextManager,
-                    (LuaScriptThread)context.getScriptContext().getMainThread(), luaCode);
+                    (ILuaScriptThread)context.getScriptContext().getMainThread(), luaCode);
             append("> " + result);
         } catch (ScriptException e) {
             LOG.info("Error during eval", e);

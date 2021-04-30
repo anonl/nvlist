@@ -2,6 +2,7 @@ package nl.weeaboo.vn.desktop;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -16,17 +17,18 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.glutils.HdpiMode;
-import com.google.common.collect.ImmutableList;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.IWritableFileSystem;
 import nl.weeaboo.prefsstore.Preference;
 import nl.weeaboo.vn.core.InitException;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.desktop.debug.NvlistDebugLauncher;
 import nl.weeaboo.vn.gdx.res.DesktopGdxFileSystem;
+import nl.weeaboo.vn.gdx.res.GdxFileSystem;
 import nl.weeaboo.vn.impl.InitConfig;
 import nl.weeaboo.vn.impl.Launcher;
 import nl.weeaboo.vn.impl.core.NovelPrefsStore;
@@ -34,14 +36,22 @@ import nl.weeaboo.vn.impl.core.NovelPrefsStore;
 /**
  * Main entrypoint for desktop operating systems (Windows, Mac, Linux).
  */
-public final class DesktopLauncher {
+public final class DesktopLauncher extends Launcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesktopLauncher.class);
 
-    private final ImmutableList<String> args;
+    private final GdxFileSystem resourceFileSystem;
 
-    public DesktopLauncher(String[] args) {
-        this.args = ImmutableList.copyOf(args);
+    private @Nullable NvlistDebugLauncher debugLauncher;
+
+    DesktopLauncher() {
+        this(openResourceFileSystem(new File(".")), new DesktopOutputFileSystem(FileType.Local, "save/"));
+    }
+
+    DesktopLauncher(GdxFileSystem resourceFileSystem, IWritableFileSystem outputFileSystem) {
+        super(resourceFileSystem, outputFileSystem);
+
+        this.resourceFileSystem = Checks.checkNotNull(resourceFileSystem);
     }
 
     /**
@@ -51,7 +61,7 @@ public final class DesktopLauncher {
         try {
             InitConfig.init();
 
-            new DesktopLauncher(args).start();
+            new DesktopLauncher().start(args);
         } catch (Exception e) {
             LOG.error("Fatal error during init", e);
             System.exit(1);
@@ -61,56 +71,13 @@ public final class DesktopLauncher {
     /**
      * @throws InitException If a fatal error occurs during initialization.
      */
-    public void start() throws InitException {
-        DesktopGdxFileSystem gdxFileSystem = openResourceFileSystem(new File("."));
-        IWritableFileSystem outputFileSystem = new DesktopOutputFileSystem(FileType.Local, "save/");
+    public void start(String[] args) throws InitException {
+        NovelPrefsStore prefs = loadPreferences();
+        handleCommandlineOptions(prefs, args);
 
-        final Launcher launcher = new Launcher(gdxFileSystem, outputFileSystem) {
-
-            private @Nullable NvlistDebugLauncher debugLauncher;
-
-            @Override
-            public void create() {
-                DesktopGraphicsUtil.setWindowIcon(gdxFileSystem);
-                NovelPrefsStore prefs = loadPreferences();
-                DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
-
-                if (prefs.get(NovelPrefs.DEBUG)) {
-                    debugLauncher = NvlistDebugLauncher.launch(prefs.get(NovelPrefs.DEBUG_ADAPTER_PORT),
-                            Gdx.app::postRunnable);
-                }
-
-                super.create();
-
-                if (prefs.get(NovelPrefs.FULLSCREEN) && !prefs.get(NovelPrefs.DEBUG)) {
-                    /*
-                     * If in debug mode, never start full-screen. Full-screen is annoying when you need to use
-                     * a bunch of other windows/programs at the same time.
-                     *
-                     * Must activate fullscreen mode after creating the window, or else the window is created
-                     * without window decorations.
-                     */
-                    Gdx.graphics.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-                }
-            }
-
-            @Override
-            public void dispose() {
-                super.dispose();
-
-                if (debugLauncher != null) {
-                    debugLauncher.close();
-                }
-            }
-        };
-
-        NovelPrefsStore prefs = launcher.loadPreferences();
-        handleCommandlineOptions(prefs);
-
-        Lwjgl3ApplicationConfiguration config = createConfig(launcher, prefs);
         // Note: The Lwjgl3Application constructor contains an infinite loop
         @SuppressWarnings("unused")
-        Lwjgl3Application app = new Lwjgl3Application(launcher, config) {
+        Lwjgl3Application app = new Lwjgl3Application(this, createConfig(prefs)) {
 
         };
     }
@@ -125,7 +92,43 @@ public final class DesktopLauncher {
         return new DesktopGdxFileSystem(new File(projectFolder, "res"));
     }
 
-    private Lwjgl3ApplicationConfiguration createConfig(Launcher launcher, NovelPrefsStore prefs) {
+    @Override
+    public void create() {
+        DesktopGraphicsUtil.setWindowIcon(resourceFileSystem);
+
+        NovelPrefsStore prefs = loadPreferences();
+        DesktopGraphicsUtil.limitInitialWindowSize(Gdx.graphics);
+
+        if (prefs.get(NovelPrefs.DEBUG)) {
+            debugLauncher = NvlistDebugLauncher.launch(prefs.get(NovelPrefs.DEBUG_ADAPTER_PORT),
+                    Gdx.app::postRunnable);
+        }
+
+        super.create();
+
+        if (prefs.get(NovelPrefs.FULLSCREEN) && !prefs.get(NovelPrefs.DEBUG)) {
+            /*
+             * If in debug mode, never start full-screen. Full-screen is annoying when you need to use
+             * a bunch of other windows/programs at the same time.
+             *
+             * Must activate fullscreen mode after creating the window, or else the window is created
+             * without window decorations.
+             */
+            Gdx.graphics.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (debugLauncher != null) {
+            debugLauncher.close();
+            debugLauncher = null;
+        }
+    }
+
+    Lwjgl3ApplicationConfiguration createConfig(NovelPrefsStore prefs) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.useVsync(false);
 
@@ -141,7 +144,7 @@ public final class DesktopLauncher {
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public boolean closeRequested() {
-                return launcher.onCloseRequested();
+                return onCloseRequested();
             }
         });
 
@@ -156,8 +159,8 @@ public final class DesktopLauncher {
         return title;
     }
 
-    private void handleCommandlineOptions(NovelPrefsStore prefs) throws InitException {
-        LOG.info("Commandline args: {}", args);
+    void handleCommandlineOptions(NovelPrefsStore prefs, String[] args) throws InitException {
+        LOG.info("Commandline args: {}", Arrays.asList(args));
 
         List<Preference<?>> declaredPrefs = NovelPrefsStore.getDeclaredPrefs(NovelPrefs.class);
 
@@ -168,7 +171,7 @@ public final class DesktopLauncher {
 
         OptionSet options;
         try {
-            options = optionParser.parse(args.toArray(new String[0]));
+            options = optionParser.parse(args);
         } catch (OptionException oe) {
             try {
                 optionParser.printHelpOn(System.out);

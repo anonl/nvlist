@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.res.IResource;
 import nl.weeaboo.vn.image.desc.IImageDefinition;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
@@ -23,6 +24,8 @@ public final class GdxTextureStoreTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
+
         env = TestEnvironment.newInstance();
         texStore = StaticEnvironment.TEXTURE_STORE.get();
     }

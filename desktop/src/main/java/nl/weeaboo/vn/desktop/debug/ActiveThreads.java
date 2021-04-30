@@ -1,6 +1,5 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,10 +18,8 @@ import com.google.common.collect.Iterables;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
-import nl.weeaboo.vn.core.INovel;
-import nl.weeaboo.vn.impl.script.lua.LuaScriptThread;
+import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.script.IScriptContext;
-import nl.weeaboo.vn.script.IScriptThread;
 
 final class ActiveThreads implements Iterable<DebugThread> {
 
@@ -37,7 +34,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
         this.breakpoints = Objects.requireNonNull(breakpoints);
     }
 
-    public void update(INovel novel, IDebugProtocolClient peer) {
+    public void update(IContextManager contextManager, IDebugProtocolClient peer) {
         // Remove dead threads
         Iterator<DebugThread> itr = threadsById.values().iterator();
         while (itr.hasNext()) {
@@ -55,13 +52,11 @@ final class ActiveThreads implements Iterable<DebugThread> {
         }
 
         // Update existing threads, detect new threads
-        IContextManager contextManager = novel.getEnv().getContextManager();
         IContext primaryContext = contextManager.getPrimaryContext();
         for (IContext context : contextManager.getContexts()) {
             IScriptContext scriptContext = context.getScriptContext();
-            Collection<? extends IScriptThread> threads = scriptContext.getThreads();
-            for (LuaScriptThread thread : Iterables.filter(threads, LuaScriptThread.class)) {
-                int threadId = DebugThread.getThreadId(thread);
+            for (ILuaScriptThread thread : Iterables.filter(scriptContext.getThreads(), ILuaScriptThread.class)) {
+                int threadId = thread.getThreadId();
 
                 DebugThread debugThread = threadsById.get(threadId);
                 if (debugThread == null) {
@@ -102,7 +97,8 @@ final class ActiveThreads implements Iterable<DebugThread> {
         if (frameId == null) {
             return primaryThread;
         } else {
-            return primaryThread;
+            LOG.warn("Unable to find thread with frame ID {}", frameId);
+            return null;
         }
     }
 
