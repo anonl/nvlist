@@ -13,8 +13,9 @@ import org.eclipse.lsp4j.debug.Thread;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 
 import nl.weeaboo.lua2.vm.LuaStackTraceElement;
+import nl.weeaboo.vn.impl.script.lua.ILuaDebugHook;
 import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
-import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread.ILuaDebugHook;
+import nl.weeaboo.vn.impl.script.lua.LuaDebugEvent;
 
 final class DebugThread {
 
@@ -26,10 +27,6 @@ final class DebugThread {
     DebugThread(ILuaScriptThread thread, IDebugProtocolClient peer) {
         this.thread = Objects.requireNonNull(thread);
         this.peer = Objects.requireNonNull(peer);
-    }
-
-    static int getThreadId(ILuaScriptThread thread) {
-        return System.identityHashCode(thread);
     }
 
     int getThreadId() {
@@ -122,29 +119,29 @@ final class DebugThread {
         }
 
         @Override
-        public void onEvent(String eventName, int lineNumber) {
+        public void onEvent(LuaDebugEvent event, int lineNumber) {
             if (stepMode != null) {
                 switch (stepMode) {
                 case IN:
-                    if (eventName.endsWith("call")) {
+                    if (event == LuaDebugEvent.CALL) {
                         stepHit();
                     }
                     break;
                 case OUT:
-                    if (eventName.equals("return")) {
+                    if (event == LuaDebugEvent.RETURN || event == LuaDebugEvent.TAIL_RETURN) {
                         // Pausing during a "tail return" seems to cause stack corruption (this is a bug)
                         stepHit();
                     }
                     break;
                 case NEXT:
                     // Ignore line events in nested function calls
-                    if (eventName.endsWith("call")) {
+                    if (event == LuaDebugEvent.CALL) {
                         depth++;
-                    } else if (eventName.endsWith("return")) {
+                    } else if (event == LuaDebugEvent.RETURN) {
                         depth--;
                     }
 
-                    if (depth <= 0 && "line".equals(eventName)) {
+                    if (depth <= 0 && event == LuaDebugEvent.LINE) {
                         stepHit();
                     }
                     break;

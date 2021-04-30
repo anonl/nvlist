@@ -58,7 +58,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
         for (IContext context : contextManager.getContexts()) {
             IScriptContext scriptContext = context.getScriptContext();
             for (ILuaScriptThread thread : Iterables.filter(scriptContext.getThreads(), ILuaScriptThread.class)) {
-                int threadId = DebugThread.getThreadId(thread);
+                int threadId = thread.getThreadId();
 
                 DebugThread debugThread = threadsById.get(threadId);
                 if (debugThread == null) {

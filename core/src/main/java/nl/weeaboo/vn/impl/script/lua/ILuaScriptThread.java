@@ -55,13 +55,4 @@ public interface ILuaScriptThread extends IScriptThread {
      */
     void installHook(ILuaDebugHook debugHook);
 
-    /**
-     * Lua debug library callback.
-     */
-    interface ILuaDebugHook {
-
-        void onEvent(String eventName, int lineNumber);
-
-    }
-
 }

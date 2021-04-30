@@ -183,7 +183,7 @@ class LuaScriptThread implements ILuaScriptThread {
 
         @Override
         public LuaValue call(LuaValue eventName, LuaValue lineNumber) {
-            callback.onEvent(eventName.tojstring(), lineNumber.optint(0));
+            callback.onEvent(LuaDebugEvent.of(eventName.tojstring()), lineNumber.optint(0));
             return LuaConstants.NONE;
         }
 
