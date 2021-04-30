@@ -4,6 +4,7 @@ import nl.weeaboo.prefsstore.IPreferenceStore;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextListener;
 import nl.weeaboo.vn.core.ISkipState;
+import nl.weeaboo.vn.impl.script.ScriptContextStub;
 import nl.weeaboo.vn.render.IRenderEnv;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
@@ -12,6 +13,8 @@ import nl.weeaboo.vn.signal.ISignal;
 public final class ContextStub implements IContext {
 
     private static final long serialVersionUID = 1L;
+
+    private IScriptContext scriptContext = new ScriptContextStub();
 
     private boolean active = true;
     private boolean destroyed;
@@ -62,7 +65,11 @@ public final class ContextStub implements IContext {
 
     @Override
     public IScriptContext getScriptContext() {
-        throw new UnsupportedOperationException();
+        return scriptContext;
+    }
+
+    public void setScriptContext(IScriptContext sc) {
+        scriptContext = sc;
     }
 
     @Override

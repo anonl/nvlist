@@ -7,12 +7,14 @@ import javax.annotation.Nullable;
 
 import org.eclipse.lsp4j.debug.ContinuedEventArguments;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
+import org.eclipse.lsp4j.debug.ThreadEventArguments;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolClient;
 
 final class DebugProtocolClientMock implements IDebugProtocolClient {
 
     private final List<StoppedEventArguments> stoppedEvents = new ArrayList<>();
     private final List<ContinuedEventArguments> continuedEvents = new ArrayList<>();
+    private final List<ThreadEventArguments> threadEvents = new ArrayList<>();
 
     @Override
     public void stopped(StoppedEventArguments event) {
@@ -30,6 +32,15 @@ final class DebugProtocolClientMock implements IDebugProtocolClient {
 
     public @Nullable ContinuedEventArguments consumeContinued() {
         return consume(continuedEvents);
+    }
+
+    @Override
+    public void thread(ThreadEventArguments event) {
+        threadEvents.add(event);
+    }
+
+    public @Nullable ThreadEventArguments consumeThread() {
+        return consume(threadEvents);
     }
 
     private static <T> @Nullable T consume(List<T> events) {

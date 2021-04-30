@@ -18,7 +18,6 @@ import com.google.common.collect.Iterables;
 
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IContextManager;
-import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.script.IScriptContext;
 
@@ -35,7 +34,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
         this.breakpoints = Objects.requireNonNull(breakpoints);
     }
 
-    public void update(INovel novel, IDebugProtocolClient peer) {
+    public void update(IContextManager contextManager, IDebugProtocolClient peer) {
         // Remove dead threads
         Iterator<DebugThread> itr = threadsById.values().iterator();
         while (itr.hasNext()) {
@@ -53,7 +52,6 @@ final class ActiveThreads implements Iterable<DebugThread> {
         }
 
         // Update existing threads, detect new threads
-        IContextManager contextManager = novel.getEnv().getContextManager();
         IContext primaryContext = contextManager.getPrimaryContext();
         for (IContext context : contextManager.getContexts()) {
             IScriptContext scriptContext = context.getScriptContext();
@@ -99,7 +97,8 @@ final class ActiveThreads implements Iterable<DebugThread> {
         if (frameId == null) {
             return primaryThread;
         } else {
-            return primaryThread;
+            LOG.warn("Unable to find thread with frame ID {}", frameId);
+            return null;
         }
     }
 

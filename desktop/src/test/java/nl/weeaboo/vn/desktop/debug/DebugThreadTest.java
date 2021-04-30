@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.eclipse.lsp4j.debug.ContinuedEventArguments;
-import org.eclipse.lsp4j.debug.Source;
 import org.eclipse.lsp4j.debug.SourceBreakpoint;
 import org.eclipse.lsp4j.debug.StackFrame;
 import org.eclipse.lsp4j.debug.StoppedEventArguments;
@@ -61,8 +60,8 @@ public final class DebugThreadTest {
     @Test
     public void testStackTrace() {
         Assert.assertArrayEquals(new StackFrame[] {
-                stackFrame("a", 111, "a.func"),
-                stackFrame("b", 222, "b.func"),
+                DapTestHelper.stackFrame("a", 111, "a.func"),
+                DapTestHelper.stackFrame("b", 222, "b.func"),
         }, debugThread.getStackTrace());
     }
 
@@ -76,7 +75,9 @@ public final class DebugThreadTest {
     @Test
     public void testDebugHook() {
         Breakpoints breakpoints = new Breakpoints();
-        breakpoints.setBreakpoints(source("a"), new SourceBreakpoint[] { sourceBreakpoint(111) });
+        breakpoints.setBreakpoints(DapTestHelper.source("a"), new SourceBreakpoint[] {
+                DapTestHelper.sourceBreakpoint(111)
+        });
         debugThread.installHook(breakpoints);
         Assert.assertEquals(false, luaThread.isPaused());
 
@@ -127,24 +128,4 @@ public final class DebugThreadTest {
         }
     }
 
-    private static StackFrame stackFrame(String file, int line, String func) {
-        StackFrame sf = new StackFrame();
-        sf.setSource(source(file));
-        sf.setName(func);
-        sf.setLine(line);
-        return sf;
-    }
-
-    private static Source source(String file) {
-        Source source = new Source();
-        source.setName(file);
-        source.setPath(NameMapping.toAbsoluteScriptPath(file));
-        return source;
-    }
-
-    private static SourceBreakpoint sourceBreakpoint(int line) {
-        SourceBreakpoint sb = new SourceBreakpoint();
-        sb.setLine(line);
-        return sb;
-    }
 }

@@ -110,7 +110,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     private void update() {
         INovel novel = getNovel();
         if (novel != null) {
-            activeThreads.update(novel, peer);
+            activeThreads.update(novel.getEnv().getContextManager(), peer);
         }
     }
 
@@ -271,7 +271,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
             IContextManager contextManager = novel.getEnv().getContextManager();
             DebugThread debugThread = activeThreads.findByFrameId(args.getFrameId());
-            Preconditions.checkNotNull(novel, "NVList isn't active");
+            Preconditions.checkNotNull(debugThread, "Unable to find thread");
 
             EvaluateResponse response = new EvaluateResponse();
             try {
