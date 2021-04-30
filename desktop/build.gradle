@@ -12,4 +12,5 @@ dependencies {
     runtimeOnly deps.slf4j_desktop
 
     testFixturesApi testFixtures(project(':nvlist-core'))
+    testFixturesImplementation deps.lsp4j_debug
 }
