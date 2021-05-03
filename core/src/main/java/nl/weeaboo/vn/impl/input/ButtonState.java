@@ -14,7 +14,7 @@ final class ButtonState {
     }
 
     public boolean isJustPressed() {
-        return pressed && isJustPressed && !consumed;
+        return isJustPressed && !consumed;
     }
 
     public void clearJustPressed() {
@@ -47,7 +47,6 @@ final class ButtonState {
 
     public void onReleased(long timestampMs) {
         consumed = false;
-        isJustPressed = false;
         pressed = false;
         pressedStateSinceMs = timestampMs;
     }
