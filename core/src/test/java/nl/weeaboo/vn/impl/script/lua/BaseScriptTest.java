@@ -12,6 +12,7 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.vn.core.ResourceId;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
@@ -29,6 +30,7 @@ public class BaseScriptTest {
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         scriptLoader = (LuaScriptLoader)env.getScriptEnv().getScriptLoader();
         scriptEnv = env.getScriptEnv();

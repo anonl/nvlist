@@ -9,6 +9,7 @@ import org.junit.Test;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.ResourceLoadInfo;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.video.IVideo;
 
@@ -20,6 +21,8 @@ public class VideoModuleTest {
 
     @Before
     public void before() {
+        HeadlessGdx.init();
+
         TestEnvironment env = TestEnvironment.newInstance();
         videoModule = new VideoModule(env, new VideoResourceLoader(env), new NativeVideoFactoryMock());
     }
