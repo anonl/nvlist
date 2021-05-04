@@ -1,7 +1,7 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         // Plugin for creating runnable distributions (Win/Mac/Linux)
