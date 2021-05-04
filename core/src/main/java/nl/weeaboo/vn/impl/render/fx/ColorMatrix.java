@@ -67,18 +67,26 @@ public final class ColorMatrix implements Serializable {
     /**
      * Sets the diagonals of the multiplication part (RGBA order).
      */
-    public void setDiagonals(double[] rgba) {
-        mul[RR] = rgba[0];
-        mul[GG] = rgba[1];
-        mul[BB] = rgba[2];
-        mul[AA] = rgba[3];
+    public void setDiagonals(double... rgba) {
+        if (rgba.length > 0) {
+            mul[RR] = rgba[0];
+        }
+        if (rgba.length > 1) {
+            mul[GG] = rgba[1];
+        }
+        if (rgba.length > 2) {
+            mul[BB] = rgba[2];
+        }
+        if (rgba.length > 3) {
+            mul[AA] = rgba[3];
+        }
     }
 
     /**
      * Sets the multiplication factors (RGBA order) for the red output.
      */
-    public void setRedFactors(double[] factorsRGBA) {
-        for (int n = 0; n < 4; n++) {
+    public void setRedFactors(double... factorsRGBA) {
+        for (int n = 0; n < factorsRGBA.length; n++) {
             mul[0 + n] = factorsRGBA[n];
         }
     }
@@ -86,8 +94,8 @@ public final class ColorMatrix implements Serializable {
     /**
      * Sets the multiplication factors (RGBA order) for the green output.
      */
-    public void setGreenFactors(double[] factorsRGBA) {
-        for (int n = 0; n < 4; n++) {
+    public void setGreenFactors(double... factorsRGBA) {
+        for (int n = 0; n < factorsRGBA.length; n++) {
             mul[4 + n] = factorsRGBA[n];
         }
     }
@@ -95,8 +103,8 @@ public final class ColorMatrix implements Serializable {
     /**
      * Sets the multiplication factors (RGBA order) for the blue output.
      */
-    public void setBlueFactors(double[] factorsRGBA) {
-        for (int n = 0; n < 4; n++) {
+    public void setBlueFactors(double... factorsRGBA) {
+        for (int n = 0; n < factorsRGBA.length; n++) {
             mul[8 + n] = factorsRGBA[n];
         }
     }
@@ -104,8 +112,8 @@ public final class ColorMatrix implements Serializable {
     /**
      * Sets the multiplication factors (RGBA order) for the alpha output.
      */
-    public void setAlphaFactors(double[] factorsRGBA) {
-        for (int n = 0; n < 4; n++) {
+    public void setAlphaFactors(double... factorsRGBA) {
+        for (int n = 0; n < factorsRGBA.length; n++) {
             mul[12 + n] = factorsRGBA[n];
         }
     }
@@ -119,8 +127,8 @@ public final class ColorMatrix implements Serializable {
      * a' = a + aoff
      * </pre>
      */
-    public void setOffsets(double[] offsets) {
-        for (int n = 0; n < 4; n++) {
+    public void setOffsets(double... offsets) {
+        for (int n = 0; n < offsets.length; n++) {
             off[n] = offsets[n];
         }
     }

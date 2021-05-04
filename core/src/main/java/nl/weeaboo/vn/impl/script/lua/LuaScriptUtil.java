@@ -92,19 +92,23 @@ public final class LuaScriptUtil {
      */
     public static ResourceLoadInfo createLoadInfo(MediaType mediaType, FilePath filename) {
         List<String> callStack = ImmutableList.of();
-        try {
-            IScriptContext scriptContext = getCurrentScriptContext();
+        IContext context = ContextUtil.getCurrentContext();
+        if (context == null) {
+            LOG.debug("No context is current: unable to determine callStack: {}", filename);
+        } else {
+            try {
+                IScriptContext scriptContext = getCurrentScriptContext();
 
-            /*
-             * By taking the stack trace of the main thread, we can correlate image loads with the current
-             * line in the .lvn file. This assumes that the main thread is used to run the .lvn files, but that should
-             * pretty much always be the case.
-             */
-            callStack = scriptContext.getMainThread().getStackTrace();
-        } catch (ScriptException e) {
-            LOG.warn("No script context is current: unable to determine callStack", e);
+                /*
+                 * By taking the stack trace of the main thread, we can correlate image loads with the current
+                 * line in the .lvn file. This assumes that the main thread is used to run the .lvn files, but that should
+                 * pretty much always be the case.
+                 */
+                callStack = scriptContext.getMainThread().getStackTrace();
+            } catch (ScriptException e) {
+                LOG.warn("No script context is current: unable to determine callStack: {}", filename, e);
+            }
         }
-
         return new ResourceLoadInfo(mediaType, filename, callStack);
     }
 

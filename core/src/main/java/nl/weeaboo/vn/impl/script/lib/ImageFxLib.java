@@ -206,22 +206,22 @@ public class ImageFxLib extends LuaLib {
         ColorMatrix matrix = new ColorMatrix();
         double[] offsets = new double[4];
         if (args.arg(2).istable()) {
-            double[] arr = toDoubleArray(args.arg(2), 5);
+            double[] arr = toDoubleArray(args.arg(2), 4);
             matrix.setRedFactors(arr);
             offsets[0] = arr[0];
         }
         if (args.arg(3).istable()) {
-            double[] arr = toDoubleArray(args.arg(3), 5);
+            double[] arr = toDoubleArray(args.arg(3), 4);
             matrix.setGreenFactors(arr);
             offsets[1] = arr[1];
         }
         if (args.arg(4).istable()) {
-            double[] arr = toDoubleArray(args.arg(4), 5);
+            double[] arr = toDoubleArray(args.arg(4), 4);
             matrix.setBlueFactors(arr);
             offsets[2] = arr[2];
         }
         if (args.arg(5).istable()) {
-            double[] arr = toDoubleArray(args.arg(5), 5);
+            double[] arr = toDoubleArray(args.arg(5), 4);
             matrix.setAlphaFactors(arr);
             offsets[3] = arr[3];
         }

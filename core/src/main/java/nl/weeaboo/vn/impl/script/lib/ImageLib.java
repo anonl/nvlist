@@ -274,9 +274,6 @@ public class ImageLib extends LuaLib {
         IImageModule imageModule = env.getImageModule();
 
         ITexture tex = imageModule.getColorTexture(argb);
-        if (tex == null) {
-            return LuaNil.NIL;
-        }
         return LuajavaLib.toUserdata(tex, ITexture.class);
     }
 

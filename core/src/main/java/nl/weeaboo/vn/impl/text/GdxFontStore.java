@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.io.Filenames;
 import nl.weeaboo.styledtext.EFontStyle;
@@ -56,12 +57,22 @@ public final class GdxFontStore extends ResourceStore {
         cache = new FontCache(new ResourceStoreCacheConfig<>());
     }
 
-    private void loadBuiltInFont() {
+    private void loadInitialFonts() {
         try {
             loadFont(Gdx.files.classpath("builtin/font/default.ttf"),
                     new TextStyle(TextUtil.DEFAULT_FONT_NAME, 16));
         } catch (IOException e) {
             LOG.warn("Error loading built-in font", e);
+        }
+
+        for (FilePath fontPath : resourceFileSystem.getFiles(FileCollectOptions.files(FilePath.of("font")))) {
+            try {
+                MutableTextStyle mts = new MutableTextStyle();
+                mts.setFontName(Filenames.stripExtension(fontPath.getName()));
+                loadFont(fontPath, mts.immutableCopy());
+            } catch (IOException e) {
+                LOG.warn("Error loading in font: {}", fontPath, e);
+            }
         }
     }
 
@@ -94,6 +105,9 @@ public final class GdxFontStore extends ResourceStore {
 
     private List<FilePath> getStyleSpecificPaths(FilePath path, EFontStyle fontStyle) {
         FilePath parent = path.getParent();
+        if (parent == null) {
+            parent = FilePath.empty();
+        }
         String baseName = Filenames.stripExtension(path.getName());
         String ext = Filenames.getExtension(path.getName());
 
@@ -121,9 +135,8 @@ public final class GdxFontStore extends ResourceStore {
      * may be returned instead.
      */
     public IFontMetrics getFontMetrics(FilePath absoluteFontPath, TextStyle styleArg) {
-        // Add the default font if we didn't do that yet
         if (backing.getFonts().isEmpty()) {
-            loadBuiltInFont();
+            loadInitialFonts();
         }
 
         // Workaround for a bug in gdx-styledtext -- a null font name causes problems

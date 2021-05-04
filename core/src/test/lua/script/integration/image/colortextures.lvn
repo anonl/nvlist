@@ -1,0 +1,10 @@
+
+@@
+
+luaAssertEquals(Image.getColorTexture(0x00000000), Image.getBlankTexture())
+
+luaAssertEquals(Image.getColorTexture(0xffffffff), Image.getWhiteTexture())
+
+luaAssertEquals(Image.getColorTexture(0x12345678), Image.getColorTexture(0x12345678))
+
+@@
