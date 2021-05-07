@@ -1,0 +1,6 @@
+@@
+function jump(...)
+    return Thread.jump(...)
+end
+
+@@

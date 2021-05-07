@@ -3,6 +3,7 @@ package nl.weeaboo.vn.desktop.debug;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,18 +48,19 @@ import org.eclipse.lsp4j.jsonrpc.debug.DebugLauncher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import nl.weeaboo.common.StringUtil;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.io.StreamUtil;
-import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.LuaUtil;
-import nl.weeaboo.lua2.lib.LuaResource;
 import nl.weeaboo.vn.core.IContextManager;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.ScriptException;
 
 /**
@@ -76,7 +78,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     private Future<?> periodicUpdateTask = CompletableFuture.completedFuture(null);
 
     private IDebugProtocolClient peer;
-    private Socket socket;
+    private IConnection connection;
     private Future<Void> messageHandler;
 
     private NvlistDebugServer(INvlistTaskRunner taskRunner) {
@@ -101,13 +103,14 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         periodicUpdateTask.cancel(true);
         messageHandler.cancel(true);
         try {
-            socket.close();
+            connection.close();
         } catch (IOException e) {
             LOG.warn("I/O exception trying to close debug server", e);
         }
     }
 
-    private void update() {
+    @VisibleForTesting
+    void update() {
         INovel novel = getNovel();
         if (novel != null) {
             activeThreads.update(novel.getEnv().getContextManager(), peer);
@@ -118,8 +121,14 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     public CompletableFuture<Void> disconnect(DisconnectArguments args) {
         LOG.debug("[debug-server] Received disconnect request {}", args);
 
-        close();
-        System.exit(0);
+        taskRunner.runOnNvlistThread(() -> {
+            close();
+            try {
+                System.exit(0);
+            } catch (SecurityException e) {
+                LOG.warn("System.exit() isn't allowed");
+            }
+        });
 
         return CompletableFuture.completedFuture(null);
     }
@@ -131,11 +140,12 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
             INovel novel = getNovel();
             DebugThread primaryThread = activeThreads.getPrimaryThread();
-            String program = NameMapping.toRelativeScriptPath((String)args.get("program"));
+            String program = (String)args.get("program");
             if (novel == null || primaryThread == null || program == null) {
                 return;
             }
 
+            program = NameMapping.toRelativeScriptPath(program);
             String expr = StringUtil.formatRoot("jump(\"%s\")", LuaUtil.escape(program));
             try {
                 LuaScriptUtil.eval(novel.getEnv().getContextManager(), primaryThread.getThread(), expr);
@@ -300,19 +310,17 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
         return taskRunner.supplyOnNvlistThread(() -> {
             LOG.debug("[debug-server] Received source request: source={}", args.getSource());
 
-            LuaRunState lrs = LuaRunState.getCurrent();
-            Preconditions.checkNotNull(lrs, "NVList isn't active");
+            INovel novel = getNovel();
+            Preconditions.checkNotNull(novel, "NVList isn't active");
 
             String relPath = NameMapping.toRelativeScriptPath(args.getSource().getPath());
+            IScriptLoader scriptLoader = novel.getEnv().getScriptEnv().getScriptLoader();
 
             SourceResponse response = new SourceResponse();
-            LuaResource resource = lrs.findResource(relPath);
-            if (resource != null) {
-                try (InputStream in = resource.open()) {
-                    response.setContent(StringUtil.fromUTF8(StreamUtil.readBytes(in)));
-                } catch (IOException e) {
-                    LOG.warn("Error reading source file: " + relPath, e);
-                }
+            try (InputStream in = scriptLoader.openScript(FilePath.of(relPath))) {
+                response.setContent(StringUtil.fromUTF8(StreamUtil.readBytes(in)));
+            } catch (IOException e) {
+                throw new IllegalStateException("Error reading source file: " + relPath, e);
             }
             return response;
         });
@@ -325,6 +333,11 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
 
     public static NvlistDebugServer start(INvlistTaskRunner taskRunner, @WillCloseWhenClosed Socket socket,
             ExecutorService executorService) throws IOException {
+        return start(taskRunner, new SocketConnection(socket), executorService);
+    }
+
+    static NvlistDebugServer start(INvlistTaskRunner taskRunner, @WillCloseWhenClosed IConnection socket,
+            ExecutorService executorService) throws IOException {
 
         NvlistDebugServer debugServer = new NvlistDebugServer(taskRunner);
         Launcher<IDebugProtocolClient> launcher = new DebugLauncher.Builder<IDebugProtocolClient>()
@@ -335,9 +348,42 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
                 .setExecutorService(executorService)
                 .create();
         debugServer.peer = launcher.getRemoteProxy();
-        debugServer.socket = socket;
+        debugServer.connection = socket;
         debugServer.messageHandler = launcher.startListening();
         return debugServer;
+    }
+
+    interface IConnection extends Closeable {
+
+        InputStream getInputStream() throws IOException;
+
+        OutputStream getOutputStream() throws IOException;
+
+    }
+
+    static final class SocketConnection implements IConnection {
+
+        private final Socket socket;
+
+        SocketConnection(@WillCloseWhenClosed Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void close() throws IOException {
+            socket.close();
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return socket.getInputStream();
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            return socket.getOutputStream();
+        }
+
     }
 
 }

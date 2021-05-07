@@ -7,6 +7,7 @@ import org.junit.Assert;
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.MultiFileSystem;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.gdx.res.AssetManagerMock;
 import nl.weeaboo.vn.gdx.res.GdxFileSystem;
@@ -140,4 +141,13 @@ public class TestEnvironment extends DefaultEnvironment {
     public void consumeClearCachesCount(int expected) {
         Assert.assertEquals(expected, clearCachesCount.getAndSet(0));
     }
+
+    /** Creates a context and activate it */
+    public IContext createActiveContext() {
+        IContext context = contextManager.createContext();
+        contextManager.setContextActive(context, true);
+        ContextUtil.setCurrentContext(context);
+        return context;
+    }
+
 }
