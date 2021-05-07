@@ -7,6 +7,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -142,7 +143,8 @@ public class NvlistDebugServerTest {
         assertEvaluate();
 
         // Disconnect request causes a disconnect, so there's no guarantee that a reply will be received
-        remoteProxy.disconnect(new DisconnectArguments());
+        @SuppressWarnings("unused")
+        CompletableFuture<Void> result = remoteProxy.disconnect(new DisconnectArguments());
     }
 
     /** Requests the source code of a script file */

@@ -30,6 +30,7 @@ public abstract class LuaIntegrationTest {
     public void init() throws ScriptException {
         HeadlessGdx.init();
         env = TestEnvironment.newInstance();
+        contextManager = env.getContextManager();
 
         addInitializers(env.getScriptEnv());
         env.getScriptEnv().initEnv();

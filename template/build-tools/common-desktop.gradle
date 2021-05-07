@@ -6,10 +6,6 @@ def vnId = rootProject.name
 mainClassName = "nl.weeaboo.vn.desktop.DesktopLauncher"
 applicationName = vnId
 
-test {
-    workingDir = vnRootDir
-}
-
 run {
     workingDir = vnRootDir
     args '--Pdebug=true'

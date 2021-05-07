@@ -121,7 +121,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     public CompletableFuture<Void> disconnect(DisconnectArguments args) {
         LOG.debug("[debug-server] Received disconnect request {}", args);
 
-        taskRunner.runOnNvlistThread(() -> {
+        return taskRunner.runOnNvlistThread(() -> {
             close();
             try {
                 System.exit(0);
@@ -129,8 +129,6 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
                 LOG.warn("System.exit() isn't allowed");
             }
         });
-
-        return CompletableFuture.completedFuture(null);
     }
 
     @Override
