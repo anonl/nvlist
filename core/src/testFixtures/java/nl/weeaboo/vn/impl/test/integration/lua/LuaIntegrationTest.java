@@ -62,7 +62,7 @@ public abstract class LuaIntegrationTest {
 
     protected void loadScript(FilePath path) {
         try {
-            LuaScriptUtil.loadScript(mainContext, env.getScriptEnv().getScriptLoader(), path);
+            LuaScriptUtil.loadScript(mainContext, path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }

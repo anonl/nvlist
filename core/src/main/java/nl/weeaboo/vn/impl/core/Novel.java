@@ -69,7 +69,7 @@ public class Novel implements INovel {
 
         // Load main script and call main function
         try {
-            LuaScriptUtil.loadScript(mainContext, getScriptEnv().getScriptLoader(), FilePath.of("main"));
+            LuaScriptUtil.loadScript(mainContext, FilePath.of("main"));
             LuaScriptUtil.callFunction(mainContext, mainFunctionName);
         } catch (Exception e) {
             LOG.warn("Error executing main function: \"{}\"", mainFunctionName, e);

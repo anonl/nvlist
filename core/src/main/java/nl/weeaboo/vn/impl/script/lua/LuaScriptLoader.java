@@ -23,10 +23,8 @@ import nl.weeaboo.io.CustomSerializable;
 import nl.weeaboo.io.StreamUtil;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
-import nl.weeaboo.lua2.compiler.ScriptLoader;
 import nl.weeaboo.lua2.lib.ILuaResourceFinder;
 import nl.weeaboo.lua2.lib.LuaResource;
-import nl.weeaboo.lua2.vm.Varargs;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.MediaType;
 import nl.weeaboo.vn.core.NovelPrefs;
@@ -37,8 +35,6 @@ import nl.weeaboo.vn.impl.script.lvn.ILvnParser;
 import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
 import nl.weeaboo.vn.impl.script.lvn.LvnParserFactory;
 import nl.weeaboo.vn.script.IScriptLoader;
-import nl.weeaboo.vn.script.IScriptThread;
-import nl.weeaboo.vn.script.ScriptException;
 import nl.weeaboo.vn.stats.ISeenLogHolder;
 
 /**
@@ -184,18 +180,6 @@ public class LuaScriptLoader implements IScriptLoader, ILuaResourceFinder {
                 return new ByteArrayInputStream(fileData);
             }
         };
-    }
-
-    @Override
-    public void loadScript(IScriptThread thread, FilePath filename) throws ScriptException {
-        ILuaScriptThread luaThread = (ILuaScriptThread)thread;
-
-        Varargs loadResult = ScriptLoader.loadFile(filename.toString());
-        if (!loadResult.arg1().isclosure()) {
-            throw new ScriptException("Error loading script, " + filename + ": " + loadResult.arg(2));
-        }
-
-        luaThread.call(loadResult.checkclosure(1));
     }
 
     private static class LuaScriptResourceLoader extends ResourceLoader {

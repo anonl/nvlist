@@ -58,7 +58,7 @@ public class LuaScriptUtilTest {
         final IScriptThread mainThread = mainContext.getScriptContext().getMainThread();
 
         // Load script with some test functions
-        LuaScriptUtil.loadScript(mainContext, env.getScriptEnv().getScriptLoader(), FilePath.of("script-util-test"));
+        LuaScriptUtil.loadScript(mainContext, FilePath.of("script-util-test"));
 
         // Call test function
         LuaScriptUtil.callFunction(mainContext, "x", 1, 2, 3);

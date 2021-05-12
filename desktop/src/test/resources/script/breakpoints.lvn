@@ -1,0 +1,18 @@
+@@
+yield()
+
+local function subsub()
+    pos = 4
+end
+
+local function sub()
+    pos = 3
+    subsub()
+    pos = 5
+end
+
+pos = 1
+pos = 2 -- breakpoint at this line
+sub()
+pos = 6
+@@

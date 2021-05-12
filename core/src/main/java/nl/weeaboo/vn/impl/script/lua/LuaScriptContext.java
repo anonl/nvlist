@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaRunState;
+import nl.weeaboo.lua2.compiler.ScriptLoader;
 import nl.weeaboo.lua2.vm.LuaClosure;
 import nl.weeaboo.lua2.vm.LuaConstants;
 import nl.weeaboo.lua2.vm.LuaTable;
@@ -60,6 +62,19 @@ public class LuaScriptContext implements IScriptContext, IDestructible {
     @Override
     public boolean isDestroyed() {
         return mainThread.isDestroyed();
+    }
+
+    @Override
+    public IScriptThread loadScriptInNewThread(FilePath path) throws ScriptException {
+        return createThread(loadScriptAsClosure(path));
+    }
+
+    LuaClosure loadScriptAsClosure(FilePath path) throws ScriptException {
+        Varargs loadResult = ScriptLoader.loadFile(path.toString());
+        if (!loadResult.arg1().isclosure()) {
+            throw new ScriptException("Error loading script, " + path + ": " + loadResult.arg(2));
+        }
+        return loadResult.checkclosure(1);
     }
 
     /**

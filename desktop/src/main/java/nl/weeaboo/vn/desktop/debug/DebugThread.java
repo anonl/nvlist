@@ -123,7 +123,8 @@ final class DebugThread {
             if (stepMode != null) {
                 switch (stepMode) {
                 case IN:
-                    if (event == LuaDebugEvent.CALL) {
+                    if (event == LuaDebugEvent.CALL || event == LuaDebugEvent.LINE || event == LuaDebugEvent.RETURN
+                            || event == LuaDebugEvent.TAIL_RETURN) {
                         stepHit();
                     }
                     break;
@@ -137,7 +138,7 @@ final class DebugThread {
                     // Ignore line events in nested function calls
                     if (event == LuaDebugEvent.CALL) {
                         depth++;
-                    } else if (event == LuaDebugEvent.RETURN) {
+                    } else if (event == LuaDebugEvent.RETURN || event == LuaDebugEvent.TAIL_RETURN) {
                         depth--;
                     }
 

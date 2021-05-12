@@ -89,7 +89,8 @@ public final class DebugThreadTest {
         Assert.assertNotNull(dpc.consumeStopped());
 
         debugThread.step(EStepMode.IN);
-        assertAssertSteppingStoppedBy(hook, EnumSet.of(LuaDebugEvent.CALL));
+        assertAssertSteppingStoppedBy(hook, EnumSet.of(LuaDebugEvent.CALL, LuaDebugEvent.LINE,
+                LuaDebugEvent.RETURN, LuaDebugEvent.TAIL_RETURN));
 
         debugThread.step(EStepMode.OUT);
         assertAssertSteppingStoppedBy(hook, EnumSet.of(LuaDebugEvent.RETURN, LuaDebugEvent.TAIL_RETURN));

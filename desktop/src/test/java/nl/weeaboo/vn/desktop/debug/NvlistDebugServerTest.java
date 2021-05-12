@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -16,16 +17,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.lsp4j.debug.Breakpoint;
 import org.eclipse.lsp4j.debug.Capabilities;
 import org.eclipse.lsp4j.debug.DisconnectArguments;
 import org.eclipse.lsp4j.debug.EvaluateArguments;
 import org.eclipse.lsp4j.debug.EvaluateArgumentsContext;
 import org.eclipse.lsp4j.debug.EvaluateResponse;
 import org.eclipse.lsp4j.debug.InitializeRequestArguments;
+import org.eclipse.lsp4j.debug.NextArguments;
+import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
+import org.eclipse.lsp4j.debug.SetBreakpointsResponse;
 import org.eclipse.lsp4j.debug.SourceArguments;
+import org.eclipse.lsp4j.debug.SourceBreakpoint;
 import org.eclipse.lsp4j.debug.SourceResponse;
 import org.eclipse.lsp4j.debug.StackTraceArguments;
 import org.eclipse.lsp4j.debug.StackTraceResponse;
+import org.eclipse.lsp4j.debug.StepInArguments;
+import org.eclipse.lsp4j.debug.StepOutArguments;
 import org.eclipse.lsp4j.debug.Thread;
 import org.eclipse.lsp4j.debug.ThreadsResponse;
 import org.eclipse.lsp4j.debug.services.IDebugProtocolServer;
@@ -52,6 +60,7 @@ import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
+import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
 import nl.weeaboo.vn.impl.test.NoExitSecurityManager;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -67,6 +76,7 @@ public class NvlistDebugServerTest {
     private SecurityManager oldSecurityManager;
     private TestEnvironment env;
     private IContext context;
+    private ILuaScriptThread mainThread;
 
     private Future<Void> clientFuture;
     private NvlistDebugServer debugServer;
@@ -83,7 +93,10 @@ public class NvlistDebugServerTest {
         StaticEnvironment.NOVEL.set(new NovelMock(env));
 
         LuaScriptEnv scriptEnv = env.getScriptEnv();
-        LuaScriptUtil.loadScript(context, scriptEnv.getScriptLoader(), FilePath.of("main"));
+        scriptEnv.initEnv();
+        LuaScriptUtil.loadScript(context, FilePath.of("main"));
+
+        mainThread = (ILuaScriptThread)context.getScriptContext().getMainThread();
 
         PipedInputStream clientIn = new PipedInputStream();
         PipedOutputStream clientOut = new PipedOutputStream();
@@ -141,6 +154,8 @@ public class NvlistDebugServerTest {
         assertThreadsRequest();
         assertStackTraceRequest();
         assertEvaluate();
+        assertStepping();
+        assertPauseContinue();
 
         // Disconnect request causes a disconnect, so there's no guarantee that a reply will be received
         @SuppressWarnings("unused")
@@ -152,7 +167,7 @@ public class NvlistDebugServerTest {
         SourceArguments reqArgs = new SourceArguments();
         reqArgs.setSource(DapTestHelper.source("a.lvn"));
         SourceResponse sourceResponse = remoteProxy.source(reqArgs).get();
-        Assert.assertEquals("#a.lvn\n@local x = 1\n@yield(999999)", sourceResponse.getContent());
+        Assert.assertEquals("#a.lvn\n@local x = 1\n@yield()", sourceResponse.getContent());
 
         // Requests for files that don't exist throw an exception
         reqArgs.setSource(DapTestHelper.source("doesntexist.lvn"));
@@ -176,11 +191,9 @@ public class NvlistDebugServerTest {
 
     /** Requests the current stack trace of a thread */
     private void assertStackTraceRequest() throws InterruptedException, ExecutionException {
-        ILuaScriptThread thread = (ILuaScriptThread)context.getScriptContext().getMainThread();
-        DebugThread debugThread = new DebugThread(thread, dapClient);
-
+        DebugThread debugThread = new DebugThread(mainThread, dapClient);
         StackTraceArguments reqArgs = new StackTraceArguments();
-        reqArgs.setThreadId(thread.getThreadId());
+        reqArgs.setThreadId(debugThread.getThreadId());
         StackTraceResponse stackTraceResponse = remoteProxy.stackTrace(reqArgs).get();
 
         Assert.assertArrayEquals(debugThread.getStackTrace(), stackTraceResponse.getStackFrames());
@@ -202,4 +215,85 @@ public class NvlistDebugServerTest {
         evalResponse = remoteProxy.evaluate(reqArgs).get();
         Assert.assertEquals("1", evalResponse.getResult());
     }
+
+    /**
+     * Manually (un)pause a specific thread.
+     */
+    private void assertPauseContinue() {
+        IScriptThread thread;
+        try {
+            thread = context.getScriptContext().loadScriptInNewThread(FilePath.of("thread-pause.lvn"));
+        } catch (ScriptException e) {
+            throw new AssertionError(e);
+        }
+
+//        - Pause thread
+//        - run Threads (paused thread doesn't run)
+//        - Continue thread
+    }
+
+    /** Stepping after hitting a breakpoint */
+    private void assertStepping() throws InterruptedException, ExecutionException {
+        try {
+            mainThread.eval("jump(\"breakpoints.lvn\")");
+        } catch (ScriptException e) {
+            throw new AssertionError(e);
+        }
+
+        setBreakpoints();
+        debugServer.update();
+        env.update();
+
+        LuaTestUtil.assertGlobal("pos", 1);
+        stepIn();
+        LuaTestUtil.assertGlobal("pos", 2);
+
+        stepIn(); // Step into sub()
+        LuaTestUtil.assertGlobal("pos", 2);
+        stepIn(); // Stop at first instruction in sub()
+        LuaTestUtil.assertGlobal("pos", 2);
+        stepIn(); // Stop at second instruction in sub
+        LuaTestUtil.assertGlobal("pos", 3);
+
+        stepNext(); // Skip over subsub()
+        LuaTestUtil.assertGlobal("pos", 4);
+
+        stepOut(); // Exit sub()
+        LuaTestUtil.assertGlobal("pos", 5);
+    }
+
+    /** Checks breakpoint support */
+    private void setBreakpoints() throws InterruptedException, ExecutionException {
+        SetBreakpointsArguments reqArgs = new SetBreakpointsArguments();
+        reqArgs.setSource(DapTestHelper.source("breakpoints.lvn"));
+        reqArgs.setBreakpoints(new SourceBreakpoint[] { DapTestHelper.sourceBreakpoint(15) });
+        SetBreakpointsResponse response = remoteProxy.setBreakpoints(reqArgs).get();
+
+        Breakpoint bp = Iterables.getOnlyElement(Arrays.asList(response.getBreakpoints()));
+        Assert.assertEquals(NameMapping.toAbsoluteScriptPath("breakpoints.lvn"), bp.getSource().getPath());
+        Assert.assertEquals(Integer.valueOf(15), bp.getLine());
+        Assert.assertEquals(true, bp.isVerified());
+    }
+
+    private void stepIn() throws InterruptedException, ExecutionException {
+        StepInArguments stepInArgs = new StepInArguments();
+        stepInArgs.setThreadId(mainThread.getThreadId());
+        remoteProxy.stepIn(stepInArgs).get();
+        env.update();
+    }
+
+    private void stepNext() throws InterruptedException, ExecutionException {
+        NextArguments nextArgs = new NextArguments();
+        nextArgs.setThreadId(mainThread.getThreadId());
+        remoteProxy.next(nextArgs).get();
+        env.update();
+    }
+
+    private void stepOut() throws InterruptedException, ExecutionException {
+        StepOutArguments stepOutArgs = new StepOutArguments();
+        stepOutArgs.setThreadId(mainThread.getThreadId());
+        remoteProxy.stepOut(stepOutArgs).get();
+        env.update();
+    }
+
 }
