@@ -1,5 +1,5 @@
 @@
-yield()
+
 
 local function subsub()
     pos = 4

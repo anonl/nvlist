@@ -19,12 +19,14 @@ import java.util.stream.Stream;
 
 import org.eclipse.lsp4j.debug.Breakpoint;
 import org.eclipse.lsp4j.debug.Capabilities;
+import org.eclipse.lsp4j.debug.ContinueArguments;
 import org.eclipse.lsp4j.debug.DisconnectArguments;
 import org.eclipse.lsp4j.debug.EvaluateArguments;
 import org.eclipse.lsp4j.debug.EvaluateArgumentsContext;
 import org.eclipse.lsp4j.debug.EvaluateResponse;
 import org.eclipse.lsp4j.debug.InitializeRequestArguments;
 import org.eclipse.lsp4j.debug.NextArguments;
+import org.eclipse.lsp4j.debug.PauseArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsArguments;
 import org.eclipse.lsp4j.debug.SetBreakpointsResponse;
 import org.eclipse.lsp4j.debug.SourceArguments;
@@ -219,28 +221,45 @@ public class NvlistDebugServerTest {
     /**
      * Manually (un)pause a specific thread.
      */
-    private void assertPauseContinue() {
-        IScriptThread thread;
+    private void assertPauseContinue() throws InterruptedException, ExecutionException {
+        ILuaScriptThread thread;
         try {
-            thread = context.getScriptContext().loadScriptInNewThread(FilePath.of("thread-pause.lvn"));
+            thread = (ILuaScriptThread)context.getScriptContext()
+                    .loadScriptInNewThread(FilePath.of("thread-pause.lvn"));
         } catch (ScriptException e) {
             throw new AssertionError(e);
         }
+        debugServer.update(); // Allow the debug server to detect the new thread
 
-//        - Pause thread
-//        - run Threads (paused thread doesn't run)
-//        - Continue thread
+        env.update();
+        LuaTestUtil.assertGlobal("pos", 1);
+
+        PauseArguments pauseArgs = new PauseArguments();
+        pauseArgs.setThreadId(thread.getThreadId());
+        remoteProxy.pause(pauseArgs).get();
+
+        // The thread is paused and therefore doesn't run
+        env.update();
+        LuaTestUtil.assertGlobal("pos", 1);
+
+        ContinueArguments continueArgs = new ContinueArguments();
+        continueArgs.setThreadId(thread.getThreadId());
+        remoteProxy.continue_(continueArgs).get();
+
+        env.update();
+        LuaTestUtil.assertGlobal("pos", 2);
     }
 
     /** Stepping after hitting a breakpoint */
     private void assertStepping() throws InterruptedException, ExecutionException {
+        setBreakpoints();
+
         try {
             mainThread.eval("jump(\"breakpoints.lvn\")");
         } catch (ScriptException e) {
             throw new AssertionError(e);
         }
 
-        setBreakpoints();
         debugServer.update();
         env.update();
 

@@ -156,7 +156,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     @Override
     public CompletableFuture<Void> pause(PauseArguments args) {
         return taskRunner.runOnNvlistThread(() -> {
-            LOG.debug("[debug-server] Received pause request {}", args.getThreadId());
+            LOG.debug("[debug-server] Received pause request for thread #{}", args.getThreadId());
 
             DebugThread thread = activeThreads.findById(args.getThreadId());
             if (thread != null) {
@@ -173,7 +173,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
     @Override
     public CompletableFuture<ContinueResponse> continue_(ContinueArguments args) {
         return taskRunner.supplyOnNvlistThread(() -> {
-            LOG.debug("[debug-server] Received continue request {}", args.getThreadId());
+            LOG.debug("[debug-server] Received continue request for thread #{}", args.getThreadId());
 
             DebugThread thread = activeThreads.findById(args.getThreadId());
             if (thread != null) {
