@@ -26,7 +26,6 @@ import nl.weeaboo.vn.scene.ILayer;
 import nl.weeaboo.vn.scene.IScreen;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptFunction;
-import nl.weeaboo.vn.script.IScriptLoader;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -92,19 +91,23 @@ public final class LuaScriptUtil {
      */
     public static ResourceLoadInfo createLoadInfo(MediaType mediaType, FilePath filename) {
         List<String> callStack = ImmutableList.of();
-        try {
-            IScriptContext scriptContext = getCurrentScriptContext();
+        IContext context = ContextUtil.getCurrentContext();
+        if (context == null) {
+            LOG.debug("No context is current: unable to determine callStack: {}", filename);
+        } else {
+            try {
+                IScriptContext scriptContext = getCurrentScriptContext();
 
-            /*
-             * By taking the stack trace of the main thread, we can correlate image loads with the current
-             * line in the .lvn file. This assumes that the main thread is used to run the .lvn files, but that should
-             * pretty much always be the case.
-             */
-            callStack = scriptContext.getMainThread().getStackTrace();
-        } catch (ScriptException e) {
-            LOG.warn("No script context is current: unable to determine callStack", e);
+                /*
+                 * By taking the stack trace of the main thread, we can correlate image loads with the current
+                 * line in the .lvn file. This assumes that the main thread is used to run the .lvn files, but that should
+                 * pretty much always be the case.
+                 */
+                callStack = scriptContext.getMainThread().getStackTrace();
+            } catch (ScriptException e) {
+                LOG.warn("No script context is current: unable to determine callStack: {}", filename, e);
+            }
         }
-
         return new ResourceLoadInfo(mediaType, filename, callStack);
     }
 
@@ -117,9 +120,8 @@ public final class LuaScriptUtil {
      *
      * @throws IOException If the script file can't be read.
      * @throws ScriptException If the script throws an exception.
-     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
-    public static void loadScript(IContext mainContext, IScriptLoader scriptLoader, FilePath scriptFilename)
+    public static void loadScript(IContext mainContext, FilePath scriptFilename)
             throws IOException, ScriptException {
 
         LuaScriptContext scriptContext = getScriptContext(mainContext);
@@ -127,7 +129,7 @@ public final class LuaScriptUtil {
 
         IContext oldContext = ContextUtil.setCurrentContext(mainContext);
         try {
-            scriptLoader.loadScript(mainThread, scriptFilename);
+            mainThread.call(scriptContext.loadScriptAsClosure(scriptFilename));
         } finally {
             ContextUtil.setCurrentContext(oldContext);
         }
@@ -153,7 +155,6 @@ public final class LuaScriptUtil {
      * Calls a function in the main thread of the given context.
      *
      * @throws ScriptException If the Lua function throws an exception when called.
-     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static void callFunction(IContext mainContext, IScriptFunction func) throws ScriptException {
         LuaScriptContext scriptContext = getScriptContext(mainContext);
@@ -169,7 +170,6 @@ public final class LuaScriptUtil {
      * Runs arbitrary Lua code in the main thread of the given context.
      *
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
-     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static String eval(IContext context, String luaCode) throws ScriptException {
         Varargs result;
@@ -186,7 +186,6 @@ public final class LuaScriptUtil {
      * Runs arbitrary Lua code in the given thread.
      *
      * @throws ScriptException If the Lua code can't be parsed, or throws an exception.
-     * @see IScriptLoader#loadScript(IScriptThread, FilePath)
      */
     public static String eval(IContextManager contextManager, ILuaScriptThread thread, String luaCode)
             throws ScriptException {

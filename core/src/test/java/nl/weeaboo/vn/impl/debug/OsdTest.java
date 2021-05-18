@@ -7,12 +7,11 @@ import org.junit.Test;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.core.SkipMode;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.gdx.res.DisposeUtil;
-import nl.weeaboo.vn.impl.core.Context;
-import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.input.InputMock;
 import nl.weeaboo.vn.impl.text.TextRendererMock;
@@ -49,9 +48,7 @@ public final class OsdTest {
         assertOsdText(perfMetrics.getPerformanceSummary() + resolutionAndMouse);
 
         // Activate some other stuff that shows up in the OSD text
-        ContextManager contextManager = env.getContextManager();
-        Context context = contextManager.createContext();
-        contextManager.setContextActive(context, true);
+        IContext context = env.createActiveContext();
 
         // Enable skip mode
         context.getSkipState().setSkipMode(SkipMode.PARAGRAPH);

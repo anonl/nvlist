@@ -1,19 +1,15 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Performs file path conversions.
  */
 final class NameMapping {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DebugBreakpoint.class);
-    private static final File SCRIPT_FOLDER = new File("res/script");
+    private static final Path SCRIPT_FOLDER = Paths.get("res/script").toAbsolutePath();
 
     /**
      * Turns an absolute path to a file in the res/script folder into a relative path.
@@ -25,12 +21,12 @@ final class NameMapping {
             return absolutePath;
         }
 
-        try {
-            URI scriptFolderUri = SCRIPT_FOLDER.getCanonicalFile().toURI();
-            URI absoluteUri = new File(absolutePath).getCanonicalFile().toURI();
-            return scriptFolderUri.relativize(absoluteUri).getPath();
-        } catch (IOException ioe) {
-            LOG.warn("Unable to determine relative path for {}", absolutePath, ioe);
+        URI scriptFolderUri = SCRIPT_FOLDER.toUri();
+        URI uri = Paths.get(absolutePath).toAbsolutePath().toUri();
+        if (uri.getPath().startsWith(scriptFolderUri.getPath())) {
+            return scriptFolderUri.relativize(uri).getPath();
+        } else {
+            // Path isn't relative to the script folder
             return absolutePath;
         }
     }
@@ -45,12 +41,7 @@ final class NameMapping {
             return relativePath;
         }
 
-        try {
-            return new File(SCRIPT_FOLDER, relativePath).getCanonicalPath();
-        } catch (IOException ioe) {
-            LOG.warn("Unable to determine absolute path for {}", relativePath, ioe);
-            return relativePath;
-        }
+        return SCRIPT_FOLDER.resolve(relativePath).toAbsolutePath().toString();
     }
 
 }

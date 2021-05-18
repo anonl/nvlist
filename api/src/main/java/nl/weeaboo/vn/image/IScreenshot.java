@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.image;
 
+import javax.annotation.CheckForNull;
+
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.vn.render.IAsyncRenderTask;
 import nl.weeaboo.vn.scene.IVisualElement;
@@ -50,6 +52,7 @@ public interface IScreenshot extends IAsyncRenderTask {
     /**
      * Warning: May return {@code null} if the screenshot is not yet available or volatile.
      */
+    @CheckForNull
     ITextureData getPixels();
 
 }

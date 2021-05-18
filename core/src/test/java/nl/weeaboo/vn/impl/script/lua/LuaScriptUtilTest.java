@@ -11,6 +11,7 @@ import org.junit.Test;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.vn.core.IContext;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
@@ -22,6 +23,7 @@ public class LuaScriptUtilTest {
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         env.getScriptEnv().initEnv();
         mainContext = env.getContextManager().createContext();
@@ -56,7 +58,7 @@ public class LuaScriptUtilTest {
         final IScriptThread mainThread = mainContext.getScriptContext().getMainThread();
 
         // Load script with some test functions
-        LuaScriptUtil.loadScript(mainContext, env.getScriptEnv().getScriptLoader(), FilePath.of("script-util-test"));
+        LuaScriptUtil.loadScript(mainContext, FilePath.of("script-util-test"));
 
         // Call test function
         LuaScriptUtil.callFunction(mainContext, "x", 1, 2, 3);

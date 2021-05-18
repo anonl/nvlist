@@ -73,6 +73,10 @@ project(':desktop') {
     }
 
     mainClassName = settings.desktopMain
+
+    test {
+        workingDir = vnRootDir
+    }
 }
 
 project(':android') {

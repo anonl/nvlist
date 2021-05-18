@@ -3,6 +3,7 @@ package nl.weeaboo.vn.script;
 import java.io.Serializable;
 import java.util.Collection;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IContext;
 
 /**
@@ -10,6 +11,12 @@ import nl.weeaboo.vn.core.IContext;
  * context-specific data.
  */
 public interface IScriptContext extends Serializable {
+
+    /**
+     * Loads a script file in a new thread.
+     * @throws ScriptException If loading fails.
+     */
+    IScriptThread loadScriptInNewThread(FilePath path) throws ScriptException;
 
     /**
      * Creates a new thread and adds it to the script context.

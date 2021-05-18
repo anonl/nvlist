@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.io.CustomSerializable;
@@ -86,7 +88,7 @@ public abstract class AbstractScreenshot extends AsyncRenderTask implements IScr
     }
 
     @Override
-    public ITextureData getPixels() {
+    public @Nullable ITextureData getPixels() {
         return pixels;
     }
 

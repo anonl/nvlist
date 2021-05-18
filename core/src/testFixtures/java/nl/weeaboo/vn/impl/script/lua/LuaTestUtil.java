@@ -10,13 +10,13 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.LuaRunState;
 import nl.weeaboo.lua2.luajava.CoerceJavaToLua;
+import nl.weeaboo.lua2.luajava.CoerceLuaToJava;
 import nl.weeaboo.lua2.vm.LuaTable;
 import nl.weeaboo.lua2.vm.LuaValue;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.impl.script.ThrowingScriptExceptionHandler;
-import nl.weeaboo.vn.impl.test.CoreTestUtil;
 import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 
@@ -53,19 +53,9 @@ public final class LuaTestUtil {
         Assert.assertEquals(val, getGlobal(name).optint(0));
     }
 
-    /** Asserts that the value of the Lua global with the given name is equal to the given value. */
+    /** Asserts that the Lua global with the given name has the specified value. */
     public static void assertGlobal(String name, Object val) {
-        LuaValue global = getGlobal(name);
-
-        if (val instanceof Boolean) {
-            Assert.assertEquals(val, global.toboolean());
-        } else if (val instanceof String) {
-            Assert.assertEquals(val, global.tojstring());
-        } else if (val instanceof Number) {
-            Assert.assertEquals(((Number)val).doubleValue(), global.todouble(), CoreTestUtil.EPSILON);
-        } else {
-            Assert.assertEquals(val, global.optuserdata(null));
-        }
+        assertEquals(val, getGlobal(name));
     }
 
     /** Returns the Lua global with the given name, or {@code LuaNil#NIL} if not found. */
@@ -99,6 +89,18 @@ public final class LuaTestUtil {
     public static void setGlobal(String name, LuaValue value) {
         LuaTable globals = LuaRunState.getCurrent().getGlobalEnvironment();
         globals.set(name, value);
+    }
+
+    /**
+     * Asserts that a Lua object is equal to an expected Java object.
+     */
+    public static void assertEquals(Object expected, LuaValue luaValue) {
+        if (expected == null) {
+            Assert.assertTrue(luaValue.isnil());
+        } else {
+            Object javaValue = CoerceLuaToJava.coerceArg(luaValue, expected.getClass());
+            Assert.assertEquals(expected, javaValue);
+        }
     }
 
     /**

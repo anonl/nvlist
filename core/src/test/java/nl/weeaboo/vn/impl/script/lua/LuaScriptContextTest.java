@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.ContextStub;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.ThrowingScriptExceptionHandler;
@@ -20,6 +21,7 @@ public final class LuaScriptContextTest {
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
 
         scriptEnv = env.getScriptEnv();

@@ -2,11 +2,6 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-repositories {
-    // NVList v4.0.0 isn't available in Maven central
-    maven { url 'https://dl.bintray.com/anonl/nvlist/' }
-}
-
 dependencies {
     api deps.styled_text_api
     api deps.tcommon_core
@@ -21,7 +16,7 @@ dependencies {
 
 // Check to see if we're API-compatible with a previous release
 // To release a breaking change, set compatibleVersion to version
-def compatibleVersion = '4.0.0'
+def compatibleVersion = '4.8.0' // 4.8.0 is the oldest version available through Maven Central
 if (version != compatibleVersion) {
     configurations {
         oldApi {

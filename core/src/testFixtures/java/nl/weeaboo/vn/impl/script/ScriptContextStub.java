@@ -2,6 +2,7 @@ package nl.weeaboo.vn.impl.script;
 
 import java.util.Collection;
 
+import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.impl.core.DestructibleElemList;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptThreadMock;
@@ -29,6 +30,11 @@ public class ScriptContextStub implements IScriptContext {
         this.mainThread = mainThread;
 
         threads.add(mainThread);
+    }
+
+    @Override
+    public IScriptThread loadScriptInNewThread(FilePath path) throws ScriptException {
+        throw new ScriptException("Not supported");
     }
 
     @Override

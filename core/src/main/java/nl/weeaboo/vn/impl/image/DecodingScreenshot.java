@@ -66,8 +66,8 @@ public abstract class DecodingScreenshot extends AbstractScreenshot {
     }
 
     @Override
-    public ITextureData getPixels() {
-        if (!isLoaded) {
+    public @Nullable ITextureData getPixels() {
+        if (!isLoaded && data != null) {
             tryLoad(data);
             isLoaded = true;
         }

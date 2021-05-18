@@ -1,0 +1,7 @@
+
+@@
+
+
+Image.preload("a", "b")
+
+@@

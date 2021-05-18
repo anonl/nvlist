@@ -71,6 +71,9 @@ final class ActiveThreads implements Iterable<DebugThread> {
                     threadEvent.setThreadId(debugThread.getThreadId());
                     threadEvent.setReason(ThreadEventArgumentsReason.STARTED);
                     peer.thread(threadEvent);
+                } else {
+                    // TODO: Remove temporary workaround for bug in LuaJPP2 that clears the debug hook
+                    debugThread.installHook(breakpoints);
                 }
 
                 if (context == primaryContext && thread == scriptContext.getMainThread()) {

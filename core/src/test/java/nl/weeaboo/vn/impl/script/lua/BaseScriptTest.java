@@ -11,13 +11,13 @@ import org.junit.Test;
 import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.lua2.luajava.LuajavaLib;
 import nl.weeaboo.lua2.vm.LuaTable;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.ResourceId;
-import nl.weeaboo.vn.impl.core.Context;
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.ContextManager;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lvn.ICompiledLvnFile;
 import nl.weeaboo.vn.impl.script.lvn.LvnParseException;
-import nl.weeaboo.vn.script.IScriptContext;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
@@ -26,13 +26,17 @@ public class BaseScriptTest {
     private TestEnvironment env;
     private LuaScriptLoader scriptLoader;
     private LuaScriptEnv scriptEnv;
+    private IContext context;
 
     @Before
     public void init() throws ScriptException {
+        HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         scriptLoader = (LuaScriptLoader)env.getScriptEnv().getScriptLoader();
         scriptEnv = env.getScriptEnv();
         scriptEnv.initEnv();
+
+        context = env.createActiveContext();
     }
 
     @After
@@ -71,20 +75,16 @@ public class BaseScriptTest {
 
     /** Simple hello world script */
     @Test
-    public void helloWorld() throws ScriptException {
-        LuaScriptContext context = new LuaScriptContext(scriptEnv);
-        IScriptThread mainThread = context.getMainThread();
-
-        scriptLoader.loadScript(mainThread, LuaTestUtil.SCRIPT_HELLOWORLD);
+    public void helloWorld() throws ScriptException, IOException {
+        LuaScriptUtil.loadScript(context, LuaTestUtil.SCRIPT_HELLOWORLD);
     }
 
     /** Test behavior of yield function */
     @Test
-    public void yield() throws ScriptException {
-        LuaScriptContext context = new LuaScriptContext(scriptEnv);
-        IScriptThread mainThread = context.getMainThread();
+    public void yield() throws ScriptException, IOException {
+        IScriptThread mainThread = context.getScriptContext().getMainThread();
 
-        scriptLoader.loadScript(mainThread, FilePath.of("yield.lvn"));
+        LuaScriptUtil.loadScript(context, FilePath.of("yield.lvn"));
         LuaTestUtil.assertGlobal("count", 0); // Stop at yield(1)
         mainThread.update();
         LuaTestUtil.assertGlobal("count", 1); // Stop at yield(2)
@@ -99,24 +99,17 @@ public class BaseScriptTest {
     }
 
     @Test
-    public void createContext() throws ScriptException {
+    public void createContext() throws ScriptException, IOException {
         ContextManager contextManager = env.getContextManager();
 
         // Make context manager available to the script environment
         LuaTable globals = scriptEnv.getGlobals();
         globals.rawset("contextManager", LuajavaLib.toUserdata(contextManager, ContextManager.class));
 
-        // Create an initial context and activate it
-        Context mainContext = contextManager.createContext();
-        contextManager.setContextActive(mainContext, true);
-
-        IScriptContext mainScriptContext = mainContext.getScriptContext();
-        IScriptThread mainThread = mainScriptContext.getMainThread();
-
         Assert.assertEquals(1, contextManager.getActiveContexts().size());
 
         // Run a script that creates and activates a context
-        scriptLoader.loadScript(mainThread, FilePath.of("createcontext.lvn"));
+        LuaScriptUtil.loadScript(context, FilePath.of("createcontext.lvn"));
         Assert.assertEquals(2, contextManager.getActiveContexts().size());
 
         LuaTestUtil.waitForAllThreads(env);

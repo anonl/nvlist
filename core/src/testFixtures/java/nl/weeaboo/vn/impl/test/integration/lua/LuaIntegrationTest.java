@@ -9,7 +9,6 @@ import nl.weeaboo.filesystem.FilePath;
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.impl.core.Context;
 import nl.weeaboo.vn.impl.core.ContextManager;
-import nl.weeaboo.vn.impl.core.ContextUtil;
 import nl.weeaboo.vn.impl.core.EnvironmentFactory;
 import nl.weeaboo.vn.impl.core.TestEnvironment;
 import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
@@ -31,15 +30,13 @@ public abstract class LuaIntegrationTest {
     public void init() throws ScriptException {
         HeadlessGdx.init();
         env = TestEnvironment.newInstance();
+        contextManager = env.getContextManager();
 
         addInitializers(env.getScriptEnv());
         env.getScriptEnv().initEnv();
 
         // Create an initial context and activate it
-        contextManager = env.getContextManager();
-        mainContext = contextManager.createContext();
-        contextManager.setContextActive(mainContext, true);
-        ContextUtil.setCurrentContext(mainContext);
+        mainContext = (Context)env.createActiveContext();
 
         mainThread = mainContext.getScriptContext().getMainThread();
     }
@@ -65,7 +62,7 @@ public abstract class LuaIntegrationTest {
 
     protected void loadScript(FilePath path) {
         try {
-            LuaScriptUtil.loadScript(mainContext, env.getScriptEnv().getScriptLoader(), path);
+            LuaScriptUtil.loadScript(mainContext, path);
         } catch (IOException | ScriptException e) {
             throw new AssertionError(e);
         }
