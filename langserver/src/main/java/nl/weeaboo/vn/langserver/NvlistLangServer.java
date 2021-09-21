@@ -4,9 +4,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -42,7 +39,7 @@ public final class NvlistLangServer implements LanguageServer, LanguageClientAwa
     private final NvlistWorkspaceService workspaceService = new NvlistWorkspaceService();
     private Future<Void> messageHandler;
 
-    public static void start(InputStream in, OutputStream out) throws IOException {
+    public static void start(InputStream in, OutputStream out) {
         LOG.info("Starting NVList language server...");
 
         NvlistLangServer server = new NvlistLangServer();
@@ -51,7 +48,6 @@ public final class NvlistLangServer implements LanguageServer, LanguageClientAwa
                 .setRemoteInterface(LanguageClient.class)
                 .setInput(in)
                 .setOutput(out)
-                .traceMessages(new PrintWriter(Files.newBufferedWriter(Paths.get("nvlist-langserver-trace.log"))))
                 .create();
         LanguageClient peer = launcher.getRemoteProxy();
         server.connect(peer);

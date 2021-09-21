@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.filesystem.FilePath;
+import nl.weeaboo.vn.core.IContext;
 import nl.weeaboo.vn.core.IEnvironment;
 import nl.weeaboo.vn.core.INovel;
 import nl.weeaboo.vn.core.InitException;
@@ -16,6 +17,7 @@ import nl.weeaboo.vn.core.NovelPrefs;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.render.IDrawBuffer;
+import nl.weeaboo.vn.script.IScriptContext;
 
 /**
  * Default implementation of {@link INovel}.
@@ -46,6 +48,19 @@ public class Novel implements INovel {
 
     @Override
     public void start(String mainFunctionName) throws InitException {
+        doStart(mainFunctionName);
+
+        // Stop execution if requested
+        if (env.getPref(NovelPrefs.STOP_ON_ENTRY)) {
+            LOG.info("Stopping execution (requested via {})", NovelPrefs.STOP_ON_ENTRY.getKey());
+            for (IContext context : getContextManager().getContexts()) {
+                IScriptContext scriptContext = context.getScriptContext();
+                scriptContext.getMainThread().pause();
+            }
+        }
+    }
+
+    private void doStart(String mainFunctionName) throws InitException {
         StaticEnvironment.NOVEL.set(this);
 
         // Building the environment also (re)loads persistent data
@@ -82,7 +97,7 @@ public class Novel implements INovel {
 
         env.clearCaches();
 
-        start(KnownScriptFunctions.TITLESCREEN);
+        doStart(KnownScriptFunctions.TITLESCREEN);
     }
 
     @Override

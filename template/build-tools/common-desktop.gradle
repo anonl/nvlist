@@ -8,7 +8,7 @@ applicationName = vnId
 
 run {
     workingDir = vnRootDir
-    args '--Pdebug=true'
+    setArgsString(project.findProperty('runArgs') ?: '-Pdebug=true')
     ignoreExitValue = true
 }
 
