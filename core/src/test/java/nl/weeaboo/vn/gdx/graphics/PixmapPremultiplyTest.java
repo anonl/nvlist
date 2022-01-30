@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.gdx.graphics;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -8,6 +9,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+
+import nl.weeaboo.vn.gdx.HeadlessGdx;
 
 @RunWith(Parameterized.class)
 public class PixmapPremultiplyTest {
@@ -26,6 +29,11 @@ public class PixmapPremultiplyTest {
 
     public PixmapPremultiplyTest(Format format) {
         this.format = format;
+    }
+
+    @Before
+    public void before() {
+        HeadlessGdx.init();
     }
 
     @Test
