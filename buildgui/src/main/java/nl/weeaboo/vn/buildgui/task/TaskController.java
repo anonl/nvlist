@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Nullable;
 import javax.swing.SwingUtilities;
 
 import nl.weeaboo.vn.buildgui.SwingUtil;
@@ -19,7 +20,7 @@ public final class TaskController implements ITaskController {
     private final CopyOnWriteArrayList<IActiveTaskListener> activeTaskListeners = new CopyOnWriteArrayList<>();
 
     private final IProgressListener taskFinishListener = new TaskFinishListener();
-    private ITask activeTask;
+    private @Nullable ITask activeTask;
 
     @Override
     public void addActiveTaskListener(IActiveTaskListener listener) {
@@ -37,7 +38,7 @@ public final class TaskController implements ITaskController {
     }
 
     @Override
-    public void setActiveTask(ITask task) {
+    public void setActiveTask(@Nullable ITask task) {
         SwingUtil.assertIsEdt();
 
         if (activeTask != null) {

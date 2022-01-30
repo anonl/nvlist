@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 
 import javax.annotation.Nullable;
 
+import com.google.errorprone.annotations.InlineMe;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Dim;
 import nl.weeaboo.io.CustomSerializable;
@@ -24,7 +26,7 @@ public abstract class AbstractScreenshot extends AsyncRenderTask implements IScr
     private final short z;
     private final boolean isVolatile;
 
-    private transient ITextureData pixels;
+    private transient @Nullable ITextureData pixels;
     private Dim screenSize = Dim.EMPTY;
 
     protected AbstractScreenshot(short z, boolean isVolatile) {
@@ -72,8 +74,9 @@ public abstract class AbstractScreenshot extends AsyncRenderTask implements IScr
     }
 
     @Deprecated
+    @InlineMe(replacement = "this.markTransient()")
     @Override
-    public void makeTransient() {
+    public final void makeTransient() {
         markTransient();
     }
 

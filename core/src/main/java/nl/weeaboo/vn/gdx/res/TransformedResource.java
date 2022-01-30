@@ -2,6 +2,8 @@ package nl.weeaboo.vn.gdx.res;
 
 import java.lang.ref.WeakReference;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 
 /**
@@ -15,8 +17,8 @@ public abstract class TransformedResource<S, D> extends AbstractResource<D> {
     private static final long serialVersionUID = 1L;
 
     private final IResource<S> inner;
-    private transient WeakReference<S> cachedOriginal;
-    private transient D cachedTransformed;
+    private transient @Nullable WeakReference<S> cachedOriginal;
+    private transient @Nullable D cachedTransformed;
 
     protected TransformedResource(IResource<S> inner) {
         this.inner = Checks.checkNotNull(inner);

@@ -94,7 +94,7 @@ public final class LuaTestUtil {
     /**
      * Asserts that a Lua object is equal to an expected Java object.
      */
-    public static void assertEquals(Object expected, LuaValue luaValue) {
+    public static void assertEquals(@Nullable Object expected, LuaValue luaValue) {
         if (expected == null) {
             Assert.assertTrue(luaValue.isnil());
         } else {

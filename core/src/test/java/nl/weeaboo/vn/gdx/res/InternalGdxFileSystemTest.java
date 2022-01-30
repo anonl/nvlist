@@ -26,9 +26,7 @@ public class InternalGdxFileSystemTest extends AbstractGdxFileSystemTest {
 
     @After
     public void after() {
-        if (fileSystem != null) {
-            fileSystem.close();
-        }
+        fileSystem.close();
     }
 
     @Override

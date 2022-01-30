@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.save;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.save.SaveFormatException;
 import nl.weeaboo.vn.save.ThumbnailInfo;
 
@@ -9,8 +11,8 @@ final class SaveFileHeaderJson {
 
     public int format = 1;
     public long creationTime;
-    public Storage userData;
-    public ThumbnailInfoJson thumbnail;
+    public @Nullable Storage userData;
+    public @Nullable ThumbnailInfoJson thumbnail;
 
     public static SaveFileHeader decode(SaveFileHeaderJson headerJson) throws SaveFormatException, IOException {
         if (headerJson.format != SaveFileConstants.FORMAT_VERSION) {

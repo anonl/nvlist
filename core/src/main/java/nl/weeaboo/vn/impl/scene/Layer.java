@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.scene;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
     protected Layer() {
     }
 
-    public Layer(ILayer parent) {
+    public Layer(@Nullable ILayer parent) {
         setParent(parent);
 
         if (parent != null) {
@@ -122,7 +124,7 @@ public class Layer extends AxisAlignedContainer implements ILayer, ILayoutElemPe
     }
 
     @Override
-    public boolean containsLayer(ILayer layer) {
+    public boolean containsLayer(@Nullable ILayer layer) {
         if (layer == null) {
             return false;
         }

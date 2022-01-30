@@ -53,9 +53,7 @@ public class FileResourceLoader extends ResourceLoader {
 
     @Override
     protected boolean isValidFilename(FilePath filePath) {
-        if (filePath == null) {
-            return false;
-        }
+        Checks.checkNotNull(filePath);
         FileSystemView fs = getFileSystem();
         return fs.getFileExists(filePath) && !fs.isFolder(filePath);
     }

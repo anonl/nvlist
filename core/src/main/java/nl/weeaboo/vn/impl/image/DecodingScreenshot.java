@@ -23,11 +23,7 @@ public abstract class DecodingScreenshot extends AbstractScreenshot {
     protected DecodingScreenshot(byte[] bytes) {
         super((short)0, false);
 
-        if (bytes == null) {
-            cancel();
-        } else {
-            data = bytes.clone();
-        }
+        data = bytes.clone();
     }
 
     @Override

@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.render;
 import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,7 +46,7 @@ public class GLScreenRenderer extends BaseScreenRenderer implements IDestructibl
     private int buffered;
     private final SpriteBatch spriteBatch = new SpriteBatch();
     protected GLMatrixStack matrixStack = new GLMatrixStack(spriteBatch);
-    private transient Mesh triangleMesh;
+    private transient @Nullable Mesh triangleMesh;
     // -------------------------------------------------------------------------------------
 
     public GLScreenRenderer(IRenderEnv env, RenderStats stats) {

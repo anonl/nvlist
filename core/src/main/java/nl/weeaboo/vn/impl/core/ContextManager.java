@@ -47,7 +47,7 @@ public final class ContextManager implements IContextManager {
     }
 
     @Override
-    public final Context createContext(IScriptFunction func) {
+    public final Context createContext(@Nullable IScriptFunction func) {
         Context context = contextFactory.newContext();
         if (func != null) {
             try {

@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.core;
 
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 
 import com.google.common.collect.ImmutableSet;
@@ -19,7 +21,7 @@ final class StorageTestHelper {
     public static final String KEY_DOUBLE = "keyDouble";
     public static final String KEY_STRING = "keyString";
 
-    public void assertStorageEquals(IStorage expected, IStorage actual) {
+    public void assertStorageEquals(@Nullable IStorage expected, @Nullable IStorage actual) {
         if (expected == null || actual == null) {
             Assert.assertSame(expected, actual);
             return;

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Nullable;
+
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
@@ -115,7 +117,7 @@ public final class GradleBuildController implements IBuildController {
         private final GradleMonitor gradleMonitor;
         private final CopyOnWriteArrayList<IBuildLogListener> logListeners;
 
-        private CancellationTokenSource cancelTokenSource;
+        private @Nullable CancellationTokenSource cancelTokenSource;
 
         GradleTask(GradleMonitor gradleMonitor, Collection<IBuildLogListener> logListeners) {
             this.gradleMonitor = Objects.requireNonNull(gradleMonitor);

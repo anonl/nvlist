@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.save;
 
+import javax.annotation.Nullable;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -141,7 +143,7 @@ public class StoragePrimitiveTest {
         Assert.assertEquals(expectedOutput, sp.toJson());
     }
 
-    private static void assertBoolean(Boolean expected, StoragePrimitive p) {
+    private static void assertBoolean(@Nullable Boolean expected, StoragePrimitive p) {
         if (expected != null) {
             // If we expect a non-null value, the default should be ignored
             Assert.assertEquals(expected, p.toBoolean(!expected));
@@ -152,7 +154,7 @@ public class StoragePrimitiveTest {
         }
     }
 
-    private static void assertNumber(Number expected, StoragePrimitive p) {
+    private static void assertNumber(@Nullable Number expected, StoragePrimitive p) {
         if (expected != null) {
             Assert.assertEquals(expected.doubleValue(), p.toDouble(-expected.doubleValue()),
                     ApiTestUtil.EPSILON);

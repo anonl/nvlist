@@ -14,9 +14,10 @@ tasks.withType(JavaCompile) {
         excludedPaths = '.*/gen/.*';
 
         warn('FieldMissingNullable')
-        warn('ParameterNotNullable')
-        // warn('ReturnMissingNullable') // (temporarily?) removed in 2.4.0 due to bugs in the check
-        // warn('NullableDereference') // (temporarily?) removed in 2.4.0 due to bugs in the check
+        warn('ParameterMissingNullable')
+        warn('ReturnMissingNullable')
+        // warn('NullableDereference') // TODO: Replace with NullAway
+
         disable('MissingSummary') // Allow Javadoc without summary (for example just an @see for an overloaded method)
     }
 }

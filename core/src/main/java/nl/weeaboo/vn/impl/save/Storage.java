@@ -156,7 +156,7 @@ public class Storage implements IStorage, Json.Serializable {
     }
 
     @Override
-    public Collection<String> getKeys(String prefix) {
+    public Collection<String> getKeys(@Nullable String prefix) {
         List<String> result = new ArrayList<>();
         for (String key : properties.keySet()) {
             if (prefix == null || key.startsWith(prefix)) {

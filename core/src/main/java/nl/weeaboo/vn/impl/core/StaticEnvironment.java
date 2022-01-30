@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.assets.AssetManager;
 
 import nl.weeaboo.filesystem.IFileSystem;
@@ -86,7 +88,7 @@ public final class StaticEnvironment {
     }
 
     /** Sets the value of a static reference. */
-    public <T> void set(StaticRef<T> ref, T value) {
+    public <T> void set(StaticRef<T> ref, @Nullable T value) {
         synchronized (objects) {
             if (value == null) {
                 objects.remove(ref.getId());

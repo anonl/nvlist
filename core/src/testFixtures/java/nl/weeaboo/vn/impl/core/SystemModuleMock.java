@@ -25,7 +25,7 @@ public class SystemModuleMock extends AbstractModule implements ISystemModule {
     private final List<String> openedWebsites = new ArrayList<>();
 
     private @Nullable InitException restartException;
-    private transient SystemEnvMock systemEnv;
+    private transient @Nullable SystemEnvMock systemEnv;
 
     public SystemModuleMock(IEnvironment env) {
         this.env = env;

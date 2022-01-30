@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.StringUtil;
 import nl.weeaboo.lua2.LuaException;
 import nl.weeaboo.lua2.lib.VarArgFunction;
@@ -21,7 +23,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
 
     private static final long serialVersionUID = 1L;
 
-    private final String tableName;
+    private final @Nullable String tableName;
 
     /**
      * @param tableName The name of the global table object to which the library functions should be added, or
@@ -85,7 +87,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
         private final String methodName;
         private final Class<?>[] parameterTypes;
 
-        private transient Method method;
+        private transient @Nullable Method method;
 
         public FunctionWrapper(LuaLib object, String methodName, Class<?>[] parameterTypes) {
             this.name = methodName;
@@ -119,7 +121,7 @@ public abstract class LuaLib implements ILuaScriptEnvInitializer {
             }
         }
 
-        private String invokeErrorMessage(Varargs args, Throwable cause) {
+        private String invokeErrorMessage(Varargs args, @Nullable Throwable cause) {
             String error = StringUtil.formatRoot("Error invoking Java method: %s%s",
                     methodName, args);
             if (cause != null) {

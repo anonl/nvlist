@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.scene;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -29,7 +31,7 @@ public class Viewport extends AxisAlignedContainer implements IViewport, ILayout
     private final Vec2 scroll = new Vec2();
 
     private boolean dragging;
-    private Vec2 lastPointerPos;
+    private @Nullable Vec2 lastPointerPos;
     private double scrollWheelAccel = 30;
 
     @Override

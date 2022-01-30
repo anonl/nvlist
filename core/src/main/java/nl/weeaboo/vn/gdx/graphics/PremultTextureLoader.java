@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, TextureParameter> {
 
-    private TextureLoaderInfo info = new TextureLoaderInfo();
+    private final TextureLoaderInfo info = new TextureLoaderInfo();
 
     public PremultTextureLoader(FileHandleResolver resolver) {
         super(resolver);
@@ -34,7 +34,7 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file,
-            TextureParameter parameter) {
+            @Nullable TextureParameter parameter) {
 
         if (parameter == null || parameter.textureData == null) {
             Format format = null;
@@ -75,10 +75,7 @@ public class PremultTextureLoader extends AsynchronousAssetLoader<Texture, Textu
     @Nullable
     @Override
     public Texture loadSync(AssetManager manager, String fileName, FileHandle file,
-            TextureParameter parameter) {
-        if (info == null) {
-            return null;
-        }
+            @Nullable TextureParameter parameter) {
 
         Texture texture = info.texture;
         if (texture != null) {

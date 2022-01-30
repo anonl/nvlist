@@ -83,7 +83,8 @@ public abstract class ResourceLoader implements IResourceResolver {
 
     @Override
     public @Nullable ResourceId resolveResource(FilePath path) {
-        if (path == null || unresolvableFilenames.contains(path)) {
+        Checks.checkNotNull(path);
+        if (unresolvableFilenames.contains(path)) {
             return null;
         }
 

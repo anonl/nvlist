@@ -16,9 +16,9 @@ public final class StoragePrimitive {
     private static final String[] stringEscapeFrom = { "\\", "\n", "\r", "\f", "\t", "\"", "\'" };
     private static final String[] stringEscapeTo = { "\\\\", "\\n", "\\r", "\\f", "\\t", "\\\"", "\\'" };
 
-    private final Object value;
+    private final @Nullable Object value;
 
-    private StoragePrimitive(Object value) {
+    private StoragePrimitive(@Nullable Object value) {
         this.value = value;
     }
 
@@ -34,7 +34,7 @@ public final class StoragePrimitive {
      * @return The JSON value converted to a {@link StoragePrimitive} object, or {@code null} if the JSON
      *         value couldn't be parsed.
      */
-    public static @Nullable StoragePrimitive fromJson(String json) {
+    public static @Nullable StoragePrimitive fromJson(@Nullable String json) {
         if (json == null || json.equals("undefined")) {
             return null;
         }

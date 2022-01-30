@@ -2,6 +2,9 @@ package nl.weeaboo.vn.image;
 
 import java.io.Serializable;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Insets2D;
 
 /**
@@ -64,10 +67,11 @@ public interface INinePatch extends Serializable {
     double getNativeHeight();
 
     /** Returns the current texture for the requested region. */
+    @CheckForNull
     ITexture getTexture(AreaId area);
 
     /** Sets the texture of the specified region. */
-    void setTexture(AreaId area, ITexture texture);
+    void setTexture(AreaId area, @Nullable ITexture texture);
 
     /** Returns the amount of non-resizable space on the top/right/bottom/left of the 9-patch. */
     Insets2D getInsets();

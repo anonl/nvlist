@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.scene;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.vn.image.IScreenshotBuffer;
 
 /**
@@ -18,7 +20,7 @@ public interface ILayer extends IAxisAlignedContainer {
     /**
      * Returns {@code true} if the specified layer is a descendant of this layer.
      */
-    boolean containsLayer(ILayer layer);
+    boolean containsLayer(@Nullable ILayer layer);
 
     /**
      * Returns a read-only view of all layer children (non-recursive).

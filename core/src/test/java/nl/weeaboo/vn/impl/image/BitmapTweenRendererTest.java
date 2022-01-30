@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import nl.weeaboo.vn.gdx.HeadlessGdx;
 import nl.weeaboo.vn.image.IImageModule;
+import nl.weeaboo.vn.impl.core.EventListenerStub;
 import nl.weeaboo.vn.impl.image.BitmapTweenConfig.ControlImage;
 
 public class BitmapTweenRendererTest {
@@ -26,11 +27,13 @@ public class BitmapTweenRendererTest {
     @Test(timeout = 5000)
     public void basicFlow() {
         BitmapTweenRendererMock btr = new BitmapTweenRendererMock(imageModule, defaultConfig);
-        btr.onAttached(null);
+
+        EventListenerStub ls = new EventListenerStub();
+        btr.onAttached(ls);
         while (!btr.isFinished()) {
             btr.update();
         }
-        btr.onDetached(null);
+        btr.onDetached(ls);
     }
 
 }
