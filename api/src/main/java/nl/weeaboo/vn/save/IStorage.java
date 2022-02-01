@@ -55,7 +55,7 @@ public interface IStorage extends Serializable {
      * @return A collection of all stored keys matching the given prefix, or all stored keys if the prefix is
      *         {@code null}.
      */
-    Collection<String> getKeys(String prefix);
+    Collection<String> getKeys(@Nullable String prefix);
 
     /**
      * @return {@code true} if this storage object contains a mapping for the given key.

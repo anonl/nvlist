@@ -85,7 +85,7 @@ public class GdxFontStoreTest {
             bitmapFontField.setAccessible(true);
             return ((BitmapFont)bitmapFontField.get(gdxFont)).getData().name;
         } catch (ReflectiveOperationException e) {
-            throw new AssertionError(e);
+            throw new LinkageError("Error accessing internal of bitmap font class", e);
         }
     }
 }

@@ -2,6 +2,9 @@ package nl.weeaboo.vn.impl.image;
 
 import java.io.Serializable;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.image.ITexture;
@@ -14,8 +17,7 @@ public final class AlignedTexture implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** May be null. */
-    private final ITexture texture;
+    private final @Nullable ITexture texture;
 
     private final double alignX;
     private final double alignY;
@@ -24,16 +26,13 @@ public final class AlignedTexture implements Serializable {
         this(null, 0, 0);
     }
 
-    /**
-     * @param texture May be null
-     */
-    public AlignedTexture(ITexture texture, double alignX, double alignY) {
+    public AlignedTexture(@Nullable ITexture texture, double alignX, double alignY) {
         this.texture = texture;
         this.alignX = alignX;
         this.alignY = alignY;
     }
 
-    /** May be null */
+    @CheckForNull
     public ITexture getTexture() {
         return texture;
     }

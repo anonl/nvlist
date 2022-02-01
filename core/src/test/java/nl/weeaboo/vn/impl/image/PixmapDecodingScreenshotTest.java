@@ -57,7 +57,9 @@ public class PixmapDecodingScreenshotTest {
      */
     @Test
     public void testEmpty() {
-        PixmapDecodingScreenshot ss = new PixmapDecodingScreenshot(null);
+        PixmapDecodingScreenshot ss = new PixmapDecodingScreenshot(new byte[0]);
+        ss.cancel();
+
         Assert.assertEquals(false, ss.isAvailable());
         Assert.assertEquals(true, ss.isFailed());
         Assert.assertEquals(false, ss.isTransient());

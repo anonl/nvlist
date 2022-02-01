@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,7 @@ public class LuaPrefsAdapter {
         private final Set<String> prefHolderClasses = Sets.newLinkedHashSet();
         private final boolean isSetter;
 
-        private transient Map<String, Preference<?>> cachedPrefs;
+        private transient @Nullable Map<String, Preference<?>> cachedPrefs;
 
         public PrefsMetaFunction(boolean isSetter, StaticRef<? extends IPreferenceStore> prefStoreRef) {
             this.isSetter = isSetter;

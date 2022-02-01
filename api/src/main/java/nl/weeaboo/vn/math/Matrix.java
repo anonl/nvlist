@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.math;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.FastMath;
 
 /**
@@ -13,7 +15,7 @@ public final class Matrix extends AbstractMatrix {
 
     private static final Matrix IDENTITY_MATRIX = new Matrix(1, 0, 0, 0, 1, 0);
 
-    private transient float[] glMatrix;
+    private transient @Nullable float[] glMatrix;
 
     public Matrix(double m00, double m01, double m02, double m10, double m11, double m12) {
         super(m00, m01, m02, m10, m11, m12);

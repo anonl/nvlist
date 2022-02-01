@@ -10,6 +10,7 @@ import javax.annotation.WillCloseWhenClosed;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.errorprone.annotations.InlineMe;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.io.CustomSerializable;
@@ -62,6 +63,7 @@ public final class PixelTextureData implements IGdxTextureData {
     }
 
     @Deprecated
+    @InlineMe(replacement = "false")
     @Override
     public boolean isDestroyed() {
         return false;

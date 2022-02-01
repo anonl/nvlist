@@ -23,7 +23,6 @@ public final class BufferedImageUtil {
      * automatically determined from the pixmap's format.
      *
      * @see #toBufferedImage(Pixmap, int)
-     * @see #toBufferedImageType(Format)
      */
     public static BufferedImage toBufferedImage(Pixmap pixmap) {
         return toBufferedImage(pixmap, BufferedImageUtil.toBufferedImageType(pixmap.getFormat()));

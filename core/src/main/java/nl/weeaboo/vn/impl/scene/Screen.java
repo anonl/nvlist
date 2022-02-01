@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.scene;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +45,8 @@ public class Screen implements IScreen {
 
     private final IOffscreenRenderTaskBuffer offscreenRenderTaskBuffer;
 
-    private ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
-    private ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
+    private @Nullable ILayer rootLayer; // Lazily (re-)initialized when null or destroyed
+    private @Nullable ILayer activeLayer; // Could potentially point to a destroyed layer (minor memory leak)
     private IRenderEnv renderEnv;
 
     public Screen(Rect2D bounds, IRenderEnv env, IScreenTextState textState, ISkipState skipState) {
@@ -111,7 +113,7 @@ public class Screen implements IScreen {
         return doCreateLayer(null);
     }
 
-    private ILayer doCreateLayer(ILayer parentLayer) {
+    private ILayer doCreateLayer(@Nullable ILayer parentLayer) {
         ILayer layer = newLayer(parentLayer);
         if (parentLayer != null) {
             layer.setBounds(parentLayer.getX(), parentLayer.getY(), parentLayer.getWidth(), parentLayer.getHeight());
@@ -125,7 +127,7 @@ public class Screen implements IScreen {
      * Creates a new layer.
      * @param parentLayer If not {@code null}, creates the new layer as a sub-layer of {@code parentLayer}.
      */
-    protected ILayer newLayer(ILayer parentLayer) {
+    protected ILayer newLayer(@Nullable ILayer parentLayer) {
         if (parentLayer == null) {
             return new Layer(null);
         }

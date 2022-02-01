@@ -133,7 +133,7 @@ public final class ButtonRenderer extends AbstractRenderable implements IButtonR
     }
 
     @Override
-    public void setTexture(ButtonViewState viewState, INinePatch tex) {
+    public void setTexture(ButtonViewState viewState, @Nullable INinePatch tex) {
         if (tex == null) {
             textures.remove(viewState);
         } else {

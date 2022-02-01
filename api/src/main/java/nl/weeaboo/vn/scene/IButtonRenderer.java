@@ -1,6 +1,7 @@
 package nl.weeaboo.vn.scene;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 import nl.weeaboo.styledtext.StyledText;
 import nl.weeaboo.vn.core.VerticalAlign;
@@ -36,7 +37,7 @@ public interface IButtonRenderer extends IRenderable {
     /**
      * Sets the button background to the supplied nine-patch.
      */
-    void setTexture(ButtonViewState viewState, INinePatch tex);
+    void setTexture(ButtonViewState viewState, @Nullable INinePatch tex);
 
     /**
      * @return The current button state.

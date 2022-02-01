@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,7 @@ public final class DesktopGdxFileSystem extends GdxFileSystem {
     private final InternalGdxFileSystem internalFileSystem;
 
     // Cached file archives. Archives are searched in order.
-    private transient ImmutableList<ZipFileArchive> cachedFileArchives;
+    private transient @Nullable ImmutableList<ZipFileArchive> cachedFileArchives;
 
     public DesktopGdxFileSystem(File baseFolder) {
         this(baseFolder.toString().replace('\\', '/') + "/");
