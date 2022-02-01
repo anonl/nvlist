@@ -1,4 +1,1 @@
-codecov:
-  status:
-    project: yes
-    patch: no
+github_checks: false

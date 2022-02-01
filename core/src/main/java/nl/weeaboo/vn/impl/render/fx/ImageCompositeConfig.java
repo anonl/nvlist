@@ -3,6 +3,8 @@ package nl.weeaboo.vn.impl.render.fx;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -20,7 +22,7 @@ public final class ImageCompositeConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<TextureEntry> entries = Lists.newArrayList();
-    private Dim explicitSize; // Null if no explicit size is set
+    private @Nullable Dim explicitSize; // Null if no explicit size is set
 
     public ImageCompositeConfig() {
     }

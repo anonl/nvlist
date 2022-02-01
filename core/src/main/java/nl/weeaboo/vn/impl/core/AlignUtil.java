@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.core;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.Rect2D;
 import nl.weeaboo.vn.core.Direction;
@@ -24,7 +26,7 @@ public final class AlignUtil {
     /**
      * Returns the relative bounds for the given texture, if aligned using the given fractional alignment.
      */
-    public static Rect2D getAlignedBounds(ITexture tex, double alignX, double alignY) {
+    public static Rect2D getAlignedBounds(@Nullable ITexture tex, double alignX, double alignY) {
         if (tex == null) {
             return getAlignedBounds(0, 0, alignX, alignY);
         }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Sort;
+import com.google.errorprone.annotations.InlineMe;
 
 import nl.weeaboo.common.Area2D;
 import nl.weeaboo.common.Rect2D;
@@ -52,6 +53,7 @@ public final class DrawBuffer implements IDrawBuffer {
     }
 
     @Deprecated
+    @InlineMe(replacement = "this.drawText(dt, dx, dy, -1, textLayout, visibleGlyphs)")
     @Override
     public void drawText(IDrawTransform dt, double dx, double dy, ITextLayout textLayout, double visibleGlyphs) {
         drawText(dt, dx, dy, 0xFFFFFFFF, textLayout, visibleGlyphs);

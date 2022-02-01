@@ -39,9 +39,9 @@ public class Button extends Transformable implements IButton {
 
     private double touchMargin;
     private double alphaEnableThreshold = 0.9;
-    private IScriptFunction clickHandler;
+    private @Nullable IScriptFunction clickHandler;
 
-    private transient IEventListener rendererListener;
+    private transient @Nullable IEventListener rendererListener;
 
     public Button(IScriptEventDispatcher eventDispatcher, ILoadingFontStore fontStore) {
         this(eventDispatcher, new ButtonModel(), new ButtonRenderer(fontStore));

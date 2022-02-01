@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.desktop.debug;
 
+import javax.annotation.Nullable;
+
 import org.eclipse.lsp4j.debug.SourceBreakpoint;
 import org.eclipse.lsp4j.debug.ThreadEventArguments;
 import org.eclipse.lsp4j.debug.ThreadEventArgumentsReason;
@@ -80,7 +82,7 @@ public final class ActiveThreadsTest {
         return context;
     }
 
-    private void assertThreadEquals(ILuaScriptThread expected, DebugThread actual) {
+    private void assertThreadEquals(@Nullable ILuaScriptThread expected, @Nullable DebugThread actual) {
         if (actual == null) {
             Assert.assertNull(expected);
         } else {

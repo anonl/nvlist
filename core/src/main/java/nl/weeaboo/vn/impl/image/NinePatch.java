@@ -2,6 +2,8 @@ package nl.weeaboo.vn.impl.image;
 
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
@@ -71,7 +73,7 @@ public final class NinePatch implements INinePatch {
     }
 
     @Override
-    public void setTexture(AreaId area, ITexture texture) {
+    public void setTexture(AreaId area, @Nullable ITexture texture) {
         if (texture != null) {
             textures.put(area, texture);
         } else {

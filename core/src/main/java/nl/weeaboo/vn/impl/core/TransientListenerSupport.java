@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Nullable;
+
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.vn.core.IEventListener;
 
@@ -14,7 +16,7 @@ public class TransientListenerSupport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private transient List<IEventListener> transientListeners;
+    private transient @Nullable List<IEventListener> transientListeners;
 
     /**
      * @return The internal (mutable) collection storing the transient listeners.

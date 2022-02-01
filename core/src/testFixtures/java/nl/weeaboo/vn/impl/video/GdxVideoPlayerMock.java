@@ -1,5 +1,7 @@
 package nl.weeaboo.vn.impl.video;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.video.VideoPlayer;
 
@@ -13,9 +15,9 @@ final class GdxVideoPlayerMock implements VideoPlayer {
     private Dim renderSize = Dim.EMPTY;
     private float volume = 1f;
 
-    private FileHandle file;
-    private VideoSizeListener sizeListener;
-    private CompletionListener completionListener;
+    private @Nullable FileHandle file;
+    private @Nullable VideoSizeListener sizeListener;
+    private @Nullable CompletionListener completionListener;
 
     @Override
     public void dispose() {

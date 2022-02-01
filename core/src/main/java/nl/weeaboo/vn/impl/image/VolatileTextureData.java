@@ -3,6 +3,7 @@ package nl.weeaboo.vn.impl.image;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.errorprone.annotations.InlineMe;
 
 import nl.weeaboo.vn.gdx.res.AbstractResource;
 import nl.weeaboo.vn.gdx.res.GdxCleaner;
@@ -36,6 +37,7 @@ public final class VolatileTextureData implements IGdxTextureData {
     }
 
     @Deprecated
+    @InlineMe(replacement = "false")
     @Override
     public boolean isDestroyed() {
         return false;

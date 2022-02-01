@@ -28,7 +28,7 @@ public final class ContextUtil {
      * @see IContext#onCurrent()
      * @see #getCurrentContext()
      */
-    public static IContext setCurrentContext(IContext context) {
+    public static IContext setCurrentContext(@Nullable IContext context) {
         IContext oldContext = getCurrentContext();
         currentContext.set(context);
         if (context != null) {

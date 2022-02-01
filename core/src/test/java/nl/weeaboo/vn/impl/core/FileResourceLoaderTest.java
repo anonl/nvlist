@@ -60,8 +60,8 @@ public class FileResourceLoaderTest {
         assertValidFilename(true, "subfolder/b.txt");
         assertValidFilename(false, "invalid.jpg");
 
-        // Null filenames just return false and don't throw an exception
-        assertValidFilename(false, null);
+        // Null filenames are illegal
+        Assert.assertThrows(IllegalArgumentException.class, () -> assertValidFilename(false, null));
     }
 
     @Test
@@ -73,8 +73,8 @@ public class FileResourceLoaderTest {
         resourceLoader.setAutoFileExts("txt");
         assertNormalizedFilename("subfolder/a.txt", "subfolder/a");
 
-        // Null filenames just return null and don't throw an exception
-        assertNormalizedFilename(null, null);
+        // Null filenames are illegal
+        Assert.assertThrows(IllegalArgumentException.class, () -> assertNormalizedFilename(null, null));
     }
 
     /** Check behavior when changing the base resource folder at runtime */

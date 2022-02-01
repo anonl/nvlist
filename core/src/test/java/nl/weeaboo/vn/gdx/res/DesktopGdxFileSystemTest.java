@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Nullable;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +22,7 @@ import nl.weeaboo.io.ZipUtil.Compression;
 
 public final class DesktopGdxFileSystemTest extends AbstractGdxFileSystemTest {
 
-    private DesktopGdxFileSystem fileSystem;
+    private @Nullable DesktopGdxFileSystem fileSystem;
 
     @Before
     public void before() throws IOException {

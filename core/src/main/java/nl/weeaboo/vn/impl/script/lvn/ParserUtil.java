@@ -6,6 +6,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 
@@ -122,7 +124,7 @@ final class ParserUtil {
         return findBlockEnd(itr, endChar, null);
     }
 
-    static int findBlockEnd(CharacterIterator itr, char endChar, StringBuilder out) {
+    static int findBlockEnd(CharacterIterator itr, char endChar, @Nullable StringBuilder out) {
         boolean inQuotes = false;
         int brackets = 0;
 

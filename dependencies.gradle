@@ -7,7 +7,7 @@
 
 ext.deps = [:]
 
-ext.errorProneVersion = '2.4.0'
+ext.errorProneVersion = '2.10.0'
 
 def antlrVersion = '4.8';
 def gdxTestVersion = '3.0.1'

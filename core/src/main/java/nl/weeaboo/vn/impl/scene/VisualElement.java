@@ -28,7 +28,7 @@ public abstract class VisualElement implements IVisualElement {
     private static final long serialVersionUID = SceneImpl.serialVersionUID;
 
     /** May be null */
-    IVisualGroup parent;
+    @Nullable IVisualGroup parent;
 
     private final SignalSupport signalSupport = new SignalSupport();
 
@@ -36,7 +36,7 @@ public abstract class VisualElement implements IVisualElement {
     private boolean visible = true;
     private boolean destroyed;
 
-    private ILayoutElem layoutAdapter;
+    private @Nullable ILayoutElem layoutAdapter;
 
     protected VisualElement() {
         // Add self at index 0
