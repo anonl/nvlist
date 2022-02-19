@@ -122,11 +122,11 @@ public class Polygon implements IShape, Serializable {
 
     /**
      * @return The side on which the point lies in relation to the line segment between {@code p[i0] -> p[i1]}:
-     * <ul>
-     * <li>-1: Left side
-     * <li>+1: Right side
-     * <li>0: On the line
-     * </ul>
+     *     <ul>
+     *     <li>-1: Left side
+     *     <li>+1: Right side
+     *     <li>0: On the line
+     *     </ul>
      */
     private int getPointSide(int i0, int i1, double x, double y) {
         double dx = pointsX[i1] - pointsX[i0];
