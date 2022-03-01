@@ -93,6 +93,9 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
             taskRunner.runOnNvlistThread(this::update);
         }, 1, 1, TimeUnit.SECONDS);
 
+        // This line breaks something -- the main thread seems to freeze
+        // taskRunner.runOnNvlistThread(this::update);
+
         Capabilities caps = new Capabilities();
         caps.setSupportsEvaluateForHovers(true);
         return CompletableFuture.completedFuture(caps);
@@ -248,6 +251,7 @@ final class NvlistDebugServer implements IDebugProtocolServer, Closeable {
             StackTraceResponse response = new StackTraceResponse();
             DebugThread thread = activeThreads.findById(threadId);
             if (thread != null) {
+                System.out.println(thread.getThread().hashCode());
                 response.setStackFrames(thread.getStackTrace());
             }
             return response;

@@ -44,10 +44,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
 
                 LOG.debug("Send thread stop event to debug adapter client (now {} active threads)",
                         threadsById.size());
-                ThreadEventArguments threadEvent = new ThreadEventArguments();
-                threadEvent.setThreadId(debugThread.getThreadId());
-                threadEvent.setReason(ThreadEventArgumentsReason.EXITED);
-                peer.thread(threadEvent);
+                sendThreadStopEvent(peer, debugThread);
             }
         }
 
@@ -67,10 +64,7 @@ final class ActiveThreads implements Iterable<DebugThread> {
 
                     LOG.debug("Send thread start event to debug adapter client (id={}, now {} active threads)",
                             threadId, threadsById.size());
-                    ThreadEventArguments threadEvent = new ThreadEventArguments();
-                    threadEvent.setThreadId(debugThread.getThreadId());
-                    threadEvent.setReason(ThreadEventArgumentsReason.STARTED);
-                    peer.thread(threadEvent);
+                    sendThreadStartEvent(peer, debugThread);
                 }
 
                 if (context == primaryContext && thread == scriptContext.getMainThread()) {
@@ -78,6 +72,20 @@ final class ActiveThreads implements Iterable<DebugThread> {
                 }
             }
         }
+    }
+
+    private void sendThreadStartEvent(IDebugProtocolClient peer, DebugThread debugThread) {
+        ThreadEventArguments threadEvent = new ThreadEventArguments();
+        threadEvent.setThreadId(debugThread.getThreadId());
+        threadEvent.setReason(ThreadEventArgumentsReason.STARTED);
+        peer.thread(threadEvent);
+    }
+
+    private void sendThreadStopEvent(IDebugProtocolClient peer, DebugThread debugThread) {
+        ThreadEventArguments threadEvent = new ThreadEventArguments();
+        threadEvent.setThreadId(debugThread.getThreadId());
+        threadEvent.setReason(ThreadEventArgumentsReason.EXITED);
+        peer.thread(threadEvent);
     }
 
     public @Nullable DebugThread findById(int threadId) {

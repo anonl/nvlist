@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import nl.weeaboo.common.Checks;
 import nl.weeaboo.common.StringUtil;
@@ -42,6 +43,7 @@ import nl.weeaboo.vn.text.ILoadingFontStore;
 public final class GdxFontStore extends ResourceStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(GdxFontStore.class);
+    private static final ImmutableSet<String> FONT_FILE_EXTS = ImmutableSet.of("ttf");
 
     private final GdxFileSystem resourceFileSystem;
     private final GdxFontRegistry backing;
@@ -66,6 +68,12 @@ public final class GdxFontStore extends ResourceStore {
         }
 
         for (FilePath fontPath : resourceFileSystem.getFiles(FileCollectOptions.files(FilePath.of("font")))) {
+            String ext = fontPath.getExt();
+            if (!FONT_FILE_EXTS.contains(ext)) {
+                LOG.debug("Skipping over non-font file in fonts folder: {}", fontPath);
+                continue;
+            }
+
             try {
                 MutableTextStyle mts = new MutableTextStyle();
                 mts.setFontName(Filenames.stripExtension(fontPath.getName()));

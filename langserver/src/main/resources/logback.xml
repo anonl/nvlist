@@ -1,6 +1,6 @@
 <configuration>
   <appender name="file" class="ch.qos.logback.core.FileAppender">
-    <file>nvlist-langserver.log</file>
+    <file>save/nvlist-langserver.log</file>
     <append>false</append>
     <encoder>
       <pattern>| %-5level | %msg | %file:%line | %thread%n</pattern>

@@ -37,6 +37,11 @@ public final class NovelPrefs {
             false,
             "Enables developer mode, unlocking various debugging features.");
 
+    public static final Preference<Boolean> STOP_ON_ENTRY = newConstPreference("debug.stopOnEntry",
+            "Stop on entry",
+            false,
+            "Stops NVList at a debugger breakpoint immediately upon starting.");
+
     public static final Preference<String> ENGINE_MIN_VERSION = newConstPreference("vn.engineMinVersion",
             "Engine Minimum Version",
             "4.0",
