@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -29,7 +28,7 @@ final class HeaderPanel extends JPanel implements IProjectModelListener {
         rightPanel.add(folderConfigPanel);
 
         setOpaque(true);
-        setBackground(Styles.HEADER_BACKGROUND);
+        setBackground(Styles.theme.headerBackground);
         setBorder(BorderFactory.createEmptyBorder(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
         setPreferredSize(new Dimension(logoIcon.getIconWidth() + 2 * BORDER_SIZE,
                 logoIcon.getIconHeight() + 2 * BORDER_SIZE));

@@ -4,9 +4,10 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
@@ -16,11 +17,9 @@ import org.gradle.tooling.events.ProgressListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
-
 import nl.weeaboo.vn.buildgui.IBuildController;
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
+import nl.weeaboo.vn.buildgui.Styles;
 import nl.weeaboo.vn.buildgui.task.ITaskController;
 import nl.weeaboo.vn.buildtools.project.NvlistProjectConnection;
 import nl.weeaboo.vn.buildtools.project.ProjectFolderConfig;
@@ -72,7 +71,7 @@ public final class GradleBuildController implements IBuildController {
 
     @Override
     public ITask startRun() {
-        return startTask("run");
+        return startTask("runDesktop");
     }
 
     @Override
@@ -126,7 +125,9 @@ public final class GradleBuildController implements IBuildController {
 
         @Override
         public void cancel() {
-            cancelTokenSource.cancel();
+            if (cancelTokenSource != null) {
+                cancelTokenSource.cancel();
+            }
 
             super.cancel();
         }
@@ -146,7 +147,7 @@ public final class GradleBuildController implements IBuildController {
 
                             LOG.debug("[gradle] {}", message);
 
-                            fireLogLine(message, LogStyles.DEBUG_COLOR);
+                            fireLogLine(message, Styles.theme.logStyles.debugColor);
                             fireProgress(message);
                         }
                     })
@@ -157,7 +158,7 @@ public final class GradleBuildController implements IBuildController {
                             String message = "Task completed";
                             LOG.info("[gradle] {}", message);
 
-                            fireLogLine(message, LogStyles.GRADLE_COMPLETE_COLOR);
+                            fireLogLine(message, Styles.theme.logStyles.gradleCompleteColor);
                             fireFinished(TaskResultType.SUCCESS, message);
                         }
 
@@ -166,7 +167,7 @@ public final class GradleBuildController implements IBuildController {
                             String longMessage = "Task failed: " + Throwables.getStackTraceAsString(failure);
                             LOG.warn("[gradle] {}", longMessage);
 
-                            fireLogLine(longMessage, LogStyles.GRADLE_FAILED_COLOR);
+                            fireLogLine(longMessage, Styles.theme.logStyles.gradleFailedColor);
 
                             /*
                              * Note: Use the cause's message, since the outer exception's message just says

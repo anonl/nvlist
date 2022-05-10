@@ -13,7 +13,7 @@ public interface IBuildLogListener {
      * @see #onLogLine(String, Color)
      */
     default void onLogLine(String message) {
-        onLogLine(message, Color.BLACK);
+        onLogLine(message, Styles.theme.logStyles.infoColor);
     }
 
     /**

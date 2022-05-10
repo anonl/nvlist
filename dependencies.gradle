@@ -29,6 +29,8 @@ deps.maven_resolver = [
     'org.apache.maven.resolver:maven-resolver-transport-http:1.1.1',
 ]
 
+deps.flat_laf = 'com.formdev:flatlaf:2.2'
+
 deps.gdx_android = [
     'com.badlogicgames.gdx:gdx-backend-android:' + gdxVersion,
     'com.badlogicgames.gdx:gdx-freetype:' + gdxVersion,
