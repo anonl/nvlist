@@ -26,7 +26,7 @@ tasks.register('runLanguageServer') {
 }
 
 shadowJar {
-   baseName = 'nvlist-langserver'
-   classifier = null
-   version = null
+   archiveBaseName.set('nvlist-langserver')
+   archiveClassifier.set(null)
+   archiveVersion.set(null)
 }

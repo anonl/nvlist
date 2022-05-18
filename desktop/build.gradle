@@ -1,7 +1,9 @@
 
-apply from: "${buildToolsDir}/common-desktop.gradle"
+plugins {
+    id 'maven-publish'
+}
 
-apply plugin: 'maven-publish'
+apply from: "${buildToolsDir}/common-desktop.gradle"
 
 dependencies {
     api project(":nvlist-core")
