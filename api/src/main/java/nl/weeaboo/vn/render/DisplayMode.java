@@ -13,5 +13,5 @@ public enum DisplayMode {
     /**
      * Windowed mode.
      */
-    WINDOWED;
+    WINDOWED
 }

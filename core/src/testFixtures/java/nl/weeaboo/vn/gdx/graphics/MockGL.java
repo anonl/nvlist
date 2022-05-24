@@ -59,6 +59,7 @@ public class MockGL extends GL20Interceptor {
 
     @Override
     public void glGetShaderiv(int shader, int pname, IntBuffer params) {
+        //noinspection SwitchStatementWithTooFewBranches
         switch (pname) {
         case GL_COMPILE_STATUS:
             params.put(0, 1);

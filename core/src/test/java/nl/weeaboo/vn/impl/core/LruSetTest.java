@@ -46,6 +46,6 @@ public class LruSetTest {
     }
 
     private enum Value {
-        A, B, C, D, E;
+        A, B, C, D, E
     }
 }

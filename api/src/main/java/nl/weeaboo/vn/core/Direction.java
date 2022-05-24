@@ -27,7 +27,7 @@ public enum Direction {
 
     private final int intValue;
 
-    private Direction(int val) {
+    Direction(int val) {
         this.intValue = val;
     }
 

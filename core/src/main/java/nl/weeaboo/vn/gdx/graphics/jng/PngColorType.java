@@ -29,7 +29,7 @@ enum PngColorType {
 
     private final int intValue;
 
-    private PngColorType(int intValue) {
+    PngColorType(int intValue) {
         this.intValue = intValue;
     }
 

@@ -41,7 +41,7 @@ public abstract class DesktopIntegrationTest {
     protected Novel novel;
 
     @BeforeClass
-    public static final void beforeAllIntegration() {
+    public static void beforeAllIntegration() {
         HeadlessGdx.init();
     }
 
@@ -77,7 +77,7 @@ public abstract class DesktopIntegrationTest {
     }
 
     @AfterClass
-    public static final void afterAllIntegration() {
+    public static void afterAllIntegration() {
         HeadlessGdx.clear();
     }
 

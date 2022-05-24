@@ -81,7 +81,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
         buffer.drawText(d, dx, dy, d.getColorARGB(), textLayout, visibleText);
     }
 
-    private final ITextLayout getLayout() {
+    private ITextLayout getLayout() {
         ITextLayout result = cachedLayout;
         if (result == null) {
             result = createLayout(getLayoutMaxWidth());

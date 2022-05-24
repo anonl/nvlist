@@ -12,5 +12,5 @@ public enum LayoutSizeType {
     PREF,
 
     /** Maximum size. */
-    MAX;
+    MAX
 }

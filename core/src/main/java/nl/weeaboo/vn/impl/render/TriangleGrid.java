@@ -28,7 +28,7 @@ public final class TriangleGrid implements Serializable {
             CLAMP,
             REPEAT_X,
             REPEAT_Y,
-            REPEAT_BOTH;
+            REPEAT_BOTH
     }
 
     private final int verticesPerRow;

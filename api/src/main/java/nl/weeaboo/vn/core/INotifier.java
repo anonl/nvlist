@@ -10,6 +10,6 @@ public interface INotifier {
      *
      * @param message The message to show.
      */
-    public void message(String message);
+    void message(String message);
 
 }

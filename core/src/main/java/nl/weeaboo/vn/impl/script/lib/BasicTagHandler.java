@@ -95,7 +95,7 @@ final class BasicTagHandler extends VarArgFunction {
 
         private final String tagId;
 
-        private Tag(String tagId) {
+        Tag(String tagId) {
             this.tagId = Checks.checkNotNull(tagId);
         }
 

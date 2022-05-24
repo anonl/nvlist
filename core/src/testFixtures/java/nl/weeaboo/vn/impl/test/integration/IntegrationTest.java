@@ -37,7 +37,7 @@ public abstract class IntegrationTest {
     protected Novel novel;
 
     @BeforeClass
-    public static final void beforeAllIntegration() {
+    public static void beforeAllIntegration() {
         HeadlessGdx.init();
     }
 
@@ -70,7 +70,7 @@ public abstract class IntegrationTest {
     }
 
     @AfterClass
-    public static final void afterAllIntegration() {
+    public static void afterAllIntegration() {
         HeadlessGdx.clear();
     }
 

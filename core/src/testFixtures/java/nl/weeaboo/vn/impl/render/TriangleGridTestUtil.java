@@ -15,7 +15,7 @@ public final class TriangleGridTestUtil {
      * Vertex attribute.
      */
     public enum DataType {
-        VERTEX, TEX1, TEX2, TEX3;
+        VERTEX, TEX1, TEX2, TEX3
     }
 
     private static final double EPSILON = CoreTestUtil.EPSILON;

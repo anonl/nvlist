@@ -15,7 +15,7 @@ import nl.weeaboo.common.Insets2D;
 public interface INinePatch extends Serializable {
 
     /** Named regions of the 9-patch. */
-    public enum AreaId {
+    enum AreaId {
         TOP_LEFT,
         TOP,
         TOP_RIGHT,

@@ -15,7 +15,7 @@ public enum MediaType {
 
     private final FilePath subFolder;
 
-    private MediaType(String subFolder) {
+    MediaType(String subFolder) {
         this.subFolder = FilePath.of(subFolder);
     }
 

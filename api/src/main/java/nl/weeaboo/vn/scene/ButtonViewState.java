@@ -7,5 +7,5 @@ public enum ButtonViewState {
     DEFAULT,
     ROLLOVER,
     PRESSED,
-    DISABLED;
+    DISABLED
 }

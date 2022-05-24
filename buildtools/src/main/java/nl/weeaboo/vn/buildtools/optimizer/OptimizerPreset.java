@@ -9,6 +9,6 @@ public enum OptimizerPreset {
     LOSSLESS,
 
     /** Allow lossy optimizations, optimize for quality over file size */
-    QUALITY;
+    QUALITY
 
 }

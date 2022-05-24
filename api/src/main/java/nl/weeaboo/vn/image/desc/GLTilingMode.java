@@ -15,7 +15,7 @@ public enum GLTilingMode {
     private final String name;
     private final int glIdentifier;
 
-    private GLTilingMode(String name, int glIdentifier) {
+    GLTilingMode(String name, int glIdentifier) {
         this.name = name;
         this.glIdentifier = glIdentifier;
     }

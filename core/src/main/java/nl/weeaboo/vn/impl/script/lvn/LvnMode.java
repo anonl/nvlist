@@ -14,7 +14,7 @@ public enum LvnMode {
 
     private final boolean singleLine;
 
-    private LvnMode(boolean singleLine) {
+    LvnMode(boolean singleLine) {
         this.singleLine = singleLine;
     }
 

@@ -13,7 +13,7 @@ enum JngAlphaType {
      */
     private final int intValue;
 
-    private JngAlphaType(int intValue) {
+    JngAlphaType(int intValue) {
         this.intValue = intValue;
     }
 
