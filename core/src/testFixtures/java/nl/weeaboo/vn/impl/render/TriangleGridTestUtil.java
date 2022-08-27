@@ -43,7 +43,7 @@ public final class TriangleGridTestUtil {
             getVertexData(grid, type, y, buf);
 
             // Vertices are in the order: x0,y0,x0,y1,...
-            Assert.assertEquals("y0=" + y, rowSplits[y + 0], buf.get(1), EPSILON);
+            Assert.assertEquals("y0=" + y, rowSplits[y    ], buf.get(1), EPSILON);
             Assert.assertEquals("y1=" + y, rowSplits[y + 1], buf.get(3), EPSILON);
         }
     }

@@ -51,7 +51,7 @@ public final class TaskController implements ITaskController {
             task.addProgressListener(taskFinishListener);
         }
 
-        activeTaskListeners.forEach(ls -> ls.onActiveTaskChanged(getActiveTask()));
+        activeTaskListeners.forEach(ls -> ls.onActiveTaskChanged(getActiveTask().orElse(null)));
     }
 
     private final class TaskFinishListener implements IProgressListener {

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
@@ -121,8 +120,8 @@ final class TaskButton extends JPanel implements IActiveTaskListener {
     }
 
     @Override
-    public void onActiveTaskChanged(Optional<ITask> currentTask) {
-        activeTask = currentTask.orElse(null);
+    public void onActiveTaskChanged(@Nullable ITask currentTask) {
+        activeTask = currentTask;
 
         refresh();
     }
