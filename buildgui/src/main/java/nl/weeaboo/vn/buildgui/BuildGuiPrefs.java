@@ -38,10 +38,11 @@ final class BuildGuiPrefs {
 
         // Override certain properties with command-line overrides
         if (commandLineArgs.length >= 1) {
-            storage.projectPath = commandLineArgs[0];
+
+            storage.projectPath = ProjectFolderConfig.toCanonicalPath(Paths.get(commandLineArgs[0]));
         }
         if (commandLineArgs.length >= 2) {
-            storage.buildToolsPath = commandLineArgs[1];
+            storage.buildToolsPath = ProjectFolderConfig.toCanonicalPath(Paths.get(commandLineArgs[1]));
         }
 
         return new BuildGuiPrefs(storage);

@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
+import nl.weeaboo.vn.buildgui.Styles;
+import nl.weeaboo.vn.buildgui.Theme;
 
 final class OutputToLogAdapter extends OutputStream {
 
@@ -29,14 +31,15 @@ final class OutputToLogAdapter extends OutputStream {
     }
 
     private Color getDefaultColor(String line) {
+        Theme.LogStyles logStyles = Styles.theme.logStyles;
         if (line.contains("| DEBUG |")) {
-            return LogStyles.DEBUG_COLOR;
+            return logStyles.debugColor;
         } else if (line.contains("| WARN  |")) {
-            return LogStyles.WARNING_COLOR;
+            return logStyles.warningColor;
         } else if (line.contains("| ERROR |")) {
-            return LogStyles.ERROR_COLOR;
+            return logStyles.errorColor;
         } else {
-            return LogStyles.INFO_COLOR;
+            return logStyles.infoColor;
         }
     }
 

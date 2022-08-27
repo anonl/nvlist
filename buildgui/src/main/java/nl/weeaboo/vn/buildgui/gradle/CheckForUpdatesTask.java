@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -27,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.weeaboo.vn.buildgui.IBuildLogListener;
+import nl.weeaboo.vn.buildgui.Styles;
+import nl.weeaboo.vn.buildgui.Theme;
 import nl.weeaboo.vn.buildtools.task.Task;
 import nl.weeaboo.vn.buildtools.task.TaskResultType;
 
@@ -55,6 +56,7 @@ public final class CheckForUpdatesTask extends Task {
     }
 
     private void runInBackground() {
+        Theme.LogStyles logStyles = Styles.theme.logStyles;
         String message;
         try {
             final RepositorySystem repoSystem = createRepoSystem();
@@ -72,13 +74,13 @@ public final class CheckForUpdatesTask extends Task {
 
             message = "Current NVList version: " + nvlistVersion
                     + "\nHighest available NVList version: " + result.getHighestVersion();
-            fireLogLine(message, LogStyles.INFO_COLOR);
+            fireLogLine(message, logStyles.infoColor);
             fireFinished(TaskResultType.SUCCESS, message);
         } catch (VersionRangeResolutionException | RuntimeException e) {
             LOG.warn("Error in check-for-updates task", e);
 
             message = e.toString();
-            fireLogLine(message, LogStyles.ERROR_COLOR);
+            fireLogLine(message, logStyles.errorColor);
             fireFinished(TaskResultType.FAILED, message);
         }
 
@@ -103,8 +105,7 @@ public final class CheckForUpdatesTask extends Task {
         DefaultServiceLocator serviceLocator = MavenRepositorySystemUtils.newServiceLocator();
         serviceLocator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
         serviceLocator.addService(TransporterFactory.class, HttpTransporterFactory.class);
-        RepositorySystem repoSystem = serviceLocator.getService(RepositorySystem.class);
-        return repoSystem;
+        return serviceLocator.getService(RepositorySystem.class);
     }
 
     private void fireLogLine(String line, Color color) {

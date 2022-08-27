@@ -1,6 +1,8 @@
 
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
 
 dependencies {
     api project(':nvlist-api')

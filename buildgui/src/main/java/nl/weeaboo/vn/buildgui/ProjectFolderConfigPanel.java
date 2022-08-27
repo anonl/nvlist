@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -48,7 +47,7 @@ final class ProjectFolderConfigPanel extends JPanel implements IProjectModelList
         projectFolderLabel = new JLabel();
         projectFolderLabel.setMaximumSize(new Dimension(999, 999));
 
-        setBackground(Styles.HEADER_BACKGROUND2);
+        setBackground(Styles.theme.headerBackground2);
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         buttonPanel.setAlignmentX(CENTER_ALIGNMENT);

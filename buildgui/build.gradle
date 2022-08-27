@@ -1,7 +1,9 @@
 
-apply plugin: 'application'
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
+plugins {
+    id 'application'
+    id 'java-library'
+    id 'maven-publish'
+}
 
 mainClassName = 'nl.weeaboo.vn.buildgui.BuildGuiLauncher'
 
@@ -9,17 +11,22 @@ dependencies {
     implementation project(':nvlist-buildtools')
     implementation project(':nvlist-core')
     implementation deps.gradle_tooling_api
+    implementation deps.flat_laf
     implementation deps.maven_resolver
-    
+
     runtimeOnly deps.slf4j_desktop
+}
+
+run {
+    args = ['../template', '..']
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
-   baseName = 'nvlist-build'
-   classifier = null
-   version = null
+    archiveBaseName.set('nvlist-build')
+    archiveClassifier.set(null)
+    archiveVersion.set(null)
 }
 
 // Generate a native executable

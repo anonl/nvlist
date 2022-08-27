@@ -6,7 +6,6 @@ import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -33,7 +32,7 @@ final class BuildGui extends JFrame {
         setDefaultWindowIcon(this);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        getContentPane().setBackground(Styles.WINDOW_BACKGROUND);
+        getContentPane().setBackground(Styles.theme.windowBackground);
         setLayout(new BorderLayout());
         add(createTopPanel(), BorderLayout.NORTH);
         add(createCenterPanel(), BorderLayout.CENTER);
@@ -86,7 +85,7 @@ final class BuildGui extends JFrame {
 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(true);
-        panel.setBackground(Styles.WINDOW_BACKGROUND2);
+        panel.setBackground(Styles.theme.windowBackground2);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(progressPanel, BorderLayout.CENTER);
         panel.add(taskButton, BorderLayout.EAST);
