@@ -8,9 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
+
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -21,10 +21,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import nl.weeaboo.filesystem.FileCollectOptions;
 import nl.weeaboo.filesystem.FilePath;
@@ -68,7 +69,7 @@ final class ProjectOverviewPanel extends JPanel implements IProjectModelListener
     }
 
     @Override
-    public void onActiveTaskChanged(Optional<ITask> currentTask) {
+    public void onActiveTaskChanged(@Nullable ITask currentTask) {
         refresh();
     }
 

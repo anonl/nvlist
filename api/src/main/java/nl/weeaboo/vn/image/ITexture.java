@@ -13,41 +13,41 @@ import nl.weeaboo.vn.scene.IImageDrawable;
  */
 public interface ITexture extends Serializable {
 
-    public static Area2D DEFAULT_UV = Area2D.of(0, 0, 1, 1);
+    Area2D DEFAULT_UV = Area2D.of(0, 0, 1, 1);
 
     /**
      * @return The texture width in image state coordinates.
      */
-    public double getWidth();
+    double getWidth();
 
     /**
      * @return The texture height in image state coordinates.
      */
-    public double getHeight();
+    double getHeight();
 
     /**
      * @return The texture width in pixels.
      */
-    public int getPixelWidth();
+    int getPixelWidth();
 
     /**
      * @return The texture height in pixels.
      */
-    public int getPixelHeight();
+    int getPixelHeight();
 
     /**
      * @return The scale factor from pixel size to virtual size.
      */
-    public double getScaleX();
+    double getScaleX();
 
     /**
      * @return The scale factor from pixel size to virtual size.
      */
-    public double getScaleY();
+    double getScaleY();
 
     /**
      * @return The texture mapping coordinates used by the underlying graphics system.
      */
-    public Area2D getUV();
+    Area2D getUV();
 
 }

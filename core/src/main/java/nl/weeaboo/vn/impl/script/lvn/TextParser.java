@@ -111,7 +111,7 @@ final class TextParser {
         TEXT,
         STRINGIFIER,
         TAG,
-        COMMAND;
+        COMMAND
     }
 
     public static class Token {

@@ -32,7 +32,7 @@ public final class InputAccumulator {
      * Button press state.
      */
     public enum PressState {
-        PRESS, RELEASE;
+        PRESS, RELEASE
     }
 
     /**

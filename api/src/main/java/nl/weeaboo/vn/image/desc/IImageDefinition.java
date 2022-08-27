@@ -14,7 +14,7 @@ public interface IImageDefinition {
     /**
      * Name of the file storing image definitions for images in the same folder.
      */
-    public static final String IMG_DEF_FILE = "img.json";
+    String IMG_DEF_FILE = "img.json";
 
     /**
      * The filename of the image (not a file path).

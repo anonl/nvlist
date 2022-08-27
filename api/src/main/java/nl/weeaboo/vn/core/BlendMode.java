@@ -18,6 +18,6 @@ public enum BlendMode {
     /**
      * Additive blending, commonly used to create glow effects.
      */
-    ADD;
+    ADD
 
 }

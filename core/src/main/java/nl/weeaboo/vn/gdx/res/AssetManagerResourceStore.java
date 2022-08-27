@@ -144,7 +144,7 @@ public class AssetManagerResourceStore<T> extends ResourceStore {
     }
 
     protected enum ELoadState {
-        UNLOADED, PRELOADING, LOADED, ERROR;
+        UNLOADED, PRELOADING, LOADED, ERROR
     }
 
 }

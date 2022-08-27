@@ -44,12 +44,12 @@ public interface IRenderEnv extends Serializable {
     /**
      * @return The scale factor from virtual coords to real coords.
      */
-    public double getScale();
+    double getScale();
 
     /**
      * @return The bounds of the full OpenGL rendering bounds in virtual
      *         coordinates, ignoring any offset or clipping.
      */
-    public Rect2D getGLScreenVirtualBounds();
+    Rect2D getGLScreenVirtualBounds();
 
 }

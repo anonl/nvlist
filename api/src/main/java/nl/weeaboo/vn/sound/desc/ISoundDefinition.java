@@ -10,7 +10,7 @@ public interface ISoundDefinition {
     /**
      * Name of the file storing sound definitions for audio files in the same folder.
      */
-    public static final String SND_DEF_FILE = "snd.json";
+    String SND_DEF_FILE = "snd.json";
 
     /**
      * The filename of the image (not a file path).

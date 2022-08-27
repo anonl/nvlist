@@ -15,6 +15,6 @@ public interface IAnimation {
      *
      * @param s The new speed (must be positive).
      */
-    public void setSpeed(double s);
+    void setSpeed(double s);
 
 }

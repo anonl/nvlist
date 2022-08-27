@@ -23,7 +23,7 @@ public enum GLScaleFilter {
     private final int glIdentifier;
     private final boolean isMipmap;
 
-    private GLScaleFilter(String name, int glIdentifier, boolean isMipmap) {
+    GLScaleFilter(String name, int glIdentifier, boolean isMipmap) {
         this.name = name;
         this.glIdentifier = glIdentifier;
         this.isMipmap = isMipmap;

@@ -179,6 +179,6 @@ public enum KeyCode {
     NUMPAD_SUBTRACT,
     PAUSE,
     PRINT_SCREEN,
-    SCROLL_LOCK;
+    SCROLL_LOCK
 
 }

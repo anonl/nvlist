@@ -19,7 +19,7 @@ public class PixmapPremultiplyTest {
      * Run this test for every libGDX pixmap format.
      */
     @Parameters(name = "{index}: {0}")
-    public static final Format[] params() {
+    public static Format[] params() {
         return Format.values();
     }
 

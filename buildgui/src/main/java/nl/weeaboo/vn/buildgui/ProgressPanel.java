@@ -2,7 +2,6 @@ package nl.weeaboo.vn.buildgui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.swing.ImageIcon;
@@ -49,14 +48,13 @@ final class ProgressPanel extends JPanel implements IActiveTaskListener {
     }
 
     @Override
-    public void onActiveTaskChanged(Optional<ITask> task) {
+    public void onActiveTaskChanged(@Nullable ITask newTask) {
         Preconditions.checkState(SwingUtilities.isEventDispatchThread());
 
         if (currentTask != null) {
             currentTask.removeProgressListener(progressListener);
         }
 
-        ITask newTask = task.orElse(null);
         currentTask = newTask;
 
         if (newTask != null) {

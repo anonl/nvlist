@@ -10,7 +10,7 @@ import nl.weeaboo.vn.scene.ITextDrawable;
  */
 public interface ITextRenderState extends IMultiLineText, Serializable {
 
-    final double ALL_GLYPHS_VISIBLE = 999999;
+    double ALL_GLYPHS_VISIBLE = 999999;
 
     /**
      * Returns the tags of the TextStyle of the characters at the specified location or <code>null</code> if no hit.

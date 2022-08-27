@@ -45,7 +45,7 @@
                 { "id": "disabled-right",       "rect": [112,  80, 16, 32] },
                 { "id": "disabled-bottomleft",  "rect": [ 64, 112, 16, 16] },
                 { "id": "disabled-bottom",      "rect": [ 80, 112, 32, 16] },
-                { "id": "disabled-bottomright", "rect": [112, 112, 16, 16] },
+                { "id": "disabled-bottomright", "rect": [112, 112, 16, 16] }
             ]
         }
     ]

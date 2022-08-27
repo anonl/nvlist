@@ -9,12 +9,12 @@ ext.deps = [:]
 
 ext.errorProneVersion = '2.10.0'
 
-def antlrVersion = '4.8';
+def antlrVersion = '4.8'
 def gdxTestVersion = '3.0.1'
 def gdxVersion = '1.9.13'
 def gdxControllersVersion = '2.2.0'
 def gdxVideoVersion = '1.0.0-anonl'
-def guavaVersion = '30.1-android' // Note: The -android version is not Android-specific, only Android-compatible
+def guavaVersion = '31.1-android' // Note: The -android version is not Android-specific, only Android-compatible
 def lsp4jVersion = '0.9.0'
 def roboVmVersion = '2.3.12'
 def slf4jVersion = '1.7.30'

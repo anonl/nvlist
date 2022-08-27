@@ -18,7 +18,7 @@ public enum GLBlendMode {
     public final int srcFunc;
     public final int dstFunc;
 
-    private GLBlendMode(int sfactor, int dfactor) {
+    GLBlendMode(int sfactor, int dfactor) {
         this.srcFunc = sfactor;
         this.dstFunc = dfactor;
     }

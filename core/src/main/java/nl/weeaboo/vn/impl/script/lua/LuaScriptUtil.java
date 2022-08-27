@@ -87,7 +87,7 @@ public final class LuaScriptUtil {
 
     /**
      * Creates {@link ResourceLoadInfo} for the current Lua call stack.
-     * @see LuaUtil#getLuaStack()
+     * @see LuaUtil#getLuaStack
      */
     public static ResourceLoadInfo createLoadInfo(MediaType mediaType, FilePath filename) {
         List<String> callStack = ImmutableList.of();
