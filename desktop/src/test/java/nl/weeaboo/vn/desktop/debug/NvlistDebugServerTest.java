@@ -63,11 +63,10 @@ import nl.weeaboo.vn.impl.script.lua.ILuaScriptThread;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptEnv;
 import nl.weeaboo.vn.impl.script.lua.LuaScriptUtil;
 import nl.weeaboo.vn.impl.script.lua.LuaTestUtil;
-import nl.weeaboo.vn.impl.test.NoExitSecurityManager;
 import nl.weeaboo.vn.script.IScriptThread;
 import nl.weeaboo.vn.script.ScriptException;
 
-public class NvlistDebugServerTest {
+public class NvlistDebugServerTest extends DebugAdapterTest {
 
     @Rule
     public final Timeout timeout = new Timeout(30, TimeUnit.SECONDS);
@@ -75,7 +74,6 @@ public class NvlistDebugServerTest {
     private final DapClient dapClient = new DapClient();
     private final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-    private SecurityManager oldSecurityManager;
     private TestEnvironment env;
     private IContext context;
     private ILuaScriptThread mainThread;
@@ -86,9 +84,6 @@ public class NvlistDebugServerTest {
 
     @Before
     public void before() throws IOException, ScriptException {
-        oldSecurityManager = System.getSecurityManager();
-        System.setSecurityManager(new NoExitSecurityManager());
-
         HeadlessGdx.init();
         env = TestEnvironment.newInstance();
         context = env.createActiveContext();
@@ -132,13 +127,9 @@ public class NvlistDebugServerTest {
 
     @After
     public void after() {
-        try {
-            clientFuture.cancel(true);
-            debugServer.close();
-            MoreExecutors.shutdownAndAwaitTermination(executor, 5, TimeUnit.SECONDS);
-        } finally {
-            System.setSecurityManager(oldSecurityManager);
-        }
+        clientFuture.cancel(true);
+        debugServer.close();
+        MoreExecutors.shutdownAndAwaitTermination(executor, 5, TimeUnit.SECONDS);
 
         StaticEnvironment.getInstance().clear();
     }
