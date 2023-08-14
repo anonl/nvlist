@@ -1,15 +1,24 @@
 package nl.weeaboo.vn.desktop.debug;
 
-import java.net.URI;
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Performs file path conversions.
  */
 final class NameMapping {
 
-    private static final Path SCRIPT_FOLDER = Paths.get("res/script").toAbsolutePath();
+    private static final Logger LOG = LoggerFactory.getLogger(NameMapping.class);
+
+    @VisibleForTesting
+    static Path scriptFolder = Paths.get("res/script").toAbsolutePath();
 
     /**
      * Turns an absolute path to a file in the res/script folder into a relative path.
@@ -21,14 +30,18 @@ final class NameMapping {
             return absolutePath;
         }
 
-        URI scriptFolderUri = SCRIPT_FOLDER.toUri();
-        URI uri = Paths.get(absolutePath).toAbsolutePath().toUri();
-        if (uri.getPath().startsWith(scriptFolderUri.getPath())) {
-            return scriptFolderUri.relativize(uri).getPath();
-        } else {
+        try {
+            Path basePath = scriptFolder.toRealPath();
+            Path filePath = Paths.get(absolutePath).toRealPath();
+
+            return basePath.relativize(filePath).toString();
+        } catch (NoSuchFileException e) {
+            LOG.warn("Script folder doesn't exist: {}", scriptFolder);
+        } catch (IOException e) {
             // Path isn't relative to the script folder
-            return absolutePath;
+            LOG.debug("Name mapping called with non-relative path: {}", absolutePath, e);
         }
+        return absolutePath;
     }
 
     /**
@@ -41,7 +54,7 @@ final class NameMapping {
             return relativePath;
         }
 
-        return SCRIPT_FOLDER.resolve(relativePath).toAbsolutePath().toString();
+        return scriptFolder.resolve(relativePath).toAbsolutePath().toString();
     }
 
 }

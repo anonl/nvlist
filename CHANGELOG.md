@@ -3,8 +3,10 @@
 - The resource optimizer now runs automatically for desktop releases (Windows, Mac, Linux). You can change the optimizer settings through `build-res/optimizer.json`.
 - You can now call `:setClickHandler()` directly on the button object from Lua instead of having to use `Gui.setClickHandler()`.
 - Attempting to `quickLoad` a save slot which doesn't exist now logs a warning instead of throwing an exception.
+- The build GUI has a new color theme: dark mode
 - fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.
 - fix: The default choice screen displays previously selected choices in a different color. If you saved at a choice, the colors wouldn't update when loading.
+- fix: Debug adapter: Relative path handling used by breakpoints didn't always work on case-insensitive file systems. 
 - fix: Parts of lines would sometimes be cut off or missing from the text log due to a rounding error.
 
 # v4.9.6
