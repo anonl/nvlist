@@ -72,9 +72,14 @@ public final class NovelPrefsStore extends AbstractPreferenceStore {
 
         Map<String, String> vars = new HashMap<>();
         for (Preference<?> pref : getDeclaredPrefs(NovelPrefs.class)) {
-            vars.put(pref.getKey(), getDefaultValueString(pref));
+            // Ignore overrides for properties that aren't allowed to be overridden
+            if (!pref.isConstant()) {
+                vars.put(pref.getKey(), getDefaultValueString(pref));
+            }
         }
         vars.putAll(getVariables());
+
+        // Ignore overrides for properties defined in config.ini
         vars.keySet().removeAll(constKeys);
 
         OutputStream out = outputSystem.openOutputStream(VARIABLES_FILENAME, false);
