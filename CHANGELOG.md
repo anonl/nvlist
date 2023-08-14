@@ -5,6 +5,7 @@
 - Attempting to `quickLoad` a save slot which doesn't exist now logs a warning instead of throwing an exception.
 - fix: Initial window size limits are now properly applied when the window is (almost) larger than the screen.
 - fix: The default choice screen displays previously selected choices in a different color. If you saved at a choice, the colors wouldn't update when loading.
+- fix: Parts of lines would sometimes be cut off or missing from the text log due to a rounding error.
 
 # v4.9.6
 - fix: File permissions were broken for Linux/Mac builds when building on a file system which doesn't support permissions (e.g. NTFS on Windows)
