@@ -12,6 +12,7 @@ import nl.weeaboo.styledtext.TextStyle;
 import nl.weeaboo.test.RectAssert;
 import nl.weeaboo.vn.core.VerticalAlign;
 import nl.weeaboo.vn.impl.core.StaticEnvironment;
+import nl.weeaboo.vn.layout.ILayoutElem;
 
 public class TextRendererTest {
 
@@ -132,6 +133,17 @@ public class TextRendererTest {
         assertLineBounds(0, Rect2D.EMPTY);
     }
 
+    /**
+     * Calculation of max width/height for {@link ILayoutElem} purposes.
+     */
+    @Test
+    public void testMaxWidth() {
+        textRenderer.setText("one\ntwo\nthree");
+        textRenderer.setSize(63.999, 12.34);
+
+        assertMaxSize(64.0, 13.0);
+    }
+
     private void assertLineBounds(int lineIndex, Rect2D expectedBounds) {
         Rect2D actualBounds = textRenderer.getLineBounds(lineIndex);
         RectAssert.assertEquals(expectedBounds, actualBounds, 0.0);
@@ -152,6 +164,11 @@ public class TextRendererTest {
 
     private void assertFinalLineFullyVisible(boolean expected) {
         Assert.assertEquals(expected, textRenderer.isFinalLineFullyVisible());
+    }
+
+    private void assertMaxSize(double expectedW, double expectedH) {
+        Assert.assertEquals(expectedW, textRenderer.getMaxWidth(), 0.0);
+        Assert.assertEquals(expectedH, textRenderer.getMaxHeight(), 0.0);
     }
 
 }

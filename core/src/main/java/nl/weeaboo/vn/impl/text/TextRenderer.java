@@ -167,11 +167,11 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
     }
 
     private int getLayoutMaxWidth() {
-        return (int)Math.floor(getMaxWidth());
+        return (int)Math.round(getMaxWidth());
     }
 
     private int getLayoutMaxHeight() {
-        return (int)Math.floor(getMaxHeight());
+        return (int)Math.round(getMaxHeight());
     }
 
     @Override
@@ -341,7 +341,7 @@ public final class TextRenderer extends AbstractRenderable implements ITextRende
 
     @Override
     public void setSize(double w, double h) {
-        setMaxSize((int)Math.floor(w), (int)Math.floor(h));
+        setMaxSize((int)Math.ceil(w), (int)Math.ceil(h));
 
         super.setSize(w, h);
     }
